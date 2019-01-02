@@ -8,6 +8,34 @@ import "./SiderMenu.css";
 const SubMenu = Menu.SubMenu;
 const { Sider } = Layout;
 
+const urlArray = [
+	//小金库调价
+	'/golden/adjustApply',
+	//发票
+	'/invoice/applyList',
+	//快易提
+	'/extractManage',
+	//打款单
+	'/remitOrder',
+	//销售提成
+	'/saleIncome/businessAccounting',
+	'/saleIncome/clientPayment',
+	'/saleIncome/businessIncome',
+	'/saleIncome/missionOutput',
+	'/saleIncome/exceedPayment',
+	'/saleIncome/longAging',
+	'/saleIncome/missionInput',
+	'/saleIncome/companyIncome',
+	'/saleIncome/missionList',
+	'/saleIncome/completePercent',
+	'/saleIncome/personInfo',
+	//工作室
+	'/studioManage/list',
+	'/studioManage/detail',
+]
+const checkExternalLinks = url => {
+	return !urlArray.includes(url)
+}
 function createMenu(data) {
 	return data.map(item => {
 		let { subs: child, name, url } = item
@@ -18,7 +46,7 @@ function createMenu(data) {
 		</span>
 		return child ? <SubMenu key={name} title={title}>{createMenu(child)}
 		</SubMenu> : <Menu.Item key={url}>
-				<Link to={url}>{name}</Link>
+				{checkExternalLinks(url) ? <a href={url}>{name}</a> : <Link to={url}>{name}</Link>}
 			</Menu.Item>
 	})
 }

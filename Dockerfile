@@ -3,7 +3,7 @@
 FROM harbor.weiboyi.com/wby/nginx-alpine-base:1.0
 MAINTAINER  xuehao  "xuehao@weiboyi.com"
 
-COPY ./build/ /var/www/Core-Bentley/
+COPY ./build/ /var/www/Front-End-Finance/
 COPY ./core-bentley.conf /etc/nginx/conf.d/
 COPY ./mknginxproxyapiconf.sh /wby/entrypoint-devbox.sh
 RUN chmod +x /wby/entrypoint-devbox.sh

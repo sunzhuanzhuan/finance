@@ -3,38 +3,30 @@ import { Layout, Menu, Icon, message } from "antd";
 import { Link, withRouter } from "react-router-dom";
 import { events } from '@/util'
 import "./SiderMenu.less";
-import "./SiderMenu.css";
 
 const SubMenu = Menu.SubMenu;
 const { Sider } = Layout;
 
 const urlArray = [
 	//小金库调价
-	'/golden/adjustApply',
+	'/golden',
 	//发票
-	'/invoice/applyList',
+	'/invoice',
 	//快易提
 	'/extractManage',
 	//打款单
 	'/remitOrder',
 	//销售提成
-	'/saleIncome/businessAccounting',
-	'/saleIncome/clientPayment',
-	'/saleIncome/businessIncome',
-	'/saleIncome/missionOutput',
-	'/saleIncome/exceedPayment',
-	'/saleIncome/longAging',
-	'/saleIncome/missionInput',
-	'/saleIncome/companyIncome',
-	'/saleIncome/missionList',
-	'/saleIncome/completePercent',
-	'/saleIncome/personInfo',
+	'/saleIncome',
 	//工作室
-	'/studioManage/list',
-	'/studioManage/detail',
+	'/studioManage'
 ]
+const checkFinanceLink = url => {
+	url = urlArray.some(item => new RegExp(`^${item}`).test(url)) ? '/finance' + url : url;
+	return url
+}
 const checkExternalLinks = url => {
-	return !urlArray.includes(url)
+	return !/^finance/.test(url)
 }
 function createMenu(data) {
 	return data.map(item => {
@@ -46,7 +38,8 @@ function createMenu(data) {
 		</span>
 		return child ? <SubMenu key={name} title={title}>{createMenu(child)}
 		</SubMenu> : <Menu.Item key={url}>
-				{checkExternalLinks(url) ? <a href={url}>{name}</a> : <Link to={url}>{name}</Link>}
+				<Link to={checkFinanceLink(url)}>{name}</Link>
+				{checkExternalLinks(checkFinanceLink(url)) ? <Link to={url}>{name}</Link> : <a href={url}>{name}</a>}
 			</Menu.Item>
 	})
 }

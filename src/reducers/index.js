@@ -2,7 +2,7 @@ import { combineReducers } from 'redux'
 import { routerReducer } from 'react-router-redux';
 import commonReducers from './common'
 import authReducers from '../auth/reducers'
-import adminUserList from '../adminUser/reducers'
+// import adminUserList from '../adminUser/reducers'
 import companyDetail from '../companyDetail/reducers'
 import invoice from '../invoice/reducers'
 import loginReducer from '../login/reducer/index'
@@ -15,7 +15,7 @@ export default combineReducers({
 	commonReducers,
 	routing: routerReducer,
 	auth: authReducers,
-	...adminUserList,
+	// ...adminUserList,
 	companyDetail,
 	invoice,
 	loginReducer,

@@ -8,7 +8,6 @@ import { Layout, Button, Icon } from 'antd';
 import SiderMenu from '../components/SiderMenu'
 import { getUserLoginInfo, getUserConfigKey } from '../login/actions'
 import { resetSiderAuth, getAuthorizations } from '../actions'
-import BrowserJudge from '../browserJudge/showBrowserJudge'
 import { sensors } from '../util/sensor/sensors.js'
 const { Header, Content } = Layout;
 const Cookies = require('js-cookie');
@@ -84,7 +83,6 @@ class App extends Component {
 
 		const { loginReducer: { userLoginInfo }, siderMenuAuth = [] } = this.props;
 		return userLoginInfo['X-Access-Token'] ? <Layout style={layStyle}>
-			<BrowserJudge />
 			<Header style={headerStyle}>
 				<span>NB</span>
 				<div className="user-name">

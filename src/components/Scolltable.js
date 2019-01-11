@@ -1,5 +1,5 @@
 import React from "react";
-import "./Scolltable.css";
+import "./Scolltable.less";
 import { browserInfo } from '../util'
 /*
     该组件实现一个底部固定滚动条代替包含组件的滚动条，为了调整滚动条位置的组件

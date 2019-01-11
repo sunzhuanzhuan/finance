@@ -8,7 +8,7 @@ import "babel-polyfill";
 import { LocaleProvider } from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 import './index.less'
-import { HashRouter, Switch, Route, Redirect } from 'react-router-dom'
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 import numeral from 'numeral';
@@ -20,37 +20,36 @@ import Invoice from './invoice/index'
 import ExtractCoin from './extractCoin/index'
 import SaleIncomeRoute from './saleIncome/index'
 import StudioManage from './studioManage'
-//404错误页面
-import ErrorIndex from './containers/error'
-import Login from './login/container/Login'
 
 numeral.locale('chs')
 moment.locale('zh-cn');
+
+const routes = () => (
+	<App history={history}>
+		<Switch>
+			<Route path='/finance/detail' component={Detail} />
+			<Route path='/finance/freeze' component={Detail} />
+			<Route path='/finance/golden' component={Detail} />
+			<Route path='/finance/invoice' component={Invoice} />
+			<Route path='/finance/contractManage' component={ExtractCoin} />
+			<Route path='/finance/extractManage' component={ExtractCoin} />
+			<Route path='/finance/remitOrder' component={ExtractCoin} />
+			<Route path='/finance/saleIncome' component={SaleIncomeRoute} />
+			<Route path='/finance/studioManage' component={StudioManage} />
+			<Redirect to="/error" />
+		</Switch>
+	</App>
+);
+
 render(
 	<LocaleProvider locale={zhCN}>
 		<Provider store={store}>
-			<HashRouter>
+			<BrowserRouter>
 				<Switch>
-					<Route exact path='/' render={() => (<Redirect to="/loginSuccess" />)} />
-					<Route path='/login' component={Login} />
-					<Route path='/remitOrder/paymentOrder' component={ExtractCoin} />
-					<App history={history}>
-						<Switch>
-							<Route path='/detail' component={Detail} />
-							<Route path='/freeze' component={Detail} />
-							<Route path='/golden' component={Detail} />
-							<Route path='/invoice' component={Invoice} />
-							<Route path='/contractManage' component={ExtractCoin} />
-							<Route path='/extractManage' component={ExtractCoin} />
-							<Route path='/remitOrder' component={ExtractCoin} />
-							<Route path='/saleIncome' component={SaleIncomeRoute} />
-							<Route path='/studioManage' component={StudioManage} />
-							<Route path='/error' component={ErrorIndex} />
-							<Redirect to={'/error'} />
-						</Switch>
-					</App>
+					<Route path='/finance/remitOrder/paymentOrder' component={ExtractCoin} />
+					<Route path="/finance" render={routes} />
 				</Switch>
-			</HashRouter>
+			</BrowserRouter>
 		</Provider></LocaleProvider >,
 	document.getElementById('root')
 )

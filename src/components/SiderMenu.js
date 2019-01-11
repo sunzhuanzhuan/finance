@@ -26,7 +26,7 @@ const checkFinanceLink = url => {
 	return url
 }
 const checkExternalLinks = url => {
-	return !/^finance/.test(url)
+	return !/^finance/.test(checkFinanceLink(url))
 }
 function createMenu(data) {
 	return data.map(item => {
@@ -39,7 +39,7 @@ function createMenu(data) {
 		return child ? <SubMenu key={name} title={title}>{createMenu(child)}
 		</SubMenu> : <Menu.Item key={url}>
 				<Link to={checkFinanceLink(url)}>{name}</Link>
-				{checkExternalLinks(checkFinanceLink(url)) ? <Link to={url}>{name}</Link> : <a href={url}>{name}</a>}
+				{checkExternalLinks(url) ? <Link to={checkFinanceLink(url)}>{name}</Link> : <a href={url}>{name}</a>}
 			</Menu.Item>
 	})
 }

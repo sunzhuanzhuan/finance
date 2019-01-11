@@ -31,7 +31,6 @@
 		"dev": "webpack-dev-server --mode development --progress",
 		"build": "webpack --mode production",
 		"dll": "rm -rf ./public/static && webpack --config webpack.dll.config.js",
-		"eject": "react-scripts eject",
 		"precommit-msg": "echo '正在执行eslint验证...' && exit 0",
 		"eslint": "eslint ./src",
 		"eslint-fix": "eslint --fix ./src"

@@ -469,7 +469,7 @@ class ApplyList extends Component {
 					if (record.payback_status == 0) {
 						return (
 							<div>
-								<a target='_blank' href={`/invoice/applyDetail?id=${record.id}`} >{text}</a>
+								<a target='_blank' href={`/finance/invoice/applyDetail?id=${record.id}`} >{text}</a>
 								<span className="highLight" >待回款</span>
 							</div >
 
@@ -477,7 +477,7 @@ class ApplyList extends Component {
 					} else if (record.payback_status == 2) {
 						return (
 							<div>
-								<a target='_blank' href={`/invoice/applyDetail?id=${record.id}`} >{text}</a>
+								<a target='_blank' href={`/finance/invoice/applyDetail?id=${record.id}`} >{text}</a>
 								<Popover content={partMoney} trigger="click">
 									<span className="highLight" onClick={() => { this.handlePartMoney(record.id) }} >已回款</span>
 								</Popover>
@@ -486,7 +486,7 @@ class ApplyList extends Component {
 					} else if (record.payback_status == 1) {
 						return (
 							<div>
-								<a target='_blank' href={`/invoice/applyDetail?id=${record.id}`} >{text}</a>
+								<a target='_blank' href={`/finance/invoice/applyDetail?id=${record.id}`} >{text}</a>
 								<Popover content={partMoney} trigger="click">
 									<span className="highLight" onClick={() => { this.handlePartMoney(record.id) }}>部分回款</span>
 								</Popover>
@@ -494,7 +494,7 @@ class ApplyList extends Component {
 						)
 					} else {
 						return <div>
-							<a target='_blank' href={`/invoice/applyDetail?id=${record.id}`} >{text}</a>
+							<a target='_blank' href={`/finance/invoice/applyDetail?id=${record.id}`} >{text}</a>
 						</div>
 					}
 				}
@@ -648,12 +648,12 @@ class ApplyList extends Component {
 						<div>
 							{role == 'sale' ?
 								<div className='button-margin'>
-									<Button size='small' type="primary" href={`/invoice/apply?applyType=3&company_id=${record.company_id}&id=${record.id}`} >复制</Button>
+									<Button size='small' type="primary" href={`/finance/invoice/apply?applyType=3&company_id=${record.company_id}&id=${record.id}`} >复制</Button>
 									{record.status_display == '已开' ? <Button size='small' type="primary" onClick={this.showConfirm.bind(this, 'deliver', record.id, role, expressCompanyData)}>已寄出</Button> : ''}
 									{record.status_display == '草稿' ?
 										<p>
 											<Button size='small' type="primary" onClick={this.showConfirm.bind(this, 'sale-commit', record.id, role)} disabled={this.state.passDisable}>提交审核</Button>
-											<Button size='small' type="primary" href={`/invoice/apply?applyType=2&company_id=${record.company_id}&id=${record.id}`} >修改</Button>
+											<Button size='small' type="primary" href={`/finance/invoice/apply?applyType=2&company_id=${record.company_id}&id=${record.id}`} >修改</Button>
 											{record.status == 0 ? <Button size='small' type="primary" onClick={this.showConfirm.bind(this, 'sale-cancel', record.id)}>取消</Button> : ''}
 										</p> : ''}
 								</div> : ''

@@ -30,10 +30,10 @@ module.exports = merge(baseConfig, {
 	},
 	plugins: [
 		new MiniCssExtractPlugin({
-			filename: "[name].css",
-			chunkFilename: "[id].css"
+			filename: "static/css/[name].css",
+			chunkFilename: "static/css/[id].css"
 		}),
-		new CleanWebpackPlugin(["dist"], {
+		new CleanWebpackPlugin(["build"], {
 			root: path.resolve(__dirname, "../"),
 			verbose: true
 		}),

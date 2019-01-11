@@ -5,25 +5,29 @@ const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 const cssnano = require('cssnano');
 
 module.exports = merge(baseConfig, {
+	mode: 'production',
 	module: {
 		rules: [
 			{
-				test: /\.css$/,
-				use: [
-					MiniCssExtractPlugin.loader,
-					'css-loader'
-				],
-			},
-			{
-				test: /\.less$/,
+				test: /\.(less|css)$/,
 				use: [
 					MiniCssExtractPlugin.loader,
 					"css-loader",
-					"less-loader"
+					{
+						loader: 'less-loader', // compiles Less to CSS
+						options: {
+							modifyVars: {
+								'primary-color': '#1DA57A',
+								'link-color': '#1DA57A',
+							},
+							javascriptEnabled: true,
+						},
+					}
 				]
 			},
 		],
@@ -44,6 +48,7 @@ module.exports = merge(baseConfig, {
 					removeAll: true
 				}
 			}
-		})
+		}),
+		// new BundleAnalyzerPlugin()
 	]
 })

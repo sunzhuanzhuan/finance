@@ -76,7 +76,7 @@ class AssociateInvoice extends Component {
 		message.success(data.message || 'OK', 2, () => {
 			let timer = setTimeout(() => {
 				clearTimeout(timer)
-				this.props.history.push('/invoice/applyList')
+				this.props.history.push('/finance/invoice/applyList')
 			}, 300);
 		});
 	}

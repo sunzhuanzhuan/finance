@@ -239,7 +239,7 @@ class ApplyList extends Component {
 						// browserHistory.push({ pathname: "/invoice/upload", state: Obj })
 						//修改了push的方式
 						that.props.history.push({
-							pathname: "/invoice/upload",
+							pathname: "/finance/invoice/upload",
 							search: '?' + qs.stringify(Obj)
 						})
 					} else if (that.state.isOrderIncomplete && !that.state.isNeedUploadProof) {
@@ -251,7 +251,7 @@ class ApplyList extends Component {
 							role: role
 						}
 						that.props.history.push({
-							pathname: "/invoice/completeApply",
+							pathname: "/finance/invoice/completeApply",
 							search: '?' + qs.stringify(Obj)
 						})
 					} else if (!that.state.isNeedUploadProof && !that.state.isOrderIncomplete) {
@@ -711,7 +711,7 @@ class ApplyList extends Component {
 							<p style={{ fontSize: '12px' }}>该公司总消费：{this.state.totalSpendAmount}元，总充值：{this.state.totalRechargeAmount}元，已开票金额（含合同、邮件审批）：{this.state.totalInvoicedAmount}元</p>
 							<p>请确认该发票申请单之前没有开过发票，以免开重，然后再进行下一步操作</p>
 							<Row type="flex" justify="center" gutter={16}>
-								{this.state.isAssociateBtnVisible == '消费' || this.state.isAssociateBtnVisible == '充值' ? <Col><Button><Link to={"/invoice/associateInvoice?id=" + this.state.invoiceApplyId + "&role=" + role}>已开票，关联现有发票</Link></Button></Col> : ''}
+								{this.state.isAssociateBtnVisible == '消费' || this.state.isAssociateBtnVisible == '充值' ? <Col><Button><Link to={"/finance/invoice/associateInvoice?id=" + this.state.invoiceApplyId + "&role=" + role}>已开票，关联现有发票</Link></Button></Col> : ''}
 								<Col><Button onClick={this.handleCreatNewInvoice.bind(this)}>未开票，开具新发票</Button></Col>
 							</Row>
 

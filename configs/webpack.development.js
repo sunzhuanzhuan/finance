@@ -3,6 +3,7 @@ const merge = require('webpack-merge')
 const baseConfig = require('./webpack.base')
 
 module.exports = merge(baseConfig, {
+	mode: 'development',
 	devServer: {
 		port: '3000',
 		historyApiFallback: true,
@@ -25,15 +26,7 @@ module.exports = merge(baseConfig, {
 				loader: "eslint-loader",
 			},
 			{
-				test: /\.css$/,
-				use: [
-					'css-hot-loader',
-					'style-loader',
-					'css-loader'
-				],
-			},
-			{
-				test: /\.less$/,
+				test: /\.(less|css)$/,
 				use: [
 					'css-hot-loader',
 					'style-loader',

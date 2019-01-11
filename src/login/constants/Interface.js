@@ -1,15 +1,15 @@
 const { config } = window;
 export default {
 	login: {
-		sendsms: config.LoginHost + '/sendsms', //登录发送短信
-		verifysms: config.LoginHost + '/verifysms', //登录短信验证
-		getUserLoginInfo: config.LoginHost + '/cross/getUserLoginInfo',
-		getQrCode: config.LoginHost + '/wechatAuth/qrCode',
-		login: config.LoginHost + 'login',
-		loginWithSign: config.LoginHost + '/wechatAuth/loginWithSign',	//微信登录
-		qrViewInfo: config.LoginHost + '/wechatAuth/qrViewInfo',		//获取扫码状态
-		getLoginConfig: config.LoginHost + '/wechatAuth/getLoginConfig',
-		getUserConfigKey: config.LoginHost + '/config/getConfigByKeys',//神策统计
+		sendsms: '/sendsms', //登录发送短信
+		verifysms: '/verifysms', //登录短信验证
+		getUserLoginInfo: '/cross/getUserLoginInfo',
+		getQrCode: '/wechatAuth/qrCode',
+		login: 'login',
+		loginWithSign: '/wechatAuth/loginWithSign',	//微信登录
+		qrViewInfo: '/wechatAuth/qrViewInfo',		//获取扫码状态
+		getLoginConfig: '/wechatAuth/getLoginConfig',
+		getUserConfigKey: '/config/getConfigByKeys',//神策统计
 	}
 }
 

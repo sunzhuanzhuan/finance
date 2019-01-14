@@ -7,6 +7,7 @@ module.exports = merge(baseConfig, {
 	devServer: {
 		port: '3000',
 		historyApiFallback: true,
+		compress: true,
 		open: true,
 		hot: true,
 		host: 'lg.nip.io',

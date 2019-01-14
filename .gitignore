@@ -2,7 +2,6 @@
 
 # dependencies
 /node_modules
-
 # testing
 /coverage
 
@@ -22,3 +21,4 @@ yarn-error.log*
 .vscode
 .history
 .webpack.config.js
+.cache

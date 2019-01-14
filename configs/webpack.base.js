@@ -14,7 +14,7 @@ module.exports = {
 	entry: './src/index.js',
 	output: {
 		path: path.resolve(__dirname, '../build'),
-		filename: 'static/js/bundle.js',
+		filename: 'static/js/[name].js',
 		publicPath: '/'
 	},
 	module: {
@@ -136,7 +136,8 @@ module.exports = {
 			minify: { // 压缩 HTML 的配置
 				minifyCSS: true, // 压缩 HTML 中出现的 CSS 代码
 				minifyJS: true // 压缩 HTML 中出现的 JS 代码
-			}
+			},
+			chunks: ['main', 'vendors', 'icon', 'antd', 'wbyui', 'async-commons']
 		}),
 		createHappyPlugin('happy-babel', [{
 			loader: 'babel-loader',

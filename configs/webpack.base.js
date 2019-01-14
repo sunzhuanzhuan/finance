@@ -15,7 +15,7 @@ module.exports = {
 	output: {
 		path: path.resolve(__dirname, '../build'),
 		filename: 'static/js/[name].js',
-		publicPath: '/'
+		publicPath: process.env.$PUBLIC_URL||'/'
 	},
 	module: {
 		rules: [

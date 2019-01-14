@@ -64,11 +64,8 @@ module.exports = {
 		],
 	},
 	resolve: {
-		extensions: ['.js', '.jsx', 'json', '.less', '.css'],
-		modules: [
-			path.resolve(__dirname, '../node_modules'),
-			path.resolve(__dirname, '../src')
-		],
+		extensions: ['.js', '.jsx', 'json'],
+		modules: [path.resolve(__dirname, '../src'), 'node_modules'],
 		alias: {
 			"@": path.resolve(__dirname, '../src')
 		}
@@ -133,8 +130,7 @@ module.exports = {
 			minify: { // 压缩 HTML 的配置
 				minifyCSS: true, // 压缩 HTML 中出现的 CSS 代码
 				minifyJS: true // 压缩 HTML 中出现的 JS 代码
-			},
-			chunks: ['vendors', 'antd', 'wbyui', 'async-commons', 'commons',]
+			}
 		}),
 		createHappyPlugin('happy-babel', [{
 			loader: 'babel-loader',

@@ -137,7 +137,6 @@ module.exports = {
 				minifyCSS: true, // 压缩 HTML 中出现的 CSS 代码
 				minifyJS: true // 压缩 HTML 中出现的 JS 代码
 			},
-			chunks: ['main', 'vendors', 'icon', 'antd', 'wbyui', 'async-commons']
 		}),
 		createHappyPlugin('happy-babel', [{
 			loader: 'babel-loader',

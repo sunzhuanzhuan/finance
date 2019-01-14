@@ -107,7 +107,7 @@ class OrderCompensate extends Component {
 				const hide = message.loading('查询中，请稍候...');
 				this.queryData({ page: 1, page_size: 20, ...keys }, () => {
 					this.props.history.replace({
-						pathname: '/invoice/reparation',
+						pathname: '/finance/invoice/reparation',
 						search: `?${qs.stringify(params)}`,
 					});
 				}).then(() => {

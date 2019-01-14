@@ -1,10 +1,11 @@
+const { config } = window;
 export default {
 	login: {
 		sendsms: '/sendsms', //登录发送短信
 		verifysms: '/verifysms', //登录短信验证
 		getUserLoginInfo: '/cross/getUserLoginInfo',
 		getQrCode: '/wechatAuth/qrCode',
-		login: '/login',
+		login: 'login',
 		loginWithSign: '/wechatAuth/loginWithSign',	//微信登录
 		qrViewInfo: '/wechatAuth/qrViewInfo',		//获取扫码状态
 		getLoginConfig: '/wechatAuth/getLoginConfig',

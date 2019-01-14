@@ -14,7 +14,6 @@ import LoginQrCode from '../components/LoginQrCode'
 import { LoginType } from '../constants'
 import { getUrlParam } from '../../util'
 import { notification } from 'antd'
-import BrowserJudge from '../../browserJudge/showBrowserJudge'
 import './login.less'
 const logo = require("../images/logo.png");
 const Cookie = require('js-cookie');
@@ -185,7 +184,6 @@ class NormalLoginForm extends React.Component {
 		const token = loginConfig['X-Access-Token'];
 		return (
 			<div>
-				<BrowserJudge />
 				<img src={logo} height={50} style={{ marginTop: 20, display: 'block', marginLeft: 25, width: 320 }} />
 				<div className="loginContainer">
 					{

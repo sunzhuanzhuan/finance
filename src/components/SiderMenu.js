@@ -3,11 +3,31 @@ import { Layout, Menu, Icon, message } from "antd";
 import { Link, withRouter } from "react-router-dom";
 import { events } from '@/util'
 import "./SiderMenu.less";
-import "./SiderMenu.css";
 
 const SubMenu = Menu.SubMenu;
 const { Sider } = Layout;
 
+const urlArray = [
+	//小金库调价
+	'/golden',
+	//发票
+	'/invoice',
+	//快易提
+	'/extractManage',
+	//打款单
+	'/remitOrder',
+	//销售提成
+	'/saleIncome',
+	//工作室
+	'/studioManage'
+]
+const checkFinanceLink = url => {
+	url = urlArray.some(item => new RegExp(`^${item}`).test(url)) ? '/finance' + url : url;
+	return url
+}
+const checkExternalLinks = url => {
+	return !/^finance/.test(checkFinanceLink(url))
+}
 function createMenu(data) {
 	return data.map(item => {
 		let { subs: child, name, url } = item
@@ -18,7 +38,8 @@ function createMenu(data) {
 		</span>
 		return child ? <SubMenu key={name} title={title}>{createMenu(child)}
 		</SubMenu> : <Menu.Item key={url}>
-				<Link to={url}>{name}</Link>
+				<Link to={checkFinanceLink(url)}>{name}</Link>
+				{checkExternalLinks(url) ? <Link to={checkFinanceLink(url)}>{name}</Link> : <a href={url}>{name}</a>}
 			</Menu.Item>
 	})
 }

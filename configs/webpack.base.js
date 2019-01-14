@@ -96,15 +96,21 @@ module.exports = {
 					priority: 100,
 					name: 'vendors',
 				},
-				antd: { // 将体积较大的d3单独提取包，指定页面需要的时候再异步加载
+				icon: {
+					test: /@ant-design/,
+					priority: 100,
+					name: 'icon',
+					chunks: 'initial'
+				},
+				antd: {
 					test: /antd/,
-					priority: 100, // 设置高于async-commons，避免打包到async-common中
+					priority: 100,
 					name: 'antd',
 					chunks: 'async'
 				},
-				wbyui: { // 异步加载echarts包
+				wbyui: {
 					test: /wbyui/,
-					priority: 100, // 高于async-commons优先级
+					priority: 100,
 					name: 'wbyui',
 					chunks: 'async'
 				},

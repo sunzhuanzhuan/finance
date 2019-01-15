@@ -10,12 +10,13 @@ const createHappyPlugin = (id, loaders) => new HappyPack({
 	threadPool: happyThreadPool,
 	verbose: process.env.HAPPY_VERBOSE === '1' // make happy more verbose with HAPPY_VERBOSE=1
 });
+const PUBLIC_URL=process.env.PUBLIC_URL?process.env.PUBLIC_URL+'/':'/'
 module.exports = {
 	entry: './src/index.js',
 	output: {
 		path: path.resolve(__dirname, '../build'),
 		filename: 'static/js/[name].js',
-		publicPath: process.env.PUBLIC_URL||'/'
+		publicPath: PUBLIC_URL
 	},
 	module: {
 		rules: [

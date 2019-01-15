@@ -15,7 +15,7 @@ module.exports = {
 	output: {
 		path: path.resolve(__dirname, '../build'),
 		filename: 'static/js/[name].js',
-		publicPath: process.env.$PUBLIC_URL||'/'
+		publicPath: process.env.PUBLIC_URL||'/'
 	},
 	module: {
 		rules: [
@@ -100,7 +100,7 @@ module.exports = {
 					test: /@ant-design/,
 					priority: 100,
 					name: 'icon',
-					chunks: 'initial'
+					chunks: 'async'
 				},
 				antd: {
 					test: /antd/,
@@ -136,7 +136,7 @@ module.exports = {
 			minify: { // 压缩 HTML 的配置
 				minifyCSS: true, // 压缩 HTML 中出现的 CSS 代码
 				minifyJS: true // 压缩 HTML 中出现的 JS 代码
-			},
+			}
 		}),
 		createHappyPlugin('happy-babel', [{
 			loader: 'babel-loader',

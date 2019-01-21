@@ -24,6 +24,11 @@ import StudioManage from './studioManage'
 numeral.locale('chs')
 moment.locale('zh-cn');
 
+const redirectToOtherProjects = ({ location: { pathname = '/error' } }) => {
+	window.location.replace(pathname);
+	return null;
+};
+
 const routes = () => (
 	<App history={history}>
 		<Switch>
@@ -48,6 +53,7 @@ render(
 				<Switch>
 					<Route path='/finance/remitOrder/paymentOrder' component={ExtractCoin} />
 					<Route path="/finance" render={routes} />
+					<Route render={redirectToOtherProjects} />
 				</Switch>
 			</BrowserRouter>
 		</Provider></LocaleProvider >,

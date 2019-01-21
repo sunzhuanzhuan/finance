@@ -7,9 +7,6 @@ import "./SiderMenu.less";
 const SubMenu = Menu.SubMenu;
 const { Sider } = Layout;
 
-const checkExternalLinks = url => {
-	return /^finance/.test(url)
-}
 function createMenu(data) {
 	return data.map(item => {
 		let { subs: child, name, url } = item
@@ -20,7 +17,7 @@ function createMenu(data) {
 		</span>
 		return child ? <SubMenu key={name} title={title}>{createMenu(child)}
 		</SubMenu> : <Menu.Item key={url}>
-				{checkExternalLinks(url) ? <a href={url}>{name}</a> : <Link to={url}>{name}</Link>}
+				<Link to={url}>{name}</Link>
 			</Menu.Item>
 	})
 }

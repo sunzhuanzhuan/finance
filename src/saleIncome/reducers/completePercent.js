@@ -3,6 +3,7 @@ import {
 	getCompleteList_success,
 	getCompleteDetail_success
 } from '../actions/completePercent';
+import { markMergerCols } from '../constans'
 
 export const completeData = handleActions({
 	[getCompleteList_success]: (state, action) => {
@@ -15,7 +16,7 @@ export const completeData = handleActions({
 			item.actionFlag = `${item.position_name}_${item.business_name}`;
 			return item
 		});
-		poll(list);
+		list = markMergerCols(list, 'actionFlag');
 		return { ...action.payload.data, list }
 	}
 }, {})
@@ -25,18 +26,3 @@ export const completeDetail = handleActions({
 		return { ...action.payload.data[0] }
 	}
 }, {})
-
-function poll(list) {
-	let key = list[0].actionFlag, cur = 0;
-	list.forEach((item, index) => {
-		if (index >= list.length - 1) {
-			list[cur].action = index - cur + 1;
-			return
-		}
-		if (item.actionFlag === key) return;
-		list[cur].action = index - cur;
-		cur = index;
-		key = item.actionFlag;
-		return
-	})
-}

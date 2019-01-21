@@ -215,14 +215,20 @@ export const personInfoFunc = (handleNewModal, handleDelete, postType = []) => {
 			key: 'action',
 			align: 'center',
 			render: (text, record) => {
-				return text ? <span>
-					<a href='javascript:;' onClick={() => {
-						handleNewModal('mod', record)
-					}}>修改</a>
-					<a href='javascript:;' className='left-gap' onClick={() => {
-						handleDelete(record.sale_id)
-					}}>删除</a>
-				</span> : null
+				let obj = {
+					children: text ? <span>
+						<a href='javascript:;' onClick={() => {
+							handleNewModal('mod', record)
+						}}>修改</a>
+						<a href='javascript:;' className='left-gap' onClick={() => {
+							handleDelete(record.sale_id)
+						}}>删除</a>
+					</span> : null,
+					props: {
+						rowSpan: text
+					}
+				};
+				return obj
 			}
 		}
 	]
@@ -274,14 +280,20 @@ export const completePercentFunc = (handleNewModal, handleDelete) => {
 			key: 'action',
 			align: 'center',
 			render: (text, record) => {
-				return text ? <span>
-					<a href='javascript:;' onClick={() => {
-						handleNewModal('mod', record)
-					}}>修改</a>
-					<a href='javascript:;' className='left-gap' onClick={() => {
-						handleDelete(record.id)
-					}}>删除</a>
-				</span> : null
+				let obj = {
+					children: text ? <span>
+						<a href='javascript:;' onClick={() => {
+							handleNewModal('mod', record)
+						}}>修改</a>
+						<a href='javascript:;' className='left-gap' onClick={() => {
+							handleDelete(record.id)
+						}}>删除</a>
+					</span> : null,
+					props: {
+						rowSpan: text
+					}
+				};
+				return obj
 			}
 		}
 	]
@@ -750,3 +762,31 @@ export const tabListConfig = [
 	{ title: '部分核销', key: 3 }
 ]
 
+export const exportMap = [
+	{ label: '加价订单对应的客户维护费拓展项目', action: 'bussinessExcel' },
+	{ label: '业绩信息表', action: 'execExcel' },
+	{ label: '赠送金额统计表', action: 'giftExcel' },
+	{ label: '质检扣款统计表', action: 'qcExcel' },
+	{ label: '赔偿统计表', action: 'reparationExcel' },
+	{ label: '手工质检统计表', action: 'manualQcExcel' },
+	{ label: '回款信息表', action: 'payBackExcel' },
+	{ label: '长账龄扣款表', action: 'longAgingExcel' },
+	{ label: '上月待扣GMV', action: 'lessAchievementsExcel' }
+];
+
+//用action参数 ->  标记需要合并的列数
+export const markMergerCols = function (list, flag) {
+	let key = list[0][flag], curIndex = 0;//记录当前key值和索引值
+	list.forEach((item, index) => {
+		if (item[flag] !== key) {
+			if (index == list.length - 1) item.action = 1; //最后一项特殊处理
+			list[curIndex].action = index - curIndex;
+			curIndex = index;
+			key = item[flag];
+		} else {
+			if (index == list.length - 1) list[curIndex].action = index - curIndex + 1;//最后一项特殊处理
+			item.action = 0;
+		}
+	})
+	return list
+}

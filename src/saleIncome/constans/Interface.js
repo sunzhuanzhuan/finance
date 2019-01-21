@@ -52,6 +52,7 @@ export default {
 	giftExcel: '/commission/excel/gift',
 	qcExcel: '/commission/excel/qc',
 	reparationExcel: '/commission/excel/reparation',
+	manualQcExcel: '/commission/excel/manualQc',
 	payBackExcel: '/commission/excel/payBack',
 	longAgingExcel: '/commission/excel/longAging',
 	lessAchievementsExcel: '/commission/excel/lessAchievements',

@@ -1,16 +1,9 @@
 const path = require('path')
-const os = require('os')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ParallelUglifyPlugin = require('webpack-parallel-uglify-plugin');
-const HappyPack = require('happypack');
-const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
-const createHappyPlugin = (id, loaders) => new HappyPack({
-	id: id,
-	loaders: loaders,
-	threadPool: happyThreadPool,
-	verbose: process.env.HAPPY_VERBOSE === '1' // make happy more verbose with HAPPY_VERBOSE=1
-});
-const PUBLIC_URL=process.env.PUBLIC_URL?process.env.PUBLIC_URL+'/':'/'
+const createHappyPlugin = require('./utils').createHappyPlugin
+
+const PUBLIC_URL = process.env.PUBLIC_URL ? process.env.PUBLIC_URL + '/' : '/'
 module.exports = {
 	entry: './src/index.js',
 	output: {
@@ -25,9 +18,8 @@ module.exports = {
 				include: [
 					path.resolve(__dirname, '../src'),
 				],
-				use: {
-					loader: "babel-loader"
-				}
+				exclude: path.resolve(__dirname, '../node_modules'),
+				use: ['happypack/loader?id=happy-babel'],
 			},
 			{
 				test: /\.(png|jpg|gif)$/,
@@ -65,8 +57,8 @@ module.exports = {
 		],
 	},
 	resolve: {
-		extensions: ['.js', '.jsx', 'json'],
-		modules: [path.resolve(__dirname, '../src'), 'node_modules'],
+		extensions: ['.js'],
+		modules: ['node_modules'],
 		alias: {
 			"@": path.resolve(__dirname, '../src')
 		}
@@ -87,13 +79,13 @@ module.exports = {
 						reduce_vars: true
 					}
 				}
-			}),
+			})
 		],
 		splitChunks: {
 			cacheGroups: {
 				vendors: { // 项目基本框架等
 					chunks: 'all',
-					test: /(react|react-dom|react-router-dom|babel-polyfill|redux|axios|react-redux)/,
+					test: /(react|react-dom|react-router-dom|babel-polyfill|redux|axios|react-redux|antd)/,
 					priority: 100,
 					name: 'vendors',
 				},
@@ -101,13 +93,7 @@ module.exports = {
 					test: /@ant-design/,
 					priority: 100,
 					name: 'icon',
-					chunks: 'async'
-				},
-				antd: {
-					test: /antd/,
-					priority: 100,
-					name: 'antd',
-					chunks: 'async'
+					chunks: 'initial'
 				},
 				wbyui: {
 					test: /wbyui/,

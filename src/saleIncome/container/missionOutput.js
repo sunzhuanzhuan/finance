@@ -5,17 +5,13 @@ import * as missionOutputActions from '../actions/missionOutput'
 import { Button, message, DatePicker, Form } from 'antd';
 import './saleIncome.less';
 import moment from 'moment';
+import { exportMap } from '../constans'
 
 const { MonthPicker } = DatePicker;
 const FormItem = Form.Item;
 const monthFormat = 'YYYY-MM';
 
 class MissionOutput extends React.Component {
-	constructor() {
-		super();
-		this.state = {
-		}
-	}
 	componentDidMount() {
 		const toMonth = this.getMonth();
 		this.props.form.setFieldsValue({ 'time': moment(toMonth, monthFormat) });
@@ -27,6 +23,13 @@ class MissionOutput extends React.Component {
 		month = month < 10 ? "0" + month : month;
 		let toMonth = years.toString() + '-' + month.toString();
 		return toMonth;
+	}
+	handleExport = (action, time) => {
+		const hide = message.loading('导出中，请稍候...', 1);
+		this.props.actions[action]({ time }).then(() => {
+			message.success('导出成功，请查收邮件');
+			hide();
+		});
 	}
 	render() {
 		const { getFieldDecorator, getFieldValue } = this.props.form;
@@ -43,62 +46,14 @@ class MissionOutput extends React.Component {
 					)}
 				</FormItem>
 			</Form>
-			<div className='top-gap'><div className='output-label'>加价订单对应的客户维护费拓展项目:</div><Button type="primary" className='left-gap' onClick={() => {
-				const hide = message.loading('导出中，请稍候...', 1);
-				this.props.actions.bussinessExcel({ time }).then(() => {
-					message.success('导出成功，请查收邮件');
-					hide();
-				});
-			}}>导出</Button></div>
-			<div className='top-gap'><div className='output-label'>业绩信息表:</div><Button type="primary" className='left-gap' onClick={() => {
-				const hide = message.loading('导出中，请稍候...', 1);
-				this.props.actions.execExcel({ time }).then(() => {
-					message.success('导出成功，请查收邮件');
-					hide();
-				});
-			}}>导出</Button></div>
-			<div className='top-gap'><div className='output-label'>赠送金额统计表:</div><Button type="primary" className='left-gap' onClick={() => {
-				const hide = message.loading('导出中，请稍候...', 1);
-				this.props.actions.giftExcel({ time }).then(() => {
-					message.success('导出成功，请查收邮件');
-					hide();
-				});
-			}}>导出</Button></div>
-			<div className='top-gap'><div className='output-label'>质检扣款统计表:</div><Button type="primary" className='left-gap' onClick={() => {
-				const hide = message.loading('导出中，请稍候...', 1);
-				this.props.actions.qcExcel({ time }).then(() => {
-					message.success('导出成功，请查收邮件');
-					hide();
-				});
-			}}>导出</Button></div>
-			<div className='top-gap'><div className='output-label'>赔偿统计表:</div><Button type="primary" className='left-gap' onClick={() => {
-				const hide = message.loading('导出中，请稍候...', 1);
-				this.props.actions.reparationExcel({ time }).then(() => {
-					message.success('导出成功，请查收邮件');
-					hide();
-				});
-			}}>导出</Button></div>
-			<div className='top-gap'><div className='output-label'>回款信息表:</div><Button type="primary" className='left-gap' onClick={() => {
-				const hide = message.loading('导出中，请稍候...', 1);
-				this.props.actions.payBackExcel({ time }).then(() => {
-					message.success('导出成功，请查收邮件');
-					hide();
-				});
-			}}>导出</Button></div>
-			<div className='top-gap'><div className='output-label'>长账龄扣款表:</div><Button type="primary" className='left-gap' onClick={() => {
-				const hide = message.loading('导出中，请稍候...', 1);
-				this.props.actions.longAgingExcel({ time }).then(() => {
-					message.success('导出成功，请查收邮件');
-					hide();
-				});
-			}}>导出</Button></div>
-			<div className='top-gap'><div className='output-label'>上月待扣GMV:</div><Button type="primary" className='left-gap' onClick={() => {
-				const hide = message.loading('导出中，请稍候...', 1);
-				this.props.actions.lessAchievementsExcel({ time }).then(() => {
-					message.success('导出成功，请查收邮件');
-					hide();
-				});
-			}}>导出</Button></div>
+			{exportMap.map(item => {
+				return <div key={item.action} className='top-gap'>
+					<div className='output-label'>{item.label}:</div>
+					<Button type="primary" className='left-gap' onClick={() => {
+						this.handleExport(item.action, time);
+					}}>导出</Button>
+				</div>
+			})}
 		</div>
 	}
 }

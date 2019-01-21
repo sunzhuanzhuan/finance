@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Row, Col, Table, Select, DatePicker, Button, Form, message, Icon, Input, Popconfirm, Popover, Modal } from 'antd';
+import { Row, Col, Table, Select, DatePicker, Button, Form, message, Icon, Input, Modal } from 'antd';
 import * as orderCompensateAction from '../actions/orderCompensate';
+import { orderColumnsFunc } from '../constants'
 import './orderCompensate.less'
 import qs from 'qs';
 import moment from 'moment';
@@ -33,12 +34,6 @@ class OrderCompensate extends Component {
 		labels.length > 0 ? labels.forEach(item => {
 			obj[item] = { key: search.keys[item], label: search.labels[item] }
 		}) : null;
-		for (let key in keys) {
-			if (key === 'time_start' || key === 'time_end') {
-				keys[key] = moment(keys[key], dateFormat);
-			}
-		}
-		this.props.form.setFieldsValue({ ...keys, ...obj });
 		getCompensateAuthorizations().then(res => {
 			let flag = res.data[0].permissions['reparation.completeReparation'];
 			this.setState({ flag });
@@ -46,6 +41,12 @@ class OrderCompensate extends Component {
 		getReparationSaleList();
 		getReparationStatus();
 		this.queryData({ page: 1, page_size: 20, ...search.keys });
+		for (let key in keys) {
+			if (key === 'time_start' || key === 'time_end') {
+				keys[key] = moment(keys[key], dateFormat);
+			}
+		}
+		this.props.form.setFieldsValue({ ...keys, ...obj });
 	}
 	queryData = (obj, func) => {
 		this.setState({ loading: true });
@@ -127,124 +128,11 @@ class OrderCompensate extends Component {
 		const { getFieldDecorator } = this.props.form;
 		const { loading, flag, visible, record } = this.state;
 		const { reparationInfo: { count, page, list = [] }, orderSaleList, status } = this.props;
-		const columns = [
-			{
-				title: '操作',
-				dataIndex: 'action',
-				key: 'action',
-				align: 'center',
-				width: 100,
-				fixed: 'left',
-				render: (text, record) => {
-					return (<div>
-						{flag ? (record.display == "赔偿拒绝" || record.display == "赔偿通过") ? null : <div>
-							<Button type="primary" onClick={() => { this.handlePass(record) }}>通过</Button>
-							<Popconfirm title="确定要拒绝?" okText="确定" cancelText="取消" onConfirm={() => { this.handleRefuse(record.order_id) }}>
-								<Button type="primary" style={{ marginTop: '20px' }}>拒绝</Button>
-							</Popconfirm>
-						</div> : ""}
-					</div>)
-				}
-			}, {
-				title: '订单ID',
-				dataIndex: 'order_id',
-				key: 'order_id',
-				width: 130,
-				fixed: 'left',
-				align: 'center',
-				render: (text, record) => {
-					return (<div >
-						订单ID:<a target='_blank' href={record.order_link}>{record.order_id}</a><br />
-						{record.evidence ? record.evidence.map((item, index) => {
-							return (
-								<p key={index}>PO：<a target='_blank' href={record.evidence_link + item.execution_evidence_id}>{item.execution_evidence_code} </a></p>
-							)
-						}) : null}
-					</div >)
-				}
-			}, {
-				title: '需求名称',
-				dataIndex: 'requirement_name',
-				key: 'requirement_name',
-				align: 'center',
-			}, {
-				title: '赔偿ID',
-				dataIndex: 'reparation_id',
-				key: 'reparation_id',
-				align: 'center',
-			}, {
-				title: '赔偿金额',
-				dataIndex: 'reparation_amount',
-				key: 'reparation_amount',
-				align: 'center',
-			}, {
-				title: '结算金额',
-				dataIndex: 'deal_price',
-				key: 'deal_price',
-				align: 'center',
-			}, {
-				title: '赔偿原因',
-				dataIndex: 'reparation_reason',
-				key: 'execution_price',
-				align: 'center',
-				render: (text, record) => {
-					const content = (
-						<div style={{ width: '200px' }}>
-							<p style={{ width: '200px' }}>赔偿原因:{record.reparation_reason}</p>
-							{flag ? <p style={{ width: '200px' }}>备注:{record.remarks}</p> : ""}
-						</div>
-					);
-					return (<div>
-						<Popover content={content} title="详情">
-							<a href='javascript'>查看详情</a>
-						</Popover>
-
-					</div>);
-				}
-			}, {
-				title: '所属销售',
-				dataIndex: 'own_user_name',
-				key: 'own_user_name',
-				align: 'center',
-			}, {
-				title: '申请人',
-				dataIndex: 'operator_name',
-				key: 'operator_name',
-				align: 'center',
-			}, {
-				title: '赔偿状态',
-				dataIndex: 'display',
-				key: 'display',
-				align: 'center',
-			}, {
-				title: '时间',
-				dataIndex: 'time',
-				key: 'time',
-				align: 'center',
-				render: (text, record) => {
-					return (
-						<div>
-							<p>申请时间：{record.created_at}</p>
-							<p>通过/拒绝时间：{record.display == '赔偿申请中' ? '-' : record.updated_at}</p>
-						</div>
-					)
-				}
-			}, {
-				title: '公司简称',
-				dataIndex: 'company_name',
-				key: 'company_name',
-				align: 'center',
-			}, {
-				title: 'A端登录名',
-				dataIndex: 'username',
-				key: 'username',
-				align: 'center',
-			}
-		];
+		const columns = orderColumnsFunc(flag, this.handlePass, this.handleRefuse);
 		const paginationObj = {
 			onChange: (current) => {
 				this.setState({ page: current });
-				this.queryData({ page: current, ...search });
+				this.queryData({ page: current, page_size: 20, ...search.keys });
 			},
 			total: parseInt(count),
 			current: parseInt(page),

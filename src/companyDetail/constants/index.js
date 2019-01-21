@@ -400,7 +400,7 @@ export const adjustApplyFunc = (application_status, handleJump) => {
 			width: 140,
 			render: (text, record) => {
 				return <a href='javascript:;' target='_blank' type='primary' onClick={() => {
-					handleJump(record.id);
+					handleJump(record.id, record.company_id);
 				}}>订单详情</a>
 			}
 		}

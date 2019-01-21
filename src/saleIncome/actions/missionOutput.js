@@ -37,6 +37,13 @@ export const {
 });
 
 export const {
+	manualQcExcel,
+	manualQcExcel_success
+} = createHttpAction('manualQcExcel', Interface.manualQcExcel, {
+	method: 'get'
+});
+
+export const {
 	payBackExcel,
 	payBackExcel_success
 } = createHttpAction('payBackExcel', Interface.payBackExcel, {

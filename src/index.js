@@ -24,8 +24,11 @@ import StudioManage from './studioManage'
 numeral.locale('chs')
 moment.locale('zh-cn');
 
-const redirectToOtherProjects = ({ location: { pathname = '/error' } }) => {
-	window.location.replace(pathname)
+const redirectToOtherProjects = ({ location: { pathname = '/error', search = '' } }) => {
+	if (!(/^\//.test(pathname))) {
+		pathname = '/' + pathname
+	}
+	window.location.replace(pathname + search)
 	return null;
 };
 

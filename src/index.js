@@ -25,7 +25,7 @@ numeral.locale('chs')
 moment.locale('zh-cn');
 
 const redirectToOtherProjects = ({ location: { pathname = '/error' } }) => {
-	window.location.replace(pathname);
+	if (process.env === 'production') window.location.replace(pathname);
 	return null;
 };
 

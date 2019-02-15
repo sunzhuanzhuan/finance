@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as goldenActions from "../../actions/goldenApply";
 import { Input, Row, Form, Select, Button, Icon, message, Spin, Modal } from "antd";
-import SearchSelect from '../search';
+import SearchSelect from '../SearchSelect';
 import qs from 'qs';
 
 import moment from 'moment';

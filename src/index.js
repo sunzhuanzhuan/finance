@@ -28,7 +28,9 @@ const redirectToOtherProjects = ({ location: { pathname = '/error', search = '' 
 	if (!(/^\//.test(pathname))) {
 		pathname = '/' + pathname
 	}
-	window.location.replace(pathname + search)
+	if (process.env != 'development') {
+		window.location.replace(pathname + search)
+	}
 	return null;
 };
 

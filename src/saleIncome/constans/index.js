@@ -780,12 +780,12 @@ export const markMergerCols = function (list, flag) {
 	list.forEach((item, index) => {
 		if (item[flag] !== key) {
 			if (index == list.length - 1) item.action = 1; //最后一项特殊处理
-			list[curIndex].action = index - curIndex;
+			list[curIndex].action = index - curIndex; //action用来标识合并的行数
 			curIndex = index;
 			key = item[flag];
 		} else {
-			if (index == list.length - 1) list[curIndex].action = index - curIndex + 1;//最后一项特殊处理
 			item.action = 0;
+			if (index == list.length - 1) list[curIndex].action = index - curIndex + 1;//最后一项特殊处理
 		}
 	})
 	return list

@@ -16,10 +16,10 @@ class PersonListModal extends React.Component {
 	}
 	componentDidMount() {
 		const { setFieldsValue } = this.props.form;
-		let { curKey, record, region, page, page_size } = this.props;
+		let { curKey, record, region } = this.props;
 		let _region = region.find(item => item.display === record.region);
 		if (curKey && curKey.includes('mod')) {
-			this.props.actions.checkPersonInfo({ page, page_size, sale_id: record.sale_id }).then(() => {
+			this.props.actions.checkPersonInfo({ sale_id: record.sale_id }).then(() => {
 				const { checkSaleData: { list } } = this.props;
 				let ary = [];
 				list.forEach(item => {

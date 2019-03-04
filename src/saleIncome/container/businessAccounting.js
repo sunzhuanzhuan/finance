@@ -90,7 +90,7 @@ class BusinessIncome extends React.Component {
 		this.setState({ modalVisible: true, is_batch, ids });
 	}
 	render() {
-		const { modalVisible, checkVisible, filterParams, loading, currentTab, dataPage, curSelectRowKeys, curSelectRows, is_batch, ids, rowsMap } = this.state;
+		const { modalVisible, checkVisible, filterParams, loading, currentTab, dataPage, curSelectRowKeys = [], curSelectRows, is_batch, ids, rowsMap } = this.state;
 		const { accountingData: { total }, businessToken } = this.props;
 		const list = this.props.accountingData[currentTab];
 		const accountingList = businessAccountingListFunc(currentTab, this.handleVerify);

@@ -142,10 +142,10 @@ class BusinessIncome extends React.Component {
 			</div>
 			{currentTab != 2 ? <div>
 				<Row>
-					<Button className='top-gap' type='primary' disabled={!curSelectRowKeys.length} onClick={() => {
+					<Button className='top-gap' type='primary' disabled={!(curSelectRowKeys && curSelectRowKeys.length)} onClick={() => {
 						let obj = {};
 						curSelectRows.forEach(item => obj[item.id] = { price: item.not_write_off_amount, attachment: item.attachment });
-						if (curSelectRowKeys.length <= 1) {
+						if (curSelectRowKeys && curSelectRowKeys.length <= 1) {
 							this.setState({ modalVisible: true });
 							this.handleVerify(2, obj);
 							return

@@ -47,7 +47,7 @@ class AccountingTable extends React.Component {
 			handleSelected
 		} = this.props;
 		let ary = dataSource.map(item => item.id);
-		let flag = ary.every(item => curSelectRowKeys.includes(item));
+		let flag = ary.every(item => curSelectRowKeys && curSelectRowKeys.includes(item));
 		let curAry = curSelectRows.map(item => item.id);
 		let paginationObj = {
 			onChange: (current) => {

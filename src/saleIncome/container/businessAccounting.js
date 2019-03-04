@@ -90,7 +90,7 @@ class BusinessIncome extends React.Component {
 		this.setState({ modalVisible: true, is_batch, ids });
 	}
 	render() {
-		const { modalVisible, checkVisible, filterParams, loading, currentTab, dataPage, curSelectRowKeys = [], curSelectRows, is_batch, ids, rowsMap } = this.state;
+		const { modalVisible, checkVisible, filterParams, loading, currentTab, dataPage, curSelectRowKeys, curSelectRows, is_batch, ids, rowsMap } = this.state;
 		const { accountingData: { total }, businessToken } = this.props;
 		const list = this.props.accountingData[currentTab];
 		const accountingList = businessAccountingListFunc(currentTab, this.handleVerify);
@@ -112,7 +112,7 @@ class BusinessIncome extends React.Component {
 			<fieldset className='fieldset_css'>
 				<legend>统计</legend>
 				<div className='left-gap'>
-					已选记录:<span className='red-font' style={{ marginLeft: '10px' }}>{curSelectRowKeys.length}</span>个
+					已选记录:<span className='red-font' style={{ marginLeft: '10px' }}>{curSelectRowKeys ? curSelectRowKeys.length : 0}</span>个
 					<span style={{ marginLeft: '10px' }}>|</span>
 					<span className='red-font' style={{ marginLeft: '10px' }}>{price || 0.00}</span>元
 					<Button className='left-gap' type="primary" onClick={() => { this.setState({ checkVisible: true }) }}>查看已选</Button>

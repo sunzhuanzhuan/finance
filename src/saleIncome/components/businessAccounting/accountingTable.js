@@ -47,8 +47,9 @@ class AccountingTable extends React.Component {
 			handleSelected
 		} = this.props;
 		let ary = dataSource.map(item => item.id);
-		let flag = ary.every(item => curSelectRowKeys.includes(item));
+		let flag = ary.every(item => curSelectRowKeys && curSelectRowKeys.includes(item));
 		let curAry = curSelectRows.map(item => item.id);
+		let newAry = ary.filter(item => curAry.includes(item));
 		let paginationObj = {
 			onChange: (current) => {
 				handleLoading();
@@ -101,7 +102,7 @@ class AccountingTable extends React.Component {
 			footer={currentTab != 2 ? () => {
 				return <WBYTableFooter
 					plainOptions={dataSource}
-					selectedRowKeys={flag ? ary : curAry}
+					selectedRowKeys={flag ? ary : newAry}
 					onChange={this.onCheckAllChange}
 					title={'全选'}
 					pagination={dataSource.length ? paginationObj : false}

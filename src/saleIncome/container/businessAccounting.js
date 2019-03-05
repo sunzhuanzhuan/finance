@@ -112,7 +112,7 @@ class BusinessIncome extends React.Component {
 			<fieldset className='fieldset_css'>
 				<legend>统计</legend>
 				<div className='left-gap'>
-					已选记录:<span className='red-font' style={{ marginLeft: '10px' }}>{curSelectRowKeys.length}</span>个
+					已选记录:<span className='red-font' style={{ marginLeft: '10px' }}>{curSelectRowKeys ? curSelectRowKeys.length : 0}</span>个
 					<span style={{ marginLeft: '10px' }}>|</span>
 					<span className='red-font' style={{ marginLeft: '10px' }}>{price || 0.00}</span>元
 					<Button className='left-gap' type="primary" onClick={() => { this.setState({ checkVisible: true }) }}>查看已选</Button>
@@ -142,10 +142,10 @@ class BusinessIncome extends React.Component {
 			</div>
 			{currentTab != 2 ? <div>
 				<Row>
-					<Button className='top-gap' type='primary' disabled={!curSelectRowKeys.length} onClick={() => {
+					<Button className='top-gap' type='primary' disabled={!(curSelectRowKeys && curSelectRowKeys.length)} onClick={() => {
 						let obj = {};
 						curSelectRows.forEach(item => obj[item.id] = { price: item.not_write_off_amount, attachment: item.attachment });
-						if (curSelectRowKeys.length <= 1) {
+						if (curSelectRowKeys && curSelectRowKeys.length <= 1) {
 							this.setState({ modalVisible: true });
 							this.handleVerify(2, obj);
 							return

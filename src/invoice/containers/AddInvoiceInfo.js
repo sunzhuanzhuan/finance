@@ -138,12 +138,16 @@ class AddInvoiceInfo extends Component {
 	}
 	handleScroll = (e) => {
 		const { pageSize } = this.state;
-		let limit = e.target.clientHeight / 9 * pageSize - 60;
-		if (e.target.scrollTop > limit) {
-			this.handleJudge();
+		let limit = e.target.clientHeight / 8 * pageSize - e.target.clientHeight - 40;
+		let top = e.target.scrollTop;
+		let node = e.target;
+		if (top > limit) {
+			this.handleJudge(() => {
+				node.scrollTop = top;
+			});
 		}
 	}
-	handleJudge = () => {
+	handleJudge = (fn) => {
 		const { page, pageSize, invoiceId } = this.state;
 		const hide = message.loading('加载中，请稍后...')
 		const id = invoiceId ? invoiceId : [];
@@ -151,6 +155,7 @@ class AddInvoiceInfo extends Component {
 			this.setState({ pageSize: pageSize + 50 }, () => {
 				this.props.handleLimit(pageSize + 50);
 				hide();
+				setTimeout(fn, 0);
 			});
 		})
 	}

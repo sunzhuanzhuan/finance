@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as addListAction from '../actions/index'
-import { Row, Button, DatePicker, Input, Form, Select, Icon, message } from 'antd';
+import { Row, Button, DatePicker, Input, Form, Select, Icon, message, Divider } from 'antd';
 
 
 import { calcSum } from "../../util";
@@ -15,8 +15,18 @@ class AddInvoiceInfo extends Component {
 		super(props)
 		this.state = {
 			create_time: [],
-			disabled: true
+			disabled: true,
+			renderItems: [],
+			page: 1,
+			pageSize: 50
 		}
+	}
+	componentDidMount() {
+		const { availableInvoiceList = [] } = this.props;
+		const renderItems = availableInvoiceList ? availableInvoiceList.map((item, index) => {
+			return <Option key={index} value={item.invoice_number}>{item.invoice_number}</Option>
+		}) : [];
+		this.setState({ renderItems });
 	}
 	handleSubmit(e) {
 		e.preventDefault();
@@ -132,8 +142,16 @@ class AddInvoiceInfo extends Component {
 			this.props.handleTotalSum(sum)
 		})
 	}
+	handleScroll = (e) => {
+		const { page, pageSize, renderItems } = this.state;
+		let limit = e.target.clientHeight / 8 * pageSize - 50;
+		if (e.target.scrollTop > limit) {
+			this.props.actions.getAvailableInvoiceList(this.props.id, [], page + 1, pageSize).then(data => {
+				console.log(data);
+			})
+		}
+	}
 	render() {
-		const { availableInvoiceList = [] } = this.props;
 		const { getFieldDecorator, getFieldValue } = this.props.form;
 		getFieldDecorator('keys', { initialValue: [] });
 		const keys = getFieldValue('keys');
@@ -155,12 +173,9 @@ class AddInvoiceInfo extends Component {
 								placeholder="请选择"
 								showSearch
 								onChange={this.handleSelect.bind(this)}
+								onPopupScroll={this.handleScroll}
 							>
-								{
-									availableInvoiceList ? availableInvoiceList.map((item, index) => {
-										return <Option key={index} value={item.invoice_number}>{item.invoice_number}</Option>
-									}) : null
-								}
+								{this.state.renderItems}
 							</Select>
 						)}
 						{keys.length > 0 ? (
@@ -218,7 +233,7 @@ class AddInvoiceInfo extends Component {
 				<div className={formItems.length && formItems.length >= 5 ? 'invoice-scroll' : ''} ref={x => {
 					this.scrollChunk = x
 				}}>{formItems}</div>
-				{this.props.canInvoice ? < Button type="dashed" onClick={this.add} style={{ width: '60%' }}>
+				{this.props.canInvoice ? <Button type="dashed" onClick={this.add} style={{ width: '60%' }}>
 					<Icon type="plus" /> 添加发票号及金额
                 </Button > : null}
 				<Row style={{ marginTop: '20px' }}>

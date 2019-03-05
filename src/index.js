@@ -20,6 +20,8 @@ import Invoice from './invoice/index'
 import ExtractCoin from './extractCoin/index'
 import SaleIncomeRoute from './saleIncome/index'
 import StudioManage from './studioManage'
+import ZhangWu from './zhangwu'
+
 
 numeral.locale('chs')
 moment.locale('zh-cn');
@@ -46,6 +48,7 @@ const routes = () => (
 			<Route path='/finance/remitOrder' component={ExtractCoin} />
 			<Route path='/finance/saleIncome' component={SaleIncomeRoute} />
 			<Route path='/finance/studioManage' component={StudioManage} />
+			<Route path='/finance/zhangwu' component={ZhangWu} />
 			<Redirect to="/error" />
 		</Switch>
 	</App>

@@ -20,6 +20,7 @@ import Invoice from './invoice/index'
 import ExtractCoin from './extractCoin/index'
 import SaleIncomeRoute from './saleIncome/index'
 import StudioManage from './studioManage'
+import TrinityPay from './trinityPay'
 
 numeral.locale('chs')
 moment.locale('zh-cn');
@@ -46,6 +47,7 @@ const routes = () => (
 			<Route path='/finance/remitOrder' component={ExtractCoin} />
 			<Route path='/finance/saleIncome' component={SaleIncomeRoute} />
 			<Route path='/finance/studioManage' component={StudioManage} />
+			<Route path='/finance/trinityPay' component={TrinityPay} />
 			<Redirect to="/error" />
 		</Switch>
 	</App>

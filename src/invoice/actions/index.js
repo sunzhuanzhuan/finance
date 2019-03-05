@@ -85,9 +85,9 @@ export const postChangeState = (id, input_action, express_company, waybill_numbe
 	})
 }
 //发票列表接口
-export const getAvailableInvoiceList = (invoice_application_id, exclude_invoice_ids) => (dispatch) => {
+export const getAvailableInvoiceList = (invoice_application_id, exclude_invoice_ids, page = 1, page_size = 50) => (dispatch) => {
 	let ids = JSON.stringify(exclude_invoice_ids)
-	return api.get('/finance/invoice/application/availableInvoiceList?invoice_application_id=' + invoice_application_id + '&exclude_invoice_ids=' + ids).then((response) => {
+	return api.get('/finance/invoice/application/availableInvoiceList?invoice_application_id=' + invoice_application_id + '&exclude_invoice_ids=' + ids + `&page=${page}&page_size=${page_size}`).then((response) => {
 		const { data } = response
 		dispatch({
 			type: GET_AVILABLEINVOICELIST,

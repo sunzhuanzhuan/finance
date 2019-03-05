@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as addListAction from '../actions/index'
 import { Row, Button, DatePicker, Input, Form, Select, Icon, message } from 'antd';
-
+import debounce from 'lodash/debounce';
 
 import { calcSum } from "../../util";
 const FormItem = Form.Item
@@ -15,8 +15,11 @@ class AddInvoiceInfo extends Component {
 		super(props)
 		this.state = {
 			create_time: [],
-			disabled: true
+			disabled: true,
+			page: 1,
+			pageSize: 50
 		}
+		this.handleJudge = debounce(this.handleJudge, 800);
 	}
 	handleSubmit(e) {
 		e.preventDefault();
@@ -98,6 +101,7 @@ class AddInvoiceInfo extends Component {
 				let invoiceId = values.invoice_id;
 				if (invoiceId) {
 					invoiceId = invoiceId.filter(item => !isNaN(item))
+					this.setState({ invoiceId })
 				}
 				this.props.handleSelectData(invoiceId)
 				// can use data-binding to get
@@ -132,12 +136,32 @@ class AddInvoiceInfo extends Component {
 			this.props.handleTotalSum(sum)
 		})
 	}
+	handleScroll = (e) => {
+		const { pageSize } = this.state;
+		let limit = e.target.clientHeight / 9 * pageSize - 60;
+		if (e.target.scrollTop > limit) {
+			this.handleJudge();
+		}
+	}
+	handleJudge = () => {
+		const { page, pageSize, invoiceId } = this.state;
+		const hide = message.loading('加载中，请稍后...')
+		const id = invoiceId ? invoiceId : [];
+		this.props.actions.getAvailableInvoiceList(this.props.id, id, page, pageSize + 50).then(() => {
+			this.setState({ pageSize: pageSize + 50 }, () => {
+				this.props.handleLimit(pageSize + 50);
+				hide();
+			});
+		})
+	}
 	render() {
 		const { availableInvoiceList = [] } = this.props;
 		const { getFieldDecorator, getFieldValue } = this.props.form;
 		getFieldDecorator('keys', { initialValue: [] });
 		const keys = getFieldValue('keys');
-
+		const renderItems = availableInvoiceList ? availableInvoiceList.map((item, index) => {
+			return <Option key={index} value={item.invoice_number}>{item.invoice_number}</Option>
+		}) : [];
 		const formItems = keys.map((k, index) => {
 			return (
 				<div key={index}>
@@ -155,12 +179,9 @@ class AddInvoiceInfo extends Component {
 								placeholder="请选择"
 								showSearch
 								onChange={this.handleSelect.bind(this)}
+								onPopupScroll={this.handleScroll}
 							>
-								{
-									availableInvoiceList ? availableInvoiceList.map((item, index) => {
-										return <Option key={index} value={item.invoice_number}>{item.invoice_number}</Option>
-									}) : null
-								}
+								{renderItems}
 							</Select>
 						)}
 						{keys.length > 0 ? (
@@ -218,7 +239,7 @@ class AddInvoiceInfo extends Component {
 				<div className={formItems.length && formItems.length >= 5 ? 'invoice-scroll' : ''} ref={x => {
 					this.scrollChunk = x
 				}}>{formItems}</div>
-				{this.props.canInvoice ? < Button type="dashed" onClick={this.add} style={{ width: '60%' }}>
+				{this.props.canInvoice ? <Button type="dashed" onClick={this.add} style={{ width: '60%' }}>
 					<Icon type="plus" /> 添加发票号及金额
                 </Button > : null}
 				<Row style={{ marginTop: '20px' }}>

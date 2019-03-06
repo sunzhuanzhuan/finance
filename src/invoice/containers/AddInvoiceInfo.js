@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as addListAction from '../actions/index'
-import { Row, Button, DatePicker, Input, Form, Select, Icon, message } from 'antd';
+import { Row, Button, DatePicker, Input, Form, Select, Icon, message, Spin } from 'antd';
 import debounce from 'lodash/debounce';
 
 import { calcSum } from "../../util";
@@ -17,7 +17,8 @@ class AddInvoiceInfo extends Component {
 			create_time: [],
 			disabled: true,
 			page: 1,
-			pageSize: 50
+			pageSize: 50,
+			loading: false
 		}
 		this.handleJudge = debounce(this.handleJudge, 800);
 	}
@@ -140,17 +141,19 @@ class AddInvoiceInfo extends Component {
 		const node = e.target;
 		const top = node.scrollTop;
 		if (top && (top > node.scrollHeight - node.clientHeight - 5)) {
-			this.handleJudge(() => { node.scrollTop = top })
+			this.setState({ loading: true });
+			this.handleJudge(() => {
+				this.setState({ loading: false });
+				node.scrollTop = top;
+			})
 		}
 	}
 	handleJudge = (fn) => {
 		const { page, pageSize, invoiceId } = this.state;
-		const hide = message.loading('加载中，请稍后...')
 		const id = invoiceId ? invoiceId : [];
 		this.props.actions.getAvailableInvoiceList(this.props.id, id, page, pageSize + 50).then(() => {
 			this.setState({ pageSize: pageSize + 50 }, () => {
 				this.props.handleLimit(pageSize + 50);
-				hide();
 				setTimeout(fn, 0);
 			});
 		})
@@ -181,6 +184,13 @@ class AddInvoiceInfo extends Component {
 								showSearch
 								onChange={this.handleSelect.bind(this)}
 								onPopupScroll={this.handleScroll}
+								dropdownRender={menu => (
+									<div>
+										<Spin tip='加载更多，请稍候...' spinning={this.state.loading}>
+											{menu}
+										</Spin>
+									</div>
+								)}
 							>
 								{renderItems}
 							</Select>

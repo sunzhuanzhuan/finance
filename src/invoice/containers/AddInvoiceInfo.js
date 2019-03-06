@@ -137,14 +137,10 @@ class AddInvoiceInfo extends Component {
 		})
 	}
 	handleScroll = (e) => {
-		const { pageSize } = this.state;
-		let limit = e.target.clientHeight / 8 * pageSize - e.target.clientHeight - 40;
-		let top = e.target.scrollTop;
-		let node = e.target;
-		if (top > limit) {
-			this.handleJudge(() => {
-				node.scrollTop = top;
-			});
+		const node = e.target;
+		const top = node.scrollTop;
+		if (top && (top > node.scrollHeight - node.clientHeight - 5)) {
+			this.handleJudge(() => { node.scrollTop = top })
 		}
 	}
 	handleJudge = (fn) => {

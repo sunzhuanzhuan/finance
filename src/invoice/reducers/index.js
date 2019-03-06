@@ -10,6 +10,7 @@ import { getApplyDetail } from "./applyDetail";
 import { getRepartionData, saleData, repartionStatus } from "./repartion";
 import associateInvoice from './associateInvoice';
 import { reparationInfo, orderSaleList, status } from './orderCompensate';
+import { relatedInvoiceData } from './relatedInvoice'
 export default combineReducers({
 	applyList,
 	saleList,
@@ -41,7 +42,8 @@ export default combineReducers({
 	partMoney,
 	reparationInfo,
 	orderSaleList,
-	status
+	status,
+	relatedInvoiceData
 })
 
 

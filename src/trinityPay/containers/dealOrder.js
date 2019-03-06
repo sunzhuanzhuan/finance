@@ -56,7 +56,7 @@ class DealOrder extends React.Component {
 			showSizeChanger: true,
 			pageSizeOptions: ['20', '50', '100', '200']
 		};
-		return <div className='datePay-container'>
+		return <div className='dealOrder-container'>
 			<Statistics />
 			<fieldset className='fieldset_css'>
 				<legend>查询</legend>

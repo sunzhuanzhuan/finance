@@ -27,8 +27,8 @@ export const prePayFunc = (handleModal) => [
 					}}>打款撤销</Button>
 				</div>
 				<div className='little-top-gap'>
-					<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/modification?id=${record.a}`}>编辑</Button>
-					<Button className='little-left-gap' type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/detail?id=${record.a}`}>查看</Button>
+					<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/modification?type=prePay&id=${record.a}`}>编辑</Button>
+					<Button className='little-left-gap' type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/detail?type=prePay&id=${record.a}`}>查看</Button>
 				</div>
 			</div>
 		}
@@ -64,13 +64,6 @@ export const prePayFunc = (handleModal) => [
 
 	},
 	{
-		title: '三方平台订单ID',
-		dataIndex: 'e',
-		key: 'e',
-		align: 'center',
-		width: 100
-	},
-	{
 		title: '打款金额',
 		dataIndex: 'h',
 		key: 'h',
@@ -92,7 +85,7 @@ export const prePayFunc = (handleModal) => [
 		width: 100
 	},
 	{
-		title: '申请日期',
+		title: '打款单生成日期',
 		dataIndex: 'r',
 		key: 'r',
 		align: 'center',
@@ -137,8 +130,8 @@ export const datePayFunc = (handleModal) => [
 					}}>打款撤销</Button>
 				</div>
 				<div className='little-top-gap'>
-					<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/modification?id=${record.a}`}>编辑</Button>
-					<Button className='little-left-gap' type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/detail?id=${record.a}`}>查看</Button>
+					<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/modification?type=datePay&id=${record.a}`}>编辑</Button>
+					<Button className='little-left-gap' type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/detail?type=datePay&id=${record.a}`}>查看</Button>
 				</div>
 				<div className='little-top-gap'>
 					<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/modification?id=${record.a}`}>订单详情</Button>
@@ -150,6 +143,13 @@ export const datePayFunc = (handleModal) => [
 		title: '打款单ID',
 		dataIndex: 'a',
 		key: 'a',
+		align: 'center',
+		width: 100
+	},
+	{
+		title: '结算单ID',
+		dataIndex: 'z',
+		key: 'z',
 		align: 'center',
 		width: 100
 	},
@@ -294,7 +294,7 @@ export const dealOrderFunc = (handleModal) => [
 	},
 ];
 
-export const detailColumns = [
+export const prePayDetailColumns = [
 	{
 		title: '打款单ID：',
 		dataIndex: 'a',
@@ -477,6 +477,127 @@ export const detailColumns = [
 	},
 	{
 		title: '打款撤销备注：',
+		dataIndex: 'c',
+		key: 'c',
+		align: 'center'
+	}
+];
+export const datePayDetailColumns = [
+	{
+		title: '打款单ID：',
+		dataIndex: 'a',
+		key: 'a',
+		align: 'center'
+	}, {
+		title: '申请时间',
+		dataIndex: 'b',
+		key: 'b',
+		align: 'center',
+
+	},
+	{
+		title: '平台：',
+		dataIndex: 'e',
+		key: 'e',
+		align: 'center',
+	},
+	{
+		title: '三方代理商：',
+		dataIndex: 'g',
+		key: 'g',
+		align: 'center',
+	},
+	{
+		title: '打款金额：',
+		dataIndex: 'i',
+		key: 'i',
+		align: 'center',
+	},
+	{
+		title: '收款方式：',
+		dataIndex: 'k',
+		key: 'k',
+		align: 'center',
+	},
+	{
+		title: '收款户名：',
+		dataIndex: 'm',
+		key: 'm',
+		align: 'center',
+	},
+	{
+		title: '开户行：',
+		dataIndex: 'q',
+		key: 'q',
+		align: 'center'
+	},
+	{
+		title: '收款账号：',
+		dataIndex: 'r',
+		key: 'r',
+		align: 'center'
+	},
+	{
+		title: '开户支行：',
+		dataIndex: 's',
+		key: 's',
+		align: 'center'
+	},
+	{
+		title: '打款状态：',
+		dataIndex: 't',
+		key: 't',
+		align: 'center'
+	},
+	{
+		title: '付款公司：',
+		dataIndex: 'u',
+		key: 'u',
+		align: 'center'
+	},
+	{
+		title: '打款成功/失败时间：',
+		dataIndex: 'v',
+		key: 'v',
+		align: 'center'
+	},
+	{
+		title: '回票方式：',
+		dataIndex: 'w',
+		key: 'w',
+		align: 'center'
+	},
+	{
+		title: '打款成功截图：',
+		dataIndex: 'x',
+		key: 'x',
+		align: 'center'
+	},
+	{
+		title: '应回发票：',
+		dataIndex: 'y',
+		key: 'y',
+		align: 'center'
+	},
+	{
+		title: '打款备注：',
+		dataIndex: 'z',
+		key: 'z',
+		align: 'center'
+	},
+	{
+		title: '发票盈余：',
+		dataIndex: 'a',
+		key: 'a',
+		align: 'center'
+	}, {
+		title: '打款撤销备注：',
+		dataIndex: 'b',
+		key: 'b',
+		align: 'center'
+	},
+	{
+		title: '发票开具方：',
 		dataIndex: 'c',
 		key: 'c',
 		align: 'center'

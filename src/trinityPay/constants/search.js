@@ -128,10 +128,10 @@ export const prePaySearch = [
 		ctype: 'rangePicker',
 		attr: {
 			placeholder: ['开始时间', '结束时间'],
-			style: { width: 110 }
+			style: { width: 104 }
 		},
 		field: {
-			label: '申请日期',
+			label: '打款单生成日期',
 			value: ['Dstart', 'Dend'],
 		}
 	},
@@ -139,7 +139,7 @@ export const prePaySearch = [
 		ctype: 'rangePicker',
 		attr: {
 			placeholder: ['开始时间', '结束时间'],
-			style: { width: 110 }
+			style: { width: 104 }
 		},
 		field: {
 			label: '打款日期',
@@ -150,7 +150,7 @@ export const prePaySearch = [
 		ctype: 'rangePicker',
 		attr: {
 			placeholder: ['开始时间', '结束时间'],
-			style: { width: 110 }
+			style: { width: 104 }
 		},
 		field: {
 			label: '打款撤销日期',
@@ -324,7 +324,7 @@ export const datePaySearch = [
 		ctype: 'rangePicker',
 		attr: {
 			placeholder: ['开始时间', '结束时间'],
-			style: { width: 110 }
+			style: { width: 104 }
 		},
 		field: {
 			label: '申请日期',
@@ -335,7 +335,7 @@ export const datePaySearch = [
 		ctype: 'rangePicker',
 		attr: {
 			placeholder: ['开始时间', '结束时间'],
-			style: { width: 110 }
+			style: { width: 104 }
 		},
 		field: {
 			label: '打款日期',
@@ -346,7 +346,7 @@ export const datePaySearch = [
 		ctype: 'rangePicker',
 		attr: {
 			placeholder: ['开始时间', '结束时间'],
-			style: { width: 110 }
+			style: { width: 104 }
 		},
 		field: {
 			label: '打款撤销日期',
@@ -377,6 +377,17 @@ export const datePaySearch = [
 				value: '2'
 			},
 		]
+	},
+	{
+		ctype: 'input',
+		attr: {
+			placeholder: '请选择',
+			style: { width: 160 }
+		},
+		field: {
+			label: '结算单编号',
+			value: 'pingtai',
+		},
 	}
 ];
 export const dealOrderSearch = [
@@ -492,7 +503,7 @@ export const dealOrderSearch = [
 		ctype: 'rangePicker',
 		attr: {
 			placeholder: ['开始时间', '结束时间'],
-			style: { width: 110 }
+			style: { width: 104 }
 		},
 		field: {
 			label: '三方平台下单时间',

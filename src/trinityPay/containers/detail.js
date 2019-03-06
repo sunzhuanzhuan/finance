@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import * as trinityPayAction from "../actions";
 import { message, Button } from 'antd'
 import { WBYDetailTable } from "wbyui"
-import { detailColumns } from '../constants'
+import { prePayDetailColumns, datePayDetailColumns } from '../constants'
 import './trinityPay.less'
 import qs from 'qs'
 
@@ -13,11 +13,12 @@ class Detail extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-
+			type: undefined
 		}
 	}
 	componentDidMount() {
 		const search = qs.parse(this.props.location.search.substring(1));
+		this.setState({ type: search.type });
 		this.queryData({ id: search.id });
 	}
 	queryData = (obj, func) => {
@@ -33,6 +34,7 @@ class Detail extends React.Component {
 		})
 	}
 	render() {
+		const { type } = this.state;
 		const dataSoure = {
 			"a": 1,
 			"b": 2,
@@ -61,6 +63,7 @@ class Detail extends React.Component {
 			"y": 1,
 			"z": 2
 		};
+		const detailColumns = type == 'prePay' ? prePayDetailColumns : type == 'datePay' ? datePayDetailColumns : [];
 		return <div className='detail-container'>
 			<fieldset className='fieldset_css'>
 				<legend>打款单信息</legend>

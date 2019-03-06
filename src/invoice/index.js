@@ -14,6 +14,7 @@ const Reparation = lazyLoadComponent(() => import('./containers/orderCompensate'
 const AssociateInvoice = lazyLoadComponent(() => import('./containers/associateInvoice/AssociateInvoice'))
 //import modifiedUpload = lazyLoadComponent(() => import('./containers/uploadModified'))
 //import newInvoice = lazyLoadComponent(() => import('./containers/newInvoice'))
+const RelatedInvoice = lazyLoadComponent(() => import('./containers/relatedInvoice'))
 class Invoice extends Component {
 	constructor(props) {
 		super(props);
@@ -32,7 +33,7 @@ class Invoice extends Component {
     <Route path="/invoice/editUpload" component={modifiedUpload}></Route> */}
 				<Route path="/finance/invoice/associateInvoice" component={AssociateInvoice}></Route>
 				{/* <Route path="/invoice/tan" component={newInvoice}></Route> */}
-
+				<Route path="/finance/invoice/relatedInvoice" component={RelatedInvoice}></Route>
 			</div>
 		);
 	}

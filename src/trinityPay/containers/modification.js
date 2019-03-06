@@ -12,11 +12,12 @@ class Modification extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-
+			type: undefined
 		}
 	}
 	componentDidMount() {
 		const search = qs.parse(this.props.location.search.substring(1));
+		this.setState({ type: search.type })
 		this.queryData({ ...search.keys });
 	}
 	queryData = (obj, func) => {
@@ -36,6 +37,7 @@ class Modification extends React.Component {
 	}
 	render() {
 		const { getFieldDecorator } = this.props.form;
+		const { type } = this.state;
 		const formItemLayout = {
 			labelCol: { span: 6 },
 			wrapperCol: { span: 16 }
@@ -52,26 +54,47 @@ class Modification extends React.Component {
 						</FormItem>
 					</Row>
 					<Row>
+						<FormItem label='打款单类型' {...formItemLayout}>
+							{getFieldDecorator('id')(
+								<Input disabled={true} />
+							)}
+						</FormItem>
+					</Row>
+					<Row>
+						<FormItem label='收款方类型' {...formItemLayout}>
+							{getFieldDecorator('id')(
+								<Input disabled={true} />
+							)}
+						</FormItem>
+					</Row>
+					{type == 'prePay' && <Row>
 						<FormItem label='订单ID' {...formItemLayout}>
 							{getFieldDecorator('order_id')(
 								<Input disabled={true} />
 							)}
 						</FormItem>
-					</Row>
-					<Row>
+					</Row>}
+					{type == 'prePay' && <Row>
 						<FormItem label='订单类型' {...formItemLayout}>
 							{getFieldDecorator('order_type')(
 								<Input disabled={true} />
 							)}
 						</FormItem>
-					</Row>
-					<Row>
+					</Row>}
+					{type == 'prePay' && <Row>
 						<FormItem label='三方平台订单ID' {...formItemLayout}>
 							{getFieldDecorator('order_id')(
 								<Input disabled={true} />
 							)}
 						</FormItem>
-					</Row>
+					</Row>}
+					{type == 'datePay' && <Row>
+						<FormItem label='结算单ID' {...formItemLayout}>
+							{getFieldDecorator('order_id')(
+								<Input disabled={true} />
+							)}
+						</FormItem>
+					</Row>}
 					<Row>
 						<FormItem label='平台' {...formItemLayout}>
 							{getFieldDecorator('order_id')(
@@ -86,34 +109,34 @@ class Modification extends React.Component {
 							)}
 						</FormItem>
 					</Row>
-					<Row>
+					{type == 'prePay' && <Row>
 						<FormItem label='需求ID' {...formItemLayout}>
 							{getFieldDecorator('order_id')(
 								<Input disabled={true} />
 							)}
 						</FormItem>
-					</Row>
-					<Row>
+					</Row>}
+					{type == 'prePay' && <Row>
 						<FormItem label='需求名称' {...formItemLayout}>
 							{getFieldDecorator('order_id')(
 								<Input disabled={true} />
 							)}
 						</FormItem>
-					</Row>
-					<Row>
+					</Row>}
+					{type == 'prePay' && <Row>
 						<FormItem label='公司简称' {...formItemLayout}>
 							{getFieldDecorator('order_id')(
 								<Input disabled={true} />
 							)}
 						</FormItem>
-					</Row>
-					<Row>
+					</Row>}
+					{type == 'prePay' && <Row>
 						<FormItem label='所属销售' {...formItemLayout}>
 							{getFieldDecorator('order_id')(
 								<Input disabled={true} />
 							)}
 						</FormItem>
-					</Row>
+					</Row>}
 					<Row>
 						<FormItem label='打款金额' {...formItemLayout}>
 							{getFieldDecorator('order_id')(
@@ -170,14 +193,14 @@ class Modification extends React.Component {
 						</FormItem>
 					</Row>
 					<Row>
-						<FormItem label='打款成功/失败时间' {...formItemLayout}>
+						<FormItem label='付款时间' {...formItemLayout}>
 							{getFieldDecorator('order_id')(
 								<Input disabled={true} />
 							)}
 						</FormItem>
 					</Row>
 					<Row>
-						<FormItem label='打款截图' {...formItemLayout}>
+						<FormItem label='打款成功截图' {...formItemLayout}>
 							{getFieldDecorator('order_id', {
 								rules: [{ required: true, message: '打款撤销备注为必填项!' }]
 							})(
@@ -228,20 +251,20 @@ class Modification extends React.Component {
 							)}
 						</FormItem>
 					</Row>
-					<Row>
+					{type == 'prePay' && <Row>
 						<FormItem label='主账号' {...formItemLayout}>
 							{getFieldDecorator('order_id')(
 								<Input disabled={true} />
 							)}
 						</FormItem>
-					</Row>
-					<Row>
+					</Row>}
+					{type == 'prePay' && <Row>
 						<FormItem label='媒介经理' {...formItemLayout}>
 							{getFieldDecorator('order_id')(
 								<Input disabled={true} />
 							)}
 						</FormItem>
-					</Row>
+					</Row>}
 					<Row>
 						<FormItem label='打款撤销备注' {...formItemLayout}>
 							{getFieldDecorator('order_id', {

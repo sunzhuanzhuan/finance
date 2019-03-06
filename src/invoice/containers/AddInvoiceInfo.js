@@ -20,7 +20,7 @@ class AddInvoiceInfo extends Component {
 			pageSize: 50,
 			loading: false
 		}
-		this.handleJudge = debounce(this.handleJudge, 800);
+		this.addMore = debounce(this.handleJudge, 1000);
 	}
 	handleSubmit(e) {
 		e.preventDefault();
@@ -141,14 +141,14 @@ class AddInvoiceInfo extends Component {
 		const node = e.target;
 		const top = node.scrollTop;
 		if (top && (top > node.scrollHeight - node.clientHeight - 5)) {
-			this.setState({ loading: true });
-			this.handleJudge(() => {
+			this.addMore(() => {
 				this.setState({ loading: false });
 				node.scrollTop = top;
 			})
 		}
 	}
 	handleJudge = (fn) => {
+		this.setState({ loading: true });
 		const { page, pageSize, invoiceId } = this.state;
 		const id = invoiceId ? invoiceId : [];
 		this.props.actions.getAvailableInvoiceList(this.props.id, id, page, pageSize + 50).then(() => {
@@ -187,7 +187,9 @@ class AddInvoiceInfo extends Component {
 								dropdownRender={menu => (
 									<div>
 										<Spin tip='加载更多，请稍候...' spinning={this.state.loading}>
-											{menu}
+											<div style={this.state.loading ? { visibility: 'hidden' } : {}}>
+												{menu}
+											</div>
 										</Spin>
 									</div>
 								)}

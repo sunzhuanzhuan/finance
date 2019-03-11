@@ -4,7 +4,7 @@ import { DragSource, DropTarget } from "react-dnd";
 import { findDOMNode } from "react-dom";
 
 const DRAG_TYPE = 'ITEM'
-const styleMainColor = { color: '#1DA57A' }
+const styleMainColor = { color: '#1890ff' }
 const styleAutoActions = { marginLeft: 'auto', minWidth: '76px' }
 const FormItem = Form.Item
 // 拖拽源事件对象
@@ -140,7 +140,7 @@ export default class DragItems extends Component {
 					value={tempValue}
 					onChange={this.handleChangeValue}
 					placeholder='字段名'
-					// onBlur={this.cancelFieldsValue}
+				// onBlur={this.cancelFieldsValue}
 				/>
 			</FormItem>
 			<div className='actions' style={{ marginLeft: 6 }}>
@@ -149,14 +149,14 @@ export default class DragItems extends Component {
 				<a onClick={this.cancelFieldsValue}>取消</a>
 			</div>
 		</div> : <div className='item-content view-item'>
-			{alias ? alias + '[' + name + ']' : name}
-			<Icon className='actions' style={styleMainColor} onClick={this.isEdit} type="edit" theme="outlined" />
-			<div className='actions' style={styleAutoActions}>
-				<a onClick={() => drag(index, 0)}>置顶</a>
-				<Divider type="vertical" />
-				<a onClick={() => drag(index, length - 1)}>置底</a>
+				{alias ? alias + '[' + name + ']' : name}
+				<Icon className='actions' style={styleMainColor} onClick={this.isEdit} type="edit" theme="outlined" />
+				<div className='actions' style={styleAutoActions}>
+					<a onClick={() => drag(index, 0)}>置顶</a>
+					<Divider type="vertical" />
+					<a onClick={() => drag(index, length - 1)}>置底</a>
+				</div>
 			</div>
-		</div>
 		return connectDragSource && connectDropTarget &&
 			connectDragSource(connectDropTarget(
 				<div className='selected-fields-item' style={{ opacity }} onDoubleClick={this.isEdit}>

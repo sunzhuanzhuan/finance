@@ -509,7 +509,7 @@ class ApplyList extends Component {
 						return (
 							<div>
 								<Popover content={this.state.invoiceInfo} trigger="click">
-									<span onClick={this.handleInvoiceInfo.bind(this, record.id)} style={{ color: '#1DA57A', cursor: 'pointer' }}>{text}</span>
+									<span onClick={this.handleInvoiceInfo.bind(this, record.id)} style={{ color: '#1890ff', cursor: 'pointer' }}>{text}</span>
 								</Popover>
 
 							</div>
@@ -518,7 +518,7 @@ class ApplyList extends Component {
 						return (
 							<div>
 								<Popover content={this.state.rejectByAccountantReason} trigger="click">
-									<span onClick={this.handleRejectReason.bind(this, record.reject_by_accountant_reason)} style={{ color: '#1DA57A', cursor: 'pointer' }}>{text}</span>
+									<span onClick={this.handleRejectReason.bind(this, record.reject_by_accountant_reason)} style={{ color: '#1890ff', cursor: 'pointer' }}>{text}</span>
 								</Popover>
 
 							</div>

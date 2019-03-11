@@ -36,8 +36,8 @@ module.exports = merge(baseConfig, {
 						loader: 'less-loader', // compiles Less to CSS
 						options: {
 							modifyVars: {
-								'primary-color': '#1DA57A',
-								'link-color': '#1DA57A',
+								'primary-color': '#1890ff',
+								'link-color': '#1890ff',
 							},
 							javascriptEnabled: true,
 						},

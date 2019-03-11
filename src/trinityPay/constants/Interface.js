@@ -1,5 +1,10 @@
 export default {
-	getPrePayData: '/test/base',
-	getPrePaySuccess: '/test/success',
-	getPrePayFail: '/test/fail',
+	getPrePayData: '/finance/advance/paymentSlip/list',
+	getPrePayDetail: '/finance/advance/paymentSlip/info',
+	getPrePayExport: '/finance/advance/paymentSlip/export',
+	postPrePayEdit: '/finance/advance/paymentSlip/edit',
+	getPrePaySuccess: '/finance/advance/paymentSlip/paymentSuccess',
+	getPrePayFail: '/finance/advance/paymentSlip/paymentFail',
+	getPrePayBackout: '/finance/advance/paymentSlip/paymentBackout',
+	getSearchItem: '/finance/advance/paymentSlip/searchItem',
 }

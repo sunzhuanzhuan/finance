@@ -174,7 +174,7 @@ class SearchForm extends React.PureComponent {
 									data.selectOptionsChildren.length > 0 &&
 									data.selectOptionsChildren.map((optionItem, index) => (
 										<Option value={optionItem.value} key={optionItem.value}>
-											{optionItem.label}
+											{optionItem.name}
 										</Option>
 									))}
 							</Select>
@@ -294,7 +294,7 @@ class SearchForm extends React.PureComponent {
 				};
 				Object.keys(params['keys']).forEach(item => { !params['keys'][item] && params['keys'][item] !== 0 ? delete params['keys'][item] : null });
 				const hide = message.loading('查询中，请稍候...');
-				this.props.getAction(params).then(() => {
+				this.props.getAction({ ...params.keys }).then(() => {
 					this.props.history.replace({
 						pathname: this.props.location.pathname,
 						search: `?${qs.stringify(params)}`,

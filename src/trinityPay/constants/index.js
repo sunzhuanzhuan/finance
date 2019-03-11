@@ -27,81 +27,81 @@ export const prePayFunc = (handleModal) => [
 					}}>打款撤销</Button>
 				</div>
 				<div className='little-top-gap'>
-					<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/modification?type=prePay&id=${record.a}`}>编辑</Button>
-					<Button className='little-left-gap' type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/detail?type=prePay&id=${record.a}`}>查看</Button>
+					<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/modification?type=prePay&payment_slip_id=${record.payment_slip_id}`}>编辑</Button>
+					<Button className='little-left-gap' type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/detail?type=prePay&payment_slip_id=${record.payment_slip_id}`}>查看</Button>
 				</div>
 			</div>
 		}
 	},
 	{
 		title: '打款单ID',
-		dataIndex: 'a',
-		key: 'a',
+		dataIndex: 'payment_slip_id',
+		key: 'payment_slip_id',
 		align: 'center',
 		width: 100
 	},
 	{
 		title: '平台',
-		dataIndex: 'b',
-		key: 'b',
+		dataIndex: 'platform_name',
+		key: 'platform_name',
 		align: 'center',
 		width: 100
 	},
 	{
 		title: '三方代理商',
-		dataIndex: 'c',
-		key: 'c',
+		dataIndex: 'agent_name',
+		key: 'agent_name',
 		align: 'center',
 		width: 100
 
 	},
 	{
 		title: '订单ID',
-		dataIndex: 'd',
-		key: 'd',
+		dataIndex: 'public_order_id',
+		key: 'public_order_id',
 		align: 'center',
 		width: 100
 
 	},
 	{
 		title: '打款金额',
-		dataIndex: 'h',
-		key: 'h',
+		dataIndex: 'payment_amount',
+		key: 'payment_amount',
 		align: 'center',
 		width: 100
 	},
 	{
 		title: '打款状态',
-		dataIndex: 'o',
-		key: 'o',
+		dataIndex: 'payment_status',
+		key: 'payment_status',
 		align: 'center',
 		width: 100
 	},
 	{
 		title: '付款公司',
-		dataIndex: 'p',
-		key: 'p',
+		dataIndex: 'payment_company',
+		key: 'payment_company',
 		align: 'center',
 		width: 100
 	},
 	{
 		title: '打款单生成日期',
-		dataIndex: 'r',
-		key: 'r',
+		dataIndex: 'application_time',
+		key: 'application_time',
 		align: 'center',
 		width: 100
 	},
 	{
 		title: '主账号',
-		dataIndex: 'w',
-		key: 'w',
+		dataIndex: 'user_name',
+		key: 'user_name',
 		align: 'center',
 		width: 100
 	},
 	{
 		title: '媒介经理',
-		dataIndex: 'x',
-		key: 'x',
+		dataIndex: 'media_manager',
+		key: 'media_manager',
 		align: 'center',
 		width: 100
 	}
@@ -297,188 +297,183 @@ export const dealOrderFunc = (handleModal) => [
 export const prePayDetailColumns = [
 	{
 		title: '打款单ID：',
-		dataIndex: 'a',
-		key: 'a',
+		dataIndex: 'payment_slip_id',
+		key: 'payment_slip_id',
 		align: 'center'
 	}, {
 		title: '订单ID：',
-		dataIndex: 'b',
-		key: 'b',
+		dataIndex: 'order_id',
+		key: 'order_id',
 		align: 'center',
 
 	}, {
 		title: '三方平台订单ID：',
-		dataIndex: 'c',
-		key: 'c',
+		dataIndex: 'ttp_order_no',
+		key: 'ttp_order_no',
 		align: 'center'
 	}, {
 		title: '订单类型：',
-		dataIndex: 'd',
-		key: 'd',
+		dataIndex: 'product_line_desc',
+		key: 'product_line_desc ',
 		align: 'center',
 
 	},
 	{
 		title: '平台：',
-		dataIndex: 'e',
-		key: 'e',
+		dataIndex: 'platform_name',
+		key: 'platform_name',
 		align: 'center',
 	},
 	{
 		title: '需求ID：',
-		dataIndex: 'f',
-		key: 'f',
+		dataIndex: 'reservation_requirement_id',
+		key: 'reservation_requirement_id',
 		align: 'center',
 	},
 	{
 		title: '三方代理商：',
-		dataIndex: 'g',
-		key: 'g',
+		dataIndex: 'agent_name',
+		key: 'agent_name',
 		align: 'center',
 	},
 	{
 		title: '需求名称：',
-		dataIndex: 'h',
-		key: 'h',
+		dataIndex: 'reservation_requirement_name',
+		key: 'reservation_requirement_name',
 		align: 'center',
-		// render: (text) => {
-		// 	return <div>
-		// 		{text ? text.map((it, i) => {
-		// 			return <div className='thum-img-box' key={i} onClick={() => {
-		// 				this.setState({
-		// 					previewVisible: true,
-		// 					imgSrc: it.url
-		// 				})
-		// 			}}>
-		// 				<img src={it.url} />
-		// 			</div>
-		// 		}) : null}
-		// 	</div>
-		// }
 	},
 	{
 		title: '打款金额：',
-		dataIndex: 'i',
-		key: 'i',
+		dataIndex: 'payment_amount',
+		key: 'payment_amount',
 		align: 'center',
 	},
 	{
 		title: '公司简称：',
-		dataIndex: 'j',
-		key: 'j',
+		dataIndex: 'company_name',
+		key: 'company_name',
 		align: 'center',
 	},
 	{
 		title: '收款方式：',
-		dataIndex: 'k',
-		key: 'k',
+		dataIndex: 'receipt_way',
+		key: 'receipt_way',
 		align: 'center',
 	},
 	{
 		title: '所属销售：',
-		dataIndex: 'l',
-		key: 'l',
+		dataIndex: 'salesperson_name',
+		key: 'salesperson_name',
 		align: 'center',
 	},
 	{
 		title: '收款户名：',
-		dataIndex: 'm',
-		key: 'm',
+		dataIndex: 'receipt_account_name',
+		key: 'receipt_account_name',
 		align: 'center',
 	},
 	{
 		title: '付款公司：',
-		dataIndex: 'n',
-		key: 'n',
+		dataIndex: 'payment_company',
+		key: 'payment_company',
 		align: 'center'
 	},
 	{
 		title: '收款账号：',
-		dataIndex: 'o',
-		key: 'o',
+		dataIndex: 'receipt_account',
+		key: 'receipt_account',
 		align: 'center'
 	},
 	{
 		title: '回票方式：',
-		dataIndex: 'p',
-		key: 'p',
+		dataIndex: 'invoice_way_desc',
+		key: 'invoice_way_desc',
 		align: 'center'
 	},
 	{
 		title: '开户行：',
-		dataIndex: 'q',
-		key: 'q',
+		dataIndex: 'opening_bank',
+		key: 'opening_bank',
 		align: 'center'
 	},
 	{
 		title: '应回发票：',
-		dataIndex: 'r',
-		key: 'r',
+		dataIndex: 'invoice_amount',
+		key: 'invoice_amount',
 		align: 'center'
 	},
 	{
 		title: '开户支行：',
-		dataIndex: 's',
-		key: 's',
+		dataIndex: 'opening_bank_branch	',
+		key: 'opening_bank_branch	',
 		align: 'center'
 	},
 	{
 		title: '发票盈余：',
-		dataIndex: 't',
-		key: 't',
+		dataIndex: 'invoice_surplus',
+		key: 'invoice_surplus',
 		align: 'center'
 	},
 	{
 		title: '申请时间：',
-		dataIndex: 'u',
-		key: 'u',
+		dataIndex: 'application_time',
+		key: 'application_time',
 		align: 'center'
 	},
 	{
 		title: '发票开具方：',
-		dataIndex: 'v',
-		key: 'v',
+		dataIndex: 'beneficiary_company',
+		key: 'beneficiary_company',
 		align: 'center'
 	},
 	{
 		title: '打款状态：',
-		dataIndex: 'w',
-		key: 'w',
+		dataIndex: 'payment_status_desc',
+		key: 'payment_status_desc',
 		align: 'center'
 	},
 	{
 		title: '主账号：',
-		dataIndex: 'x',
-		key: 'x',
+		dataIndex: 'user_name',
+		key: 'user_name',
 		align: 'center'
 	},
 	{
 		title: '打款成功/失败时间：',
-		dataIndex: 'y',
-		key: 'y',
+		dataIndex: 'payment_time',
+		key: 'payment_time',
 		align: 'center'
 	},
 	{
 		title: '媒介经理：',
-		dataIndex: 'z',
-		key: 'z',
+		dataIndex: 'media_manager_name',
+		key: 'media_manager_name',
 		align: 'center'
 	},
 	{
 		title: '打款截图：',
-		dataIndex: 'a',
-		key: 'a',
-		align: 'center'
+		dataIndex: 'payment_screenshot',
+		key: 'payment_screenshot',
+		align: 'center',
+		render: (text) => {
+			return <div>
+				{text ? text.map((item, index) => {
+					return <div className='thum-img-box' key={index}>
+						<a href={item} target='_blank'><img src={item} /></a>
+					</div>
+				}) : null}
+			</div>
+		}
 	}, {
 		title: '打款备注：',
-		dataIndex: 'b',
-		key: 'b',
+		dataIndex: 'payment_remark',
+		key: 'payment_remark',
 		align: 'center'
 	},
 	{
 		title: '打款撤销备注：',
-		dataIndex: 'c',
-		key: 'c',
+		dataIndex: 'payment_backout_reason',
+		key: 'payment_backout_reason',
 		align: 'center'
 	}
 ];
@@ -603,3 +598,13 @@ export const datePayDetailColumns = [
 		align: 'center'
 	}
 ];
+export const modificationColumns = type => {
+	switch (type) {
+		case 'prePay':
+			return ['payment_slip_id', 'receipt_way', 'order_id', 'product_line_desc', 'sanfang', 'platform_name', 'agent_name', 'reservation_requirement_id', 'reservation_requirement_name', 'company_name', 'salesperson_name', 'payment_amount', 'receipt_way', 'receipt_account_name', 'receipt_account', 'opening_bank', 'opening_bank_branch', 'application_time', 'payment_status_desc', 'payment_time', 'payment_screenshot', 'payment_remark', 'payment_company', 'invoice_way_desc', 'invoice_amount', 'invoice_surplus', 'beneficiary_company', 'user_name', 'media_manager_name', 'payment_backout_reason']
+		case 'datePay':
+			return ['payment_slip_id', 'receipt_way', 'item_id', 'platform_name', 'agent_name', 'payment_amount', 'receipt_way', 'receipt_account_name', 'receipt_account', 'opening_bank', 'opening_bank_branch', 'application_time', 'payment_status_desc', 'payment_time', 'payment_screenshot', 'payment_remark', 'payment_company', 'invoice_way_desc', 'invoice_amount', 'invoice_surplus', 'beneficiary_company', 'payment_backout_reason']
+		default:
+			return [];
+	}
+}

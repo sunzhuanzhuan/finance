@@ -4,6 +4,7 @@ import { bindActionCreators } from "redux";
 import * as trinityPayAction from "../../actions";
 import { Modal, Button, Form, Input, message } from 'antd'
 import { WBYUploadFile } from 'wbyui'
+import qs from 'qs'
 const FormItem = Form.Item;
 const { TextArea } = Input;
 
@@ -16,14 +17,14 @@ class PreModal extends React.Component {
 	}
 	titleMap = type => {
 		const maps = {
-			'succeed': ['打款成功备注及截图', '确定打款成功吗？'],
-			'defeated': ['打款失败原因', '确定打款失败吗？'],
-			'revocation': ['打款撤销原因', '确定打款撤销吗？']
+			'succeed': ['打款成功备注及截图', '确定打款成功吗？', 'getPrePaySuccess'],
+			'defeated': ['打款失败原因', '确定打款失败吗？', 'getPrePayFail'],
+			'revocation': ['打款撤销原因', '确定打款撤销吗？', 'getPrePayBackout']
 		};
 		return maps[type]
 	}
 	handleModal = (content) => {
-		const { onCancel } = this.props;
+		const { onCancel, type } = this.props;
 		this.setState({ isClick: true }, () => {
 			Modal.confirm({
 				title: '提示',
@@ -31,7 +32,7 @@ class PreModal extends React.Component {
 				onOk: () => {
 					this.setState({ isClick: false });
 					onCancel();
-					this.handleSubmit();
+					this.handleSubmit(type);
 				},
 				onCancel: () => {
 					this.setState({ isClick: false });
@@ -39,12 +40,12 @@ class PreModal extends React.Component {
 			})
 		})
 	}
-	handleSubmit = () => {
-		this.props.actions.getPrePayFail().then(() => {
+	handleSubmit = (type) => {
+		const search = qs.parse(this.props.location.search.substring(1));
+		const actionName = this.titleMap[type][3];
+		this.props.actions[actionName]().then(() => {
 			message.success('操作成功!');
-			this.props.actions.getPrePayData().catch(({ errorMsg }) => {
-				message.error(errorMsg || '列表加载失败，请刷新！');
-			})
+			this.props.queryAction({ ...search.keys });
 		}).catch(({ errorMsg }) => {
 			message.error(errorMsg || '操作失败，请重试！');
 		})

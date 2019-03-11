@@ -12,6 +12,10 @@ module.exports = merge(baseConfig, {
 		hot: true,
 		host: 'lg.nip.io',
 		proxy: {
+			"/api/finance": {
+				target: "http://192.168.20.51:7300/mock/5c7fa2bd73f3100017a6412e",
+				changeOrigin: true
+			},
 			"/api/test": {
 				target: "http://192.168.20.51:7300/mock/5b5693d00a4cc60021ebdf6e",
 				changeOrigin: true
@@ -40,8 +44,8 @@ module.exports = merge(baseConfig, {
 						loader: 'less-loader', // compiles Less to CSS
 						options: {
 							modifyVars: {
-								'primary-color': '#1DA57A',
-								'link-color': '#1DA57A',
+								'primary-color': '#1890ff',
+								'link-color': '#1890ff',
 							},
 							javascriptEnabled: true,
 						},

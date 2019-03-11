@@ -65,7 +65,8 @@ class ApplyList extends Component {
 			canInvoice: '',
 			type: 1,
 			totalSum: 0,
-			returnLoading: false
+			returnLoading: false,
+			limit: 50
 		}
 	}
 
@@ -303,7 +304,7 @@ class ApplyList extends Component {
 			canInvoice: can_invoice,
 			type: type
 		}, () => {
-			this.props.actions.getAvailableInvoiceList(this.state.invoiceApplyId, []).catch(({ errorMsg }) => {
+			this.props.actions.getAvailableInvoiceList(this.state.invoiceApplyId, [], 1, this.state.limit).catch(({ errorMsg }) => {
 				message.warning(errorMsg || '请求出错', 1)
 			});
 			this.props.actions.getInvoiceStat(company_id).then((data) => {
@@ -339,7 +340,7 @@ class ApplyList extends Component {
 	}
 	handleSelectData(value) {
 		if (value != undefined) {
-			this.props.actions.getAvailableInvoiceList(this.state.invoiceApplyId, value).catch(({ errorMsg }) => {
+			this.props.actions.getAvailableInvoiceList(this.state.invoiceApplyId, value, 1, this.state.limit).catch(({ errorMsg }) => {
 				message.warning(errorMsg || '请求出错', 1)
 			});
 		}
@@ -745,6 +746,7 @@ class ApplyList extends Component {
 								handleCreatNewInvoiceOk={this.handleCreatNewInvoiceOk.bind(this)}
 								handleSelsetSubmit={this.handleSelsetSubmit.bind(this)}
 								handleTotalSum={this.handleTotalSum}
+								handleLimit={(limit) => { this.setState({ limit }) }}
 							></AddInvoiceInfo>
 						</div>
 

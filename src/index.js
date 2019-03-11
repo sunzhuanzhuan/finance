@@ -22,6 +22,7 @@ import SaleIncomeRoute from './saleIncome/index'
 import StudioManage from './studioManage'
 import TrinityPay from './trinityPay'
 
+
 numeral.locale('chs')
 moment.locale('zh-cn');
 

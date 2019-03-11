@@ -7,11 +7,9 @@ import qs from 'qs'
 import PropTypes from 'prop-types'
 import * as zhangActions from '../actions/index';
 import Query from'../components/query'
-import { zhangListFunc } from '../constants/column';
-import { Table, Pagination } from "antd";
-import './list.less'
-import ZhangWuTable from '../components/table'
 
+import { Table, Pagination } from "antd";
+// import './list.less'
 
 class List extends Component {
 	constructor(props) {
@@ -26,31 +24,21 @@ class List extends Component {
 		});
 	}
 	render(){
-		let paginationObj = {
-			// onChange: (current) => {
-			// 	queryAction({ page: current, ...search.keys });
-			// },
-			total: parseInt(4),
-			current: parseInt(1),
-			pageSize: parseInt(2),
-			showQuickJumper: true,
-		};
-		const columns = zhangListFunc(this.handleNewModal);
-		const dataTable = [{name:'哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈',id:2}]
-		return<div>
-		<fieldset className='fieldset_css'>
-			<legend>订单账务详情</legend>
-			<Query/>
-			<div className='top-gap'>
-				<ZhangWuTable
+		let {columns,paginationObj,dataTable}=this.props;
+		return <div className='top-gap'>
+				<Table
 					columns={columns}
-					dataTable={dataTable}
+					scroll={{ x: 1600 }}
+					dataSource={dataTable}
+					rowKey='id'
+					// questAction={this.props.actions.getMissionList}
+					total={50}
+					current={1}
 					pagination={paginationObj}
-				></ZhangWuTable>
+					// filterParams={filterParams}
+					// handlePageSize={this.handlePageSize}
+				></Table>
 			</div>
-		</fieldset>
-		
-	</div>
 	}
 }
 

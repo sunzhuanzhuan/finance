@@ -56,6 +56,9 @@ class Modification extends React.Component {
 				this.props.actions.postPrePayEdit({ ...obj }).then(() => {
 					message.success('修改成功！');
 					hide();
+					setTimeout(() => {
+						this.props.history.goBack();
+					}, 2000);
 				}).catch(({ errorMsg }) => {
 					message.error(errorMsg || '修改失败！');
 					hide();

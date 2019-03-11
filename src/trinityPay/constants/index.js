@@ -14,16 +14,16 @@ export const prePayFunc = (handleModal) => [
 			return <div>
 				<div className='little-top-gap'>
 					<Button type='primary' size='small' style={{ width: 80 }} onClick={() => {
-						handleModal(SUCCEED, true);
+						handleModal(record.payment_slip_id, SUCCEED, true);
 					}}>打款成功</Button>
 					<Button className='little-left-gap' type='primary' size='small' style={{ width: 80 }} onClick={() => {
-						handleModal(DEFEATED, true);
+						handleModal(record.payment_slip_id, DEFEATED, true);
 					}}>打款失败</Button>
 				</div>
 				<div className='little-top-gap'>
 					<Button type='primary' size='small' style={{ width: 80 }}>发票关联</Button>
 					<Button className='little-left-gap' type='primary' size='small' style={{ width: 80 }} onClick={() => {
-						handleModal(REVOCATION, true);
+						handleModal(record.payment_slip_id, REVOCATION, true);
 					}}>打款撤销</Button>
 				</div>
 				<div className='little-top-gap'>

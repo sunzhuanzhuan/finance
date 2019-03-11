@@ -1,8 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
-import * as trinityPayAction from "../../actions";
+import * as trinityPayAction from "../actions";
 import { Modal, Button, Form, Input, message } from 'antd'
+import { withRouter } from 'react-router-dom';
 import { WBYUploadFile } from 'wbyui'
 import qs from 'qs'
 const FormItem = Form.Item;
@@ -41,15 +42,24 @@ class PreModal extends React.Component {
 		})
 	}
 	handleSubmit = (type) => {
-		const search = qs.parse(this.props.location.search.substring(1));
-		const actionName = this.titleMap[type][3];
-		this.props.actions[actionName]().then(() => {
-			message.success('操作成功!');
-			this.props.queryAction({ ...search.keys });
-		}).catch(({ errorMsg }) => {
-			message.error(errorMsg || '操作失败，请重试！');
+		const { search, id, page, prePayData: { list } } = this.props;
+		const actionName = this.titleMap(type)[2];
+		this.props.form.validateFields((err, values) => {
+			if (!err) {
+				const current = (search.keys && search.keys.payment_status && list.length === 1) ? (page - 1 || page) : page;
+				let params = {
+					payment_slip_id: id
+				}
+				this.props.actions[actionName](params).then(() => {
+					message.success('操作成功!');
+					this.props.queryAction({ page: current, ...search.keys });
+				}).catch(({ errorMsg }) => {
+					message.error(errorMsg || '操作失败，请重试！');
+				})
+			}
 		})
 	}
+
 	render() {
 		const { getFieldDecorator } = this.props.form;
 		const { visible, onCancel, type, key } = this.props;
@@ -105,6 +115,7 @@ class PreModal extends React.Component {
 
 const mapStateToProps = (state) => {
 	return {
+		prePayData: state.trinityPay.prePayData,
 	}
 }
 const mapDispatchToProps = dispatch => ({

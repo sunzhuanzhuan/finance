@@ -19,7 +19,8 @@ class PrePay extends React.Component {
 			loading: false,
 			pull: false,
 			modalVisible: false,
-			type: undefined
+			type: undefined,
+			id: undefined
 		}
 	}
 	componentDidMount() {
@@ -43,8 +44,8 @@ class PrePay extends React.Component {
 			message.error(errorMsg || '列表加载失败，请重试！');
 		})
 	}
-	handleModal = (type, boolean) => {
-		this.setState({ type, modalVisible: boolean });
+	handleModal = (id, type, boolean) => {
+		this.setState({ id, type, modalVisible: boolean });
 	}
 	handleExport = () => {
 		const data = this.form.getFieldsValue();
@@ -64,7 +65,7 @@ class PrePay extends React.Component {
 	}
 	render() {
 		const search = qs.parse(this.props.location.search.substring(1));
-		const { loading, pull, modalVisible, type } = this.state;
+		const { loading, pull, modalVisible, id, type } = this.state;
 		const { prePayData: { list = [], page, page_size = 20, total, statistic }, SearchItem } = this.props;
 		const prePaySearch = prePaySearchFunc(SearchItem);
 		const prePayCols = prePayFunc(this.handleModal);
@@ -101,10 +102,13 @@ class PrePay extends React.Component {
 			{modalVisible ? <PreModal
 				key={type}
 				visible={modalVisible}
+				id={id}
+				page={page}
 				type={type}
 				queryAction={this.queryData}
+				search={search}
 				onCancel={() => {
-					this.handleModal(undefined, false)
+					this.handleModal(undefined, undefined, false)
 				}}
 			/> : null}
 		</div>

@@ -16,10 +16,6 @@ module.exports = merge(baseConfig, {
 				target: "http://192.168.20.51:7300/mock/5c7fa2bd73f3100017a6412e",
 				changeOrigin: true
 			},
-			"/api/test": {
-				target: "http://192.168.20.51:7300/mock/5b5693d00a4cc60021ebdf6e",
-				changeOrigin: true
-			},
 			"/api": {
 				target: "http://nb.tst-weiboyi.com",
 				changeOrigin: true

@@ -117,83 +117,83 @@ export const datePayFunc = (handleModal) => [
 			return <div>
 				<div className='little-top-gap'>
 					<Button type='primary' size='small' style={{ width: 80 }} onClick={() => {
-						handleModal(SUCCEED, true);
+						handleModal(record.payment_slip_id, SUCCEED, true);
 					}}>打款成功</Button>
 					<Button className='little-left-gap' type='primary' size='small' style={{ width: 80 }} onClick={() => {
-						handleModal(DEFEATED, true);
+						handleModal(record.payment_slip_id, DEFEATED, true);
 					}}>打款失败</Button>
 				</div>
 				<div className='little-top-gap'>
 					<Button type='primary' size='small' style={{ width: 80 }}>发票关联</Button>
 					<Button className='little-left-gap' type='primary' size='small' style={{ width: 80 }} onClick={() => {
-						handleModal(REVOCATION, true);
+						handleModal(record.payment_slip_id, REVOCATION, true);
 					}}>打款撤销</Button>
 				</div>
 				<div className='little-top-gap'>
-					<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/modification?type=datePay&id=${record.a}`}>编辑</Button>
-					<Button className='little-left-gap' type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/detail?type=datePay&id=${record.a}`}>查看</Button>
+					<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/modification?type=datePay&payment_slip_id=${record.payment_slip_id}`}>编辑</Button>
+					<Button className='little-left-gap' type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/detail?type=datePay&payment_slip_id=${record.payment_slip_id}`}>查看</Button>
 				</div>
 				<div className='little-top-gap'>
-					<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/modification?id=${record.a}`}>订单详情</Button>
+					<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/modification?payment_slip_id=${record.payment_slip_id}`}>订单详情</Button>
 				</div>
-			</div >
+			</div>
 		}
 	},
 	{
 		title: '打款单ID',
-		dataIndex: 'a',
-		key: 'a',
+		dataIndex: 'payment_slip_id',
+		key: 'payment_slip_id',
 		align: 'center',
 		width: 100
 	},
 	{
 		title: '结算单ID',
-		dataIndex: 'z',
-		key: 'z',
+		dataIndex: 'summary_sheet_id',
+		key: 'summary_sheet_id',
 		align: 'center',
 		width: 100
 	},
 	{
 		title: '平台',
-		dataIndex: 'b',
-		key: 'b',
+		dataIndex: 'platform_name',
+		key: 'platform_name',
 		align: 'center',
 		width: 100
 	},
 	{
 		title: '三方代理商',
-		dataIndex: 'c',
-		key: 'c',
+		dataIndex: 'agent_name',
+		key: 'agent_name',
 		align: 'center',
 		width: 100
 
 	},
 	{
 		title: '打款金额',
-		dataIndex: 'd',
-		key: 'd',
+		dataIndex: 'payment_amount',
+		key: 'payment_amount',
 		align: 'center',
 		width: 100
 
 	},
 	{
 		title: '打款状态',
-		dataIndex: 'e',
-		key: 'e',
+		dataIndex: 'payment_status_desc',
+		key: 'payment_status_desc',
 		align: 'center',
 		width: 100
 	},
 	{
 		title: '付款公司',
-		dataIndex: 'h',
-		key: 'h',
+		dataIndex: 'payment_company',
+		key: 'payment_company',
 		align: 'center',
 		width: 100
 	},
 	{
 		title: '申请日期',
-		dataIndex: 'o',
-		key: 'o',
+		dataIndex: 'application_time',
+		key: 'application_time',
 		align: 'center',
 		width: 100
 	}
@@ -480,121 +480,130 @@ export const prePayDetailColumns = [
 export const datePayDetailColumns = [
 	{
 		title: '打款单ID：',
-		dataIndex: 'a',
-		key: 'a',
+		dataIndex: 'payment_slip_id',
+		key: 'payment_slip_id',
 		align: 'center'
 	}, {
 		title: '申请时间',
-		dataIndex: 'b',
-		key: 'b',
+		dataIndex: 'application_time',
+		key: 'application_time',
 		align: 'center',
 
 	},
 	{
 		title: '平台：',
-		dataIndex: 'e',
-		key: 'e',
+		dataIndex: 'platform_name',
+		key: 'platform_name',
 		align: 'center',
 	},
 	{
 		title: '三方代理商：',
-		dataIndex: 'g',
-		key: 'g',
+		dataIndex: 'agent_name',
+		key: 'agent_name',
 		align: 'center',
 	},
 	{
 		title: '打款金额：',
-		dataIndex: 'i',
-		key: 'i',
+		dataIndex: 'payment_amount',
+		key: 'payment_amount',
 		align: 'center',
 	},
 	{
 		title: '收款方式：',
-		dataIndex: 'k',
-		key: 'k',
+		dataIndex: 'receipt_way',
+		key: 'receipt_way',
 		align: 'center',
 	},
 	{
 		title: '收款户名：',
-		dataIndex: 'm',
-		key: 'm',
+		dataIndex: 'receipt_account_name',
+		key: 'receipt_account_name',
 		align: 'center',
 	},
 	{
 		title: '开户行：',
-		dataIndex: 'q',
-		key: 'q',
+		dataIndex: 'opening_bank',
+		key: 'opening_bank',
 		align: 'center'
 	},
 	{
 		title: '收款账号：',
-		dataIndex: 'r',
-		key: 'r',
+		dataIndex: 'receipt_account',
+		key: 'receipt_account',
 		align: 'center'
 	},
 	{
 		title: '开户支行：',
-		dataIndex: 's',
-		key: 's',
+		dataIndex: 'opening_bank_branch',
+		key: 'opening_bank_branch',
 		align: 'center'
 	},
 	{
 		title: '打款状态：',
-		dataIndex: 't',
-		key: 't',
+		dataIndex: 'payment_status_desc',
+		key: 'payment_status_desc',
 		align: 'center'
 	},
 	{
 		title: '付款公司：',
-		dataIndex: 'u',
-		key: 'u',
+		dataIndex: 'payment_company',
+		key: 'payment_company',
 		align: 'center'
 	},
 	{
 		title: '打款成功/失败时间：',
-		dataIndex: 'v',
-		key: 'v',
+		dataIndex: 'payment_time',
+		key: 'payment_time',
 		align: 'center'
 	},
 	{
 		title: '回票方式：',
-		dataIndex: 'w',
-		key: 'w',
+		dataIndex: 'invoice_way',
+		key: 'invoice_way',
 		align: 'center'
 	},
 	{
 		title: '打款成功截图：',
-		dataIndex: 'x',
-		key: 'x',
-		align: 'center'
+		dataIndex: 'payment_screenshot',
+		key: 'payment_screenshot',
+		align: 'center',
+		render: (text) => {
+			return <div>
+				{text ? text.map((item, index) => {
+					return <div className='thum-img-box' key={index}>
+						<a href={item} target='_blank'><img src={item} /></a>
+					</div>
+				}) : null}
+			</div>
+		}
 	},
 	{
 		title: '应回发票：',
-		dataIndex: 'y',
-		key: 'y',
+		dataIndex: 'invoice_amount',
+		key: 'invoice_amount',
 		align: 'center'
 	},
 	{
 		title: '打款备注：',
-		dataIndex: 'z',
-		key: 'z',
+		dataIndex: 'payment_remark',
+		key: 'payment_remark',
 		align: 'center'
 	},
 	{
 		title: '发票盈余：',
-		dataIndex: 'a',
-		key: 'a',
+		dataIndex: 'invoice_surplus',
+		key: 'invoice_surplus',
 		align: 'center'
 	}, {
 		title: '打款撤销备注：',
-		dataIndex: 'b',
-		key: 'b',
+		dataIndex: 'payment_backout_reason',
+		key: 'payment_backout_reason',
 		align: 'center'
 	},
 	{
 		title: '发票开具方：',
-		dataIndex: 'c',
-		key: 'c',
+		dataIndex: 'beneficiary_company',
+		key: 'beneficiary_company',
 		align: 'center'
 	}
 ];

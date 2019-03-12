@@ -22,8 +22,10 @@ class Detail extends React.Component {
 		this.queryData({ payment_slip_id: search.payment_slip_id });
 	}
 	queryData = (obj, func) => {
+		const { type } = qs.parse(this.props.location.search.substring(1));
 		this.setState({ loading: true });
-		return this.props.actions.getPrePayDetail({ ...obj }).then(() => {
+		const actionName = type == 'prePay' ? 'getPrePayDetail' : type == 'datePay' ? 'getDatePayDetail' : undefined;
+		return this.props.actions[actionName]({ ...obj }).then(() => {
 			if (func && Object.prototype.toString.call(func) === '[object Function]') {
 				func();
 			}
@@ -35,12 +37,13 @@ class Detail extends React.Component {
 	}
 	render() {
 		const { type } = this.state;
-		const { prePayDetail } = this.props;
+		const { prePayDetail, datePayDetail } = this.props;
 		const detailColumns = type == 'prePay' ? prePayDetailColumns : type == 'datePay' ? datePayDetailColumns : [];
+		const dataSource = type == 'prePay' ? prePayDetail : type == 'datePay' ? datePayDetail : {};
 		return <div className='detail-container'>
 			<fieldset className='fieldset_css'>
 				<legend>打款单信息</legend>
-				<WBYDetailTable className='vertical-table' columns={detailColumns} dataSource={prePayDetail} columnCount={4} />
+				<WBYDetailTable className='vertical-table' columns={detailColumns} dataSource={dataSource} columnCount={4} />
 				<div style={{ textAlign: 'center', paddingTop: '20px' }}>
 					<Button type='primary' size='large' onClick={() => {
 						this.props.history.goBack()
@@ -54,6 +57,7 @@ class Detail extends React.Component {
 const mapStateToProps = (state) => {
 	return {
 		prePayDetail: state.trinityPay.prePayDetail,
+		datePayDetail: state.trinityPay.datePayDetail,
 	}
 }
 const mapDispatchToProps = dispatch => ({

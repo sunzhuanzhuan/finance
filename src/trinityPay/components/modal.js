@@ -3,9 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as trinityPayAction from "../actions";
 import { Modal, Button, Form, Input, message } from 'antd'
-import { withRouter } from 'react-router-dom';
 import { WBYUploadFile } from 'wbyui'
-import qs from 'qs'
 const FormItem = Form.Item;
 const { TextArea } = Input;
 
@@ -16,16 +14,37 @@ class PreModal extends React.Component {
 			isClick: false
 		}
 	}
-	titleMap = type => {
+	titleMap = (status, type) => {
+		const succeedName = type => {
+			const actionMap = {
+				'prePay': 'postPrePaySuccess',
+				'datePay': 'postDatePaySuccess',
+			}
+			return actionMap[type]
+		}
+		const defeatedName = type => {
+			const actionMap = {
+				'prePay': 'postPrePayFail',
+				'datePay': 'postDatePayFail',
+			}
+			return actionMap[type]
+		}
+		const revocationName = type => {
+			const actionMap = {
+				'prePay': 'postPrePayBackout',
+				'datePay': 'postDatePayBackout',
+			}
+			return actionMap[type]
+		}
 		const maps = {
-			'succeed': ['打款成功备注及截图', '确定打款成功吗？', 'getPrePaySuccess'],
-			'defeated': ['打款失败原因', '确定打款失败吗？', 'getPrePayFail'],
-			'revocation': ['打款撤销原因', '确定打款撤销吗？', 'getPrePayBackout']
+			'succeed': { title: '打款成功备注及截图', content: '确定打款成功吗？', actionName: succeedName(type) },
+			'defeated': { title: '打款失败原因', content: '确定打款失败吗？', actionName: defeatedName(type) },
+			'revocation': { title: '打款撤销原因', content: '确定打款撤销吗？', actionName: revocationName(type) },
 		};
-		return maps[type]
+		return maps[status]
 	}
 	handleModal = (content) => {
-		const { onCancel, type } = this.props;
+		const { onCancel, status, type } = this.props;
 		this.setState({ isClick: true }, () => {
 			Modal.confirm({
 				title: '提示',
@@ -33,7 +52,7 @@ class PreModal extends React.Component {
 				onOk: () => {
 					this.setState({ isClick: false });
 					onCancel();
-					this.handleSubmit(type);
+					this.handleSubmit(status, type);
 				},
 				onCancel: () => {
 					this.setState({ isClick: false });
@@ -41,9 +60,9 @@ class PreModal extends React.Component {
 			})
 		})
 	}
-	handleSubmit = (type) => {
+	handleSubmit = (status, type) => {
 		const { search, id, page, prePayData: { list } } = this.props;
-		const actionName = this.titleMap(type)[2];
+		const actionName = this.titleMap(status, type).actionName;
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
 				const current = (search.keys && search.keys.payment_status && list.length === 1) ? (page - 1 || page) : page;
@@ -62,18 +81,21 @@ class PreModal extends React.Component {
 
 	render() {
 		const { getFieldDecorator } = this.props.form;
-		const { visible, onCancel, type, key } = this.props;
+		const { visible, onCancel, status, type, key } = this.props;
 		const { isClick } = this.state;
 		const formItemLayout = {
 			labelCol: { span: 4 },
 			wrapperCol: { span: 20 }
 		};
-		const article = this.titleMap(type);
+		const article = this.titleMap(status, type);
+		console.log('%carticle: ', 'color: MidnightBlue; background: Aquamarine; font-size: 20px;', article);
+		console.log('%ctype: ', 'color: MidnightBlue; background: Aquamarine; font-size: 20px;', type);
+		console.log('%cstatus: ', 'color: MidnightBlue; background: Aquamarine; font-size: 20px;', status);
 		return <Modal
 			wrapClassName='prePay-modal'
 			key={key}
 			width={640}
-			title={article[0]}
+			title={article.title}
 			visible={visible}
 			maskClosable={false}
 			onCancel={onCancel}
@@ -81,7 +103,7 @@ class PreModal extends React.Component {
 				[
 					<Button key="back" onClick={onCancel}>返回</Button>,
 					<Button key="submit" type="primary" disabled={isClick} onClick={() => {
-						this.handleModal(article[1])
+						this.handleModal(article.content)
 					}}>确认</Button>
 				]}
 		>

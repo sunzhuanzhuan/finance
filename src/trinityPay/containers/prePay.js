@@ -17,16 +17,16 @@ class PrePay extends React.Component {
 		super();
 		this.state = {
 			loading: false,
-			pull: false,
+			pullReady: false,
 			modalVisible: false,
-			type: undefined,
+			status: undefined,
 			id: undefined
 		}
 	}
 	componentDidMount() {
 		const search = qs.parse(this.props.location.search.substring(1));
-		this.props.actions.getSearchItem().then(() => {
-			this.setState({ pull: true });
+		this.props.actions.getPrePaySearchItem().then(() => {
+			this.setState({ pullReady: true });
 		}).catch(({ errorMsg }) => {
 			message.error(errorMsg || '下拉项加载失败，请重试！');
 		})
@@ -44,8 +44,8 @@ class PrePay extends React.Component {
 			message.error(errorMsg || '列表加载失败，请重试！');
 		})
 	}
-	handleModal = (id, type, boolean) => {
-		this.setState({ id, type, modalVisible: boolean });
+	handleModal = (id, status, boolean) => {
+		this.setState({ id, status, modalVisible: boolean });
 	}
 	handleExport = () => {
 		const data = this.form.getFieldsValue();
@@ -65,9 +65,9 @@ class PrePay extends React.Component {
 	}
 	render() {
 		const search = qs.parse(this.props.location.search.substring(1));
-		const { loading, pull, modalVisible, id, type } = this.state;
-		const { prePayData: { list = [], page, page_size = 20, total, statistic }, SearchItem } = this.props;
-		const prePaySearch = prePaySearchFunc(SearchItem);
+		const { loading, pullReady, modalVisible, id, status } = this.state;
+		const { prePayData: { list = [], page, page_size = 20, total, statistic }, prePaySearchItem } = this.props;
+		const prePaySearch = prePaySearchFunc(prePaySearchItem);
 		const prePayCols = prePayFunc(this.handleModal);
 		const paginationObj = {
 			onChange: (current) => {
@@ -87,7 +87,7 @@ class PrePay extends React.Component {
 			<Statistics title={'三方平台打款单'} render={Stat(total, statistic)} />
 			<fieldset className='fieldset_css'>
 				<legend>查询</legend>
-				{pull && <SearForm data={prePaySearch} getAction={this.queryData} responseLayout={{ xs: 24, sm: 24, md: 10, lg: 8, xxl: 6 }} extraFooter={<Button type='primary' style={{ marginLeft: 20 }} onClick={this.handleExport}>导出</Button>} wrappedComponentRef={form => this.form = form} />}
+				{pullReady && <SearForm data={prePaySearch} getAction={this.queryData} responseLayout={{ xs: 24, sm: 24, md: 10, lg: 8, xxl: 6 }} extraFooter={<Button type='primary' style={{ marginLeft: 20 }} onClick={this.handleExport}>导出</Button>} wrappedComponentRef={form => this.form = form} />}
 			</fieldset>
 			<div className='top-gap'>
 				<Table
@@ -96,15 +96,16 @@ class PrePay extends React.Component {
 					columns={prePayCols}
 					dataSource={list}
 					bordered
-					pagination={list.length ? paginationObj : false}
+					pagination={total > page_size ? paginationObj : false}
 				/>
 			</div>
 			{modalVisible ? <PreModal
-				key={type}
+				key={status}
 				visible={modalVisible}
 				id={id}
 				page={page}
-				type={type}
+				status={status}
+				type={'prePay'}
 				queryAction={this.queryData}
 				search={search}
 				onCancel={() => {
@@ -118,7 +119,7 @@ class PrePay extends React.Component {
 const mapStateToProps = (state) => {
 	return {
 		prePayData: state.trinityPay.prePayData,
-		SearchItem: state.trinityPay.SearchItem,
+		prePaySearchItem: state.trinityPay.prePaySearchItem,
 	}
 }
 const mapDispatchToProps = dispatch => ({

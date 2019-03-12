@@ -4,7 +4,8 @@ export const prePaySearchFunc = ({ agent = [], media_manager = [], payment_compa
 		attr: {
 			placeholder: '请选择',
 			style: { width: 160 },
-			labelInValue: true
+			labelInValue: true,
+			allowClear: true
 		},
 		field: {
 			label: '平台',
@@ -17,7 +18,8 @@ export const prePaySearchFunc = ({ agent = [], media_manager = [], payment_compa
 		attr: {
 			placeholder: '请选择',
 			style: { width: 160 },
-			labelInValue: true
+			labelInValue: true,
+			allowClear: true
 		},
 		field: {
 			label: '三方代理商',
@@ -30,7 +32,8 @@ export const prePaySearchFunc = ({ agent = [], media_manager = [], payment_compa
 		attr: {
 			placeholder: '请选择',
 			style: { width: 160 },
-			labelInValue: true
+			labelInValue: true,
+			allowClear: true
 		},
 		field: {
 			label: '打款状态',
@@ -43,7 +46,8 @@ export const prePaySearchFunc = ({ agent = [], media_manager = [], payment_compa
 		attr: {
 			placeholder: '请选择',
 			style: { width: 160 },
-			labelInValue: true
+			labelInValue: true,
+			allowClear: true
 		},
 		field: {
 			label: '付款公司',
@@ -103,7 +107,8 @@ export const prePaySearchFunc = ({ agent = [], media_manager = [], payment_compa
 		attr: {
 			placeholder: '请选择',
 			style: { width: 160 },
-			labelInValue: true
+			labelInValue: true,
+			allowClear: true
 		},
 		field: {
 			label: '收款方式',
@@ -127,7 +132,8 @@ export const prePaySearchFunc = ({ agent = [], media_manager = [], payment_compa
 		attr: {
 			placeholder: '请选择',
 			style: { width: 160 },
-			labelInValue: true
+			labelInValue: true,
+			allowClear: true
 		},
 		field: {
 			label: '媒介经理',
@@ -136,174 +142,122 @@ export const prePaySearchFunc = ({ agent = [], media_manager = [], payment_compa
 		selectOptionsChildren: media_manager
 	}
 ];
-export const datePaySearch = [
+export const datePaySearchFunc = ({ platform = [], agent = [], payment_status = [], payment_company = [], receipt_way = [] }) => [
 	{
 		ctype: 'select',
 		attr: {
-			placeholder: '请选择',
-			style: { width: 160 }
+			placeholder: '不限',
+			style: { width: 160 },
+			labelInValue: true,
+			allowClear: true
 		},
 		field: {
 			label: '平台',
-			value: 'pingtai',
+			value: 'platform_id',
 		},
-		selectOptionsChildren: [
-			{
-				label: '全部',
-				value: ''
-			},
-			{
-				label: '是',
-				value: '1'
-			},
-			{
-				label: '否',
-				value: '2'
-			},
-		]
+		selectOptionsChildren: platform
 	},
 	{
 		ctype: 'select',
 		attr: {
-			placeholder: '请选择',
-			style: { width: 160 }
+			placeholder: '不限',
+			style: { width: 160 },
+			labelInValue: true,
+			allowClear: true
 		},
 		field: {
 			label: '三方代理商',
-			value: 'sanfang',
+			value: 'agent_id',
 		},
-		selectOptionsChildren: [
-			{
-				label: '全部',
-				value: ''
-			},
-			{
-				label: '是',
-				value: '1'
-			},
-			{
-				label: '否',
-				value: '2'
-			},
-		]
+		selectOptionsChildren: agent
 	},
 	{
 		ctype: 'select',
 		attr: {
-			placeholder: '请选择',
-			style: { width: 160 }
+			placeholder: '不限',
+			style: { width: 160 },
+			labelInValue: true,
+			allowClear: true
 		},
 		field: {
 			label: '打款状态',
-			value: 'status',
+			value: 'payment_status',
 		},
-		selectOptionsChildren: [
-			{
-				label: '全部',
-				value: ''
-			},
-			{
-				label: '是',
-				value: '1'
-			},
-			{
-				label: '否',
-				value: '2'
-			},
-		]
+		selectOptionsChildren: payment_status
 	},
 	{
 		ctype: 'select',
 		attr: {
-			placeholder: '请选择',
-			style: { width: 160 }
+			placeholder: '不限',
+			style: { width: 160 },
+			labelInValue: true,
+			allowClear: true
 		},
 		field: {
 			label: '付款公司',
-			value: 'company',
+			value: 'payment_company_id',
 		},
-		selectOptionsChildren: [
-			{
-				label: '全部',
-				value: ''
-			},
-			{
-				label: '是',
-				value: '1'
-			},
-			{
-				label: '否',
-				value: '2'
-			},
-		]
+		selectOptionsChildren: payment_company
 	},
 	{
 		ctype: 'rangePicker',
 		attr: {
 			placeholder: ['开始时间', '结束时间'],
+			format: 'YYYY-MM-DD',
 			style: { width: 104 }
 		},
 		field: {
 			label: '申请日期',
-			value: ['Sstart', 'Send'],
+			value: ['application_time_start', 'application_time_end'],
 		}
 	},
 	{
 		ctype: 'rangePicker',
 		attr: {
 			placeholder: ['开始时间', '结束时间'],
+			format: 'YYYY-MM-DD',
 			style: { width: 104 }
 		},
 		field: {
 			label: '打款日期',
-			value: ['Dstart', 'Dend'],
+			value: ['payment_time_start', 'payment_time_end'],
 		}
 	},
 	{
 		ctype: 'rangePicker',
 		attr: {
 			placeholder: ['开始时间', '结束时间'],
+			format: 'YYYY-MM-DD',
 			style: { width: 104 }
 		},
 		field: {
 			label: '打款撤销日期',
-			value: ['Dstart', 'Dend'],
+			value: ['payment_backout_time_start', 'payment_backout_time_end'],
 		}
 	},
 	{
 		ctype: 'select',
 		attr: {
-			placeholder: '请选择',
-			style: { width: 160 }
+			placeholder: '不限',
+			style: { width: 160 },
+			labelInValue: true,
+			allowClear: true
 		},
 		field: {
 			label: '收款方式',
-			value: 'jingli',
+			value: 'receipt_way',
 		},
-		selectOptionsChildren: [
-			{
-				label: '全部',
-				value: ''
-			},
-			{
-				label: '是',
-				value: '1'
-			},
-			{
-				label: '否',
-				value: '2'
-			},
-		]
+		selectOptionsChildren: receipt_way
 	},
 	{
 		ctype: 'input',
 		attr: {
-			placeholder: '请选择',
+			placeholder: '请输入',
 			style: { width: 160 }
 		},
 		field: {
 			label: '结算单编号',
-			value: 'pingtai',
+			value: 'summary_sheet_id',
 		},
 	}
 ];
@@ -312,7 +266,9 @@ export const dealOrderSearch = [
 		ctype: 'select',
 		attr: {
 			placeholder: '请选择',
-			style: { width: 160 }
+			style: { width: 160 },
+			labelInValue: true,
+			allowClear: true
 		},
 		field: {
 			label: '平台',
@@ -337,7 +293,9 @@ export const dealOrderSearch = [
 		ctype: 'select',
 		attr: {
 			placeholder: '请选择',
-			style: { width: 160 }
+			style: { width: 160 },
+			labelInValue: true,
+			allowClear: true
 		},
 		field: {
 			label: '三方代理商',
@@ -395,7 +353,9 @@ export const dealOrderSearch = [
 		ctype: 'select',
 		attr: {
 			placeholder: '请选择',
-			style: { width: 160 }
+			style: { width: 160 },
+			labelInValue: true,
+			allowClear: true
 		},
 		field: {
 			label: '打款状态',
@@ -431,7 +391,9 @@ export const dealOrderSearch = [
 		ctype: 'select',
 		attr: {
 			placeholder: '请选择',
-			style: { width: 160 }
+			style: { width: 160 },
+			labelInValue: true,
+			allowClear: true
 		},
 		field: {
 			label: '付款公司',

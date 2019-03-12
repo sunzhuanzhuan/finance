@@ -134,7 +134,7 @@ export const datePayFunc = (handleModal) => [
 					<Button className='little-left-gap' type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/detail?type=datePay&payment_slip_id=${record.payment_slip_id}`}>查看</Button>
 				</div>
 				<div className='little-top-gap'>
-					<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/modification?payment_slip_id=${record.payment_slip_id}`}>订单详情</Button>
+					<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/dealOrder?payment_slip_id=${record.payment_slip_id}`}>订单详情</Button>
 				</div>
 			</div>
 		}
@@ -198,97 +198,97 @@ export const datePayFunc = (handleModal) => [
 		width: 100
 	}
 ];
-export const dealOrderFunc = (handleModal) => [
+export const dealOrderCols = [
 	{
 		title: '订单ID',
-		dataIndex: 'a',
-		key: 'a',
+		dataIndex: 'order_id',
+		key: 'order_id',
 		align: 'center',
 		width: 100
 	},
 	{
 		title: '订单类型',
-		dataIndex: 'b',
-		key: 'b',
+		dataIndex: 'product_line_desc',
+		key: 'product_line_desc',
 		align: 'center',
 		width: 100
 	},
 	{
 		title: '平台',
-		dataIndex: 'c',
-		key: 'c',
+		dataIndex: 'platform_name',
+		key: 'platform_name',
 		align: 'center',
 		width: 100
 
 	},
 	{
 		title: '三方平台订单ID',
-		dataIndex: 'd',
-		key: 'd',
+		dataIndex: 'ttp_order_no',
+		key: 'ttp_order_no',
 		align: 'center',
 		width: 100
 
 	},
 	{
 		title: '三方代理商',
-		dataIndex: 'e',
-		key: 'e',
+		dataIndex: 'agent_name',
+		key: 'agent_name',
 		align: 'center',
 		width: 100
 	},
 	{
 		title: '三方平台下单时间',
-		dataIndex: 'h',
-		key: 'h',
+		dataIndex: 'ttp_place_order_at',
+		key: 'ttp_place_order_at',
 		align: 'center',
 		width: 100
 	},
 	{
 		title: '三方原始成本价',
-		dataIndex: 't',
-		key: 't',
+		dataIndex: 'public_cost_price',
+		key: 'public_cost_price',
 		align: 'center',
 		width: 100
 	},
 	{
 		title: '成本调整',
-		dataIndex: 'u',
-		key: 'u',
+		dataIndex: 'public_cost_price_adjustment',
+		key: 'public_cost_price_adjustment',
 		align: 'center',
 		width: 100
 	},
 	{
 		title: '剩余成本价',
-		dataIndex: 'v',
-		key: 'v',
+		dataIndex: 'public_cost_price_residual',
+		key: 'public_cost_price_residual',
 		align: 'center',
 		width: 100
 	},
 	{
 		title: '打款金额',
-		dataIndex: 'w',
-		key: 'w',
+		dataIndex: 'payment_amount',
+		key: 'payment_amount',
 		align: 'center',
 		width: 100
 	},
 	{
 		title: '打款单ID',
-		dataIndex: 'x',
-		key: 'x',
+		dataIndex: 'payment_slip_id',
+		key: 'payment_slip_id',
 		align: 'center',
 		width: 100
 	},
 	{
 		title: '打款状态',
-		dataIndex: 'y',
-		key: 'y',
+		dataIndex: 'payment_status_desc',
+		key: 'payment_status_desc',
 		align: 'center',
 		width: 100
 	},
 	{
 		title: '付款公司',
-		dataIndex: 'z',
-		key: 'z',
+		dataIndex: 'payment_company',
+		key: 'payment_company',
 		align: 'center',
 		width: 100
 	},

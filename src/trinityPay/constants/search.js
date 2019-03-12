@@ -2,7 +2,7 @@ export const prePaySearchFunc = ({ agent = [], media_manager = [], payment_compa
 	{
 		ctype: 'select',
 		attr: {
-			placeholder: '请选择',
+			placeholder: '不限',
 			style: { width: 160 },
 			labelInValue: true,
 			allowClear: true
@@ -16,7 +16,7 @@ export const prePaySearchFunc = ({ agent = [], media_manager = [], payment_compa
 	{
 		ctype: 'select',
 		attr: {
-			placeholder: '请选择',
+			placeholder: '不限',
 			style: { width: 160 },
 			labelInValue: true,
 			allowClear: true
@@ -30,7 +30,7 @@ export const prePaySearchFunc = ({ agent = [], media_manager = [], payment_compa
 	{
 		ctype: 'select',
 		attr: {
-			placeholder: '请选择',
+			placeholder: '不限',
 			style: { width: 160 },
 			labelInValue: true,
 			allowClear: true
@@ -44,7 +44,7 @@ export const prePaySearchFunc = ({ agent = [], media_manager = [], payment_compa
 	{
 		ctype: 'select',
 		attr: {
-			placeholder: '请选择',
+			placeholder: '不限',
 			style: { width: 160 },
 			labelInValue: true,
 			allowClear: true
@@ -59,7 +59,8 @@ export const prePaySearchFunc = ({ agent = [], media_manager = [], payment_compa
 		ctype: 'input',
 		attr: {
 			placeholder: '请输入',
-			style: { width: 160 }
+			style: { width: 160 },
+			allowClear: true
 		},
 		field: {
 			label: '订单ID',
@@ -105,7 +106,7 @@ export const prePaySearchFunc = ({ agent = [], media_manager = [], payment_compa
 	{
 		ctype: 'select',
 		attr: {
-			placeholder: '请选择',
+			placeholder: '不限',
 			style: { width: 160 },
 			labelInValue: true,
 			allowClear: true
@@ -120,7 +121,8 @@ export const prePaySearchFunc = ({ agent = [], media_manager = [], payment_compa
 		ctype: 'input',
 		attr: {
 			placeholder: '请输入',
-			style: { width: 160 }
+			style: { width: 160 },
+			allowClear: true
 		},
 		field: {
 			label: '主账号',
@@ -130,7 +132,7 @@ export const prePaySearchFunc = ({ agent = [], media_manager = [], payment_compa
 	{
 		ctype: 'select',
 		attr: {
-			placeholder: '请选择',
+			placeholder: '不限',
 			style: { width: 160 },
 			labelInValue: true,
 			allowClear: true
@@ -253,7 +255,8 @@ export const datePaySearchFunc = ({ platform = [], agent = [], payment_status = 
 		ctype: 'input',
 		attr: {
 			placeholder: '请输入',
-			style: { width: 160 }
+			style: { width: 160 },
+			allowClear: true
 		},
 		field: {
 			label: '结算单编号',
@@ -261,66 +264,41 @@ export const datePaySearchFunc = ({ platform = [], agent = [], payment_status = 
 		},
 	}
 ];
-export const dealOrderSearch = [
+export const dealOrderSearchFunc = ({ platform = [], agent = [], payment_status = [], payment_company = [] }) => [
 	{
 		ctype: 'select',
 		attr: {
-			placeholder: '请选择',
+			placeholder: '不限',
 			style: { width: 160 },
 			labelInValue: true,
 			allowClear: true
 		},
 		field: {
 			label: '平台',
-			value: 'pingtai',
+			value: 'platform_id',
 		},
-		selectOptionsChildren: [
-			{
-				label: '全部',
-				value: ''
-			},
-			{
-				label: '是',
-				value: '1'
-			},
-			{
-				label: '否',
-				value: '2'
-			},
-		]
+		selectOptionsChildren: platform
 	},
 	{
 		ctype: 'select',
 		attr: {
-			placeholder: '请选择',
+			placeholder: '不限',
 			style: { width: 160 },
 			labelInValue: true,
 			allowClear: true
 		},
 		field: {
 			label: '三方代理商',
-			value: 'sanfang',
+			value: 'agent_id',
 		},
-		selectOptionsChildren: [
-			{
-				label: '全部',
-				value: ''
-			},
-			{
-				label: '是',
-				value: '1'
-			},
-			{
-				label: '否',
-				value: '2'
-			},
-		]
+		selectOptionsChildren: agent
 	},
 	{
 		ctype: 'input',
 		attr: {
-			placeholder: '请选择',
-			style: { width: 160 }
+			placeholder: '请输入',
+			style: { width: 160 },
+			allowClear: true
 		},
 		field: {
 			label: '订单ID',
@@ -330,19 +308,21 @@ export const dealOrderSearch = [
 	{
 		ctype: 'input',
 		attr: {
-			placeholder: '请选择',
-			style: { width: 160 }
+			placeholder: '请输入',
+			style: { width: 160 },
+			allowClear: true
 		},
 		field: {
 			label: '打款单ID',
-			value: 'order_id',
+			value: 'payment_slip_id',
 		},
 	},
 	{
 		ctype: 'input',
 		attr: {
-			placeholder: '请选择',
-			style: { width: 160 }
+			placeholder: '请输入',
+			style: { width: 160 },
+			allowClear: true
 		},
 		field: {
 			label: '三方平台订单ID',
@@ -352,66 +332,41 @@ export const dealOrderSearch = [
 	{
 		ctype: 'select',
 		attr: {
-			placeholder: '请选择',
+			placeholder: '不限',
 			style: { width: 160 },
 			labelInValue: true,
 			allowClear: true
 		},
 		field: {
 			label: '打款状态',
-			value: 'status',
+			value: 'payment_status',
 		},
-		selectOptionsChildren: [
-			{
-				label: '全部',
-				value: ''
-			},
-			{
-				label: '是',
-				value: '1'
-			},
-			{
-				label: '否',
-				value: '2'
-			},
-		]
+		selectOptionsChildren: payment_status
 	},
 	{
 		ctype: 'rangePicker',
 		attr: {
 			placeholder: ['开始时间', '结束时间'],
+			format: 'YYYY-MM-DD',
 			style: { width: 104 }
 		},
 		field: {
 			label: '三方平台下单时间',
-			value: ['Sstart', 'Send'],
+			value: ['public_order_time_start', 'public_order_time_end'],
 		}
 	},
 	{
 		ctype: 'select',
 		attr: {
-			placeholder: '请选择',
+			placeholder: '不限',
 			style: { width: 160 },
 			labelInValue: true,
 			allowClear: true
 		},
 		field: {
 			label: '付款公司',
-			value: 'jingli',
+			value: 'payment_company_id',
 		},
-		selectOptionsChildren: [
-			{
-				label: '全部',
-				value: ''
-			},
-			{
-				label: '是',
-				value: '1'
-			},
-			{
-				label: '否',
-				value: '2'
-			},
-		]
+		selectOptionsChildren: payment_company
 	}
 ];

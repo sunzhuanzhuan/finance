@@ -6,7 +6,9 @@ import {
 	getPrePaySearchItem_success,
 	getDatePayData_success,
 	getDatePayDetail_success,
-	getDatePaySearchItem_success
+	getDatePaySearchItem_success,
+	getDealOrderData_success,
+	getDealOrderSearchItem_success
 } from '../actions';
 
 //预付款
@@ -45,6 +47,18 @@ export const datePaySearchItem = handleActions({
 		return { ...action.payload.data }
 	}
 }, {})
+//三方订单明细
+export const dealOrderData = handleActions({
+	[getDealOrderData_success]: (state, action) => {
+		return { ...action.payload.data }
+	}
+}, {})
+
+export const dealOrderSearchItem = handleActions({
+	[getDealOrderSearchItem_success]: (state, action) => {
+		return { ...action.payload.data }
+	}
+}, {})
 export default combineReducers({
 	prePayData,
 	prePayDetail,
@@ -53,4 +67,7 @@ export default combineReducers({
 	datePayData,
 	datePayDetail,
 	datePaySearchItem,
+	//三方订单明细
+	dealOrderData,
+	dealOrderSearchItem
 })

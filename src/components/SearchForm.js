@@ -1,6 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { Form, Row, Col, Input, Button, Select, DatePicker, Cascader, Radio, InputNumber, message } from 'antd';
+import SearchSelect from './SearchSelect'
 //深比较
 // import isEqual from 'lodash/isEqual';
 //引入
@@ -251,16 +252,18 @@ class SearchForm extends React.PureComponent {
 						)}
 					</FormItem>
 				</Col>);
-			case 'custom':
+			case 'searchSelect':
 				return (<Col
 					{...ResponseLayout}
 					key={itemIndex}
 				>
-					<FormItem label={field.label}>
+					{<FormItem label={field.label}>
 						{getFieldDecorator(field.value, field.params ? field.params : {})(
-							{ component }
+							<SearchSelect
+								{...attr}
+							/>
 						)}
-					</FormItem>
+					</FormItem>}
 				</Col>)
 			default:
 				return null

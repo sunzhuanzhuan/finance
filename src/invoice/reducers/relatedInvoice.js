@@ -1,7 +1,8 @@
 import { combineReducers } from 'redux'
 import { handleActions } from 'redux-actions';
 import {
-	getRelatedInvoiceData_success
+	getRelatedInvoiceData_success,
+	getRelatedInvoiceSearchItem_success,
 } from '../actions/relatedInvoice';
 
 export const relatedInvoiceData = handleActions({
@@ -10,7 +11,13 @@ export const relatedInvoiceData = handleActions({
 	}
 }, {})
 
+export const relatedInvoiceSearchItem = handleActions({
+	[getRelatedInvoiceSearchItem_success]: (state, action) => {
+		return { ...action.payload.data }
+	}
+}, {})
 
-export default combineReducers({
-	relatedInvoiceData
-})
+export default {
+	relatedInvoiceData,
+	relatedInvoiceSearchItem,
+}

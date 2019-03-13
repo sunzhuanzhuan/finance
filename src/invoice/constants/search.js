@@ -1,84 +1,48 @@
-export const relatedInvoiceSearch = [
+export const relatedInvoiceSearchFunc = ({ platform, agent }) => [
 	{
 		ctype: 'select',
 		attr: {
-			placeholder: '请选择',
-			style: { width: 120 }
+			placeholder: '不限',
+			style: { width: 160 },
+			labelInValue: true,
+			allowClear: true
 		},
 		field: {
 			label: '平台',
-			value: 'jingli',
+			value: 'platform_id',
 		},
-		selectOptionsChildren: [
-			{
-				label: '全部',
-				value: ''
-			},
-			{
-				label: '是',
-				value: '1'
-			},
-			{
-				label: '否',
-				value: '2'
-			},
-		]
+		selectOptionsChildren: platform
 	},
 	{
 		ctype: 'select',
 		attr: {
-			placeholder: '请选择',
-			style: { width: 120 }
+			placeholder: '不限',
+			style: { width: 160 },
+			labelInValue: true,
+			allowClear: true
 		},
 		field: {
 			label: '代理商',
-			value: 'jingli',
+			value: 'agent_id',
 		},
-		selectOptionsChildren: [
-			{
-				label: '全部',
-				value: ''
-			},
-			{
-				label: '是',
-				value: '1'
-			},
-			{
-				label: '否',
-				value: '2'
-			},
-		]
-	},
-	{
-		ctype: 'select',
-		attr: {
-			placeholder: '请选择',
-			style: { width: 120 }
-		},
-		field: {
-			label: '发票开具方',
-			value: 'jingli',
-		},
-		selectOptionsChildren: [
-			{
-				label: '全部',
-				value: ''
-			},
-			{
-				label: '是',
-				value: '1'
-			},
-			{
-				label: '否',
-				value: '2'
-			},
-		]
+		selectOptionsChildren: agent
 	},
 	{
 		ctype: 'input',
 		attr: {
 			placeholder: '请输入',
-			style: { width: 120 }
+			style: { width: 160 }
+		},
+		field: {
+			label: '发票开具方',
+			value: 'beneficiary_company',
+		}
+	},
+	{
+		ctype: 'input',
+		attr: {
+			placeholder: '请输入',
+			style: { width: 160 }
 		},
 		field: {
 			label: '发票号',

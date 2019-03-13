@@ -6,7 +6,7 @@ export default {
 	postReparationComplete: '/finance/reparation/complete',
 	postReparationRefuse: '/finance/reparation/refuse',
 	//关联发票
-	getRelatedInvoiceData: '/test/base',
-	getRelatedInvoiceSuccess: '/test/success',
-	getRelatedInvoiceFail: '/test/fail',
+	getRelatedInvoiceData: '/finance/invoice/relation/list',
+	getRelatedInvoiceSearchItem: '/finance/invoice/relation/searchItem',
+	postRelatedInvoiceRelate: '/finance/invoice/relation/relate',
 }

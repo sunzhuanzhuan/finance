@@ -9,3 +9,20 @@ export const {
 	ignoreToast: true
 });
 
+export const {
+	getRelatedInvoiceSearchItem,
+	getRelatedInvoiceSearchItem_success
+} = createHttpAction('getRelatedInvoiceSearchItem', Interface.getRelatedInvoiceSearchItem, {
+	method: 'get',
+	ignoreToast: true
+});
+
+export const {
+	postRelatedInvoiceRelate,
+	postRelatedInvoiceRelate_success
+} = createHttpAction('postRelatedInvoiceRelate', Interface.postRelatedInvoiceRelate, {
+	method: 'post',
+	ignoreToast: true
+});
+
+

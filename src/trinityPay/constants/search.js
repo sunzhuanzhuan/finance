@@ -1,4 +1,4 @@
-export const prePaySearchFunc = ({ agent = [], media_manager = [], payment_company = [], payment_status = [], platform = [], receipt_way = [] }) => [
+export const prePaySearchFunc = ({ agent = [], media_manager = [], payment_company = [], payment_status = [], platform = [], receipt_way = [] }, handleFetch) => [
 	{
 		ctype: 'select',
 		attr: {
@@ -118,11 +118,14 @@ export const prePaySearchFunc = ({ agent = [], media_manager = [], payment_compa
 		selectOptionsChildren: receipt_way
 	},
 	{
-		ctype: 'input',
+		ctype: 'searchSelect',
 		attr: {
-			placeholder: '请输入',
-			style: { width: 160 },
-			allowClear: true
+			getPopupContainer: () => document.querySelector('.ant-advanced-search-form'),
+			action: handleFetch,
+			keyWord: 'account_name',
+			dataToList: res => { return res.data },
+			item: ['value', 'name'],
+			style: { width: 160 }
 		},
 		field: {
 			label: '主账号',

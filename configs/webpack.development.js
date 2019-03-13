@@ -12,6 +12,10 @@ module.exports = merge(baseConfig, {
 		hot: true,
 		host: 'lg.nip.io',
 		proxy: {
+			"/api/finance/invoice": {
+				target: "http://192.168.20.51:7300/mock/5c8752f273f3100017a641f5",
+				changeOrigin: true
+			},
 			"/api/finance": {
 				target: "http://192.168.20.51:7300/mock/5c7fa2bd73f3100017a6412e",
 				changeOrigin: true

@@ -8,6 +8,7 @@ export default {
 	postPrePaySuccess: '/finance/advance/paymentSlip/paymentSuccess',
 	postPrePayFail: '/finance/advance/paymentSlip/paymentFail',
 	postPrePayBackout: '/finance/advance/paymentSlip/paymentBackout',
+	getPrimaryAccount: '/finance/advance/paymentSlip/primaryAccount',
 	//周期付款
 	getDatePayData: '/finance/periodic/paymentSlip/list',
 	getDatePaySearchItem: '/finance/periodic/paymentSlip/searchItem',

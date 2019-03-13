@@ -64,6 +64,14 @@ export const {
 	method: 'post',
 	ignoreToast: true
 });
+
+export const {
+	getPrimaryAccount,
+	getPrimaryAccount_success
+} = createHttpAction('getPrimaryAccount', Interface.getPrimaryAccount, {
+	method: 'get',
+	ignoreToast: true
+});
 //周期付款
 export const {
 	getDatePayData,

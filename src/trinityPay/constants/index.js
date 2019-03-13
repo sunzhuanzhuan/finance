@@ -21,7 +21,7 @@ export const prePayFunc = (handleModal) => [
 					}}>打款失败</Button>
 				</div>
 				<div className='little-top-gap'>
-					<Button type='primary' size='small' style={{ width: 80 }}>发票关联</Button>
+					<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/invoice/relatedInvoice?payment_slip_id=${record.payment_slip_id}`}>发票关联</Button>
 					<Button className='little-left-gap' type='primary' size='small' style={{ width: 80 }} onClick={() => {
 						handleModal(record.payment_slip_id, REVOCATION, true);
 					}}>打款撤销</Button>
@@ -124,7 +124,7 @@ export const datePayFunc = (handleModal) => [
 					}}>打款失败</Button>
 				</div>
 				<div className='little-top-gap'>
-					<Button type='primary' size='small' style={{ width: 80 }}>发票关联</Button>
+					<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/invoice/relatedInvoice?payment_slip_id=${record.payment_slip_id}`}>发票关联</Button>
 					<Button className='little-left-gap' type='primary' size='small' style={{ width: 80 }} onClick={() => {
 						handleModal(record.payment_slip_id, REVOCATION, true);
 					}}>打款撤销</Button>

@@ -320,7 +320,7 @@ class SearchForm extends React.PureComponent {
 		}
 	};
 	render() {
-		const { data = null, children, extraFooter, handleSearch } = this.props;
+		const { data = null, children, beforeFooter, extraFooter, handleSearch } = this.props;
 		const layout = this.combindResponseLayout();
 
 		return <Form className="ant-advanced-search-form" onSubmit={handleSearch || this.handleSearch}>
@@ -332,6 +332,7 @@ class SearchForm extends React.PureComponent {
 			</Row> : null}
 			{data ? <Row gutter={24} type="flex" justify="center">
 				<Col {...layout}>
+					{beforeFooter ? beforeFooter : null}
 					<Button type="primary" htmlType="submit">
 						查询
                 </Button>

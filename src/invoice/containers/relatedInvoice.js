@@ -3,11 +3,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as relatedInvoiceAction from "../actions/relatedInvoice";
 import SearForm from '../../components/SearchForm'
-// import Statistics from '../components/Statistics'
 import { Table, message, Button } from 'antd'
 import { relatedInvoiceSearchFunc } from '../constants/search'
 import { readyRelatedFunc, relatedInvoiceFunc } from '../constants/relatedInvoice'
-import './relatedInvoice.less'
 import qs from 'qs'
 
 class RelatedInvoice extends React.Component {
@@ -52,6 +50,9 @@ class RelatedInvoice extends React.Component {
 			// node.style.display = 'block';
 		}
 	}
+	handleCancel = (invoice_number) => {
+		this.toggleRelate(2, invoice_number)
+	}
 	toggleRelate = (operation_type, invoice_id, use_amount) => {
 		const { payment_slip_id } = qs.parse(this.props.location.search.substring(1));
 		this.props.actions.postRelatedInvoiceRelate({ operation_type, payment_slip_id, invoice_id, use_amount }).then(() => {
@@ -63,21 +64,22 @@ class RelatedInvoice extends React.Component {
 	render() {
 		const search = qs.parse(this.props.location.search.substring(1));
 		const { loading, pullReady } = this.state;
-		const { relatedInvoiceData: { list = [], page, page_size = 20, total }, relatedInvoiceSearchItem } = this.props;
+		const { relatedInvoiceData: { list = [], alredyList = [], page, page_size = 20, total }, relatedInvoiceSearchItem } = this.props;
 		const relatedInvoiceSearch = relatedInvoiceSearchFunc(relatedInvoiceSearchItem);
-		const readyRelatedCols = readyRelatedFunc();
+		const readyRelatedCols = readyRelatedFunc(this.handleCancel);
 		const relatedInvoiceCols = relatedInvoiceFunc(this.handleSubmit);
 		return <div className='relatedInvoice-container'>
 			<legend>选择发票</legend>
 			<fieldset className='fieldset_css'>
 				<legend>已选发票</legend>
-				{/* <Table
-					rowKey='a'
+				<Table
+					rowKey='invoice_number'
+					loading={loading}
 					columns={readyRelatedCols}
-					dataSource={list}
+					dataSource={alredyList}
 					bordered
 					pagination={false}
-				/> */}
+				/>
 			</fieldset>
 			<fieldset className='fieldset_css'>
 				<legend>查询</legend>

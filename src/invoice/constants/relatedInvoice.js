@@ -1,54 +1,54 @@
 import React from 'react'
 import { Input, Button } from 'antd'
-export const readyRelatedFunc = (handleModal) => [
+export const readyRelatedFunc = (handleCancel) => [
 	{
 		title: '发票号',
-		dataIndex: 'a',
-		key: 'a',
+		dataIndex: 'invoice_number',
+		key: 'invoice_number',
 		align: 'center',
 		width: 100
 	},
 	{
 		title: '发票开具方',
-		dataIndex: 'b',
-		key: 'b',
+		dataIndex: 'beneficiary_company',
+		key: 'beneficiary_company',
 		align: 'center',
 		width: 100
 	},
 	{
 		title: '发票余额',
-		dataIndex: 'c',
-		key: 'c',
+		dataIndex: 'invoice_amount',
+		key: 'invoice_amount',
 		align: 'center',
 		width: 100
 
 	},
 	{
 		title: '平台',
-		dataIndex: 'd',
-		key: 'd',
+		dataIndex: 'platform_name',
+		key: 'platform_name',
 		align: 'center',
 		width: 100
 
 	},
 	{
 		title: '代理商',
-		dataIndex: 'h',
-		key: 'h',
+		dataIndex: 'agent_name',
+		key: 'agent_name',
 		align: 'center',
 		width: 100
 	},
 	{
 		title: '发票余额',
-		dataIndex: 'o',
-		key: 'o',
+		dataIndex: 'rest_amount',
+		key: 'rest_amount',
 		align: 'center',
 		width: 100
 	},
 	{
 		title: '使用金额',
-		dataIndex: 'p',
-		key: 'p',
+		dataIndex: 'use_amount',
+		key: 'use_amount',
 		align: 'center',
 		width: 100
 	},
@@ -57,7 +57,12 @@ export const readyRelatedFunc = (handleModal) => [
 		dataIndex: 'action',
 		key: 'action',
 		align: 'center',
-		width: 100
+		width: 100,
+		render: (text, record) => {
+			return <Button type='primary' onClick={() => {
+				handleCancel(record.invoice_number)
+			}}>删除</Button>
+		}
 	}
 ];
 export const relatedInvoiceFunc = (handleSubmit) => [

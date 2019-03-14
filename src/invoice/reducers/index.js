@@ -11,6 +11,7 @@ import { getRepartionData, saleData, repartionStatus } from "./repartion";
 import associateInvoice from './associateInvoice';
 import { reparationInfo, orderSaleList, status } from './orderCompensate';
 import relatedInvoice from './relatedInvoice'
+import trinityInvoice from './trinityInvoice'
 export default combineReducers({
 	applyList,
 	saleList,
@@ -43,7 +44,8 @@ export default combineReducers({
 	reparationInfo,
 	orderSaleList,
 	status,
-	...relatedInvoice
+	...relatedInvoice,
+	...trinityInvoice,
 })
 
 

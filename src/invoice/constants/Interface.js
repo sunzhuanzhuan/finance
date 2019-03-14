@@ -9,4 +9,11 @@ export default {
 	getRelatedInvoiceData: '/finance/invoice/relation/list',
 	getRelatedInvoiceSearchItem: '/finance/invoice/relation/searchItem',
 	postRelatedInvoiceRelate: '/finance/invoice/relation/relate',
+	//三方平台发票管理
+	getTrinityInvoiceSearchItem: '/finance/invoice/searchItem',
+	getTrinityInvoiceData: '/finance/invoice/list',
+	postTrinityInvoiceAdd: '/finance/invoice/add',
+	postTrinityInvoiceEdit: '/finance/invoice/edit',
+	postTrinityInvoiceDel: '/finance/invoice/del',
+	postTrinityInvoiceReset: '/finance/invoice/reset'
 }

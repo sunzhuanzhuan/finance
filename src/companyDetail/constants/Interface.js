@@ -24,6 +24,7 @@ export default {
 	postPassByOrderIds: '/finance/readjust/passByOrderIds',
 	postPassByReadjust: '/finance/readjust/passByReadjustId',
 	getApplicationDetail: '/finance/readjust/applicationOrderDetail',
+	getApplicationPreview: '/finance/readjust/applicationPreview',
 	postRejectByReadjustId: '/finance/readjust/rejectByReadjustId',
 	postRejectByOrderIds: '/finance/readjust/rejectByOrderIds',
 	getExport: '/finance/readjust/export',

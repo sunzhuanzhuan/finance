@@ -14,7 +14,7 @@ class ApplyModal extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			isClick: false
+			isClick: false,
 		}
 		this.attachment = ''
 	}
@@ -33,6 +33,21 @@ class ApplyModal extends React.Component {
 				this.setState({ isClick: false });
 			})
 		}
+	}
+	handlePreview = e => {
+		const { curSelectRowKeys, togglePreview } = this.props;
+		e.preventDefault();
+		this.props.form.validateFields((err, values) => {
+			if (!err) {
+				const hide = message.loading('加载中,请输入...');
+				const order_ids = curSelectRowKeys.toString();
+				this.props.actions.getApplicationPreview({ order_ids }).then(() => {
+					togglePreview(true, () => {
+						hide();
+					})
+				})
+			}
+		})
 	}
 	handleSubmit = (e) => {
 		const attachment = this.attachment;
@@ -149,6 +164,7 @@ class ApplyModal extends React.Component {
 			maskClosable={false}
 			wrapClassName='adjust-dialog-list'
 			footer={[
+				<Button key='preview' type="primary" disabled={isClick} onClick={this.handlePreview}>预览结果</Button>,
 				<Button key="submit" type="primary" disabled={isClick} onClick={this.handleSubmit}>确认提交</Button>,
 				<Button key="back" onClick={onCancel}>取消</Button>
 			]}
@@ -218,7 +234,8 @@ class ApplyModal extends React.Component {
 
 const mapStateToProps = (state) => {
 	return {
-		goldenToken: state.companyDetail.goldenToken
+		goldenToken: state.companyDetail.goldenToken,
+		applicationPreview: state.companyDetail.applicationPreview,
 	}
 }
 const mapDispatchToProps = dispatch => ({

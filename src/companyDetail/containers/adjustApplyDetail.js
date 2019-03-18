@@ -2,10 +2,11 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as goldenActions from "../actions/goldenApply";
-import { Button, Row, Modal, message, Input } from "antd";
+import { Button, Row, Modal, message, Input, Table } from "antd";
 import ListQuery from '../components/addAdjustApply/listQuery';
 import ApplyTable from '../components/addAdjustApply/applyTable';
 import ApplyModal from '../components/addAdjustApply/applyModal';
+import PrevModal from '../components/addAdjustApply/preModal'
 import { adjustApplyDetailFunc } from "../constants";
 import "./golden.less";
 import qs from 'qs';
@@ -18,6 +19,7 @@ class AdjustApplyDetail extends React.Component {
 		this.state = {
 			tipVisible: false,
 			rejectVisible: false,
+			previewVisible: false,
 			loading: false,
 			flag: false,
 			curSelectRowKeys: [],
@@ -33,7 +35,7 @@ class AdjustApplyDetail extends React.Component {
 			const flag = companyDetailAuthorizations[0].permissions['readjust.finance.operation'];
 			this.setState({ flag });
 		})
-		getGoldenMetadata();
+		// getGoldenMetadata();
 		this.queryData({ page: 1, ...search.keys });
 	}
 	queryData = (obj, func) => {
@@ -89,10 +91,14 @@ class AdjustApplyDetail extends React.Component {
 			message.error(errorMsg || '操作失败！');
 		})
 	}
+	togglePreview = (boolean, func) => {
+		this.setState({ previewVisible: boolean }, func);
+	}
 	render() {
-		const { loading, tipVisible, rejectVisible, flag, curSelectRowKeys, curSelectRows } = this.state;
+		const { loading, tipVisible, rejectVisible, previewVisible, flag, curSelectRowKeys, curSelectRows, rowsMap } = this.state;
 		const { applicationDetail: { list = [], page = 1, total = 0 }, goldenMetadata: { rel_order_status = [] } } = this.props;
-		const adjustApplyDetail = flag ? adjustApplyDetailFunc(rel_order_status)(['order_id', 'status', 'company_name', 'project_name', 'requirement_id', 'requirement_name', 'platform_name', 'account_id', 'weibo_name', 'price', 'quoted_price', 'history_min_sell_price', 'history_rate', 'min_sell_price', 'quote_type', 'pass_time', 'remark']) : adjustApplyDetailFunc(rel_order_status)(['order_id', 'status', 'company_name', 'project_name', 'requirement_id', 'requirement_name', 'platform_name', 'account_id', 'weibo_name', 'price', 'history_min_sell_price', 'min_sell_price', 'pass_time', 'remark']);
+		const adjustApplyDetail = flag ? adjustApplyDetailFunc(rel_order_status)(['order_id', 'status', 'company_name', 'project_name', 'requirement_id', 'requirement_name', 'platform_name', 'account_id', 'weibo_name', 'discount_rate', 'price', 'quoted_price', 'history_min_sell_price', 'history_rate', 'min_sell_price', 'quote_type', 'pass_time', 'remark']) : adjustApplyDetailFunc(rel_order_status)(['order_id', 'status', 'company_name', 'project_name', 'requirement_id', 'requirement_name', 'platform_name', 'account_id', 'weibo_name', 'discount_rate', 'price', 'history_min_sell_price', 'min_sell_price', 'pass_time', 'remark']);
+		const adjustApplyPreview = adjustApplyDetailFunc(rel_order_status)(['prev_id', 'company_name', 'project_name', 'requirement_id_name', 'platform_name', 'weibo_name', 'discount_rate', 'price', 'quoted_price', 'min_sell_price']);
 		return <div className='add-adjust-apply'>
 			<fieldset className='fieldset_css'>
 				<legend>统计</legend>
@@ -120,7 +126,7 @@ class AdjustApplyDetail extends React.Component {
 				curSelectRows={curSelectRows}
 				handleSelected={this.handleSelected}
 				location={this.props.location}
-				scroll={flag ? { x: 2770 } : { x: 2170 }}
+				scroll={flag ? { x: 2870 } : { x: 2270 }}
 			>
 			</ApplyTable>
 			{flag ? <Row className='top-gap' style={{ textAlign: 'center' }}>
@@ -136,11 +142,17 @@ class AdjustApplyDetail extends React.Component {
 				curSelectRowKeys={curSelectRowKeys}
 				curSelectRows={curSelectRows}
 				handleClear={this.handleClear}
+				togglePreview={this.togglePreview}
 				onCancel={() => { this.setState({ tipVisible: false }) }}
 				location={this.props.location}
 				quoteType={curSelectRows.length > 0 ? curSelectRows[0].quote_type : null}
 			>
 			</ApplyModal> : null}
+			{previewVisible && <PrevModal visible={previewVisible}
+				curSelectRows={curSelectRows}
+				onCancel={() => { this.setState({ previewVisible: false }) }}
+				columns={adjustApplyPreview}
+			/>}
 			{rejectVisible ? <Modal title='订单调价处理' visible={rejectVisible}
 				onOk={this.handleReject}
 				onCancel={() => { this.setState({ rejectVisible: false }) }}

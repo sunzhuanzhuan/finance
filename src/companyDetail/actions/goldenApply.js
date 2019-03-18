@@ -76,6 +76,14 @@ export const {
 });
 
 export const {
+	getApplicationPreview,
+	getApplicationPreview_success
+} = createHttpAction('getApplicationPreview', Interface.getApplicationPreview, {
+	method: 'get',
+	ignoreToast: true
+});
+
+export const {
 	postPassByReadjust,
 	postPassByReadjust_success
 } = createHttpAction('postPassByReadjust', Interface.postPassByReadjust, {

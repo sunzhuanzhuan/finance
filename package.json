@@ -28,6 +28,7 @@
 		"wbyui": "^1.4.0"
 	},
 	"scripts": {
+		"start": "yarn dev",
 		"dev": "webpack-dev-server --mode development --progress",
 		"build": "webpack --mode production",
 		"dll": "rm -rf ./public/static && webpack --config webpack.dll.config.js",

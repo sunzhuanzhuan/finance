@@ -489,10 +489,10 @@ export const adjustApplyListFunc = (application_status, handleJump, handleAction
 							handleAction('reject', record.id);
 						}}>驳回</Button>
 					</div> : null}
-					{record.status != '3' ? <div>
+					<div>
 						<Button type='primary' size='small' style={{ marginTop: "10px", width: '68px' }}
 							target='_blank' href={`/api/finance/readjust/export?readjust_application_id=${record.id}`}>导出</Button>
-					</div> : null}
+					</div>
 				</div >
 			}
 		}
@@ -643,13 +643,31 @@ export const readyCheckFunc = (handleDelete) => {
 export const adjustApplyDetailFunc = (rel_order_status) => {
 	return ary => {
 		const configMap = {
+			'prev_id': {
+				title: '订单ID',
+				dataIndex: 'order_id',
+				key: 'order_id',
+				align: 'center',
+				render: (text, record) => {
+					return <div>
+						<div>{text}</div>
+						{record.plan_manager_id == 1 ? <div style={{ display: 'inline-block', backgroundColor: 'red', color: '#fff', padding: '0 10px' }}>含策划</div> : null}
+					</div>
+				}
+			},
 			'order_id': {
 				title: '订单ID',
 				dataIndex: 'order_id',
 				key: 'order_id',
 				align: 'center',
 				width: 80,
-				fixed: 'left'
+				fixed: 'left',
+				render: (text, record) => {
+					return <div>
+						<div>{text}</div>
+						{record.plan_manager_id == 1 ? <div style={{ display: 'inline-block', backgroundColor: 'red', color: '#fff', padding: '0 10px' }}>含策划</div> : null}
+					</div>
+				}
 			},
 			'status': {
 				title: '审批状态',
@@ -694,6 +712,19 @@ export const adjustApplyDetailFunc = (rel_order_status) => {
 				align: 'center',
 				width: 160,
 			},
+			'requirement_id_name': {
+				title: '需求ID/名称',
+				dataIndex: 'requirement_id_name',
+				key: 'requirement_id_name',
+				align: 'center',
+				width: 160,
+				render: (text, { requirement_id, requirement_name }) => {
+					return <div>
+						<div>{requirement_id}</div>
+						<div>{requirement_name}</div>
+					</div>
+				}
+			},
 			'platform_name': {
 				title: '平台',
 				dataIndex: 'platform_name',
@@ -715,16 +746,31 @@ export const adjustApplyDetailFunc = (rel_order_status) => {
 				align: 'center',
 				width: 160,
 			},
+			'discount_rate': {
+				title: '折扣比例',
+				dataIndex: 'discount_rate',
+				key: 'discount_rate',
+				align: 'center',
+				width: 160,
+				render: (text, { price }) => {
+					const discount = price && price[0] ? price[0].discount_rate : 0;
+					return discount ? numeral(discount).format('0.00%') : '-'
+				}
+			},
 			'quoted_price': {
-				title: '成本价',
+				title: '对外成本价',
 				dataIndex: 'quoted_price',
 				key: 'quoted_price',
 				align: 'center',
 				width: 240,
-				render: (text, { price }) => {
+				render: (text, { price = [] }) => {
+					const flag = price && price[0] ? price[0].is_trinity : null;
 					return <div>
 						{price.map((item, index) => {
-							return <div key={index}>{`${item.price_label}:${item.price}`}</div>
+							return <div key={index}>
+								<div>{`${item.price_label}:${item.open_cost_price}`}</div>
+								{(flag && flag == 1) ? <div>{`(博主${item.private_open_cost_price},第三方${item.public_open_cost_price})`}</div> : null}
+							</div>
 						})}
 					</div>
 				}
@@ -735,7 +781,7 @@ export const adjustApplyDetailFunc = (rel_order_status) => {
 				key: 'price',
 				align: 'center',
 				width: 240,
-				render: (text, { price }) => {
+				render: (text, { price = [] }) => {
 					return <div>
 						{price.map((item, index) => {
 							return <div key={index}>{`${item.price_label}:${item.quoted_price}`}</div>
@@ -749,11 +795,14 @@ export const adjustApplyDetailFunc = (rel_order_status) => {
 				key: 'history_min_sell_price',
 				align: 'center',
 				width: 240,
-				render: (text) => {
+				render: (text, { readjust_type }) => {
 					const item = text ? text.min_sell_price : [];
 					const node = item.length > 0 ? <div>
 						{item.map((item, index) => {
-							return <div key={index}>{`${item.price_label}:${item.min_sell_price}`}</div>
+							return <div key={index}>
+								<div>{`${item.price_label}:${item.min_sell_price}`}</div>
+								{readjust_type == 2 && <div style={{ color: 'red' }}>（导入excel方式调整）</div>}
+							</div>
 						})}
 					</div> : '-';
 					return node;

@@ -45,66 +45,71 @@ class Detail extends Component {
 				<Col span={6}>{detail.order?detail.order.execution_completed_time:''}</Col>
 			</Row>
 			
-			<Row >
+			<Row>
 				<Col span={12} className='colHeight'>
-				<div>
-					<span>账号报价</span>
-					<span>微播易到手价</span>
-					<span>三方平台下单价</span>
+				<div className='marLeft26'>
+					<span className='padd40'>账号报价</span>
+					<span className='padd40'>微播易到手价</span>
+					<span className='padd40'>三方平台下单价</span>
 				</div>
-				￥{detail.order?detail.order.total_account_quote_price:''}
+				<div className='marLeft26'>
+					<span className='padd40'>￥{detail.order?detail.order.total_account_quote_price:''}</span>
 					<span>=</span>
-					<span>￥{detail.order?detail.order.private_account_quote_price:''}</span>
-				<span>+</span>
-				<span>￥{detail.order?detail.order.public_account_quote_price:''}</span></Col>
+					<span className='padd40'>￥{detail.order?detail.order.private_account_quote_price:''}</span>
+					<span>+</span>
+					<span className='padd40'>￥{detail.order?detail.order.public_account_quote_price:''}</span>
+				</div>
+				</Col>
 				
 				<Col span={12} className='colHeight'>
-				<div>
-					<span>应约价</span>
-					<span>对外报价(博主)</span>
-					<span>对外报价(三方)</span>
-				</div>
-				<span>￥{detail.order?detail.order.total_quote_price:''}</span>
-				<span>=</span>
-				<span>￥{detail.order?detail.order.private_quote_price:''}</span>
-				<span>+</span>
-				<span>￥{detail.order?detail.order.public_quote_price:''}</span></Col>
+					<div className='marLeft26'>
+						<span className='padd40'>应约价</span>
+						<span className='padd40'>对外报价(博主)</span>
+						<span className='padd40'>对外报价(三方)</span>
+					</div>
+					<div className='marLeft26'>
+						<span className='padd40'>￥{detail.order?detail.order.total_quote_price:''}</span>
+						<span>=</span>
+						<span className='padd40'>￥{detail.order?detail.order.private_quote_price:''}</span>
+						<span>+</span>
+						<span className='padd40'>￥{detail.order?detail.order.public_quote_price:''}</span>
+					</div>
+				</Col>
 			</Row>
-			{/* <Row className='colHeightTitle'>
-				<Col span={4}>订单成本价</Col>
-				<Col span={4}>博主成本价</Col>
-				<Col span={4}>三方成本价</Col>
-				<Col span={4}>执行价</Col>
-				<Col span={4}></Col>
-				<Col span={4}>执行价(三方)</Col>
-			</Row> */}
+			
 			<Row className='colHeight'>
 				<Col span={12}>
-				<div>
-					<span>订单成本价</span>
-					<span>博主成本价</span>
-					<span>三方成本价</span>
+				<div className='marLeft26'>
+					<span className='padd40'>订单成本价</span>
+					<span className='padd40'>博主成本价</span>
+					<span className='padd40'>三方成本价</span>
 				</div>
-				<span>￥{detail.order?detail.order.total_cost_price:''}</span>
-				<span>=</span>
-				<span>￥{detail.order?detail.order.private_cost_price:''}</span>
-				<span>+</span>
-				<span>￥{detail.order?detail.order.public_cost_price:''}</span></Col>
+				<div className='marLeft26'>
+					<span className='padd40'>￥{detail.order?detail.order.total_cost_price:''}</span>
+					<span>=</span>
+					<span className='padd40'>￥{detail.order?detail.order.private_cost_price:''}</span>
+					<span>+</span>
+					<span className='padd40'>￥{detail.order?detail.order.public_cost_price:''}</span>
+				</div>
+				</Col>
 				<Col span={12} className='colHeight'>
-				<div>
-					<span>执行价</span>
-					<span>执行价(博主)</span>
-					<span>执行价(三方)</span>
-				</div>
-				<span>￥{detail.order?detail.order.total_deal_price:''}</span>
-				<span>=</span>
-				<span>￥{detail.order?detail.order.private_deal_price:''}</span>
-				<span>+</span>
-				<span>￥{detail.order?detail.order.public_deal_price:''}</span></Col>
+					<div className='marLeft26'>
+						<span className='padd40'>执行价</span>
+						<span className='padd40'>执行价(博主)</span>
+						<span className='padd40'>执行价(三方)</span>
+					</div>
+					<div className='marLeft26'>
+						<span className='padd40'>￥{detail.order?detail.order.total_deal_price:''}</span>
+						<span>=</span>
+						<span className='padd40'>￥{detail.order?detail.order.private_deal_price:''}</span>
+						<span>+</span>
+						<span className='padd40'>￥{detail.order?detail.order.public_deal_price:''}</span>
+					</div>
+				</Col>
 			</Row>
 			
 			
-			<Row className='company'>
+			<Row className='company paddUp20'>
 				应收
 				
 			</Row>
@@ -115,41 +120,53 @@ class Detail extends Component {
 				<Col span={8}>所属销售:{detail.company?detail.company.sale_manager_name:''} </Col>
 				
 			</Row>
-			<Row className='colHeightTitle'>
-				
-			</Row>
+			
 			<Row className='colHeight'>
-				<div>
-					<span>订单实收</span>
-					<span>执行价</span>
-					<span>质检返款</span>
-					<span>使用赠送</span>
-					<span>赔偿</span>
-					<span>手工质检返款(结案前)</span>
-				</div>
+			
 				<Col span={24}>
-				<span>￥{detail.company?detail.company.real_consumption:''}</span>
+				<div className='padd60'>
+					<span className='displayInline'>订单实收</span>
+					<span className='displayInline'>￥{detail.company?detail.company.real_consumption:''}</span>
+				</div>
+				
+				
+				
 				<span>=</span>
+				<div className='padd60'>
+					<span className='displayInline'>执行价</span>
+					<span className='displayInline'>￥{detail.order?detail.order.total_deal_price:''}</span>
+				</div>
 				
-				<span>￥{detail.order?detail.order.total_deal_price:''}</span>
 				<span>-</span>
+				<div className='padd60'>
+					<span className='displayInline'>质检返款</span>
+					<span className='displayInline'>￥{detail.company?detail.company.deducted_deal_price:''}</span>
+				</div>
 				
-				<span>￥{detail.company?detail.company.deducted_deal_price:''}</span>
 				<span>-</span>
-				
-				<span>￥{detail.company?detail.company.gift_price:''}</span>
+				<div className='padd60'>
+					<span className='displayInline'>使用赠送</span>
+					<span className='displayInline'>￥{detail.company?detail.company.gift_price:''}</span>
+				</div>
+			
 				<span>-</span>
+				<div className='padd60'>
+					<span className='displayInline'>赔偿</span>
+					<span className='displayInline'>￥{detail.company?detail.company.reparation_price:''}</span>
+				</div>
 				
-				<span>￥{detail.company?detail.company.reparation_price:''}</span>
 				<span>-</span>
+				<div className='padd60'>
+					<span className='displayInline'>手工质检返款(结案前)</span>
+					<span className='displayInline'>￥{detail.company?detail.company.before_close_case_manual_qc:''}</span>
+				</div>
 				
-				<span>￥{detail.company?detail.company.before_close_case_manual_qc:''}</span>
 				</Col>
 			</Row>
 			
-			<Row className='colHeight'>
+			<Row className='colHeight padd40'>
 				<div>
-				<span span={8}>手工质检(结案后):{detail.company?detail.company.after_close_case_manual_qc:''}</span>
+					<span span={8}>手工质检(结案后):{detail.company?detail.company.after_close_case_manual_qc:''}</span>
 				</div>
 				<Col span={6}>应开票:￥{detail.company?detail.company.total_invoice_amount:''}</Col>
 				<Col span={6}>已开发票:￥{detail.company?detail.company.already_invoice_amount:''}</Col>
@@ -158,7 +175,7 @@ class Detail extends Component {
 			</Row>
 		
 			
-			<Row className='account'>
+			<Row className='account paddUp20'>
 				应付
 			</Row>
 			<Row className='accountTitle'>
@@ -173,31 +190,41 @@ class Detail extends Component {
 			</Row>
 			
 			<Row className='colHeight'>
-				<div>
-					<span>剩余成本价</span>
-					<span>博主成本价</span>
-					<span>质检扣款</span>
-					<span>成本调整</span>
-					<span>订单扣款(打款前)</span>
-					<span>订单补款(打款后)</span>
-				</div>
+				
 				<Col span={24}>
-				<span>￥{detail.account?detail.account.remaining_price:''}</span>
+				<div className='padd60'>
+					<span className='displayInline'>剩余成本价</span>
+					<span className='displayInline'>￥{detail.account?detail.account.remaining_price:''}</span>
+				</div>
 				
 				
-				<span>￥{detail.account?detail.order.private_cost_price:''}</span>
+				<div className='padd60'>
+					<span className='displayInline'>博主成本价</span>
+					<span className='displayInline'>￥{detail.account?detail.order.private_cost_price:''}</span>
+				</div>
 				
 				
-				<span>￥{detail.account?detail.account.deducted_cost_price:''}</span>
+				<div className='padd60'>
+					<span className='displayInline'>质检扣款</span>
+					<span className='displayInline'>￥{detail.account?detail.account.deducted_cost_price:''}</span>
+				</div>
 				
+				<div className='padd60'>
+					<span className='displayInline'>成本调整</span>
+					<span className='displayInline'>￥{detail.account?detail.account.cost_deduction:''}</span>
+				</div>
 				
-				<span>￥{detail.account?detail.account.cost_deduction:''}</span>
+			
+				<div className='padd60'>
+					<span className='displayInline'>订单扣款(打款前)</span>
+					<span className='displayInline'>￥{detail.account?detail.account.before_payment_adjust_amount:''}</span>
+				</div>
 				
-				<span>
-				￥{detail.account?detail.account.before_payment_adjust_amount:''}</span>
+				<div className='padd60'>
+					<span className='displayInline'>订单补款(打款后)</span>
+					<span className='displayInline'>￥{detail.account?detail.account.after_payment_adjust_amount:''}</span>
+				</div>
 				
-				<span>
-				￥{detail.account?detail.account.after_payment_adjust_amount:''}</span>
 				</Col>
 			</Row>
 			<Row className='colHeight'>
@@ -237,9 +264,17 @@ class Detail extends Component {
 				
 			</Row>
 			<Row className='colHeight'>
-				<Col span={8}>剩余成本:{detail.trinity?detail.trinity.actual_public_cost_price:''} </Col>
-				<Col span={8}>三方成本:{detail.trinity?detail.order.public_cost_price:''} </Col>
-				<Col span={8}>成本调整:{detail.trinity?detail.trinity.public_cost_adjustment:''} </Col>
+				<div>
+					<span>剩余成本</span>
+					<span>三方成本</span>
+					<span>成本调整</span>
+				</div>
+				<Col span={8}>
+				<span>{detail.trinity?detail.trinity.actual_public_cost_price:''} </span>
+				<span>=</span>
+				<span>{detail.trinity?detail.order.public_cost_price:''}</span>
+				<span>+</span>
+				<span>{detail.trinity?detail.trinity.public_cost_adjustment:''} </span></Col>
 			</Row> 
 	</div>
 	}

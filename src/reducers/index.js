@@ -11,6 +11,7 @@ import siderMenuReducer from '../siderMenu/reducers'
 import authorizationsReducers from './authorizations'
 import saleIncome from '../saleIncome/reducers'
 import studioManage from '../studioManage/reducers'
+import zhangWu from '../zhangwu/reducers'
 export default combineReducers({
 	commonReducers,
 	routing: routerReducer,
@@ -24,4 +25,5 @@ export default combineReducers({
 	authorizationsReducers,
 	saleIncome,
 	studioManage,
+	zhangWu
 });

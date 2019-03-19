@@ -1,14 +1,13 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-//import { Link, browserHistory } from 'react-router'
-import { Link } from 'react-router-dom'
+import { message } from 'antd'
 import qs from 'qs'
-import PropTypes from 'prop-types'
+
 import * as zhangActions from '../actions/index';
 import Query from'../components/query'
 import { zhangListFunc } from '../constants/column';
-import { Table, Pagination } from "antd";
+
 import './list.less'
 import ZhangWuTable from '../components/table'
 
@@ -16,36 +15,58 @@ import ZhangWuTable from '../components/table'
 class List extends Component {
 	constructor(props) {
 		super(props)
-
+		
 	}
+	state={
+		loading:false,
+		page_size: 20,
+		filterParams: {}
+	}
+	componentWillMount=()=>{
+		const search = qs.parse(this.props.location.search.substring(1));
+		this.queryData({ page: 1, page_size: this.state.page_size, ...search.keys });
+	}
+
 	handleNewModal=({id})=>{
-		// console.log(record)
 		this.props.history.push({
 			pathname: '/finance/zhangwu/detail',
 			search: `?${qs.stringify({ id: id})}`,
 		});
 	}
+	queryData = (obj, func) => {
+		this.setState({ loading: true });
+		return this.props.actions.getAccountList({ ...obj }).then(() => {
+			if (func && Object.prototype.toString.call(func) === '[object Function]') {
+				func();
+			}
+			this.setState({ loading: false })
+		}).catch(({ errorMsg }) => {
+			this.setState({ loading: false });
+			message.error(errorMsg || '列表加载失败，请重试！');
+		})
+	}
+	handlefilterParams = (filterParams) => {
+		this.setState({ filterParams });
+	}
 	render(){
-		let paginationObj = {
-			// onChange: (current) => {
-			// 	queryAction({ page: current, ...search.keys });
-			// },
-			total: parseInt(4),
-			current: parseInt(1),
-			pageSize: parseInt(2),
-			showQuickJumper: true,
-		};
+		
 		const columns = zhangListFunc(this.handleNewModal);
-		const dataTable = [{name:'哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈',id:2}]
 		return<div>
 		<fieldset className='fieldset_css'>
 			<legend>订单账务详情</legend>
-			<Query/>
+			<Query
+			history={this.props.history}
+			handlefilterParams={this.handlefilterParams}
+			questAction={this.queryData}
+			accountList={this.props.accountList}
+			/>
 			<div className='top-gap'>
 				<ZhangWuTable
+					loading={this.state.loading}
 					columns={columns}
-					dataTable={dataTable}
-					pagination={paginationObj}
+					accountList={this.props.accountList}
+					queryData={this.queryData}
+					filterParams={this.state.filterParams}
 				></ZhangWuTable>
 			</div>
 		</fieldset>
@@ -56,10 +77,8 @@ class List extends Component {
 
 const mapStateToProps = (state) => {
 	return {
-		studioMetadata: state.studioManage.studioMetadata,
-		allocationData: state.studioManage.allocationData,
-		studioNameCheck: state.studioManage.studioNameCheck,
-		allocationStatData: state.studioManage.allocationStatData,
+		accountList: state.zhangWu.accountList,
+		
 	}
 }
 const mapDispatchToProps = dispatch => ({

@@ -1,14 +1,13 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-//import { Link, browserHistory } from 'react-router'
-import { Link } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import qs from 'qs'
-import PropTypes from 'prop-types'
-import * as zhangActions from '../actions/index';
-import Query from'../components/query'
 
-import { Table, Pagination } from "antd";
+import * as zhangActions from '../actions/index';
+
+
+import { Table } from "antd";
 // import './list.less'
 
 class List extends Component {
@@ -24,33 +23,42 @@ class List extends Component {
 		});
 	}
 	render(){
-		let {columns,paginationObj,dataTable}=this.props;
+		let {columns,loading}=this.props;
+		const search = qs.parse(this.props.location.search.substring(1));
+		const { accountList: { list = [], page, total,page_size },filterParams}=this.props;
+		
+		let paginationObj = {
+			onChange: (current) => {
+				// let obj = { ...search.key, page: current, page_size  ,...filterParams}
+				this.props.queryData({ ...search.key, page: current, page_size, ...filterParams });
+			},
+			total: parseInt(total),
+			current: parseInt(page),
+			pageSize: parseInt(page_size),
+			showQuickJumper: true,
+			
+		};
 		return <div className='top-gap'>
-				<Table
+				{list.length?<Table
+					loading={loading}
 					columns={columns}
 					scroll={{ x: 1600 }}
-					dataSource={dataTable}
-					rowKey='id'
-					// questAction={this.props.actions.getMissionList}
+					dataSource={list}
+					rowKey={(record)=>record.account_id}
 					total={50}
 					current={1}
-					pagination={paginationObj}
-					// filterParams={filterParams}
-					// handlePageSize={this.handlePageSize}
-				></Table>
+					pagination={list.length ? paginationObj : false}
+				></Table>:null}
 			</div>
 	}
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = () => {
 	return {
-		studioMetadata: state.studioManage.studioMetadata,
-		allocationData: state.studioManage.allocationData,
-		studioNameCheck: state.studioManage.studioNameCheck,
-		allocationStatData: state.studioManage.allocationStatData,
+		
 	}
 }
 const mapDispatchToProps = dispatch => ({
 	actions: bindActionCreators({ ...zhangActions }, dispatch)
 });
-export default connect(mapStateToProps, mapDispatchToProps)(List)
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(List))

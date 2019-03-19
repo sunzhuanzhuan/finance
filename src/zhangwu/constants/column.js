@@ -18,151 +18,86 @@ export const zhangListFunc = (handleNewModal) => {
 			}
 		},
 		{
-			title: '订单类型',
-			dataIndex: 'name',
-			key: 'name',
+			title: '订单ID',
+			dataIndex: 'order_id',
+			key: 'order_id',
 			align: 'center',
 			width: 100,
 		},
 		{
 			title: '公司简称',
-			dataIndex: 'sale_id',
-			key: 'sale_id',
-			align: 'center',
-			width: 100,
-		},
-		{
-			title: '需求ID',
-			dataIndex: 'month',
-			key: 'month',
-			align: 'center',
-			width: 100,
-		},
-		{
-			title: '需求名称',
-			dataIndex: 'original_target',
-			key: 'original_target',
+			dataIndex: 'company_name',
+			key: 'company_name',
 			align: 'center',
 			width: 100,
 		},
 		{
 			title: '所属销售',
-			dataIndex: 'distribute_target',
-			key: 'distribute_target',
+			dataIndex: 'sale_manager_name',
+			key: 'sale_manager_name',
 			align: 'center',
 			width: 100,
 		},
 		{
 			title: '主账号',
-			dataIndex: 'video_target',
-			key: 'video_target',
+			dataIndex: 'identity_name',
+			key: 'identity_name',
 			align: 'center',
 			width: 100,
-			render: (text) => {
-				return parseFloat(text).toFixed(2)
-			}
 		},
 		{
 			title: '账号名称',
-			dataIndex: 'not_video_target',
-			key: 'not_video_target',
+			dataIndex: 'weibo_name',
+			key: 'weibo_name',
 			align: 'center',
 			width: 100,
 		},
 		{
 			title: '合作方类型',
-			dataIndex: 'all_target',
-			key: 'all_target',
+			dataIndex: 'partner_type',
+			key: 'partner_type',
 			align: 'center',
 			width: 100,
-			render: (text) => {
-				return parseFloat(text).toFixed(2)
-			}
 		},
 		{
 			title: '媒介经理',
-			dataIndex: 'all_target1',
-			key: 'all_target1',
+			dataIndex: 'media_manager_name',
+			key: 'media_manager_name',
 			align: 'center',
 			width: 100,
-			render: (text) => {
-				return parseFloat(text).toFixed(2)
-			}
 		},
 		{
 			title: '平台',
-			dataIndex: 'all_target2',
-			key: 'all_target2',
+			dataIndex: 'weibo_type',
+			key: 'weibo_type',
 			width: 100,
 			align: 'center',
-			render: (text) => {
-				return parseFloat(text).toFixed(2)
-			}
 		},
 		{
 			title: '三方代理商',
-			dataIndex: 'all_target3',
-			key: 'all_target3',
+			dataIndex: 'agent_name',
+			key: 'agent_name',
 			align: 'center',
 			width: 100,
-			render: (text) => {
-				return parseFloat(text).toFixed(2)
-			}
 		},
 		{
 			title: '订单执行状态',
-			dataIndex: 'all_target4',
-			key: 'all_target4',
+			dataIndex: 'execution_status',
+			key: 'execution_status',
 			align: 'center',
 			width: 100,
-			render: (text) => {
-				return parseFloat(text).toFixed(2)
-			}
 		},
 		{
 			title: '三方标识',
-			dataIndex: 'all_target5',
-			key: 'all_target5',
+			dataIndex: 'trinity_type',
+			key: 'trinity_type',
 			align: 'center',
 			width: 100,
-			render: (text) => {
-				return parseFloat(text).toFixed(2)
-			}
 		},
 		{
-			title: '账号报价',
-			dataIndex: 'all_target6',
-			key: 'all_target6',
-			align: 'center',
-			width: 100,
-			render: (text) => {
-				return parseFloat(text).toFixed(2)
-			}
-		},
-		{
-			title: '三方平台下单价',
-			dataIndex: 'all_target7',
-			key: 'all_target7',
-			align: 'center',
-			width: 100,
-			render: (text) => {
-				return parseFloat(text).toFixed(2)
-			}
-		},
-		{
-			title: '订单成本价',
-			dataIndex: 'all_target8',
-			key: 'all_target8',
-			align: 'center',
-			width: 100,
-			render: (text) => {
-				return parseFloat(text).toFixed(2)
-			}
-		},
-		{
-			title: '应约价（厂商）',
-			dataIndex: 'all_target9',
-			key: 'all_target9',
+			title: '应约价(厂商)',
+			dataIndex: 'total_quote_price',
+			key: 'total_quote_price',
 			align: 'center',
 			width: 100,
 			render: (text) => {
@@ -171,8 +106,28 @@ export const zhangListFunc = (handleNewModal) => {
 		},
 		{
 			title: '执行价',
-			dataIndex: 'all_target12',
-			key: 'all_target12',
+			dataIndex: 'total_deal_price',
+			key: 'total_deal_price',
+			align: 'center',
+			width: 100,
+			render: (text) => {
+				return parseFloat(text).toFixed(2)
+			}
+		},
+		{
+			title: '账号报价',
+			dataIndex: 'total_account_quote_price',
+			key: 'total_account_quote_price',
+			align: 'center',
+			width: 100,
+			render: (text) => {
+				return parseFloat(text).toFixed(2)
+			}
+		},
+		{
+			title: '订单成本价',
+			dataIndex: 'total_cost_price',
+			key: 'total_cost_price',
 			align: 'center',
 			width: 100,
 			render: (text) => {

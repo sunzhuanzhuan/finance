@@ -21,12 +21,17 @@ class Detail extends Component {
 	componentWillMount=()=>{
 		this.props.actions.getAccountDetail()
 	}
-	
+	handleList=()=>{
+		// console.log(record)
+		this.props.history.push({
+			pathname: '/finance/zhangwu/list',
+		});
+	}
 	render(){
 		let {detail}=this.props;
 		return<div className='detail'>
-			<Row>
-				<Col span={2}>
+			<Row className='titleRow'>
+				<Col span={2} onClick={this.handleList}>
 				<Icon type="left-circle-o" />
 				<span className="title">订单详情</span>
 				</Col>
@@ -45,10 +50,10 @@ class Detail extends Component {
 				<Col span={6}>{detail.order?detail.order.execution_completed_time:''}</Col>
 			</Row>
 			
-			<Row>
+			<Row >
 				<Col span={12} className='colHeight' style={{borderBottom:'none',borderRight:'none'}}>
 				
-					<div className='padd40'>
+					<div className='pad32'>
 						<span>账号报价</span>
 						<span className='displayInline coloRed'>
 						￥{numeral(detail.order?detail.order.total_account_quote_price:'').format('0,0.00')}
@@ -56,12 +61,12 @@ class Detail extends Component {
 						
 					</div>
 					<span>=</span>
-					<div className='padd40'>
+					<div className='padd60'>
 						<span className='displayInline'>微播易到手价</span>
 						<span className='displayInline'>￥{numeral(detail.order?detail.order.private_account_quote_price:'').format('0,0.00')}</span>
 					</div>
 					<span>+</span>
-					<div className='padd40'>
+					<div className='padd60'>
 						<span className='displayInline'>三方平台下单价</span>
 						<span className='displayInline'>￥{numeral(detail.order?detail.order.public_account_quote_price:'').format('0,0.00')}</span>
 					</div>
@@ -70,17 +75,17 @@ class Detail extends Component {
 				
 				<Col span={12} className='colHeight' style={{borderBottom:'none'}}>
 					
-					<div className='padd40'>
+					<div className='pad32'>
 						<span className='displayInline'>应约价</span>
 						<span className='displayInline coloRed'>￥{numeral(detail.order?detail.order.total_quote_price:'').format('0,0.00')}</span>
 					</div>
 					<span>=</span>
-					<div className='padd40'>
+					<div className='padd60'>
 						<span className='displayInline'>对外报价(博主)</span>
 						<span className='displayInline'>￥{numeral(detail.order?detail.order.private_quote_price:'').format('0,0.00')}</span>
 					</div>
 					<span>+</span>
-					<div className='padd40'>
+					<div className='padd60'>
 						<span className='displayInline'>对外报价(三方)</span>
 						<span className='displayInline'>￥{numeral(detail.order?detail.order.public_quote_price:'').format('0,0.00')}</span>
 					</div>
@@ -91,34 +96,34 @@ class Detail extends Component {
 			<Row>
 				<Col span={12} className='colHeight'  style={{borderRight:'none'}}>
 				
-				<div className='padd40'>
+				<div className='pad32'>
 					<span className='displayInline'>订单成本价</span>
 					<span className='displayInline coloRed'>￥{numeral(detail.order?detail.order.total_cost_price:'').format('0,0.00')}</span>
 				</div>
 				<span>=</span>
-				<div className='padd40'>
+				<div className='padd60'>
 					<span className='displayInline'>博主成本价</span>
 					<span className='displayInline'>￥{numeral(detail.order?detail.order.private_cost_price:'').format('0,0.00')}</span>
 				</div>
 				<span>+</span>
-				<div className='padd40'>
+				<div className='padd60'>
 					<span className='displayInline'>三方成本价</span>
 					<span className='displayInline'>￥{numeral(detail.order?detail.order.public_cost_price:'').format('0,0.00')}</span>
 				</div>
 				
 				</Col>
 				<Col span={12} className='colHeight'>
-					<div className='padd40'>
+					<div className='pad32'>
 						<span className='displayInline'>执行价</span>
 						<span className='displayInline coloRed'>￥{numeral(detail.order?detail.order.total_deal_price:'').format('0,0.00')}</span>
 					</div>
 					<span>=</span>
-					<div className='padd40'>
+					<div className='padd60'>
 						<span className='displayInline'>执行价(博主)</span>
 						<span className='displayInline'>￥{numeral(detail.order?detail.order.private_deal_price:'').format('0,0.00')}</span>
 					</div>
 					<span>+</span>
-					<div className='padd40'>
+					<div className='padd60'>
 						<span className='displayInline'>执行价(三方)</span>
 						<span className='displayInline'>￥{numeral(detail.order?detail.order.public_deal_price:'').format('0,0.00')}</span>
 					</div>
@@ -142,13 +147,10 @@ class Detail extends Component {
 			<Row className='colHeight' style={{borderBottom:'none'}}>
 			
 				<Col span={24}>
-				<div className='padd60'>
+				<div className='pad32'>
 					<span className='displayInline'>订单实收</span>
 					<span className='displayInline'>￥{numeral(detail.company?detail.company.real_consumption:'').format('0,0.00')}</span>
 				</div>
-				
-				
-				
 				<span>=</span>
 				<div className='padd60'>
 					<span className='displayInline'>执行价</span>
@@ -174,7 +176,7 @@ class Detail extends Component {
 				</div>
 				
 				<span>-</span>
-				<div className='padd60'>
+				<div className='pad32'>
 					<span className='displayInline'>手工质检返款(结案前)</span>
 					<span className='displayInline'>￥{numeral(detail.company?detail.company.before_close_case_manual_qc:'').format('0,0.00')}</span>
 				</div>
@@ -189,7 +191,9 @@ class Detail extends Component {
 				</div>
 				<Col span={6}>应开票:￥{numeral(detail.company?detail.company.total_invoice_amount:'').format('0,0.00')}</Col>
 				<Col span={6}>已开发票:￥{numeral(detail.company?detail.company.already_invoice_amount:'').format('0,0.00')}</Col>
-				<Col span={6}>回款金额:￥{numeral(detail.company?detail.company.payback_amount:'').format('0,0.00')}{detail.company?detail.company.is_payback:''}</Col>
+				<Col span={6}>回款金额:￥{numeral(detail.company?detail.company.payback_amount:'').format('0,0.00')}
+				<span className='paybackStatus'>{detail.company?detail.company.is_payback:''}</span>
+				</Col>
 				<Col span={6}>{detail.company?detail.company.payback_time:''}</Col>
 			</Row>
 		
@@ -211,34 +215,34 @@ class Detail extends Component {
 			<Row className='colHeight' style={{borderBottom:'none'}}>
 				
 				<Col span={24}>
-				<div className='padd60'>
+				<div className='pad32'>
 					<span className='displayInline'>剩余成本价</span>
 					<span className='displayInline'>￥{numeral(detail.account?detail.account.remaining_price:'').format('0,0.00')}</span>
 				</div>
-				
+				<span>=</span>
 				
 				<div className='padd60'>
 					<span className='displayInline'>博主成本价</span>
 					<span className='displayInline'>￥{numeral(detail.account?detail.order.private_cost_price:'').format('0,0.00')}</span>
 				</div>
 				
-				
+				<span>-</span>
 				<div className='padd60'>
 					<span className='displayInline'>质检扣款</span>
 					<span className='displayInline'>￥{numeral(detail.account?detail.account.deducted_cost_price:'').format('0,0.00')}</span>
 				</div>
-				
+				<span>-</span>
 				<div className='padd60'>
 					<span className='displayInline'>成本调整</span>
 					<span className='displayInline'>￥{numeral(detail.account?detail.account.cost_deduction:'').format('0,0.00')}</span>
 				</div>
-				
+				<span>-</span>
 			
 				<div className='padd60'>
 					<span className='displayInline'>订单扣款(打款前)</span>
 					<span className='displayInline'>￥{numeral(detail.account?detail.account.before_payment_adjust_amount:'').format('0,0.00')}</span>
 				</div>
-				
+				<span>+</span>
 				<div className='padd60'>
 					<span className='displayInline'>订单补款(打款后)</span>
 					<span className='displayInline'>￥{numeral(detail.account?detail.account.after_payment_adjust_amount:'').format('0,0.00')}</span>
@@ -246,36 +250,40 @@ class Detail extends Component {
 				
 				</Col>
 			</Row>
-			<Row className='colHeight' style={{borderBottom:'none'}}>
+			<Row className='colHeight' style={{ height:'40px',lineHeight:'40px'}}>
 				<div>
-					<span className='padd60'>应回发票:{numeral(detail.account?detail.account.total_invoice_amount:'').format('0,0.00')}</span>
+					<span className='pad32'>应回发票:{numeral(detail.account?detail.account.total_invoice_amount:'').format('0,0.00')}</span>
 					<span className='padd60'>待回发票:{numeral(detail.account?detail.account.public_quote_price:'').format('0,0.00')}</span>
 				</div>
-				<div>
-					<span className='padd60'>打款单ID:{detail.account?detail.account.payment_id:''}</span>
-					<span className='padd60'>打款类型:{detail.account?detail.account.payment_type:''}</span>
+			</Row>
+				{detail.account?detail.account.payment_list.map((item,index)=>{
+					return <div key={index} className='payment'>
+					<span className='pad32'>打款单ID:{item.payment_id}</span>
+					<span className='padd60'>打款类型:{item.payment_type}</span>
 					
 				
-					<span className='padd60'>
-						打款金额:{numeral(detail.account?detail.account.payment_amount:'').format('0,0.00')}
-						<span className='paybackStatus'>{detail.account?detail.account.payment_status:''}</span>
+					<span className='padd60' style={{paddingLeft:'300px'}}>
+						打款金额:{numeral(item.payment_amount).format('0,0.00')}
+						<span className='paybackStatus'>{item.payment_status}</span>
 					</span>
-					<span className='padd60'>打款时间:{detail.account?detail.account.payment_time:''}</span>
-				</div>
-			</Row>
+					<span className='padd60'>打款时间:{item.payment_time}</span>
+				</div>})
+				:null}
+				
+			
 			<Row className='colHeight' style={{height:'40px',lineHeight:'40px'}}>
-				<div className='padd60'>
+				<div className='pad32'>
 				订单扣补款(打款后):￥{numeral(detail.account?detail.account.after_payment_adjust_amount:'').format('0,0.00')}
 				</div>
 				
 			</Row>
-			{detail.account?detail.account.payment_list.map((item,index)=>{
+			{detail.account?detail.account.after_payment_list.map((item,index)=>{
 					return <div key={index} className='payment'>
-					<span className='padd60'>打款单ID:{item.payment_id}</span>
+					<span className='pad32'>打款单ID:{item.payment_id}</span>
 					<span className='padd60'>打款类型:{item.payment_type}</span>
 					
 				
-					<span className='padd60'>
+					<span className='padd60' style={{paddingLeft:'300px'}}>
 						打款金额:{numeral(item.payment_amount).format('0,0.00')}
 						<span className='paybackStatus'>{item.payment_status}</span>
 					</span>
@@ -293,7 +301,7 @@ class Detail extends Component {
 			<Row className='colHeight'>
 				
 				<Col span={24}>
-					<div className='padd60'>
+					<div className='pad32'>
 						<span className='displayInline'>剩余成本</span>
 						<span className='displayInline'>￥{numeral(detail.trinity?detail.trinity.actual_public_cost_price:'').format('0,0.00')} </span>
 					</div>
@@ -314,11 +322,11 @@ class Detail extends Component {
 				detail.trinity?detail.trinity.payment_list.map((item,index)=>{
 					return <Row key={index} className='payment'>
 						<div>
-							<span className='padd60'>打款单ID:{item.payment_id}</span>
+							<span className='pad32'>打款单ID:{item.payment_id}</span>
 							<span className='padd60'>打款类型:{item.payment_type}</span>
 							
 						
-							<span className='padd60'>
+							<span className='padd60' style={{paddingLeft:'300px'}}>
 								打款金额:{numeral(item.payment_amount).format('0,0.00')}
 								<span className='paybackStatus'>{item.payment_status}</span>
 							</span>

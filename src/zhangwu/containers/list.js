@@ -27,10 +27,11 @@ class List extends Component {
 		this.queryData({ page: 1, page_size: this.state.page_size, ...search.keys });
 	}
 
-	handleNewModal=({id})=>{
+	handleNewModal=({order_id})=>{
+		// console.log(order_id)
 		this.props.history.push({
 			pathname: '/finance/zhangwu/detail',
-			search: `?${qs.stringify({ id: id})}`,
+			search: `?${qs.stringify({ order_id: order_id})}`,
 		});
 	}
 	queryData = (obj, func) => {

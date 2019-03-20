@@ -775,6 +775,24 @@ export const adjustApplyDetailFunc = (rel_order_status) => {
 					</div>
 				}
 			},
+			'commissioned_price': {
+				title: '应约价',
+				dataIndex: 'price',
+				key: 'price',
+				align: 'center',
+				width: 240,
+				render: (text, { price = [] }) => {
+					const flag = price && price[0] ? price[0].is_trinity : null;
+					return <div>
+						{price.map((item, index) => {
+							return <div key={index}>
+								<div>{`${item.price_label}:${item.open_cost_price}`}</div>
+								{(flag && flag == 1) ? <div>{`(博主${item.private_quote_price},第三方${item.public_quote_price})`}</div> : null}
+							</div>
+						})}
+					</div>
+				}
+			},
 			'price': {
 				title: '应约价',
 				dataIndex: 'price',
@@ -833,6 +851,24 @@ export const adjustApplyDetailFunc = (rel_order_status) => {
 						})}
 					</div> : '-';
 					return node;
+				}
+			},
+			'pre_min_sell_price': {
+				title: '最低售卖价',
+				dataIndex: 'pre_min_sell_price',
+				key: 'pre_min_sell_price',
+				align: 'center',
+				width: 240,
+				render: (text, { price = [] }) => {
+					const flag = price && price[0] ? price[0].is_trinity : null;
+					return <div>
+						{price.map((item, index) => {
+							return <div key={index}>
+								<div>{`${item.price_label}:${item.open_cost_price}`}</div>
+								{(flag && flag == 1) ? <div>{`(博主${item.private_min_sell_price},第三方${item.private_min_sell_price})`}</div> : null}
+							</div>
+						})}
+					</div>
 				}
 			},
 			'quote_type': {

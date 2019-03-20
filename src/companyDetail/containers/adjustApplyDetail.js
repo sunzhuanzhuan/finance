@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as goldenActions from "../actions/goldenApply";
-import { Button, Row, Modal, message, Input, Table } from "antd";
+import { Button, Row, Modal, message, Input } from "antd";
 import ListQuery from '../components/addAdjustApply/listQuery';
 import ApplyTable from '../components/addAdjustApply/applyTable';
 import ApplyModal from '../components/addAdjustApply/applyModal';
@@ -35,7 +35,7 @@ class AdjustApplyDetail extends React.Component {
 			const flag = companyDetailAuthorizations[0].permissions['readjust.finance.operation'];
 			this.setState({ flag });
 		})
-		// getGoldenMetadata();
+		getGoldenMetadata();
 		this.queryData({ page: 1, ...search.keys });
 	}
 	queryData = (obj, func) => {
@@ -95,10 +95,10 @@ class AdjustApplyDetail extends React.Component {
 		this.setState({ previewVisible: boolean }, func);
 	}
 	render() {
-		const { loading, tipVisible, rejectVisible, previewVisible, flag, curSelectRowKeys, curSelectRows, rowsMap } = this.state;
+		const { loading, tipVisible, rejectVisible, previewVisible, flag, curSelectRowKeys, curSelectRows } = this.state;
 		const { applicationDetail: { list = [], page = 1, total = 0 }, goldenMetadata: { rel_order_status = [] } } = this.props;
 		const adjustApplyDetail = flag ? adjustApplyDetailFunc(rel_order_status)(['order_id', 'status', 'company_name', 'project_name', 'requirement_id', 'requirement_name', 'platform_name', 'account_id', 'weibo_name', 'discount_rate', 'price', 'quoted_price', 'history_min_sell_price', 'history_rate', 'min_sell_price', 'quote_type', 'pass_time', 'remark']) : adjustApplyDetailFunc(rel_order_status)(['order_id', 'status', 'company_name', 'project_name', 'requirement_id', 'requirement_name', 'platform_name', 'account_id', 'weibo_name', 'discount_rate', 'price', 'history_min_sell_price', 'min_sell_price', 'pass_time', 'remark']);
-		const adjustApplyPreview = adjustApplyDetailFunc(rel_order_status)(['prev_id', 'company_name', 'project_name', 'requirement_id_name', 'platform_name', 'weibo_name', 'discount_rate', 'price', 'quoted_price', 'min_sell_price']);
+		const adjustApplyPreview = adjustApplyDetailFunc(rel_order_status)(['prev_id', 'company_name', 'project_name', 'requirement_id_name', 'platform_name', 'weibo_name', 'discount_rate', 'commissioned_price', 'quoted_price', 'pre_min_sell_price']);
 		return <div className='add-adjust-apply'>
 			<fieldset className='fieldset_css'>
 				<legend>统计</legend>

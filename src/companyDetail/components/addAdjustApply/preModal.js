@@ -29,7 +29,6 @@ class PrevModal extends React.Component {
 			return obj
 		});
 		this.setState({ data: array })
-
 	}
 	render() {
 		const { data } = this.state;

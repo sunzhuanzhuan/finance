@@ -13,7 +13,10 @@ import { Table } from "antd";
 class List extends Component {
 	constructor(props) {
 		super(props)
-
+		
+	}
+	state={
+		page_size:20
 	}
 	handleNewModal=({id})=>{
 		// console.log(record)

@@ -95,26 +95,6 @@ export const zhangListFunc = (handleNewModal) => {
 			width: 100,
 		},
 		{
-			title: '应约价(厂商)',
-			dataIndex: 'total_quote_price',
-			key: 'total_quote_price',
-			align: 'center',
-			width: 100,
-			render: (text) => {
-				return parseFloat(text).toFixed(2)
-			}
-		},
-		{
-			title: '执行价',
-			dataIndex: 'total_deal_price',
-			key: 'total_deal_price',
-			align: 'center',
-			width: 100,
-			render: (text) => {
-				return parseFloat(text).toFixed(2)
-			}
-		},
-		{
 			title: '账号报价',
 			dataIndex: 'total_account_quote_price',
 			key: 'total_account_quote_price',
@@ -133,7 +113,28 @@ export const zhangListFunc = (handleNewModal) => {
 			render: (text) => {
 				return parseFloat(text).toFixed(2)
 			}
+		},
+		{
+			title: '对外报价',
+			dataIndex: 'total_quote_price',
+			key: 'total_quote_price',
+			align: 'center',
+			width: 100,
+			render: (text) => {
+				return parseFloat(text).toFixed(2)
+			}
+		},
+		{
+			title: '执行价',
+			dataIndex: 'total_deal_price',
+			key: 'total_deal_price',
+			align: 'center',
+			width: 100,
+			render: (text) => {
+				return parseFloat(text).toFixed(2)
+			}
 		}
+		
 		
 
 	];

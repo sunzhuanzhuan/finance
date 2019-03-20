@@ -76,7 +76,7 @@ class Detail extends Component {
 				<Col span={12} className='colHeight' style={{borderBottom:'none'}}>
 					
 					<div className='pad32'>
-						<span className='displayInline'>应约价</span>
+						<span className='displayInline'>对外报价</span>
 						<span className='displayInline coloRed'>￥{numeral(detail.order?detail.order.total_quote_price:'').format('0,0.00')}</span>
 					</div>
 					<span>=</span>

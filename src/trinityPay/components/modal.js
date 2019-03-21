@@ -2,8 +2,9 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as trinityPayAction from "../actions";
-import { Modal, Button, Form, Input, message } from 'antd'
-import { WBYUploadFile } from 'wbyui'
+import { Modal, Button, Form, Input } from 'antd'
+import { OssUpload } from 'wbyui'
+
 const FormItem = Form.Item;
 const { TextArea } = Input;
 
@@ -11,8 +12,44 @@ class PreModal extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			isClick: false
+			isClick: false,
+			token: undefined,
+			array: []
 		}
+	}
+	componentDidMount() {
+		const { status } = this.props;
+		if (status == 'succeed') {
+			this.props.actions.getPayToken().then((res) => {
+				const array = [
+					{
+						uid: "rc-upload-1553065863946-3",
+						status: 'done',
+						name: "打包.png",
+						url: "http://dev-wby-epoch.oss-cn-beijing.aliyuncs.com/B_GZA_ORDER_IMG_NORMAL_UPLOAD/e0dab700134d443086c4b4b8d244af0b.png",
+					},
+					{
+						uid: "rc-upload-1553065863946-6",
+						status: 'done',
+						name: "name.jpg",
+						url: "http://dev-wby-epoch.oss-cn-beijing.aliyuncs.com/B_GZA_ORDER_IMG_NORMAL_UPLOAD/b0ad78703f494c248f772c5b3ff31504.jpg",
+					},
+					{
+						uid: "rc-upload-1553065863946-7",
+						status: 'done',
+						name: "node eventLoop.png",
+						url: "http://dev-wby-epoch.oss-cn-beijing.aliyuncs.com/B_GZA_ORDER_IMG_NORMAL_UPLOAD/b5ff67b059c3415e87eb1215b2d3ef8b.png",
+					},
+				]
+				const { data } = res;
+				this.setState({
+					token: data,
+					array
+				})
+			})
+		}
+
+
 	}
 	titleMap = (status, type) => {
 		const succeedName = type => {
@@ -67,14 +104,17 @@ class PreModal extends React.Component {
 			if (!err) {
 				const current = (search.keys && search.keys.payment_status && list.length === 1) ? (page - 1 || page) : page;
 				let params = {
-					payment_slip_id: id
+					payment_slip_id: id,
+					payment_screenshot: values.payment_screenshot
 				}
-				this.props.actions[actionName](params).then(() => {
-					message.success('操作成功!');
-					this.props.queryAction({ page: current, ...search.keys });
-				}).catch(({ errorMsg }) => {
-					message.error(errorMsg || '操作失败，请重试！');
-				})
+				status == 'revocation' ? params.payment_backout_reason = values.remark : params.payment_remark = values.remark;
+				console.log('%cparams: ', 'color: MidnightBlue; background: Aquamarine; font-size: 20px;', params);
+				// this.props.actions[actionName](params).then(() => {
+				// 	message.success('操作成功!');
+				// 	this.props.queryAction({ page: current, ...search.keys });
+				// }).catch(({ errorMsg }) => {
+				// 	message.error(errorMsg || '操作失败，请重试！');
+				// })
 			}
 		})
 	}
@@ -82,19 +122,17 @@ class PreModal extends React.Component {
 	render() {
 		const { getFieldDecorator } = this.props.form;
 		const { visible, onCancel, status, type, key } = this.props;
-		const { isClick } = this.state;
+		const { isClick, token, array } = this.state;
 		const formItemLayout = {
 			labelCol: { span: 4 },
 			wrapperCol: { span: 20 }
 		};
 		const article = this.titleMap(status, type);
-		console.log('%carticle: ', 'color: MidnightBlue; background: Aquamarine; font-size: 20px;', article);
-		console.log('%ctype: ', 'color: MidnightBlue; background: Aquamarine; font-size: 20px;', type);
-		console.log('%cstatus: ', 'color: MidnightBlue; background: Aquamarine; font-size: 20px;', status);
+
 		return <Modal
 			wrapClassName='prePay-modal'
 			key={key}
-			width={640}
+			width={status == 'succeed' ? 780 : 640}
 			title={article.title}
 			visible={visible}
 			maskClosable={false}
@@ -109,27 +147,30 @@ class PreModal extends React.Component {
 		>
 			<Form>
 				<FormItem label='备注' {...formItemLayout}>
-					{getFieldDecorator('comment')(
+					{getFieldDecorator('remark')(
 						<TextArea placeholder='非必输' autosize={{ minRows: 4, maxRows: 6 }} maxLength={50} />
 					)}
 				</FormItem>
-				{/* <FormItem label='截图' {...formItemLayout}>
-					{getFieldDecorator('pics')(
-						<WBYUploadFile
-							ref={(x) => this.uploadFile = x}
-							tok={{
-								token: businessToken.upload_token,
-								upload_url: businessToken.upload_url
-							}}
-							onChange={this.handleFileChange}
-							listType='text'
-							uploadText={'上传'}
-							multiple={true}
-							size={10}
+				{token && <FormItem label='截图' {...formItemLayout}>
+					{getFieldDecorator('payment_screenshot', {
+						initialValue: array,
+						valuePropName: 'fileList',
+						getValueFromEvent: e => e.fileList
+					})(
+						<OssUpload
 							len={5}
-							accept={".png,.jpg,.jpeg"} />
+							listType="picture-card"
+							authToken={token}
+							rule={{
+								bizzCode: 'TRINITY_PROOF_PAYMENT_IMG_UPLOAD',
+								suffix: "bmp,jpg,jpeg,gif,png",
+								max: 5
+							}}
+							multiple={true}
+						>
+						</OssUpload>
 					)}
-				</FormItem> */}
+				</FormItem>}
 			</Form>
 		</Modal>
 	}

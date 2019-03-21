@@ -22,5 +22,6 @@ export default {
 	getDealOrderData: '/finance/periodic/paymentSlip/orderList',
 	getDealOrderSearchItem: '/finance/periodic/paymentSlip/orderSearchItem',
 	getDealOrderExport: '/finance/periodic/paymentSlip/orderExport',
-
+	//getToken
+	getPayToken: '/toolbox-gateway/file/v1/getToken',
 }

@@ -161,3 +161,10 @@ export const {
 	ignoreToast: true
 });
 
+export const {
+	getPayToken,
+	getPayToken_success
+} = createHttpAction('getPayToken', Interface.getPayToken, {
+	method: 'get'
+});
+

@@ -52,7 +52,7 @@ export default class SearchSelect extends React.PureComponent {
 			style={{ width: 140 }}
 			placeholder="请输入"
 			{...this.props}
-			onPopupScroll={this.handleScroll}
+			// onPopupScroll={this.handleScroll}
 		>
 			{options}
 			{more && <Option value=''> <Spin size="small" /> </Option>}

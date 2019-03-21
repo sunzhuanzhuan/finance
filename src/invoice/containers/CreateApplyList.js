@@ -911,7 +911,7 @@ class CreateApplyList extends Component {
 							<RadioGroup>
 								{
 									beneficiary_company == undefined ? null : beneficiary_company.map((item, index) => {
-										return <Radio disabled={item.id == 1 || item.id == 2 || item.id == 5 ? true : false} key={index} value={item.id}>{item.display}</Radio>
+										return <Radio disabled={item.id == 1 || item.id == 2  ? true : false} key={index} value={item.id}>{item.display}</Radio>
 									})
 								}
 							</RadioGroup>

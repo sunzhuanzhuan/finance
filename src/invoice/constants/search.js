@@ -50,7 +50,7 @@ export const relatedInvoiceSearchFunc = ({ platform, agent }) => [
 		}
 	}
 ];
-export const trinityInvoiceSearchFunc = ({ invoice_title, invoice_type, is_reset, agent }) => [
+export const trinityInvoiceSearchFunc = ({ invoice_title, invoice_type, invoice_source, agent }) => [
 	{
 		ctype: 'input',
 		attr: {
@@ -148,7 +148,7 @@ export const trinityInvoiceSearchFunc = ({ invoice_title, invoice_type, is_reset
 			label: '发票来源',
 			value: 'agent_id',
 		},
-		selectOptionsChildren: is_reset
+		selectOptionsChildren: invoice_source
 	},
 	{
 		ctype: 'select',

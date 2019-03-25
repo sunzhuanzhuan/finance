@@ -14,7 +14,7 @@ class ApplyModal extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			isClick: false,
+			isClick: false
 		}
 		this.attachment = ''
 	}
@@ -145,7 +145,7 @@ class ApplyModal extends React.Component {
 	render() {
 		const { getFieldDecorator } = this.props.form;
 		const { isClick } = this.state;
-		const { visible, onCancel, type, goldenToken, quoteType } = this.props;
+		const { visible, onCancel, type, goldenToken, quoteType, flag } = this.props;
 		const formItemLayout = {
 			labelCol: { span: 4 },
 			wrapperCol: { span: 20 },
@@ -154,7 +154,6 @@ class ApplyModal extends React.Component {
 			labelCol: { span: 4 },
 			wrapperCol: { span: 20 },
 		};
-
 		return <Modal
 			className='adjust-dialog'
 			visible={visible}
@@ -163,11 +162,14 @@ class ApplyModal extends React.Component {
 			onCancel={onCancel}
 			maskClosable={false}
 			wrapClassName='adjust-dialog-list'
-			footer={[
+			footer={flag ? [
 				<Button key='preview' type="primary" disabled={isClick} onClick={this.handlePreview}>预览结果</Button>,
 				<Button key="submit" type="primary" disabled={isClick} onClick={this.handleSubmit}>确认提交</Button>,
 				<Button key="back" onClick={onCancel}>取消</Button>
-			]}
+			] : [
+					<Button key="submit" type="primary" disabled={isClick} onClick={this.handleSubmit}>确认提交</Button>,
+					<Button key="back" onClick={onCancel}>取消</Button>
+				]}
 		>
 			{type === 'add' ? <Form>
 				<FormItem label='调价原因' {...formItemLayout}>

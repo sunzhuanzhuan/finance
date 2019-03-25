@@ -47,8 +47,8 @@ export const readyRelatedFunc = (handleCancel) => [
 	},
 	{
 		title: '使用金额',
-		dataIndex: 'use_amount',
-		key: 'use_amount',
+		dataIndex: 'used_amount',
+		key: 'used_amount',
 		align: 'center',
 		width: 100
 	},

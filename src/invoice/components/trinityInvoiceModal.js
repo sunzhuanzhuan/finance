@@ -2,11 +2,11 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as trinityPayAction from "../actions";
-import { Modal, Button, Form, Input, Select } from 'antd'
-import { OssUpload } from 'wbyui'
+import { Modal, message, Button, Form, Input, Select, DatePicker } from 'antd'
 
 const FormItem = Form.Item;
 const Option = Select.Option;
+const { TextArea } = Input;
 
 class PreModal extends React.Component {
 	constructor() {
@@ -40,24 +40,18 @@ class PreModal extends React.Component {
 			})
 		})
 	}
-	handleSubmit = (status, type) => {
-		const { search, id, page, prePayData: { list } } = this.props;
-		const actionName = this.titleMap(status, type).actionName;
+	handleSubmit = () => {
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
-				const current = (search.keys && search.keys.payment_status && list.length === 1) ? (page - 1 || page) : page;
-				let params = {
-					payment_slip_id: id,
-					payment_screenshot: values.payment_screenshot
-				}
-				status == 'revocation' ? params.payment_backout_reason = values.remark : params.payment_remark = values.remark;
-				console.log('%cparams: ', 'color: MidnightBlue; background: Aquamarine; font-size: 20px;', params);
-				// this.props.actions[actionName](params).then(() => {
-				// 	message.success('操作成功!');
-				// 	this.props.queryAction({ page: current, ...search.keys });
-				// }).catch(({ errorMsg }) => {
-				// 	message.error(errorMsg || '操作失败，请重试！');
-				// })
+				const { search } = this.props;
+				this.props.actions.postTrinityInvoiceAdd({ ...values }).then(() => {
+					message.success('操作成功!');
+					this.props.queryAction({ ...search.keys }).catch(({ errorMsg }) => {
+						message.error(errorMsg || '列表刷新失败，请重试！');
+					})
+				}).catch(({ errorMsg }) => {
+					message.error(errorMsg || '操作失败，请重试！');
+				})
 			}
 		})
 	}
@@ -67,45 +61,49 @@ class PreModal extends React.Component {
 		const { visible, onCancel, status, SearchItem } = this.props;
 		const { isClick } = this.state;
 		const formItemLayout = {
-			labelCol: { span: 4 },
-			wrapperCol: { span: 20 }
+			labelCol: { span: 6 },
+			wrapperCol: { span: 18 }
 		};
+		const options = {
+			rules: [{ required: true, message: '该项为必填项！' }],
+		}
 		const title = this.titleMapping(status);
 
 		return <Modal
 			wrapClassName='prePay-modal'
 			key={status}
-			width={640}
+			width={500}
 			title={title}
 			visible={visible}
 			maskClosable={false}
 			onCancel={onCancel}
 			footer={
-				[
-					<Button key="back" onClick={onCancel}>返回</Button>,
-					<Button key="submit" type="primary" disabled={isClick} onClick={() => {
-						// this.handleModal(article.content)
-					}}>确认</Button>
-				]}
+				status === 'check' ? [
+					<Button key="back" onClick={onCancel}>返回</Button>
+				] : [
+						<Button key="back" onClick={onCancel}>返回</Button>,
+						<Button key="submit" type="primary" disabled={isClick} onClick={this.handleSubmit
+						}>确认</Button>
+					]}
 		>
-			<Form>
+			{(status === 'new' || status === 'modification') && <Form>
 				<FormItem label='发票来源' {...formItemLayout}>
-					{getFieldDecorator('remark')(
+					{getFieldDecorator('invoice_source', { ...options })(
 						<Select placeholder="请选择" style={{ width: 200 }}
 						>
-							{SearchItem && SearchItem.is_reset.map((item) =>
+							{SearchItem && SearchItem.invoice_source.map((item) =>
 								<Option key={item.value} value={item.value}>{item.name}</Option>)
 							}
 						</Select>
 					)}
 				</FormItem>
 				<FormItem label='发票号' {...formItemLayout}>
-					{getFieldDecorator('remark')(
+					{getFieldDecorator('invoice_number', { ...options })(
 						<Input placeholder="请输入" style={{ width: 200 }} />
 					)}
 				</FormItem>
 				<FormItem label='三方代理商' {...formItemLayout}>
-					{getFieldDecorator('remark')(
+					{getFieldDecorator('agent_id', { ...options })(
 						<Select placeholder="请选择" style={{ width: 200 }}
 						>
 							{SearchItem && SearchItem.agent.map((item) =>
@@ -115,7 +113,7 @@ class PreModal extends React.Component {
 					)}
 				</FormItem>
 				<FormItem label='发票抬头' {...formItemLayout}>
-					{getFieldDecorator('remark')(
+					{getFieldDecorator('invoice_title', { ...options })(
 						<Select placeholder="请选择" style={{ width: 200 }}
 						>
 							{SearchItem && SearchItem.invoice_title.map((item) =>
@@ -125,32 +123,32 @@ class PreModal extends React.Component {
 					)}
 				</FormItem>
 				<FormItem label='发票开具方' {...formItemLayout}>
-					{getFieldDecorator('remark')(
+					{getFieldDecorator('beneficiary_company', { ...options })(
 						<Input placeholder="请输入" style={{ width: 200 }} />
 					)}
 				</FormItem>
 				<FormItem label='发票内容' {...formItemLayout}>
-					{getFieldDecorator('remark')(
+					{getFieldDecorator('invoice_content', { ...options })(
 						<Input placeholder="请输入" style={{ width: 200 }} />
 					)}
 				</FormItem>
 				<FormItem label='发票金额' {...formItemLayout}>
-					{getFieldDecorator('remark')(
+					{getFieldDecorator('invoice_pure_amount', { ...options })(
 						<Input placeholder="请输入" style={{ width: 200 }} suffix={'元'} />
 					)}
 				</FormItem>
 				<FormItem label='发票税额' {...formItemLayout}>
-					{getFieldDecorator('remark')(
+					{getFieldDecorator('invoice_tax_amount', { ...options })(
 						<Input placeholder="请输入" style={{ width: 200 }} suffix={'元'} />
 					)}
 				</FormItem>
-				<FormItem label='发票税率' {...formItemLayout}>
-					{getFieldDecorator('remark')(
+				{status === 'new' && <FormItem label='发票税率' {...formItemLayout}>
+					{getFieldDecorator('invoice_tax')(
 						<Input placeholder="请输入" style={{ width: 200 }} suffix={'%'} />
 					)}
-				</FormItem>
-				<FormItem label='发票类型' {...formItemLayout}>
-					{getFieldDecorator('remark')(
+				</FormItem>}
+				{status === 'new' && <FormItem label='发票类型' {...formItemLayout}>
+					{getFieldDecorator('invoice_type')(
 						<Select placeholder="请选择" style={{ width: 200 }}
 						>
 							{SearchItem && SearchItem.invoice_type.map((item) =>
@@ -158,8 +156,20 @@ class PreModal extends React.Component {
 							}
 						</Select>
 					)}
+				</FormItem>}
+				<FormItem label='开票日期' {...formItemLayout}>
+					{getFieldDecorator('invoice_make_out_time', { ...options })(
+						<DatePicker placeholder='请选择' style={{ width: 200 }} />
+					)}
 				</FormItem>
-			</Form>
+				<FormItem label='备注' {...formItemLayout}>
+					{getFieldDecorator('remark')(
+						<TextArea placeholder='非必输' autosize={{ minRows: 4, maxRows: 6 }} maxLength={50} />
+					)}
+				</FormItem>
+			</Form>}
+			{status === 'check' && 111}
+
 		</Modal>
 	}
 }

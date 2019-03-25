@@ -45,12 +45,15 @@ class TrinityInvoice extends React.Component {
 	handleModal = (status, modalVisible) => {
 		this.setState({ status, modalVisible })
 	}
+	handleDelete = id => {
+		this.props.actions.postTrinityInvoiceDel({ id })
+	}
 	render() {
 		const search = qs.parse(this.props.location.search.substring(1));
 		const { loading, pullReady, modalVisible, status } = this.state;
 		const { trinityInvoiceData: { list = [], page, page_size = 20, total, statistic }, trinityInvoiceSearchItem } = this.props;
 		const trinityInvoiceSearch = trinityInvoiceSearchFunc(trinityInvoiceSearchItem);
-		const trinityInvoiceCols = trinityInvoiceFunc(this.handleModal);
+		const trinityInvoiceCols = trinityInvoiceFunc(this.handleModal, this.handleDelete);
 		const paginationObj = {
 			onChange: (current) => {
 				this.queryData({ ...search.keys, page: current, page_size });

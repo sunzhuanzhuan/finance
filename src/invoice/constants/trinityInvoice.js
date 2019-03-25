@@ -1,6 +1,6 @@
 import React from 'react'
 import { Input, Button } from 'antd'
-export const trinityInvoiceFunc = (handleCancel) => [
+export const trinityInvoiceFunc = (handleModal, handleDelete) => [
 	{
 		title: '操作',
 		dataIndex: 'action',
@@ -10,13 +10,19 @@ export const trinityInvoiceFunc = (handleCancel) => [
 		render: (text, record) => {
 			return <div>
 				<div>
-					<Button type='primary' size='small' style={{ width: 80 }}>编辑</Button>
+					<Button type='primary' size='small' style={{ width: 80 }} onClick={() => {
+						handleModal('modification', true)
+					}}>编辑</Button>
 				</div>
 				<div className='little-top-gap'>
-					<Button type='primary' size='small' style={{ width: 80 }}>查看</Button>
+					<Button type='primary' size='small' style={{ width: 80 }} onClick={() => {
+						handleModal('check', true)
+					}}>查看</Button>
 				</div>
 				<div className='little-top-gap'>
-					<Button type='primary' size='small' style={{ width: 80 }}>删除</Button>
+					<Button type='primary' size='small' style={{ width: 80 }} onClick={() => {
+						handleDelete(record.invoice_number)
+					}}>删除</Button>
 				</div>
 			</div>
 		}
@@ -59,8 +65,8 @@ export const trinityInvoiceFunc = (handleCancel) => [
 	},
 	{
 		title: '发票类型',
-		dataIndex: 'a',
-		key: 'a',
+		dataIndex: 'invoice_type',
+		key: 'invoice_type',
 		align: 'center',
 		width: 100
 	},

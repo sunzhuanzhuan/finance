@@ -146,6 +146,7 @@ class AdjustApplyDetail extends React.Component {
 				onCancel={() => { this.setState({ tipVisible: false }) }}
 				location={this.props.location}
 				quoteType={curSelectRows.length > 0 ? curSelectRows[0].quote_type : null}
+				flag={flag}
 			>
 			</ApplyModal> : null}
 			{previewVisible && <PrevModal visible={previewVisible}

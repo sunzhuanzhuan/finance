@@ -64,7 +64,7 @@ class RelatedInvoice extends React.Component {
 	render() {
 		const search = qs.parse(this.props.location.search.substring(1));
 		const { loading, pullReady } = this.state;
-		const { relatedInvoiceData: { list = [], alredyList = [], page, page_size = 20, total }, relatedInvoiceSearchItem } = this.props;
+		const { relatedInvoiceData: { associated_list = [], list = [], alredyList = [], page, page_size = 20, total }, relatedInvoiceSearchItem } = this.props;
 		const relatedInvoiceSearch = relatedInvoiceSearchFunc(relatedInvoiceSearchItem);
 		const readyRelatedCols = readyRelatedFunc(this.handleCancel);
 		const relatedInvoiceCols = relatedInvoiceFunc(this.handleSubmit);
@@ -76,7 +76,7 @@ class RelatedInvoice extends React.Component {
 					rowKey='invoice_number'
 					loading={loading}
 					columns={readyRelatedCols}
-					dataSource={alredyList}
+					dataSource={associated_list}
 					bordered
 					pagination={false}
 				/>

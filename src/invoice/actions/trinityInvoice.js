@@ -21,31 +21,21 @@ export const {
 	postTrinityInvoiceAdd,
 	postTrinityInvoiceAdd_success
 } = createHttpAction('postTrinityInvoiceAdd', Interface.postTrinityInvoiceAdd, {
-	method: 'post',
-	ignoreToast: true
+	method: 'post'
 });
 
 export const {
 	postTrinityInvoiceEdit,
 	postTrinityInvoiceEdit_success
 } = createHttpAction('postTrinityInvoiceEdit', Interface.postTrinityInvoiceEdit, {
-	method: 'post',
-	ignoreToast: true
+	method: 'post'
 });
 
 export const {
 	postTrinityInvoiceDel,
 	postTrinityInvoiceDel_success
 } = createHttpAction('postTrinityInvoiceDel', Interface.postTrinityInvoiceDel, {
-	method: 'post',
-	ignoreToast: true
+	method: 'post'
 });
 
-export const {
-	postTrinityInvoiceReset,
-	postTrinityInvoiceReset_success
-} = createHttpAction('postTrinityInvoiceReset', Interface.postTrinityInvoiceReset, {
-	method: 'post',
-	ignoreToast: true
-});
 

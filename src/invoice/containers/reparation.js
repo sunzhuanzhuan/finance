@@ -272,7 +272,7 @@ class Filter extends Component {
 					);
 					return (<div>
 						<Popover content={content} title="详情">
-							<span style={{ color: '#1DA57A' }}>查看详情</span>
+							<span style={{ color: '#1890ff' }}>查看详情</span>
 						</Popover>
 
 					</div>);

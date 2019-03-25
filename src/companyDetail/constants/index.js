@@ -651,7 +651,7 @@ export const adjustApplyDetailFunc = (rel_order_status) => {
 				render: (text, record) => {
 					return <div>
 						<div>{text}</div>
-						{record.plan_manager_id == 1 ? <div style={{ display: 'inline-block', backgroundColor: 'red', color: '#fff', padding: '0 10px' }}>含策划</div> : null}
+						{record.is_plan_manager == 1 ? <div style={{ display: 'inline-block', backgroundColor: 'red', color: '#fff', padding: '0 10px' }}>含策划</div> : null}
 					</div>
 				}
 			},
@@ -665,7 +665,7 @@ export const adjustApplyDetailFunc = (rel_order_status) => {
 				render: (text, record) => {
 					return <div>
 						<div>{text}</div>
-						{record.plan_manager_id == 1 ? <div style={{ display: 'inline-block', backgroundColor: 'red', color: '#fff', padding: '0 10px' }}>含策划</div> : null}
+						{record.is_plan_manager == 1 ? <div style={{ display: 'inline-block', backgroundColor: 'red', color: '#fff', padding: '0 10px' }}>含策划</div> : null}
 					</div>
 				}
 			},
@@ -764,7 +764,7 @@ export const adjustApplyDetailFunc = (rel_order_status) => {
 				align: 'center',
 				width: 240,
 				render: (text, { price = [] }) => {
-					const flag = price && price[0] ? price[0].is_trinity : null;
+					const flag = price && price[0] ? price[0].trinity_type==2 : null;
 					return <div>
 						{price.map((item, index) => {
 							return <div key={index}>
@@ -782,7 +782,7 @@ export const adjustApplyDetailFunc = (rel_order_status) => {
 				align: 'center',
 				width: 240,
 				render: (text, { price = [] }) => {
-					const flag = price && price[0] ? price[0].is_trinity : null;
+					const flag = price && price[0] ? price[0].trinity_type==2 : null;
 					return <div>
 						{price.map((item, index) => {
 							return <div key={index}>
@@ -860,7 +860,7 @@ export const adjustApplyDetailFunc = (rel_order_status) => {
 				align: 'center',
 				width: 240,
 				render: (text, { price = [] }) => {
-					const flag = price && price[0] ? price[0].is_trinity : null;
+					const flag = price && price[0] ? price[0].trinity_type==2 : null;
 					return <div>
 						{price.map((item, index) => {
 							return <div key={index}>

@@ -12,15 +12,19 @@ module.exports = merge(baseConfig, {
 		hot: true,
 		host: 'lg.nip.io',
 		proxy: {
-			// "/api/finance/readjust": {
-			// 	target: "http://192.168.20.51:7300/mock/5c8f0c2873f3100017a64234",
-			// 	changeOrigin: true
-			// },
-			// "/api/finance/invoice": {
-			// 	target: "http://192.168.20.51:7300/mock/5c8752f273f3100017a641f5",
-			// 	changeOrigin: true
-			// },
-			"/api/finance": {
+			"/api/finance/readjust": {
+				target: "http://192.168.20.51:7300/mock/5c8f0c2873f3100017a64234",
+				changeOrigin: true
+			},
+			"/api/finance/invoice": {
+				target: "http://192.168.20.51:7300/mock/5c8752f273f3100017a641f5",
+				changeOrigin: true
+			},
+			"/api/finance//periodic": {
+				target: "http://192.168.20.51:7300/mock/5c7fa2bd73f3100017a6412e",
+				changeOrigin: true
+			},
+			"/api/finance/advance": {
 				target: "http://192.168.20.51:7300/mock/5c7fa2bd73f3100017a6412e",
 				changeOrigin: true
 			},

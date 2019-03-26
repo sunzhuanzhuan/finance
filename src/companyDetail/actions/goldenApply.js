@@ -76,10 +76,10 @@ export const {
 });
 
 export const {
-	getApplicationPreview,
-	getApplicationPreview_success
-} = createHttpAction('getApplicationPreview', Interface.getApplicationPreview, {
-	method: 'get',
+	postPreviewMinSellPrice,
+	postPreviewMinSellPrice_success
+} = createHttpAction('postPreviewMinSellPrice', Interface.postPreviewMinSellPrice, {
+	method: 'post',
 	ignoreToast: true
 });
 

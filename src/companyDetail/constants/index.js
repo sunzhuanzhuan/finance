@@ -481,7 +481,7 @@ export const adjustApplyListFunc = (application_status, handleJump, handleAction
 					</div>
 					{record.status != '3' ? <div>
 						<Button type='primary' size='small' style={{ marginTop: "10px" }} onClick={() => {
-							handleAction('pass', record.id, record.quote_type);
+							handleAction('pass', record.id, record.quote_type, record.company_id);
 						}}>审核通过</Button>
 					</div> : null}
 					{record.status != '3' ? <div>
@@ -505,7 +505,7 @@ export const addAdjustApplyConfig = [
 		dataIndex: 'order_id',
 		key: 'order_id',
 		align: 'center',
-		width: 100,
+		width: 120,
 		fixed: 'left'
 	},
 	{
@@ -640,7 +640,7 @@ export const readyCheckFunc = (handleDelete) => {
 		}
 	]
 }
-export const adjustApplyDetailFunc = (rel_order_status) => {
+export const adjustApplyDetailFunc = (rel_order_status = []) => {
 	return ary => {
 		const configMap = {
 			'prev_id': {
@@ -764,12 +764,12 @@ export const adjustApplyDetailFunc = (rel_order_status) => {
 				align: 'center',
 				width: 240,
 				render: (text, { price = [] }) => {
-					const flag = price && price[0] ? price[0].trinity_type==2 : null;
+					const flag = price && price[0] ? price[0].trinity_type == 2 : false;
 					return <div>
 						{price.map((item, index) => {
 							return <div key={index}>
 								<div>{`${item.price_label}:${item.open_cost_price}`}</div>
-								{(flag && flag == 1) ? <div>{`(博主${item.private_open_cost_price},第三方${item.public_open_cost_price})`}</div> : null}
+								{flag ? <div>{`(博主${item.private_open_cost_price},第三方${item.public_open_cost_price})`}</div> : null}
 							</div>
 						})}
 					</div>
@@ -782,11 +782,11 @@ export const adjustApplyDetailFunc = (rel_order_status) => {
 				align: 'center',
 				width: 240,
 				render: (text, { price = [] }) => {
-					const flag = price && price[0] ? price[0].trinity_type==2 : null;
+					const flag = price && price[0] ? price[0].trinity_type == 2 : false;
 					return <div>
 						{price.map((item, index) => {
 							return <div key={index}>
-								<div>{`${item.price_label}:${item.open_cost_price}`}</div>
+								<div>{`${item.price_label}:${item.quoted_price}`}</div>
 								{(flag && flag == 1) ? <div>{`(博主${item.private_quote_price},第三方${item.public_quote_price})`}</div> : null}
 							</div>
 						})}
@@ -859,12 +859,12 @@ export const adjustApplyDetailFunc = (rel_order_status) => {
 				key: 'pre_min_sell_price',
 				align: 'center',
 				width: 240,
-				render: (text, { price = [] }) => {
-					const flag = price && price[0] ? price[0].trinity_type==2 : null;
+				render: (text, { price = [], pre_min_sell_price = [] }) => {
+					const flag = price && price[0] ? price[0].trinity_type == 2 : false;
 					return <div>
-						{price.map((item, index) => {
+						{pre_min_sell_price.map((item, index) => {
 							return <div key={index}>
-								<div>{`${item.price_label}:${item.open_cost_price}`}</div>
+								<div>{`${item.price_label}:${item.min_sell_price}`}</div>
 								{(flag && flag == 1) ? <div>{`(博主${item.private_min_sell_price},第三方${item.private_min_sell_price})`}</div> : null}
 							</div>
 						})}

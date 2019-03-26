@@ -14,7 +14,8 @@ class ApplyModal extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			isClick: false
+			isClick: false,
+			loading: false
 		}
 		this.attachment = ''
 	}
@@ -34,17 +35,68 @@ class ApplyModal extends React.Component {
 			})
 		}
 	}
+	queryData = (obj, func) => {
+		this.setState({ loading: true });
+		return this.props.actions.getApplicationDetail({ ...obj }).then(() => {
+			if (func && Object.prototype.toString.call(func) === '[object Function]') {
+				func();
+			}
+			this.setState({ loading: false })
+		}).catch(({ errorMsg }) => {
+			this.setState({ loading: false });
+			message.error(errorMsg || '列表加载失败，请重试！');
+		})
+	}
+	handleApplicationPreview = e => {
+		e.preventDefault();
+		const { readjustId, companyId, togglePreview } = this.props;
+		this.props.form.validateFields((err, values) => {
+			if (!err) {
+				const hide = message.loading('加载中,请稍候...');
+				this.queryData({ page: 1, page_size: 50, status: 1, readjust_application_id: readjustId, company_id: companyId }).then(() => {
+					const { applicationDetail: { list = [] } } = this.props;
+					const order_ids = list.map(item => item.order_id).toString();
+					const params = {
+						...values,
+						order_ids,
+						profit_rate: values['profit_rate'] && values['profit_rate'] != 0 ? numeral(values['profit_rate'] / 100).format('0.0000') : 0,
+						service_rate: values['service_rate'] && values['service_rate'] != 0 ? numeral(values['service_rate'] / 100).format('0.0000') : 0,
+						readjust_application_id: readjustId
+					}
+					this.props.actions.postPreviewMinSellPrice(params).then(() => {
+						togglePreview(true, () => {
+							hide();
+						})
+					}).catch(({ errorMsg }) => {
+						hide();
+						message.error(errorMsg || '获取预览结果失败，请重试！');
+					})
+				})
+			}
+		})
+	}
 	handlePreview = e => {
+		const search = qs.parse(this.props.location.search.substring(1));
 		const { curSelectRowKeys, togglePreview } = this.props;
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
-				const hide = message.loading('加载中,请输入...');
+				const hide = message.loading('加载中,请稍候...');
 				const order_ids = curSelectRowKeys.toString();
-				this.props.actions.getApplicationPreview({ order_ids }).then(() => {
+				const params = {
+					...values,
+					order_ids,
+					profit_rate: values['profit_rate'] && values['profit_rate'] != 0 ? numeral(values['profit_rate'] / 100).format('0.0000') : 0,
+					service_rate: values['service_rate'] && values['service_rate'] != 0 ? numeral(values['service_rate'] / 100).format('0.0000') : 0,
+					readjust_application_id: search.readjust_application_id
+				}
+				this.props.actions.postPreviewMinSellPrice(params).then(() => {
 					togglePreview(true, () => {
 						hide();
 					})
+				}).catch(({ errorMsg }) => {
+					hide();
+					message.error(errorMsg || '获取预览结果失败，请重试！');
 				})
 			}
 		})
@@ -145,7 +197,7 @@ class ApplyModal extends React.Component {
 	render() {
 		const { getFieldDecorator } = this.props.form;
 		const { isClick } = this.state;
-		const { visible, onCancel, type, goldenToken, quoteType, flag } = this.props;
+		const { visible, onCancel, type, goldenToken, quoteType, flag, isApplication } = this.props;
 		const formItemLayout = {
 			labelCol: { span: 4 },
 			wrapperCol: { span: 20 },
@@ -163,7 +215,7 @@ class ApplyModal extends React.Component {
 			maskClosable={false}
 			wrapClassName='adjust-dialog-list'
 			footer={flag ? [
-				<Button key='preview' type="primary" disabled={isClick} onClick={this.handlePreview}>预览结果</Button>,
+				<Button key='preview' type="primary" disabled={isClick} onClick={isApplication ? this.handleApplicationPreview : this.handlePreview}>预览结果</Button>,
 				<Button key="submit" type="primary" disabled={isClick} onClick={this.handleSubmit}>确认提交</Button>,
 				<Button key="back" onClick={onCancel}>取消</Button>
 			] : [
@@ -237,6 +289,7 @@ class ApplyModal extends React.Component {
 const mapStateToProps = (state) => {
 	return {
 		goldenToken: state.companyDetail.goldenToken,
+		applicationDetail: state.companyDetail.applicationDetail,
 		applicationPreview: state.companyDetail.applicationPreview,
 	}
 }

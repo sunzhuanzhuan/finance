@@ -39,10 +39,10 @@ class Detail extends Component {
 				
 			</Row>
 			{/* 订单 */}
-			<Row className='orderBox'>
+			<Row className='orderBox borderBottomNode'>
 				<Col span={3} className='marLeft26'>
 					订单id:{detail.order?detail.order.order_id:''}
-					<span>{detail.order?detail.order.order_type:''}</span> 
+					<span className='orderStatus'>{detail.order?detail.order.order_type:''}</span> 
 				</Col>
 				<Col span={6}>三方标识:{detail.order?detail.order.trinity_type:''}</Col>
 				<Col span={6}>订单执行状态:{detail.order?detail.order.execution_status:''}</Col>
@@ -51,10 +51,10 @@ class Detail extends Component {
 			</Row>
 			
 			<Row >
-				<Col span={12} className='colHeight' style={{borderBottom:'none',borderRight:'none'}}>
+				<Col span={12} className='colHeightTitle' style={{borderBottom:'none',borderRight:'none'}}>
 				
 					<div className='pad32'>
-						<span>账号报价</span>
+						<span className='displayInline'>账号报价</span>
 						<span className='displayInline coloRed'>
 						￥{numeral(detail.order?detail.order.total_account_quote_price:'').format('0,0.00')}
 						</span>
@@ -73,7 +73,7 @@ class Detail extends Component {
 				
 				</Col>
 				
-				<Col span={12} className='colHeight' style={{borderBottom:'none'}}>
+				<Col span={12} className='colHeightTitle' style={{borderBottom:'none'}}>
 					
 					<div className='pad32'>
 						<span className='displayInline'>对外报价</span>
@@ -94,7 +94,7 @@ class Detail extends Component {
 			</Row>
 			
 			<Row>
-				<Col span={12} className='colHeight'  style={{borderRight:'none'}}>
+				<Col span={12} className='colHeightTitle'  style={{borderRight:'none'}}>
 				
 				<div className='pad32'>
 					<span className='displayInline'>订单成本价</span>
@@ -112,7 +112,7 @@ class Detail extends Component {
 				</div>
 				
 				</Col>
-				<Col span={12} className='colHeight'>
+				<Col span={12} className='colHeightTitle'>
 					<div className='pad32'>
 						<span className='displayInline'>执行价</span>
 						<span className='displayInline coloRed'>￥{numeral(detail.order?detail.order.total_deal_price:'').format('0,0.00')}</span>
@@ -136,7 +136,7 @@ class Detail extends Component {
 				应收
 				
 			</Row>
-			<Row className='companyTitle'>
+			<Row className='companyTitle borderBottomNode'>
 				<Col span={8} className='marLeft26'>
 					公司简称:{detail.company?detail.company.company_name:''}
 				</Col>
@@ -144,7 +144,7 @@ class Detail extends Component {
 				
 			</Row>
 			
-			<Row className='colHeight' style={{borderBottom:'none'}}>
+			<Row className='colHeightTitle' style={{borderBottom:'none'}}>
 			
 				<Col span={24}>
 				<div className='pad32'>
@@ -201,7 +201,7 @@ class Detail extends Component {
 			<Row className='account paddUp20'>
 				应付
 			</Row>
-			<Row className='accountTitle'>
+			<Row className='accountTitle borderBottomNode'>
 				<Col span={5} className='marLeft26'>
 					账号:{detail.account?detail.account.weibo_name:''}
 				</Col>
@@ -212,7 +212,7 @@ class Detail extends Component {
 				
 			</Row>
 			
-			<Row className='colHeight' style={{borderBottom:'none'}}>
+			<Row className='colHeightTitle' style={{borderBottom:'none'}}>
 				
 				<Col span={24}>
 				<div className='pad32'>
@@ -263,7 +263,7 @@ class Detail extends Component {
 					
 				
 					<span className='padd60' style={{paddingLeft:'300px'}}>
-						打款金额:{numeral(item.payment_amount).format('0,0.00')}
+						打款金额:￥{numeral(item.payment_amount).format('0,0.00')}
 						<span className='paybackStatus'>{item.payment_status}</span>
 					</span>
 					<span className='padd60'>打款时间:{item.payment_time}</span>
@@ -284,14 +284,14 @@ class Detail extends Component {
 					
 				
 					<span className='padd60' style={{paddingLeft:'300px'}}>
-						打款金额:{numeral(item.payment_amount).format('0,0.00')}
+						打款金额:￥{numeral(item.payment_amount).format('0,0.00')}
 						<span className='paybackStatus'>{item.payment_status}</span>
 					</span>
 					<span className='padd60'>打款时间:{item.payment_time}</span>
 				</div>})
 				:null}
 			
-			<Row className='accountTitle'>
+			<Row className='accountTitle borderBottomNode' style={{marginTop:'20px'}}>
 				<Col span={5} className='marLeft26'>平台:{detail.trinity?detail.trinity.weibo_type:''} </Col>
 				<Col span={5}>三方下单平台:{detail.trinity?detail.trinity.weibo_type:''} </Col>
 				<Col span={5}>三方代理:{detail.trinity?detail.trinity.agent_name:''} </Col>
@@ -299,7 +299,7 @@ class Detail extends Component {
 				<Col span={4}>合作方式:{detail.trinity?detail.trinity.cooperation_type:''} </Col>
 				
 			</Row>
-			<Row className='colHeight'>
+			<Row className='colHeightTitle'>
 				
 				<Col span={24}>
 					<div className='pad32'>
@@ -328,7 +328,7 @@ class Detail extends Component {
 							
 						
 							<span className='padd60' style={{paddingLeft:'300px'}}>
-								打款金额:{numeral(item.payment_amount).format('0,0.00')}
+								打款金额:￥{numeral(item.payment_amount).format('0,0.00')}
 								<span className='paybackStatus'>{item.payment_status}</span>
 							</span>
 							<span className='padd60'>打款时间:{item.payment_time}</span>

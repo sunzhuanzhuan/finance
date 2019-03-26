@@ -19,32 +19,13 @@ class ListQuery extends React.Component {
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
-				// let keys = {}, labels = {};
-				// for (let key in values) {
-				// 	if (Object.prototype.toString.call(values[key]) === '[object Object]') {
-				// 		if (values[key].key) {
-				// 			keys[key] = values[key].key;
-				// 			labels[key] = values[key].label;
-				// 		}
-				// 	} else {
-				// 		keys[key] = values[key]
-				// 	}
-				// }
 				
-				// let params = {
-				// 	keys: { ...keys },
-				// 	labels: { ...labels }
-				// };
-				// Object.keys(params['keys']).forEach(item => { !params['keys'][item] && params['keys'][item] !== 0 ? delete params['keys'][item] : null });
 				
 				const hide = message.loading('查询中，请稍候...');
 				
 				questAction({ ...values, page: 1, page_size }).then(() => {
-					handlefilterParams(...values);
-					// this.props.history.replace({
-					// 	pathname: '/finance/zhangwu/list',
-					// 	search: `?${qs.stringify(params)}`,
-					// })
+					handlefilterParams({...values});
+					
 					hide();
 				}).catch(() => {
 					message.error('查询失败');

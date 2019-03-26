@@ -36,7 +36,6 @@ class List extends Component {
 	}
 	queryData = (obj, func) => {
 		this.setState({ loading: true });
-		console.log({ ...obj })
 		return this.props.actions.getAccountList({ ...obj }).then(() => {
 			if (func && Object.prototype.toString.call(func) === '[object Function]') {
 				func();
@@ -53,11 +52,13 @@ class List extends Component {
 	render(){
 		
 		const columns = zhangListFunc(this.handleNewModal);
-		const { accountList: { list = [], page, total,page_size },filterParams}=this.props;
+		const { accountList: { list = [], page, total,page_size }}=this.props;
+		let {filterParams}=this.state;
 		
 		let paginationObj = {
 			onChange: (current) => {
 				// let obj = { ...search.key, page: current, page_size  ,...filterParams}
+				console.log(filterParams)
 				this.queryData({ page: current, page_size, ...filterParams });
 			},
 			total: parseInt(total),
@@ -74,13 +75,13 @@ class List extends Component {
 			handlefilterParams={this.handlefilterParams}
 			questAction={this.queryData}
 			accountList={this.props.accountList}
+			page_size={page_size}
 			/>
 			<div className='top-gap'>
 				<ZhangWuTable
 					loading={this.state.loading}
 					columns={columns}
 					list={list}
-
 					paginationObj={paginationObj}
 					accountList={this.props.accountList}
 					filterParams={this.state.filterParams}

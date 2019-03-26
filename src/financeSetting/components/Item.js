@@ -1,6 +1,9 @@
 import React from 'react'
 import { Button } from 'antd'
 import FormList from './FormList'
+import { WBYPlatformIcon } from 'wbyui'
+import numeral from 'numeral'
+
 class Item extends React.PureComponent {
 	constructor() {
 		super();
@@ -12,17 +15,25 @@ class Item extends React.PureComponent {
 		this.setState({ visible: boolean })
 	}
 	handleSubmit = () => {
-		const value = this.form.props.form.getFieldsValue();
-		console.log('%cvalue: ', 'color: MidnightBlue; background: Aquamarine; font-size: 20px;', value);
+		const values = this.form.props.form.getFieldsValue();
+		console.log('%cvalue: ', 'color: MidnightBlue; background: Aquamarine; font-size: 20px;', values);
+		const params = {};
+		params['platformId'] = this.props.data.platformId;
+		params['trinityProfitRateDTOS'] = Object.values(values).map(item => ({ ...item, rate: item.rate / 100, validParams: true }));
+		console.log('%cparams: ', 'color: MidnightBlue; background: Aquamarine; font-size: 20px;', params);
+
 	}
 	render() {
-		const { icon, title, data } = this.props.data;
+		const { platformId, platformName, trinityProfitRates } = this.props.data;
 		const { visible } = this.state;
 		return <div className='top-gap setting-item'>
 			< div className='setting-title' >
 				<div>
-					<img src={icon} alt="" />
-					<span className='platform-name'>{title}</span>
+					<WBYPlatformIcon
+						weibo_type={platformId}
+						widthSize={22}
+					/>
+					<span className='platform-name'>{platformName}</span>
 					{visible ?
 						<span className='btn-container'>
 							<Button className='btn' onClick={() => { this.toggleVisible(false) }}>取消</Button>
@@ -35,7 +46,7 @@ class Item extends React.PureComponent {
 				{visible ? <div>
 					<div className='form-text'>利润率：</div>
 					<div className='value-section'>
-						<FormList data={data} wrappedComponentRef={form => this.form = form} />
+						<FormList data={trinityProfitRates} wrappedComponentRef={form => this.form = form} />
 						<div className='form-explain little-top-gap'>
 							<span className='little-left-gap'>说明：</span>
 							<ul>
@@ -46,7 +57,7 @@ class Item extends React.PureComponent {
 					</div>
 				</div> :
 					<ul className='value-list'>
-						{data.map((item = {}, index) => (<li key={index}>{item.min}元至{item.max}元，利润率为{item.tax}%</li>))}
+						{trinityProfitRates && trinityProfitRates.map((item = {}, index) => (<li key={index}>{item.min}元至{item.max}元，利润率为{numeral(item.rate * 100).format('0.00')}%</li>))}
 					</ul>}
 			</div>
 		</div >

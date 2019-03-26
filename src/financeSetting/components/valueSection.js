@@ -1,7 +1,6 @@
 import React from 'react'
-import { Form, Select, Input } from "antd";
+import { Form, Input } from "antd";
 const FormItem = Form.Item;
-const Option = Select.Option;
 
 let uuid = 0;
 
@@ -11,6 +10,11 @@ class ValueSection extends React.Component {
 		this.state = {
 
 		}
+	}
+	componentDidMount() {
+		const { form } = this.props;
+		const keys = form.getFieldValue('keys');
+		uuid = keys.length;
 	}
 	checkCount = () => {
 
@@ -44,7 +48,7 @@ class ValueSection extends React.Component {
 				<div key={k}>
 					<FormItem style={{ display: 'inline-block' }}>
 						{getFieldDecorator(name, {
-							initialValue: { min: "", max: "", tax: "" },
+							initialValue: { min: "", max: "", rate: "" },
 							validateTrigger: 'onBlur',
 							rules: [{ validator: this.checkCount }]
 						})(
@@ -71,7 +75,7 @@ class ValueInput extends React.PureComponent {
 		this.state = {
 			min: value.min,
 			max: value.max,
-			tax: value.tax
+			rate: value.rate
 		};
 	}
 	componentWillReceiveProps(nextProps) {
@@ -103,16 +107,16 @@ class ValueInput extends React.PureComponent {
 	handleRate = e => {
 		const rate = e.target.value;
 		if (!('value' in this.props)) {
-			this.setState({ tax: rate });
+			this.setState({ rate: rate });
 		}
-		this.triggerChange({ tax: rate });
+		this.triggerChange({ rate: rate });
 	}
 	render() {
-		const { min, max, tax } = this.state;
+		const { min, max, rate } = this.state;
 		return <span>
-			<Input style={{ width: 110, height: 32, margin: '0 10px' }} placeholder='请输入' onChange={this.handleMin} value={min}/>元至
-		<Input style={{ width: 110, height: 32, margin: '0 10px' }} placeholder='请输入' onChange={this.handleMax} value={max}/>元，则利润率为
-	<Input style={{ width: 80, height: 32, margin: '0 10px' }} placeholder='输入数值' onChange={this.handleRate} value={tax}/>%
+			<Input style={{ width: 110, height: 32, margin: '0 10px' }} placeholder='请输入' onChange={this.handleMin} value={min} />元至
+		<Input style={{ width: 110, height: 32, margin: '0 10px' }} placeholder='请输入' onChange={this.handleMax} value={max} />元，则利润率为
+	<Input style={{ width: 80, height: 32, margin: '0 10px' }} placeholder='输入数值' onChange={this.handleRate} value={rate} />%
 	</span>
 	}
 }

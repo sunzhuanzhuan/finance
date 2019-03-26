@@ -23,8 +23,8 @@ class List extends Component {
 		filterParams: {}
 	}
 	componentWillMount=()=>{
-		const search = qs.parse(this.props.location.search.substring(1));
-		this.queryData({ page: 1, page_size: this.state.page_size, ...search.keys });
+		// const search = qs.parse(this.props.location.search.substring(1));
+		this.queryData({ page: 1, page_size: this.state.page_size });
 	}
 
 	handleNewModal=({order_id})=>{
@@ -36,6 +36,7 @@ class List extends Component {
 	}
 	queryData = (obj, func) => {
 		this.setState({ loading: true });
+		console.log({ ...obj })
 		return this.props.actions.getAccountList({ ...obj }).then(() => {
 			if (func && Object.prototype.toString.call(func) === '[object Function]') {
 				func();
@@ -52,6 +53,19 @@ class List extends Component {
 	render(){
 		
 		const columns = zhangListFunc(this.handleNewModal);
+		const { accountList: { list = [], page, total,page_size },filterParams}=this.props;
+		
+		let paginationObj = {
+			onChange: (current) => {
+				// let obj = { ...search.key, page: current, page_size  ,...filterParams}
+				this.queryData({ page: current, page_size, ...filterParams });
+			},
+			total: parseInt(total),
+			current: parseInt(page),
+			pageSize: parseInt(page_size),
+			showQuickJumper: true,
+			
+		};
 		return<div>
 		<fieldset className='fieldset_css'>
 			<legend>订单账务详情</legend>
@@ -65,8 +79,10 @@ class List extends Component {
 				<ZhangWuTable
 					loading={this.state.loading}
 					columns={columns}
+					list={list}
+
+					paginationObj={paginationObj}
 					accountList={this.props.accountList}
-					queryData={this.queryData}
 					filterParams={this.state.filterParams}
 				></ZhangWuTable>
 			</div>

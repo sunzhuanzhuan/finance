@@ -19,32 +19,32 @@ class ListQuery extends React.Component {
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
-				let keys = {}, labels = {};
-				for (let key in values) {
-					if (Object.prototype.toString.call(values[key]) === '[object Object]') {
-						if (values[key].key) {
-							keys[key] = values[key].key;
-							labels[key] = values[key].label;
-						}
-					} else {
-						keys[key] = values[key]
-					}
-				}
+				// let keys = {}, labels = {};
+				// for (let key in values) {
+				// 	if (Object.prototype.toString.call(values[key]) === '[object Object]') {
+				// 		if (values[key].key) {
+				// 			keys[key] = values[key].key;
+				// 			labels[key] = values[key].label;
+				// 		}
+				// 	} else {
+				// 		keys[key] = values[key]
+				// 	}
+				// }
 				
-				let params = {
-					keys: { ...keys },
-					labels: { ...labels }
-				};
-				Object.keys(params['keys']).forEach(item => { !params['keys'][item] && params['keys'][item] !== 0 ? delete params['keys'][item] : null });
+				// let params = {
+				// 	keys: { ...keys },
+				// 	labels: { ...labels }
+				// };
+				// Object.keys(params['keys']).forEach(item => { !params['keys'][item] && params['keys'][item] !== 0 ? delete params['keys'][item] : null });
 				
 				const hide = message.loading('查询中，请稍候...');
 				
-				questAction({ ...params.keys, page: 1, page_size }).then(() => {
-					handlefilterParams(...params.keys);
-					this.props.history.replace({
-						pathname: '/finance/zhangwu/list',
-						search: `?${qs.stringify(params)}`,
-					})
+				questAction({ ...values, page: 1, page_size }).then(() => {
+					handlefilterParams(...values);
+					// this.props.history.replace({
+					// 	pathname: '/finance/zhangwu/list',
+					// 	search: `?${qs.stringify(params)}`,
+					// })
 					hide();
 				}).catch(() => {
 					message.error('查询失败');
@@ -62,28 +62,28 @@ class ListQuery extends React.Component {
 		// let { handleNew, region, nameList } = this.props;
 		// nameList = Object.values(nameList);
 		const formItemLayout = {
-			labelCol: { span: 12 },
-			wrapperCol: { span: 12 },
+			labelCol: { span: 6 },
+			wrapperCol: { span: 18 },
 		};
 		return <div className='mission-list-query'>
 			<Form>
-				<Row type="flex" justify="start" gutter={16}>
-					<Col span={6}>
+				<Row>
+					<Col span={5}>
 						<FormItem label='订单ID' {...formItemLayout}>
 							{getFieldDecorator('order_id')(
 								<Input style={{ width: 140 }} />
 							)}
 						</FormItem>
 					</Col>
-					<Col span={5}>
+					<Col span={7}>
 						<FormItem label="订单执行状态" {...formItemLayout} >
 							{getFieldDecorator('execution_status')(
 								<Select placeholder="请选择" style={{ width: 140 }}>
-										{orderStatus.map(item =>
-											<Option key={item.id} value={item.id}>
-												{item.name}
-											</Option>)
-										}
+									{orderStatus.map(item =>
+										<Option key={item.id} value={item.id}>
+											{item.name}
+										</Option>)
+									}
 								</Select>
 							)}
 						</FormItem>
@@ -102,11 +102,19 @@ class ListQuery extends React.Component {
 							)}
 						</FormItem>
 					</Col>
+					
 					</Row>
 					<Row>
 					<Col span={5}>
-						<FormItem label="三方代理商" {...formItemLayout} >
-							{getFieldDecorator('agent_name')(
+						<FormItem label='媒介经理' {...formItemLayout}>
+							{getFieldDecorator('media_manager_name', { initialValue: '' })(
+								<Input style={{ width: 140 }} />
+							)}
+						</FormItem>
+					</Col>
+					<Col span={7}>
+						<FormItem label="三方标识" {...formItemLayout} >
+							{getFieldDecorator('trinity_type')(
 								<Select placeholder="请选择" style={{ width: 140 }}>
 										{orderStatus.map(item =>
 											<Option key={item.id} value={item.id}>
@@ -124,29 +132,25 @@ class ListQuery extends React.Component {
 							)}
 						</FormItem>
 					</Col>
-					<Col span={5}>
-						<FormItem label='媒介经理' {...formItemLayout}>
-							{getFieldDecorator('media_manager_name', { initialValue: '' })(
-								<Input style={{ width: 140 }} />
-							)}
-						</FormItem>
-					</Col>
-					
-				</Row>
-				<Row>
-					<Col span={6}>
+					<Col span={7}>
 						<FormItem label='账号名称' {...formItemLayout}>
 							{getFieldDecorator('weibo_name', { initialValue: '' })(
 								<Input style={{ width: 140 }} />
 							)}
 						</FormItem>
 					</Col>
-					<Col span={5} style={{ float:'right' }}>
-						<Button type="primary" className='left-gap' onClick={this.handleSearch}>查询</Button>
-						<Button style={{ marginLeft: '20px' }} className='left-gap' type="primary" onClick={() => {
-							this.props.form.resetFields()
-						}}>重置</Button>
-					</Col>
+					
+				</Row>
+				<Row style={{marginBottom:'20px'}}>
+				<Col span={20}></Col>
+					
+					
+				<Col span={4}>
+					<Button type="primary" className='left-gap' onClick={this.handleSearch}>查询</Button>
+					<Button style={{ marginLeft: '20px' }} className='left-gap' type="primary" onClick={() => {
+						this.props.form.resetFields()
+					}}>重置</Button>
+				</Col>
 				</Row>
 			</Form>
 		</div>

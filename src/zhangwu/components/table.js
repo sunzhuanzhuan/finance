@@ -26,32 +26,18 @@ class List extends Component {
 		});
 	}
 	render(){
-		let {columns,loading}=this.props;
+		let {columns,loading,paginationObj,list}=this.props;
 		const search = qs.parse(this.props.location.search.substring(1));
-		const { accountList: { list = [], page, total,page_size },filterParams}=this.props;
 		
-		let paginationObj = {
-			onChange: (current) => {
-				// let obj = { ...search.key, page: current, page_size  ,...filterParams}
-				this.props.queryData({ ...search.key, page: current, page_size, ...filterParams });
-			},
-			total: parseInt(total),
-			current: parseInt(page),
-			pageSize: parseInt(page_size),
-			showQuickJumper: true,
-			
-		};
 		return <div className='top-gap'>
-				{list.length?<Table
+				<Table
 					loading={loading}
 					columns={columns}
 					scroll={{ x: 1600 }}
 					dataSource={list}
 					rowKey={(record)=>record.account_id}
-					total={50}
-					current={1}
-					pagination={list.length ? paginationObj : false}
-				></Table>:null}
+					pagination={paginationObj}
+				></Table>
 			</div>
 	}
 }

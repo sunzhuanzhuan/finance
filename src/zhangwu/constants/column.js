@@ -74,13 +74,6 @@ export const zhangListFunc = (handleNewModal) => {
 			align: 'center',
 		},
 		{
-			title: '三方代理商',
-			dataIndex: 'agent_name',
-			key: 'agent_name',
-			align: 'center',
-			width: 100,
-		},
-		{
 			title: '订单执行状态',
 			dataIndex: 'execution_status',
 			key: 'execution_status',

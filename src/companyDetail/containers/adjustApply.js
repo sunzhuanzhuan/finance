@@ -94,12 +94,12 @@ class AdjustApply extends React.Component {
 		const adjustApplyList = flag ? adjustApplyListFunc(application_status, this.handleJump, this.handleAction) : adjustApplyFunc(application_status, this.handleJump);
 		let paginationObj = {
 			onChange: (current) => {
-				this.queryData({ ...search.key, page: current, page_size });
+				this.queryData({ ...search.keys, page: current, page_size });
 			},
 			onShowSizeChange: (current, pageSize) => {
 				const curPage = Math.ceil(total / pageSize);
 				this.setState({ page_size: pageSize });
-				this.queryData({ ...search.key, page: curPage, page_size: pageSize });
+				this.queryData({ ...search.keys, page: curPage, page_size: pageSize });
 			},
 			total: parseInt(total),
 			current: parseInt(page),

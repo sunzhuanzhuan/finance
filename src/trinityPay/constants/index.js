@@ -30,8 +30,7 @@ export const prePayFunc = (handleModal) => [
 		dataIndex: 'agent_name',
 		key: 'agent_name',
 		align: 'center',
-		width: 100
-
+		width: 140
 	},
 	{
 		title: '订单ID',
@@ -39,7 +38,6 @@ export const prePayFunc = (handleModal) => [
 		key: 'public_order_id',
 		align: 'center',
 		width: 100
-
 	},
 	{
 		title: '打款金额',
@@ -50,36 +48,50 @@ export const prePayFunc = (handleModal) => [
 	},
 	{
 		title: '打款状态',
-		dataIndex: 'payment_status',
-		key: 'payment_status',
+		dataIndex: 'payment_status_desc',
+		key: 'payment_status_desc',
 		align: 'center',
 		width: 100
 	},
 	{
 		title: '付款公司',
-		dataIndex: 'payment_company',
-		key: 'payment_company',
+		dataIndex: 'payment_company_name',
+		key: 'payment_company_name',
 		align: 'center',
 		width: 100
 	},
 	{
 		title: '打款单生成日期',
-		dataIndex: 'application_time',
-		key: 'application_time',
+		dataIndex: 'created_at',
+		key: 'created_at',
+		align: 'center',
+		width: 100
+	},
+	{
+		title: '应回发票',
+		dataIndex: 'return_invoice_amount',
+		key: 'return_invoice_amount',
+		align: 'center',
+		width: 100
+	},
+	{
+		title: '发票盈余',
+		dataIndex: 'invoice_surplus',
+		key: 'invoice_surplus',
 		align: 'center',
 		width: 100
 	},
 	{
 		title: '主账号',
-		dataIndex: 'user_name',
-		key: 'user_name',
+		dataIndex: 'main_user_name',
+		key: 'main_user_name',
 		align: 'center',
 		width: 100
 	},
 	{
 		title: '媒介经理',
-		dataIndex: 'media_manager',
-		key: 'media_manager',
+		dataIndex: 'media_user_name',
+		key: 'media_user_name',
 		align: 'center',
 		width: 100
 	},
@@ -88,27 +100,23 @@ export const prePayFunc = (handleModal) => [
 		dataIndex: 'action',
 		key: 'action',
 		align: 'center',
+		fixed: 'right',
 		width: 200,
 		render: (text, record) => {
-			return <div>
-				<div className='little-top-gap'>
-					<Button type='primary' size='small' style={{ width: 80 }} onClick={() => {
-						handleModal(record.payment_slip_id, SUCCEED, true);
-					}}>打款成功</Button>
-					<Button className='little-left-gap' type='primary' size='small' style={{ width: 80 }} onClick={() => {
-						handleModal(record.payment_slip_id, DEFEATED, true);
-					}}>打款失败</Button>
-				</div>
-				<div className='little-top-gap'>
-					<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/invoice/relatedInvoice?payment_slip_id=${record.payment_slip_id}`}>发票关联</Button>
-					<Button className='little-left-gap' type='primary' size='small' style={{ width: 80 }} onClick={() => {
-						handleModal(record.payment_slip_id, REVOCATION, true);
-					}}>打款撤销</Button>
-				</div>
-				<div className='little-top-gap'>
-					<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/modification?type=prePay&payment_slip_id=${record.payment_slip_id}`}>编辑</Button>
-					<Button className='little-left-gap' type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/detail?type=prePay&payment_slip_id=${record.payment_slip_id}`}>查看</Button>
-				</div>
+			return <div className='datePay-action-container'>
+				{record.payment_status && record.payment_status == 1 && <Button type='primary' size='small' style={{ width: 80 }} onClick={() => {
+					handleModal(record.payment_slip_id, SUCCEED, true);
+				}}>打款成功</Button>}
+				{record.payment_status && record.payment_status == 1 && <Button type='primary' size='small' style={{ width: 80 }} onClick={() => {
+					handleModal(record.payment_slip_id, DEFEATED, true);
+				}}>打款失败</Button>}
+				{record.payment_status && record.payment_status == 2 && <Button type='primary' size='small' style={{ width: 80 }} href={`/finance/invoice/relatedInvoice?payment_slip_id=${record.payment_slip_id}`}>发票关联</Button>}
+				{record.payment_status && record.payment_status == 2 && <Button type='primary' size='small' style={{ width: 80 }} onClick={() => {
+					handleModal(record.payment_slip_id, REVOCATION, true);
+				}}>打款撤销</Button>}
+				<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/dealorder?payment_slip_id=${record.payment_slip_id}`}>订单详情</Button>
+				<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/modification?type=prePay&payment_slip_id=${record.payment_slip_id}`}>编辑</Button>
+				<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/detail?type=prePay&payment_slip_id=${record.payment_slip_id}`}>查看</Button>
 			</div>
 		}
 	}
@@ -123,8 +131,8 @@ export const datePayFunc = (handleModal) => [
 	},
 	{
 		title: '结算单ID',
-		dataIndex: 'summary_sheet_id',
-		key: 'summary_sheet_id',
+		dataIndex: 'settle_id',
+		key: 'settle_id',
 		align: 'center',
 		width: 100
 	},
@@ -147,7 +155,7 @@ export const datePayFunc = (handleModal) => [
 		dataIndex: 'agent_name',
 		key: 'agent_name',
 		align: 'center',
-		width: 100
+		width: 140
 
 	},
 	{
@@ -167,15 +175,29 @@ export const datePayFunc = (handleModal) => [
 	},
 	{
 		title: '付款公司',
-		dataIndex: 'payment_company',
-		key: 'payment_company',
+		dataIndex: 'payment_company_name',
+		key: 'payment_company_name',
 		align: 'center',
 		width: 100
 	},
 	{
 		title: '申请日期',
-		dataIndex: 'application_time',
-		key: 'application_time',
+		dataIndex: 'created_at',
+		key: 'created_at',
+		align: 'center',
+		width: 100
+	},
+	{
+		title: '应回发票',
+		dataIndex: 'return_invoice_amount',
+		key: 'return_invoice_amount',
+		align: 'center',
+		width: 100
+	},
+	{
+		title: '发票盈余',
+		dataIndex: 'invoice_surplus',
+		key: 'invoice_surplus',
 		align: 'center',
 		width: 100
 	},
@@ -186,28 +208,20 @@ export const datePayFunc = (handleModal) => [
 		align: 'center',
 		width: 200,
 		render: (text, record) => {
-			return <div>
-				<div className='little-top-gap'>
-					<Button type='primary' size='small' style={{ width: 80 }} onClick={() => {
-						handleModal(record.payment_slip_id, SUCCEED, true);
-					}}>打款成功</Button>
-					<Button className='little-left-gap' type='primary' size='small' style={{ width: 80 }} onClick={() => {
-						handleModal(record.payment_slip_id, DEFEATED, true);
-					}}>打款失败</Button>
-				</div>
-				<div className='little-top-gap'>
-					<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/invoice/relatedInvoice?payment_slip_id=${record.payment_slip_id}`}>发票关联</Button>
-					<Button className='little-left-gap' type='primary' size='small' style={{ width: 80 }} onClick={() => {
-						handleModal(record.payment_slip_id, REVOCATION, true);
-					}}>打款撤销</Button>
-				</div>
-				<div className='little-top-gap'>
-					<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/modification?type=datePay&payment_slip_id=${record.payment_slip_id}`}>编辑</Button>
-					<Button className='little-left-gap' type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/detail?type=datePay&payment_slip_id=${record.payment_slip_id}`}>查看</Button>
-				</div>
-				<div className='little-top-gap'>
-					<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/dealOrder?payment_slip_id=${record.payment_slip_id}`}>订单详情</Button>
-				</div>
+			return <div className='prePay-action-container'>
+				{record.payment_status && record.payment_status == 1 && <Button type='primary' size='small' style={{ width: 80 }} onClick={() => {
+					handleModal(record.payment_slip_id, SUCCEED, true);
+				}}>打款成功</Button>}
+				{record.payment_status && record.payment_status == 1 && <Button type='primary' size='small' style={{ width: 80 }} onClick={() => {
+					handleModal(record.payment_slip_id, DEFEATED, true);
+				}}>打款失败</Button>}
+				{record.payment_status && record.payment_status == 2 && <Button type='primary' size='small' style={{ width: 80 }} href={`/finance/invoice/relatedInvoice?payment_slip_id=${record.payment_slip_id}`}>发票关联</Button>}
+				{record.payment_status && record.payment_status == 2 && <Button type='primary' size='small' style={{ width: 80 }} onClick={() => {
+					handleModal(record.payment_slip_id, REVOCATION, true);
+				}}>打款撤销</Button>}
+				<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/dealorder?payment_slip_id=${record.payment_slip_id}`}>订单详情</Button>
+				<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/modification?type=prePay&payment_slip_id=${record.payment_slip_id}`}>编辑</Button>
+				<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/detail?type=prePay&payment_slip_id=${record.payment_slip_id}`}>查看</Button>
 			</div>
 		}
 	},

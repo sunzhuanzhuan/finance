@@ -817,13 +817,14 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 					const item = text ? text.min_sell_price : [];
 					const node = item.length > 0 ? <div>
 						{item.map((item, index) => {
-							return <div key={index}>
-								<div>{`${item.price_label}:${item.min_sell_price}`}</div>
-								{readjust_type == 2 && <div style={{ color: 'red' }}>（导入excel方式调整）</div>}
-							</div>
+							return <div key={index}>{`${item.price_label}:${item.min_sell_price}`}</div>
 						})}
 					</div> : '-';
-					return node;
+					const pro = <div>
+						{node}
+						{readjust_type == 2 && <div style={{ color: 'red' }}>（导入excel方式调整）</div>}
+					</div>
+					return pro;
 				}
 			},
 			'history_rate': {

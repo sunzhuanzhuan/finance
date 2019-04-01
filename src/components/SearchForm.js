@@ -115,7 +115,8 @@ class SearchForm extends React.PureComponent {
 					!ctype ||
 					!value ||
 					!label ||
-					((ctype === 'select' || ctype === 'cascader') &&
+					// ((ctype === 'select' || ctype === 'cascader') &&
+					(ctype === 'cascader' &&
 						selectOptionsChildren &&
 						selectOptionsChildren.length < 1)
 				)
@@ -138,7 +139,7 @@ class SearchForm extends React.PureComponent {
 	//渲染组件
 	renderItem = data => {
 		const { getFieldDecorator } = this.props.form;
-		let { ctype, field, attr, itemIndex, responsive, component } = data;
+		let { ctype, field, attr, itemIndex, responsive } = data;
 		const ResponseLayout = this.combindResponseLayout(responsive);
 		switch (ctype) {
 			case 'input':
@@ -170,12 +171,13 @@ class SearchForm extends React.PureComponent {
 				>
 					<FormItem label={field.label}>
 						{getFieldDecorator(field.value, field.params ? field.params : {})(
-							<Select {...attr}>
+							<Select getPopupContainer={() => document.querySelector('.ant-advanced-search-form')}
+								{...attr}>
 								{data.selectOptionsChildren &&
 									data.selectOptionsChildren.length > 0 &&
 									data.selectOptionsChildren.map((optionItem, index) => (
-										<Option value={optionItem.value} key={optionItem.value}>
-											{optionItem.name}
+										<Option value={data.selectItem ? data.selectItem.value : optionItem.value} key={index}>
+											{data.selectItem ? data.selectItem.key : optionItem.name}
 										</Option>
 									))}
 							</Select>
@@ -244,9 +246,9 @@ class SearchForm extends React.PureComponent {
 								{data.selectOptionsChildren &&
 									data.selectOptionsChildren.length > 0 &&
 									data.selectOptionsChildren.map((optionItem, index) => (
-										<RadioButton value={optionItem.value} key={index}>
-											{optionItem.label}
-										</RadioButton>
+										<Option value={data.selectItem ? data.selectItem.value : optionItem.value} key={index}>
+											{data.selectItem ? data.selectItem.key : optionItem.name}
+										</Option>
 									))}
 							</RadioGroup>
 						)}
@@ -259,7 +261,7 @@ class SearchForm extends React.PureComponent {
 				>
 					{<FormItem label={field.label}>
 						{getFieldDecorator(field.value, field.params ? field.params : {})(
-							<SearchSelect
+							<SearchSelect getPopupContainer={() => document.querySelector('.ant-advanced-search-form')}
 								{...attr}
 							/>
 						)}

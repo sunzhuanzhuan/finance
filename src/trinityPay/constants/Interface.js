@@ -1,7 +1,7 @@
 export default {
 	//预付款
-	getPrePayData: '/finance/advance/paymentSlip/list',
-	getPrePaySearchItem: '/finance/advance/paymentSlip/searchItem',
+	getPrePayData: '/trinity/publicPaymentSlip/list',
+	getPrePaySearchItem: '/trinity/publicPaymentSlip/searchItem',
 	getPrePayDetail: '/finance/advance/paymentSlip/info',
 	getPrePayExport: '/finance/advance/paymentSlip/export',
 	postPrePayEdit: '/finance/advance/paymentSlip/edit',
@@ -10,8 +10,8 @@ export default {
 	postPrePayBackout: '/finance/advance/paymentSlip/paymentBackout',
 	getPrimaryAccount: '/finance/advance/paymentSlip/primaryAccount',
 	//周期付款
-	getDatePayData: '/finance/periodic/paymentSlip/list',
-	getDatePaySearchItem: '/finance/periodic/paymentSlip/searchItem',
+	getDatePayData: '/trinity/publicPaymentSlip/list',
+	getDatePaySearchItem: '/trinity/publicPaymentSlip/searchItem',
 	getDatePayDetail: '/finance/periodic/paymentSlip/info',
 	getDatePayExport: '/finance/periodic/paymentSlip/export',
 	postDatePayEdit: '/finance/periodic/paymentSlip/edit',
@@ -20,7 +20,7 @@ export default {
 	postDatePayBackout: '/finance/periodic/paymentSlip/paymentBackout',
 	//三方订单明细
 	getDealOrderData: '/finance/periodic/paymentSlip/orderList',
-	getDealOrderSearchItem: '/finance/periodic/paymentSlip/orderSearchItem',
+	getDealOrderSearchItem: '/trinity/publicPaymentSlip/searchItem',
 	getDealOrderExport: '/finance/periodic/paymentSlip/orderExport',
 	//getToken
 	getPayToken: '/toolbox-gateway/file/v1/getToken',

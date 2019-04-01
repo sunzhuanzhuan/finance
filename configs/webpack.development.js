@@ -36,12 +36,16 @@ module.exports = merge(baseConfig, {
 			// 	target: "http://192.168.100.117:30002",
 			// 	changeOrigin: true
 			// },
-			"/api/finance//periodic": {
-				target: "http://192.168.20.51:7300/mock/5c7fa2bd73f3100017a6412e",
+			"/api/finance/periodic": {
+				target: "http://192.168.20.128:8010",
 				changeOrigin: true
 			},
 			"/api/finance/advance": {
-				target: "http://192.168.20.51:7300/mock/5c7fa2bd73f3100017a6412e",
+				target: "http://192.168.20.128:8010",
+				changeOrigin: true
+			},
+			"/api/trinity": {
+				target: "http://192.168.20.128:8010",
 				changeOrigin: true
 			},
 			"/api": {

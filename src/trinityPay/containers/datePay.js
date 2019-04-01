@@ -18,7 +18,10 @@ class DatePay extends React.Component {
 			pullReady: false,
 			modalVisible: false,
 			status: undefined,
-			id: undefined
+			id: undefined,
+			cooperation_platform_id: undefined,
+			agent: []
+
 		}
 	}
 	componentDidMount() {
@@ -28,11 +31,23 @@ class DatePay extends React.Component {
 		}).catch(({ errorMsg }) => {
 			message.error(errorMsg || '下拉项加载失败，请重试！');
 		})
-		this.queryData({ ...search.keys });
+		this.queryData({ page: 1, page_size: 20, ...search.keys });
+	}
+	handleFetchPlatform = () => {
+		const value = this.form.getFieldValue('cooperation_platform_id');
+		if (!value) {
+			message.error('请先选择三方下单平台');
+			return
+		}
+		if (value != this.state.platform_id) {
+			this.props.actions.getPrimaryAccount().then(() => {
+				this.setState({ cooperation_platform_id: value, agent: [{ name: '张三', value: '1' }, { name: '李四', value: '2' }] })
+			})
+		}
 	}
 	queryData = (obj, func) => {
 		this.setState({ loading: true });
-		return this.props.actions.getDatePayData({ ...obj }).then(() => {
+		return this.props.actions.getDatePayData({ ...obj, settle_type: 2 }).then(() => {
 			if (func && Object.prototype.toString.call(func) === '[object Function]') {
 				func();
 			}
@@ -63,9 +78,9 @@ class DatePay extends React.Component {
 	}
 	render() {
 		const search = qs.parse(this.props.location.search.substring(1));
-		const { loading, pullReady, modalVisible, id, status } = this.state;
+		const { loading, pullReady, modalVisible, id, status, agent } = this.state;
 		const { datePayData: { list = [], page, page_size = 20, total, statistic }, datePaySearchItem } = this.props;
-		const datePaySearch = datePaySearchFunc(datePaySearchItem);
+		const datePaySearch = datePaySearchFunc(datePaySearchItem, agent, this.handleFetchPlatform);
 		const datePayCols = datePayFunc(this.handleModal);
 		const paginationObj = {
 			onChange: (current) => {
@@ -129,7 +144,7 @@ function Stat(total, statistic) {
 		<span>当前筛选条件下共<span className='red-font little-left-gap'>{total}</span>条</span>
 		<span className='left-gap'>待打款金额：<span className='red-font little-left-gap'>{statistic && statistic.unpaid_amount_total}</span>元</span>
 		<span className='left-gap'>已打款金额：<span className='red-font little-left-gap'>{statistic && statistic.paid_amount_total}</span>元</span>
-		<span className='left-gap'>应回发票金额：<span className='red-font little-left-gap'>{statistic && statistic.invoice_amount_total}</span>元</span>
+		<span className='left-gap'>应回发票金额：<span className='red-font little-left-gap'>{statistic && statistic.return_invoice_amount_total}</span>元</span>
 		<span className='left-gap'>发票盈余：<span className='red-font little-left-gap'>{statistic && statistic.invoice_surplus_total}</span>元</span>
 	</div>
 }

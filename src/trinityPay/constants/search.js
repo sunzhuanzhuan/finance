@@ -1,11 +1,17 @@
-export const prePaySearchFunc = ({ agent = [], media_manager = [], payment_company = [], payment_status = [], platform = [], receipt_way = [] }, handleFetch) => [
+import React from 'react'
+import { Spin } from 'antd'
+export const prePaySearchFunc = ({ media_manager = [], payment_company = [], payment_status = [], platform = [], payment_type = [], cooperation_platform = [] }, platform_name = [], handleFetchPlatform, handleFetchAccount) => [
 	{
 		ctype: 'select',
 		attr: {
 			placeholder: '不限',
 			style: { width: 160 },
 			labelInValue: true,
-			allowClear: true
+			allowClear: true,
+			showSearch: true,
+			filterOption: (input, option) => (
+				option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+			)
 		},
 		field: {
 			label: '平台',
@@ -22,10 +28,26 @@ export const prePaySearchFunc = ({ agent = [], media_manager = [], payment_compa
 			allowClear: true
 		},
 		field: {
+			label: '三方下单平台',
+			value: 'cooperation_platform_id',
+		},
+		selectOptionsChildren: cooperation_platform
+	},
+	{
+		ctype: 'select',
+		attr: {
+			placeholder: '不限',
+			style: { width: 160 },
+			labelInValue: true,
+			allowClear: true,
+			onFocus: handleFetchPlatform,
+			notFoundContent: (<div style={{ paddingLeft: '10px' }} > <Spin size="small" /> </div>)
+		},
+		field: {
 			label: '三方代理商',
 			value: 'agent_id',
 		},
-		selectOptionsChildren: agent
+		selectOptionsChildren: platform_name
 	},
 	{
 		ctype: 'select',
@@ -51,7 +73,7 @@ export const prePaySearchFunc = ({ agent = [], media_manager = [], payment_compa
 		},
 		field: {
 			label: '付款公司',
-			value: 'payment_company_id',
+			value: 'payment_company_code',
 		},
 		selectOptionsChildren: payment_company
 	},
@@ -64,7 +86,7 @@ export const prePaySearchFunc = ({ agent = [], media_manager = [], payment_compa
 		},
 		field: {
 			label: '订单ID',
-			value: 'order_id',
+			value: 'wby_order_id',
 		}
 	},
 	{
@@ -76,7 +98,7 @@ export const prePaySearchFunc = ({ agent = [], media_manager = [], payment_compa
 		},
 		field: {
 			label: '打款单生成日期',
-			value: ['application_time_start', 'application_time_end'],
+			value: ['public_payment_slip_created_at_started', 'public_payment_slip_created_at_ended'],
 		}
 	},
 	{
@@ -88,7 +110,7 @@ export const prePaySearchFunc = ({ agent = [], media_manager = [], payment_compa
 		},
 		field: {
 			label: '打款日期',
-			value: ['payment_time_start', 'payment_time_end'],
+			value: ['payment_time_started', 'payment_time_ended'],
 		}
 	},
 	{
@@ -100,7 +122,7 @@ export const prePaySearchFunc = ({ agent = [], media_manager = [], payment_compa
 		},
 		field: {
 			label: '打款撤销日期',
-			value: ['payment_backout_time_start', 'payment_backout_time_end'],
+			value: ['payment_revoke_time_started', 'payment_revoke_time_ended'],
 		}
 	},
 	{
@@ -113,15 +135,14 @@ export const prePaySearchFunc = ({ agent = [], media_manager = [], payment_compa
 		},
 		field: {
 			label: '收款方式',
-			value: 'receipt_way',
+			value: 'payment_type',
 		},
-		selectOptionsChildren: receipt_way
+		selectOptionsChildren: payment_type
 	},
 	{
 		ctype: 'searchSelect',
 		attr: {
-			getPopupContainer: () => document.querySelector('.ant-advanced-search-form'),
-			action: handleFetch,
+			action: handleFetchAccount,
 			keyWord: 'account_name',
 			dataToList: res => { return res.data },
 			item: ['value', 'name'],
@@ -129,7 +150,7 @@ export const prePaySearchFunc = ({ agent = [], media_manager = [], payment_compa
 		},
 		field: {
 			label: '主账号',
-			value: 'user_name',
+			value: 'main_user_id',
 		}
 	},
 	{
@@ -138,23 +159,31 @@ export const prePaySearchFunc = ({ agent = [], media_manager = [], payment_compa
 			placeholder: '不限',
 			style: { width: 160 },
 			labelInValue: true,
-			allowClear: true
+			allowClear: true,
+			showSearch: true,
+			filterOption: (input, option) => (
+				option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+			)
 		},
 		field: {
 			label: '媒介经理',
-			value: 'media_manager_id',
+			value: 'media_user_id',
 		},
 		selectOptionsChildren: media_manager
 	}
 ];
-export const datePaySearchFunc = ({ platform = [], agent = [], payment_status = [], payment_company = [], receipt_way = [] }) => [
+export const datePaySearchFunc = ({ platform = [], cooperation_platform = [], payment_status = [], payment_company = [], payment_type = [] }, platform_name = [], handleFetchPlatform) => [
 	{
 		ctype: 'select',
 		attr: {
 			placeholder: '不限',
 			style: { width: 160 },
 			labelInValue: true,
-			allowClear: true
+			allowClear: true,
+			showSearch: true,
+			filterOption: (input, option) => (
+				option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+			)
 		},
 		field: {
 			label: '平台',
@@ -171,10 +200,26 @@ export const datePaySearchFunc = ({ platform = [], agent = [], payment_status = 
 			allowClear: true
 		},
 		field: {
+			label: '三方下单平台',
+			value: 'cooperation_platform_id',
+		},
+		selectOptionsChildren: cooperation_platform
+	},
+	{
+		ctype: 'select',
+		attr: {
+			placeholder: '不限',
+			style: { width: 160 },
+			labelInValue: true,
+			allowClear: true,
+			onFocus: handleFetchPlatform,
+			notFoundContent: (<div style={{ paddingLeft: '10px' }} > <Spin size="small" /> </div>)
+		},
+		field: {
 			label: '三方代理商',
 			value: 'agent_id',
 		},
-		selectOptionsChildren: agent
+		selectOptionsChildren: platform_name
 	},
 	{
 		ctype: 'select',
@@ -200,7 +245,7 @@ export const datePaySearchFunc = ({ platform = [], agent = [], payment_status = 
 		},
 		field: {
 			label: '付款公司',
-			value: 'payment_company_id',
+			value: 'payment_company_code',
 		},
 		selectOptionsChildren: payment_company
 	},
@@ -213,7 +258,7 @@ export const datePaySearchFunc = ({ platform = [], agent = [], payment_status = 
 		},
 		field: {
 			label: '申请日期',
-			value: ['application_time_start', 'application_time_end'],
+			value: ['public_payment_slip_created_at_started', 'public_payment_slip_created_at_ended'],
 		}
 	},
 	{
@@ -225,7 +270,7 @@ export const datePaySearchFunc = ({ platform = [], agent = [], payment_status = 
 		},
 		field: {
 			label: '打款日期',
-			value: ['payment_time_start', 'payment_time_end'],
+			value: ['payment_time_started', 'payment_time_ended'],
 		}
 	},
 	{
@@ -237,7 +282,7 @@ export const datePaySearchFunc = ({ platform = [], agent = [], payment_status = 
 		},
 		field: {
 			label: '打款撤销日期',
-			value: ['payment_backout_time_start', 'payment_backout_time_end'],
+			value: ['payment_revoke_time_started', 'payment_revoke_time_ended'],
 		}
 	},
 	{
@@ -250,9 +295,9 @@ export const datePaySearchFunc = ({ platform = [], agent = [], payment_status = 
 		},
 		field: {
 			label: '收款方式',
-			value: 'receipt_way',
+			value: 'payment_type',
 		},
-		selectOptionsChildren: receipt_way
+		selectOptionsChildren: payment_type
 	},
 	{
 		ctype: 'input',
@@ -263,7 +308,7 @@ export const datePaySearchFunc = ({ platform = [], agent = [], payment_status = 
 		},
 		field: {
 			label: '结算单编号',
-			value: 'summary_sheet_id',
+			value: 'settle_id',
 		},
 	}
 ];

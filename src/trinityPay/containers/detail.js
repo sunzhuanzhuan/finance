@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as trinityPayAction from "../actions";
-import { message, Button } from 'antd'
+import { message, Button, Skeleton } from 'antd'
 import { WBYDetailTable } from "wbyui"
 import { prePayDetailColumns, datePayDetailColumns } from '../constants'
 import './trinityPay.less'
@@ -13,7 +13,8 @@ class Detail extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			type: undefined
+			type: undefined,
+			loading: false
 		}
 	}
 	componentDidMount() {
@@ -24,26 +25,26 @@ class Detail extends React.Component {
 	queryData = (obj, func) => {
 		const { type } = qs.parse(this.props.location.search.substring(1));
 		this.setState({ loading: true });
-		const actionName = type == 'prePay' ? 'getPrePayDetail' : type == 'datePay' ? 'getDatePayDetail' : undefined;
-		return this.props.actions[actionName]({ ...obj }).then(() => {
+		return this.props.actions.getPayDetail({ ...obj }).then(() => {
 			if (func && Object.prototype.toString.call(func) === '[object Function]') {
 				func();
 			}
-			this.setState({ loading: false })
+			this.setState({ loading: false });
 		}).catch(({ errorMsg }) => {
 			this.setState({ loading: false });
 			message.error(errorMsg || '详情加载失败，请重试！');
 		})
 	}
 	render() {
-		const { type } = this.state;
-		const { prePayDetail, datePayDetail } = this.props;
+		const { type, loading } = this.state;
+		const { payDetail } = this.props;
 		const detailColumns = type == 'prePay' ? prePayDetailColumns : type == 'datePay' ? datePayDetailColumns : [];
-		const dataSource = type == 'prePay' ? prePayDetail : type == 'datePay' ? datePayDetail : {};
 		return <div className='detail-container'>
 			<fieldset className='fieldset_css'>
 				<legend>打款单信息</legend>
-				<WBYDetailTable className='vertical-table' columns={detailColumns} dataSource={dataSource} columnCount={4} />
+				<Skeleton loading={loading} active >
+					<WBYDetailTable className='vertical-table' columns={detailColumns} dataSource={payDetail} columnCount={4} ></WBYDetailTable>
+				</Skeleton>
 				<div style={{ textAlign: 'center', paddingTop: '20px' }}>
 					<Button type='primary' size='large' onClick={() => {
 						this.props.history.goBack()
@@ -56,8 +57,7 @@ class Detail extends React.Component {
 
 const mapStateToProps = (state) => {
 	return {
-		prePayDetail: state.trinityPay.prePayDetail,
-		datePayDetail: state.trinityPay.datePayDetail,
+		payDetail: state.trinityPay.payDetail,
 	}
 }
 const mapDispatchToProps = dispatch => ({

@@ -10,17 +10,17 @@ export const {
 });
 
 export const {
-	getPrePaySearchItem,
-	getPrePaySearchItem_success
-} = createHttpAction('getPrePaySearchItem', Interface.getPrePaySearchItem, {
+	getPaySearchItem,
+	getPaySearchItem_success
+} = createHttpAction('getPaySearchItem', Interface.getPaySearchItem, {
 	method: 'get',
 	ignoreToast: true
 });
 
 export const {
-	getPrePayDetail,
-	getPrePayDetail_success
-} = createHttpAction('getPrePayDetail', Interface.getPrePayDetail, {
+	getPayDetail,
+	getPayDetail_success
+} = createHttpAction('getPayDetail', Interface.getPayDetail, {
 	method: 'get',
 	ignoreToast: true
 });
@@ -34,33 +34,33 @@ export const {
 });
 
 export const {
-	postPrePayEdit,
-	postPrePayEdit_success
-} = createHttpAction('postPrePayEdit', Interface.postPrePayEdit, {
+	postPayEdit,
+	postPayEdit_success
+} = createHttpAction('postPayEdit', Interface.postPayEdit, {
 	method: 'post',
 	ignoreToast: true
 });
 
 export const {
-	postPrePaySuccess,
-	postPrePaySuccess_success
-} = createHttpAction('postPrePaySuccess', Interface.postPrePaySuccess, {
+	postPaySuccess,
+	postPaySuccess_success
+} = createHttpAction('postPaySuccess', Interface.postPaySuccess, {
 	method: 'post',
 	ignoreToast: true
 });
 
 export const {
-	postPrePayFail,
-	postPrePayFail_success
-} = createHttpAction('postPrePayFail', Interface.postPrePayFail, {
+	postPayFail,
+	postPayFail_success
+} = createHttpAction('postPayFail', Interface.postPayFail, {
 	method: 'post',
 	ignoreToast: true
 });
 
 export const {
-	postPrePayBackout,
-	postPrePayBackout_success
-} = createHttpAction('postPrePayBackout', Interface.postPrePayBackout, {
+	postPayRevoke,
+	postPayRevoke_success
+} = createHttpAction('postPayRevoke', Interface.postPayRevoke, {
 	method: 'post',
 	ignoreToast: true
 });
@@ -69,6 +69,14 @@ export const {
 	getPrimaryAccount,
 	getPrimaryAccount_success
 } = createHttpAction('getPrimaryAccount', Interface.getPrimaryAccount, {
+	method: 'get',
+	ignoreToast: true
+});
+
+export const {
+	getAgentListByCPId,
+	getAgentListByCPId_success
+} = createHttpAction('getAgentListByCPId', Interface.getAgentListByCPId, {
 	method: 'get',
 	ignoreToast: true
 });
@@ -82,22 +90,6 @@ export const {
 });
 
 export const {
-	getDatePaySearchItem,
-	getDatePaySearchItem_success
-} = createHttpAction('getDatePaySearchItem', Interface.getDatePaySearchItem, {
-	method: 'get',
-	ignoreToast: true
-});
-
-export const {
-	getDatePayDetail,
-	getDatePayDetail_success
-} = createHttpAction('getDatePayDetail', Interface.getDatePayDetail, {
-	method: 'get',
-	ignoreToast: true
-});
-
-export const {
 	getDatePayExport,
 	getDatePayExport_success
 } = createHttpAction('getDatePayExport', Interface.getDatePayExport, {
@@ -105,37 +97,6 @@ export const {
 	ignoreToast: true
 });
 
-export const {
-	postDatePayEdit,
-	postDatePayEdit_success
-} = createHttpAction('postDatePayEdit', Interface.postDatePayEdit, {
-	method: 'post',
-	ignoreToast: true
-});
-
-export const {
-	postDatePaySuccess,
-	postDatePaySuccess_success
-} = createHttpAction('postDatePaySuccess', Interface.postDatePaySuccess, {
-	method: 'post',
-	ignoreToast: true
-});
-
-export const {
-	postDatePayFail,
-	postDatePayFail_success
-} = createHttpAction('postDatePayFail', Interface.postDatePayFail, {
-	method: 'post',
-	ignoreToast: true
-});
-
-export const {
-	postDatePayBackout,
-	postDatePayBackout_success
-} = createHttpAction('postDatePayBackout', Interface.postDatePayBackout, {
-	method: 'post',
-	ignoreToast: true
-});
 //三方订单明细
 export const {
 	getDealOrderData,
@@ -145,13 +106,6 @@ export const {
 	ignoreToast: true
 });
 
-export const {
-	getDealOrderSearchItem,
-	getDealOrderSearchItem_success
-} = createHttpAction('getDealOrderSearchItem', Interface.getDealOrderSearchItem, {
-	method: 'get',
-	ignoreToast: true
-});
 
 export const {
 	getDealOrderExport,
@@ -161,10 +115,4 @@ export const {
 	ignoreToast: true
 });
 
-export const {
-	getPayToken,
-	getPayToken_success
-} = createHttpAction('getPayToken', Interface.getPayToken, {
-	method: 'get'
-});
 

@@ -2,13 +2,10 @@ import { combineReducers } from 'redux'
 import { handleActions } from 'redux-actions';
 import {
 	getPrePayData_success,
-	getPrePayDetail_success,
-	getPrePaySearchItem_success,
+	getPayDetail_success,
+	getPaySearchItem_success,
 	getDatePayData_success,
-	getDatePayDetail_success,
-	getDatePaySearchItem_success,
 	getDealOrderData_success,
-	getDealOrderSearchItem_success
 } from '../actions';
 
 //预付款
@@ -18,14 +15,14 @@ export const prePayData = handleActions({
 	}
 }, {})
 
-export const prePayDetail = handleActions({
-	[getPrePayDetail_success]: (state, action) => {
+export const payDetail = handleActions({
+	[getPayDetail_success]: (state, action) => {
 		return { ...action.payload.data }
 	}
 }, {})
 
-export const prePaySearchItem = handleActions({
-	[getPrePaySearchItem_success]: (state, action) => {
+export const paySearchItem = handleActions({
+	[getPaySearchItem_success]: (state, action) => {
 		return { ...action.payload.data }
 	}
 }, {})
@@ -37,17 +34,6 @@ export const datePayData = handleActions({
 	}
 }, {})
 
-export const datePayDetail = handleActions({
-	[getDatePayDetail_success]: (state, action) => {
-		return { ...action.payload.data }
-	}
-}, {})
-
-export const datePaySearchItem = handleActions({
-	[getDatePaySearchItem_success]: (state, action) => {
-		return { ...action.payload.data }
-	}
-}, {})
 //三方订单明细
 export const dealOrderData = handleActions({
 	[getDealOrderData_success]: (state, action) => {
@@ -55,20 +41,15 @@ export const dealOrderData = handleActions({
 	}
 }, {})
 
-export const dealOrderSearchItem = handleActions({
-	[getDealOrderSearchItem_success]: (state, action) => {
-		return { ...action.payload.data }
-	}
-}, {})
+
 export default combineReducers({
+	//公共
+	paySearchItem,
+	payDetail,
+	//预付款
 	prePayData,
-	prePayDetail,
-	prePaySearchItem,
 	//周期付款
 	datePayData,
-	datePayDetail,
-	datePaySearchItem,
 	//三方订单明细
 	dealOrderData,
-	dealOrderSearchItem
 })

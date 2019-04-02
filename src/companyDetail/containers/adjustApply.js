@@ -100,6 +100,10 @@ class AdjustApply extends React.Component {
 		let paginationObj = {
 			onChange: (current) => {
 				this.queryData({ ...search.keys, page: current, page_size });
+				this.props.history.replace({
+					pathname: this.props.location.pathname,
+					search: `?${qs.stringify({ keys: { ...search.keys, page: current } })}`,
+				})
 			},
 			onShowSizeChange: (current, pageSize) => {
 				const curPage = Math.ceil(total / pageSize);

@@ -143,7 +143,7 @@ export const prePaySearchFunc = ({ media_manager = [], payment_company = [], pay
 		ctype: 'searchSelect',
 		attr: {
 			action: handleFetchAccount,
-			keyWord: 'account_name',
+			keyWord: 'name',
 			dataToList: res => { return res.data },
 			item: ['value', 'name'],
 			style: { width: 160 }
@@ -312,7 +312,7 @@ export const datePaySearchFunc = ({ platform = [], cooperation_platform = [], pa
 		},
 	}
 ];
-export const dealOrderSearchFunc = ({ platform = [], agent = [], payment_status = [], payment_company = [] }) => [
+export const dealOrderSearchFunc = ({ platform = [], cooperation_platform = [], payment_status = [], payment_company = [] }, platform_name, handleFetchPlatform) => [
 	{
 		ctype: 'select',
 		attr: {
@@ -336,10 +336,26 @@ export const dealOrderSearchFunc = ({ platform = [], agent = [], payment_status 
 			allowClear: true
 		},
 		field: {
+			label: '三方下单平台',
+			value: 'cooperation_platform_id',
+		},
+		selectOptionsChildren: cooperation_platform
+	},
+	{
+		ctype: 'select',
+		attr: {
+			placeholder: '不限',
+			style: { width: 160 },
+			labelInValue: true,
+			allowClear: true,
+			onFocus: handleFetchPlatform,
+			notFoundContent: (<div style={{ paddingLeft: '10px' }} > <Spin size="small" /> </div>)
+		},
+		field: {
 			label: '三方代理商',
 			value: 'agent_id',
 		},
-		selectOptionsChildren: agent
+		selectOptionsChildren: platform_name
 	},
 	{
 		ctype: 'input',
@@ -350,7 +366,7 @@ export const dealOrderSearchFunc = ({ platform = [], agent = [], payment_status 
 		},
 		field: {
 			label: '订单ID',
-			value: 'order_id',
+			value: 'wby_order_id',
 		},
 	},
 	{
@@ -374,7 +390,7 @@ export const dealOrderSearchFunc = ({ platform = [], agent = [], payment_status 
 		},
 		field: {
 			label: '三方平台订单ID',
-			value: 'order_id',
+			value: 'ttp_order_id',
 		},
 	},
 	{
@@ -400,7 +416,7 @@ export const dealOrderSearchFunc = ({ platform = [], agent = [], payment_status 
 		},
 		field: {
 			label: '三方平台下单时间',
-			value: ['public_order_time_start', 'public_order_time_end'],
+			value: ['ttp_place_order_at_started', 'ttp_place_order_at_ended'],
 		}
 	},
 	{
@@ -413,7 +429,7 @@ export const dealOrderSearchFunc = ({ platform = [], agent = [], payment_status 
 		},
 		field: {
 			label: '付款公司',
-			value: 'payment_company_id',
+			value: 'payment_company_code',
 		},
 		selectOptionsChildren: payment_company
 	}

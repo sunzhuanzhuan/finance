@@ -1,27 +1,21 @@
 export default {
 	//预付款
 	getPrePayData: '/trinity/publicPaymentSlip/list',
-	getPrePaySearchItem: '/trinity/publicPaymentSlip/searchItem',
-	getPrePayDetail: '/finance/advance/paymentSlip/info',
 	getPrePayExport: '/finance/advance/paymentSlip/export',
-	postPrePayEdit: '/finance/advance/paymentSlip/edit',
-	postPrePaySuccess: '/finance/advance/paymentSlip/paymentSuccess',
-	postPrePayFail: '/finance/advance/paymentSlip/paymentFail',
-	postPrePayBackout: '/finance/advance/paymentSlip/paymentBackout',
-	getPrimaryAccount: '/finance/advance/paymentSlip/primaryAccount',
+	getPrimaryAccount: '/trinity/publicPaymentSlip/getUserByName',
 	//周期付款
 	getDatePayData: '/trinity/publicPaymentSlip/list',
-	getDatePaySearchItem: '/trinity/publicPaymentSlip/searchItem',
-	getDatePayDetail: '/finance/periodic/paymentSlip/info',
 	getDatePayExport: '/finance/periodic/paymentSlip/export',
-	postDatePayEdit: '/finance/periodic/paymentSlip/edit',
-	postDatePaySuccess: '/finance/periodic/paymentSlip/paymentSuccess',
-	postDatePayFail: '/finance/periodic/paymentSlip/paymentFail',
-	postDatePayBackout: '/finance/periodic/paymentSlip/paymentBackout',
+	//公共操作方法
+	getPaySearchItem: '/trinity/publicPaymentSlip/searchItem',
+	getAgentListByCPId: '/trinity/publicPaymentSlip/getAgentListByCPId',
+	getPayDetail: '/trinity/publicPaymentSlip/info',
+	postPayEdit: '/trinity/publicPaymentSlip/edit',
+	postPaySuccess: '/trinity/publicPaymentSlip/paySuccess',
+	postPayFail: '/trinity/publicPaymentSlip/payFail',
+	postPayRevoke: '/trinity/publicPaymentSlip/paymentRevoke',
 	//三方订单明细
-	getDealOrderData: '/finance/periodic/paymentSlip/orderList',
+	getDealOrderData: '/trinity/publicOrderTrade/list',
 	getDealOrderSearchItem: '/trinity/publicPaymentSlip/searchItem',
 	getDealOrderExport: '/finance/periodic/paymentSlip/orderExport',
-	//getToken
-	getPayToken: '/toolbox-gateway/file/v1/getToken',
 }

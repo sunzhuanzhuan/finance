@@ -27,7 +27,7 @@ class PrePay extends React.Component {
 	}
 	componentDidMount() {
 		const search = qs.parse(this.props.location.search.substring(1));
-		this.props.actions.getPrePaySearchItem().then(() => {
+		this.props.actions.getPaySearchItem().then(() => {
 			this.setState({ pullReady: true });
 		}).catch(({ errorMsg }) => {
 			message.error(errorMsg || '下拉项加载失败，请重试！');
@@ -38,14 +38,14 @@ class PrePay extends React.Component {
 		return this.props.actions.getPrimaryAccount({ ...obj })
 	}
 	handleFetchPlatform = () => {
-		const value = this.form.getFieldValue('cooperation_platform_id');
+		const value = this.form.getFieldValue('cooperation_platform_id').key;
 		if (!value) {
 			message.error('请先选择三方下单平台');
 			return
 		}
-		if (value != this.state.platform_id) {
-			this.props.actions.getPrimaryAccount().then(() => {
-				this.setState({ cooperation_platform_id: value, agent: [{ name: '张三', value: '1' }, { name: '李四', value: '2' }] })
+		if (value != this.state.cooperation_platform_id) {
+			this.props.actions.getAgentListByCPId({ cooperation_platform_id: value }).then(res => {
+				this.setState({ cooperation_platform_id: value, agent: res.data })
 			})
 		}
 	}
@@ -83,8 +83,8 @@ class PrePay extends React.Component {
 	render() {
 		const search = qs.parse(this.props.location.search.substring(1));
 		const { loading, pullReady, modalVisible, id, status, agent } = this.state;
-		const { prePayData: { list = [], page, page_size = 20, total, statistic }, prePaySearchItem } = this.props;
-		const prePaySearch = prePaySearchFunc(prePaySearchItem, agent, this.handleFetchPlatform, this.handleFetchAccount);
+		const { prePayData: { list = [], page, page_size = 20, total, statistic }, paySearchItem } = this.props;
+		const prePaySearch = prePaySearchFunc(paySearchItem, agent, this.handleFetchPlatform, this.handleFetchAccount);
 		const prePayCols = prePayFunc(this.handleModal);
 		const paginationObj = {
 			onChange: (current) => {
@@ -137,7 +137,7 @@ class PrePay extends React.Component {
 const mapStateToProps = (state) => {
 	return {
 		prePayData: state.trinityPay.prePayData,
-		prePaySearchItem: state.trinityPay.prePaySearchItem,
+		paySearchItem: state.trinityPay.paySearchItem,
 	}
 }
 const mapDispatchToProps = dispatch => ({

@@ -15,12 +15,13 @@ class DealOrder extends React.Component {
 		this.state = {
 			loading: false,
 			pullReady: false,
+			agent: []
 		}
 	}
 	componentDidMount() {
 		const { payment_slip_id, keys } = qs.parse(this.props.location.search.substring(1));
 
-		this.props.actions.getDealOrderSearchItem().then(() => {
+		this.props.actions.getPaySearchItem().then(() => {
 			this.setState({ pullReady: true });
 		}).catch(({ errorMsg }) => {
 			message.error(errorMsg || '下拉项加载失败，请重试！');
@@ -38,6 +39,18 @@ class DealOrder extends React.Component {
 			this.setState({ loading: false });
 			message.error(errorMsg || '列表加载失败，请重试！');
 		})
+	}
+	handleFetchPlatform = () => {
+		const value = this.form.getFieldValue('cooperation_platform_id').key;
+		if (!value) {
+			message.error('请先选择三方下单平台');
+			return
+		}
+		if (value != this.state.cooperation_platform_id) {
+			this.props.actions.getAgentListByCPId({ cooperation_platform_id: value }).then(res => {
+				this.setState({ cooperation_platform_id: value, agent: res.data })
+			})
+		}
 	}
 	handleExport = () => {
 		const { payment_slip_id } = qs.parse(this.props.location.search.substring(1));
@@ -58,9 +71,9 @@ class DealOrder extends React.Component {
 	}
 	render() {
 		const search = qs.parse(this.props.location.search.substring(1));
-		const { loading, pullReady } = this.state;
-		const { dealOrderData: { list = [], page, page_size = 20, total, statistic }, dealOrderSearchItem } = this.props;
-		const dealOrderSearch = dealOrderSearchFunc(dealOrderSearchItem);
+		const { loading, pullReady, agent } = this.state;
+		const { dealOrderData: { list = [], page, page_size = 20, total, statistic }, paySearchItem } = this.props;
+		const dealOrderSearch = dealOrderSearchFunc(paySearchItem, agent, this.handleFetchPlatform);
 		const paginationObj = {
 			onChange: (current) => {
 				this.queryData({ ...search.key, page: current, page_size });
@@ -83,7 +96,7 @@ class DealOrder extends React.Component {
 			</fieldset>
 			<div className='top-gap'>
 				<Table
-					rowKey='id'
+					rowKey='wby_order_id'
 					loading={loading}
 					columns={dealOrderCols}
 					dataSource={list}
@@ -98,7 +111,7 @@ class DealOrder extends React.Component {
 const mapStateToProps = (state) => {
 	return {
 		dealOrderData: state.trinityPay.dealOrderData,
-		dealOrderSearchItem: state.trinityPay.dealOrderSearchItem,
+		paySearchItem: state.trinityPay.paySearchItem,
 	}
 }
 const mapDispatchToProps = dispatch => ({

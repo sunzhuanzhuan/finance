@@ -2,8 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as trinityPayAction from "../actions";
-import { Modal, Button, Form, Input } from 'antd'
+import { Modal, Button, Form, Input, message } from 'antd'
 import { OssUpload } from 'wbyui'
+import api from '../../api'
+import qs from 'qs'
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
@@ -14,69 +16,21 @@ class PreModal extends React.Component {
 		this.state = {
 			isClick: false,
 			token: undefined,
-			array: []
 		}
 	}
 	componentDidMount() {
 		const { status } = this.props;
 		if (status == 'succeed') {
-			this.props.actions.getPayToken().then((res) => {
-				const array = [
-					{
-						uid: "rc-upload-1553065863946-3",
-						status: 'done',
-						name: "打包.png",
-						url: "http://dev-wby-epoch.oss-cn-beijing.aliyuncs.com/B_GZA_ORDER_IMG_NORMAL_UPLOAD/e0dab700134d443086c4b4b8d244af0b.png",
-					},
-					{
-						uid: "rc-upload-1553065863946-6",
-						status: 'done',
-						name: "name.jpg",
-						url: "http://dev-wby-epoch.oss-cn-beijing.aliyuncs.com/B_GZA_ORDER_IMG_NORMAL_UPLOAD/b0ad78703f494c248f772c5b3ff31504.jpg",
-					},
-					{
-						uid: "rc-upload-1553065863946-7",
-						status: 'done',
-						name: "node eventLoop.png",
-						url: "http://dev-wby-epoch.oss-cn-beijing.aliyuncs.com/B_GZA_ORDER_IMG_NORMAL_UPLOAD/b5ff67b059c3415e87eb1215b2d3ef8b.png",
-					},
-				]
-				const { data } = res;
-				this.setState({
-					token: data,
-					array
-				})
+			api.get('/toolbox-gateway/file/v1/getToken').then((res) => {
+				this.setState({ token: res.data })
 			})
 		}
-
-
 	}
-	titleMap = (status, type) => {
-		const succeedName = type => {
-			const actionMap = {
-				'prePay': 'postPrePaySuccess',
-				'datePay': 'postDatePaySuccess',
-			}
-			return actionMap[type]
-		}
-		const defeatedName = type => {
-			const actionMap = {
-				'prePay': 'postPrePayFail',
-				'datePay': 'postDatePayFail',
-			}
-			return actionMap[type]
-		}
-		const revocationName = type => {
-			const actionMap = {
-				'prePay': 'postPrePayBackout',
-				'datePay': 'postDatePayBackout',
-			}
-			return actionMap[type]
-		}
+	titleMap = (status) => {
 		const maps = {
-			'succeed': { title: '打款成功备注及截图', content: '确定打款成功吗？', actionName: succeedName(type) },
-			'defeated': { title: '打款失败原因', content: '确定打款失败吗？', actionName: defeatedName(type) },
-			'revocation': { title: '打款撤销原因', content: '确定打款撤销吗？', actionName: revocationName(type) },
+			'succeed': { title: '打款成功备注及截图', content: '确定打款成功吗？', actionName: 'postPaySuccess' },
+			'defeated': { title: '打款失败原因', content: '确定打款失败吗？', actionName: 'postPayFail' },
+			'revocation': { title: '打款撤销原因', content: '确定打款撤销吗？', actionName: 'postPayRevoke' },
 		};
 		return maps[status]
 	}
@@ -103,18 +57,23 @@ class PreModal extends React.Component {
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
 				const current = (search.keys && search.keys.payment_status && list.length === 1) ? (page - 1 || page) : page;
+				const urlArray = values.payment_screenshot.map(item => ({
+					uid: item.uid,
+					status: item.status,
+					name: item.name,
+					url: item.url
+				}));
 				let params = {
 					payment_slip_id: id,
-					payment_screenshot: values.payment_screenshot
+					payment_screenshot: qs.stringify(urlArray)
 				}
 				status == 'revocation' ? params.payment_backout_reason = values.remark : params.payment_remark = values.remark;
-				console.log('%cparams: ', 'color: MidnightBlue; background: Aquamarine; font-size: 20px;', params);
-				// this.props.actions[actionName](params).then(() => {
-				// 	message.success('操作成功!');
-				// 	this.props.queryAction({ page: current, ...search.keys });
-				// }).catch(({ errorMsg }) => {
-				// 	message.error(errorMsg || '操作失败，请重试！');
-				// })
+				this.props.actions[actionName](params).then(() => {
+					message.success('操作成功!');
+					this.props.queryAction({ page: current, ...search.keys });
+				}).catch(({ errorMsg }) => {
+					message.error(errorMsg || '操作失败，请重试！');
+				})
 			}
 		})
 	}
@@ -122,7 +81,7 @@ class PreModal extends React.Component {
 	render() {
 		const { getFieldDecorator } = this.props.form;
 		const { visible, onCancel, status, type, key } = this.props;
-		const { isClick, token, array } = this.state;
+		const { isClick, token } = this.state;
 		const formItemLayout = {
 			labelCol: { span: 4 },
 			wrapperCol: { span: 20 }
@@ -153,7 +112,6 @@ class PreModal extends React.Component {
 				</FormItem>
 				{token && <FormItem label='截图' {...formItemLayout}>
 					{getFieldDecorator('payment_screenshot', {
-						initialValue: array,
 						valuePropName: 'fileList',
 						getValueFromEvent: e => e.fileList
 					})(

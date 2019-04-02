@@ -16,7 +16,15 @@ export const readyRelatedFunc = (handleCancel) => [
 		width: 100
 	},
 	{
-		title: '发票余额',
+		title: '三方代理商',
+		dataIndex: 'agent_name',
+		key: 'agent_name',
+		align: 'center',
+		width: 100
+
+	},
+	{
+		title: '发票金额',
 		dataIndex: 'invoice_amount',
 		key: 'invoice_amount',
 		align: 'center',
@@ -24,17 +32,9 @@ export const readyRelatedFunc = (handleCancel) => [
 
 	},
 	{
-		title: '平台',
-		dataIndex: 'platform_name',
-		key: 'platform_name',
-		align: 'center',
-		width: 100
-
-	},
-	{
-		title: '代理商',
-		dataIndex: 'agent_name',
-		key: 'agent_name',
+		title: '本次使用金额',
+		dataIndex: 'used_amount',
+		key: 'used_amount',
 		align: 'center',
 		width: 100
 	},
@@ -42,13 +42,6 @@ export const readyRelatedFunc = (handleCancel) => [
 		title: '发票余额',
 		dataIndex: 'rest_amount',
 		key: 'rest_amount',
-		align: 'center',
-		width: 100
-	},
-	{
-		title: '使用金额',
-		dataIndex: 'used_amount',
-		key: 'used_amount',
 		align: 'center',
 		width: 100
 	},
@@ -81,20 +74,11 @@ export const relatedInvoiceFunc = (handleSubmit) => [
 		width: 100
 	},
 	{
-		title: '发票余额',
-		dataIndex: 'invoice_amount',
-		key: 'invoice_amount',
+		title: '三方代理商',
+		dataIndex: 'agent_name',
+		key: 'agent_name',
 		align: 'center',
 		width: 100
-
-	},
-	{
-		title: '平台',
-		dataIndex: 'platform_name',
-		key: 'platform_name',
-		align: 'center',
-		width: 100
-
 	},
 	{
 		title: '发票抬头',
@@ -102,12 +86,11 @@ export const relatedInvoiceFunc = (handleSubmit) => [
 		key: 'invoice_title',
 		align: 'center',
 		width: 100
-
 	},
 	{
-		title: '代理商',
-		dataIndex: 'agent_name',
-		key: 'agent_name',
+		title: '发票金额',
+		dataIndex: 'invoice_amount',
+		key: 'invoice_amount',
 		align: 'center',
 		width: 100
 	},

@@ -26,7 +26,7 @@ class DatePay extends React.Component {
 	}
 	componentDidMount() {
 		const search = qs.parse(this.props.location.search.substring(1));
-		this.props.actions.getDatePaySearchItem().then(() => {
+		this.props.actions.getPaySearchItem().then(() => {
 			this.setState({ pullReady: true });
 		}).catch(({ errorMsg }) => {
 			message.error(errorMsg || '下拉项加载失败，请重试！');
@@ -34,14 +34,14 @@ class DatePay extends React.Component {
 		this.queryData({ page: 1, page_size: 20, ...search.keys });
 	}
 	handleFetchPlatform = () => {
-		const value = this.form.getFieldValue('cooperation_platform_id');
+		const value = this.form.getFieldValue('cooperation_platform_id').key;
 		if (!value) {
 			message.error('请先选择三方下单平台');
 			return
 		}
-		if (value != this.state.platform_id) {
-			this.props.actions.getPrimaryAccount().then(() => {
-				this.setState({ cooperation_platform_id: value, agent: [{ name: '张三', value: '1' }, { name: '李四', value: '2' }] })
+		if (value != this.state.cooperation_platform_id) {
+			this.props.actions.getAgentListByCPId({ cooperation_platform_id: value }).then(res => {
+				this.setState({ cooperation_platform_id: value, agent: res.data })
 			})
 		}
 	}
@@ -79,8 +79,8 @@ class DatePay extends React.Component {
 	render() {
 		const search = qs.parse(this.props.location.search.substring(1));
 		const { loading, pullReady, modalVisible, id, status, agent } = this.state;
-		const { datePayData: { list = [], page, page_size = 20, total, statistic }, datePaySearchItem } = this.props;
-		const datePaySearch = datePaySearchFunc(datePaySearchItem, agent, this.handleFetchPlatform);
+		const { datePayData: { list = [], page, page_size = 20, total, statistic }, paySearchItem } = this.props;
+		const datePaySearch = datePaySearchFunc(paySearchItem, agent, this.handleFetchPlatform);
 		const datePayCols = datePayFunc(this.handleModal);
 		const paginationObj = {
 			onChange: (current) => {
@@ -132,7 +132,7 @@ class DatePay extends React.Component {
 const mapStateToProps = (state) => {
 	return {
 		datePayData: state.trinityPay.datePayData,
-		datePaySearchItem: state.trinityPay.datePaySearchItem,
+		paySearchItem: state.trinityPay.paySearchItem,
 	}
 }
 const mapDispatchToProps = dispatch => ({

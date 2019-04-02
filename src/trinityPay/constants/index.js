@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button } from 'antd';
+import qs from 'qs';
 const SUCCEED = 'succeed';
 const DEFEATED = 'defeated';
 const REVOCATION = 'revocation';
@@ -115,7 +116,7 @@ export const prePayFunc = (handleModal) => [
 					handleModal(record.payment_slip_id, REVOCATION, true);
 				}}>打款撤销</Button>}
 				<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/dealorder?payment_slip_id=${record.payment_slip_id}`}>订单详情</Button>
-				<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/modification?type=prePay&payment_slip_id=${record.payment_slip_id}`}>编辑</Button>
+				{record.payment_status && record.payment_status != 1 && <Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/modification?type=prePay&payment_slip_id=${record.payment_slip_id}`}>编辑</Button>}
 				<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/detail?type=prePay&payment_slip_id=${record.payment_slip_id}`}>查看</Button>
 			</div>
 		}
@@ -220,8 +221,8 @@ export const datePayFunc = (handleModal) => [
 					handleModal(record.payment_slip_id, REVOCATION, true);
 				}}>打款撤销</Button>}
 				<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/dealorder?payment_slip_id=${record.payment_slip_id}`}>订单详情</Button>
-				<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/modification?type=prePay&payment_slip_id=${record.payment_slip_id}`}>编辑</Button>
-				<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/detail?type=prePay&payment_slip_id=${record.payment_slip_id}`}>查看</Button>
+				{record.payment_status && record.payment_status != 1 && <Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/modification?type=datePay&payment_slip_id=${record.payment_slip_id}`}>编辑</Button>}
+				<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/detail?type=datePay&payment_slip_id=${record.payment_slip_id}`}>查看</Button>
 			</div>
 		}
 	},
@@ -229,15 +230,15 @@ export const datePayFunc = (handleModal) => [
 export const dealOrderCols = [
 	{
 		title: '订单ID',
-		dataIndex: 'order_id',
-		key: 'order_id',
+		dataIndex: 'wby_order_id',
+		key: 'wby_order_id',
 		align: 'center',
 		width: 100
 	},
 	{
 		title: '订单类型',
-		dataIndex: 'product_line_desc',
-		key: 'product_line_desc',
+		dataIndex: 'product_line_type_desc',
+		key: 'product_line_type_desc',
 		align: 'center',
 		width: 100
 	},
@@ -251,8 +252,8 @@ export const dealOrderCols = [
 	},
 	{
 		title: '三方平台订单ID',
-		dataIndex: 'ttp_order_no',
-		key: 'ttp_order_no',
+		dataIndex: 'ttp_order_id',
+		key: 'ttp_order_id',
 		align: 'center',
 		width: 100
 
@@ -280,15 +281,15 @@ export const dealOrderCols = [
 	},
 	{
 		title: '成本调整',
-		dataIndex: 'public_cost_price_adjustment',
-		key: 'public_cost_price_adjustment',
+		dataIndex: 'public_cost_adjustment',
+		key: 'public_cost_adjustment',
 		align: 'center',
 		width: 100
 	},
 	{
 		title: '剩余成本价',
-		dataIndex: 'public_cost_price_residual',
-		key: 'public_cost_price_residual',
+		dataIndex: 'actual_public_cost_price',
+		key: 'actual_public_cost_price',
 		align: 'center',
 		width: 100
 	},
@@ -315,8 +316,8 @@ export const dealOrderCols = [
 	},
 	{
 		title: '付款公司',
-		dataIndex: 'payment_company',
-		key: 'payment_company',
+		dataIndex: 'payment_company_name',
+		key: 'payment_company_name',
 		align: 'center',
 		width: 100
 	},
@@ -330,21 +331,21 @@ export const prePayDetailColumns = [
 		align: 'center'
 	}, {
 		title: '订单ID：',
-		dataIndex: 'order_id',
-		key: 'order_id',
+		dataIndex: 'wby_order_id',
+		key: 'wby_order_id',
 		align: 'center',
 
 	}, {
 		title: '三方平台订单ID：',
-		dataIndex: 'ttp_order_no',
-		key: 'ttp_order_no',
+		dataIndex: 'ttp_order_id',
+		key: 'ttp_order_id',
 		align: 'center'
-	}, {
+	},
+	{
 		title: '订单类型：',
-		dataIndex: 'product_line_desc',
-		key: 'product_line_desc ',
+		dataIndex: 'product_line_type_name',
+		key: 'product_line_type_name',
 		align: 'center',
-
 	},
 	{
 		title: '平台：',
@@ -354,8 +355,20 @@ export const prePayDetailColumns = [
 	},
 	{
 		title: '需求ID：',
-		dataIndex: 'reservation_requirement_id',
-		key: 'reservation_requirement_id',
+		dataIndex: 'requirement_id',
+		key: 'requirement_id',
+		align: 'center',
+	},
+	{
+		title: '三方下单平台：',
+		dataIndex: 'cooperation_platform_name',
+		key: 'cooperation_platform_name',
+		align: 'center',
+	},
+	{
+		title: '需求名称：',
+		dataIndex: 'requirement_name',
+		key: 'requirement_name',
 		align: 'center',
 	},
 	{
@@ -365,9 +378,9 @@ export const prePayDetailColumns = [
 		align: 'center',
 	},
 	{
-		title: '需求名称：',
-		dataIndex: 'reservation_requirement_name',
-		key: 'reservation_requirement_name',
+		title: '公司简称：',
+		dataIndex: 'requirement_company_name',
+		key: 'requirement_company_name',
 		align: 'center',
 	},
 	{
@@ -377,63 +390,51 @@ export const prePayDetailColumns = [
 		align: 'center',
 	},
 	{
-		title: '公司简称：',
-		dataIndex: 'company_name',
-		key: 'company_name',
+		title: '所属销售：',
+		dataIndex: 'requirement_sale_manager_name',
+		key: 'requirement_sale_manager_name',
 		align: 'center',
 	},
 	{
 		title: '收款方式：',
-		dataIndex: 'receipt_way',
-		key: 'receipt_way',
-		align: 'center',
-	},
-	{
-		title: '所属销售：',
-		dataIndex: 'salesperson_name',
-		key: 'salesperson_name',
-		align: 'center',
-	},
-	{
-		title: '收款户名：',
-		dataIndex: 'receipt_account_name',
-		key: 'receipt_account_name',
+		dataIndex: 'payment_type_desc',
+		key: 'payment_type_desc',
 		align: 'center',
 	},
 	{
 		title: '付款公司：',
-		dataIndex: 'payment_company',
-		key: 'payment_company',
+		dataIndex: 'payment_company_name',
+		key: 'payment_company_name',
 		align: 'center'
 	},
 	{
-		title: '收款账号：',
-		dataIndex: 'receipt_account',
-		key: 'receipt_account',
-		align: 'center'
+		title: '收款人名称：',
+		dataIndex: 'payee_account_name',
+		key: 'payee_account_name',
+		align: 'center',
 	},
 	{
 		title: '回票方式：',
-		dataIndex: 'invoice_way_desc',
-		key: 'invoice_way_desc',
+		dataIndex: 'return_invoice_type_desc',
+		key: 'return_invoice_type_desc',
 		align: 'center'
 	},
 	{
-		title: '开户行：',
-		dataIndex: 'opening_bank',
-		key: 'opening_bank',
+		title: '收款人账号：',
+		dataIndex: 'payee_account',
+		key: 'payee_account',
 		align: 'center'
 	},
 	{
 		title: '应回发票：',
-		dataIndex: 'invoice_amount',
-		key: 'invoice_amount',
+		dataIndex: 'return_invoice_amount',
+		key: 'return_invoice_amount',
 		align: 'center'
 	},
 	{
-		title: '开户支行：',
-		dataIndex: 'opening_bank_branch	',
-		key: 'opening_bank_branch	',
+		title: '开户行：',
+		dataIndex: 'bank',
+		key: 'bank',
 		align: 'center'
 	},
 	{
@@ -443,9 +444,9 @@ export const prePayDetailColumns = [
 		align: 'center'
 	},
 	{
-		title: '申请时间：',
-		dataIndex: 'application_time',
-		key: 'application_time',
+		title: '开户支行：',
+		dataIndex: 'bank_agency',
+		key: 'bank_agency',
 		align: 'center'
 	},
 	{
@@ -455,15 +456,27 @@ export const prePayDetailColumns = [
 		align: 'center'
 	},
 	{
+		title: '申请时间：',
+		dataIndex: 'created_at',
+		key: 'created_at',
+		align: 'center'
+	},
+	{
+		title: '主账号：',
+		dataIndex: 'main_user_name',
+		key: 'main_user_name',
+		align: 'center'
+	},
+	{
 		title: '打款状态：',
 		dataIndex: 'payment_status_desc',
 		key: 'payment_status_desc',
 		align: 'center'
 	},
 	{
-		title: '主账号：',
-		dataIndex: 'user_name',
-		key: 'user_name',
+		title: '媒介经理：',
+		dataIndex: 'media_user_name',
+		key: 'media_user_name',
 		align: 'center'
 	},
 	{
@@ -473,9 +486,9 @@ export const prePayDetailColumns = [
 		align: 'center'
 	},
 	{
-		title: '媒介经理：',
-		dataIndex: 'media_manager_name',
-		key: 'media_manager_name',
+		title: '打款备注：',
+		dataIndex: 'payment_remark',
+		key: 'payment_remark',
 		align: 'center'
 	},
 	{
@@ -484,24 +497,20 @@ export const prePayDetailColumns = [
 		key: 'payment_screenshot',
 		align: 'center',
 		render: (text) => {
+			const urlArray = text ? Object.values(qs.parse(text)) : [];
 			return <div>
-				{text ? text.map((item, index) => {
+				{urlArray && urlArray.map((item, index) => {
 					return <div className='thum-img-box' key={index}>
-						<a href={item} target='_blank'><img src={item} /></a>
+						<a href={item.url} target='_blank'><img src={item.url} alt={item.name} /></a>
 					</div>
-				}) : null}
+				})}
 			</div>
 		}
-	}, {
-		title: '打款备注：',
-		dataIndex: 'payment_remark',
-		key: 'payment_remark',
-		align: 'center'
 	},
 	{
 		title: '打款撤销备注：',
-		dataIndex: 'payment_backout_reason',
-		key: 'payment_backout_reason',
+		dataIndex: 'payment_revoke_reason',
+		key: 'payment_revoke_reason',
 		align: 'center'
 	}
 ];
@@ -512,16 +521,21 @@ export const datePayDetailColumns = [
 		key: 'payment_slip_id',
 		align: 'center'
 	}, {
-		title: '申请时间',
-		dataIndex: 'application_time',
-		key: 'application_time',
+		title: '申请时间：',
+		dataIndex: 'created_at',
+		key: 'created_at',
 		align: 'center',
-
 	},
 	{
 		title: '平台：',
 		dataIndex: 'platform_name',
 		key: 'platform_name',
+		align: 'center',
+	},
+	{
+		title: '三方下单平台：',
+		dataIndex: 'cooperation_platform_name',
+		key: 'cooperation_platform_name',
 		align: 'center',
 	},
 	{
@@ -531,39 +545,63 @@ export const datePayDetailColumns = [
 		align: 'center',
 	},
 	{
+		title: '付款公司：',
+		dataIndex: 'payment_company_name',
+		key: 'payment_company_name',
+		align: 'center',
+	},
+	{
 		title: '打款金额：',
 		dataIndex: 'payment_amount',
 		key: 'payment_amount',
 		align: 'center',
 	},
 	{
-		title: '收款方式：',
-		dataIndex: 'receipt_way',
-		key: 'receipt_way',
+		title: '回票方式：',
+		dataIndex: 'return_invoice_type_desc',
+		key: 'return_invoice_type_desc',
 		align: 'center',
 	},
 	{
-		title: '收款户名：',
-		dataIndex: 'receipt_account_name',
-		key: 'receipt_account_name',
+		title: '收款方式：',
+		dataIndex: 'payment_type_desc',
+		key: 'payment_type_desc',
 		align: 'center',
+	},
+	{
+		title: '应回发票：',
+		dataIndex: 'return_invoice_amount',
+		key: 'return_invoice_amount',
+		align: 'center',
+	},
+	{
+		title: '收款人账号：',
+		dataIndex: 'payee_account',
+		key: 'payee_account',
+		align: 'center',
+	},
+	{
+		title: '发票盈余：',
+		dataIndex: 'invoice_surplus',
+		key: 'invoice_surplus',
+		align: 'center',
+	},
+	{
+		title: '收款人名称：',
+		dataIndex: 'payee_account_name',
+		key: 'payee_account_name',
+		align: 'center'
+	},
+	{
+		title: '发票开具方：',
+		dataIndex: 'beneficiary_company',
+		key: 'beneficiary_company',
+		align: 'center'
 	},
 	{
 		title: '开户行：',
-		dataIndex: 'opening_bank',
-		key: 'opening_bank',
-		align: 'center'
-	},
-	{
-		title: '收款账号：',
-		dataIndex: 'receipt_account',
-		key: 'receipt_account',
-		align: 'center'
-	},
-	{
-		title: '开户支行：',
-		dataIndex: 'opening_bank_branch',
-		key: 'opening_bank_branch',
+		dataIndex: 'bank_agency_province',
+		key: 'bank_agency_province',
 		align: 'center'
 	},
 	{
@@ -573,9 +611,9 @@ export const datePayDetailColumns = [
 		align: 'center'
 	},
 	{
-		title: '付款公司：',
-		dataIndex: 'payment_company',
-		key: 'payment_company',
+		title: '开户支行：',
+		dataIndex: 'bank_agency',
+		key: 'bank_agency',
 		align: 'center'
 	},
 	{
@@ -585,31 +623,20 @@ export const datePayDetailColumns = [
 		align: 'center'
 	},
 	{
-		title: '回票方式：',
-		dataIndex: 'invoice_way',
-		key: 'invoice_way',
-		align: 'center'
-	},
-	{
 		title: '打款成功截图：',
 		dataIndex: 'payment_screenshot',
 		key: 'payment_screenshot',
 		align: 'center',
 		render: (text) => {
+			const urlArray = text ? Object.values(qs.parse(text)) : [];
 			return <div>
-				{text ? text.map((item, index) => {
+				{urlArray && urlArray.map((item, index) => {
 					return <div className='thum-img-box' key={index}>
-						<a href={item} target='_blank'><img src={item} /></a>
+						<a href={item.url} target='_blank'><img src={item.url} alt={item.name} /></a>
 					</div>
-				}) : null}
+				})}
 			</div>
 		}
-	},
-	{
-		title: '应回发票：',
-		dataIndex: 'invoice_amount',
-		key: 'invoice_amount',
-		align: 'center'
 	},
 	{
 		title: '打款备注：',
@@ -618,29 +645,18 @@ export const datePayDetailColumns = [
 		align: 'center'
 	},
 	{
-		title: '发票盈余：',
-		dataIndex: 'invoice_surplus',
-		key: 'invoice_surplus',
-		align: 'center'
-	}, {
 		title: '打款撤销备注：',
-		dataIndex: 'payment_backout_reason',
-		key: 'payment_backout_reason',
-		align: 'center'
-	},
-	{
-		title: '发票开具方：',
-		dataIndex: 'beneficiary_company',
-		key: 'beneficiary_company',
+		dataIndex: 'payment_revoke_reason',
+		key: 'payment_revoke_reason',
 		align: 'center'
 	}
 ];
 export const modificationColumns = type => {
 	switch (type) {
 		case 'prePay':
-			return ['payment_slip_id', 'receipt_way', 'order_id', 'product_line_desc', 'sanfang', 'platform_name', 'agent_name', 'reservation_requirement_id', 'reservation_requirement_name', 'company_name', 'salesperson_name', 'payment_amount', 'receipt_way', 'receipt_account_name', 'receipt_account', 'opening_bank', 'opening_bank_branch', 'application_time', 'payment_status_desc', 'payment_time', 'payment_screenshot', 'payment_remark', 'payment_company', 'invoice_way_desc', 'invoice_amount', 'invoice_surplus', 'beneficiary_company', 'user_name', 'media_manager_name', 'payment_backout_reason']
+			return ['payment_slip_id', 'settle_type_desc', 'payee_type_desc', 'wby_order_id', 'product_line_type_name', 'ttp_order_id', 'platform_name', 'cooperation_platform_name', 'agent_name', 'requirement_id', 'requirement_name', 'requirement_company_name', 'requirement_sale_manager_name', 'payment_amount', 'payment_type_desc', 'payee_account_name', 'payee_account', 'bank_agency_province', 'bank_agency_city', 'bank', 'bank_agency', 'created_at', 'payment_status_desc', 'payment_time', 'payment_screenshot', 'payment_remark', 'payment_company_name', 'return_invoice_type_desc', 'return_invoice_amount', 'invoice_surplus', 'beneficiary_company', 'main_user_name', 'media_user_name', 'payment_revoke_reason']
 		case 'datePay':
-			return ['payment_slip_id', 'receipt_way', 'item_id', 'platform_name', 'agent_name', 'payment_amount', 'receipt_way', 'receipt_account_name', 'receipt_account', 'opening_bank', 'opening_bank_branch', 'application_time', 'payment_status_desc', 'payment_time', 'payment_screenshot', 'payment_remark', 'payment_company', 'invoice_way_desc', 'invoice_amount', 'invoice_surplus', 'beneficiary_company', 'payment_backout_reason']
+			return ['payment_slip_id', 'settle_type_desc', 'payee_type_desc', 'settle_id', 'platform_name', 'cooperation_platform_name', 'agent_name', 'payment_amount', 'payment_type_desc', 'payee_account_name', 'payee_account', 'bank_agency_province', 'bank_agency_city', 'bank', 'bank_agency', 'created_at', 'payment_status_desc', 'payment_time', 'payment_screenshot', 'payment_remark', 'payment_company_name', 'return_invoice_type_desc', 'return_invoice_amount', 'invoice_surplus', 'beneficiary_company', 'payment_revoke_reason']
 		default:
 			return [];
 	}

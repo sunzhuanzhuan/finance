@@ -4,7 +4,9 @@ import { bindActionCreators } from "redux";
 import * as trinityPayAction from "../actions";
 import { message, Form, Row, Input, Button } from 'antd'
 import { modificationColumns } from '../constants'
+import { OssUpload } from 'wbyui'
 import './trinityPay.less'
+import api from '../../api'
 import qs from 'qs'
 const FormItem = Form.Item;
 
@@ -12,7 +14,8 @@ class Modification extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			type: undefined
+			type: undefined,
+			token: undefined,
 		}
 	}
 	componentDidMount() {
@@ -21,25 +24,31 @@ class Modification extends React.Component {
 		const ary = modificationColumns(search.type);
 
 		this.setState({ type: search.type });
-		this.queryData({ payment_slip_id: search.payment_slip_id }, () => {
-			const { prePayDetail } = this.props;
+		this.queryData({ payment_slip_id: search.payment_slip_id }).then(() => {
+			const { payDetail } = this.props;
 			let obj = {};
 			ary.forEach(item => {
-				if (item === 'payment_screenshot') obj[item] = prePayDetail[item].toString();
-				else obj[item] = prePayDetail[item];
+				if (item === 'payment_screenshot') {
+					obj[item] = payDetail['payment_screenshot'] ? Object.values(qs.parse(payDetail[item])) : [];
+				} else obj[item] = payDetail[item];
 			});
-			setFieldsValue({ ...obj });
+			setTimeout(() => {
+				setFieldsValue({ ...obj });
+			}, 0);
+		});
+		api.get('/toolbox-gateway/file/v1/getToken').then((res) => {
+			this.setState({ token: res.data })
 		});
 	}
 	queryData = (obj, func) => {
-		this.setState({ loading: true });
-		return this.props.actions.getPrePayDetail({ ...obj }).then(() => {
+		const hide = message.loading('数据加载中，请稍候...');
+		return this.props.actions.getPayDetail({ ...obj }).then(() => {
 			if (func && Object.prototype.toString.call(func) === '[object Function]') {
 				func();
 			}
-			this.setState({ loading: false })
+			hide();
 		}).catch(({ errorMsg }) => {
-			this.setState({ loading: false });
+			hide();
 			message.error(errorMsg || '详情加载失败，请重试！');
 		})
 	}
@@ -47,13 +56,32 @@ class Modification extends React.Component {
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
+				const { payDetail: { payment_status } } = this.props;
 				const obj = {
-					payment_slip_id: values['payment_slip_id'],
-					payment_remark: values['payment_remark'],
-					payment_screenshot: values['payment_screenshot']
+					payment_slip_id: values['payment_slip_id']
+				}
+				switch (payment_status) {
+					case 2:
+						const urlArray = values.payment_screenshot.map(item => ({
+							uid: item.uid,
+							status: item.status,
+							name: item.name,
+							url: item.url
+						}));
+						obj['payment_remark'] = values['payment_remark'];
+						obj['payment_screenshot'] = qs.stringify(urlArray);
+						break;
+					case 3:
+						obj['payment_remark'] = values['payment_remark'];
+						break;
+					case 4:
+						obj['payment_revoke_reason'] = values['payment_revoke_reason'];
+						break;
+					default:
+						break;
 				}
 				const hide = message.loading('请稍候...');
-				this.props.actions.postPrePayEdit({ ...obj }).then(() => {
+				this.props.actions.postPayEdit({ payment_status, ...obj }).then(() => {
 					message.success('修改成功！');
 					hide();
 					setTimeout(() => {
@@ -68,7 +96,8 @@ class Modification extends React.Component {
 	}
 	render() {
 		const { getFieldDecorator } = this.props.form;
-		const { type } = this.state;
+		const { type, token } = this.state;
+		const { payDetail: { payment_status } } = this.props;
 		const formItemLayout = {
 			labelCol: { span: 6 },
 			wrapperCol: { span: 16 }
@@ -86,42 +115,42 @@ class Modification extends React.Component {
 					</Row>
 					<Row>
 						<FormItem label='打款单类型' {...formItemLayout}>
-							{getFieldDecorator('id')(
+							{getFieldDecorator('settle_type_desc')(
 								<Input disabled={true} />
 							)}
 						</FormItem>
 					</Row>
 					<Row>
-						<FormItem label='收款方类型' {...formItemLayout}>
-							{getFieldDecorator('receipt_way')(
+						<FormItem label='收款人类型' {...formItemLayout}>
+							{getFieldDecorator('payee_type_desc')(
 								<Input disabled={true} />
 							)}
 						</FormItem>
 					</Row>
 					{type == 'prePay' && <Row>
 						<FormItem label='订单ID' {...formItemLayout}>
-							{getFieldDecorator('order_id')(
+							{getFieldDecorator('wby_order_id')(
 								<Input disabled={true} />
 							)}
 						</FormItem>
 					</Row>}
 					{type == 'prePay' && <Row>
 						<FormItem label='订单类型' {...formItemLayout}>
-							{getFieldDecorator('product_line_desc')(
+							{getFieldDecorator('product_line_type_name')(
 								<Input disabled={true} />
 							)}
 						</FormItem>
 					</Row>}
 					{type == 'prePay' && <Row>
 						<FormItem label='三方平台订单ID' {...formItemLayout}>
-							{getFieldDecorator('sanfang')(
+							{getFieldDecorator('ttp_order_id')(
 								<Input disabled={true} />
 							)}
 						</FormItem>
 					</Row>}
 					{type == 'datePay' && <Row>
 						<FormItem label='结算单ID' {...formItemLayout}>
-							{getFieldDecorator('item_id')(
+							{getFieldDecorator('settle_id')(
 								<Input disabled={true} />
 							)}
 						</FormItem>
@@ -129,6 +158,13 @@ class Modification extends React.Component {
 					<Row>
 						<FormItem label='平台' {...formItemLayout}>
 							{getFieldDecorator('platform_name')(
+								<Input disabled={true} />
+							)}
+						</FormItem>
+					</Row>
+					<Row>
+						<FormItem label='三方下单平台' {...formItemLayout}>
+							{getFieldDecorator('cooperation_platform_name')(
 								<Input disabled={true} />
 							)}
 						</FormItem>
@@ -142,28 +178,28 @@ class Modification extends React.Component {
 					</Row>
 					{type == 'prePay' && <Row>
 						<FormItem label='需求ID' {...formItemLayout}>
-							{getFieldDecorator('reservation_requirement_id')(
+							{getFieldDecorator('requirement_id')(
 								<Input disabled={true} />
 							)}
 						</FormItem>
 					</Row>}
 					{type == 'prePay' && <Row>
 						<FormItem label='需求名称' {...formItemLayout}>
-							{getFieldDecorator('reservation_requirement_name')(
+							{getFieldDecorator('requirement_name')(
 								<Input disabled={true} />
 							)}
 						</FormItem>
 					</Row>}
 					{type == 'prePay' && <Row>
 						<FormItem label='公司简称' {...formItemLayout}>
-							{getFieldDecorator('company_name')(
+							{getFieldDecorator('requirement_company_name')(
 								<Input disabled={true} />
 							)}
 						</FormItem>
 					</Row>}
 					{type == 'prePay' && <Row>
 						<FormItem label='所属销售' {...formItemLayout}>
-							{getFieldDecorator('salesperson_name')(
+							{getFieldDecorator('requirement_sale_manager_name')(
 								<Input disabled={true} />
 							)}
 						</FormItem>
@@ -177,41 +213,55 @@ class Modification extends React.Component {
 					</Row>
 					<Row>
 						<FormItem label='收款方式' {...formItemLayout}>
-							{getFieldDecorator('receipt_way')(
+							{getFieldDecorator('payment_type_desc')(
 								<Input disabled={true} />
 							)}
 						</FormItem>
 					</Row>
 					<Row>
-						<FormItem label='收款户名' {...formItemLayout}>
-							{getFieldDecorator('receipt_account_name')(
+						<FormItem label='收款人名称' {...formItemLayout}>
+							{getFieldDecorator('payee_account_name')(
 								<Input disabled={true} />
 							)}
 						</FormItem>
 					</Row>
 					<Row>
-						<FormItem label='收款账号' {...formItemLayout}>
-							{getFieldDecorator('receipt_account')(
+						<FormItem label='收款人账号' {...formItemLayout}>
+							{getFieldDecorator('payee_account')(
+								<Input disabled={true} />
+							)}
+						</FormItem>
+					</Row>
+					<Row>
+						<FormItem label='开户行所在省' {...formItemLayout}>
+							{getFieldDecorator('bank_agency_province')(
+								<Input disabled={true} />
+							)}
+						</FormItem>
+					</Row>
+					<Row>
+						<FormItem label='开户行所在市' {...formItemLayout}>
+							{getFieldDecorator('bank_agency_city')(
 								<Input disabled={true} />
 							)}
 						</FormItem>
 					</Row>
 					<Row>
 						<FormItem label='开户行' {...formItemLayout}>
-							{getFieldDecorator('opening_bank')(
+							{getFieldDecorator('bank')(
 								<Input disabled={true} />
 							)}
 						</FormItem>
 					</Row>
 					<Row>
 						<FormItem label='开户支行' {...formItemLayout}>
-							{getFieldDecorator('opening_bank_branch')(
+							{getFieldDecorator('bank_agency')(
 								<Input disabled={true} />
 							)}
 						</FormItem>
 					</Row><Row>
 						<FormItem label='申请时间' {...formItemLayout}>
-							{getFieldDecorator('application_time')(
+							{getFieldDecorator('created_at')(
 								<Input disabled={true} />
 							)}
 						</FormItem>
@@ -230,41 +280,55 @@ class Modification extends React.Component {
 							)}
 						</FormItem>
 					</Row>
-					<Row>
+					{token && <Row>
 						<FormItem label='打款成功截图' {...formItemLayout}>
 							{getFieldDecorator('payment_screenshot', {
-								rules: [{ required: true, message: '打款撤销备注为必填项!' }]
+								rules: [{ required: payment_status == 2, message: '打款撤销备注为必填项!' }],
+								valuePropName: 'fileList',
+								getValueFromEvent: e => e.fileList
 							})(
-								<Input />
+								<OssUpload
+									len={5}
+									listType="picture-card"
+									authToken={token}
+									rule={{
+										bizzCode: 'TRINITY_PROOF_PAYMENT_IMG_UPLOAD',
+										suffix: "bmp,jpg,jpeg,gif,png",
+										max: 5
+									}}
+									multiple={true}
+									disabled={payment_status != 2}
+								>
+								</OssUpload>
 							)}
 						</FormItem>
-					</Row>
+					</Row>}
 					<Row>
 						<FormItem label='打款备注' {...formItemLayout}>
 							{getFieldDecorator('payment_remark', {
-								rules: [{ required: true, message: '打款撤销备注为必填项!' }]
+								rules: [{ required: payment_status == (2 || 3), message: '打款撤销备注为必填项!' }]
 							})(
-								<Input />
+								<Input disabled={payment_status != (2 || 3)} />
 							)}
 						</FormItem>
 					</Row>
 					<Row>
 						<FormItem label='付款公司' {...formItemLayout}>
-							{getFieldDecorator('payment_company')(
+							{getFieldDecorator('payment_company_name')(
 								<Input disabled={true} />
 							)}
 						</FormItem>
 					</Row>
 					<Row>
 						<FormItem label='回票方式' {...formItemLayout}>
-							{getFieldDecorator('invoice_way_desc')(
+							{getFieldDecorator('return_invoice_type_desc')(
 								<Input disabled={true} />
 							)}
 						</FormItem>
 					</Row>
 					<Row>
 						<FormItem label='应回发票' {...formItemLayout}>
-							{getFieldDecorator('invoice_amount')(
+							{getFieldDecorator('return_invoice_amount')(
 								<Input disabled={true} />
 							)}
 						</FormItem>
@@ -284,24 +348,24 @@ class Modification extends React.Component {
 					</Row>
 					{type == 'prePay' && <Row>
 						<FormItem label='主账号' {...formItemLayout}>
-							{getFieldDecorator('user_name')(
+							{getFieldDecorator('main_user_name')(
 								<Input disabled={true} />
 							)}
 						</FormItem>
 					</Row>}
 					{type == 'prePay' && <Row>
 						<FormItem label='媒介经理' {...formItemLayout}>
-							{getFieldDecorator('media_manager_name')(
+							{getFieldDecorator('media_user_name')(
 								<Input disabled={true} />
 							)}
 						</FormItem>
 					</Row>}
 					<Row>
 						<FormItem label='打款撤销备注' {...formItemLayout}>
-							{getFieldDecorator('payment_backout_reason', {
-								rules: [{ required: true, message: '打款撤销备注为必填项!' }]
+							{getFieldDecorator('payment_revoke_reason', {
+								rules: [{ required: payment_status == 4, message: '打款撤销备注为必填项!' }]
 							})(
-								<Input />
+								<Input disabled={payment_status != 4} />
 							)}
 						</FormItem>
 					</Row>
@@ -319,7 +383,7 @@ class Modification extends React.Component {
 
 const mapStateToProps = (state) => {
 	return {
-		prePayDetail: state.trinityPay.prePayDetail,
+		payDetail: state.trinityPay.payDetail,
 	}
 }
 const mapDispatchToProps = dispatch => ({

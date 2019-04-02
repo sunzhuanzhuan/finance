@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as relatedInvoiceAction from "../actions/relatedInvoice";
-import SearForm from '../../components/SearchForm'
+import RelatedModal from '../components/reletedModal'
 import Statistics from '../components/Statistics'
 import { Table, message, Button, Icon } from 'antd'
 import { relatedInvoiceSearchFunc } from '../constants/search'
@@ -15,7 +15,8 @@ class RelatedInvoice extends React.Component {
 		super();
 		this.state = {
 			loading: false,
-			pullReady: false
+			pullReady: false,
+			visible: false
 		}
 	}
 	componentDidMount() {
@@ -66,39 +67,49 @@ class RelatedInvoice extends React.Component {
 	handleBack = () => {
 		this.props.history.goBack()
 	}
+	handleModal = (boolean) => {
+		this.setState({ visible: boolean })
+	}
 	render() {
 		const search = qs.parse(this.props.location.search.substring(1));
-		const { loading, pullReady } = this.state;
+		const { loading, pullReady, visible } = this.state;
 		const { relatedInvoiceData: { associated_list = [], list = [], page, page_size = 20, total, statistic }, relatedInvoiceSearchItem } = this.props;
 		const relatedInvoiceSearch = relatedInvoiceSearchFunc(relatedInvoiceSearchItem);
 		const readyRelatedCols = readyRelatedFunc(this.handleCancel);
 		const relatedInvoiceCols = relatedInvoiceFunc(this.handleSubmit);
+		const paginationObj = {
+			onChange: (current) => {
+				this.queryData({ ...search.keys, page: current, page_size });
+			},
+			onShowSizeChange: (current, size) => {
+				this.queryData({ ...search.keys, page: 1, page_size: size });
+			},
+			total: parseInt(total),
+			current: parseInt(page),
+			pageSize: parseInt(page_size),
+			showQuickJumper: true,
+			showSizeChanger: true,
+			pageSizeOptions: ['20', '50', '100', '200']
+		};
 		return <div className='relatedInvoice-container'>
 			<legend className='container-title'><Icon type="left-circle" onClick={this.handleBack} /><span className='left-gap'>关联发票</span></legend>
 			<Statistics title={'统计项'} render={Stat(total, statistic)} />
-			<Table
-				rowKey='invoice_number'
-				loading={loading}
-				columns={readyRelatedCols}
-				dataSource={associated_list}
-				bordered
-				pagination={false}
-			/>
-			{/* <fieldset className='fieldset_css'>
-				<legend>查询</legend>
-				{pullReady && <SearForm data={relatedInvoiceSearch} getAction={this.queryData} responseLayout={{ xs: 24, sm: 12, md: 8, lg: 6, xxl: 6 }} />}
-			</fieldset>
-			<fieldset className='fieldset_css'>
-				<legend>发票列表</legend>
+			<div className='top-gap'>
 				<Table
 					rowKey='invoice_number'
 					loading={loading}
-					columns={relatedInvoiceCols}
-					dataSource={list}
+					columns={readyRelatedCols}
+					dataSource={associated_list}
 					bordered
-					pagination={false}
+					pagination={total > page_size ? paginationObj : false}
 				/>
-			</fieldset> */}
+			</div>
+			{visible && <RelatedModal visible={visible} pullReady={pullReady}
+
+			>
+
+			</RelatedModal>}
+
 		</div>
 	}
 }
@@ -121,5 +132,6 @@ function Stat(total, statistic) {
 		<span className='left-gap'>已打款金额：<span className='red-font little-left-gap'>{statistic && statistic.paid_amount_total}</span>元</span>
 		<span className='left-gap'>应回发票金额：<span className='red-font little-left-gap'>{statistic && statistic.return_invoice_amount_total}</span>元</span>
 		<span className='left-gap'>发票盈余：<span className='red-font little-left-gap'>{statistic && statistic.invoice_surplus_total}</span>元</span>
+		<Button className='left-gap' type='primary'>选择发票</Button>
 	</div>
 }

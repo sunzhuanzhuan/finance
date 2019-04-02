@@ -22,7 +22,7 @@ export const relatedInvoiceSearchFunc = ({ platform, agent }) => [
 			allowClear: true
 		},
 		field: {
-			label: '代理商',
+			label: '三方代理商',
 			value: 'agent_id',
 		},
 		selectOptionsChildren: agent
@@ -45,8 +45,8 @@ export const relatedInvoiceSearchFunc = ({ platform, agent }) => [
 			style: { width: 160 }
 		},
 		field: {
-			label: '发票号',
-			value: 'id',
+			label: '发票抬头',
+			value: 'invoice_title',
 		}
 	}
 ];

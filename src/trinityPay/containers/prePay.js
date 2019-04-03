@@ -5,6 +5,7 @@ import * as trinityPayAction from "../actions";
 import SearForm from '../../components/SearchForm'
 import Statistics from '../components/Statistics'
 import PreModal from '../components/modal'
+import getPagination from '../components/pagination'
 import { Table, message, Button } from 'antd'
 import { prePaySearchFunc } from '../constants/search'
 import { prePayFunc } from '../constants'
@@ -86,20 +87,7 @@ class PrePay extends React.Component {
 		const { prePayData: { list = [], page, page_size = 20, total, statistic }, paySearchItem } = this.props;
 		const prePaySearch = prePaySearchFunc(paySearchItem, agent, this.handleFetchPlatform, this.handleFetchAccount);
 		const prePayCols = prePayFunc(this.handleModal);
-		const paginationObj = {
-			onChange: (current) => {
-				this.queryData({ ...search.keys, page: current, page_size });
-			},
-			onShowSizeChange: (current, size) => {
-				this.queryData({ ...search.keys, page: 1, page_size: size });
-			},
-			total: parseInt(total),
-			current: parseInt(page),
-			pageSize: parseInt(page_size),
-			showQuickJumper: true,
-			showSizeChanger: true,
-			pageSizeOptions: ['20', '50', '100', '200']
-		};
+		const paginationObj = getPagination(this, search, { total, page, page_size });
 		return <div className='prePay-container'>
 			<Statistics title={'三方平台打款单'} render={Stat(total, statistic)} />
 			<fieldset className='fieldset_css'>

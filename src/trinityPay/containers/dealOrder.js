@@ -4,6 +4,7 @@ import { bindActionCreators } from "redux";
 import * as trinityPayAction from "../actions";
 import SearForm from '../../components/SearchForm'
 import Statistics from '../components/Statistics'
+import getPagination from '../components/pagination'
 import { Table, message, Button } from 'antd'
 import { dealOrderSearchFunc } from '../constants/search'
 import { dealOrderCols } from '../constants'
@@ -74,20 +75,7 @@ class DealOrder extends React.Component {
 		const { loading, pullReady, agent } = this.state;
 		const { dealOrderData: { list = [], page, page_size = 20, total, statistic }, paySearchItem } = this.props;
 		const dealOrderSearch = dealOrderSearchFunc(paySearchItem, agent, this.handleFetchPlatform);
-		const paginationObj = {
-			onChange: (current) => {
-				this.queryData({ ...search.key, page: current, page_size });
-			},
-			onShowSizeChange: (current, size) => {
-				this.queryData({ ...search.key, page: 1, page_size: size });
-			},
-			total: parseInt(total),
-			current: parseInt(page),
-			pageSize: parseInt(page_size),
-			showQuickJumper: true,
-			showSizeChanger: true,
-			pageSizeOptions: ['20', '50', '100', '200']
-		};
+		const paginationObj = getPagination(this, search, { total, page, page_size });
 		return <div className='dealOrder-container'>
 			<Statistics title={'三方平台交易明细'} render={Stat(total, statistic)} />
 			<fieldset className='fieldset_css'>
@@ -96,12 +84,12 @@ class DealOrder extends React.Component {
 			</fieldset>
 			<div className='top-gap'>
 				<Table
-					rowKey='wby_order_id'
+					rowKey='id'
 					loading={loading}
 					columns={dealOrderCols}
 					dataSource={list}
 					bordered
-					pagination={list.length ? paginationObj : false}
+					pagination={total > page_size ? paginationObj : false}
 				/>
 			</div>
 		</div>

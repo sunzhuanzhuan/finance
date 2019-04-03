@@ -34,10 +34,13 @@ class SearchForm extends React.PureComponent {
 		const search = qs.parse(this.props.location.search.substring(1));
 		const { setFieldsValue } = this.props.form;
 		const obj = {};
-		let timeKeys = {};
 		const keys = search.keys || {};
-		if (data) data.forEach(item => { timeKeys = { ...timeKeys, ...this.keyMapToTime(item) } });
 		const labels = search.labels ? Object.keys(search.labels) : [];
+
+		const timeKeys = data ? data.reduce((data, current) => {
+			return { ...data, ...this.keyMapToTime(current) }
+		}, {}) : {};
+
 		labels.length > 0 ? labels.forEach(item => {
 			obj[item] = { key: search.keys[item], label: search.labels[item] }
 		}) : null;

@@ -1,6 +1,6 @@
 import React from 'react'
-import { Input, Button } from 'antd'
-export const readyRelatedFunc = (handleCancel) => [
+import { InputNumber, Button } from 'antd'
+export const relatedInvoiceFunc = (handleDel) => [
 	{
 		title: '发票号',
 		dataIndex: 'invoice_number',
@@ -17,8 +17,8 @@ export const readyRelatedFunc = (handleCancel) => [
 	},
 	{
 		title: '三方代理商',
-		dataIndex: 'agent_name',
-		key: 'agent_name',
+		dataIndex: 'business_account_name',
+		key: 'business_account_name',
 		align: 'center',
 		width: 100
 
@@ -33,8 +33,8 @@ export const readyRelatedFunc = (handleCancel) => [
 	},
 	{
 		title: '本次使用金额',
-		dataIndex: 'used_amount',
-		key: 'used_amount',
+		dataIndex: 'use_amount',
+		key: 'use_amount',
 		align: 'center',
 		width: 100
 	},
@@ -53,12 +53,12 @@ export const readyRelatedFunc = (handleCancel) => [
 		width: 100,
 		render: (text, record) => {
 			return <Button type='primary' onClick={() => {
-				handleCancel(record.invoice_number)
+				handleDel(record.invoice_number)
 			}}>删除</Button>
 		}
 	}
 ];
-export const relatedInvoiceFunc = (handleSubmit) => [
+export const availableInvoiceFunc = (selectedRowKeys, handleChange) => [
 	{
 		title: '发票号',
 		dataIndex: 'invoice_number',
@@ -75,8 +75,8 @@ export const relatedInvoiceFunc = (handleSubmit) => [
 	},
 	{
 		title: '三方代理商',
-		dataIndex: 'agent_name',
-		key: 'agent_name',
+		dataIndex: 'business_account_name',
+		key: 'business_account_name',
 		align: 'center',
 		width: 100
 	},
@@ -109,21 +109,11 @@ export const relatedInvoiceFunc = (handleSubmit) => [
 		width: 100,
 		render: (text, record) => {
 			return <div>
-				<Input id={`${record.invoice_number}`} />
-				{/* <p className={`red-font ${record.invoice_number}`} style={{ display: 'none', margin: 0 }}>请输入正确的金额!</p> */}
+				<InputNumber id={`${record.invoice_number}`} formatter={value => `${value}`.replace(/[^\d||.]/g, '')} disabled={selectedRowKeys.includes(record.invoice_number)} onChange={(value) => {
+					handleChange(value, record);
+				}} />
+				<p className={`red-font ${record.invoice_number}`} style={{ display: 'none', margin: 0 }}>使用金额应小于发票余额!</p>
 			</div>
-		}
-	},
-	{
-		title: '操作',
-		dataIndex: 'action',
-		key: 'action',
-		align: 'center',
-		width: 100,
-		render: (text, record) => {
-			return <Button type='primary' onClick={() => {
-				handleSubmit(record.invoice_number)
-			}}>使用</Button>
 		}
 	}
 ];

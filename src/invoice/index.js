@@ -15,6 +15,7 @@ const AssociateInvoice = lazyLoadComponent(() => import('./containers/associateI
 //import modifiedUpload = lazyLoadComponent(() => import('./containers/uploadModified'))
 //import newInvoice = lazyLoadComponent(() => import('./containers/newInvoice'))
 const RelatedInvoice = lazyLoadComponent(() => import('./containers/relatedInvoice'))
+const RelatedChooseInvoice = lazyLoadComponent(() => import('./containers/relatedChooseInvoice'))
 const TrinityInvoice = lazyLoadComponent(() => import('./containers/trinityInvoice'))
 class Invoice extends Component {
 	constructor(props) {
@@ -35,6 +36,7 @@ class Invoice extends Component {
 				<Route path="/finance/invoice/associateInvoice" component={AssociateInvoice}></Route>
 				{/* <Route path="/invoice/tan" component={newInvoice}></Route> */}
 				<Route path="/finance/invoice/relatedInvoice" component={RelatedInvoice}></Route>
+				<Route path="/finance/invoice/relatedChooseInvoice" component={RelatedChooseInvoice}></Route>
 				<Route path="/finance/invoice/trinityInvoice" component={TrinityInvoice}></Route>
 			</div>
 		);

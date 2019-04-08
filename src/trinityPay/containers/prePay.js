@@ -5,7 +5,7 @@ import * as trinityPayAction from "../actions";
 import SearForm from '../../components/SearchForm'
 import Statistics from '../components/Statistics'
 import PreModal from '../components/modal'
-import getPagination from '../components/pagination'
+import getPagination from '../../components/pagination'
 import { Table, message, Button } from 'antd'
 import { prePaySearchFunc } from '../constants/search'
 import { prePayFunc } from '../constants'

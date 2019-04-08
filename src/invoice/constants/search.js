@@ -1,17 +1,14 @@
-export const relatedInvoiceSearchFunc = ({ platform, agent }) => [
+export const relatedInvoiceSearchFunc = ({ agent, invoice_title }) => [
 	{
-		ctype: 'select',
+		ctype: 'input',
 		attr: {
-			placeholder: '不限',
-			style: { width: 160 },
-			labelInValue: true,
-			allowClear: true
+			placeholder: '请输入',
+			style: { width: 160 }
 		},
 		field: {
-			label: '平台',
-			value: 'platform_id',
-		},
-		selectOptionsChildren: platform
+			label: '发票号',
+			value: 'invoice_number',
+		}
 	},
 	{
 		ctype: 'select',
@@ -23,7 +20,7 @@ export const relatedInvoiceSearchFunc = ({ platform, agent }) => [
 		},
 		field: {
 			label: '三方代理商',
-			value: 'agent_id',
+			value: 'business_account_id',
 		},
 		selectOptionsChildren: agent
 	},
@@ -39,15 +36,18 @@ export const relatedInvoiceSearchFunc = ({ platform, agent }) => [
 		}
 	},
 	{
-		ctype: 'input',
+		ctype: 'select',
 		attr: {
-			placeholder: '请输入',
-			style: { width: 160 }
+			placeholder: '不限',
+			style: { width: 160 },
+			labelInValue: true,
+			allowClear: true
 		},
 		field: {
 			label: '发票抬头',
 			value: 'invoice_title',
-		}
+		},
+		selectOptionsChildren: invoice_title
 	}
 ];
 export const trinityInvoiceSearchFunc = ({ invoice_title, invoice_type, invoice_source, agent }) => [
@@ -133,7 +133,7 @@ export const trinityInvoiceSearchFunc = ({ invoice_title, invoice_type, invoice_
 		},
 		field: {
 			label: '发票录入日期',
-			value: ['invoice_created_time_start', 'invoice_created_time_end'],
+			value: ['created_time_start', 'created_time_end'],
 		}
 	},
 	{
@@ -146,7 +146,7 @@ export const trinityInvoiceSearchFunc = ({ invoice_title, invoice_type, invoice_
 		},
 		field: {
 			label: '发票来源',
-			value: 'agent_id',
+			value: 'invoice_source',
 		},
 		selectOptionsChildren: invoice_source
 	},
@@ -160,7 +160,7 @@ export const trinityInvoiceSearchFunc = ({ invoice_title, invoice_type, invoice_
 		},
 		field: {
 			label: '三方代理商',
-			value: 'agent_id',
+			value: 'business_account_id',
 		},
 		selectOptionsChildren: agent
 	},

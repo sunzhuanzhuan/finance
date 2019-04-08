@@ -1,13 +1,17 @@
 import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
-import * as trinityPayAction from "../actions";
+import * as trinityPayAction from "../actions/trinityInvoice";
 import { Modal, message, Button, Form, Input, Select, DatePicker } from 'antd'
+import numeral from 'numeral'
+import moment from 'moment';
+import 'moment/locale/zh-cn';
+moment.locale('zh-cn');
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 const { TextArea } = Input;
-
+const format = 'YYYY-MM-DD';
 class PreModal extends React.Component {
 	constructor() {
 		super();
@@ -15,13 +19,48 @@ class PreModal extends React.Component {
 			isClick: false,
 		}
 	}
+	componentDidMount() {
+		const { status, record } = this.props;
+		if (status === 'modification') {
+			let timer = setTimeout(() => {
+				this.props.form.setFieldsValue({
+					invoice_source: parseInt(record.invoice_source),
+					invoice_number: record.invoice_number,
+					business_account_id: parseInt(record.business_account_id),
+					invoice_title: parseInt(record.invoice_title),
+					beneficiary_company: record.beneficiary_company,
+					invoice_content: record.invoice_content,
+					invoice_pure_amount: record.invoice_pure_amount,
+					invoice_tax_amount: record.invoice_tax_amount,
+					invoice_make_out_time: moment(record.invoice_make_out_time, format),
+					remark: record.remark
+				})
+				clearTimeout(timer);
+			}, 0);
+		}
+	}
 	titleMapping = (status) => {
 		const Mapping = {
-			'new': '新增发票',
-			'modification': '编辑',
-			'check': '发票信息',
+			'new': { title: '新增发票', actionName: 'postTrinityInvoiceAdd' },
+			'modification': { title: '编辑', actionName: 'postTrinityInvoiceEdit' },
 		}
 		return Mapping[status]
+	}
+	handlePureChange = e => {
+		this.pureValue = e.target.value;
+		if (e.target.value && !isNaN(this.taxValue)) {
+			this.props.form.setFieldsValue({
+				invoice_tax: numeral(this.pureValue / this.taxValue).format('0.00')
+			});
+		}
+	}
+	handleTaxChange = e => {
+		this.taxValue = e.target.value;
+		if (e.target.value && !isNaN(this.pureValue)) {
+			this.props.form.setFieldsValue({
+				invoice_tax: numeral(this.pureValue / this.taxValue).format('0.00')
+			});
+		}
 	}
 	handleModal = (content) => {
 		const { onCancel, status, type } = this.props;
@@ -43,10 +82,16 @@ class PreModal extends React.Component {
 	handleSubmit = () => {
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
-				const { search } = this.props;
-				this.props.actions.postTrinityInvoiceAdd({ ...values }).then(() => {
+				const { search, status, onCancel } = this.props;
+				const actionName = this.titleMapping(status).actionName;
+				this.props.actions[actionName]({
+					...values,
+					invoice_make_out_time: moment(values.invoice_make_out_time).format(format)
+				}).then(() => {
 					message.success('操作成功!');
-					this.props.queryAction({ ...search.keys }).catch(({ errorMsg }) => {
+					this.props.queryAction({ ...search.keys }, () => {
+						onCancel()
+					}).catch(({ errorMsg }) => {
 						message.error(errorMsg || '列表刷新失败，请重试！');
 					})
 				}).catch(({ errorMsg }) => {
@@ -67,26 +112,23 @@ class PreModal extends React.Component {
 		const options = {
 			rules: [{ required: true, message: '该项为必填项！' }],
 		}
-		const title = this.titleMapping(status);
+		const title = this.titleMapping(status).title;
 
 		return <Modal
-			wrapClassName='prePay-modal'
+			wrapClassName='trinityInvoice-modal'
 			key={status}
 			width={500}
 			title={title}
 			visible={visible}
 			maskClosable={false}
 			onCancel={onCancel}
-			footer={
-				status === 'check' ? [
-					<Button key="back" onClick={onCancel}>返回</Button>
-				] : [
-						<Button key="back" onClick={onCancel}>返回</Button>,
-						<Button key="submit" type="primary" disabled={isClick} onClick={this.handleSubmit
-						}>确认</Button>
-					]}
+			footer={[
+				<Button key="back" onClick={onCancel}>返回</Button>,
+				<Button key="submit" type="primary" disabled={isClick} onClick={this.handleSubmit
+				}>确认</Button>
+			]}
 		>
-			{(status === 'new' || status === 'modification') && <Form>
+			<Form>
 				<FormItem label='发票来源' {...formItemLayout}>
 					{getFieldDecorator('invoice_source', { ...options })(
 						<Select placeholder="请选择" style={{ width: 200 }}
@@ -103,7 +145,7 @@ class PreModal extends React.Component {
 					)}
 				</FormItem>
 				<FormItem label='三方代理商' {...formItemLayout}>
-					{getFieldDecorator('agent_id', { ...options })(
+					{getFieldDecorator('business_account_id', { ...options })(
 						<Select placeholder="请选择" style={{ width: 200 }}
 						>
 							{SearchItem && SearchItem.agent.map((item) =>
@@ -134,17 +176,17 @@ class PreModal extends React.Component {
 				</FormItem>
 				<FormItem label='发票金额' {...formItemLayout}>
 					{getFieldDecorator('invoice_pure_amount', { ...options })(
-						<Input placeholder="请输入" style={{ width: 200 }} suffix={'元'} />
+						<Input placeholder="请输入" style={{ width: 200 }} suffix={'元'} onChange={this.handlePureChange} />
 					)}
 				</FormItem>
 				<FormItem label='发票税额' {...formItemLayout}>
 					{getFieldDecorator('invoice_tax_amount', { ...options })(
-						<Input placeholder="请输入" style={{ width: 200 }} suffix={'元'} />
+						<Input placeholder="请输入" style={{ width: 200 }} suffix={'元'} onChange={this.handleTaxChange} />
 					)}
 				</FormItem>
 				{status === 'new' && <FormItem label='发票税率' {...formItemLayout}>
 					{getFieldDecorator('invoice_tax')(
-						<Input placeholder="请输入" style={{ width: 200 }} suffix={'%'} />
+						<Input placeholder="请输入" style={{ width: 200 }} suffix={'%'} disabled={true} />
 					)}
 				</FormItem>}
 				{status === 'new' && <FormItem label='发票类型' {...formItemLayout}>
@@ -159,7 +201,7 @@ class PreModal extends React.Component {
 				</FormItem>}
 				<FormItem label='开票日期' {...formItemLayout}>
 					{getFieldDecorator('invoice_make_out_time', { ...options })(
-						<DatePicker placeholder='请选择' style={{ width: 200 }} />
+						<DatePicker placeholder='请选择' format={format} style={{ width: 200 }} />
 					)}
 				</FormItem>
 				<FormItem label='备注' {...formItemLayout}>
@@ -167,9 +209,7 @@ class PreModal extends React.Component {
 						<TextArea placeholder='非必输' autosize={{ minRows: 4, maxRows: 6 }} maxLength={50} />
 					)}
 				</FormItem>
-			</Form>}
-			{status === 'check' && 111}
-
+			</Form>
 		</Modal>
 	}
 }

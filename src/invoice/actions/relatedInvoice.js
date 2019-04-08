@@ -10,6 +10,14 @@ export const {
 });
 
 export const {
+	getAvailableInvoiceData,
+	getAvailableInvoiceData_success
+} = createHttpAction('getAvailableInvoiceData', Interface.getAvailableInvoiceData, {
+	method: 'get',
+	ignoreToast: true
+});
+
+export const {
 	getRelatedInvoiceSearchItem,
 	getRelatedInvoiceSearchItem_success
 } = createHttpAction('getRelatedInvoiceSearchItem', Interface.getRelatedInvoiceSearchItem, {

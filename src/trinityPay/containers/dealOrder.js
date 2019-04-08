@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import * as trinityPayAction from "../actions";
 import SearForm from '../../components/SearchForm'
 import Statistics from '../components/Statistics'
-import getPagination from '../components/pagination'
+import getPagination from '../../components/pagination'
 import { Table, message, Button } from 'antd'
 import { dealOrderSearchFunc } from '../constants/search'
 import { dealOrderCols } from '../constants'

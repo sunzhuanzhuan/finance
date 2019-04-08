@@ -5,7 +5,7 @@ import * as trinityPayAction from "../actions";
 import SearForm from '../../components/SearchForm'
 import Statistics from '../components/Statistics'
 import DateModal from '../components/modal'
-import getPagination from '../components/pagination'
+import getPagination from '../../components/pagination'
 import { Table, message, Button } from 'antd'
 import { datePaySearchFunc } from '../constants/search'
 import { datePayFunc } from '../constants'

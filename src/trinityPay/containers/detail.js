@@ -23,7 +23,6 @@ class Detail extends React.Component {
 		this.queryData({ payment_slip_id: search.payment_slip_id });
 	}
 	queryData = (obj, func) => {
-		const { type } = qs.parse(this.props.location.search.substring(1));
 		this.setState({ loading: true });
 		return this.props.actions.getPayDetail({ ...obj }).then(() => {
 			if (func && Object.prototype.toString.call(func) === '[object Function]') {

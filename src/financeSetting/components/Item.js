@@ -15,13 +15,13 @@ class Item extends React.PureComponent {
 		this.setState({ visible: boolean })
 	}
 	handleSubmit = () => {
+		const { onSubmit } = this.props;
 		const values = this.form.props.form.getFieldsValue();
-		console.log('%cvalue: ', 'color: MidnightBlue; background: Aquamarine; font-size: 20px;', values);
-		const params = {};
+		const obj = { ...values }, params = {};
+		delete obj['keys'];
 		params['platformId'] = this.props.data.platformId;
-		params['trinityProfitRateDTOS'] = Object.values(values).map(item => ({ ...item, rate: item.rate / 100, validParams: true }));
-		console.log('%cparams: ', 'color: MidnightBlue; background: Aquamarine; font-size: 20px;', params);
-
+		params['trinityProfitRateDTOS'] = Object.values(obj).map(item => ({ ...item, rate: item.rate / 100, validParams: true }));
+		onSubmit('modify', params);
 	}
 	render() {
 		const { platformId, platformName, trinityProfitRates } = this.props.data;

@@ -4,6 +4,7 @@ import { bindActionCreators } from "redux";
 import * as settingAction from "../actions";
 import { message, Button } from 'antd'
 import Item from '../components/Item'
+import NewItem from '../components/newItem'
 import './financeSetting.less'
 import qs from 'qs'
 
@@ -11,7 +12,7 @@ class Setting extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-
+			visible: false
 		}
 	}
 	componentDidMount() {
@@ -24,20 +25,37 @@ class Setting extends React.Component {
 			if (func && Object.prototype.toString.call(func) === '[object Function]') {
 				func();
 			}
-			this.setState({ loading: false })
+			this.setState({ loading: false });
 		}).catch(({ errorMsg }) => {
 			this.setState({ loading: false });
 			message.error(errorMsg || '平台配置获取失败，请重试！');
 		})
 	}
+	handleAdd = () => {
+		this.setState({ visible: true });
+	}
+	handleCancel = () => {
+		this.setState({ visible: false });
+	}
+	handleSubmit = (type, params) => {
+		const actionName = type === 'add' ? 'postTrinityProfitRateAdd' : type === 'modify' ? 'postTrinityProfitRateModify' : '';
+		return this.props.actions[actionName]({ ...params }).then(() => {
+			this.queryData();
+			message.success('操作成功！');
+		}).catch(({ errorMsg }) => {
+			message.error(errorMsg || '平台配置获取失败，请重试！');
+		})
+	}
 	render() {
 		const { trinityProfitRateAll } = this.props;
+		const { visible } = this.state;
 		return <div className='setting-container'>
 			<div>
-				<Button type='primary'>新增平台</Button>
+				<Button type='primary' onClick={this.handleAdd}>新增平台</Button>
 				<span className='left-gap' style={{ color: '#999999' }}>说明：此处设置的是微播易三方订单，当报价模式为利润率时，计算账号报价阳价时的利润率</span>
 			</div>
-			{trinityProfitRateAll.map(item => (<Item key={item.platformId} data={item} />))}
+			{visible && <NewItem onCancel={this.handleCancel} onSubmit={this.handleSubmit} />}
+			{trinityProfitRateAll.map(item => (<Item key={item.platformId} data={item} onSubmit={this.handleSubmit} />))}
 		</div>
 	}
 }

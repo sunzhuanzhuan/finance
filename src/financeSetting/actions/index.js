@@ -9,6 +9,13 @@ export const {
 });
 
 export const {
+	getTrinityCompanyList,
+	getTrinityCompanyList_success
+} = createHttpAction('getTrinityCompanyList', Interface.getTrinityCompanyList, {
+	method: 'get'
+});
+
+export const {
 	postTrinityProfitRateAdd,
 	postTrinityProfitRateAdd_success
 } = createHttpAction('postTrinityProfitRateAdd', Interface.postTrinityProfitRateAdd, {

@@ -25,7 +25,7 @@ class NewItem extends React.PureComponent {
 		onSubmit('add', params);
 	}
 	render() {
-		const { onCancel } = this.props;
+		const { onCancel, companyList } = this.props;
 		return <div className='top-gap setting-new-item'>
 			< div className='setting-title' >
 				<div>
@@ -44,10 +44,7 @@ class NewItem extends React.PureComponent {
 							placeholder='请选择平台'
 							onChange={this.handleChange}
 						>
-							<Option value="1">1</Option>
-							<Option value="2">2</Option>
-							<Option value="3">3</Option>
-							<Option value="4">4</Option>
+							{companyList.map(item => (<Option value={item.id} key={item.id}>{item.platformName}</Option>))}
 						</Select>
 					</div>
 				</div>

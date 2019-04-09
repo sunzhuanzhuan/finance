@@ -57,7 +57,7 @@ class RelatedChooseInvoice extends React.Component {
 	handleChange = (value, record) => {
 		if (parseFloat(value) > parseFloat(record.rest_amount)) {
 			document.getElementsByClassName(record.invoice_number)[0].style.display = 'block';
-			console.log('%cdocument.getElementsByTagName(tr): ', 'color: MidnightBlue; background: Aquamarine; font-size: 20px;', document.getElementsByTagName('tr'));
+			console.log('%cdocument.getElementsByTagName(tr): ', 'color: MidnightBlue; background: Aquamarine; font-size: 20px;', document.getElementsByTagName('tr')).get;
 			// document.getElementsByTagName('tr').forEach(item => {
 
 			// 	if (item.getAttribute('data-row-key') == record.invoice_number) {
@@ -113,7 +113,7 @@ class RelatedChooseInvoice extends React.Component {
 					pagination={total > page_size ? paginationObj : false}
 					rowSelection={rowSelectionObj}
 					footer={() => {
-						return <span className='left-gap'>已选发票金额：<span className='red-font'>{numeral(totalPrice).format('0,0')}</span></span>
+						return <span className='left-gap'>已选发票金额：<span className='red-font'>{numeral(totalPrice).format('0,0') || 0}</span></span>
 						// return <WBYTableFooter
 						// 	plainOptions={list}
 						// 	selectedRowKeys={flag ? listKeys : []}

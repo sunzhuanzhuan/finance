@@ -18,6 +18,7 @@ class Setting extends React.Component {
 	componentDidMount() {
 		const search = qs.parse(this.props.location.search.substring(1));
 		this.queryData({ ...search.keys });
+		this.props.actions.getTrinityCompanyList();
 	}
 	queryData = (obj, func) => {
 		this.setState({ loading: true });
@@ -47,14 +48,14 @@ class Setting extends React.Component {
 		})
 	}
 	render() {
-		const { trinityProfitRateAll } = this.props;
+		const { trinityProfitRateAll, trinityCompanyList } = this.props;
 		const { visible } = this.state;
 		return <div className='setting-container'>
 			<div>
 				<Button type='primary' onClick={this.handleAdd}>新增平台</Button>
 				<span className='left-gap' style={{ color: '#999999' }}>说明：此处设置的是微播易三方订单，当报价模式为利润率时，计算账号报价阳价时的利润率</span>
 			</div>
-			{visible && <NewItem onCancel={this.handleCancel} onSubmit={this.handleSubmit} />}
+			{visible && <NewItem onCancel={this.handleCancel} onSubmit={this.handleSubmit} companyList={trinityCompanyList} />}
 			{trinityProfitRateAll.map(item => (<Item key={item.platformId} data={item} onSubmit={this.handleSubmit} />))}
 		</div>
 	}
@@ -63,6 +64,7 @@ class Setting extends React.Component {
 const mapStateToProps = (state) => {
 	return {
 		trinityProfitRateAll: state.trinityProfitRate.trinityProfitRateAll,
+		trinityCompanyList: state.trinityProfitRate.trinityCompanyList,
 	}
 }
 const mapDispatchToProps = dispatch => ({

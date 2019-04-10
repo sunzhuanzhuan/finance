@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button } from 'antd'
+import { Button, message, Modal } from 'antd'
 import FormList from './FormList'
 import { WBYPlatformIcon } from 'wbyui'
 import numeral from 'numeral'
@@ -19,9 +19,36 @@ class Item extends React.PureComponent {
 		const values = this.form.props.form.getFieldsValue();
 		const obj = { ...values }, params = {};
 		delete obj['keys'];
-		params['platformId'] = this.props.data.platformId;
-		params['trinityProfitRates'] = Object.values(obj).map(item => ({ ...item, rate: item.rate / 100, validParams: true }));
-		onSubmit('modify', params, () => { this.setState({ visible: false }) });
+		const data = Object.values(obj);
+		for (let i = 0; i < data.length; i++) {
+			let item = data[i];
+			if (item['min'] === '' || item['max'] === '') {
+				message.error('有未填写的区间输入框', 3);
+				return
+			}
+			if (!(/^(0||[1-9][0-9]*)$/.test(item['min']) && /^(0||[1-9][0-9]*)$/.test(item['max']))) {
+				message.error('区间必须为整数', 3);
+				return
+			}
+			if (!item['rate']) {
+				message.error('有未填写的利润率输入框', 3);
+				return
+			}
+			if (!(item['rate'] >= -30 && item['rate'] <= 100) || !(/^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/.test(item['rate']))) {
+				message.error('利润率需为[-30,100]之间的两位小数', 3);
+				return
+			}
+		}
+		Modal.confirm({
+			title: '',
+			content: '新订单将按照修改后的利润率计算报价，确定修改该平台的利润率吗？',
+			onOk() {
+				params['platformId'] = this.props.data.platformId;
+				params['trinityProfitRates'] = Object.values(obj).map(item => ({ ...item, rate: item.rate / 100, validParams: true }));
+				onSubmit('modify', params, () => { this.setState({ visible: false }) });
+			},
+			onCancel() { },
+		})
 	}
 	render() {
 		const { platformId, platformName, trinityProfitRates } = this.props.data;

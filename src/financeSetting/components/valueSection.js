@@ -56,7 +56,7 @@ class ValueSection extends React.Component {
 						)}
 					</FormItem>
 					{(keys.length > 1 && index >= 1) && <a href="javascript:;" className='left-gap remove-btn' onClick={() => this.handleRemove(k)}>删除</a>}
-					{(index == keys.length - 1) && <div className='little-left-gap'>
+					{((index == keys.length - 1) && index < 9) && <div className='little-left-gap'>
 						<a href='javascript:;' onClick={this.handleAdd}>添加更多</a>
 					</div>}
 				</div>

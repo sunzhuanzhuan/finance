@@ -38,9 +38,14 @@ class Setting extends React.Component {
 	handleCancel = () => {
 		this.setState({ visible: false });
 	}
-	handleSubmit = (type, params) => {
+	handleSubmit = (type, params, func) => {
 		const actionName = type === 'add' ? 'postTrinityProfitRateAdd' : type === 'modify' ? 'postTrinityProfitRateModify' : '';
 		return this.props.actions[actionName]({ ...params }).then(() => {
+			if (func) {
+				func();
+			} else {
+				this.handleCancel();
+			}
 			this.queryData();
 			message.success('操作成功！');
 		}).catch(({ errorMsg }) => {

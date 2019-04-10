@@ -12,14 +12,6 @@ module.exports = merge(baseConfig, {
 		hot: true,
 		host: 'lg.nip.io',
 		proxy: {
-			"/api/platform/v1/queryPlatformList": {
-				target: "http://weiboyi-common-service-test.192.168.100.203.nip.io",
-				changeOrigin: true
-			},
-			"/api/price/finance": {
-				target: "http://192.168.20.51:7300/mock/5c98a76a73f3100017a642ff",
-				changeOrigin: true
-			},
 			"/api/finance/invoice": {
 				target: "http://192.168.20.51:7300/mock/5c8752f273f3100017a641f5",
 				changeOrigin: true

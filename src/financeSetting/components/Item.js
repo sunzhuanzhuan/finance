@@ -21,7 +21,7 @@ class Item extends React.PureComponent {
 		delete obj['keys'];
 		params['platformId'] = this.props.data.platformId;
 		params['trinityProfitRates'] = Object.values(obj).map(item => ({ ...item, rate: item.rate / 100, validParams: true }));
-		onSubmit('modify', params);
+		onSubmit('modify', params, () => { this.setState({ visible: false }) });
 	}
 	render() {
 		const { platformId, platformName, trinityProfitRates } = this.props.data;

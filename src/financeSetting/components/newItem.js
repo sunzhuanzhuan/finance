@@ -21,7 +21,7 @@ class NewItem extends React.PureComponent {
 		const obj = { ...values }, params = {};
 		delete obj['keys'];
 		params['platformId'] = value;
-		params['trinityProfitRateDTOS'] = Object.values(obj).map(item => ({ ...item, rate: item.rate / 100, validParams: true }));
+		params['trinityProfitRates'] = Object.values(obj).map(item => ({ ...item, rate: item.rate / 100, validParams: true }));
 		onSubmit('add', params);
 	}
 	render() {

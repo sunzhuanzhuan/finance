@@ -43,6 +43,12 @@ class NewItem extends React.PureComponent {
 						<Select style={{ marginLeft: '10px', width: 166 }}
 							placeholder='请选择平台'
 							onChange={this.handleChange}
+							getPopupContainer={() => document.querySelector('.value-section')}
+							allowClear
+							showSearch
+							filterOption={(input, option) => (
+								option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+							)}
 						>
 							{companyList.map(item => (<Option value={item.id} key={item.id}>{item.platformName}</Option>))}
 						</Select>
@@ -55,8 +61,8 @@ class NewItem extends React.PureComponent {
 						<div className='form-explain little-top-gap'>
 							<span className='little-left-gap'>说明：</span>
 							<ul>
-								<li>利润率数值设置必须覆盖所有区间即0元至99999元，可设置多个区间多个利润率。</li>
-								<li>利润率区间均为包含关系，例如。0元至9999元，指的是包含0元且包含9999元。</li>
+								<li>利润率数值设置必须覆盖所有区间即0元至9999999元，可设置多个区间多个利润率。</li>
+								<li>利润率区间均为包含关系，例如。0元至9999999元，指的是包含0元且包含9999999元。</li>
 							</ul>
 						</div>
 					</div>

@@ -21,8 +21,13 @@ class NewItem extends React.PureComponent {
 		const obj = { ...values }, params = {};
 		delete obj['keys'];
 		const data = Object.values(obj);
+
 		for (let i = 0; i < data.length; i++) {
 			let item = data[i];
+			if (!value) {
+				message.error('请先选择平台', 3);
+				return
+			}
 			if (item['min'] === '' || item['max'] === '') {
 				message.error('有未填写的区间输入框', 3);
 				return
@@ -60,7 +65,8 @@ class NewItem extends React.PureComponent {
 				<div style={{ padding: '10px 0' }}>
 					<div className='form-text'>平台名称：</div>
 					<div className='value-section'>
-						<Select style={{ marginLeft: '10px', width: 166 }}
+						<Select id='new-platform-id'
+							style={{ marginLeft: '10px', width: 166 }}
 							placeholder='请选择平台'
 							onChange={this.handleChange}
 							getPopupContainer={() => document.querySelector('.value-section')}

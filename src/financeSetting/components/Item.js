@@ -34,7 +34,7 @@ class Item extends React.PureComponent {
 				message.error('有未填写的利润率输入框', 3);
 				return
 			}
-			if (!(item['rate'] >= -30 && item['rate'] <= 100) || !(/^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/.test(item['rate']))) {
+			if (!(item['rate'] >= -30 && item['rate'] <= 100) || !(/^-?(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/.test(item['rate']))) {
 				message.error('利润率需为[-30,100]之间的两位小数', 3);
 				return
 			}
@@ -42,12 +42,11 @@ class Item extends React.PureComponent {
 		Modal.confirm({
 			title: '',
 			content: '新订单将按照修改后的利润率计算报价，确定修改该平台的利润率吗？',
-			onOk() {
+			onOk: () => {
 				params['platformId'] = this.props.data.platformId;
 				params['trinityProfitRates'] = Object.values(obj).map(item => ({ ...item, rate: item.rate / 100, validParams: true }));
 				onSubmit('modify', params, () => { this.setState({ visible: false }) });
-			},
-			onCancel() { },
+			}
 		})
 	}
 	render() {

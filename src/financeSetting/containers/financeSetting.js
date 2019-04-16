@@ -49,7 +49,7 @@ class Setting extends React.Component {
 			this.queryData();
 			message.success('操作成功！');
 		}).catch(({ errorMsg }) => {
-			message.error(errorMsg || '平台配置获取失败，请重试！');
+			message.error(errorMsg || '操作失败，请重试！');
 		})
 	}
 	render() {

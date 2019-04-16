@@ -866,7 +866,7 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 						{pre_min_sell_price.map((item, index) => {
 							return <div key={index}>
 								<div>{`${item.price_label}:${item.min_sell_price}`}</div>
-								{(flag && flag == 1) ? <div>{`(博主${item.private_min_sell_price},第三方${item.private_min_sell_price})`}</div> : null}
+								{(flag && flag == 1) ? <div>{`(博主${item.private_min_sell_price},第三方${item.public_min_sell_price})`}</div> : null}
 							</div>
 						})}
 					</div>

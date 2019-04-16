@@ -53,14 +53,16 @@ class Setting extends React.Component {
 		})
 	}
 	render() {
-		const { trinityProfitRateAll, trinityCompanyList } = this.props;
+		const { trinityProfitRateAll = [], trinityCompanyList = [] } = this.props;
+		const platformId = trinityProfitRateAll.map(item => item.platformId);
+		const companyList = trinityCompanyList.filter(item => !platformId.includes(item.id));
 		const { visible } = this.state;
 		return <div className='setting-container'>
 			<div>
 				<Button type='primary' onClick={this.handleAdd}>新增平台</Button>
 				<span className='left-gap' style={{ color: '#999999' }}>说明：此处设置的是微播易三方订单，当报价模式为利润率时，计算账号报价阳价时的利润率</span>
 			</div>
-			{visible && <NewItem onCancel={this.handleCancel} onSubmit={this.handleSubmit} companyList={trinityCompanyList} />}
+			{visible && <NewItem onCancel={this.handleCancel} onSubmit={this.handleSubmit} companyList={companyList} />}
 			{trinityProfitRateAll.map(item => (<Item key={item.platformId} data={item} onSubmit={this.handleSubmit} />))}
 		</div>
 	}

@@ -44,7 +44,7 @@ class Item extends React.PureComponent {
 			content: '新订单将按照修改后的利润率计算报价，确定修改该平台的利润率吗？',
 			onOk: () => {
 				params['platformId'] = this.props.data.platformId;
-				params['trinityProfitRates'] = Object.values(obj).map(item => ({ ...item, rate: item.rate / 100, validParams: true }));
+				params['trinityProfitRates'] = Object.values(obj).map(item => ({ ...item, rate: (item.rate / 100).toFixed(4).toString(), validParams: true }));
 				onSubmit('modify', params, () => { this.setState({ visible: false }) });
 			}
 		})

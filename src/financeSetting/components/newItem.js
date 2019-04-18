@@ -46,7 +46,7 @@ class NewItem extends React.PureComponent {
 			}
 		}
 		params['platformId'] = value;
-		params['trinityProfitRates'] = Object.values(obj).map(item => ({ ...item, rate: item.rate / 100, validParams: true }));
+		params['trinityProfitRates'] = Object.values(obj).map(item => ({ ...item, rate: (item.rate / 100).toFixed(4).toString(), validParams: true }));
 		onSubmit('add', params);
 	}
 	render() {

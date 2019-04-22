@@ -1,5 +1,5 @@
 
-import { GET_ACCOUNT_DETAIL ,GET_ACCOUNT_LIST} from '../constants/ActionType'
+import { GET_ACCOUNT_DETAIL ,SEARCH_ITEM} from '../constants/ActionType'
 import { 
 	getAccountList_success
    } from '../actions'
@@ -15,15 +15,15 @@ export const accountDetail = (state = {}, action) => {
     }
 }
 
-//获取账务列表
-// export const accountList = (state = [], action) => {
-//     switch (action.type) {
-// 		case getAccountList_success:
-//             return action.payload;
-//         default:
-//             return state;
-//     }
-// }
+// 获取账务搜索下拉
+export const searchDetail = (state = {}, action) => {
+    switch (action.type) {
+		case SEARCH_ITEM:
+            return action.payload;
+        default:
+            return state;
+    }
+}
 
 //获取账号名称模糊搜索
 export const accountList = handleActions({

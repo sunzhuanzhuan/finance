@@ -1,6 +1,6 @@
 
 import api from "../../api/index";
-import { GET_ACCOUNT_DETAIL,GET_ACCOUNT_LIST } from "../constants/ActionType";
+import { GET_ACCOUNT_DETAIL,SEARCH_ITEM } from "../constants/ActionType";
 // import Interface from '../constants/Interface';
 import { createHttpAction } from 'redux-action-extend';
 //获取账务详情
@@ -15,16 +15,16 @@ export const getAccountDetail = () => dispatch => {
 	})
 }
 //获取账务详情
-// export const getAccountList = () => dispatch => {
-// 	return api.get('/finance/order/accountList').then(response => {
-// 		const { data } = response;
-// 		dispatch({
-// 			type: GET_ACCOUNT_LIST,
-// 			payload: data
-// 		});
+export const getSearchDetail = () => dispatch => {
+	return api.get('/finance/order/searchItem').then(response => {
+		const { data } = response;
+		dispatch({
+			type: SEARCH_ITEM,
+			payload: data
+		});
 
-// 	})
-// }
+	})
+}
 export const {
 	getAccountList,
 	getAccountList_success

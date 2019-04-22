@@ -25,6 +25,7 @@ class List extends Component {
 	componentWillMount=()=>{
 		// const search = qs.parse(this.props.location.search.substring(1));
 		this.queryData({ page: 1, page_size: this.state.page_size });
+		this.props.actions.getSearchDetail()
 	}
 
 	handleNewModal=({order_id})=>{
@@ -52,9 +53,9 @@ class List extends Component {
 	render(){
 		
 		const columns = zhangListFunc(this.handleNewModal);
-		const { accountList: { list = [], page, total,page_size }}=this.props;
+		const { searchDetail,accountList: { list = [], page, total,page_size }}=this.props;
 		let {filterParams}=this.state;
-		
+		console.log(searchDetail)
 		let paginationObj = {
 			onChange: (current) => {
 				// let obj = { ...search.key, page: current, page_size  ,...filterParams}
@@ -76,6 +77,7 @@ class List extends Component {
 			questAction={this.queryData}
 			accountList={this.props.accountList}
 			page_size={page_size}
+			searchDetail={searchDetail}
 			/>
 			<div className='top-gap'>
 				<ZhangWuTable
@@ -96,6 +98,7 @@ class List extends Component {
 const mapStateToProps = (state) => {
 	return {
 		accountList: state.zhangWu.accountList,
+		searchDetail:state.zhangWu.searchDetail
 		
 	}
 }

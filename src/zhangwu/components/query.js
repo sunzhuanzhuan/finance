@@ -41,7 +41,7 @@ class ListQuery extends React.Component {
 	render() {
 		let { getFieldDecorator } = this.props.form;
 		let { searchDetail} = this.props;
-		console.log(searchDetail)
+		// console.log(searchDetail)
 		// nameList = Object.values(nameList);
 		const formItemLayout = {
 			labelCol: { span: 6 },

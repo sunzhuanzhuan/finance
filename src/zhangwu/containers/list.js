@@ -55,7 +55,7 @@ class List extends Component {
 		const columns = zhangListFunc(this.handleNewModal);
 		const { searchDetail,accountList: { list = [], page, total,page_size }}=this.props;
 		let {filterParams}=this.state;
-		console.log(searchDetail)
+		// console.log(searchDetail)
 		let paginationObj = {
 			onChange: (current) => {
 				// let obj = { ...search.key, page: current, page_size  ,...filterParams}

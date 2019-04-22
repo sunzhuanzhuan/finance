@@ -8,7 +8,7 @@ import qs from 'qs'
 import * as zhangActions from '../actions/index';
 import Query from'../components/query'
 // import { zhangListFunc } from '../constants/column';
-import { Row, Col ,Icon} from "antd";
+import { Row, Col ,Icon,Spin} from "antd";
 import './list.less'
 // import ZhangWuTable from '../components/table'
 import './detail.less'
@@ -19,7 +19,8 @@ class Detail extends Component {
 
 	}
 	componentWillMount=()=>{
-		this.props.actions.getAccountDetail()
+		const search =qs.parse(this.props.location.search.substring(1));
+		this.props.actions.getAccountDetail(search.order_id)
 	}
 	handleList=()=>{
 		// console.log(record)
@@ -30,7 +31,8 @@ class Detail extends Component {
 	render(){
 		let {detail}=this.props;
 		return<div className='detail'>
-			<Row className='titleRow'>
+		{
+			Object.keys(detail).length>0?<div><Row className='titleRow'>
 				<Col span={2} onClick={this.handleList}>
 				<Icon type="left-circle-o" />
 				<span className="title">订单详情</span>
@@ -205,10 +207,10 @@ class Detail extends Component {
 				<Col span={5} className='marLeft26'>
 					账号:{detail.account?detail.account.weibo_name:''}
 				</Col>
-				<Col span={4}>ID:{detail.account?detail.account.public_quote_price:''} </Col>
+				<Col span={3}>ID:{detail.account?detail.account.public_quote_price:''} </Col>
 				<Col span={4}>媒介经理:{detail.account?detail.account.media_manager_name:''} </Col>
 				<Col span={5}>合作方类型:{detail.account?detail.account.partner_type:''} </Col>
-				<Col span={4}>付款公司:{detail.account?detail.account.payment_company_name:''} </Col>
+				<Col span={5}>付款公司:{detail.account?detail.account.payment_company_name:''} </Col>
 				
 			</Row>
 			
@@ -327,7 +329,7 @@ class Detail extends Component {
 							<span className='padd60'>打款类型:{item.payment_type}</span>
 							
 						
-							<span className='padd60' style={{paddingLeft:'300px'}}>
+							<span className='padd60' style={{paddingLeft:'260px'}}>
 								打款金额:￥{numeral(item.payment_amount).format('0,0.00')}
 								<span className='paybackStatus'>{item.payment_status}</span>
 							</span>
@@ -335,7 +337,9 @@ class Detail extends Component {
 						</div>
 					</Row>
 				}):null
-			}
+			}</div>
+			:<Spin size="large" className="centerSpin"/>
+		}
 	</div>
 	}
 }

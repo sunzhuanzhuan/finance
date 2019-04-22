@@ -1,5 +1,5 @@
 
-import { GET_ACCOUNT_DETAIL ,SEARCH_ITEM} from '../constants/ActionType'
+import { GET_ACCOUNT_DETAIL ,SEARCH_ITEM,DETAIL_RESET} from '../constants/ActionType'
 import { 
 	getAccountList_success
    } from '../actions'
@@ -9,7 +9,9 @@ import {
 export const accountDetail = (state = {}, action) => {
     switch (action.type) {
 		case GET_ACCOUNT_DETAIL:
-            return action.payload;
+			return action.payload;
+		case DETAIL_RESET:
+			return action.payload;
         default:
             return state;
     }

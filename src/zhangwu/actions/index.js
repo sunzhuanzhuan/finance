@@ -1,6 +1,6 @@
 
 import api from "../../api/index";
-import { GET_ACCOUNT_DETAIL,SEARCH_ITEM } from "../constants/ActionType";
+import { GET_ACCOUNT_DETAIL,SEARCH_ITEM ,DETAIL_RESET} from "../constants/ActionType";
 // import Interface from '../constants/Interface';
 import { createHttpAction } from 'redux-action-extend';
 //获取账务详情
@@ -24,6 +24,14 @@ export const getSearchDetail = () => dispatch => {
 		});
 
 	})
+}
+//清空账务详情
+export const getResetDetail = () => dispatch => {
+	
+		dispatch({
+			type: DETAIL_RESET,
+			payload: {}
+		});
 }
 export const {
 	getAccountList,

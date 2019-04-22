@@ -28,14 +28,17 @@ class Detail extends Component {
 			pathname: '/finance/zhangwu/list',
 		});
 	}
+	handleResetDetail=()=>{
+		this.props.actions.getResetDetail()
+	}
 	render(){
 		let {detail}=this.props;
 		return<div className='detail'>
 		{
 			Object.keys(detail).length>0?<div><Row className='titleRow'>
-				<Col span={2} onClick={this.handleList}>
-				<Icon type="left-circle-o" />
-				<span className="title">订单详情</span>
+				<Col span={2} onClick={this.handleList} oncClick={this.handleResetDetail}>
+				<Icon type="left-circle-o" style={{cursor:'pointer'}} />
+				<span className="title" style={{cursor:'pointer'}}>订单详情</span>
 				</Col>
 				
 				

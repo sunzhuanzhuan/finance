@@ -138,6 +138,9 @@ class RemitOrderManage extends React.Component {
 			message.error(errorMsg || '加载失败，请刷新页面')
 		})
 	}
+	handleChangeStudio = () => {
+		console.log('%c1: ', 'color: MidnightBlue; background: Aquamarine; font-size: 20px;', 1);
+	}
 	render() {
 		let { newVisible, remitOrderLoading, outputVisible, remitOrderPageSize, filterParams, outputLoading, receiptsVisible, questParams } = this.state;
 		let { remitOrderData: { data, total = 20, current_page = 1, payment_slip_status_name }, excel_name_list: { title, excel } } = this.props;
@@ -168,7 +171,10 @@ class RemitOrderManage extends React.Component {
 				questAction={this.props.actions.getPaymentSlipList}
 				handlefilterParams={this.handlefilterParams}
 			></RemitQuery>
-			<Row className='topGap'><Button type='primary' onClick={this.newRemitOrder}>新建打款单</Button></Row>
+			<Row className='topGap'>
+				<Button type='primary' onClick={this.newRemitOrder}>新建打款单</Button>
+				<Button className='left-gap' type='primary' onClick={this.handleChangeStudio}>更换工作室</Button>
+			</Row>
 			<Table className='topGap'
 				rowKey='id'
 				columns={remitOrderConfig}

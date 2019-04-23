@@ -25,7 +25,7 @@ class BankCard extends React.Component {
 	}
 	render() {
 		const { getFieldDecorator } = this.props.form;
-		const { formItemLayout, bank } = this.props;
+		const { formItemLayout, bank, extra } = this.props;
 		return <div>
 			<Row>
 				<FormItem label='银行卡开户行' {...formItemLayout}>
@@ -56,6 +56,13 @@ class BankCard extends React.Component {
 					)}
 				</FormItem>
 			</Row>
+			{extra && <Row>
+				<FormItem label='开户支行' {...formItemLayout}>
+					{getFieldDecorator('e', { rules: [{ required: true, message: '请填写开户支行' }] })(
+						<Input placeholder="请输入" />
+					)}
+				</FormItem>
+			</Row>}
 			<Row>
 				<FormItem label='持卡人' {...formItemLayout}>
 					{getFieldDecorator('real_name', {

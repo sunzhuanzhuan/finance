@@ -9,7 +9,7 @@ export const studioConfigFunc = (handleStopStudio, handleStartStudio, history) =
 			key: 'id',
 			align: 'center',
 			width: 100,
-			fixed: 'left'
+			// fixed: 'left'
 		},
 		{
 			title: '状态',
@@ -60,6 +60,17 @@ export const studioConfigFunc = (handleStopStudio, handleStartStudio, history) =
 			}
 		},
 		{
+			title: '非身份证',
+			dataIndex: 'a',
+			key: 'a',
+			align: 'center',
+			width: 120,
+			render: (text) => {
+				const value = text === 1 ? '支持' : '不支持';
+				return value
+			}
+		},
+		{
 			title: '有效期',
 			dataIndex: 'validity',
 			key: 'validity',
@@ -70,7 +81,20 @@ export const studioConfigFunc = (handleStopStudio, handleStartStudio, history) =
 			}
 		},
 		{
-			title: '支付方式',
+			title: '收款方式',
+			dataIndex: 'b',
+			key: 'b',
+			align: 'center',
+			width: 140,
+			render: (text, record) => {
+				const isAlipay = record.is_support_alipay === 1;
+				const isBank = record.payment_type_id !== 0;
+				const value = isAlipay && isBank ? '支付宝&银行卡' : isAlipay ? '支付宝' : '银行卡';
+				return value
+			}
+		},
+		{
+			title: '付款支付方式',
 			dataIndex: 'payment_type',
 			key: 'payment_type',
 			align: 'center',
@@ -83,86 +107,12 @@ export const studioConfigFunc = (handleStopStudio, handleStartStudio, history) =
 			}
 		},
 		{
-			title: '总限额',
-			dataIndex: 'total_limit',
-			key: 'total_limit',
-			align: 'center',
-			width: 140,
-			render: (text) => {
-				return numeral(text / 100).format('0,0.00');
-			}
-		},
-		{
-			title: '冻结额度',
-			dataIndex: 'total_freeze',
-			key: 'total_freeze',
-			align: 'center',
-			width: 140,
-			render: (text) => {
-				return numeral(text / 100).format('0,0.00');
-			}
-		},
-		{
-			title: '使用额度',
-			dataIndex: 'total_occupy',
-			key: 'total_occupy',
-			align: 'center',
-			width: 140,
-			render: (text) => {
-				return numeral(text / 100).format('0,0.00');
-			}
-		},
-		{
-			title: '剩余额度',
-			dataIndex: 'total_residue',
-			key: 'total_residue',
-			align: 'center',
-			width: 140,
-			render: (text, record) => {
-				const total_limit = parseFloat(record.total_limit / 100);
-				const total_freeze = parseFloat(record.total_freeze / 100);
-				const total_occupy = parseFloat(record.total_occupy / 100);
-				const value = calcSum([total_limit, -total_freeze, -total_occupy]);
-				return numeral(value).format('0,0.00');
-			}
-		},
-		{
-			title: '备注',
-			dataIndex: 'remark',
-			key: 'remark',
-			align: 'center',
-			width: '244px',
-			render: (text, { remark }) => {
-				if (remark && remark.length > 30) {
-					return <div title={remark}>
-						{remark.slice(0, 29) + '...'}
-					</div>
-				} else {
-					return remark
-				}
-			}
-		},
-		{
-			title: '修订时间',
-			dataIndex: 'modified_at',
-			key: 'modified_at',
-			align: 'center',
-			width: 160,
-		},
-		{
-			title: '操作人',
-			dataIndex: 'operator_real_name',
-			key: 'operator_real_name',
-			align: 'center',
-			width: 100,
-		},
-		{
 			title: '操作',
 			dataIndex: 'action',
 			key: 'action',
 			align: 'center',
 			width: 160,
-			fixed: 'right',
+			// fixed: 'right',
 			render: (Text, record) => {
 				return <div>
 					<a href='javascript:;' onClick={() => {
@@ -183,16 +133,16 @@ export const studioConfigFunc = (handleStopStudio, handleStartStudio, history) =
 }
 export const detailConfig = [
 	{
-		title: '状态',
-		dataIndex: 'source_status_display',
-		key: 'source_status_display',
-		align: 'center'
+		title: '工作室ID',
+		dataIndex: 'studio_id',
+		key: 'studio_id',
+		align: 'center',
 	},
 	{
-		title: '类型',
-		dataIndex: 'source_type_display',
-		key: 'source_type_display',
-		align: 'center'
+		title: '工作室名称',
+		dataIndex: 'name',
+		key: 'name',
+		align: 'center',
 	},
 	{
 		title: '打款单ID',
@@ -204,18 +154,16 @@ export const detailConfig = [
 		}
 	},
 	{
-		title: '工作室ID',
-		dataIndex: 'studio_id',
-		key: 'studio_id',
-		align: 'center',
-
+		title: '状态',
+		dataIndex: 'source_status_display',
+		key: 'source_status_display',
+		align: 'center'
 	},
 	{
-		title: '工作室名称',
-		dataIndex: 'name',
-		key: 'name',
-		align: 'center',
-
+		title: '类型',
+		dataIndex: 'source_type_display',
+		key: 'source_type_display',
+		align: 'center'
 	},
 	{
 		title: '主账号名称',
@@ -244,6 +192,18 @@ export const detailConfig = [
 		render: (text) => {
 			return numeral(text / 100).format('0,0.00')
 		}
+	},
+	{
+		title: '实付金额',
+		dataIndex: 'a',
+		key: 'a',
+		align: 'center'
+	},
+	{
+		title: '税金',
+		dataIndex: 'b',
+		key: 'b',
+		align: 'center'
 	},
 	{
 		title: '提现时间',

@@ -70,7 +70,22 @@ class RemitQuery extends React.Component {
 							)}
 						</FormItem>
 					</Col>
-					<Col style={{ marginLeft: '40px' }}>
+					<Col className='left-gap'>
+						<FormItem label="工作室">
+							{getFieldDecorator('studio', { initialValue: '' })(
+								<Select style={{ width: 120 }}>
+									<Option value="">不限</Option>
+									<Option value="0">待打款</Option>
+									<Option value="1">待还款</Option>
+									<Option value="2">待结税</Option>
+									<Option value="3">已结算</Option>
+								</Select>
+							)}
+						</FormItem>
+					</Col>
+				</Row>
+				<Row style={{ textAlign: 'center' }}>
+					<Col>
 						<Button type="primary" onClick={this.handleSearch}>查询</Button>
 						<a className="reset-filter left-gap" onClick={this.handleClear}><Icon type="retweet" />重置搜索框</a>
 					</Col>

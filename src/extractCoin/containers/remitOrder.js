@@ -26,7 +26,8 @@ class RemitOrderManage extends React.Component {
 			filterParams: {},
 			questParams: {},
 			outputLoading: false,
-			curPage: 1
+			curPage: 1,
+			selectedRowKeys: []
 		}
 	}
 	componentDidMount() {
@@ -141,8 +142,13 @@ class RemitOrderManage extends React.Component {
 	handleChangeStudio = () => {
 		console.log('%c1: ', 'color: MidnightBlue; background: Aquamarine; font-size: 20px;', 1);
 	}
+	onSelectChange = (selectedRowKeys, selectedRows) => {
+		console.log('%cselectedRowKeys: ', 'color: MidnightBlue; background: Aquamarine; font-size: 20px;', selectedRowKeys);
+		console.log('%cselectedRows: ', 'color: MidnightBlue; background: Aquamarine; font-size: 20px;', selectedRows);
+
+	}
 	render() {
-		let { newVisible, remitOrderLoading, outputVisible, remitOrderPageSize, filterParams, outputLoading, receiptsVisible, questParams } = this.state;
+		let { newVisible, remitOrderLoading, outputVisible, remitOrderPageSize, filterParams, outputLoading, receiptsVisible, questParams, selectedRowKeys } = this.state;
 		let { remitOrderData: { data, total = 20, current_page = 1, payment_slip_status_name }, excel_name_list: { title, excel } } = this.props;
 		let remitOrderConfig = remitOrderFunc(payment_slip_status_name, this.handleOutputDetail, this.handleReceiptsVisible, this.handleTipVisible);
 		let paginationObj = {
@@ -165,6 +171,10 @@ class RemitOrderManage extends React.Component {
 			showSizeChanger: true,
 			pageSizeOptions: ['20', '50', '100', '200']
 		};
+		const rowSelection = {
+			selectedRowKeys,
+			onChange: this.onSelectChange,
+		};
 		return <div className='remitOrder'>
 			<RemitQuery
 				limit_num={remitOrderPageSize}
@@ -181,7 +191,9 @@ class RemitOrderManage extends React.Component {
 				dataSource={data}
 				pagination={paginationObj}
 				loading={remitOrderLoading}
-				bordered></Table>
+				bordered
+				rowSelection={rowSelection}
+			></Table>
 			{newVisible ? <NewRemitModal visible={newVisible} onCancel={this.closeNewModal}
 				requestList={this.requestList} /> : null}
 			<RemitModal visible={outputVisible}

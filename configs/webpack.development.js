@@ -12,24 +12,32 @@ module.exports = merge(baseConfig, {
 		hot: true,
 		host: 'lg.nip.io',
 		proxy: {
-			"/api/operator-gateway": {
-				target: "http://192.168.20.51:7300/mock/5c73560e73f3100017a640ad",
+			// "/api/operator-gateway": {
+			// 	target: "http://192.168.20.51:7300/mock/5c73560e73f3100017a640ad",
+			// 	changeOrigin: true
+			// },
+			// "/api/common-price/finance": {
+			// 	target: "http://192.168.20.51:7300/mock/5c98a76a73f3100017a642ff",
+			// 	changeOrigin: true
+			// },
+			"/api/trinity/publicInvoiceRelation": {
+				target: "http://172.16.120.191:8002",
 				changeOrigin: true
 			},
-			"/api/common-price/finance": {
-				target: "http://192.168.20.51:7300/mock/5c98a76a73f3100017a642ff",
+			"/api/trinity/publicInvoice": {
+				target: "http://172.16.120.191:8002",
 				changeOrigin: true
 			},
-			"/api/finance/invoice": {
-				target: "http://192.168.20.51:7300/mock/5c98a76a73f3100017a642ff",
-				changeOrigin: true
-			},
-			"/api/trinity": {
-				target: "http://192.168.20.128:8010",
-				changeOrigin: true
-			},
+			// "/api/finance/invoice": {
+			// 	target: "http://192.168.20.51:7300/mock/5c8752f273f3100017a641f5",
+			// 	changeOrigin: true
+			// },
+			// "/api/trinity": {
+			// 	target: "http://192.168.20.128:8010",
+			// 	changeOrigin: true
+			// },
 			"/api": {
-				target: "http://nb.dev-weiboyi.com",
+				target: "http://nb.tst-weiboyi.com",
 				changeOrigin: true
 			}
 		},

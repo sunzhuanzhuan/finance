@@ -12,6 +12,7 @@ import { trinityInvoiceSearchFunc } from '../constants/search'
 import { trinityInvoiceFunc, checkModalCols } from '../constants/trinityInvoice'
 import './trinityInvoice.less'
 import qs from 'qs'
+import numeral from 'numeral'
 
 class TrinityInvoice extends React.Component {
 	constructor() {
@@ -22,7 +23,8 @@ class TrinityInvoice extends React.Component {
 			checkVisible: false,
 			modalVisible: false,
 			status: undefined,
-			record: undefined
+			record: undefined,
+			modType: undefined
 		}
 	}
 	componentDidMount() {
@@ -46,14 +48,26 @@ class TrinityInvoice extends React.Component {
 			message.error(errorMsg || '列表加载失败，请重试！');
 		})
 	}
-	handleModal = (status, modalVisible, record) => {
-		this.setState({ status, modalVisible, record })
+	handleModal = (status, modalVisible, record, modType) => {
+		this.setState({ status, modalVisible, record, modType })
 	}
 	handleCheckModal = (checkVisible, record) => {
 		this.setState({ checkVisible, record })
 	}
-	handleDelete = id => {
-		this.props.actions.postTrinityInvoiceDel({ id })
+	handleDelete = invoice_id => {
+		Modal.confirm({
+			title: '',
+			content: `确认删除？`,
+			onOk: () => {
+				const hide = message.loading('操作中，请稍候...');
+				this.props.actions.postTrinityInvoiceDel({ invoice_id }).then(() => {
+					hide();
+					message.success('操作成功', 2);
+				}).catch(({ errorMsg }) => {
+					message.error(errorMsg || '操作成功，请重试！', 2);
+				})
+			}
+		})
 	}
 	handleExport = () => {
 		const data = this.form.getFieldsValue();
@@ -73,7 +87,7 @@ class TrinityInvoice extends React.Component {
 	}
 	render() {
 		const search = qs.parse(this.props.location.search.substring(1));
-		const { loading, pullReady, modalVisible, checkVisible, status, record } = this.state;
+		const { loading, pullReady, modalVisible, checkVisible, status, modType, record } = this.state;
 		const { trinityInvoiceData: { list = [], page, page_size = 20, total, statistic }, trinityInvoiceSearchItem } = this.props;
 		const trinityInvoiceSearch = trinityInvoiceSearchFunc(trinityInvoiceSearchItem);
 		const trinityInvoiceCols = trinityInvoiceFunc(this.handleModal, this.handleCheckModal, this.handleDelete);
@@ -82,11 +96,11 @@ class TrinityInvoice extends React.Component {
 			<Statistics title={'三方平台发票管理'} render={Stat(total, statistic)} />
 			<fieldset className='fieldset_css'>
 				<legend>查询</legend>
-				{pullReady && <SearForm data={trinityInvoiceSearch} getAction={this.queryData} responseLayout={{ xs: 24, sm: 24, md: 10, lg: 8, xxl: 6 }} beforeFooter={<Button type='primary' style={{ marginRight: 20 }} onClick={() => { this.handleModal('new', true, undefined) }}>新增发票</Button>} extraFooter={<Button type='primary' style={{ marginLeft: 20 }} onClick={this.handleExport}>导出</Button>} wrappedComponentRef={form => this.form = form} />}
+				{pullReady && <SearForm data={trinityInvoiceSearch} getAction={this.queryData} responseLayout={{ xs: 24, sm: 24, md: 10, lg: 8, xxl: 6 }} beforeFooter={<Button type='primary' style={{ marginRight: 20 }} onClick={() => { this.handleModal('new', true, undefined, undefined) }}>新增发票</Button>} extraFooter={<Button type='primary' style={{ marginLeft: 20 }} onClick={this.handleExport}>导出</Button>} wrappedComponentRef={form => this.form = form} />}
 			</fieldset>
 			<div className='top-gap'>
 				<Table
-					rowKey='invoice_number'
+					rowKey='invoice_id'
 					loading={loading}
 					columns={trinityInvoiceCols}
 					dataSource={list}
@@ -99,11 +113,12 @@ class TrinityInvoice extends React.Component {
 				visible={modalVisible}
 				page={page}
 				status={status}
+				modType={modType}
 				record={record}
 				queryAction={this.queryData}
 				search={search}
 				onCancel={() => {
-					this.handleModal(undefined, false, undefined)
+					this.handleModal(undefined, false, undefined, undefined)
 				}}
 				SearchItem={trinityInvoiceSearchItem}
 			/> : null}
@@ -128,9 +143,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(TrinityInvoice)
 function Stat(total, statistic) {
 	return <div style={{ padding: '0 10px' }}>
 		<span>当前筛选条件下发票数：<span className='red-font little-left-gap'>{total}</span>条</span>
-		<span className='left-gap'>发票总金额：<span className='red-font little-left-gap'>{statistic && statistic.total_invoice_amount}</span>元</span>
-		<span className='left-gap'>发票金额：<span className='red-font little-left-gap'>{statistic && statistic.total_invoice_pure_amount}</span>元</span>
-		<span className='left-gap'>发票税额：<span className='red-font little-left-gap'>{statistic && statistic.total_invoice_tax_amount}</span>元</span>
+		<span className='left-gap'>发票总金额：<span className='red-font little-left-gap'>{statistic && numeral(statistic.total_invoice_amount).format('0,0.00')}</span>元</span>
+		<span className='left-gap'>发票金额：<span className='red-font little-left-gap'>{statistic && numeral(statistic.total_invoice_pure_amount).format('0,0.00')}</span>元</span>
+		<span className='left-gap'>发票税额：<span className='red-font little-left-gap'>{statistic && numeral(statistic.total_invoice_tax_amount).format('0,0.00')}</span>元</span>
 	</div>
 }
 function CheckModal({ visible, onCancel, record }) {

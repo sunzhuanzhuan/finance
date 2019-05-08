@@ -1,5 +1,20 @@
 import React from 'react'
-import { InputNumber, Button } from 'antd'
+import { InputNumber, Button, Form } from 'antd'
+const FormItem = Form.Item;
+function checkPrice(record, rule, value, callback) {
+	if (value || parseFloat(value) == 0) {
+		const reg = /^[1-9]?\d+(\.\d\d?)?$/;
+		if (parseFloat(value) > parseFloat(record.rest_amount)) {
+			callback('使用金额不能大于发票余额');
+		}
+		if (!reg.test(value)) {
+			callback('请输入最多保留两位的有效数字')
+		}
+		if (parseFloat(value) == 0) {
+			callback('使用金额不能为0')
+		}
+	}
+}
 export const relatedInvoiceFunc = (handleDel) => [
 	{
 		title: '发票号',
@@ -53,12 +68,12 @@ export const relatedInvoiceFunc = (handleDel) => [
 		width: 100,
 		render: (text, record) => {
 			return <Button type='primary' onClick={() => {
-				handleDel(record.invoice_number)
+				handleDel(record.id)
 			}}>删除</Button>
 		}
 	}
 ];
-export const availableInvoiceFunc = (selectedRowKeys, handleChange) => [
+export const availableInvoiceFunc = (getFieldDecorator, selectedRowKeys) => [
 	{
 		title: '发票号',
 		dataIndex: 'invoice_number',
@@ -82,8 +97,8 @@ export const availableInvoiceFunc = (selectedRowKeys, handleChange) => [
 	},
 	{
 		title: '发票抬头',
-		dataIndex: 'invoice_title',
-		key: 'invoice_title',
+		dataIndex: 'invoice_title_desc',
+		key: 'invoice_title_desc',
 		align: 'center',
 		width: 100
 	},
@@ -108,12 +123,23 @@ export const availableInvoiceFunc = (selectedRowKeys, handleChange) => [
 		align: 'center',
 		width: 100,
 		render: (text, record) => {
-			return <div>
-				<InputNumber id={`${record.invoice_number}`} formatter={value => `${value}`.replace(/[^\d||.]/g, '')} disabled={selectedRowKeys.includes(record.invoice_number)} onChange={(value) => {
-					handleChange(value, record);
-				}} />
-				<p className={`red-font ${record.invoice_number}`} style={{ display: 'none', margin: 0 }}>使用金额应小于发票余额!</p>
-			</div>
+			return <FormItem>
+				{getFieldDecorator(`${record.invoice_number}.price`, {
+					rules: [{
+						validator: (...args) => { checkPrice(record, ...args) }
+					}]
+				})(
+					<InputNumber formatter={value => `${value}`.replace(/[^\d||.]/g, '')}
+						disabled={selectedRowKeys.includes(record.invoice_id)} />
+				)
+				}
+			</FormItem>
+			// return <div>
+			// <InputNumber id={`${record.invoice_number}`} formatter={value => `${value}`.replace(/[^\d||.]/g, '')} disabled={selectedRowKeys.includes(record.invoice_number)} onChange={(value) => {
+			// 	handleChange(value, record);
+			// }} />
+			// 	<p className={`red-font ${record.invoice_number}`} style={{ display: 'none', margin: 0 }}>使用金额应小于发票余额!</p>
+			// </div>
 		}
 	}
 ];

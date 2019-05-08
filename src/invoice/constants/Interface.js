@@ -6,15 +6,16 @@ export default {
 	postReparationComplete: '/finance/reparation/complete',
 	postReparationRefuse: '/finance/reparation/refuse',
 	//关联发票
-	getRelatedInvoiceData: '/finance/invoice/relation/list',
-	getAvailableInvoiceData: '/finance/invoice/available/list',
-	getRelatedInvoiceSearchItem: '/finance/invoice/searchItem',
-	postRelatedInvoiceRelate: '/finance/invoice/relation/relate',
+	getRelatedInvoiceData: '/trinity/publicInvoiceRelation/associatedList',
+	getAvailableInvoiceData: '/trinity/publicInvoiceRelation/availableList',
+	postDeleteInvoiceRelate: '/trinity/publicInvoiceRelation/delRelation',
+	postAddRelation: '/trinity/publicInvoiceRelation/addRelation',
 	//三方平台发票管理
-	getTrinityInvoiceSearchItem: '/finance/invoice/searchItem',
-	getTrinityInvoiceData: '/finance/invoice/list',
-	postTrinityInvoiceAdd: '/finance/invoice/add',
-	postTrinityInvoiceEdit: '/finance/invoice/edit',
-	postTrinityInvoiceDel: '/finance/invoice/del',
-	postTrinityInvoiceExport: '/finance/invoice/export'
+	getTrinityInvoiceData: '/trinity/publicInvoice/list',
+	postTrinityInvoiceAdd: '/trinity/publicInvoice/add',
+	postTrinityInvoiceEdit: '/trinity/publicInvoice/edit',
+	postTrinityInvoiceDel: '/trinity/publicInvoice/del',
+	postTrinityInvoiceExport: '/trinity/publicInvoice/export',
+	//公共
+	getTrinityInvoiceSearchItem: '/trinity/publicInvoice/searchItem'
 }

@@ -50,7 +50,7 @@ class PreModal extends React.Component {
 		this.pureValue = e.target.value;
 		if (e.target.value && !isNaN(this.taxValue)) {
 			this.props.form.setFieldsValue({
-				invoice_tax: numeral(this.pureValue / this.taxValue).format('0.00')
+				invoice_tax: numeral(this.taxValue / this.pureValue * 100).format('0.00')
 			});
 		}
 	}
@@ -58,7 +58,7 @@ class PreModal extends React.Component {
 		this.taxValue = e.target.value;
 		if (e.target.value && !isNaN(this.pureValue)) {
 			this.props.form.setFieldsValue({
-				invoice_tax: numeral(this.pureValue / this.taxValue).format('0.00')
+				invoice_tax: numeral(this.taxValue / this.pureValue * 100).format('0.00')
 			});
 		}
 	}
@@ -82,16 +82,18 @@ class PreModal extends React.Component {
 	handleSubmit = () => {
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
+				const hide = message.loading('操作中，请稍候...');
 				const { search, status, onCancel } = this.props;
 				const actionName = this.titleMapping(status).actionName;
 				this.props.actions[actionName]({
+					business_account_type: 3,
 					...values,
 					invoice_make_out_time: moment(values.invoice_make_out_time).format(format)
 				}).then(() => {
 					message.success('操作成功!');
-					this.props.queryAction({ ...search.keys }, () => {
-						onCancel()
-					}).catch(({ errorMsg }) => {
+					hide();
+					onCancel();
+					this.props.queryAction({ ...search.keys }).catch(({ errorMsg }) => {
 						message.error(errorMsg || '列表刷新失败，请重试！');
 					})
 				}).catch(({ errorMsg }) => {
@@ -103,7 +105,7 @@ class PreModal extends React.Component {
 
 	render() {
 		const { getFieldDecorator } = this.props.form;
-		const { visible, onCancel, status, SearchItem } = this.props;
+		const { visible, onCancel, status, SearchItem, modType } = this.props;
 		const { isClick } = this.state;
 		const formItemLayout = {
 			labelCol: { span: 6 },
@@ -131,7 +133,7 @@ class PreModal extends React.Component {
 			<Form>
 				<FormItem label='发票来源' {...formItemLayout}>
 					{getFieldDecorator('invoice_source', { ...options })(
-						<Select placeholder="请选择" style={{ width: 200 }}
+						<Select placeholder="请选择" style={{ width: 200 }} disabled={modType == 2}
 						>
 							{SearchItem && SearchItem.invoice_source.map((item) =>
 								<Option key={item.value} value={item.value}>{item.name}</Option>)
@@ -141,12 +143,12 @@ class PreModal extends React.Component {
 				</FormItem>
 				<FormItem label='发票号' {...formItemLayout}>
 					{getFieldDecorator('invoice_number', { ...options })(
-						<Input placeholder="请输入" style={{ width: 200 }} />
+						<Input placeholder="请输入" style={{ width: 200 }} disabled={modType == 2} />
 					)}
 				</FormItem>
 				<FormItem label='三方代理商' {...formItemLayout}>
 					{getFieldDecorator('business_account_id', { ...options })(
-						<Select placeholder="请选择" style={{ width: 200 }}
+						<Select placeholder="请选择" style={{ width: 200 }} disabled={modType == 2}
 						>
 							{SearchItem && SearchItem.agent.map((item) =>
 								<Option key={item.value} value={item.value}>{item.name}</Option>)
@@ -156,7 +158,7 @@ class PreModal extends React.Component {
 				</FormItem>
 				<FormItem label='发票抬头' {...formItemLayout}>
 					{getFieldDecorator('invoice_title', { ...options })(
-						<Select placeholder="请选择" style={{ width: 200 }}
+						<Select placeholder="请选择" style={{ width: 200 }} disabled={modType == 2}
 						>
 							{SearchItem && SearchItem.invoice_title.map((item) =>
 								<Option key={item.value} value={item.value}>{item.name}</Option>)
@@ -171,17 +173,17 @@ class PreModal extends React.Component {
 				</FormItem>
 				<FormItem label='发票内容' {...formItemLayout}>
 					{getFieldDecorator('invoice_content', { ...options })(
-						<Input placeholder="请输入" style={{ width: 200 }} />
+						<Input placeholder="请输入" style={{ width: 200 }} disabled={modType == 2} />
 					)}
 				</FormItem>
 				<FormItem label='发票金额' {...formItemLayout}>
 					{getFieldDecorator('invoice_pure_amount', { ...options })(
-						<Input placeholder="请输入" style={{ width: 200 }} suffix={'元'} onChange={this.handlePureChange} />
+						<Input placeholder="请输入" style={{ width: 200 }} suffix={'元'} onChange={this.handlePureChange} disabled={modType == 2} />
 					)}
 				</FormItem>
 				<FormItem label='发票税额' {...formItemLayout}>
 					{getFieldDecorator('invoice_tax_amount', { ...options })(
-						<Input placeholder="请输入" style={{ width: 200 }} suffix={'元'} onChange={this.handleTaxChange} />
+						<Input placeholder="请输入" style={{ width: 200 }} suffix={'元'} onChange={this.handleTaxChange} disabled={modType == 2} />
 					)}
 				</FormItem>
 				{status === 'new' && <FormItem label='发票税率' {...formItemLayout}>
@@ -201,12 +203,12 @@ class PreModal extends React.Component {
 				</FormItem>}
 				<FormItem label='开票日期' {...formItemLayout}>
 					{getFieldDecorator('invoice_make_out_time', { ...options })(
-						<DatePicker placeholder='请选择' format={format} style={{ width: 200 }} />
+						<DatePicker placeholder='请选择' format={format} style={{ width: 200 }} disabled={modType == 2} />
 					)}
 				</FormItem>
 				<FormItem label='备注' {...formItemLayout}>
 					{getFieldDecorator('remark')(
-						<TextArea placeholder='非必输' autosize={{ minRows: 4, maxRows: 6 }} maxLength={50} />
+						<TextArea placeholder='非必输' autosize={{ minRows: 4, maxRows: 6 }} maxLength={50} disabled={modType == 2} />
 					)}
 				</FormItem>
 			</Form>

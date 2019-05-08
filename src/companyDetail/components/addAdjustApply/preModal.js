@@ -64,7 +64,7 @@ class PrevModal extends React.Component {
 			onCancel={onCancel}
 			maskClosable={false}
 		>
-			<Table rowKey='order_id' columns={columns} dataSource={data} bordered pagination={isApplication ? applicationPaginationObj : paginationObj} />
+			<Table rowKey='order_id' columns={columns} dataSource={data} bordered pagination={isApplication ? applicationPaginationObj : paginationObj} scroll={{x:1700}}/>
 		</Modal>
 	}
 }

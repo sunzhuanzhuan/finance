@@ -766,7 +766,7 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				width: 260,
 				render: (text, { price = [] }) => {
 					const flag = price && price[0] ? price[0].trinity_type == 2 : false;
-					return <div>
+					return <div  style={{width:260}}>
 						{price.map((item, index) => {
 							return <div key={index}>
 								<div>{`${item.price_label}:${item.open_cost_price}`}</div>
@@ -784,7 +784,7 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				width: 260,
 				render: (text, { price = [] }) => {
 					const flag = price && price[0] ? price[0].trinity_type == 2 : false;
-					return <div>
+					return <div style={{width:260}}>
 						{price.map((item, index) => {
 							return <div key={index}>
 								<div>{`${item.price_label}:${item.quoted_price}`}</div>
@@ -863,7 +863,7 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				width: 246,
 				render: (text, { price = [], pre_min_sell_price = [] }) => {
 					const flag = price && price[0] ? price[0].trinity_type == 2 : false;
-					return <div>
+					return <div style={{width:260}}>
 						{pre_min_sell_price.map((item, index) => {
 							return <div key={index}>
 								<div>{`${item.price_label}:${item.min_sell_price}`}</div>

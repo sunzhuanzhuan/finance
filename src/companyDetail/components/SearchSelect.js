@@ -11,7 +11,6 @@ export default class SearchSelect extends React.PureComponent {
 			data: [],
 			value: undefined,
 			loading: false,
-			more: false
 		}
 		this.handleSearch = debounce(this.fetchData, 400);
 	}
@@ -36,7 +35,7 @@ export default class SearchSelect extends React.PureComponent {
 		}
 	}
 	render() {
-		const { data, value, loading, more } = this.state;
+		const { data, value, loading } = this.state;
 		const { item: [id, name] } = this.props;
 		const options = data.map(d => <Option key={d[id]}>{d[name]}</Option>);
 		return <Select
@@ -48,14 +47,13 @@ export default class SearchSelect extends React.PureComponent {
 			filterOption={false}
 			onSearch={this.handleSearch}
 			onChange={this.handleChange}
-			notFoundContent={loading ? <Spin size="small" /> : null}
+			notFoundContent={loading ? <Spin size="small" style={{ paddingLeft: '10px' }} /> : null}
 			style={{ width: 140 }}
 			placeholder="请输入"
 			{...this.props}
-			onPopupScroll={this.handleScroll}
+		// onPopupScroll={this.handleScroll}
 		>
 			{options}
-			{more && <Option value=''> <Spin size="small" /> </Option>}
 		</Select>
 	}
 }

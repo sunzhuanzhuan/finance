@@ -30,7 +30,7 @@ class NavType extends Component {
 				loading: false,
 				applist: response.data,
 			});
-		}).catch((error)=>{
+		}).catch((error) => {
 			this.setState({ loading: false });
 			message.error(error.errorMsg)
 		});
@@ -41,7 +41,7 @@ class NavType extends Component {
 		this.props.actions.getNavTypeDetail(id).then(() => {
 			this.setState({ loading: false })
 			this.showModal('AuthModal');
-		}).catch((error)=>{
+		}).catch((error) => {
 			this.setState({ loading: false });
 			message.error(error.errorMsg)
 		})
@@ -79,7 +79,7 @@ class NavType extends Component {
 					message.error(response.message)
 				}
 
-			}).catch((error)=>{
+			}).catch((error) => {
 				this.setState({ loading: false });
 				message.error(error.errorMsg)
 			});
@@ -93,7 +93,7 @@ class NavType extends Component {
 			}
 			values.id = this.props.getNavTypeParam.editId;
 			this.setState({ loading: true })
-			
+
 			this.props.actions.updateNavType(values).then((response) => {
 				if (response.code == 200) {
 					message.success(response.message)
@@ -108,7 +108,7 @@ class NavType extends Component {
 					message.error(response.message)
 				}
 
-			}).catch((error)=>{
+			}).catch((error) => {
 				this.setState({ loading: false });
 				message.error(error.errorMsg)
 			});
@@ -127,14 +127,14 @@ class NavType extends Component {
 	}
 	async deleteNavTypeAction(id) {
 		this.setState({ loading: true })
-		this.props.actions.deleteNavType(id).then(()=>{
+		this.props.actions.deleteNavType(id).then(() => {
 			this.props.actions.getNavTypeList({ app_id: this.state.appId, page: 1 })
 			this.setState({ loading: false })
-		}).catch((error)=>{
+		}).catch((error) => {
 			this.setState({ loading: false });
 			message.error(error.errorMsg)
 		});
-		
+
 	}
 	handleAppChange(value) {
 		this.setState({
@@ -150,7 +150,7 @@ class NavType extends Component {
 				key: 'app_name',
 				width: '140px',
 				render: (text, record) => (
-					<div className="NavType_jump" type="primary" onClick={this.jump.bind(this, '/auth/navGroup', record)} style={{ color: '#1DA57A' }}>{text}</div>
+					<div className="NavType_jump" type="primary" onClick={this.jump.bind(this, '/auth/navGroup', record)} style={{ color: '#1890ff' }}>{text}</div>
 				),
 			}, {
 				title: '导航名称',

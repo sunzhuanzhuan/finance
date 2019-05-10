@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import { companyData, companyMetadata, companyDetail, companyBillings, companyBillDetail, readjustPriceAccount, readjustPriceAccountBill, giftAccount, goldenAccount, goldenFlow, freezeDetail } from './companyDetail'
-import { companyDetailAuthorizations, goldenMetadata, applicationList, applyOrderList, platformList, projectList, applyReadjust, goldenToken, applicationDetail, goldenUserList } from './goldenApply'
+import { companyDetailAuthorizations, goldenMetadata, applicationList, applyOrderList, platformList, projectList, applyReadjust, goldenToken, applicationDetail, applicationPreview, goldenUserList } from './goldenApply'
 export default combineReducers({
 	/* companyDetail */
 	companyData,
@@ -24,6 +24,7 @@ export default combineReducers({
 	applyOrderList,
 	applyReadjust,
 	applicationDetail,
+	applicationPreview,
 	goldenUserList,
 })
 

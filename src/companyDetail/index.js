@@ -28,7 +28,7 @@ class Company extends Component {
 	}
 	render() {
 		return (
-			<dic>
+			<div>
 				<Route path='/finance/detail/company' component={CompanyDetail} />
 				<Route path='/finance/freeze/detail' component={FreezeDetail} />
 				<Route path='/finance/golden/detail' component={GoldenDetail} />
@@ -37,7 +37,7 @@ class Company extends Component {
 				<Route path='/finance/golden/addAdjustApply' component={AddAdjustApply} />
 				<Route path='/finance/golden/adjustApplyDetail' component={AdjustApplyDetail} />
 				<Route path='/finance/golden/adjustApplyInput' component={AdjustApplyInput} />
-			</dic>
+			</div>
 		);
 	}
 }

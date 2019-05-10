@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as goldenActions from "../../actions/goldenApply";
-import { Input, Row, Form, Select, Button, Icon, message, Spin, Modal } from "antd";
+import { Input, Row, Col, Form, Select, Button, Icon, message, Spin, Modal } from "antd";
 import SearchSelect from '../SearchSelect';
 import qs from 'qs';
 
@@ -191,7 +191,7 @@ class ListQuery extends React.Component {
 				<Row type="flex" justify="start" gutter={16} style={{ padding: '10px 0' }}>
 					<FormItem label='每页显示' className='left-gap'>
 						{getFieldDecorator('page_size', { initialValue: 50 })(
-							<Select style={{ width: 80 }}>
+							<Select style={{ width: 60 }}>
 								<Option value={20}>20</Option>
 								<Option value={50}>50</Option>
 								<Option value={100}>100</Option>
@@ -258,11 +258,25 @@ class ListQuery extends React.Component {
 							/>
 						)}
 					</FormItem>
+					{type === 'detail' ? <FormItem className='left-gap'>
+						{getFieldDecorator('is_plan_manage')(
+							<Select
+								style={{ width: 120 }}
+								placeholder="是否含策划"
+								allowClear
+								showSearch
+								labelInValue
+							>
+								<Option value="1">是</Option>
+								<Option value="2">否</Option>
+							</Select>
+						)}
+					</FormItem> : null}
 					<FormItem className='left-gap'>
 						{getFieldDecorator('weibo_type')(
 							<Select
 								id='weibo_type'
-								style={{ width: 160 }}
+								style={{ width: 120 }}
 								placeholder="平台"
 								allowClear
 								showSearch
@@ -282,10 +296,12 @@ class ListQuery extends React.Component {
 					</FormItem>
 					<FormItem className='left-gap'>
 						{getFieldDecorator('order_id')(
-							<Input placeholder='订单ID' style={{ width: 160 }} />
+							<Input placeholder='订单ID' style={{ width: 120 }} />
 						)}
 					</FormItem>
-					<FormItem className='left-gap'>
+				</Row>
+				<Row type="flex" justify="center" gutter={16} style={{ padding: '10px 0' }}>
+					<FormItem>
 						<Button type='primary' onClick={this.handleSearch}>查询</Button>
 						<a className="reset-filter left-gap" onClick={this.handleClear}><Icon type="retweet" />重置搜索框</a>
 					</FormItem>

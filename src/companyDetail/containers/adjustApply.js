@@ -5,7 +5,8 @@ import * as goldenActions from "../actions/goldenApply";
 import { Modal, message, Table, Input } from "antd";
 import AdjustQuery from '../components/adjustQuery';
 import ApplyModal from '../components/addAdjustApply/applyModal'
-import { adjustApplyFunc, adjustApplyListFunc } from "../constants";
+import PrevModal from '../components/addAdjustApply/preModal'
+import { adjustApplyFunc, adjustApplyListFunc, adjustApplyDetailFunc } from "../constants";
 import "./golden.less";
 import qs from 'qs';
 const { TextArea } = Input;
@@ -16,6 +17,7 @@ class AdjustApply extends React.Component {
 		this.state = {
 			page_size: 20,
 			tipVisible: false,
+			previewVisible: false,
 			loading: false,
 			flag: false,
 			btnFlag: false,
@@ -60,9 +62,9 @@ class AdjustApply extends React.Component {
 	handleExport = (readjust_application_id) => {
 		this.props.actions.getExport({ readjust_application_id })
 	}
-	handleAction = (type, readjust_application_id, quote_type) => {
+	handleAction = (type, readjust_application_id, quote_type, company_id) => {
 		if (type === 'pass') {
-			this.setState({ tipVisible: true, quoteType: quote_type, readjust_application_id });
+			this.setState({ tipVisible: true, quoteType: quote_type, readjust_application_id, company_id });
 		} else if (type === 'reject') {
 			this.showReject(readjust_application_id);
 		}
@@ -87,19 +89,30 @@ class AdjustApply extends React.Component {
 			message.error(errorMsg || '操作失败！');
 		})
 	}
+	togglePreview = (boolean, func) => {
+		this.setState({ previewVisible: boolean }, func);
+	}
 	render() {
-		const { loading, tipVisible, page_size, flag, btnFlag, quoteType, readjust_application_id, rejectVisible } = this.state;
-		const { applicationList: { list = [], page, total }, goldenMetadata, goldenMetadata: { application_status = [] }, goldenUserList } = this.props;
+		const { loading, tipVisible, previewVisible, page_size, flag, btnFlag, quoteType, readjust_application_id, rejectVisible, company_id } = this.state;
+		const { applicationList: { list = [], page, total }, goldenMetadata, goldenMetadata: { application_status = [] }, goldenUserList, applicationDetail: { list: detailList = [] } } = this.props;
 		const search = qs.parse(this.props.location.search.substring(1));
 		const adjustApplyList = flag ? adjustApplyListFunc(application_status, this.handleJump, this.handleAction) : adjustApplyFunc(application_status, this.handleJump);
 		let paginationObj = {
 			onChange: (current) => {
-				this.queryData({ ...search.key, page: current, page_size });
+				this.queryData({ ...search.keys, page: current, page_size });
+				this.props.history.replace({
+					pathname: this.props.location.pathname,
+					search: `?${qs.stringify({ ...search, keys: { ...search.keys, page: current } })}`,
+				});
 			},
 			onShowSizeChange: (current, pageSize) => {
 				const curPage = Math.ceil(total / pageSize);
 				this.setState({ page_size: pageSize });
-				this.queryData({ ...search.key, page: curPage, page_size: pageSize });
+				this.queryData({ ...search.keys, page: curPage, page_size: pageSize });
+				this.props.history.replace({
+					pathname: this.props.location.pathname,
+					search: `?${qs.stringify({ ...search, keys: { ...search.keys, page: curPage, page_size: pageSize } })}`,
+				});
 			},
 			total: parseInt(total),
 			current: parseInt(page),
@@ -108,6 +121,7 @@ class AdjustApply extends React.Component {
 			showSizeChanger: true,
 			pageSizeOptions: ['20', '50', '100', '200']
 		};
+		const adjustApplyPreview = adjustApplyDetailFunc([])(['prev_id', 'company_name', 'project_name', 'requirement_id_name', 'platform_name', 'weibo_name', 'discount_rate', 'commissioned_price', 'quoted_price', 'pre_min_sell_price']);
 		return <div className='adjust-apply'>
 			<fieldset className='fieldset_css'>
 				<legend>订单调价</legend>
@@ -132,6 +146,8 @@ class AdjustApply extends React.Component {
 			</fieldset>
 			{tipVisible ? <ApplyModal
 				type={'pass'}
+				flag={flag}
+				isApplication={true}
 				visible={tipVisible}
 				queryAction={this.queryData}
 				onCancel={() => { this.setState({ tipVisible: false }) }}
@@ -139,8 +155,18 @@ class AdjustApply extends React.Component {
 				page_size={page_size}
 				quoteType={quoteType}
 				readjustId={readjust_application_id}
+				companyId={company_id}
+				togglePreview={this.togglePreview}
 			>
 			</ApplyModal> : null}
+			{previewVisible && <PrevModal visible={previewVisible}
+				isApplication={true}
+				readjustId={readjust_application_id}
+				companyId={company_id}
+				curSelectRows={detailList}
+				onCancel={() => { this.setState({ previewVisible: false }) }}
+				columns={adjustApplyPreview}
+			/>}
 			{rejectVisible ? <Modal title='订单调价处理' visible={rejectVisible}
 				onOk={() => { this.handleReject(readjust_application_id) }}
 				onCancel={() => { this.setState({ rejectVisible: false }) }}
@@ -158,6 +184,7 @@ const mapStateToProps = (state) => {
 		goldenMetadata: state.companyDetail.goldenMetadata,
 		goldenUserList: state.companyDetail.goldenUserList,
 		applicationList: state.companyDetail.applicationList,
+		applicationDetail: state.companyDetail.applicationDetail,
 	}
 }
 const mapDispatchToProps = dispatch => ({

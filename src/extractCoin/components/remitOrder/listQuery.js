@@ -43,7 +43,7 @@ class RemitQuery extends React.Component {
 					<Col className='left-gap'>
 						<FormItem label='打款状态'>
 							{getFieldDecorator('status', { initialValue: '' })(
-								<Select style={{ width: 120 }}>
+								<Select style={{ width: 120 }} allowClear>
 									<Option value="">不限</Option>
 									<Option value="0">待打款</Option>
 									<Option value="1">待还款</Option>
@@ -56,7 +56,7 @@ class RemitQuery extends React.Component {
 					<Col className='left-gap'>
 						<FormItem label='打款单ID'>
 							{getFieldDecorator('id')(
-								<Input placeholder="请输入" style={{ width: 160 }} />
+								<Input placeholder="请输入" style={{ width: 160 }} allowClear />
 							)}
 						</FormItem>
 					</Col>
@@ -71,15 +71,12 @@ class RemitQuery extends React.Component {
 						</FormItem>
 					</Col>
 					<Col className='left-gap'>
-						<FormItem label="工作室">
-							{getFieldDecorator('studio', { initialValue: '' })(
-								<Select style={{ width: 120 }}>
-									<Option value="">不限</Option>
-									<Option value="0">待打款</Option>
-									<Option value="1">待还款</Option>
-									<Option value="2">待结税</Option>
-									<Option value="3">已结算</Option>
-								</Select>
+						<FormItem label="可提金额">
+							{getFieldDecorator('payment_amount_min')(
+								<Input placeholder="请输入" style={{ width: 120 }} allowClear />
+							)}~
+							{getFieldDecorator('payment_amount_max')(
+								<Input placeholder="请输入" style={{ width: 120 }} allowClear />
 							)}
 						</FormItem>
 					</Col>

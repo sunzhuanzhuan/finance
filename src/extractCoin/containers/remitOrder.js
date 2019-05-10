@@ -4,11 +4,12 @@ import { bindActionCreators } from "redux";
 import * as remitOrderActions from "../action/remitOrder";
 import { outputRemitConfig, remitOrderFunc } from "../constans/manageConfig";
 import "./remitOrder.less";
-import { Button, Row, Form, Table, Modal, message } from "antd";
+import { Button, Row, Form, Table, Modal, message, Checkbox } from "antd";
 import RemitQuery from '../components/remitOrder/listQuery'
 import NewRemitModal from "../components/newRemitModal";
 import ReceiptsModal from '../components/receiptsModal'
 import RemitModal from '../components/remitModal'
+import StudioModal from '../components/remitOrder/studioModal'
 
 import moment from 'moment';
 import 'moment/locale/zh-cn';
@@ -27,7 +28,9 @@ class RemitOrderManage extends React.Component {
 			questParams: {},
 			outputLoading: false,
 			curPage: 1,
-			selectedRowKeys: []
+			selectedRowKeys: [],
+			rowsMap: {},
+			studioVisible: false,
 		}
 	}
 	componentDidMount() {
@@ -140,16 +143,33 @@ class RemitOrderManage extends React.Component {
 		})
 	}
 	handleChangeStudio = () => {
-		console.log('%c1: ', 'color: MidnightBlue; background: Aquamarine; font-size: 20px;', 1);
+		const { rowsMap } = this.state;
+		this.setState({ studioVisible: true });
 	}
 	onSelectChange = (selectedRowKeys, selectedRows) => {
-		console.log('%cselectedRowKeys: ', 'color: MidnightBlue; background: Aquamarine; font-size: 20px;', selectedRowKeys);
-		console.log('%cselectedRows: ', 'color: MidnightBlue; background: Aquamarine; font-size: 20px;', selectedRows);
-
+		const rowsMap = selectedRows.reduce((data, item) => {
+			return { ...data, [item.id]: item }
+		}, {});
+		this.setState({ selectedRowKeys, rowsMap })
+	}
+	handleCheckAll = e => {
+		const { remitOrderData: { data = [] } } = this.props;
+		const { rowsMap } = this.state;
+		let obj;
+		if (e.target.checked) {
+			obj = data.reduce((data, item) => {
+				return { ...data, [item.id]: item }
+			}, rowsMap);
+		} else {
+			obj = { ...rowsMap };
+			data.forEach(item => delete obj[item.id.toString()]);
+		}
+		this.onSelectChange(Object.keys(obj), Object.values(obj));
 	}
 	render() {
-		let { newVisible, remitOrderLoading, outputVisible, remitOrderPageSize, filterParams, outputLoading, receiptsVisible, questParams, selectedRowKeys } = this.state;
-		let { remitOrderData: { data, total = 20, current_page = 1, payment_slip_status_name }, excel_name_list: { title, excel } } = this.props;
+		let { newVisible, remitOrderLoading, outputVisible, remitOrderPageSize, filterParams, outputLoading, receiptsVisible, questParams, selectedRowKeys, studioVisible } = this.state;
+		let { remitOrderData: { data = [], total = 20, current_page = 1, payment_slip_status_name }, excel_name_list: { title, excel } } = this.props;
+		const checked = data.every(item => selectedRowKeys.includes(item.id.toString()));
 		let remitOrderConfig = remitOrderFunc(payment_slip_status_name, this.handleOutputDetail, this.handleReceiptsVisible, this.handleTipVisible);
 		let paginationObj = {
 			onChange: (current) => {
@@ -186,13 +206,16 @@ class RemitOrderManage extends React.Component {
 				<Button className='left-gap' type='primary' onClick={this.handleChangeStudio}>更换工作室</Button>
 			</Row>
 			<Table className='topGap'
-				rowKey='id'
+				rowKey={record => { return record.id.toString() }}
 				columns={remitOrderConfig}
 				dataSource={data}
 				pagination={paginationObj}
 				loading={remitOrderLoading}
 				bordered
 				rowSelection={rowSelection}
+				footer={() => {
+					return <Checkbox onChange={this.handleCheckAll} disabled={data.length == 0} checked={data.length > 0 && checked}>全选</Checkbox>
+				}}
 			></Table>
 			{newVisible ? <NewRemitModal visible={newVisible} onCancel={this.closeNewModal}
 				requestList={this.requestList} /> : null}
@@ -205,6 +228,8 @@ class RemitOrderManage extends React.Component {
 				partner_type={questParams.partner_type}
 			></RemitModal>
 			{receiptsVisible ? <ReceiptsModal visible={receiptsVisible} onCancel={this.closeReceiptsModal} questParams={questParams} /> : null}
+			{studioVisible && <StudioModal visible={studioVisible}
+				onCancel={() => { this.setState({ studioVisible: false }) }} />}
 		</div>
 	}
 }

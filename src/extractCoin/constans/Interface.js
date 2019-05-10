@@ -21,4 +21,6 @@ export default {
 	paymentSlipPayedTax: '/flash/payment_slip_payed_tax',
 	getBillList: '/flash/bill_list',
 	paymentOrderDetail: '/flash/bill_detail',
+	//更换工作室
+	getFlashStudioList: '/finance/studio/list'
 }

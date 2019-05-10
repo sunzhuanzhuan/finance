@@ -108,7 +108,7 @@ export const studioDetailSearchFunc = ({ studio_status, studio_type, studio_supp
 		},
 		field: {
 			label: '工作室ID',
-			value: 'id',
+			value: 'studio_id',
 		}
 	},
 	{
@@ -186,18 +186,19 @@ export const studioDetailSearchFunc = ({ studio_status, studio_type, studio_supp
 		},
 		field: {
 			label: '主账号',
-			value: 'a',
+			value: 'identity_name',
 		}
 	},
 	{
 		ctype: 'rangeInput',
 		attr: {
 			placeholder: ['输入金额', '输入金额'],
-			style: { width: 120 }
+			style: { width: 120 },
+			allowClear: true
 		},
 		field: {
 			label: '订单总金额',
-			value: ['b', 'c'],
+			value: ['occupy_amount_min', 'occupy_amount_max'],
 		}
 	},
 ];

@@ -195,14 +195,14 @@ export const detailConfig = [
 	},
 	{
 		title: '实付金额',
-		dataIndex: 'a',
-		key: 'a',
+		dataIndex: 'payment_amount',
+		key: 'payment_amount',
 		align: 'center'
 	},
 	{
 		title: '税金',
-		dataIndex: 'b',
-		key: 'b',
+		dataIndex: 'tax_to_partner',
+		key: 'tax_to_partner',
 		align: 'center'
 	},
 	{
@@ -328,6 +328,7 @@ export const bankList = {
 	}
 };
 export const isFlashConfig = [
+	{ id: '', display: '全部' },
 	{ id: 1, display: '支持' },
 	{ id: 2, display: '不支持' },
 ]

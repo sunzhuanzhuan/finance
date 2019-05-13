@@ -97,3 +97,10 @@ export const {
 } = createHttpAction('getFlashStudioList', Interface.getFlashStudioList, {
 	method: 'get'
 });
+
+export const {
+	postTransferStudio,
+	postTransferStudio_success
+} = createHttpAction('postTransferStudio', Interface.postTransferStudio, {
+	method: 'post'
+});

@@ -1,5 +1,4 @@
 import React from "react";
-import { calcSum } from '../../util'
 import numeral from "numeral";
 export const studioConfigFunc = (handleStopStudio, handleStartStudio, history) => {
 	return [
@@ -8,7 +7,7 @@ export const studioConfigFunc = (handleStopStudio, handleStartStudio, history) =
 			dataIndex: 'id',
 			key: 'id',
 			align: 'center',
-			width: 100,
+			width: 80,
 			// fixed: 'left'
 		},
 		{
@@ -39,7 +38,7 @@ export const studioConfigFunc = (handleStopStudio, handleStartStudio, history) =
 			dataIndex: 'type_display',
 			key: 'type_display',
 			align: 'center',
-			width: 100
+			width: 80
 		},
 		{
 			title: '平台',
@@ -53,7 +52,7 @@ export const studioConfigFunc = (handleStopStudio, handleStartStudio, history) =
 			dataIndex: 'is_support_flash',
 			key: 'is_support_flash',
 			align: 'center',
-			width: 120,
+			width: 100,
 			render: (text) => {
 				const value = text === 1 ? '支持' : '不支持';
 				return value
@@ -75,7 +74,7 @@ export const studioConfigFunc = (handleStopStudio, handleStartStudio, history) =
 			dataIndex: 'validity',
 			key: 'validity',
 			align: 'center',
-			width: '300px',
+			width: 200,
 			render: (text, record) => {
 				return `${record.validity_start}~${record.validity_end}`
 			}
@@ -118,11 +117,12 @@ export const studioConfigFunc = (handleStopStudio, handleStartStudio, history) =
 					<a href='javascript:;' onClick={() => {
 						history.push(`/finance/studiomanage/new?postType=2&id=${record.id}&name=${record.name}`);
 					}}>编辑</a>
-					{record.status === 1 ? <a href='javascript:;' className='left-gap' onClick={() => {
+					<a className='little-left-gap' target='_blank' href={`/finance/studioManage/check?id=${record.id}`} >查看</a>
+					{record.status === 1 ? <a href='javascript:;' className='little-left-gap' onClick={() => {
 						handleStopStudio(record);
 					}}>停用</a> : null
 					}
-					{record.status === 0 || record.status === 2 ? <a href='javascript:;' className='left-gap' onClick={() => {
+					{record.status === 0 || record.status === 2 ? <a href='javascript:;' className='little-left-gap' onClick={() => {
 						handleStartStudio(record);
 					}}>启用</a> : null}
 					{/* <a href='javascript:;' className='left-gap'>使用详情</a> */}
@@ -271,6 +271,194 @@ export const orderConfig = [
 		dataIndex: 'tax',
 		key: 'tax',
 		align: 'center',
+	}
+];
+export const detailColumns = [
+	{
+		title: '作室名称：',
+		dataIndex: 'name',
+		key: 'name',
+		align: 'center'
+	},
+	{
+		title: '打款标识：',
+		dataIndex: 'identity',
+		key: 'identity',
+		align: 'center',
+
+	},
+	{
+		title: '类型：',
+		dataIndex: 'type',
+		key: 'type',
+		align: 'center',
+		render: text => {
+			return text == 1 ? '自由' : text == 2 ? '三方' : '-'
+		}
+	},
+	{
+		title: '支持平台：',
+		dataIndex: 'supported_platforms',
+		key: 'supported_platforms',
+		align: 'center',
+		render: text => {
+			return text == 1 ? '不限' : text == 2 ? '快手' : '-'
+		}
+	},
+	{
+		title: '快易提：',
+		dataIndex: 'is_support_flash',
+		key: 'is_support_flash',
+		align: 'center',
+		render: text => {
+			return text == 1 ? '支持' : text == 2 ? '不支持' : '-'
+		}
+	},
+	{
+		title: '非身份证：',
+		dataIndex: 'is_support_id_card',
+		key: 'is_support_id_card',
+		align: 'center',
+		render: text => {
+			return text == 1 ? '支持' : text == 2 ? '不支持' : '-'
+		}
+	},
+	{
+		title: '总限额：',
+		dataIndex: 'total_limit',
+		key: 'total_limit',
+		align: 'center',
+	},
+	{
+		title: '冻结额度：',
+		dataIndex: 'requirement_name',
+		key: 'requirement_name',
+		align: 'center',
+	},
+	{
+		title: '使用限额：',
+		dataIndex: 'agent_name',
+		key: 'agent_name',
+		align: 'center',
+	},
+	{
+		title: '剩余额度：',
+		dataIndex: 'requirement_company_name',
+		key: 'requirement_company_name',
+		align: 'center',
+	},
+	{
+		title: '单笔限额：',
+		dataIndex: 'single_limit',
+		key: 'single_limit',
+		align: 'center',
+	},
+	{
+		title: '博主单月累计限额：',
+		dataIndex: 'monthly_limit',
+		key: 'monthly_limit',
+		align: 'center',
+	},
+	{
+		title: '支付方式',
+		dataIndex: 'payment_type',
+		key: 'payment_type',
+		align: 'center',
+		colspan: 3,
+		width: 140,
+		render: (text, record) => {
+			const isAlipay = record.is_support_alipay === 1;
+			const isBank = record.payment_type_id !== 0;
+			const value = isAlipay && isBank ? '支付宝&银行卡' : isAlipay ? '支付宝' : '银行卡';
+			return value
+		}
+	},
+	{
+		title: '银行卡开户行：',
+		dataIndex: 'bank_agency',
+		key: 'bank_agency',
+		align: 'center'
+	},
+	{
+		title: '开户支行：',
+		dataIndex: 'bank_agency_subbranch',
+		key: 'bank_agency_subbranch',
+		align: 'center',
+	},
+	{
+		title: '开户行所在省：',
+		dataIndex: 'bank_agency_province',
+		key: 'bank_agency_province',
+		align: 'center'
+	},
+	{
+		title: '开户行所在市：',
+		dataIndex: 'bank_agency_city',
+		key: 'bank_agency_city',
+		align: 'center'
+	},
+	{
+		title: '持卡人：',
+		dataIndex: 'real_name',
+		key: 'real_name',
+		align: 'center'
+	},
+	{
+		title: '卡号：',
+		dataIndex: 'card_number',
+		key: 'card_number',
+		align: 'center'
+	},
+	{
+		title: '支付宝名称：',
+		dataIndex: 'alipay_real_name',
+		key: 'alipay_real_name',
+		align: 'center'
+	},
+	{
+		title: '支付宝账号：',
+		dataIndex: 'alipay_card_number',
+		key: 'alipay_card_number',
+		align: 'center'
+	},
+	{
+		title: '税率：',
+		dataIndex: 'invoice_tax_rate',
+		key: 'invoice_tax_rate',
+		align: 'center'
+	},
+	{
+		title: '发票抬头：',
+		dataIndex: 'invoice_provider',
+		key: 'invoice_provider',
+		align: 'center'
+	},
+	{
+		title: '操作人：',
+		dataIndex: 'main_user_name',
+		key: 'main_user_name',
+		align: 'center'
+	},
+	{
+		title: '有效期：',
+		dataIndex: 'validity_time',
+		key: 'validity_time',
+		align: 'center',
+		render: (text, record) => {
+			return record.validity_start + '~' + record.validity_end
+		}
+	},
+	{
+		title: '备注：',
+		dataIndex: 'remark',
+		key: 'remark',
+		align: 'center'
+	},
+	{
+		title: '修订时间：',
+		dataIndex: 'payment_time',
+		key: 'payment_time',
+		align: 'center'
 	}
 ];
 export const bankList = {

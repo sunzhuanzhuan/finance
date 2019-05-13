@@ -143,7 +143,6 @@ class RemitOrderManage extends React.Component {
 		})
 	}
 	handleChangeStudio = () => {
-		const { rowsMap } = this.state;
 		this.setState({ studioVisible: true });
 	}
 	onSelectChange = (selectedRowKeys, selectedRows) => {
@@ -167,7 +166,7 @@ class RemitOrderManage extends React.Component {
 		this.onSelectChange(Object.keys(obj), Object.values(obj));
 	}
 	render() {
-		let { newVisible, remitOrderLoading, outputVisible, remitOrderPageSize, filterParams, outputLoading, receiptsVisible, questParams, selectedRowKeys, studioVisible } = this.state;
+		let { newVisible, remitOrderLoading, outputVisible, remitOrderPageSize, filterParams, outputLoading, receiptsVisible, questParams, selectedRowKeys, rowsMap, studioVisible } = this.state;
 		let { remitOrderData: { data = [], total = 20, current_page = 1, payment_slip_status_name }, excel_name_list: { title, excel } } = this.props;
 		const checked = data.every(item => selectedRowKeys.includes(item.id.toString()));
 		let remitOrderConfig = remitOrderFunc(payment_slip_status_name, this.handleOutputDetail, this.handleReceiptsVisible, this.handleTipVisible);
@@ -229,7 +228,10 @@ class RemitOrderManage extends React.Component {
 			></RemitModal>
 			{receiptsVisible ? <ReceiptsModal visible={receiptsVisible} onCancel={this.closeReceiptsModal} questParams={questParams} /> : null}
 			{studioVisible && <StudioModal visible={studioVisible}
-				onCancel={() => { this.setState({ studioVisible: false }) }} />}
+				selectedRowKeys={selectedRowKeys}
+				onCancel={() => { this.setState({ studioVisible: false }) }}
+				rowsMap={rowsMap}
+			/>}
 		</div>
 	}
 }

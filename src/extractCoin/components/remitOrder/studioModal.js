@@ -1,4 +1,7 @@
 import React from 'react'
+import { connect } from 'react-redux';
+import { bindActionCreators } from "redux";
+import * as remitOrderActions from "../../action/remitOrder";
 import { Select, Modal, Button, Form } from "antd";
 import './studioModal.less'
 import numeral from 'numeral';
@@ -13,17 +16,25 @@ class StudioModal extends React.Component {
 
 		}
 	}
+	componentDidMount() {
+		this.props.actions.getFlashStudioList({ status: 1, page: 1, page_size: 100 });
+	}
 	handleOk = (e) => {
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
-				this.props.handleSubmit(values);
+				const { selectedRowKeys } = this.props;
+				const payment = selectedRowKeys.map(item => ({ source_id: item }));
+				this.props.actions.postTransferStudio({ ...values, payment });
 			}
 		});
 	}
 	render() {
 		const { getFieldDecorator } = this.props.form;
-		const { visible, onCancel, freezeList, studioCheck, isClick, curSelectRows } = this.props;
+		const { visible, onCancel, rowsMap, flashStudioLists = [] } = this.props;
+		const total = Object.values(rowsMap).reduce((data, item) => {
+			return data + parseFloat(item.occupy_amount / 100);
+		}, 0)
 		return <Modal
 			wrapClassName='studio-modal'
 			title={null}
@@ -32,24 +43,25 @@ class StudioModal extends React.Component {
 			onCancel={onCancel}
 			footer={[
 				<Button key="back" onClick={onCancel}>返回</Button>,
-				<Button key="submit" type="primary" onClick={this.handleOk} disabled={isClick}>确认</Button>
+				<Button key="submit" type="primary" onClick={this.handleOk}>确认</Button>
 			]}
 		>
 			<div className='modal-header'>
 				<h3>请选择更换的工作室名称</h3>
 				<p>注：<span className='red-font'>更换工作室以提现单为维度处理</span></p>
 			</div>
-			{/* <div className='studio-list-container'>
+			<div className='studio-list-container'>
 				<div className='studio-list'>
-					<div key={item.source_id}>
-						<span>打款类型：{item.source_type_display}</span>
-						<span style={{ display: 'inline-block', width: '110px' }} className='left-gap'>打款单ID：{item.source_id}</span>
+					{Object.values(rowsMap).map(item => (<div key={item.source_id}>
+						<span>打款类型：快易提</span>
+						<span style={{ display: 'inline-block', width: '110px' }} className='left-gap'>打款单ID：{item.id}</span>
 						<span className='left-gap'>已冻结订单金额：{numeral(item.occupy_amount / 100).format('0,0.00')}</span>
-					</div>
-					{curSelectRows.length > 20 && <div style={{ textAlign: 'center' }}>最多只显示20条哟~</div>}
+					</div>))}
+
+					{Object.keys(rowsMap).length > 20 && <div style={{ textAlign: 'center' }}>最多只显示20条哟~</div>}
 				</div>
 				<div>
-					转移订单总金额：{type && type === 'stop' ? numeral(studioCheck.total_freeze / 100).format('0,0.00') : type && type === 'change' ? numeral(rowsValue / 100).format('0,0.00') : null}
+					转移订单总金额：{numeral(total).format('0,0.00')}
 				</div>
 			</div>
 			<div style={{ marginTop: '10px' }}>
@@ -58,18 +70,18 @@ class StudioModal extends React.Component {
 					<FormItem>
 						{getFieldDecorator('to_studio_id', {
 							rules: [{
-								required: true, message: '目标工作室为空！'
+								required: true, message: '请选择转移的目标工作室！'
 							}]
 						})(
 							<Select className='studio-select'
 								showSearch
 								filterOption={(input, option) => {
 									let value = option.props.value;
-									let obj = studioNameList.find(item => item.id === value);
+									let obj = flashStudioLists.find(item => item.id === value);
 									return obj.name.toLowerCase().indexOf(input.toLowerCase()) >= 0
 								}}
 							>
-								{studioNameList.map(item => {
+								{flashStudioLists.map(item => {
 									return <Option key={item.id} value={item.id}>
 										<p>{item.name}</p>
 										<p>
@@ -82,9 +94,17 @@ class StudioModal extends React.Component {
 						)}
 					</FormItem>
 				</Form>
-			</div> */}
+			</div>
 		</Modal>
 	}
 }
 
-export default Form.create()(StudioModal)
+const mapStateToProps = (state) => {
+	return {
+		flashStudioLists: state.withdraw.flashStudioLists,
+	}
+}
+const mapDispatchToProps = dispatch => ({
+	actions: bindActionCreators({ ...remitOrderActions }, dispatch)
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Form.create()(StudioModal))

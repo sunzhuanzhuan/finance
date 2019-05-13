@@ -56,7 +56,6 @@ class StudioFormTop extends React.Component {
 	render() {
 		const { getFieldDecorator, getFieldValue } = this.props.form;
 		const { formItemLayout, platforms, bank } = this.props;
-		const collectionValue = getFieldValue('d');
 		const paymentValue = getFieldValue('is_support_alipay');
 		return <div>
 			<Row>
@@ -128,7 +127,7 @@ class StudioFormTop extends React.Component {
 			</Row>
 			<Row>
 				<FormItem label='非身份证' {...formItemLayout}>
-					{getFieldDecorator('a', {
+					{getFieldDecorator('is_support_id_card', {
 						rules: [{ required: true, message: '请选择是否支持非身份证' }]
 					})(
 						<RadioGroup>
@@ -153,7 +152,7 @@ class StudioFormTop extends React.Component {
 			</Row>
 			<Row>
 				<FormItem label='单笔限额' {...formItemLayout}>
-					{getFieldDecorator('b', {
+					{getFieldDecorator('single_limit', {
 						rules: [{
 							required: true, message: '请输入单笔限额'
 						},
@@ -167,7 +166,7 @@ class StudioFormTop extends React.Component {
 			</Row>
 			<Row>
 				<FormItem label='博主单月累计限额' {...formItemLayout}>
-					{getFieldDecorator('c', {
+					{getFieldDecorator('monthly_limit', {
 						rules: [{
 							required: true, message: '请输入博主单月累计限额'
 						}, {
@@ -179,25 +178,7 @@ class StudioFormTop extends React.Component {
 				</FormItem>
 			</Row>
 			<Row>
-				<FormItem label='收款方式' {...formItemLayout}>
-					{getFieldDecorator('d', {
-						initialValue: [2],
-						rules: [{ required: true, message: '请选择支付方式' }]
-					})(
-						<CheckboxGroup
-							options={[
-								{ label: '支付宝', value: 1 },
-								{ label: '银行卡', value: 2, disabled: true }
-							]}
-							onChange={this.checkChange}
-						/>
-					)}
-				</FormItem>
-			</Row>
-			{collectionValue && collectionValue.includes(1) && <Alipay form={this.props.form} formItemLayout={formItemLayout}></Alipay>}
-			{collectionValue && collectionValue.includes(2) && <BankCard form={this.props.form} formItemLayout={formItemLayout} bank={bank} extra={true}></BankCard>}
-			<Row>
-				<FormItem label='付款支付方式' {...formItemLayout}>
+				<FormItem label='支付方式' {...formItemLayout}>
 					{getFieldDecorator('is_support_alipay', {
 						initialValue: [2],
 						rules: [{ required: true, message: '请选择支付方式' }]
@@ -212,7 +193,7 @@ class StudioFormTop extends React.Component {
 					)}
 				</FormItem>
 			</Row>
-			{paymentValue && paymentValue.includes(1) && !collectionValue.includes(1) && <Alipay form={this.props.form} formItemLayout={formItemLayout}></Alipay>}
+			{paymentValue && paymentValue.includes(1) && <Alipay form={this.props.form} formItemLayout={formItemLayout}></Alipay>}
 			{paymentValue && paymentValue.includes(2) && <BankCard form={this.props.form} formItemLayout={formItemLayout} bank={bank}></BankCard>}
 		</div>
 	}

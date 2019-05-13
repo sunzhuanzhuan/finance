@@ -56,13 +56,13 @@ class BankCard extends React.Component {
 					)}
 				</FormItem>
 			</Row>
-			{extra && <Row>
+			<Row>
 				<FormItem label='开户支行' {...formItemLayout}>
-					{getFieldDecorator('e', { rules: [{ required: true, message: '请填写开户支行' }] })(
+					{getFieldDecorator('bank_agency_subbranch', { rules: [{ required: true, message: '请填写开户支行' }] })(
 						<Input placeholder="请输入" />
 					)}
 				</FormItem>
-			</Row>}
+			</Row>
 			<Row>
 				<FormItem label='持卡人' {...formItemLayout}>
 					{getFieldDecorator('real_name', {

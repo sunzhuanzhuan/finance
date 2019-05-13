@@ -297,6 +297,7 @@ class SearchForm extends React.PureComponent {
 		this.props.form.validateFields((err, values) => {
 			// 表单表单不报错,且props有传递的情况下,才返回表单数据
 			if (!err && this.props.getAction) {
+				const search = qs.parse(this.props.location.search.substring(1));
 				// 字符串类型全部去除两边的空格
 				let form_data = this.removeNotNeedValue(values);
 
@@ -323,7 +324,7 @@ class SearchForm extends React.PureComponent {
 				this.props.getAction({ ...params.keys }).then(() => {
 					this.props.history.replace({
 						pathname: this.props.location.pathname,
-						search: `?${qs.stringify(params)}`,
+						search: `?${qs.stringify({ ...search, ...params })}`,
 					})
 					hide();
 				}).catch(({ errorMsg }) => {

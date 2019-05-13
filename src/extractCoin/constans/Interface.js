@@ -22,5 +22,6 @@ export default {
 	getBillList: '/flash/bill_list',
 	paymentOrderDetail: '/flash/bill_detail',
 	//更换工作室
-	getFlashStudioList: '/finance/studio/list'
+	getFlashStudioList: '/finance/studio/list',
+	postTransferStudio: '/flash/transfer-studio',
 }

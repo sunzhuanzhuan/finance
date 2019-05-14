@@ -648,10 +648,11 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				dataIndex: 'order_id',
 				key: 'order_id',
 				align: 'center',
+				width: 80,
 				render: (text, record) => {
 					return <div>
 						<div>{text}</div>
-						{record.is_plan_manager == 1 ? <div style={{ display: 'inline-block', backgroundColor: 'red', color: '#fff', padding: '0 10px' }}>含策划</div> : null}
+						{record.plan_manager_id && record.plan_manager_id != '0' && <div style={{ display: 'inline-block', backgroundColor: 'red', color: '#fff', padding: '0 10px' }}>含策划</div>}
 					</div>
 				}
 			},
@@ -665,7 +666,7 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				render: (text, record) => {
 					return <div>
 						<div>{text}</div>
-						{record.is_plan_manager == 1 ? <div style={{ display: 'inline-block', backgroundColor: 'red', color: '#fff', padding: '0 10px' }}>含策划</div> : null}
+						{record.plan_manager_id && record.plan_manager_id != '0' && <div style={{ display: 'inline-block', backgroundColor: 'red', color: '#fff', padding: '0 10px' }}>含策划</div>}
 					</div>
 				}
 			},
@@ -686,14 +687,14 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				dataIndex: 'company_name',
 				key: 'company_name',
 				align: 'center',
-				width: 200,
+				width: 100,
 			},
 			'project_name': {
 				title: '所属项目',
 				dataIndex: 'project_name',
 				key: 'project_name',
 				align: 'center',
-				width: 160,
+				width: 100,
 				render: (text) => {
 					return text ? text : '-'
 				}
@@ -717,7 +718,7 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				dataIndex: 'requirement_id_name',
 				key: 'requirement_id_name',
 				align: 'center',
-				width: 160,
+				width: 120,
 				render: (text, { requirement_id, requirement_name }) => {
 					return <div>
 						<div>{requirement_id}</div>
@@ -730,7 +731,7 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				dataIndex: 'platform_name',
 				key: 'platform_name',
 				align: 'center',
-				width: 160,
+				width: 100,
 			},
 			'account_id': {
 				title: 'account id',
@@ -744,14 +745,14 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				dataIndex: 'weibo_name',
 				key: 'weibo_name',
 				align: 'center',
-				width: 160,
+				width: 120,
 			},
 			'discount_rate': {
 				title: '折扣比例',
 				dataIndex: 'discount_rate',
 				key: 'discount_rate',
 				align: 'center',
-				width: 160,
+				width: 80,
 				render: (text, { price }) => {
 					const discount = price && price[0] ? price[0].discount_rate : 0;
 					return discount ? numeral(discount).format('0.00%') : '-'
@@ -762,10 +763,10 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				dataIndex: 'quoted_price',
 				key: 'quoted_price',
 				align: 'center',
-				width: 240,
+				width: 260,
 				render: (text, { price = [] }) => {
 					const flag = price && price[0] ? price[0].trinity_type == 2 : false;
-					return <div>
+					return <div  style={{width:260}}>
 						{price.map((item, index) => {
 							return <div key={index}>
 								<div>{`${item.price_label}:${item.open_cost_price}`}</div>
@@ -780,10 +781,10 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				dataIndex: 'price',
 				key: 'price',
 				align: 'center',
-				width: 240,
+				width: 260,
 				render: (text, { price = [] }) => {
 					const flag = price && price[0] ? price[0].trinity_type == 2 : false;
-					return <div>
+					return <div style={{width:260}}>
 						{price.map((item, index) => {
 							return <div key={index}>
 								<div>{`${item.price_label}:${item.quoted_price}`}</div>
@@ -859,10 +860,10 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				dataIndex: 'pre_min_sell_price',
 				key: 'pre_min_sell_price',
 				align: 'center',
-				width: 240,
+				width: 246,
 				render: (text, { price = [], pre_min_sell_price = [] }) => {
 					const flag = price && price[0] ? price[0].trinity_type == 2 : false;
-					return <div>
+					return <div style={{width:260}}>
 						{pre_min_sell_price.map((item, index) => {
 							return <div key={index}>
 								<div>{`${item.price_label}:${item.min_sell_price}`}</div>

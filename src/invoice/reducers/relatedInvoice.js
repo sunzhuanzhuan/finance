@@ -2,8 +2,8 @@ import { handleActions } from 'redux-actions';
 import {
 	getRelatedInvoiceData_success,
 	getAvailableInvoiceData_success,
-	getRelatedInvoiceSearchItem_success,
-} from '../actions/relatedInvoice';
+	getTrinityInvoiceSearchItem_success,
+} from '../actions/trinityInvoice';
 
 export const relatedInvoiceData = handleActions({
 	[getRelatedInvoiceData_success]: (state, action) => {
@@ -18,7 +18,7 @@ export const availableInvoiceData = handleActions({
 }, {})
 
 export const relatedInvoiceSearchItem = handleActions({
-	[getRelatedInvoiceSearchItem_success]: (state, action) => {
+	[getTrinityInvoiceSearchItem_success]: (state, action) => {
 		return { ...action.payload.data }
 	}
 }, {})

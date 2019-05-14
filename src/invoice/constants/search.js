@@ -3,7 +3,8 @@ export const relatedInvoiceSearchFunc = ({ agent, invoice_title }) => [
 		ctype: 'input',
 		attr: {
 			placeholder: '请输入',
-			style: { width: 160 }
+			style: { width: 160 },
+			allowClear: true
 		},
 		field: {
 			label: '发票号',
@@ -28,7 +29,8 @@ export const relatedInvoiceSearchFunc = ({ agent, invoice_title }) => [
 		ctype: 'input',
 		attr: {
 			placeholder: '请输入',
-			style: { width: 160 }
+			style: { width: 160 },
+			allowClear: true
 		},
 		field: {
 			label: '发票开具方',
@@ -55,7 +57,8 @@ export const trinityInvoiceSearchFunc = ({ invoice_title, invoice_type, invoice_
 		ctype: 'input',
 		attr: {
 			placeholder: '请输入',
-			style: { width: 160 }
+			style: { width: 160 },
+			allowClear: true
 		},
 		field: {
 			label: '发票号',
@@ -94,7 +97,8 @@ export const trinityInvoiceSearchFunc = ({ invoice_title, invoice_type, invoice_
 		ctype: 'input',
 		attr: {
 			placeholder: '请输入',
-			style: { width: 160 }
+			style: { width: 160 },
+			allowClear: true
 		},
 		field: {
 			label: '发票内容',
@@ -105,7 +109,8 @@ export const trinityInvoiceSearchFunc = ({ invoice_title, invoice_type, invoice_
 		ctype: 'input',
 		attr: {
 			placeholder: '请输入',
-			style: { width: 160 }
+			style: { width: 160 },
+			allowClear: true
 		},
 		field: {
 			label: '发票开具方',
@@ -133,7 +138,7 @@ export const trinityInvoiceSearchFunc = ({ invoice_title, invoice_type, invoice_
 		},
 		field: {
 			label: '发票录入日期',
-			value: ['created_time_start', 'created_time_end'],
+			value: ['created_at_start', 'created_at_end'],
 		}
 	},
 	{

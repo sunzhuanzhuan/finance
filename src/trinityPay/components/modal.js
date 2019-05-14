@@ -67,7 +67,7 @@ class PreModal extends React.Component {
 					payment_slip_id: id,
 					payment_screenshot: qs.stringify(urlArray)
 				}
-				status == 'revocation' ? params.payment_backout_reason = values.remark : params.payment_remark = values.remark;
+				status == 'revocation' ? params.payment_revoke_reason = values.remark : params.payment_remark = values.remark;
 				this.props.actions[actionName](params).then(() => {
 					message.success('操作成功!');
 					this.props.queryAction({ page: current, ...search.keys });

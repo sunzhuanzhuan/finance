@@ -43,7 +43,7 @@ class RelatedChooseInvoice extends React.Component {
 			if (func && Object.prototype.toString.call(func) === '[object Function]') {
 				func();
 			}
-			this.setState({ loading: false })
+			this.setState({ loading: false, selectedRowKeys: [], rowsMap: {} })
 		}).catch(({ errorMsg }) => {
 			this.setState({ loading: false });
 			message.error(errorMsg || '列表加载失败，请重试！');

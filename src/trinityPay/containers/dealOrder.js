@@ -54,8 +54,8 @@ class DealOrder extends React.Component {
 		}
 	}
 	handleExport = () => {
-		const hide = message.loading('导出中,请稍候...');
-		const { payment_slip_id } = qs.parse(this.props.location.search.substring(1));
+		message.loading('导出中,请稍候...');
+		const { payment_slip_id, settle_type } = qs.parse(this.props.location.search.substring(1));
 		const data = this.form.getFieldsValue();
 		const obj = {};
 		for (let [key, value] of Object.entries(data)) {
@@ -65,12 +65,11 @@ class DealOrder extends React.Component {
 				else obj[key] = value.format('YYYY-MM-DD');
 			}
 		}
-		this.props.actions.getDealOrderExport({ ...obj, payment_slip_id }).then(() => {
-			message.success('导出成功！');
-			hide();
-		}).catch(({ errorMsg }) => {
-			message.error(errorMsg || '导出失败，请重试！');
-		})
+		window.open(`/api/trinity/publicOrderTrade/exportPublicOrderTrade?${qs.stringify({
+			settle_type,
+			payment_slip_id,
+			...obj
+		})}`);
 	}
 	render() {
 		const search = qs.parse(this.props.location.search.substring(1));

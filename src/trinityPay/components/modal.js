@@ -57,7 +57,7 @@ class PreModal extends React.Component {
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
 				const current = (search.keys && search.keys.payment_status && list.length === 1) ? (page - 1 || page) : page;
-				const urlArray = values.payment_screenshot.map(item => ({
+				const urlArray = values.payment_screenshot && values.payment_screenshot.map(item => ({
 					uid: item.uid,
 					status: item.status,
 					name: item.name,

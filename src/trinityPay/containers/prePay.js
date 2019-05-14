@@ -66,7 +66,7 @@ class PrePay extends React.Component {
 		this.setState({ id, status, modalVisible: boolean });
 	}
 	handleExport = () => {
-		message.loading('导出中,请稍候...', 4);
+		message.loading('导出中,请稍候...', 3);
 		const data = this.form.getFieldsValue();
 		const obj = {};
 		for (let [key, value] of Object.entries(data)) {
@@ -76,15 +76,10 @@ class PrePay extends React.Component {
 				else obj[key] = value.format('YYYY-MM-DD');
 			}
 		}
-		window.open(`api/trinity/publicPaymentSlip/exportPublicPaymentSlip?${qs.stringify({
+		window.open(`/api/trinity/publicPaymentSlip/exportPublicPaymentSlip?${qs.stringify({
 			settle_type: 1,
 			...obj
 		})}`);
-		// this.props.actions.getPrePayExport({ ...obj, settle_type: 1 }).then(() => {
-		// 	message.success('导出成功！');
-		// }).catch(({ errorMsg }) => {
-		// 	message.error(errorMsg || '导出失败，请重试！');
-		// })
 	}
 	render() {
 		const search = qs.parse(this.props.location.search.substring(1));

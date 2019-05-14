@@ -7,6 +7,7 @@ const StudioList = lazyLoadComponent(() => import("./containers/studioManage"))
 const NewStudio = lazyLoadComponent(() => import("./containers/newStudio"))
 const StudioDetail = lazyLoadComponent(() => import("./containers/studioDetail"))
 const CheckStudio = lazyLoadComponent(() => import("./containers/checkStudio"))
+const IdCardExport = lazyLoadComponent(() => import("./containers/idCardExport"))
 
 class StudioManage extends Component {
 	state = {}
@@ -17,6 +18,7 @@ class StudioManage extends Component {
 				<Route exact path="/finance/studioManage/new" component={NewStudio} />
 				<Route exact path="/finance/studioManage/detail" component={StudioDetail} />
 				<Route exact path="/finance/studioManage/check" component={CheckStudio} />
+				<Route exact path="/finance/studioManage/idCardExport" component={IdCardExport} />
 			</div>
 		);
 	}

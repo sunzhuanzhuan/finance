@@ -31,7 +31,7 @@ class StudioModal extends React.Component {
 	}
 	render() {
 		const { getFieldDecorator } = this.props.form;
-		const { visible, onCancel, rowsMap, flashStudioLists = [] } = this.props;
+		const { visible, onCancel, rowsMap, selectedRowKeys, flashStudioLists = [] } = this.props;
 		const total = Object.values(rowsMap).reduce((data, item) => {
 			return data + parseFloat(item.occupy_amount / 100);
 		}, 0)
@@ -57,8 +57,7 @@ class StudioModal extends React.Component {
 						<span style={{ display: 'inline-block', width: '110px' }} className='left-gap'>打款单ID：{item.id}</span>
 						<span className='left-gap'>已冻结订单金额：{numeral(item.occupy_amount / 100).format('0,0.00')}</span>
 					</div>))}
-
-					{Object.keys(rowsMap).length > 20 && <div style={{ textAlign: 'center' }}>最多只显示20条哟~</div>}
+					{selectedRowKeys.length > 20 && <div style={{ textAlign: 'center' }}>最多只显示20条哟~</div>}
 				</div>
 				<div>
 					转移订单总金额：{numeral(total).format('0,0.00')}

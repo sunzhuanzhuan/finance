@@ -1,136 +1,134 @@
 import React from "react";
 import numeral from "numeral";
-export const studioConfigFunc = (handleStopStudio, handleStartStudio, history) => {
-	return [
-		{
-			title: '工作室ID',
-			dataIndex: 'id',
-			key: 'id',
-			align: 'center',
-			width: 80,
-			// fixed: 'left'
-		},
-		{
-			title: '状态',
-			dataIndex: 'status_display',
-			key: 'status_display',
-			align: 'center',
-			width: 120
-		},
-		{
-			title: '名称',
-			dataIndex: 'name',
-			key: 'name',
-			align: 'center',
-			width: '244px',
-			render: (text, { name }) => {
-				if (name && name.length > 30) {
-					return <div title={name}>
-						{name.slice(0, 29) + '...'}
-					</div>
-				} else {
-					return name
-				}
-			}
-		},
-		{
-			title: '类型',
-			dataIndex: 'type_display',
-			key: 'type_display',
-			align: 'center',
-			width: 80
-		},
-		{
-			title: '平台',
-			dataIndex: 'supported_platforms_display',
-			key: 'supported_platforms_display',
-			align: 'center',
-			width: 100
-		},
-		{
-			title: '快易提',
-			dataIndex: 'is_support_flash',
-			key: 'is_support_flash',
-			align: 'center',
-			width: 100,
-			render: (text) => {
-				const value = text === 1 ? '支持' : '不支持';
-				return value
-			}
-		},
-		{
-			title: '非身份证',
-			dataIndex: 'a',
-			key: 'a',
-			align: 'center',
-			width: 120,
-			render: (text) => {
-				const value = text === 1 ? '支持' : '不支持';
-				return value
-			}
-		},
-		{
-			title: '有效期',
-			dataIndex: 'validity',
-			key: 'validity',
-			align: 'center',
-			width: 200,
-			render: (text, record) => {
-				return `${record.validity_start}~${record.validity_end}`
-			}
-		},
-		{
-			title: '收款方式',
-			dataIndex: 'b',
-			key: 'b',
-			align: 'center',
-			width: 140,
-			render: (text, record) => {
-				const isAlipay = record.is_support_alipay === 1;
-				const isBank = record.payment_type_id !== 0;
-				const value = isAlipay && isBank ? '支付宝&银行卡' : isAlipay ? '支付宝' : '银行卡';
-				return value
-			}
-		},
-		{
-			title: '付款支付方式',
-			dataIndex: 'payment_type',
-			key: 'payment_type',
-			align: 'center',
-			width: 140,
-			render: (text, record) => {
-				const isAlipay = record.is_support_alipay === 1;
-				const isBank = record.payment_type_id !== 0;
-				const value = isAlipay && isBank ? '支付宝&银行卡' : isAlipay ? '支付宝' : '银行卡';
-				return value
-			}
-		},
-		{
-			title: '操作',
-			dataIndex: 'action',
-			key: 'action',
-			align: 'center',
-			width: 160,
-			// fixed: 'right',
-			render: (Text, record) => {
-				return <div>
-					<a href='javascript:;' onClick={() => {
-						history.push(`/finance/studiomanage/new?postType=2&id=${record.id}&name=${record.name}`);
-					}}>编辑</a>
-					<a className='little-left-gap' target='_blank' href={`/finance/studioManage/check?id=${record.id}`} >查看</a>
-					{record.status === 1 ? <a href='javascript:;' className='little-left-gap' onClick={() => {
-						handleStopStudio(record);
-					}}>停用</a> : null
-					}
-					{record.status === 0 || record.status === 2 ? <a href='javascript:;' className='little-left-gap' onClick={() => {
-						handleStartStudio(record);
-					}}>启用</a> : null}
-					{/* <a href='javascript:;' className='left-gap'>使用详情</a> */}
+export const studioConfigFunc = (handleStopStudio, handleStartStudio, history) => [
+	{
+		title: '工作室ID',
+		dataIndex: 'id',
+		key: 'id',
+		align: 'center',
+		width: 80,
+		// fixed: 'left'
+	},
+	{
+		title: '状态',
+		dataIndex: 'status_display',
+		key: 'status_display',
+		align: 'center',
+		width: 120
+	},
+	{
+		title: '名称',
+		dataIndex: 'name',
+		key: 'name',
+		align: 'center',
+		width: '244px',
+		render: (text, { name }) => {
+			if (name && name.length > 30) {
+				return <div title={name}>
+					{name.slice(0, 29) + '...'}
 				</div>
+			} else {
+				return name
 			}
 		}
-	]
-}
+	},
+	{
+		title: '类型',
+		dataIndex: 'type_display',
+		key: 'type_display',
+		align: 'center',
+		width: 80
+	},
+	{
+		title: '平台',
+		dataIndex: 'supported_platforms_display',
+		key: 'supported_platforms_display',
+		align: 'center',
+		width: 100
+	},
+	{
+		title: '快易提',
+		dataIndex: 'is_support_flash',
+		key: 'is_support_flash',
+		align: 'center',
+		width: 100,
+		render: (text) => {
+			const value = text === 1 ? '支持' : '不支持';
+			return value
+		}
+	},
+	{
+		title: '非身份证',
+		dataIndex: 'a',
+		key: 'a',
+		align: 'center',
+		width: 120,
+		render: (text) => {
+			const value = text === 1 ? '支持' : '不支持';
+			return value
+		}
+	},
+	{
+		title: '有效期',
+		dataIndex: 'validity',
+		key: 'validity',
+		align: 'center',
+		width: 200,
+		render: (text, record) => {
+			return `${record.validity_start}~${record.validity_end}`
+		}
+	},
+	{
+		title: '收款方式',
+		dataIndex: 'b',
+		key: 'b',
+		align: 'center',
+		width: 140,
+		render: (text, record) => {
+			const isAlipay = record.is_support_alipay === 1;
+			const isBank = record.payment_type_id !== 0;
+			const value = isAlipay && isBank ? '支付宝&银行卡' : isAlipay ? '支付宝' : '银行卡';
+			return value
+		}
+	},
+	{
+		title: '付款支付方式',
+		dataIndex: 'payment_type',
+		key: 'payment_type',
+		align: 'center',
+		width: 140,
+		render: (text, record) => {
+			const isAlipay = record.is_support_alipay === 1;
+			const isBank = record.payment_type_id !== 0;
+			const value = isAlipay && isBank ? '支付宝&银行卡' : isAlipay ? '支付宝' : '银行卡';
+			return value
+		}
+	},
+	{
+		title: '操作',
+		dataIndex: 'action',
+		key: 'action',
+		align: 'center',
+		width: 160,
+		// fixed: 'right',
+		render: (Text, record) => {
+			return <div>
+				<a href='javascript:;' onClick={() => {
+					history.push(`/finance/studiomanage/new?postType=2&id=${record.id}&name=${record.name}`);
+				}}>编辑</a>
+				<a className='little-left-gap' target='_blank' href={`/finance/studioManage/check?id=${record.id}`} >查看</a>
+				{record.status === 1 ? <a href='javascript:;' className='little-left-gap' onClick={() => {
+					handleStopStudio(record);
+				}}>停用</a> : null
+				}
+				{record.status === 0 || record.status === 2 ? <a href='javascript:;' className='little-left-gap' onClick={() => {
+					handleStartStudio(record);
+				}}>启用</a> : null}
+				{/* <a href='javascript:;' className='left-gap'>使用详情</a> */}
+			</div>
+		}
+	}
+]
 export const detailConfig = [
 	{
 		title: '工作室ID',
@@ -459,6 +457,60 @@ export const detailColumns = [
 		dataIndex: 'payment_time',
 		key: 'payment_time',
 		align: 'center'
+	}
+];
+export const idCardExportColumns = [
+	{
+		title: '任务ID',
+		dataIndex: 'job_id',
+		key: 'job_id',
+		align: 'center'
+	},
+	{
+		title: '任务名称',
+		dataIndex: 'identity',
+		key: 'identity',
+		align: 'center',
+
+	},
+	{
+		title: '月份',
+		dataIndex: 'month',
+		key: 'month',
+		align: 'center',
+	},
+	{
+		title: '启动时间',
+		dataIndex: 'created_at',
+		key: 'created_at',
+		align: 'center',
+	},
+	{
+		title: '开始时间',
+		dataIndex: 'start_at',
+		key: 'start_at',
+		align: 'center',
+	},
+	{
+		title: '结束时间',
+		dataIndex: 'completed_at',
+		key: 'completed_at',
+		align: 'center',
+	},
+	{
+		title: '任务状态',
+		dataIndex: 'status',
+		key: 'status',
+		align: 'center',
+	},
+	{
+		title: '操作',
+		dataIndex: 'action',
+		key: 'action',
+		align: 'center',
+		render: text => {
+			return <a href='javascript:;'>下载</a>
+		}
 	}
 ];
 export const bankList = {

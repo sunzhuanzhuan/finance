@@ -93,3 +93,17 @@ export const {
 } = createHttpAction('getAllocationListStat', Interface.getAllocationListStat, {
 	method: 'get'
 });
+
+export const {
+	getIdCardList,
+	getIdCardList_success
+} = createHttpAction('getIdCardList', Interface.getIdCardList, {
+	method: 'get'
+});
+
+export const {
+	getIdCardListExport,
+	getIdCardListExport_success
+} = createHttpAction('getIdCardListExport', Interface.getIdCardListExport, {
+	method: 'get'
+});

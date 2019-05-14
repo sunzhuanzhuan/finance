@@ -85,7 +85,7 @@ class DatePay extends React.Component {
 		const datePayCols = datePayFunc(this.handleModal);
 		const paginationObj = getPagination(this, search, { total, page, page_size });
 		return <div className='datePay-container'>
-			<Statistics title={'三方平台打款单'} render={Stat(total, statistic)} />
+			<Statistics title={'三方平台周期打款单'} render={Stat(total, statistic)} />
 			<fieldset className='fieldset_css'>
 				<legend>查询</legend>
 				{pullReady && <SearForm data={datePaySearch} getAction={this.queryData} responseLayout={{ xs: 24, sm: 24, md: 10, lg: 8, xxl: 6 }} extraFooter={<Button type='primary' style={{ marginLeft: 20 }} onClick={this.handleExport}>导出</Button>} wrappedComponentRef={form => this.form = form} />}

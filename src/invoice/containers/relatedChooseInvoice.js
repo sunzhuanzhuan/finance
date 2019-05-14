@@ -59,6 +59,12 @@ class RelatedChooseInvoice extends React.Component {
 		const search = qs.parse(this.props.location.search.substring(1));
 		const { rowsMap } = this.state;
 		const relations = Object.values(rowsMap).map(item => ({ invoice_id: item.invoice_id, use_amount: item.price }));
+		if (!relations.length) {
+			Modal.error({
+				content: '请先勾选发票！'
+			});
+			return
+		}
 		this.props.actions.postAddRelation({
 			relations,
 			record_id: search.payment_slip_id
@@ -71,7 +77,9 @@ class RelatedChooseInvoice extends React.Component {
 				}
 			})
 		}).catch(({ errorMsg }) => {
-			Modal.error(errorMsg || '操作失败，请重试！');
+			Modal.error({
+				content: errorMsg || '操作失败，请重试！'
+			});
 		})
 	}
 	render() {

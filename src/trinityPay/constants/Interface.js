@@ -1,11 +1,11 @@
 export default {
 	//预付款
 	getPrePayData: '/trinity/publicPaymentSlip/list',
-	getPrePayExport: '/finance/advance/paymentSlip/export',
+	getPrePayExport: '/trinity/publicPaymentSlip/exportPublicPaymentSlip',
 	getPrimaryAccount: '/trinity/publicPaymentSlip/getUserByName',
 	//周期付款
 	getDatePayData: '/trinity/publicPaymentSlip/list',
-	getDatePayExport: '/finance/periodic/paymentSlip/export',
+	getDatePayExport: '/trinity/publicPaymentSlip/exportPublicPaymentSlip',
 	//公共操作方法
 	getPaySearchItem: '/trinity/publicPaymentSlip/searchItem',
 	getAgentListByCPId: '/trinity/publicPaymentSlip/getAgentListByCPId',
@@ -17,5 +17,5 @@ export default {
 	//三方订单明细
 	getDealOrderData: '/trinity/publicOrderTrade/list',
 	getDealOrderSearchItem: '/trinity/publicPaymentSlip/searchItem',
-	getDealOrderExport: '/finance/periodic/paymentSlip/orderExport',
+	getDealOrderExport: '/trinity/publicPaymentSlip/exportPublicPaymentSlip',
 }

@@ -54,6 +54,7 @@ class DealOrder extends React.Component {
 		}
 	}
 	handleExport = () => {
+		const hide = message.loading('导出中,请稍候...');
 		const { payment_slip_id } = qs.parse(this.props.location.search.substring(1));
 		const data = this.form.getFieldsValue();
 		const obj = {};
@@ -66,6 +67,7 @@ class DealOrder extends React.Component {
 		}
 		this.props.actions.getDealOrderExport({ ...obj, payment_slip_id }).then(() => {
 			message.success('导出成功！');
+			hide();
 		}).catch(({ errorMsg }) => {
 			message.error(errorMsg || '导出失败，请重试！');
 		})

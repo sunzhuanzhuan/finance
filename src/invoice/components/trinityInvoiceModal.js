@@ -103,7 +103,19 @@ class PreModal extends React.Component {
 			}
 		})
 	}
-
+	checkMoney = (rule, value, callback) => {
+		const newValue = value ? value.replace(/' '/g, '') : '';
+		const reg = /^[1-9]?\d+(\.\d\d?)?$/;
+		if (newValue && isNaN(newValue)) {
+			callback('请输入正确的金额');
+			return;
+		}
+		if (!reg.test(value)) {
+			callback('请输入最多保留两位的有效数字')
+			return;
+		}
+		callback()
+	}
 	render() {
 		const { getFieldDecorator } = this.props.form;
 		const { visible, onCancel, status, SearchItem, modType } = this.props;
@@ -178,12 +190,18 @@ class PreModal extends React.Component {
 					)}
 				</FormItem>
 				<FormItem label='发票金额' {...formItemLayout}>
-					{getFieldDecorator('invoice_pure_amount', { ...options })(
+					{getFieldDecorator('invoice_pure_amount', {
+						rules: [{ required: true, message: '该项为必填项！' },
+						{ validator: this.checkMoney }]
+					})(
 						<Input placeholder="请输入" style={{ width: 200 }} suffix={'元'} onChange={this.handlePureChange} disabled={modType == 2} />
 					)}
 				</FormItem>
 				<FormItem label='发票税额' {...formItemLayout}>
-					{getFieldDecorator('invoice_tax_amount', { ...options })(
+					{getFieldDecorator('invoice_tax_amount', {
+						rules: [{ required: true, message: '该项为必填项！' },
+						{ validator: this.checkMoney }]
+					})(
 						<Input placeholder="请输入" style={{ width: 200 }} suffix={'元'} onChange={this.handleTaxChange} disabled={modType == 2} />
 					)}
 				</FormItem>

@@ -73,7 +73,7 @@ export const relatedInvoiceFunc = (handleDel) => [
 		}
 	}
 ];
-export const availableInvoiceFunc = (getFieldDecorator, selectedRowKeys) => [
+export const availableInvoiceFunc = (getFieldDecorator, handleSelected, rowsMap) => [
 	{
 		title: '发票号',
 		dataIndex: 'invoice_number',
@@ -124,13 +124,16 @@ export const availableInvoiceFunc = (getFieldDecorator, selectedRowKeys) => [
 		width: 100,
 		render: (text, record) => {
 			return <FormItem>
-				{getFieldDecorator(`${record.invoice_number}.price`, {
+				{getFieldDecorator(`${record.invoice_id}.price`, {
 					rules: [{
 						validator: (...args) => { checkPrice(record, ...args) }
 					}]
 				})(
-					<InputNumber formatter={value => `${value}`.replace(/[^\d||.]/g, '')}
-						disabled={selectedRowKeys.includes(record.invoice_id)} />
+					<InputNumber formatter={value => `${value}`.replace(/[^\d||.]/g, '')} onBlur={(e) => {
+						const obj = { ...record, price: e.target.value };
+						const newRowsMap = { ...rowsMap, [record.invoice_id.toString()]: obj };
+						handleSelected(Object.keys(newRowsMap), Object.values(newRowsMap));
+					}} />
 				)
 				}
 			</FormItem>

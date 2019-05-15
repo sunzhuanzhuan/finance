@@ -51,7 +51,7 @@ class RelatedChooseInvoice extends React.Component {
 	}
 	handleSelected = (selectedRowKeys, selectedRows) => {
 		let rowsMap = selectedRows.reduce((data, current) => {
-			return { ...data, [current.invoice_number]: current }
+			return { ...data, [current.invoice_id.toString()]: current }
 		}, {});
 		this.setState({ selectedRowKeys, rowsMap })
 	}
@@ -83,29 +83,25 @@ class RelatedChooseInvoice extends React.Component {
 		})
 	}
 	render() {
-		const { getFieldDecorator, getFieldError, getFieldValue } = this.props.form;
+		const { getFieldDecorator, getFieldValue, setFieldsValue } = this.props.form;
 		const search = qs.parse(this.props.location.search.substring(1));
 		const { isClick, loading, pullReady, selectedRowKeys, rowsMap } = this.state;
 		const { availableInvoiceData: { list = [], page, page_size = 20, total }, relatedInvoiceSearchItem } = this.props;
 		const relatedInvoiceSearch = relatedInvoiceSearchFunc(relatedInvoiceSearchItem);
-		const availableInvoiceCols = availableInvoiceFunc(getFieldDecorator, selectedRowKeys);
+		const availableInvoiceCols = availableInvoiceFunc(getFieldDecorator, this.handleSelected, rowsMap);
 		const totalPrice = Object.values(rowsMap).reduce((data, current) => data + parseFloat(current.price), 0);
 		const paginationObj = getPagination(this, search, { total, page, page_size });
 		const rowSelectionObj = {
 			selectedRowKeys: selectedRowKeys,
 			onChange: (selectedRowKeys, selectedRows) => {
-				const ary = selectedRows.map(item => ({
-					...item,
-					price: getFieldValue(`${item.invoice_number}.price`)
-				}));
+				const ary = selectedRows.map(item => {
+					const price = getFieldValue(`${item.invoice_id}.price`);
+					if (!price) {
+						setFieldsValue({ [`${item.invoice_id}.price`]: item.rest_amount })
+					}
+					return { ...item, price: getFieldValue(`${item.invoice_id}.price`) }
+				});
 				this.handleSelected(selectedRowKeys, ary);
-			},
-			getCheckboxProps: (record) => {
-				const name = `${record.invoice_number}.price`;
-				const err = getFieldError(name);
-				const value = getFieldValue(name);
-				const flag = (!err && value)
-				return { disabled: !flag }
 			}
 		}
 		return <div className='relatedChoose-container'>
@@ -114,7 +110,7 @@ class RelatedChooseInvoice extends React.Component {
 			<div className='top-gap'>
 				<Form>
 					<Table
-						rowKey='invoice_id'
+						rowKey={record => record.invoice_id.toString()}
 						loading={loading}
 						columns={availableInvoiceCols}
 						dataSource={list}

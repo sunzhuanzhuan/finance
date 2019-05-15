@@ -314,8 +314,8 @@ export const detailColumns = [
 	},
 	{
 		title: '非身份证：',
-		dataIndex: 'is_support_id_card',
-		key: 'is_support_id_card',
+		dataIndex: 'is_support_not_id_card',
+		key: 'is_support_not_id_card',
 		align: 'center',
 		render: text => {
 			return text == 1 ? '支持' : text == 2 ? '不支持' : '-'
@@ -468,8 +468,8 @@ export const idCardExportColumns = [
 	},
 	{
 		title: '任务名称',
-		dataIndex: 'identity',
-		key: 'identity',
+		dataIndex: 'job_name',
+		key: 'job_name',
 		align: 'center',
 
 	},
@@ -508,8 +508,8 @@ export const idCardExportColumns = [
 		dataIndex: 'action',
 		key: 'action',
 		align: 'center',
-		render: text => {
-			return <a href='javascript:;'>下载</a>
+		render: (text, record) => {
+			return record.status == 3 && <a href='download_link'>下载</a>
 		}
 	}
 ];

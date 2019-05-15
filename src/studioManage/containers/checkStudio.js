@@ -79,7 +79,7 @@ function DetailTable({ data }) {
 				<td>快易提：</td>
 				<td>{data.is_support_flash == 1 ? '支持' : '不支持'}</td>
 				<td>非身份证：</td>
-				<td>{data.is_support_id_card == 1 ? '支持' : '不支持'}</td>
+				<td>{data.is_support_not_id_card == 1 ? '支持' : '不支持'}</td>
 			</tr>
 			<tr>
 				<td>总限额：</td>

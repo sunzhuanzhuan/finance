@@ -24,7 +24,7 @@ class IdCardExport extends React.Component {
 	componentDidMount() {
 		const toMonth = this.getMonth();
 		this.props.form.setFieldsValue({ 'month': moment(toMonth, monthFormat) });
-		this.queryData({ month: moment(toMonth, monthFormat) });
+		this.queryData({ month: toMonth });
 	}
 	getMonth = () => {
 		let date = new Date();
@@ -85,16 +85,6 @@ class IdCardExport extends React.Component {
 				bordered
 				pagination={total > page_size ? paginationObj : false}
 			/>
-			{/* <div className='step-container'>
-				<div className='step'>获取身份证</div>
-				<div className='triangle'></div>
-				<div className='triangle2'></div>
-				<div className='step'>打包</div>
-				<div className='triangle'></div>
-				<div className='triangle2'></div>
-				<div className='step'>下载</div>
-			</div> */}
-
 		</div>
 	}
 }

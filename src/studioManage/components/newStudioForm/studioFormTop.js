@@ -53,10 +53,22 @@ class StudioFormTop extends React.Component {
 		}
 		callback()
 	}
+	checkLimitMoney = (rule, value, callback) => {
+		let newValue = value ? value.replace(/' '/g, '') : '';
+		if (newValue && isNaN(newValue)) {
+			callback('请输入正确的金额');
+			return;
+		}
+		if (parseFloat(newValue) > parseFloat(999999999.99)) {
+			callback('最多可输入9位数');
+			return;
+		}
+		callback()
+	}
 	render() {
 		const { getFieldDecorator, getFieldValue } = this.props.form;
 		const { formItemLayout, platforms, bank } = this.props;
-		const paymentValue = getFieldValue('is_support_alipay');
+		const checkValue = getFieldValue('is_support_alipay');
 		return <div>
 			<Row>
 				<FormItem label='工作室名称' {...formItemLayout}>
@@ -127,7 +139,7 @@ class StudioFormTop extends React.Component {
 			</Row>
 			<Row>
 				<FormItem label='非身份证' {...formItemLayout}>
-					{getFieldDecorator('is_support_id_card', {
+					{getFieldDecorator('is_support_not_id_card', {
 						rules: [{ required: true, message: '请选择是否支持非身份证' }]
 					})(
 						<RadioGroup>
@@ -157,7 +169,7 @@ class StudioFormTop extends React.Component {
 							required: true, message: '请输入单笔限额'
 						},
 						{
-							validator: this.checkMoney,
+							validator: this.checkLimitMoney,
 						}]
 					})(
 						<Input placeholder="请输入" />
@@ -170,7 +182,7 @@ class StudioFormTop extends React.Component {
 						rules: [{
 							required: true, message: '请输入博主单月累计限额'
 						}, {
-							validator: this.checkMoney,
+							validator: this.checkLimitMoney,
 						}]
 					})(
 						<Input placeholder="请输入" />
@@ -193,8 +205,8 @@ class StudioFormTop extends React.Component {
 					)}
 				</FormItem>
 			</Row>
-			{paymentValue && paymentValue.includes(1) && <Alipay form={this.props.form} formItemLayout={formItemLayout}></Alipay>}
-			{paymentValue && paymentValue.includes(2) && <BankCard form={this.props.form} formItemLayout={formItemLayout} bank={bank}></BankCard>}
+			{checkValue && checkValue.includes(1) && <Alipay form={this.props.form} formItemLayout={formItemLayout}></Alipay>}
+			{checkValue && checkValue.includes(2) && <BankCard form={this.props.form} formItemLayout={formItemLayout} bank={bank}></BankCard>}
 		</div>
 	}
 }

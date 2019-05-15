@@ -130,9 +130,18 @@ export const availableInvoiceFunc = (getFieldDecorator, handleSelected, rowsMap)
 					}]
 				})(
 					<InputNumber formatter={value => `${value}`.replace(/[^\d||.]/g, '')} onBlur={(e) => {
-						const obj = { ...record, price: e.target.value };
-						const newRowsMap = { ...rowsMap, [record.invoice_id.toString()]: obj };
-						handleSelected(Object.keys(newRowsMap), Object.values(newRowsMap));
+						const value = e.target.value;
+						if (!value) {
+							const obj = { ...rowsMap };
+							delete obj[record.invoice_id.toString()];
+							handleSelected(Object.keys(obj), Object.values(obj));
+							return
+						}
+						if (value && rowsMap[record.invoice_id.toString()]) {
+							const obj = { ...record, price: value };
+							const newRowsMap = { ...rowsMap, [record.invoice_id.toString()]: obj };
+							handleSelected(Object.keys(newRowsMap), Object.values(newRowsMap));
+						}
 					}} />
 				)
 				}

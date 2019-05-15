@@ -55,6 +55,7 @@ class TrinityInvoice extends React.Component {
 		this.setState({ checkVisible, record })
 	}
 	handleDelete = invoice_id => {
+		const search = qs.parse(this.props.location.search.substring(1));
 		Modal.confirm({
 			title: '',
 			content: `确认删除？`,
@@ -63,6 +64,7 @@ class TrinityInvoice extends React.Component {
 				this.props.actions.postTrinityInvoiceDel({ invoice_id }).then(() => {
 					hide();
 					message.success('操作成功', 2);
+					this.queryData({ ...search.keys });
 				}).catch(({ errorMsg }) => {
 					message.error(errorMsg || '操作成功，请重试！', 2);
 				})

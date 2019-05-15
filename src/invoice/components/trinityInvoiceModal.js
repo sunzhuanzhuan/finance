@@ -83,10 +83,11 @@ class PreModal extends React.Component {
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
 				const hide = message.loading('操作中，请稍候...');
-				const { search, status, onCancel } = this.props;
+				const { search, status, onCancel, record } = this.props;
 				const actionName = this.titleMapping(status).actionName;
 				this.props.actions[actionName]({
 					business_account_type: 3,
+					invoice_id: record.invoice_id,
 					...values,
 					invoice_make_out_time: moment(values.invoice_make_out_time).format(format)
 				}).then(() => {

@@ -68,8 +68,8 @@ export const zhangListFunc = (handleNewModal) => {
 		},
 		{
 			title: '平台',
-			dataIndex: 'weibo_type',
-			key: 'weibo_type',
+			dataIndex: 'platform_name',
+			key: 'platform_name',
 			width: 100,
 			align: 'center',
 		},
@@ -127,8 +127,8 @@ export const zhangListFunc = (handleNewModal) => {
 				return parseFloat(text).toFixed(2)
 			}
 		}
-		
-		
+
+
 
 	];
 }

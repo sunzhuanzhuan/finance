@@ -109,7 +109,7 @@ class PreModal extends React.Component {
 			<Form>
 				<FormItem label='备注' {...formItemLayout}>
 					{getFieldDecorator('remark', { ...remarkOption })(
-						<TextArea placeholder='非必输' autosize={{ minRows: 4, maxRows: 6 }} maxLength={50} />
+						<TextArea autosize={{ minRows: 4, maxRows: 6 }} maxLength={50} />
 					)}
 				</FormItem>
 				{token && <FormItem label='截图' {...formItemLayout}>

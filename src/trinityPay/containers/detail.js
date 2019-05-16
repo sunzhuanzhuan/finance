@@ -46,8 +46,8 @@ class Detail extends React.Component {
 				</Skeleton>
 				<div style={{ textAlign: 'center', paddingTop: '20px' }}>
 					<Button type='primary' size='large' onClick={() => {
-						this.props.history.goBack()
-					}}>确定</Button>
+						window.close();
+					}}>关闭</Button>
 				</div>
 			</fieldset>
 		</div>

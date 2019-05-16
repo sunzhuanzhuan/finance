@@ -103,8 +103,10 @@ class NewStudio extends React.Component {
 				let validity_end = values['validity_end'] ? values['validity_end'].format('YYYY-MM-DD') : null;
 				let is_support_alipay = values['is_support_alipay'].includes(1) ? 1 : 2;
 				let invoice_tax_rate = values['invoice_tax_rate'] === '0.00' ? numeral(values['tax_value'] / 100).format('0.0000') : values['invoice_tax_rate'];
+				let bank_agency=this.props.studioMetadata.bank.find(item=>item.id==values['payment_type_id']).display;
 				let params = {
 					...values,
+					bank_agency,
 					validity_start,
 					validity_end,
 					is_support_alipay,

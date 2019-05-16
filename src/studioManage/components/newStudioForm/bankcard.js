@@ -25,7 +25,7 @@ class BankCard extends React.Component {
 	}
 	render() {
 		const { getFieldDecorator } = this.props.form;
-		const { formItemLayout, bank, extra } = this.props;
+		const { formItemLayout, bank } = this.props;
 		return <div>
 			<Row>
 				<FormItem label='银行卡开户行' {...formItemLayout}>

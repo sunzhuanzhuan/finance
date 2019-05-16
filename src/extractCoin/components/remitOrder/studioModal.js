@@ -31,7 +31,7 @@ class StudioModal extends React.Component {
 	}
 	render() {
 		const { getFieldDecorator } = this.props.form;
-		const { visible, onCancel, rowsMap, selectedRowKeys, flashStudioLists = [] } = this.props;
+		const { visible, onCancel, rowsMap, selectedRowKeys, flashStudioList:{rows=[]} } = this.props;
 		const total = Object.values(rowsMap).reduce((data, item) => {
 			return data + parseFloat(item.occupy_amount / 100);
 		}, 0)
@@ -67,7 +67,7 @@ class StudioModal extends React.Component {
 				<p>转移工作室名称：</p>
 				<Form>
 					<FormItem>
-						{getFieldDecorator('to_studio_id', {
+						{getFieldDecorator('expect_studio_id', {
 							rules: [{
 								required: true, message: '请选择转移的目标工作室！'
 							}]
@@ -76,11 +76,11 @@ class StudioModal extends React.Component {
 								showSearch
 								filterOption={(input, option) => {
 									let value = option.props.value;
-									let obj = flashStudioLists.find(item => item.id === value);
+									let obj = rows.find(item => item.id === value);
 									return obj.name.toLowerCase().indexOf(input.toLowerCase()) >= 0
 								}}
 							>
-								{flashStudioLists.map(item => {
+								{rows.map(item => {
 									return <Option key={item.id} value={item.id}>
 										<p>{item.name}</p>
 										<p>
@@ -100,7 +100,7 @@ class StudioModal extends React.Component {
 
 const mapStateToProps = (state) => {
 	return {
-		flashStudioLists: state.withdraw.flashStudioLists,
+		flashStudioList: state.withdraw.flashStudioList,
 	}
 }
 const mapDispatchToProps = dispatch => ({

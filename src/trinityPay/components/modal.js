@@ -35,20 +35,24 @@ class PreModal extends React.Component {
 		return maps[status]
 	}
 	handleModal = (content) => {
-		const { onCancel, status, type } = this.props;
-		this.setState({ isClick: true }, () => {
-			Modal.confirm({
-				title: '提示',
-				content,
-				onOk: () => {
-					this.setState({ isClick: false });
-					onCancel();
-					this.handleSubmit(status, type);
-				},
-				onCancel: () => {
-					this.setState({ isClick: false });
-				},
-			})
+		this.props.form.validateFields((err) => {
+			if (!err) {
+				const { onCancel, status, type } = this.props;
+				this.setState({ isClick: true }, () => {
+					Modal.confirm({
+						title: '提示',
+						content,
+						onOk: () => {
+							this.setState({ isClick: false });
+							onCancel();
+							this.handleSubmit(status, type);
+						},
+						onCancel: () => {
+							this.setState({ isClick: false });
+						},
+					})
+				})
+			}
 		})
 	}
 	handleSubmit = (status, type) => {
@@ -63,11 +67,9 @@ class PreModal extends React.Component {
 					name: item.name,
 					url: item.url
 				}));
-				let params = {
-					payment_slip_id: id,
-					payment_screenshot: qs.stringify(urlArray)
-				}
+				let params = { payment_slip_id: id }
 				status == 'revocation' ? params.payment_revoke_reason = values.remark : params.payment_remark = values.remark;
+				status == 'succeed' ? params.payment_screenshot = qs.stringify(urlArray) : null;
 				this.props.actions[actionName](params).then(() => {
 					message.success('操作成功!');
 					this.props.queryAction({ page: current, ...search.keys });
@@ -87,7 +89,7 @@ class PreModal extends React.Component {
 			wrapperCol: { span: 20 }
 		};
 		const article = this.titleMap(status, type);
-
+		const remarkOption = status != 'succeed' ? { rules: [{ required: true, message: '请填写原因!' }], } : {};
 		return <Modal
 			wrapClassName='prePay-modal'
 			key={key}
@@ -106,7 +108,7 @@ class PreModal extends React.Component {
 		>
 			<Form>
 				<FormItem label='备注' {...formItemLayout}>
-					{getFieldDecorator('remark')(
+					{getFieldDecorator('remark', { ...remarkOption })(
 						<TextArea placeholder='非必输' autosize={{ minRows: 4, maxRows: 6 }} maxLength={50} />
 					)}
 				</FormItem>

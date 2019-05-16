@@ -89,7 +89,6 @@ class PreModal extends React.Component {
 			wrapperCol: { span: 20 }
 		};
 		const article = this.titleMap(status, type);
-		const remarkOption = status != 'succeed' ? { rules: [{ required: true, message: '请填写原因!' }], } : {};
 		return <Modal
 			wrapClassName='prePay-modal'
 			key={key}
@@ -108,7 +107,7 @@ class PreModal extends React.Component {
 		>
 			<Form>
 				<FormItem label='备注' {...formItemLayout}>
-					{getFieldDecorator('remark', { ...remarkOption })(
+					{getFieldDecorator('remark', { rules: [{ required: true, message: '请填写原因!' }] })(
 						<TextArea autosize={{ minRows: 4, maxRows: 6 }} maxLength={50} />
 					)}
 				</FormItem>

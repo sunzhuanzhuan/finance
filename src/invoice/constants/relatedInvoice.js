@@ -142,7 +142,7 @@ export const availableInvoiceFunc = (getFieldDecorator, handleSelected, rowsMap,
 							const newRowsMap = { ...rowsMap, [record.invoice_id.toString()]: obj };
 							handleSelected(Object.keys(newRowsMap), Object.values(newRowsMap));
 						}
-					}} disabled={!selectedRowKeys.includes(record.invoice_id.toString())} />
+					}} />
 				)
 				}
 			</FormItem>

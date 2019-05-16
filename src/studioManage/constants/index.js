@@ -499,8 +499,8 @@ export const idCardExportColumns = [
 	},
 	{
 		title: '任务状态',
-		dataIndex: 'status',
-		key: 'status',
+		dataIndex: 'status_display',
+		key: 'status_display',
 		align: 'center',
 	},
 	{

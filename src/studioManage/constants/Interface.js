@@ -11,6 +11,6 @@ export default {
 	postTransferPayment: '/finance/studio/transferPayment',
 	getAllocationList: '/finance/studio/studioAllocationList',
 	getAllocationListStat: '/finance/studio/studioAllocationListStat',
-	getIdCardList: '/finance/studioJobRecord/jobRecordList',
-	getIdCardListExport: '/finance/studioJobRecord/addJobRecord',
+	getIdCardList: '/finance/jobRecord/list',
+	getIdCardListExport: '/finance/jobRecord/create',
 }

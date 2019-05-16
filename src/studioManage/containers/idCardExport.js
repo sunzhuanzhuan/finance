@@ -24,7 +24,7 @@ class IdCardExport extends React.Component {
 	componentDidMount() {
 		const toMonth = this.getMonth();
 		this.props.form.setFieldsValue({ 'month': moment(toMonth, monthFormat) });
-		this.queryData({ month: toMonth });
+		this.queryData({ page: 1, page_size: 20 });
 	}
 	getMonth = () => {
 		let date = new Date();
@@ -36,7 +36,7 @@ class IdCardExport extends React.Component {
 	}
 	queryData = (obj, func) => {
 		this.setState({ loading: true });
-		return this.props.actions.getIdCardList({ page: 1, page_size: 20, ...obj }).then(() => {
+		return this.props.actions.getIdCardList({ ...obj }).then(() => {
 			if (func && Object.prototype.toString.call(func) === '[object Function]') {
 				func();
 			}

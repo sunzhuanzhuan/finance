@@ -88,17 +88,24 @@ class RelatedChooseInvoice extends React.Component {
 		const { isClick, loading, pullReady, selectedRowKeys, rowsMap } = this.state;
 		const { availableInvoiceData: { list = [], page, page_size = 20, total }, relatedInvoiceSearchItem } = this.props;
 		const relatedInvoiceSearch = relatedInvoiceSearchFunc(relatedInvoiceSearchItem);
-		const availableInvoiceCols = availableInvoiceFunc(getFieldDecorator, this.handleSelected, rowsMap);
+		const availableInvoiceCols = availableInvoiceFunc(getFieldDecorator, this.handleSelected, rowsMap, selectedRowKeys);
 		const totalPrice = Object.values(rowsMap).reduce((data, current) => data + parseFloat(current.price), 0);
 		const paginationObj = getPagination(this, search, { total, page, page_size });
 		const rowSelectionObj = {
 			selectedRowKeys: selectedRowKeys,
 			onChange: (selectedRowKeys, selectedRows) => {
-				const ary = selectedRows.map(item => {
-					const price = getFieldValue(`${item.invoice_id}.price`);
-					if (!price) {
-						setFieldsValue({ [`${item.invoice_id}.price`]: item.rest_amount })
+				list.forEach(item => {
+					const flag = selectedRowKeys.includes(item.invoice_id.toString());
+					if (flag) {
+						const price = getFieldValue(`${item.invoice_id}.price`);
+						if (!price) {
+							setFieldsValue({ [`${item.invoice_id}.price`]: item.rest_amount })
+						}
+					} else {
+						setFieldsValue({ [`${item.invoice_id}.price`]: '' })
 					}
+				});
+				const ary = selectedRows.map(item => {
 					return { ...item, price: getFieldValue(`${item.invoice_id}.price`) }
 				});
 				this.handleSelected(selectedRowKeys, ary);

@@ -73,7 +73,7 @@ export const relatedInvoiceFunc = (handleDel) => [
 		}
 	}
 ];
-export const availableInvoiceFunc = (getFieldDecorator, handleSelected, rowsMap) => [
+export const availableInvoiceFunc = (getFieldDecorator, handleSelected, rowsMap, selectedRowKeys) => [
 	{
 		title: '发票号',
 		dataIndex: 'invoice_number',
@@ -142,7 +142,7 @@ export const availableInvoiceFunc = (getFieldDecorator, handleSelected, rowsMap)
 							const newRowsMap = { ...rowsMap, [record.invoice_id.toString()]: obj };
 							handleSelected(Object.keys(newRowsMap), Object.values(newRowsMap));
 						}
-					}} />
+					}} disabled={!selectedRowKeys.includes(record.invoice_id.toString())} />
 				)
 				}
 			</FormItem>

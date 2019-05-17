@@ -490,12 +490,18 @@ export const idCardExportColumns = [
 		dataIndex: 'start_at',
 		key: 'start_at',
 		align: 'center',
+		render: text => {
+			return text || '-'
+		}
 	},
 	{
 		title: '结束时间',
 		dataIndex: 'completed_at',
 		key: 'completed_at',
 		align: 'center',
+		render: text => {
+			return text || '-'
+		}
 	},
 	{
 		title: '任务状态',
@@ -509,7 +515,7 @@ export const idCardExportColumns = [
 		key: 'action',
 		align: 'center',
 		render: (text, record) => {
-			return record.status == 3 && <a href='download_link'>下载</a>
+			return record.status == 3 && <a href='job_result'>下载</a>
 		}
 	}
 ];

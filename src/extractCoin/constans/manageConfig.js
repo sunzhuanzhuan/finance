@@ -522,8 +522,8 @@ export const remitOrderFunc = (order_status, handleOutputDetail, handleReceiptsV
 		},
 		{
 			title: '工作室',
-			dataIndex: 'a',
-			key: 'a',
+			dataIndex: 'studio_name',
+			key: 'studio_name',
 			align: 'center',
 		},
 		{

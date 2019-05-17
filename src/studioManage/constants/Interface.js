@@ -12,5 +12,6 @@ export default {
 	getAllocationList: '/finance/studio/studioAllocationList',
 	getAllocationListStat: '/finance/studio/studioAllocationListStat',
 	getIdCardList: '/finance/jobRecord/list',
-	getIdCardListExport: '/finance/jobRecord/create',
+	postIdCardListExport: '/finance/jobRecord/create',
+	getStudioDetailExport: '/finance/studio/exportStudioAllocation',
 }

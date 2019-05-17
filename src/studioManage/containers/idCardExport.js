@@ -22,9 +22,10 @@ class IdCardExport extends React.Component {
 		}
 	}
 	componentDidMount() {
+		const search = qs.parse(this.props.location.search.substring(1));
 		const toMonth = this.getMonth();
 		this.props.form.setFieldsValue({ 'month': moment(toMonth, monthFormat) });
-		this.queryData({ page: 1, page_size: 20 });
+		this.queryData({ page: 1, page_size: 20, ...search.keys });
 	}
 	getMonth = () => {
 		let date = new Date();
@@ -47,12 +48,16 @@ class IdCardExport extends React.Component {
 		})
 	}
 	handleExport = () => {
+		const search = qs.parse(this.props.location.search.substring(1));
 		const month = this.props.form.getFieldValue('month');
 		if (!month) {
 			message.error('请先选择月份');
 			return
 		}
-		this.props.actions.getIdCardListExport({ month });
+		this.props.actions.postIdCardListExport({ month: month.format(monthFormat) }).then(() => {
+			message.success('操作成功！', 2);
+			this.queryData({ page: 1, page_size: 20, ...search.keys });
+		})
 	}
 	render() {
 		const search = qs.parse(this.props.location.search.substring(1));
@@ -74,7 +79,7 @@ class IdCardExport extends React.Component {
 							)}
 						</FormItem>
 					</Form>
-					<Button type='primary'>启动</Button>
+					<Button type='primary' onClick={this.handleExport}>启动</Button>
 				</div>
 			</fieldset>
 			<Table className='top-gap'

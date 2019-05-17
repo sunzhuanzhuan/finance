@@ -90,7 +90,9 @@ class StudioDetail extends React.Component {
 		this.setState({ newModalVisible: false })
 	}
 	handleExport = () => {
-		console.log(1);
+		const search = qs.parse(this.props.location.search.substring(1));
+		message.loading('导出中,请稍候...', 2);
+		window.open(`/api/finance/studio/exportStudioAllocation?${qs.stringify({ ...search.keys })}`);
 	}
 	render() {
 		const search = qs.parse(this.props.location.search.substring(1));
@@ -101,7 +103,7 @@ class StudioDetail extends React.Component {
 		return <div className='studio-detail-container'>
 			<fieldset className='fieldset_css'>
 				<legend>查询</legend>
-				{pullReady && <SearForm data={studioDetailSearch} getAction={this.queryData} responseLayout={{ xs: 24, sm: 24, md: 10, lg: 8, xxl: 6 }} />}
+				{pullReady && <SearForm data={studioDetailSearch} getAction={this.queryData} responseLayout={{ xs: 24, sm: 24, md: 10, lg: 8, xxl: 6 }} wrappedComponentRef={form => this.form = form} />}
 				{/* <StudioDetailQuery
 					sourceType={source_type}
 					sourceStatus={source_status}

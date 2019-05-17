@@ -102,8 +102,15 @@ export const {
 });
 
 export const {
-	getIdCardListExport,
-	getIdCardListExport_success
-} = createHttpAction('getIdCardListExport', Interface.getIdCardListExport, {
+	postIdCardListExport,
+	postIdCardListExport_success
+} = createHttpAction('postIdCardListExport', Interface.postIdCardListExport, {
+	method: 'post'
+});
+
+export const {
+	getStudioDetailExport,
+	getStudioDetailExport_success
+} = createHttpAction('getStudioDetailExport', Interface.getStudioDetailExport, {
 	method: 'get'
 });

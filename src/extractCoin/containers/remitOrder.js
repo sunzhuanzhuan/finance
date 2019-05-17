@@ -146,8 +146,9 @@ class RemitOrderManage extends React.Component {
 		this.setState({ studioVisible: true });
 	}
 	onSelectChange = (selectedRowKeys, selectedRows) => {
-		const rowsMap = selectedRows.reduce((data, item) => {
-			return { ...data, [item.id]: item }
+		const rowsMap = selectedRowKeys.reduce((data, item) => {
+			const row = selectedRows.find(it => it.id.toString() === item);
+			return row ? { ...data, [item]: row } : { ...data, [item]: this.state.rowsMap[item] }
 		}, {});
 		this.setState({ selectedRowKeys, rowsMap })
 	}
@@ -167,6 +168,7 @@ class RemitOrderManage extends React.Component {
 	}
 	render() {
 		let { newVisible, remitOrderLoading, outputVisible, remitOrderPageSize, filterParams, outputLoading, receiptsVisible, questParams, selectedRowKeys, rowsMap, studioVisible } = this.state;
+		console.log('%crowsMap: ', 'color: MidnightBlue; background: Aquamarine; font-size: 20px;', rowsMap);
 		let { remitOrderData: { data = [], total = 20, current_page = 1, payment_slip_status_name }, excel_name_list: { title, excel } } = this.props;
 		const checked = data.every(item => selectedRowKeys.includes(item.id.toString()));
 		let remitOrderConfig = remitOrderFunc(payment_slip_status_name, this.handleOutputDetail, this.handleReceiptsVisible, this.handleTipVisible);

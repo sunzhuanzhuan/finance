@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as studioActions from "../actions";
-import { Form, DatePicker, Button, Table, message } from 'antd'
+import { Form, DatePicker, Button, Table, message, Steps } from 'antd'
 import { idCardExportColumns } from '../constants'
 import getPagination from '../../components/pagination'
 import './studioManage.less'
@@ -14,6 +14,7 @@ moment.locale('zh-cn');
 const FormItem = Form.Item;
 const { MonthPicker } = DatePicker;
 const monthFormat = 'YYYY-MM';
+const Step = Steps.Step;
 class IdCardExport extends React.Component {
 	constructor() {
 		super();
@@ -70,6 +71,13 @@ class IdCardExport extends React.Component {
 		const { loading } = this.state;
 		const paginationObj = getPagination(this, search, { total, page, page_size });
 		return <div className='id-card-container'>
+			<div className='step-container'>
+				<Steps current={null}>
+					<Step title="获取身份证" />
+					<Step title="打包" />
+					<Step title="下载" />
+				</Steps>,
+			</div>
 			<fieldset className='fieldset_css'>
 				<div style={{ textAlign: 'center' }}>
 					<Form style={{ display: 'inline-block', width: '260px', verticalAlign: 'middle' }}>

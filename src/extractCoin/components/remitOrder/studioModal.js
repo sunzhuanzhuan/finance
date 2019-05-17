@@ -31,7 +31,7 @@ class StudioModal extends React.Component {
 	}
 	render() {
 		const { getFieldDecorator } = this.props.form;
-		const { visible, onCancel, rowsMap, selectedRowKeys, flashStudioList:{rows=[]} } = this.props;
+		const { visible, onCancel, rowsMap, selectedRowKeys, flashStudioList: { rows = [] } } = this.props;
 		const total = Object.values(rowsMap).reduce((data, item) => {
 			return data + parseFloat(item.occupy_amount / 100);
 		}, 0)
@@ -52,7 +52,7 @@ class StudioModal extends React.Component {
 			</div>
 			<div className='studio-list-container'>
 				<div className='studio-list'>
-					{Object.values(rowsMap).map(item => (<div key={item.source_id}>
+					{Object.values(rowsMap).map((item, index) => (<div key={index}>
 						<span>打款类型：快易提</span>
 						<span style={{ display: 'inline-block', width: '110px' }} className='left-gap'>打款单ID：{item.id}</span>
 						<span className='left-gap'>已冻结订单金额：{numeral(item.occupy_amount / 100).format('0,0.00')}</span>

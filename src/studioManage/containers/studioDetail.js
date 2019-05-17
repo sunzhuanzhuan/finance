@@ -91,8 +91,13 @@ class StudioDetail extends React.Component {
 	}
 	handleExport = () => {
 		const search = qs.parse(this.props.location.search.substring(1));
+		if (!(search.keys && search.keys.created_at_start && search.keys.created_at_end)) {
+			message.error('请选择提现的时间，并点查询后再导出', 3);
+			return
+		}
 		message.loading('导出中,请稍候...', 2);
 		window.open(`/api/finance/studio/exportStudioAllocation?${qs.stringify({ ...search.keys })}`);
+		// this.props.actions.getStudioDetailExport({ ...search.keys })
 	}
 	render() {
 		const search = qs.parse(this.props.location.search.substring(1));

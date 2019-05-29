@@ -113,6 +113,7 @@ class PreModal extends React.Component {
 				</FormItem>
 				{token && <FormItem label='截图' {...formItemLayout}>
 					{getFieldDecorator('payment_screenshot', {
+						rules: [{ required: true, message: '请上传图片' }],
 						valuePropName: 'fileList',
 						getValueFromEvent: e => e.fileList
 					})(

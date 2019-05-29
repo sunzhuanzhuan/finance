@@ -35,8 +35,8 @@ export const prePayFunc = (handleModal) => [
 	},
 	{
 		title: '订单ID',
-		dataIndex: 'public_order_id',
-		key: 'public_order_id',
+		dataIndex: 'wby_order_id',
+		key: 'wby_order_id',
 		align: 'center',
 		width: 100
 	},

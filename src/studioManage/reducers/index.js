@@ -8,7 +8,8 @@ import {
 	postUpdateStudio_success,
 	getFreezeList_success,
 	getAllocationList_success,
-	getAllocationListStat_success
+	getAllocationListStat_success,
+	getIdCardList_success,
 } from '../actions';
 
 export const studioData = handleActions({
@@ -61,6 +62,12 @@ export const allocationStatData = handleActions({
 	}
 }, {})
 
+export const idCardList = handleActions({
+	[getIdCardList_success]: (state, action) => {
+		return { ...action.payload.data }
+	}
+}, {})
+
 
 export default combineReducers({
 	studioData,
@@ -70,5 +77,6 @@ export default combineReducers({
 	newStudioData,
 	freezeList,
 	allocationData,
-	allocationStatData
+	allocationStatData,
+	idCardList,
 })

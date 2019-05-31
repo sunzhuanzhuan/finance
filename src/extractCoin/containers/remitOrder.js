@@ -4,12 +4,13 @@ import { bindActionCreators } from "redux";
 import * as remitOrderActions from "../action/remitOrder";
 import { outputRemitConfig, remitOrderFunc } from "../constans/manageConfig";
 import "./remitOrder.less";
-import { Button, Row, Form, Table, Modal, message } from "antd";
+import { Button, Row, Form, Table, Modal, message, Checkbox } from "antd";
 import RemitQuery from '../components/remitOrder/listQuery'
 import NewRemitModal from "../components/newRemitModal";
 import ReceiptsModal from '../components/receiptsModal'
 import RemitModal from '../components/remitModal'
-
+import StudioModal from '../components/remitOrder/studioModal'
+import qs from 'qs'
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
@@ -26,7 +27,10 @@ class RemitOrderManage extends React.Component {
 			filterParams: {},
 			questParams: {},
 			outputLoading: false,
-			curPage: 1
+			curPage: 1,
+			selectedRowKeys: [],
+			rowsMap: {},
+			studioVisible: false,
 		}
 	}
 	componentDidMount() {
@@ -37,9 +41,17 @@ class RemitOrderManage extends React.Component {
 	}
 	requestList = () => {
 		this.setState({ remitOrderLoading: true });
-		this.props.actions.getPaymentSlipList({ page: 1, limit_num: 20 }).then(() => {
-			this.setState({ remitOrderLoading: false });
-		});
+		const search = qs.parse(this.props.location.search.substring(1));
+		if (search.id) {
+			this.props.actions.getPaymentSlipList({ page: 1, limit_num: 20, id: search.id }).then(() => {
+				this.setState({ remitOrderLoading: false });
+			});
+		} else {
+			this.props.actions.getPaymentSlipList({ page: 1, limit_num: 20 }).then(() => {
+				this.setState({ remitOrderLoading: false });
+			});
+		}
+
 	}
 	handleSearch = () => {
 		this.setState({ remitOrderLoading: true })
@@ -138,9 +150,44 @@ class RemitOrderManage extends React.Component {
 			message.error(errorMsg || '加载失败，请刷新页面')
 		})
 	}
+	handleChangeStudio = () => {
+		if (this.state.selectedRowKeys.length > 0) {
+			this.setState({ studioVisible: true });
+		} else {
+			message.error('请先勾选要更换的工作室')
+		}
+
+	}
+	handleCloseStudio = () => {
+		this.setState({ studioVisible: false });
+	}
+
+	onSelectChange = (selectedRowKeys, selectedRows) => {
+		const rowsMap = selectedRowKeys.reduce((data, item) => {
+			const row = selectedRows.find(it => it.id.toString() === item);
+			return row ? { ...data, [item]: row } : { ...data, [item]: this.state.rowsMap[item] }
+		}, {});
+		this.setState({ selectedRowKeys, rowsMap })
+	}
+	handleCheckAll = e => {
+		const { remitOrderData: { data = [] } } = this.props;
+		const { rowsMap } = this.state;
+		let obj;
+		if (e.target.checked) {
+			obj = data.reduce((data, item) => {
+				return { ...data, [item.id]: item }
+			}, rowsMap);
+		} else {
+			obj = { ...rowsMap };
+			data.forEach(item => delete obj[item.id.toString()]);
+		}
+		this.onSelectChange(Object.keys(obj), Object.values(obj));
+	}
 	render() {
-		let { newVisible, remitOrderLoading, outputVisible, remitOrderPageSize, filterParams, outputLoading, receiptsVisible, questParams } = this.state;
-		let { remitOrderData: { data, total = 20, current_page = 1, payment_slip_status_name }, excel_name_list: { title, excel } } = this.props;
+		let { newVisible, remitOrderLoading, outputVisible, remitOrderPageSize, filterParams, outputLoading, receiptsVisible, questParams, selectedRowKeys, rowsMap, studioVisible } = this.state;
+		console.log('%crowsMap: ', 'color: MidnightBlue; background: Aquamarine; font-size: 20px;', rowsMap);
+		let { remitOrderData: { data = [], total = 20, current_page = 1, payment_slip_status_name }, excel_name_list: { title, excel } } = this.props;
+		const checked = data.every(item => selectedRowKeys.includes(item.id.toString()));
 		let remitOrderConfig = remitOrderFunc(payment_slip_status_name, this.handleOutputDetail, this.handleReceiptsVisible, this.handleTipVisible);
 		let paginationObj = {
 			onChange: (current) => {
@@ -162,20 +209,32 @@ class RemitOrderManage extends React.Component {
 			showSizeChanger: true,
 			pageSizeOptions: ['20', '50', '100', '200']
 		};
+		const rowSelection = {
+			selectedRowKeys,
+			onChange: this.onSelectChange,
+		};
 		return <div className='remitOrder'>
 			<RemitQuery
 				limit_num={remitOrderPageSize}
 				questAction={this.props.actions.getPaymentSlipList}
 				handlefilterParams={this.handlefilterParams}
 			></RemitQuery>
-			<Row className='topGap'><Button type='primary' onClick={this.newRemitOrder}>新建打款单</Button></Row>
+			<Row className='topGap'>
+				<Button type='primary' onClick={this.newRemitOrder}>新建打款单</Button>
+				<Button className='left-gap' type='primary' onClick={this.handleChangeStudio}>更换工作室</Button>
+			</Row>
 			<Table className='topGap'
-				rowKey='id'
+				rowKey={record => { return record.id.toString() }}
 				columns={remitOrderConfig}
 				dataSource={data}
 				pagination={paginationObj}
 				loading={remitOrderLoading}
-				bordered></Table>
+				bordered
+				rowSelection={rowSelection}
+				footer={() => {
+					return <Checkbox onChange={this.handleCheckAll} disabled={data.length == 0} checked={data.length > 0 && checked}>全选</Checkbox>
+				}}
+			></Table>
 			{newVisible ? <NewRemitModal visible={newVisible} onCancel={this.closeNewModal}
 				requestList={this.requestList} /> : null}
 			<RemitModal visible={outputVisible}
@@ -187,6 +246,13 @@ class RemitOrderManage extends React.Component {
 				partner_type={questParams.partner_type}
 			></RemitModal>
 			{receiptsVisible ? <ReceiptsModal visible={receiptsVisible} onCancel={this.closeReceiptsModal} questParams={questParams} /> : null}
+			{studioVisible && <StudioModal visible={studioVisible}
+				requestList={this.requestList}
+				handleCloseStudio={this.handleCloseStudio}
+				selectedRowKeys={selectedRowKeys}
+				onCancel={() => { this.setState({ studioVisible: false }) }}
+				rowsMap={rowsMap}
+			/>}
 		</div>
 	}
 }

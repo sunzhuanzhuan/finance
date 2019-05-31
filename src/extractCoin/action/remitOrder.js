@@ -90,3 +90,17 @@ export const paymentOrderDetail = (str) => dispath => {
 		dispath({ type: 'PAYMENT_ORDER_DETAIL', payload: data });
 	})
 }
+//更换工作室
+export const {
+	getFlashStudioList,
+	getFlashStudioList_success
+} = createHttpAction('getFlashStudioList', Interface.getFlashStudioList, {
+	method: 'get'
+});
+
+export const {
+	postTransferStudio,
+	postTransferStudio_success
+} = createHttpAction('postTransferStudio', Interface.postTransferStudio, {
+	method: 'post'
+});

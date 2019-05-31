@@ -519,7 +519,18 @@ export const remitOrderFunc = (order_status, handleOutputDetail, handleReceiptsV
 			dataIndex: 'tax_amount',
 			key: 'tax_amount',
 			align: 'center',
+		}, {
+			title: '工作室占用金额',
+			dataIndex: 'occupy_amount',
+			key: 'occupy_amount',
+			align: 'center',
+		},
 
+		{
+			title: '工作室',
+			dataIndex: 'studio_name',
+			key: 'studio_name',
+			align: 'center',
 		},
 		{
 			title: '创建人',

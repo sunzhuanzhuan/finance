@@ -43,7 +43,7 @@ class RemitQuery extends React.Component {
 					<Col className='left-gap'>
 						<FormItem label='打款状态'>
 							{getFieldDecorator('status', { initialValue: '' })(
-								<Select style={{ width: 120 }}>
+								<Select style={{ width: 120 }} allowClear>
 									<Option value="">不限</Option>
 									<Option value="0">待打款</Option>
 									<Option value="1">待还款</Option>
@@ -56,7 +56,7 @@ class RemitQuery extends React.Component {
 					<Col className='left-gap'>
 						<FormItem label='打款单ID'>
 							{getFieldDecorator('id')(
-								<Input placeholder="请输入" style={{ width: 160 }} />
+								<Input placeholder="请输入" style={{ width: 160 }} allowClear />
 							)}
 						</FormItem>
 					</Col>
@@ -70,7 +70,19 @@ class RemitQuery extends React.Component {
 							)}
 						</FormItem>
 					</Col>
-					<Col style={{ marginLeft: '40px' }}>
+					<Col className='left-gap'>
+						<FormItem label="可提金额">
+							{getFieldDecorator('payment_amount_min')(
+								<Input placeholder="请输入" style={{ width: 120 }} allowClear />
+							)}~
+							{getFieldDecorator('payment_amount_max')(
+								<Input placeholder="请输入" style={{ width: 120 }} allowClear />
+							)}
+						</FormItem>
+					</Col>
+				</Row>
+				<Row style={{ textAlign: 'center' }}>
+					<Col>
 						<Button type="primary" onClick={this.handleSearch}>查询</Button>
 						<a className="reset-filter left-gap" onClick={this.handleClear}><Icon type="retweet" />重置搜索框</a>
 					</Col>

@@ -35,7 +35,10 @@ class NewStudio extends React.Component {
 						type: res.type,
 						supported_platforms: res.supported_platforms,
 						is_support_flash: res.is_support_flash,
+						is_support_not_id_card: res.is_support_not_id_card,
 						total_limit: numeral(res.total_limit / 100).format('0.00'),
+						single_limit: numeral(res.single_limit / 100).format('0.00'),
+						monthly_limit: numeral(res.monthly_limit / 100).format('0.00'),
 						is_support_alipay: res.is_support_alipay === 1 ? [1, 2] : [2],
 						invoice_provider: res.invoice_provider,
 						validity_start: moment(res.validity_start, 'YYYY-MM-DD'),
@@ -56,6 +59,8 @@ class NewStudio extends React.Component {
 								payment_type_id: res.payment_type_id,
 								bank_agency_province: res.bank_agency_province,
 								bank_agency_city: res.bank_agency_city,
+								// bank_agency_subbranch: res.bank_agency_subbranch,
+								bank_agency: res.bank_agency,
 								real_name: res.real_name,
 								card_number: res.card_number
 							})
@@ -99,8 +104,10 @@ class NewStudio extends React.Component {
 				let validity_end = values['validity_end'] ? values['validity_end'].format('YYYY-MM-DD') : null;
 				let is_support_alipay = values['is_support_alipay'].includes(1) ? 1 : 2;
 				let invoice_tax_rate = values['invoice_tax_rate'] === '0.00' ? numeral(values['tax_value'] / 100).format('0.0000') : values['invoice_tax_rate'];
+				// let bank_agency = this.props.studioMetadata.bank.find(item => item.id == values['payment_type_id']).display;
 				let params = {
 					...values,
+					// bank_agency,
 					validity_start,
 					validity_end,
 					is_support_alipay,
@@ -111,6 +118,7 @@ class NewStudio extends React.Component {
 					params['payment_type_id'] = 0;
 					params['bank_agency_province'] = '';
 					params['bank_agency_city'] = '';
+					// params['bank_agency_subbranch'] = '';
 					params['real_name'] = '';
 					params['card_number'] = '';
 				}

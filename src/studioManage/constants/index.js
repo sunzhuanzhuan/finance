@@ -59,13 +59,12 @@ export const studioConfigFunc = (handleStopStudio, handleStartStudio, history) =
 	},
 	{
 		title: '非身份证',
-		dataIndex: 'a',
-		key: 'a',
+		dataIndex: 'is_support_not_id_card',
+		key: 'is_support_not_id_card',
 		align: 'center',
 		width: 120,
 		render: (text) => {
-			const value = text === 1 ? '支持' : '不支持';
-			return value
+			return text == 1 ? '支持' : '不支持';
 		}
 	},
 	{
@@ -79,22 +78,9 @@ export const studioConfigFunc = (handleStopStudio, handleStartStudio, history) =
 		}
 	},
 	{
-		title: '收款方式',
+		title: '支付方式',
 		dataIndex: 'b',
 		key: 'b',
-		align: 'center',
-		width: 140,
-		render: (text, record) => {
-			const isAlipay = record.is_support_alipay === 1;
-			const isBank = record.payment_type_id !== 0;
-			const value = isAlipay && isBank ? '支付宝&银行卡' : isAlipay ? '支付宝' : '银行卡';
-			return value
-		}
-	},
-	{
-		title: '付款支付方式',
-		dataIndex: 'payment_type',
-		key: 'payment_type',
 		align: 'center',
 		width: 140,
 		render: (text, record) => {
@@ -183,7 +169,7 @@ export const detailConfig = [
 		}
 	},
 	{
-		title: '订单总金额',
+		title: '占用金额',
 		dataIndex: 'occupy_amount',
 		key: 'occupy_amount',
 		align: 'center',
@@ -195,13 +181,21 @@ export const detailConfig = [
 		title: '实付金额',
 		dataIndex: 'payment_amount',
 		key: 'payment_amount',
-		align: 'center'
+		align: 'center',
+		render: (text) => {
+			return numeral(text / 100).format('0,0.00')
+		}
+
 	},
 	{
 		title: '税金',
 		dataIndex: 'tax_to_partner',
 		key: 'tax_to_partner',
-		align: 'center'
+		align: 'center',
+		render: (text) => {
+			return numeral(text / 100).format('0,0.00')
+		}
+
 	},
 	{
 		title: '提现时间',
@@ -379,8 +373,8 @@ export const detailColumns = [
 	},
 	{
 		title: '开户支行：',
-		dataIndex: 'bank_agency_subbranch',
-		key: 'bank_agency_subbranch',
+		dataIndex: 'bank_agency',
+		key: 'bank_agency',
 		align: 'center',
 	},
 	{
@@ -462,8 +456,8 @@ export const detailColumns = [
 export const idCardExportColumns = [
 	{
 		title: '任务ID',
-		dataIndex: 'job_id',
-		key: 'job_id',
+		dataIndex: 'job_code',
+		key: 'job_code',
 		align: 'center'
 	},
 	{
@@ -515,7 +509,7 @@ export const idCardExportColumns = [
 		key: 'action',
 		align: 'center',
 		render: (text, record) => {
-			return record.status == 3 && <a href='job_result'>下载</a>
+			return record.status == 3 && <a href={`/api/finance/jobRecord/download?job_result=${record.job_result}`}>下载</a>
 		}
 	}
 ];

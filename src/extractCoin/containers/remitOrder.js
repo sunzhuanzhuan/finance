@@ -10,7 +10,7 @@ import NewRemitModal from "../components/newRemitModal";
 import ReceiptsModal from '../components/receiptsModal'
 import RemitModal from '../components/remitModal'
 import StudioModal from '../components/remitOrder/studioModal'
-
+import qs from 'qs'
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
@@ -41,9 +41,17 @@ class RemitOrderManage extends React.Component {
 	}
 	requestList = () => {
 		this.setState({ remitOrderLoading: true });
-		this.props.actions.getPaymentSlipList({ page: 1, limit_num: 20 }).then(() => {
-			this.setState({ remitOrderLoading: false });
-		});
+		const search = qs.parse(this.props.location.search.substring(1));
+		if (search.id) {
+			this.props.actions.getPaymentSlipList({ page: 1, limit_num: 20, id: search.id }).then(() => {
+				this.setState({ remitOrderLoading: false });
+			});
+		} else {
+			this.props.actions.getPaymentSlipList({ page: 1, limit_num: 20 }).then(() => {
+				this.setState({ remitOrderLoading: false });
+			});
+		}
+
 	}
 	handleSearch = () => {
 		this.setState({ remitOrderLoading: true })
@@ -143,8 +151,17 @@ class RemitOrderManage extends React.Component {
 		})
 	}
 	handleChangeStudio = () => {
-		this.setState({ studioVisible: true });
+		if (this.state.selectedRowKeys.length > 0) {
+			this.setState({ studioVisible: true });
+		} else {
+			message.error('请先勾选要更换的工作室')
+		}
+
 	}
+	handleCloseStudio = () => {
+		this.setState({ studioVisible: false });
+	}
+
 	onSelectChange = (selectedRowKeys, selectedRows) => {
 		const rowsMap = selectedRowKeys.reduce((data, item) => {
 			const row = selectedRows.find(it => it.id.toString() === item);
@@ -230,6 +247,8 @@ class RemitOrderManage extends React.Component {
 			></RemitModal>
 			{receiptsVisible ? <ReceiptsModal visible={receiptsVisible} onCancel={this.closeReceiptsModal} questParams={questParams} /> : null}
 			{studioVisible && <StudioModal visible={studioVisible}
+				requestList={this.requestList}
+				handleCloseStudio={this.handleCloseStudio}
 				selectedRowKeys={selectedRowKeys}
 				onCancel={() => { this.setState({ studioVisible: false }) }}
 				rowsMap={rowsMap}

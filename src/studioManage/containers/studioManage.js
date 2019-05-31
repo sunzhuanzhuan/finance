@@ -108,7 +108,7 @@ class StudioManage extends React.Component {
 	handleStartStudio = (record) => {
 		const { postStartStudio, getStudioList } = this.props.actions;
 		const { studioData: { page } } = this.props;
-		const { pageSize = 20, filterParams } = this.state;
+		const { filterParams } = this.state;
 		Modal.confirm({
 			title: '提示',
 			content: '是否立即启用该工作室?',
@@ -120,7 +120,7 @@ class StudioManage extends React.Component {
 						hidden();
 					});
 					message.success('启用成功！');
-					getStudioList({ ...filterParams, page, page_size: pageSize }).then(() => {
+					getStudioList({ ...filterParams, page, page_size: 20 }).then(() => {
 						message.success('列表已更新');
 					}).catch(({ errorMsg }) => {
 						message.success(errorMsg || '列表加载失败，请重试');

@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as remitOrderActions from "../../action/remitOrder";
-import { Select, Modal, Button, Form } from "antd";
+import { Select, Modal, Button, Form, message } from "antd";
 import './studioModal.less'
 import numeral from 'numeral';
 
@@ -25,7 +25,18 @@ class StudioModal extends React.Component {
 			if (!err) {
 				const { selectedRowKeys } = this.props;
 				const payment = selectedRowKeys.map(item => ({ source_id: item }));
-				this.props.actions.postTransferStudio({ ...values, payment });
+				this.props.actions.postTransferStudio({ ...values, payment }).then((res) => {
+					if (res.code == 1000 || res.code == 200) {
+						message.success('工作室转移成功', 3)
+						this.props.handleCloseStudio()
+						this.props.requestList()
+					} else {
+						this.props.handleCloseStudio()
+						this.props.requestList()
+
+					}
+				});
+
 			}
 		});
 	}
@@ -33,7 +44,7 @@ class StudioModal extends React.Component {
 		const { getFieldDecorator } = this.props.form;
 		const { visible, onCancel, rowsMap, selectedRowKeys, flashStudioList: { rows = [] } } = this.props;
 		const total = Object.values(rowsMap).reduce((data, item) => {
-			return data + parseFloat(item.occupy_amount / 100);
+			return data + parseFloat(item.occupy_amount);
 		}, 0)
 		return <Modal
 			wrapClassName='studio-modal'
@@ -55,7 +66,7 @@ class StudioModal extends React.Component {
 					{Object.values(rowsMap).map((item, index) => (<div key={index}>
 						<span>打款类型：快易提</span>
 						<span style={{ display: 'inline-block', width: '110px' }} className='left-gap'>打款单ID：{item.id}</span>
-						<span className='left-gap'>已冻结订单金额：{numeral(item.occupy_amount / 100).format('0,0.00')}</span>
+						<span className='left-gap'>已冻结订单金额：{numeral(item.occupy_amount).format('0,0.00')}</span>
 					</div>))}
 					{selectedRowKeys.length > 20 && <div style={{ textAlign: 'center' }}>最多只显示20条哟~</div>}
 				</div>

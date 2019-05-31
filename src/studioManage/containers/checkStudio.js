@@ -71,7 +71,7 @@ function DetailTable({ data }) {
 			</tr>
 			<tr>
 				<td>类型：</td>
-				<td>{data.type_diaplay}</td>
+				<td>{data.type_display}</td>
 				<td>支持平台：</td>
 				<td>{data.supported_platforms_display}</td>
 			</tr>
@@ -88,7 +88,7 @@ function DetailTable({ data }) {
 				<td>{data.total_freeze / 100}</td>
 			</tr>
 			<tr>
-				<td>使用限额：</td>
+				<td>使用额度：</td>
 				<td>{data.total_limit / 100}</td>
 				<td>剩余额度：</td>
 				<td>{data.remaining_amount / 100}</td>
@@ -107,7 +107,7 @@ function DetailTable({ data }) {
 				<td>银行卡开户行：</td>
 				<td>{data.bank_agency}</td>
 				<td>开户支行：</td>
-				<td>{data.bank_agency_subbranch}</td>
+				<td>{data.bank_agency}</td>
 			</tr>
 			<tr>
 				<td>开户行所在省：</td>

@@ -256,14 +256,17 @@ class InvoiceApplyDetail extends React.Component {
 				render: (text) => {
 					return <div>
 						{text ? text.map((it, i) => {
-							return <div className='thum-img-box' key={i} onClick={() => {
+							return it.name.indexOf('.pdf') < 0 ? <div className='thum-img-box' key={i} onClick={() => {
 								this.setState({
 									previewVisible: true,
 									imgSrc: it.url
 								})
 							}}>
 								<img src={it.url} />
-							</div>
+							</div> : <div className='thum-img-box' key={i} style={{ textAlign: 'center' }} >
+									<a target='_blank' href={it.url} >PDF</a>
+								</div>
+
 						}) : null}
 					</div>
 				}
@@ -340,14 +343,17 @@ class InvoiceApplyDetail extends React.Component {
 				render: (text) => {
 					return <div>
 						{text ? text.map((it, i) => {
-							return <div className='thum-img-box' key={i} onClick={() => {
+							return it.name.indexOf('.pdf') < 0 ? <div className='thum-img-box' key={i} onClick={() => {
 								this.setState({
 									previewVisible: true,
 									imgSrc: it.url
 								})
 							}}>
 								<img src={it.url} />
-							</div>
+							</div> : <div className='thum-img-box' key={i} style={{ textAlign: 'center' }} >
+									<a target='_blank' href={it.url} >PDF</a>
+								</div>
+
 						}) : null}
 					</div>
 				}
@@ -360,14 +366,17 @@ class InvoiceApplyDetail extends React.Component {
 				render: (text) => {
 					return <div>
 						{text ? text.map((it, i) => {
-							return <div className='thum-img-box' key={i} onClick={() => {
+							return it.name.indexOf('.pdf') < 0 ? <div className='thum-img-box' key={i} onClick={() => {
 								this.setState({
 									previewVisible: true,
 									imgSrc: it.url
 								})
 							}}>
 								<img src={it.url} />
-							</div>
+							</div> : <div className='thum-img-box' key={i} style={{ textAlign: 'center' }} >
+									<a target='_blank' href={it.url} >PDF</a>
+								</div>
+
 						}) : null}
 					</div>
 				}

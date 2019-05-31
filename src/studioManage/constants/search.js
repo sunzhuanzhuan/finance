@@ -98,7 +98,7 @@ export const studioListSearchFunc = ({ studio_status, studio_type, studio_suppor
 		}
 	}
 ];
-export const studioDetailSearchFunc = ({ studio_status, studio_type, studio_supported_platforms }) => [
+export const studioDetailSearchFunc = ({ source_status, source_type }) => [
 	{
 		ctype: 'input',
 		attr: {
@@ -121,9 +121,9 @@ export const studioDetailSearchFunc = ({ studio_status, studio_type, studio_supp
 		},
 		field: {
 			label: '状态',
-			value: 'status',
+			value: 'source_status',
 		},
-		selectOptionsChildren: studio_status,
+		selectOptionsChildren: source_status,
 		selectItem: { key: 'display', value: 'id' }
 	},
 	{
@@ -136,9 +136,9 @@ export const studioDetailSearchFunc = ({ studio_status, studio_type, studio_supp
 		},
 		field: {
 			label: '类型',
-			value: 'type',
+			value: 'source_type',
 		},
-		selectOptionsChildren: studio_type,
+		selectOptionsChildren: source_type,
 		selectItem: { key: 'display', value: 'id' }
 	},
 	{
@@ -197,7 +197,7 @@ export const studioDetailSearchFunc = ({ studio_status, studio_type, studio_supp
 			allowClear: true
 		},
 		field: {
-			label: '订单总金额',
+			label: '占用金额',
 			value: ['occupy_amount_min', 'occupy_amount_max'],
 		}
 	},

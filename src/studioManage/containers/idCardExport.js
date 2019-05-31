@@ -96,7 +96,7 @@ class IdCardExport extends React.Component {
 				columns={idCardExportColumns}
 				dataSource={rows}
 				bordered
-				pagination={total > page_size ? paginationObj : false}
+				pagination={paginationObj}
 			/>
 		</div>
 	}

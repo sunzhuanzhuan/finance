@@ -34,7 +34,7 @@ class StudioDetail extends React.Component {
 		getStudioMetadata().then(() => {
 			this.setState({ pullReady: true })
 		});
-		getAllocationListStat({ page: 1, page_size: 20 });
+		getAllocationListStat({ ...search.keys });
 		this.queryData({ ...search.keys });
 	}
 	queryData = (obj, func) => {
@@ -43,6 +43,7 @@ class StudioDetail extends React.Component {
 			if (func && Object.prototype.toString.call(func) === '[object Function]') {
 				func();
 			}
+			this.props.actions.getAllocationListStat({ page: 1, page_size: 20, ...obj });
 			this.setState({ loading: false })
 		}).catch(({ errorMsg }) => {
 			this.setState({ loading: false });
@@ -95,9 +96,15 @@ class StudioDetail extends React.Component {
 			message.error('请选择提现的时间，并点查询后再导出', 3);
 			return
 		}
-		message.loading('导出中,请稍候...', 2);
-		window.open(`/api/finance/studio/exportStudioAllocation?${qs.stringify({ ...search.keys })}`);
-		// this.props.actions.getStudioDetailExport({ ...search.keys })
+		let result = Math.abs(new Date(search.keys.created_at_start + '').getTime() - new Date(search.keys.created_at_end + '').getTime());
+		if (result / 1000 / 3600 / 24 <= 60) {
+			message.loading('导出中,请稍候...', 2);
+			window.open(`/api/finance/studio/exportStudioAllocation?${qs.stringify({ ...search.keys })}`);
+		} else {
+			message.error('提现时间区间应小于等于两个月', 3);
+			return
+		}
+
 	}
 	render() {
 		const search = qs.parse(this.props.location.search.substring(1));
@@ -136,7 +143,7 @@ class StudioDetail extends React.Component {
 					columns={detailConfig}
 					dataSource={rows}
 					bordered
-					pagination={total > page_size ? paginationObj : false}
+					pagination={paginationObj}
 				/>
 				{/* <StudioDetailTable
 					columns={detailConfig}

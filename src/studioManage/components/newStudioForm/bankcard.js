@@ -58,7 +58,7 @@ class BankCard extends React.Component {
 			</Row>
 			<Row>
 				<FormItem label='开户支行' {...formItemLayout}>
-					{getFieldDecorator('bank_agency_subbranch', { rules: [{ required: true, message: '请填写开户支行' }] })(
+					{getFieldDecorator('bank_agency', { rules: [{ required: true, message: '请填写开户支行' }] })(
 						<Input placeholder="请输入" />
 					)}
 				</FormItem>

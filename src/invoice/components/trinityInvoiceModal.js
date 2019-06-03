@@ -50,7 +50,7 @@ class PreModal extends React.Component {
 		this.pureValue = e.target.value;
 		if (e.target.value && !isNaN(this.taxValue)) {
 			this.props.form.setFieldsValue({
-				invoice_tax: numeral(this.taxValue / this.pureValue * 100).format('0.00')
+				invoice_type: numeral(this.taxValue / this.pureValue * 100).format('0.00')
 			});
 		}
 	}
@@ -60,6 +60,15 @@ class PreModal extends React.Component {
 			this.props.form.setFieldsValue({
 				invoice_tax: numeral(this.taxValue / this.pureValue * 100).format('0.00')
 			});
+			if (e.target.value > 0) {
+				this.props.form.setFieldsValue({
+					invoice_type: 2
+				});
+			} else {
+				this.props.form.setFieldsValue({
+					invoice_type: 1
+				});
+			}
 		}
 	}
 	handleModal = (content) => {
@@ -85,9 +94,10 @@ class PreModal extends React.Component {
 				const hide = message.loading('操作中，请稍候...');
 				const { search, status, onCancel, record } = this.props;
 				const actionName = this.titleMapping(status).actionName;
+				console.log(status)
+				values.invoice_id = status == 'new' ? null : record.invoice_id
 				this.props.actions[actionName]({
 					business_account_type: 3,
-					invoice_id: record.invoice_id,
 					...values,
 					invoice_make_out_time: moment(values.invoice_make_out_time).format(format)
 				}).then(() => {
@@ -212,7 +222,7 @@ class PreModal extends React.Component {
 				</FormItem>}
 				{status === 'new' && <FormItem label='发票类型' {...formItemLayout}>
 					{getFieldDecorator('invoice_type')(
-						<Select placeholder="请选择" style={{ width: 200 }}
+						<Select placeholder="请选择" style={{ width: 200 }} disabled={true}
 						>
 							{SearchItem && SearchItem.invoice_type.map((item) =>
 								<Option key={item.value} value={item.value}>{item.name}</Option>)

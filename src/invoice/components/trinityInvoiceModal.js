@@ -33,7 +33,9 @@ class PreModal extends React.Component {
 					invoice_pure_amount: record.invoice_pure_amount,
 					invoice_tax_amount: record.invoice_tax_amount,
 					invoice_make_out_time: moment(record.invoice_make_out_time, format),
-					remark: record.remark
+					remark: record.remark,
+					invoice_tax_rate: record.invoice_tax_rate,
+					invoice_type: record.invoice_type
 				})
 				clearTimeout(timer);
 			}, 0);
@@ -218,12 +220,12 @@ class PreModal extends React.Component {
 						<Input placeholder="请输入" style={{ width: 200 }} suffix={'元'} onChange={this.handleTaxChange} onBlur={this.handleVoiceType} disabled={modType == 2} />
 					)}
 				</FormItem>
-				{status === 'new' && <FormItem label='发票税率' {...formItemLayout}>
-					{getFieldDecorator('invoice_tax')(
+				<FormItem label='发票税率' {...formItemLayout}>
+					{getFieldDecorator('invoice_tax_rate')(
 						<Input placeholder="请输入" style={{ width: 200 }} suffix={'%'} disabled={true} />
 					)}
-				</FormItem>}
-				{status === 'new' && <FormItem label='发票类型' {...formItemLayout}>
+				</FormItem>
+				<FormItem label='发票类型' {...formItemLayout}>
 					{getFieldDecorator('invoice_type')(
 						<Select placeholder="请选择" style={{ width: 200 }} disabled={true}
 						>
@@ -232,7 +234,7 @@ class PreModal extends React.Component {
 							}
 						</Select>
 					)}
-				</FormItem>}
+				</FormItem>
 				<FormItem label='开票日期' {...formItemLayout}>
 					{getFieldDecorator('invoice_make_out_time', { ...options })(
 						<DatePicker placeholder='请选择' format={format} style={{ width: 200 }} disabled={modType == 2} />

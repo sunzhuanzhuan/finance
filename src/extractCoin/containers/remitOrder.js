@@ -183,6 +183,9 @@ class RemitOrderManage extends React.Component {
 		}
 		this.onSelectChange(Object.keys(obj), Object.values(obj));
 	}
+	handleRestSelectKey = () => {
+		this.setState({ selectedRowKeys: [], rowsMap: {} })
+	}
 	render() {
 		let { newVisible, remitOrderLoading, outputVisible, remitOrderPageSize, filterParams, outputLoading, receiptsVisible, questParams, selectedRowKeys, rowsMap, studioVisible } = this.state;
 		console.log('%crowsMap: ', 'color: MidnightBlue; background: Aquamarine; font-size: 20px;', rowsMap);
@@ -247,6 +250,7 @@ class RemitOrderManage extends React.Component {
 			></RemitModal>
 			{receiptsVisible ? <ReceiptsModal visible={receiptsVisible} onCancel={this.closeReceiptsModal} questParams={questParams} /> : null}
 			{studioVisible && <StudioModal visible={studioVisible}
+				handleRestSelectKey={this.handleRestSelectKey}
 				requestList={this.requestList}
 				handleCloseStudio={this.handleCloseStudio}
 				selectedRowKeys={selectedRowKeys}

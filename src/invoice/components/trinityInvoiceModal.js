@@ -56,19 +56,22 @@ class PreModal extends React.Component {
 	}
 	handleTaxChange = e => {
 		this.taxValue = e.target.value;
+		this.voiceType = e.target.value;
 		if (e.target.value && !isNaN(this.pureValue)) {
 			this.props.form.setFieldsValue({
 				invoice_tax: numeral(this.taxValue / this.pureValue * 100).format('0.00')
 			});
-			if (e.target.value > 0) {
-				this.props.form.setFieldsValue({
-					invoice_type: 2
-				});
-			} else {
-				this.props.form.setFieldsValue({
-					invoice_type: 1
-				});
-			}
+		}
+	}
+	handleVoiceType = () => {
+		if (this.voiceType > 0) {
+			this.props.form.setFieldsValue({
+				invoice_type: 2
+			});
+		} else {
+			this.props.form.setFieldsValue({
+				invoice_type: 1
+			});
 		}
 	}
 	handleModal = (content) => {
@@ -212,7 +215,7 @@ class PreModal extends React.Component {
 						rules: [{ required: true, message: '该项为必填项！' },
 						{ validator: this.checkMoney }]
 					})(
-						<Input placeholder="请输入" style={{ width: 200 }} suffix={'元'} onChange={this.handleTaxChange} disabled={modType == 2} />
+						<Input placeholder="请输入" style={{ width: 200 }} suffix={'元'} onChange={this.handleTaxChange} onBlur={this.handleVoiceType} disabled={modType == 2} />
 					)}
 				</FormItem>
 				{status === 'new' && <FormItem label='发票税率' {...formItemLayout}>

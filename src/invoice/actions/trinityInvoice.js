@@ -44,7 +44,7 @@ export const {
 	postTrinityInvoiceExport,
 	postTrinityInvoiceExport_success
 } = createHttpAction('postTrinityInvoiceExport', Interface.postTrinityInvoiceExport, {
-	method: 'post'
+	method: 'get'
 });
 
 

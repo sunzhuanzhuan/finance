@@ -81,11 +81,9 @@ class TrinityInvoice extends React.Component {
 				else obj[key] = value.format('YYYY-MM-DD');
 			}
 		}
-		this.props.actions.postTrinityInvoiceExport({ ...obj }).then(() => {
-			message.success('导出成功！');
-		}).catch(({ errorMsg }) => {
-			message.error(errorMsg || '导出失败，请重试！');
-		})
+		window.open(`/api/trinity/publicInvoice/export?${qs.stringify({
+			...obj
+		})}`);
 	}
 	render() {
 		const search = qs.parse(this.props.location.search.substring(1));

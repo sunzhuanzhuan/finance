@@ -1,7 +1,7 @@
 import React from 'react'
 import { Row, Col, Form, Select, Button, message, Input } from "antd";
 import qs from 'qs';
-import {orderStatus} from '../constants/config'
+import { orderStatus } from '../constants/config'
 
 
 const FormItem = Form.Item;
@@ -15,17 +15,17 @@ class ListQuery extends React.Component {
 		}
 	}
 	handleSearch = (e) => {
-		const { questAction, accountList:{ page_size } , handlefilterParams } = this.props;
+		const { questAction, accountList: { page_size }, handlefilterParams } = this.props;
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
-				
-				
+
+
 				const hide = message.loading('查询中，请稍候...');
-				
+
 				questAction({ ...values, page: 1, page_size }).then(() => {
-					handlefilterParams({...values});
-					
+					handlefilterParams({ ...values });
+
 					hide();
 				}).catch(() => {
 					message.error('查询失败');
@@ -34,13 +34,13 @@ class ListQuery extends React.Component {
 			}
 		});
 	}
-	
+
 	handleClear = () => {
 		this.props.form.resetFields();
 	}
 	render() {
 		let { getFieldDecorator } = this.props.form;
-		let { searchDetail} = this.props;
+		let { searchDetail } = this.props;
 		// console.log(searchDetail)
 		// nameList = Object.values(nameList);
 		const formItemLayout = {
@@ -61,11 +61,11 @@ class ListQuery extends React.Component {
 						<FormItem label="订单执行状态" {...formItemLayout} >
 							{getFieldDecorator('execution_status')(
 								<Select placeholder="请选择" style={{ width: 140 }}>
-									{searchDetail.execution_status?searchDetail.execution_status.map(item =>
+									{searchDetail.execution_status ? searchDetail.execution_status.map(item =>
 										<Option key={item.value} value={item.value}>
 											{item.name}
 										</Option>)
-									:null}
+										: null}
 								</Select>
 							)}
 						</FormItem>
@@ -81,24 +81,24 @@ class ListQuery extends React.Component {
 						<FormItem label='平台' {...formItemLayout}>
 							{getFieldDecorator('weibo_type', { initialValue: '' })(
 								<Select>{
-									searchDetail.platform?searchDetail.platform.map((item)=>{
+									searchDetail.platform ? searchDetail.platform.map((item) => {
 										return <Option value={item.value} key={item.value}> {item.name}</Option>
 									})
-								:null}</Select>
+										: null}</Select>
 							)}
 						</FormItem>
 					</Col>
-					
-					</Row>
-					<Row>
+
+				</Row>
+				<Row>
 					<Col span={5}>
 						<FormItem label='媒介经理' {...formItemLayout}>
-							{getFieldDecorator('media_manager_name', { initialValue: '' })(
+							{getFieldDecorator('owner_admin_id', { initialValue: '' })(
 								<Select>{
-									searchDetail.resource_media?searchDetail.resource_media.map((item)=>{
+									searchDetail.resource_media ? searchDetail.resource_media.map((item) => {
 										return <Option value={item.value} key={item.value}> {item.name}</Option>
 									})
-								:null}</Select>
+										: null}</Select>
 							)}
 						</FormItem>
 					</Col>
@@ -106,25 +106,25 @@ class ListQuery extends React.Component {
 						<FormItem label="三方标识" {...formItemLayout} >
 							{getFieldDecorator('trinity_type')(
 								<Select placeholder="请选择" style={{ width: 140 }}>
-										{searchDetail.trinity_type?searchDetail.trinity_type.map(item =>
-											<Option key={item.value} value={item.value}>
-												{item.name}
-											</Option>)
-										:null}
+									{searchDetail.trinity_type ? searchDetail.trinity_type.map(item =>
+										<Option key={item.value} value={item.value}>
+											{item.name}
+										</Option>)
+										: null}
 								</Select>
 							)}
 						</FormItem>
 					</Col>
 					<Col span={5}>
 						<FormItem label='所属销售' {...formItemLayout}>
-							{getFieldDecorator('sale_manager_name', { initialValue: '' })(
+							{getFieldDecorator('sale_manager_id', { initialValue: '' })(
 								<Select placeholder="请选择" style={{ width: 140 }}>
-								{searchDetail.sale?searchDetail.sale.map(item =>
-									<Option key={item.value} value={item.value}>
-										{item.name}
-									</Option>)
-								:null}
-						</Select>
+									{searchDetail.sale ? searchDetail.sale.map(item =>
+										<Option key={item.value} value={item.value}>
+											{item.name}
+										</Option>)
+										: null}
+								</Select>
 							)}
 						</FormItem>
 					</Col>
@@ -135,18 +135,18 @@ class ListQuery extends React.Component {
 							)}
 						</FormItem>
 					</Col>
-					
+
 				</Row>
-				<Row style={{marginBottom:'20px'}}>
-				<Col span={20}></Col>
-					
-					
-				<Col span={4}>
-					<Button type="primary" className='left-gap' onClick={this.handleSearch}>查询</Button>
-					<Button style={{ marginLeft: '20px' }} className='left-gap' type="primary" onClick={() => {
-						this.props.form.resetFields()
-					}}>重置</Button>
-				</Col>
+				<Row style={{ marginBottom: '20px' }}>
+					<Col span={20}></Col>
+
+
+					<Col span={4}>
+						<Button type="primary" className='left-gap' onClick={this.handleSearch}>查询</Button>
+						<Button style={{ marginLeft: '20px' }} className='left-gap' type="primary" onClick={() => {
+							this.props.form.resetFields()
+						}}>重置</Button>
+					</Col>
 				</Row>
 			</Form>
 		</div>

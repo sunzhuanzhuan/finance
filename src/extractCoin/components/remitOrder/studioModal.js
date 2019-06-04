@@ -30,6 +30,7 @@ class StudioModal extends React.Component {
 						message.success('工作室转移成功', 3)
 						this.props.handleCloseStudio()
 						this.props.requestList()
+						this.props.handleRestSelectKey()
 					} else {
 						this.props.handleCloseStudio()
 						this.props.requestList()

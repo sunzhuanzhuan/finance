@@ -63,7 +63,19 @@ class StudioFormTop extends React.Component {
 			callback('最多可输入9位数');
 			return;
 		}
-		callback()
+		callback();
+	}
+	checkLimitMoneyMonth = (rule, value, callback) => {
+		let newValue = value ? value.replace(/' '/g, '') : '';
+		if (newValue && isNaN(newValue)) {
+			callback('请输入正确的金额');
+			return;
+		}
+		if (parseFloat(newValue) > parseFloat(999999999.99)) {
+			callback('最多可输入9位数');
+			return;
+		}
+		callback();
 	}
 	render() {
 		const { getFieldDecorator, getFieldValue } = this.props.form;
@@ -169,7 +181,7 @@ class StudioFormTop extends React.Component {
 							required: true, message: '请输入单笔限额'
 						},
 						{
-							validator: this.checkLimitMoney,
+							validator: this.checkLimitMoneyMonth,
 						}]
 					})(
 						<Input placeholder="请输入" />

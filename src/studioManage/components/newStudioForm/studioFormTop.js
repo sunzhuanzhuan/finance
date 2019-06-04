@@ -63,11 +63,6 @@ class StudioFormTop extends React.Component {
 			callback('最多可输入9位数');
 			return;
 		}
-		const limit = Number(this.props.form.getFieldValue('single_limit'));
-		if (value <= limit) {
-			callback('单月累计限额应大于单笔限额');
-			return;
-		}
 		callback();
 	}
 	checkLimitMoneyMonth = (rule, value, callback) => {
@@ -80,7 +75,7 @@ class StudioFormTop extends React.Component {
 			callback('最多可输入9位数');
 			return;
 		}
-
+		callback();
 	}
 	render() {
 		const { getFieldDecorator, getFieldValue } = this.props.form;

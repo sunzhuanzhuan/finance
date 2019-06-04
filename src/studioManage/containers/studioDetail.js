@@ -199,7 +199,7 @@ const QueryStatistics = ({ payment_count, user_count, occupy_amount_sum, handleE
 		<div>
 			打款单：<span className='red-font'>{payment_count}</span>个;
 			主账号：<span className='red-font'>{user_count}</span>个;
-			总金额：<span className='red-font'>{numeral(occupy_amount_sum / 100).format('0,0.00')}</span>元;
+			占用金额：<span className='red-font'>{numeral(occupy_amount_sum / 100).format('0,0.00')}</span>元;
 			<Button type='primary' className='left-gap' onClick={() => {
 				handleExport();
 			}}>导出</Button>

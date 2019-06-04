@@ -65,6 +65,23 @@ class StudioFormTop extends React.Component {
 		}
 		callback()
 	}
+	checkLimitMoneyMonth = (rule, value, callback) => {
+		let newValue = value ? value.replace(/' '/g, '') : '';
+		if (newValue && isNaN(newValue)) {
+			callback('请输入正确的金额');
+			return;
+		}
+		if (parseFloat(newValue) > parseFloat(999999999.99)) {
+			callback('最多可输入9位数');
+			return;
+		}
+		const limit = Number(this.props.form.getFieldValue('monthly_limit'));
+		if (value > limit) {
+			callback('单笔月限额应小于等于单月累计限额');
+			return;
+		}
+		callback();
+	}
 	render() {
 		const { getFieldDecorator, getFieldValue } = this.props.form;
 		const { formItemLayout, platforms, bank } = this.props;
@@ -169,7 +186,7 @@ class StudioFormTop extends React.Component {
 							required: true, message: '请输入单笔限额'
 						},
 						{
-							validator: this.checkLimitMoney,
+							validator: this.checkLimitMoneyMonth,
 						}]
 					})(
 						<Input placeholder="请输入" />

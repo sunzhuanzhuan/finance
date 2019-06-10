@@ -90,7 +90,7 @@ class DealOrder extends React.Component {
 					columns={dealOrderCols}
 					dataSource={list}
 					bordered
-					pagination={total > page_size ? paginationObj : false}
+					pagination={paginationObj}
 				/>
 			</div>
 		</div>

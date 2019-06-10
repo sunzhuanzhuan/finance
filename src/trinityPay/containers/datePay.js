@@ -97,7 +97,7 @@ class DatePay extends React.Component {
 					columns={datePayCols}
 					dataSource={list}
 					bordered
-					pagination={total > page_size ? paginationObj : false}
+					pagination={paginationObj}
 				/>
 			</div>
 			{modalVisible ? <DateModal

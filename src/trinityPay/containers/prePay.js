@@ -101,7 +101,7 @@ class PrePay extends React.Component {
 					columns={prePayCols}
 					dataSource={list}
 					bordered
-					pagination={total > page_size ? paginationObj : false}
+					pagination={paginationObj}
 					scroll={{ x: 1540 }}
 				/>
 			</div>

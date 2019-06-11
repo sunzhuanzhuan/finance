@@ -39,11 +39,12 @@ class PrePay extends React.Component {
 		return this.props.actions.getPrimaryAccount({ ...obj })
 	}
 	handleFetchPlatform = () => {
-		const value = this.form.getFieldValue('cooperation_platform_id').key;
-		if (!value) {
+		const plat = this.form.getFieldValue('cooperation_platform_id');
+		if (!plat) {
 			message.error('请先选择三方下单平台');
 			return
 		}
+		const value = this.form.getFieldValue('cooperation_platform_id').key;
 		if (value != this.state.cooperation_platform_id) {
 			this.props.actions.getAgentListByCPId({ cooperation_platform_id: value }).then(res => {
 				this.setState({ cooperation_platform_id: value, agent: res.data })

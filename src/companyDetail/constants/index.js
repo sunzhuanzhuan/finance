@@ -765,12 +765,12 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				align: 'center',
 				width: 260,
 				render: (text, { price = [] }) => {
-					const flag = price && price[0] ? price[0].trinity_type == 2 : false;
-					return <div  style={{width:260}}>
+					// const flag = price && price[0] ? price[0].trinity_type == 2 : false;
+					return <div style={{ width: 260 }}>
 						{price.map((item, index) => {
 							return <div key={index}>
 								<div>{`${item.price_label}:${item.open_cost_price}`}</div>
-								{flag ? <div>{`(博主${item.private_open_cost_price},第三方${item.public_open_cost_price})`}</div> : null}
+								{item.trinity_type == 2 ? <div>{`(博主${item.private_open_cost_price},第三方${item.public_open_cost_price})`}</div> : null}
 							</div>
 						})}
 					</div>
@@ -783,12 +783,12 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				align: 'center',
 				width: 260,
 				render: (text, { price = [] }) => {
-					const flag = price && price[0] ? price[0].trinity_type == 2 : false;
-					return <div style={{width:260}}>
+					// const flag = price && price[0] ? price[0].trinity_type == 2 : false;
+					return <div style={{ width: 260 }}>
 						{price.map((item, index) => {
 							return <div key={index}>
 								<div>{`${item.price_label}:${item.quoted_price}`}</div>
-								{(flag && flag == 1) ? <div>{`(博主${item.private_quote_price},第三方${item.public_quote_price})`}</div> : null}
+								{item.trinity_type == 2 ? <div>{`(博主${item.private_quote_price},第三方${item.public_quote_price})`}</div> : null}
 							</div>
 						})}
 					</div>
@@ -862,12 +862,12 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				align: 'center',
 				width: 246,
 				render: (text, { price = [], pre_min_sell_price = [] }) => {
-					const flag = price && price[0] ? price[0].trinity_type == 2 : false;
-					return <div style={{width:260}}>
+					// const flag = price && price[0] ? price[0].trinity_type == 2 : false;
+					return <div style={{ width: 260 }}>
 						{pre_min_sell_price.map((item, index) => {
 							return <div key={index}>
 								<div>{`${item.price_label}:${item.min_sell_price}`}</div>
-								{(flag && flag == 1) ? <div>{`(博主${item.private_min_sell_price},第三方${item.public_min_sell_price})`}</div> : null}
+								{item.trinity_type == 2 ? <div>{`(博主${item.private_min_sell_price},第三方${item.public_min_sell_price})`}</div> : null}
 							</div>
 						})}
 					</div>

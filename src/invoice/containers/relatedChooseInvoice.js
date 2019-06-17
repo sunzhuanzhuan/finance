@@ -95,11 +95,13 @@ class RelatedChooseInvoice extends React.Component {
 			selectedRowKeys: selectedRowKeys,
 			onChange: (selectedRowKeys, selectedRows) => {
 				const oldValue = this.state.selectedRowKeys.filter(item => !selectedRowKeys.includes(item)).toString();
+				console.log(oldValue)
 				if (oldValue) {
 					setFieldsValue({ [`${oldValue}.price`]: '' });
 				}
 				const ary = selectedRows.map(item => {
 					const price = getFieldValue(`${item.invoice_id}.price`);
+					console.log(oldValue)
 					if (!price) {
 						setFieldsValue({ [`${item.invoice_id}.price`]: item.rest_amount })
 					}

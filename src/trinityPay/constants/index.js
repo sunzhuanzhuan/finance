@@ -7,8 +7,8 @@ const REVOCATION = 'revocation';
 export const prePayFunc = (handleModal) => [
 	{
 		title: '打款单ID',
-		dataIndex: 'payment_slip_id',
-		key: 'payment_slip_id',
+		dataIndex: 'payment_slip_code',
+		key: 'payment_slip_code',
 		align: 'center',
 		width: 100
 	},
@@ -125,8 +125,8 @@ export const prePayFunc = (handleModal) => [
 export const datePayFunc = (handleModal) => [
 	{
 		title: '打款单ID',
-		dataIndex: 'payment_slip_id',
-		key: 'payment_slip_id',
+		dataIndex: 'payment_slip_code',
+		key: 'payment_slip_code',
 		align: 'center',
 		width: 100
 	},
@@ -302,8 +302,8 @@ export const dealOrderCols = [
 	},
 	{
 		title: '打款单ID',
-		dataIndex: 'payment_slip_id',
-		key: 'payment_slip_id',
+		dataIndex: 'payment_slip_code',
+		key: 'payment_slip_code',
 		align: 'center',
 		width: 100
 	},

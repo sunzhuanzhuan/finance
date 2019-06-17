@@ -88,6 +88,17 @@ export const prePaySearchFunc = ({ media_manager = [], payment_company = [], pay
 			label: '订单ID',
 			value: 'wby_order_id',
 		}
+	}, {
+		ctype: 'input',
+		attr: {
+			placeholder: '请输入',
+			style: { width: 160 },
+			allowClear: true
+		},
+		field: {
+			label: '需求名称',
+			value: 'wby_order_id',
+		}
 	},
 	{
 		ctype: 'rangePicker',

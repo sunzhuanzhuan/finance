@@ -18,7 +18,7 @@ class Modification extends React.Component {
 			token: undefined,
 		}
 	}
-	componentDidMount() {
+	componentWillMount() {
 		const search = qs.parse(this.props.location.search.substring(1));
 		const { setFieldsValue } = this.props.form;
 		const ary = modificationColumns(search.type);
@@ -306,9 +306,9 @@ class Modification extends React.Component {
 					<Row>
 						<FormItem label='打款备注' {...formItemLayout}>
 							{getFieldDecorator('payment_remark', {
-								rules: [{ required: payment_status == (2 || 3), message: '打款撤销备注为必填项!' }]
+								rules: [{ required: (payment_status == 2 || payment_status == 3), message: '打款撤销备注为必填项!', max: 50 }]
 							})(
-								<Input disabled={payment_status != (2 || 3)} />
+								<Input disabled={!(payment_status == 3 || payment_status == 2)} />
 							)}
 						</FormItem>
 					</Row>

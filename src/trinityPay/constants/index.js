@@ -207,7 +207,7 @@ export const datePayFunc = (handleModal) => [
 		dataIndex: 'action',
 		key: 'action',
 		align: 'center',
-		width: 200,
+		width: 220,
 		render: (text, record) => {
 			return <div className='prePay-action-container'>
 				{record.payment_status && record.payment_status == 1 && <Button type='primary' size='small' style={{ width: 80 }} onClick={() => {
@@ -326,7 +326,7 @@ export const dealOrderCols = [
 export const prePayDetailColumns = [
 	{
 		title: '打款单ID：',
-		dataIndex: 'payment_slip_id',
+		dataIndex: 'payment_slip_code',
 		key: 'payment_slip_id',
 		align: 'center'
 	}, {
@@ -517,7 +517,7 @@ export const prePayDetailColumns = [
 export const datePayDetailColumns = [
 	{
 		title: '打款单ID：',
-		dataIndex: 'payment_slip_id',
+		dataIndex: 'payment_slip_code',
 		key: 'payment_slip_id',
 		align: 'center'
 	}, {

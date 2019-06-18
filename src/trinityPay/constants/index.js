@@ -131,7 +131,7 @@ export const datePayFunc = (handleModal) => [
 		width: 100
 	},
 	{
-		title: '结算单ID',
+		title: '汇总单ID',
 		dataIndex: 'settle_id',
 		key: 'settle_id',
 		align: 'center',

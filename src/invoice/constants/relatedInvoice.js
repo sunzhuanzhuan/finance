@@ -129,7 +129,7 @@ export const availableInvoiceFunc = (getFieldDecorator, handleSelected, rowsMap,
 						validator: (...args) => { checkPrice(record, ...args) }
 					}]
 				})(
-					<InputNumber formatter={value => `${value}`.replace(/[^\d||.]/g, '')} onBlur={(e) => {
+					<InputNumber min={0.01} formatter={value => `${value}`.replace(/[^\d||.]/g, '')} onBlur={(e) => {
 						const value = e.target.value;
 						if (!value) {
 							const obj = { ...rowsMap };

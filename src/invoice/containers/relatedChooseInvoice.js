@@ -95,19 +95,25 @@ class RelatedChooseInvoice extends React.Component {
 			selectedRowKeys: selectedRowKeys,
 			onChange: (selectedRowKeys, selectedRows) => {
 				const oldValue = this.state.selectedRowKeys.filter(item => !selectedRowKeys.includes(item)).toString();
-				console.log(oldValue)
+
 				if (oldValue) {
 					setFieldsValue({ [`${oldValue}.price`]: '' });
 				}
-				const ary = selectedRows.map(item => {
-					const price = getFieldValue(`${item.invoice_id}.price`);
-					console.log(oldValue)
-					if (!price) {
-						setFieldsValue({ [`${item.invoice_id}.price`]: item.rest_amount })
-					}
-					return { ...item, price: getFieldValue(`${item.invoice_id}.price`) }
-				});
-				this.handleSelected(selectedRowKeys, ary);
+
+				if (selectedRowKeys.length == 0) {
+					this.props.form.resetFields()
+					this.handleSelected(selectedRowKeys, []);
+				} else {
+					const ary = selectedRows.map(item => {
+						const price = getFieldValue(`${item.invoice_id}.price`);
+						if (!price) {
+							setFieldsValue({ [`${item.invoice_id}.price`]: item.rest_amount })
+						}
+						return { ...item, price: getFieldValue(`${item.invoice_id}.price`) }
+					});
+					this.handleSelected(selectedRowKeys, ary);
+				}
+
 			}
 		}
 		return <div className='relatedChoose-container'>

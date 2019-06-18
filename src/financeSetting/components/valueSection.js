@@ -15,6 +15,7 @@ class ValueSection extends React.Component {
 		const { form } = this.props;
 		const keys = form.getFieldValue('keys');
 		uuid = keys.length;
+		console.log(keys)
 	}
 	checkCount = () => {
 
@@ -24,6 +25,7 @@ class ValueSection extends React.Component {
 		const { form } = this.props;
 		const keys = form.getFieldValue('keys');
 		const nextKeys = keys.concat(uuid);
+		console.log(nextKeys)
 		form.setFieldsValue({
 			keys: nextKeys,
 		});

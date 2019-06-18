@@ -15,17 +15,16 @@ class ValueSection extends React.Component {
 		const { form } = this.props;
 		const keys = form.getFieldValue('keys');
 		uuid = keys.length;
-		console.log(keys)
 	}
 	checkCount = () => {
 
 	}
 	handleAdd = () => {
-		uuid++;
 		const { form } = this.props;
 		const keys = form.getFieldValue('keys');
+		uuid = keys[keys.length - 1];
+		uuid++;
 		const nextKeys = keys.concat(uuid);
-		console.log(nextKeys)
 		form.setFieldsValue({
 			keys: nextKeys,
 		});
@@ -93,21 +92,21 @@ class ValueInput extends React.PureComponent {
 		}
 	}
 	handleMin = e => {
-		const min = e.target.value;
+		const min = e.target.value.trim();
 		if (!('value' in this.props)) {
 			this.setState({ min });
 		}
 		this.triggerChange({ min });
 	}
 	handleMax = e => {
-		const max = e.target.value;
+		const max = e.target.value.trim();
 		if (!('value' in this.props)) {
 			this.setState({ max });
 		}
 		this.triggerChange({ max });
 	}
 	handleRate = e => {
-		const rate = e.target.value;
+		const rate = e.target.value.trim();
 		if (!('value' in this.props)) {
 			this.setState({ rate: rate });
 		}

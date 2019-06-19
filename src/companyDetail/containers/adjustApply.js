@@ -121,7 +121,7 @@ class AdjustApply extends React.Component {
 			showSizeChanger: true,
 			pageSizeOptions: ['20', '50', '100', '200']
 		};
-		const adjustApplyPreview = adjustApplyDetailFunc([])(['prev_id', 'company_name', 'project_name', 'requirement_id_name', 'platform_name', 'weibo_name', 'discount_rate', 'commissioned_price', 'quoted_price', 'pre_min_sell_price']);
+		const adjustApplyPreview = adjustApplyDetailFunc([])(['prev_id', 'company_name', 'project_name', 'requirement_id_name', 'platform_name', 'weibo_name', 'plan_manager_id', 'discount_rate', 'commissioned_price', 'quoted_price', 'pre_min_sell_price']);
 		return <div className='adjust-apply'>
 			<fieldset className='fieldset_css'>
 				<legend>订单调价</legend>

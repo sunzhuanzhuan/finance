@@ -747,6 +747,16 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				align: 'center',
 				width: 120,
 			},
+			'plan_manager_id': {
+				title: '是否含策划',
+				dataIndex: 'plan_manager_id',
+				key: 'plan_manager_id',
+				align: 'center',
+				width: 120,
+				render: (text, record) => {
+					return record.plan_manager_id == 0 ? '否' : '是'
+				}
+			},
 			'discount_rate': {
 				title: '折扣比例',
 				dataIndex: 'discount_rate',

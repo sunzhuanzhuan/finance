@@ -57,8 +57,9 @@ class Modification extends React.Component {
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
 				const { payDetail: { payment_status } } = this.props;
+				const search = qs.parse(this.props.location.search.substring(1));
 				const obj = {
-					payment_slip_id: values['payment_slip_id']
+					payment_slip_id: search['payment_slip_id']
 				}
 				switch (payment_status) {
 					case 2:
@@ -108,7 +109,7 @@ class Modification extends React.Component {
 				<Form onSubmit={this.handleSubmit}>
 					<Row>
 						<FormItem label='打款单ID' {...formItemLayout}>
-							{getFieldDecorator('payment_slip_id')(
+							{getFieldDecorator('payment_slip_code')(
 								<Input disabled={true} />
 							)}
 						</FormItem>
@@ -149,7 +150,7 @@ class Modification extends React.Component {
 						</FormItem>
 					</Row>}
 					{type == 'datePay' && <Row>
-						<FormItem label='结算单ID' {...formItemLayout}>
+						<FormItem label='汇总单ID' {...formItemLayout}>
 							{getFieldDecorator('settle_id')(
 								<Input disabled={true} />
 							)}

@@ -378,7 +378,7 @@ export const dealOrderSearchFunc = ({ platform = [], cooperation_platform = [], 
 		},
 		field: {
 			label: '打款单ID',
-			value: 'payment_slip_id',
+			value: 'payment_slip_code',
 		},
 	},
 	{

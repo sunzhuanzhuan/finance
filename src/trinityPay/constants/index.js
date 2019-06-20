@@ -652,8 +652,8 @@ export const datePayDetailColumns = [
 	},
 	{
 		title: '开户行：',
-		dataIndex: 'bank_agency_province',
-		key: 'bank_agency_province',
+		dataIndex: 'bank',
+		key: 'bank',
 		align: 'center'
 	},
 	{

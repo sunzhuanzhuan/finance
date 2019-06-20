@@ -110,7 +110,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(DealOrder)
 function Stat(total, statistic) {
 	return <div style={{ padding: '0 10px' }}>
 		<span>当前筛选条件下共<span className='red-font little-left-gap'>{total}</span>条</span>
-		<span className='left-gap'>预计打款金额：<span className='red-font little-left-gap'>{statistic && statistic.payment_amount_total}</span>元</span>
+		{/* <span className='left-gap'>预计打款金额：<span className='red-font little-left-gap'>{statistic && statistic.payment_amount_total}</span>元</span> */}
 		<span className='left-gap'>已打款金额：<span className='red-font little-left-gap'>{statistic && statistic.paid_amount_total}</span>元</span>
 	</div>
 }

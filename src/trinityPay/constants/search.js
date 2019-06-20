@@ -382,18 +382,6 @@ export const dealOrderSearchFunc = ({ platform = [], cooperation_platform = [], 
 		},
 	},
 	{
-		ctype: 'input',
-		attr: {
-			placeholder: '请输入',
-			style: { width: 160 },
-			allowClear: true
-		},
-		field: {
-			label: '三方平台订单ID',
-			value: 'ttp_order_id',
-		},
-	},
-	{
 		ctype: 'select',
 		attr: {
 			placeholder: '不限',

@@ -196,8 +196,8 @@ class Detail extends Component {
 				<div>
 					<span span={8}>手工质检(结案后):￥{numeral(detail.company?detail.company.after_close_case_manual_qc:'').format('0,0.00')}</span>
 				</div>
-				<Col span={6}>应开票:￥{numeral(detail.company?detail.company.total_invoice_amount:'').format('0,0.00')}</Col>
-				<Col span={6}>已开发票:￥{numeral(detail.company?detail.company.already_invoice_amount:'').format('0,0.00')}</Col>
+				<Col span={6}>应开发票金额:￥{numeral(detail.company?detail.company.total_invoice_amount:'').format('0,0.00')}</Col>
+				<Col span={6}>已开发票金额:￥{numeral(detail.company?detail.company.already_invoice_amount:'').format('0,0.00')}</Col>
 				<Col span={6}>回款金额:￥{numeral(detail.company?detail.company.payback_amount:'').format('0,0.00')}
 				<span className='paybackStatus'>{detail.company?detail.company.is_payback:''}</span>
 				</Col>
@@ -260,7 +260,7 @@ class Detail extends Component {
 			<Row className='colHeight' style={{ height:'40px',lineHeight:'40px'}}>
 				<div>
 					<span className='pad32'>应回发票:{numeral(detail.account?detail.account.total_invoice_amount:'').format('0,0.00')}</span>
-					<span className='padd60'>待回发票:{numeral(detail.account?detail.account.public_quote_price:'').format('0,0.00')}</span>
+					<span className='padd60'>发票盈余:{numeral(detail.account?detail.account.public_quote_price:'').format('0,0.00')}</span>
 				</div>
 			</Row>
 				{detail.account?detail.account.payment_list.map((item,index)=>{

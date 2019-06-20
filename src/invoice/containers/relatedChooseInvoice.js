@@ -114,7 +114,10 @@ class RelatedChooseInvoice extends React.Component {
 					this.handleSelected(selectedRowKeys, ary);
 				}
 
-			}
+			},
+			getCheckboxProps: record => ({
+				disabled: record.rest_amount == '0.00',
+			}),
 		}
 		return <div className='relatedChoose-container'>
 			<legend className='container-title'>选择发票</legend>

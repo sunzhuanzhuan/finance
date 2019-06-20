@@ -42,7 +42,7 @@ class Detail extends React.Component {
 			<fieldset className='fieldset_css'>
 				<legend>打款单信息</legend>
 				<Skeleton loading={loading} active >
-					<WBYDetailTable className='vertical-table' columns={detailColumns} dataSource={payDetail} columnCount={4} ></WBYDetailTable>
+					<WBYDetailTable className='vertical-table' isFilterZero={false} columns={detailColumns} dataSource={payDetail} columnCount={4} ></WBYDetailTable>
 				</Skeleton>
 				<div style={{ textAlign: 'center', paddingTop: '20px' }}>
 					<Button type='primary' size='large' onClick={() => {

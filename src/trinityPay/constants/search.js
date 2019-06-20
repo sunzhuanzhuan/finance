@@ -307,7 +307,7 @@ export const datePaySearchFunc = ({ platform = [], cooperation_platform = [], pa
 			allowClear: true
 		},
 		field: {
-			label: '汇总单名称',
+			label: '汇总单ID',
 			value: 'settle_id',
 		},
 	}

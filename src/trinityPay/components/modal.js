@@ -114,7 +114,7 @@ class PreModal extends React.Component {
 		>
 			<Form>
 				<FormItem label='备注' {...formItemLayout}>
-					{getFieldDecorator('remark', { rules: [{ required: true, message: '请填写原因!' }] })(
+					{getFieldDecorator('remark', { rules: [{ required: (status == 'succeed' && type == 'datePay') ? false : true, message: '请填写原因!' }] })(
 						<TextArea autosize={{ minRows: 4, maxRows: 6 }} maxLength={50} />
 					)}
 				</FormItem>

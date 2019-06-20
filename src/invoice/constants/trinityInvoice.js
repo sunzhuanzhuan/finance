@@ -231,7 +231,8 @@ export const checkModalCols = [
 		dataIndex: 'created_at',
 		key: 'created_at',
 		align: 'center',
-		render: text => {
+		render: (text, record) => {
+			console.log(record)
 			return text || '-'
 		}
 	},

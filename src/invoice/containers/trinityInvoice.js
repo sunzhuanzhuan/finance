@@ -161,7 +161,7 @@ function CheckModal({ visible, onCancel, record }) {
 			<Button key="back" onClick={onCancel}>返回</Button>
 		]}
 	>
-		<WBYDetailTable className='vertical-table' columns={checkModalCols} dataSource={record} columnCount={4} ></WBYDetailTable>
+		<WBYDetailTable isFilterZero={false} className='vertical-table' columns={checkModalCols} dataSource={record} columnCount={4} ></WBYDetailTable>
 	</Modal>
 }
 

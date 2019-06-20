@@ -24,9 +24,11 @@ class Detail extends Component {
 	}
 	handleList=()=>{
 		// console.log(record)
-		this.props.history.push({
-			pathname: '/finance/zhangwu/list',
-		});
+		// this.props.history.push({
+		// 	pathname: '/finance/zhangwu/list',
+		// });
+		this.props.history.goBack();
+
 	}
 	handleResetDetail=()=>{
 		this.props.actions.getResetDetail()

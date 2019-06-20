@@ -128,7 +128,7 @@ export const datePayFunc = (handleModal) => [
 		dataIndex: 'payment_slip_code',
 		key: 'payment_slip_code',
 		align: 'center',
-		width: 100
+		width: 100,
 	},
 	{
 		title: '汇总单ID',
@@ -233,7 +233,10 @@ export const dealOrderCols = [
 		dataIndex: 'wby_order_id',
 		key: 'wby_order_id',
 		align: 'center',
-		width: 100
+		width: 100,
+		render: (text, record) => {
+			return <a href={`/finance/zhangwu/detail?order_id=${record.wby_order_id}`}>{text}</a>
+		}
 	},
 	{
 		title: '订单类型',
@@ -337,9 +340,24 @@ export const prePayDetailColumns = [
 		key: 'payment_slip_id',
 		align: 'center'
 	}, {
-		title: '订单ID：',
-		dataIndex: 'wby_order_id',
-		key: 'wby_order_id',
+		title: '打款单类型：',
+		dataIndex: 'settle_type_desc',
+		key: 'settle_type_desc',
+		align: 'center',
+
+	}, {
+		title: '付款时间：',
+		dataIndex: 'payment_time',
+		key: 'payment_time',
+		align: 'center',
+		render: (text) => {
+			return text || '-'
+		}
+
+	}, {
+		title: '收款方类型：',
+		dataIndex: 'payee_type_desc',
+		key: 'payee_type_desc',
 		align: 'center',
 
 	}, {
@@ -528,6 +546,33 @@ export const datePayDetailColumns = [
 		key: 'payment_slip_id',
 		align: 'center'
 	}, {
+		title: '汇总单ID：',
+		dataIndex: 'settle_id',
+		key: 'settle_id',
+		align: 'center',
+
+	}, {
+		title: '打款单类型：',
+		dataIndex: 'settle_type_desc',
+		key: 'settle_type_desc',
+		align: 'center',
+
+	}, {
+		title: '付款时间：',
+		dataIndex: 'payment_time',
+		key: 'payment_time',
+		align: 'center',
+		render: (text) => {
+			return text || '-'
+		}
+
+	}, {
+		title: '收款方类型：',
+		dataIndex: 'payee_type_desc',
+		key: 'payee_type_desc',
+		align: 'center',
+
+	}, {
 		title: '申请时间：',
 		dataIndex: 'created_at',
 		key: 'created_at',
@@ -661,9 +706,9 @@ export const datePayDetailColumns = [
 export const modificationColumns = type => {
 	switch (type) {
 		case 'prePay':
-			return ['payment_slip_code', 'settle_type_desc', 'payee_type_desc', 'wby_order_id', 'product_line_type_name', 'ttp_order_id', 'platform_name', 'cooperation_platform_name', 'agent_name', 'requirement_id', 'requirement_name', 'requirement_company_name', 'requirement_sale_manager_name', 'payment_amount', 'payment_type_desc', 'payee_account_name', 'payee_account', 'bank_agency_province', 'bank_agency_city', 'bank', 'bank_agency', 'created_at', 'payment_status_desc', 'payment_time', 'payment_screenshot', 'payment_remark', 'payment_company_name', 'return_invoice_type_desc', 'return_invoice_amount', 'invoice_surplus', 'beneficiary_company', 'main_user_name', 'media_user_name', 'payment_revoke_reason']
+			return ['payment_slip_code', 'settle_type_desc', 'payment_time', 'payee_type_desc', 'settle_type_desc', 'payee_type_desc', 'wby_order_id', 'product_line_type_name', 'ttp_order_id', 'platform_name', 'cooperation_platform_name', 'agent_name', 'requirement_id', 'requirement_name', 'requirement_company_name', 'requirement_sale_manager_name', 'payment_amount', 'payment_type_desc', 'payee_account_name', 'payee_account', 'bank_agency_province', 'bank_agency_city', 'bank', 'bank_agency', 'created_at', 'payment_status_desc', 'payment_time', 'payment_screenshot', 'payment_remark', 'payment_company_name', 'return_invoice_type_desc', 'return_invoice_amount', 'invoice_surplus', 'beneficiary_company', 'main_user_name', 'media_user_name', 'payment_revoke_reason']
 		case 'datePay':
-			return ['payment_slip_code', 'settle_type_desc', 'payee_type_desc', 'settle_id', 'platform_name', 'cooperation_platform_name', 'agent_name', 'payment_amount', 'payment_type_desc', 'payee_account_name', 'payee_account', 'bank_agency_province', 'bank_agency_city', 'bank', 'bank_agency', 'created_at', 'payment_status_desc', 'payment_time', 'payment_screenshot', 'payment_remark', 'payment_company_name', 'return_invoice_type_desc', 'return_invoice_amount', 'invoice_surplus', 'beneficiary_company', 'payment_revoke_reason']
+			return ['payment_slip_code', 'settle_id', 'settle_type_desc', 'payment_time', 'payee_type_desc', 'settle_type_desc', 'payee_type_desc', 'settle_id', 'platform_name', 'cooperation_platform_name', 'agent_name', 'payment_amount', 'payment_type_desc', 'payee_account_name', 'payee_account', 'bank_agency_province', 'bank_agency_city', 'bank', 'bank_agency', 'created_at', 'payment_status_desc', 'payment_time', 'payment_screenshot', 'payment_remark', 'payment_company_name', 'return_invoice_type_desc', 'return_invoice_amount', 'invoice_surplus', 'beneficiary_company', 'payment_revoke_reason']
 		default:
 			return [];
 	}

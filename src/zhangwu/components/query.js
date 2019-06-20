@@ -53,14 +53,14 @@ class ListQuery extends React.Component {
 					<Col span={5}>
 						<FormItem label='订单ID' {...formItemLayout}>
 							{getFieldDecorator('order_id')(
-								<Input style={{ width: 140 }} />
+								<Input style={{ width: 140 }} allowClear />
 							)}
 						</FormItem>
 					</Col>
 					<Col span={7}>
 						<FormItem label="订单执行状态" {...formItemLayout} >
 							{getFieldDecorator('execution_status')(
-								<Select placeholder="请选择" style={{ width: 140 }}>
+								<Select placeholder="请选择" style={{ width: 140 }} allowClear>
 									{searchDetail.execution_status ? searchDetail.execution_status.map(item =>
 										<Option key={item.value} value={item.value}>
 											{item.name}
@@ -73,14 +73,14 @@ class ListQuery extends React.Component {
 					<Col span={5}>
 						<FormItem label='公司简称' {...formItemLayout}>
 							{getFieldDecorator('company_name', { initialValue: '' })(
-								<Input style={{ width: 140 }} />
+								<Input style={{ width: 140 }} allowClear />
 							)}
 						</FormItem>
 					</Col>
 					<Col span={5}>
 						<FormItem label='平台' {...formItemLayout}>
 							{getFieldDecorator('weibo_type', { initialValue: '' })(
-								<Select>{
+								<Select allowClear>{
 									searchDetail.platform ? searchDetail.platform.map((item) => {
 										return <Option value={item.value} key={item.value}> {item.name}</Option>
 									})
@@ -94,7 +94,7 @@ class ListQuery extends React.Component {
 					<Col span={5}>
 						<FormItem label='媒介经理' {...formItemLayout}>
 							{getFieldDecorator('owner_admin_id', { initialValue: '' })(
-								<Select>{
+								<Select allowClear>{
 									searchDetail.resource_media ? searchDetail.resource_media.map((item) => {
 										return <Option value={item.value} key={item.value}> {item.name}</Option>
 									})
@@ -105,7 +105,7 @@ class ListQuery extends React.Component {
 					<Col span={7}>
 						<FormItem label="三方标识" {...formItemLayout} >
 							{getFieldDecorator('trinity_type')(
-								<Select placeholder="请选择" style={{ width: 140 }}>
+								<Select allowClear placeholder="请选择" style={{ width: 140 }}>
 									{searchDetail.trinity_type ? searchDetail.trinity_type.map(item =>
 										<Option key={item.value} value={item.value}>
 											{item.name}
@@ -118,7 +118,7 @@ class ListQuery extends React.Component {
 					<Col span={5}>
 						<FormItem label='所属销售' {...formItemLayout}>
 							{getFieldDecorator('sale_manager_id', { initialValue: '' })(
-								<Select placeholder="请选择" style={{ width: 140 }}>
+								<Select allowClear placeholder="请选择" style={{ width: 140 }}>
 									{searchDetail.sale ? searchDetail.sale.map(item =>
 										<Option key={item.value} value={item.value}>
 											{item.name}
@@ -131,7 +131,7 @@ class ListQuery extends React.Component {
 					<Col span={7}>
 						<FormItem label='账号名称' {...formItemLayout}>
 							{getFieldDecorator('weibo_name', { initialValue: '' })(
-								<Input style={{ width: 140 }} />
+								<Input style={{ width: 140 }} allowClear />
 							)}
 						</FormItem>
 					</Col>

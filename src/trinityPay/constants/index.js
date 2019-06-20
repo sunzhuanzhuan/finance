@@ -266,6 +266,13 @@ export const dealOrderCols = [
 		width: 100
 	},
 	{
+		title: '三方平台下单',
+		dataIndex: 'cooperation_platform_name',
+		key: 'cooperation_platform_name',
+		align: 'center',
+		width: 100
+	},
+	{
 		title: '三方平台下单时间',
 		dataIndex: 'ttp_place_order_at',
 		key: 'ttp_place_order_at',

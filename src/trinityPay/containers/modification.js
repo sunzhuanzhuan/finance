@@ -122,7 +122,7 @@ class Modification extends React.Component {
 						</FormItem>
 					</Row>
 					<Row>
-						<FormItem label='收款人类型' {...formItemLayout}>
+						<FormItem label='收款方类型' {...formItemLayout}>
 							{getFieldDecorator('payee_type_desc')(
 								<Input disabled={true} />
 							)}

@@ -56,8 +56,15 @@ class PreModal extends React.Component {
 		})
 	}
 	handleSubmit = (status, type) => {
-		const { search, id, page, prePayData: { list } } = this.props;
+		const { search, id, page } = this.props;
 		const actionName = this.titleMap(status, type).actionName;
+		let list = []
+		if (type == 'datePay') {
+			list = this.props.datePayData.list;
+		} else {
+			list = this.props.prePayData.list;
+		}
+
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
 				const current = (search.keys && search.keys.payment_status && list.length === 1) ? (page - 1 || page) : page;
@@ -139,6 +146,7 @@ class PreModal extends React.Component {
 const mapStateToProps = (state) => {
 	return {
 		prePayData: state.trinityPay.prePayData,
+		datePayData: state.trinityPay.datePayData,
 	}
 }
 const mapDispatchToProps = dispatch => ({

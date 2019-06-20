@@ -13,7 +13,7 @@ class FormList extends React.PureComponent {
 			setTimeout(() => {
 				data.forEach((item, index) => {
 					let obj = { ...item };
-					obj['rate'] = item['rate'] * 100;
+					obj['rate'] = (item['rate'] * 100).toFixed(2);
 					setFieldsValue({
 						[index]: obj
 					})

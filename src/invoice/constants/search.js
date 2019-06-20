@@ -69,7 +69,7 @@ export const trinityInvoiceSearchFunc = ({ invoice_title, invoice_type, invoice_
 		ctype: 'select',
 		attr: {
 			placeholder: '不限',
-			style: { width: 160 },
+			style: { width: 210 },
 			labelInValue: true,
 			allowClear: true
 		},

@@ -166,7 +166,7 @@ class PreModal extends React.Component {
 	handleCheckVoick = (rule, value, callback) => {
 		const reg = /^[0-9a-zA-Z]*$/g;
 		if (!value) {
-			callback('发票号不允许为空')
+			callback('该项为必填项！')
 			return;
 		}
 		if (!reg.test(value)) {
@@ -256,9 +256,10 @@ class PreModal extends React.Component {
 						rules: [
 							{
 								required: true,
-								max: 50,
-								message: '请输入'
+
+								message: '该项为必填项！'
 							},
+							{ max: 50, message: '最多不超过50个字符', }
 						],
 					})(
 						<Input placeholder="请输入" style={{ width: 200 }} />
@@ -269,9 +270,9 @@ class PreModal extends React.Component {
 						rules: [
 							{
 								required: true,
-								max: 50,
-								message: '请输入'
+								message: '该项为必填项！'
 							},
+							{ max: 50, message: '最多不超过50个字符', }
 						],
 					})(
 						<Input placeholder="请输入" style={{ width: 200 }} disabled={modType == 2} />

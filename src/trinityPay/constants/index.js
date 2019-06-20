@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button } from 'antd';
+import { Button, Tooltip } from 'antd';
 import qs from 'qs';
 const SUCCEED = 'succeed';
 const DEFEATED = 'defeated';
@@ -258,7 +258,14 @@ export const dealOrderCols = [
 		dataIndex: 'ttp_order_id',
 		key: 'ttp_order_id',
 		align: 'center',
-		width: 100
+		render: (text) => {
+			return < Tooltip title={<div style={{ width: '200px' }}>{text}</div>}>
+				<div style={{
+					width: '100px', whiteSpace: 'nowrap', overflow: 'hidden',
+					textOverflow: 'ellipsis'
+				}}>{text}</div>
+			</Tooltip >
+		}
 
 	},
 	{
@@ -269,7 +276,7 @@ export const dealOrderCols = [
 		width: 100
 	},
 	{
-		title: '三方平台下单',
+		title: '三方下单平台',
 		dataIndex: 'cooperation_platform_name',
 		key: 'cooperation_platform_name',
 		align: 'center',

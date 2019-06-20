@@ -334,6 +334,9 @@ export const extractDetailFunc = (order_status) => {
 			key: 'payment_amount',
 			width: 150,
 			align: 'center',
+			render: (text) => {
+				return <span style={{ color: text > 100000 ? 'red' : '#666' }}>{text}</span>
+			}
 		},
 		{
 			title: '包含订单',

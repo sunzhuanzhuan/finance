@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as trinityPayAction from "../actions/trinityInvoice";
 import { Modal, message, Button, Form, Input, Select, DatePicker } from 'antd'
+import { moneyToChinese } from "../util/index";
 import numeral from 'numeral'
 import moment from 'moment';
 import 'moment/locale/zh-cn';
@@ -17,6 +18,8 @@ class PreModal extends React.Component {
 		super();
 		this.state = {
 			isClick: false,
+			bigMoney: '',
+			bigMoneyTax: ''
 		}
 	}
 	componentDidMount() {
@@ -49,14 +52,17 @@ class PreModal extends React.Component {
 		return Mapping[status]
 	}
 	handlePureChange = e => {
+		this.setState({ bigMoney: moneyToChinese(e.target.value) })
 		this.pureValue = e.target.value;
 		if (e.target.value && !isNaN(this.taxValue)) {
+
 			this.props.form.setFieldsValue({
 				invoice_type: numeral(this.taxValue / this.pureValue * 100).format('0.00')
 			});
 		}
 	}
 	handleTaxChange = e => {
+		this.setState({ bigMoneyTax: moneyToChinese(e.target.value) })
 		this.taxValue = e.target.value;
 		this.voiceType = e.target.value;
 		if (e.target.value && !isNaN(this.pureValue)) {
@@ -65,16 +71,34 @@ class PreModal extends React.Component {
 			});
 		}
 	}
-	handleVoiceType = () => {
+	handleTax = () => {
+		this.props.form.setFieldsValue({
+			invoice_tax_rate: (this.taxValue / this.pureValue * 100).toFixed(2)
+		});
 		if (this.voiceType > 0) {
-			this.props.form.setFieldsValue({
-				invoice_type: 2
-			});
-		} else {
 			this.props.form.setFieldsValue({
 				invoice_type: 1
 			});
+		} else {
+			this.props.form.setFieldsValue({
+				invoice_type: 2
+			});
 		}
+	}
+	handleVoiceType = () => {
+		if (this.voiceType > 0) {
+			this.props.form.setFieldsValue({
+				invoice_type: 1
+			});
+		} else {
+			this.props.form.setFieldsValue({
+				invoice_type: 2
+			});
+		}
+		this.props.form.setFieldsValue({
+			invoice_tax_rate: (this.taxValue / this.pureValue * 100).toFixed(2)
+		});
+
 	}
 	handleModal = (content) => {
 		const { onCancel, status, type } = this.props;
@@ -125,16 +149,41 @@ class PreModal extends React.Component {
 			callback('请输入正确的金额');
 			return;
 		}
+		if (value == 0) {
+			callback('发票金额必须大于0 ');
+			return;
+		}
+		if (value > 9999999999.99) {
+			callback('发票金额最大支持9999999999.99 ');
+			return;
+		}
 		if (!reg.test(value)) {
 			callback('请输入最多保留两位的有效数字')
 			return;
 		}
 		callback()
 	}
+	handleCheckVoick = (rule, value, callback) => {
+		const reg = /^[0-9a-zA-Z]*$/g;
+		if (!value) {
+			callback('发票号不允许为空')
+			return;
+		}
+		if (!reg.test(value)) {
+			callback('只允许输入字母和数字');
+			return;
+		}
+		if (value.length > 50) {
+			callback('发票号最多不超过50个字符')
+			return;
+		}
+
+		callback()
+	}
 	render() {
 		const { getFieldDecorator } = this.props.form;
 		const { visible, onCancel, status, SearchItem, modType } = this.props;
-		const { isClick } = this.state;
+		const { isClick, bigMoney, bigMoneyTax } = this.state;
 		const formItemLayout = {
 			labelCol: { span: 6 },
 			wrapperCol: { span: 18 }
@@ -170,7 +219,15 @@ class PreModal extends React.Component {
 					)}
 				</FormItem>
 				<FormItem label='发票号' {...formItemLayout}>
-					{getFieldDecorator('invoice_number', { ...options })(
+					{getFieldDecorator('invoice_number', {
+						rules: [
+							{
+								required: true,
+								validator: this.handleCheckVoick,
+								max: 50,
+							},
+						],
+					})(
 						<Input placeholder="请输入" style={{ width: 200 }} disabled={modType == 2} />
 					)}
 				</FormItem>
@@ -195,12 +252,28 @@ class PreModal extends React.Component {
 					)}
 				</FormItem>
 				<FormItem label='发票开具方' {...formItemLayout}>
-					{getFieldDecorator('beneficiary_company', { ...options })(
+					{getFieldDecorator('beneficiary_company', {
+						rules: [
+							{
+								required: true,
+								max: 50,
+								message: '请输入'
+							},
+						],
+					})(
 						<Input placeholder="请输入" style={{ width: 200 }} />
 					)}
 				</FormItem>
 				<FormItem label='发票内容' {...formItemLayout}>
-					{getFieldDecorator('invoice_content', { ...options })(
+					{getFieldDecorator('invoice_content', {
+						rules: [
+							{
+								required: true,
+								max: 50,
+								message: '请输入'
+							},
+						],
+					})(
 						<Input placeholder="请输入" style={{ width: 200 }} disabled={modType == 2} />
 					)}
 				</FormItem>
@@ -209,16 +282,18 @@ class PreModal extends React.Component {
 						rules: [{ required: true, message: '该项为必填项！' },
 						{ validator: this.checkMoney }]
 					})(
-						<Input placeholder="请输入" style={{ width: 200 }} suffix={'元'} onChange={this.handlePureChange} disabled={modType == 2} />
+						<Input placeholder="请输入" style={{ width: 200 }} suffix={'元'} onChange={this.handlePureChange} onBlur={this.handleTax} disabled={modType == 2} />
 					)}
+					<div style={{ color: 'red' }}>{bigMoney}</div>
 				</FormItem>
 				<FormItem label='发票税额' {...formItemLayout}>
 					{getFieldDecorator('invoice_tax_amount', {
-						rules: [{ required: true, message: '该项为必填项！' },
+						rules: [{ required: false, message: '该项为必填项！' },
 						{ validator: this.checkMoney }]
 					})(
 						<Input placeholder="请输入" style={{ width: 200 }} suffix={'元'} onChange={this.handleTaxChange} onBlur={this.handleVoiceType} disabled={modType == 2} />
 					)}
+					<div style={{ color: 'red' }}>{bigMoneyTax}</div>
 				</FormItem>
 				<FormItem label='发票税率' {...formItemLayout}>
 					{getFieldDecorator('invoice_tax_rate')(
@@ -242,7 +317,7 @@ class PreModal extends React.Component {
 				</FormItem>
 				<FormItem label='备注' {...formItemLayout}>
 					{getFieldDecorator('remark')(
-						<TextArea placeholder='非必输' autosize={{ minRows: 4, maxRows: 6 }} maxLength={50} disabled={modType == 2} />
+						<TextArea placeholder='' autosize={{ minRows: 4, maxRows: 6 }} maxLength={255} disabled={modType == 2} />
 					)}
 				</FormItem>
 			</Form>

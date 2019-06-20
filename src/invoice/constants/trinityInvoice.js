@@ -102,8 +102,8 @@ export const trinityInvoiceFunc = (handleModal, handleCheckModal, handleDelete) 
 export const checkModalCols = [
 	{
 		title: '发票来源',
-		dataIndex: 'invoice_source',
-		key: 'invoice_source',
+		dataIndex: 'invoice_source_desc',
+		key: 'invoice_source_desc',
 		align: 'center',
 		render: text => {
 			return text || '-'

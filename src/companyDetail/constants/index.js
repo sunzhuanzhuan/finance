@@ -763,9 +763,12 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				key: 'discount_rate',
 				align: 'center',
 				width: 80,
-				render: (text, { price }) => {
-					const discount = price && price[0] ? price[0].discount_rate : 0;
-					return discount ? numeral(discount).format('0.00%') : '-'
+				render: (text, record) => {
+					// const discount = record.price && record.price[0] ? record.price[0].discount_rate : 0;
+					// return record.quote_type != '2' ? numeral(discount).format('0.00%') : '-'
+					return record.quote_type != '2' ? record.price.map((item, index) => {
+						return <div key={index}>{numeral(item.discount_rate).format('0.00%')}</div>
+					}) : '-'
 				}
 			},
 			'quoted_price': {
@@ -824,13 +827,13 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				key: 'history_min_sell_price',
 				align: 'center',
 				width: 240,
-				render: (text, { readjust_type }) => {
+				render: (text, { history_min_sell_price: { readjust_type } }) => {
 					const item = text ? text.min_sell_price : [];
 					const node = item.length > 0 ? <div>
 						{item.map((item, index) => {
 							return <div key={index}>{`${item.price_label}:${item.min_sell_price}`}</div>
 						})}
-					</div> : '-';
+					</div> : '';
 					const pro = <div>
 						{node}
 						{readjust_type == 2 && <div style={{ color: 'red' }}>（导入excel方式调整）</div>}
@@ -856,12 +859,13 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				key: 'min_sell_price',
 				align: 'center',
 				width: 240,
-				render: (text) => {
+				render: (text, { readjust_type }) => {
 					const node = text ? <div>
 						{text.map((item, index) => {
 							return <div key={index}>{`${item.price_label}:${item.min_sell_price}`}</div>
 						})}
-					</div> : '-';
+						{readjust_type == 2 && <div style={{ color: 'red' }}>（导入excel方式调整）</div>}
+					</div> : '';
 					return node;
 				}
 			},

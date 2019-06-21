@@ -30,7 +30,7 @@ class Detail extends Component {
 		this.props.history.goBack();
 
 	}
-	handleResetDetail=()=>{
+	componentWillUnmount=()=>{
 		this.props.actions.getResetDetail()
 	}
 	render(){
@@ -38,7 +38,7 @@ class Detail extends Component {
 		return<div className='detail'>
 		{
 			Object.keys(detail).length>0?<div><Row className='titleRow'>
-				<Col span={2} onClick={this.handleList} oncClick={this.handleResetDetail}>
+				<Col span={2} onClick={this.handleList}>
 				<Icon type="left-circle-o" style={{cursor:'pointer'}} />
 				<span className="title" style={{cursor:'pointer'}}>订单详情</span>
 				</Col>

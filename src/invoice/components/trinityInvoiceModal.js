@@ -234,7 +234,6 @@ class PreModal extends React.Component {
 			rules: [{ required: true, message: '该项为必填项！' }],
 		}
 		const title = this.titleMapping(status).title;
-
 		return <Modal
 			wrapClassName='trinityInvoice-modal'
 			key={status}
@@ -340,7 +339,7 @@ class PreModal extends React.Component {
 				</FormItem>
 				<FormItem label='发票税率' {...formItemLayout}>
 					{getFieldDecorator('invoice_tax_rate')(
-						<Input placeholder="请输入" style={{ width: 200 }} suffix={'%'} disabled={true} />
+						<Input placeholder="请输入" style={{ width: 200 }} suffix={status === 'modification' ? '' : '%'} disabled={true} />
 					)}
 				</FormItem>
 				<FormItem label='发票类型' {...formItemLayout}>

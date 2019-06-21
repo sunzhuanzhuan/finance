@@ -766,9 +766,7 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				render: (text, record) => {
 					// const discount = record.price && record.price[0] ? record.price[0].discount_rate : 0;
 					// return record.quote_type != '2' ? numeral(discount).format('0.00%') : '-'
-					return record.quote_type != '2' ? record.price.map((item, index) => {
-						return <div key={index}>{numeral(item.discount_rate).format('0.00%')}</div>
-					}) : '-'
+					return record.quote_type != '2' ? record.price && record.price[0] ? numeral(record.price[0].discount_rate).format('0.00%') : 0 : '-'
 				}
 			},
 			'quoted_price': {

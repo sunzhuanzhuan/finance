@@ -299,8 +299,8 @@ class Detail extends Component {
 				:null}
 			
 			<Row className='accountTitle borderBottomNode' style={{marginTop:'20px'}}>
-				<Col span={5} className='marLeft26'>平台:{detail.trinity?detail.trinity.weibo_type:''} </Col>
-				<Col span={5}>三方下单平台:{detail.trinity?detail.trinity.weibo_type:''} </Col>
+				<Col span={5} className='marLeft26'>平台:{detail.trinity?detail.trinity.platform_name:''} </Col>
+				<Col span={5}>三方下单平台:{detail.trinity?detail.trinity.cooperation_platform_name:''} </Col>
 				<Col span={5}>三方代理:{detail.trinity?detail.trinity.agent_name:''} </Col>
 				<Col span={4}>付款公司:{detail.trinity?detail.trinity.payment_company_name:''} </Col>
 				<Col span={4}>合作方式:{detail.trinity?detail.trinity.cooperation_type:''} </Col>

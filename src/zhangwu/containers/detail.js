@@ -49,12 +49,12 @@ class Detail extends Component {
 			<Row className='orderBox borderBottomNode'>
 				<Col span={3} className='marLeft26'>
 					订单id:{detail.order?detail.order.order_id:''}
-					<span className='orderStatus'>{detail.order?detail.order.order_type:''}</span> 
+					<span className='orderStatus'>{detail.order?detail.order.product_line_desc:''}</span> 
 				</Col>
 				<Col span={6}>三方标识:{detail.order?detail.order.trinity_type:''}</Col>
 				<Col span={6}>订单执行状态:{detail.order?detail.order.execution_status:''}</Col>
 				
-				<Col span={6}>{detail.order?detail.order.execution_completed_time:''}</Col>
+				<Col span={6}>执行完成时间:{detail.order?detail.order.execution_completed_time:''}</Col>
 			</Row>
 			
 			<Row >
@@ -209,10 +209,10 @@ class Detail extends Component {
 				应付
 			</Row>
 			<Row className='accountTitle borderBottomNode'>
-				<Col span={5} className='marLeft26'>
-					账号:{detail.account?detail.account.weibo_name:''}
+				<Col span={3} className='marLeft26'>
+					主账号:{detail.account?detail.account.identity_name:''}
 				</Col>
-				<Col span={3}>ID:{detail.account?detail.account.public_quote_price:''} </Col>
+				<Col span={5}>账号:{detail.account?detail.account.weibo_name:''} </Col>
 				<Col span={4}>媒介经理:{detail.account?detail.account.media_manager_name:''} </Col>
 				<Col span={5}>合作方类型:{detail.account?detail.account.partner_type:''} </Col>
 				<Col span={5}>付款公司:{detail.account?detail.account.payment_company_name:''} </Col>

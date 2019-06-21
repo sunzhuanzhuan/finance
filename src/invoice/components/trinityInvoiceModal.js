@@ -26,7 +26,8 @@ class PreModal extends React.Component {
 		const { status, record } = this.props;
 		if (status === 'modification') {
 			this.pureValue = record.invoice_pure_amount;
-			this.taxValue = record.invoice_tax_amount
+			this.taxValue = record.invoice_tax_amount;
+			this.voiceType = record.invoice_type;
 			let timer = setTimeout(() => {
 				this.props.form.setFieldsValue({
 					invoice_source: parseInt(record.invoice_source),

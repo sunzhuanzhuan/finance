@@ -13,11 +13,19 @@ class ApplyTable extends React.Component {
 	}
 	onCheckAllChange = e => {
 		const { type, curSelectRowKeys, dataSource, handleSelected } = this.props;
+		console.log('dataSource', dataSource);
+		console.log('handleSelected', handleSelected);
+		console.log('curSelectRowKeys', curSelectRowKeys);
 		let ary = dataSource.map(item => item.order_id);
+		console.log('ary', ary);
 		let filterData = dataSource.filter(item => item.status === '1');
+		console.log('filterData', filterData);
 		let filterAry = filterData.map(item => item.order_id);
+		console.log('filterAry', filterAry);
 		let rowKeys = difference(curSelectRowKeys, ary);
+		console.log('rowKeys', rowKeys);
 		let fillterRowKeys = difference(curSelectRowKeys, filterAry);
+		console.log('fillterRowKeys', fillterRowKeys);
 		let rows, curRowKeys;
 		if (e.target.checked) {
 			if (type === 'write_detail') {
@@ -31,6 +39,8 @@ class ApplyTable extends React.Component {
 			curRowKeys = rowKeys;
 			rows = [];
 		}
+		console.log('curRowKeys', curRowKeys);
+		console.log('rows', rows)
 		handleSelected(curRowKeys, rows);
 	}
 	selectedAry = type => {

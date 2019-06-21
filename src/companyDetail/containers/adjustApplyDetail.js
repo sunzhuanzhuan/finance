@@ -57,9 +57,13 @@ class AdjustApplyDetail extends React.Component {
 			curKeys.push(item.order_id);
 			rows[item.order_id] = item;
 		});
+
 		let otherKeys = difference(selectedRowKeys, curKeys);
 		otherKeys.forEach(item => rows[item] = rowsMap[item]);
+		console.log('otherKeys', otherKeys)
 		let rowsAry = Object.values(rows);
+		console.log('rows', rows)
+		console.log('selectedRowKeys', selectedRowKeys)
 		this.setState({ curSelectRowKeys: selectedRowKeys, rowsMap: rows, curSelectRows: rowsAry });
 	}
 	handleClear = () => {

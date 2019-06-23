@@ -263,7 +263,7 @@ class Detail extends Component {
 					<span className='padd60'>发票盈余:{numeral(detail.account?detail.account.public_quote_price:'').format('0,0.00')}</span>
 				</div>
 			</Row>
-				{detail.account?detail.account.payment_list.map((item,index)=>{
+				{detail.account && detail.account.payment_list.length>0?detail.account.payment_list.map((item,index)=>{
 					return <div key={index} className='payment'>
 					<span className='pad32'>打款单ID:{item.payment_id}</span>
 					<span className='padd60'>打款类型:{item.payment_type}</span>

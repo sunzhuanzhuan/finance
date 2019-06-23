@@ -364,7 +364,7 @@ class Modification extends React.Component {
 					<Row>
 						<FormItem label='打款撤销备注' {...formItemLayout}>
 							{getFieldDecorator('payment_revoke_reason', {
-								rules: [{ required: payment_status == 4, message: '打款撤销备注为必填项!' }]
+								rules: [{ required: payment_status == 4, message: '打款撤销备注为必填项!' }, { max: 50, message: '不超过50个字符!' }]
 							})(
 								<Input disabled={payment_status != 4} />
 							)}

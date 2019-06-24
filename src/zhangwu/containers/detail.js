@@ -343,7 +343,8 @@ class Detail extends Component {
 						</div>
 					</Row>
 				}):null
-			}</div>
+			}
+			</div>
 			:<Spin size="large" className="centerSpin"/>
 		}
 	</div>

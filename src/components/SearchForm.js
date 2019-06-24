@@ -179,8 +179,8 @@ class SearchForm extends React.PureComponent {
 								{data.selectOptionsChildren &&
 									data.selectOptionsChildren.length > 0 &&
 									data.selectOptionsChildren.map((optionItem, index) => (
-										<Option value={data.selectItem ? optionItem[data.selectItem.value] : optionItem.value} key={index}>
-											{data.selectItem ? optionItem[data.selectItem.key] : optionItem.key}
+										<Option value={data.selectItem ? data.selectItem.value : optionItem.value} key={index}>
+											{data.selectItem ? data.selectItem.key : optionItem.name}
 										</Option>
 									))}
 							</Select>

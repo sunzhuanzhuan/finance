@@ -251,25 +251,24 @@ class Detail extends Component {
 				</div>
 				<span>+</span>
 				<div className='padd60'>
-					<span className='displayInline'>订单补款(打款后)</span>
-					<span className='displayInline'>￥{numeral(detail.account?detail.account.after_payment_adjust_amount:'').format('0,0.00')}</span>
+					<span className='displayInline'>订单补款(打款前)</span>
+					<span className='displayInline'>￥{numeral(detail.account?detail.account.before_payment_subtract_amount:'').format('0,0.00')}</span>
 				</div>
 				
 				</Col>
 			</Row>
-			<Row className='colHeight' style={{ height:'40px',lineHeight:'40px'}}>
+			{/* <Row className='colHeight' style={{ height:'40px',lineHeight:'40px'}}>
 				<div>
-					<span className='pad32'>应回发票:{numeral(detail.account?detail.account.total_invoice_amount:'').format('0,0.00')}</span>
-					<span className='padd60'>发票盈余:{numeral(detail.account?detail.account.public_quote_price:'').format('0,0.00')}</span>
+					
 				</div>
-			</Row>
+			</Row> */}
 				{detail.account && detail.account.payment_list.length>0?detail.account.payment_list.map((item,index)=>{
 					return <div key={index} className='payment'>
 					<span className='pad32'>打款单ID:{item.payment_id}</span>
 					<span className='padd60'>打款类型:{item.payment_type}</span>
-					
-				
-					<span className='padd60' style={{paddingLeft:'300px'}}>
+					<span className='pad32'>应回发票:{numeral(detail.account?detail.account.total_invoice_amount:'').format('0,0.00')}</span>
+					<span className='padd60'>发票盈余:{numeral(detail.account?detail.account.invoice_surplus:'').format('0,0.00')}</span>
+					<span className=''>
 						打款金额:￥{numeral(item.payment_amount).format('0,0.00')}
 						<span className='paybackStatus'>{item.payment_status}</span>
 					</span>

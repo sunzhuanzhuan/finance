@@ -27,7 +27,7 @@ class PreModal extends React.Component {
 		if (status === 'modification') {
 			this.pureValue = record.invoice_pure_amount;
 			this.taxValue = record.invoice_tax_amount;
-			this.voiceType = record.invoice_type;
+			this.voiceType = record.invoice_tax_amount;
 			let timer = setTimeout(() => {
 				this.props.form.setFieldsValue({
 					invoice_source: parseInt(record.invoice_source),
@@ -140,7 +140,6 @@ class PreModal extends React.Component {
 				const hide = message.loading('操作中，请稍候...');
 				const { search, status, onCancel, record } = this.props;
 				const actionName = this.titleMapping(status).actionName;
-				console.log(status)
 				values.invoice_id = status == 'new' ? null : record.invoice_id
 				this.props.actions[actionName]({
 					business_account_type: 3,
@@ -190,7 +189,7 @@ class PreModal extends React.Component {
 			callback('请输入正确的金额');
 			return;
 		}
-		if (value == 0) {
+		if (value < 0) {
 			callback('发票金额必须大于0 ');
 			return;
 		}
@@ -339,7 +338,7 @@ class PreModal extends React.Component {
 				</FormItem>
 				<FormItem label='发票税率' {...formItemLayout}>
 					{getFieldDecorator('invoice_tax_rate')(
-						<Input placeholder="请输入" style={{ width: 200 }} suffix={status === 'modification' ? '' : '%'} disabled={true} />
+						<Input placeholder="请输入" style={{ width: 200 }} suffix={'%'} disabled={true} />
 					)}
 				</FormItem>
 				<FormItem label='发票类型' {...formItemLayout}>

@@ -97,6 +97,7 @@ class DatePay extends React.Component {
 					columns={datePayCols}
 					dataSource={list}
 					bordered
+					scroll={{ x: 1500 }}
 					pagination={paginationObj}
 				/>
 			</div>

@@ -20,6 +20,7 @@ class DealOrder extends React.Component {
 		}
 	}
 	componentDidMount() {
+
 		const { payment_slip_id, keys } = qs.parse(this.props.location.search.substring(1));
 
 		this.props.actions.getPaySearchItem().then(() => {
@@ -27,11 +28,11 @@ class DealOrder extends React.Component {
 		}).catch(({ errorMsg }) => {
 			message.error(errorMsg || '下拉项加载失败，请重试！');
 		})
-		this.queryData({ payment_slip_id, keys });
+		this.queryData({ payment_slip_id, ...keys });
 	}
 	queryData = (obj, func) => {
 		this.setState({ loading: true });
-		return this.props.actions.getDealOrderData({ ...obj }).then(() => {
+		return this.props.actions.getDealOrderData({ ...obj, }).then(() => {
 			if (func && Object.prototype.toString.call(func) === '[object Function]') {
 				func();
 			}
@@ -78,7 +79,7 @@ class DealOrder extends React.Component {
 		const dealOrderSearch = dealOrderSearchFunc(paySearchItem, agent, this.handleFetchPlatform);
 		const paginationObj = getPagination(this, search, { total, page, page_size });
 		return <div className='dealOrder-container'>
-			<Statistics title={'三方平台交易明细'} render={Stat(total, statistic)} />
+			<Statistics title={'三方打款明细'} render={Stat(total, statistic)} />
 			<fieldset className='fieldset_css'>
 				<legend>查询</legend>
 				{pullReady && <SearForm data={dealOrderSearch} getAction={this.queryData} responseLayout={{ xs: 24, sm: 24, md: 10, lg: 8, xxl: 6 }} extraFooter={<Button type='primary' style={{ marginLeft: 20 }} onClick={this.handleExport}>导出</Button>} wrappedComponentRef={form => this.form = form} />}

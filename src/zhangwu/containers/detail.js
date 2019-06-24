@@ -173,13 +173,13 @@ class Detail extends Component {
 				<span>-</span>
 				<div className='padd60'>
 					<span className='displayInline'>使用赠送</span>
-					<span className='displayInline'>￥{numeral(detail.company?detail.company.gift_price:'').format('0,0.00')}</span>
+					<span className='displayInline'>￥{numeral(detail.company?detail.company.gift_amount:'').format('0,0.00')}</span>
 				</div>
 			
 				<span>-</span>
 				<div className='padd60'>
 					<span className='displayInline'>赔偿</span>
-					<span className='displayInline'>￥{numeral(detail.company?detail.company.reparation_price:'').format('0,0.00')}</span>
+					<span className='displayInline'>￥{numeral(detail.company?detail.company.reparation_amount:'').format('0,0.00')}</span>
 				</div>
 				
 				<span>-</span>
@@ -299,7 +299,8 @@ class Detail extends Component {
 				:null}
 			
 			<Row className='accountTitle borderBottomNode' style={{marginTop:'20px'}}>
-				<Col span={5} className='marLeft26'>平台:{detail.trinity?detail.trinity.platform_name:''} </Col>
+				<Col span={3} className='marLeft26'>平台:{detail.trinity?detail.trinity.platform_name:''} </Col>
+				<Col span={2}>汇票方式:{detail.trinity?detail.trinity.return_invoice_type:''} </Col>
 				<Col span={5}>三方下单平台:{detail.trinity?detail.trinity.cooperation_platform_name:''} </Col>
 				<Col span={5}>三方代理:{detail.trinity?detail.trinity.agent_name:''} </Col>
 				<Col span={4}>付款公司:{detail.trinity?detail.trinity.payment_company_name:''} </Col>

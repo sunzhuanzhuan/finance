@@ -81,6 +81,12 @@ export const prePayFunc = (handleModal) => [
 		key: 'invoice_surplus',
 		align: 'center',
 		width: 100
+	}, {
+		title: '打款成功/失败时间',
+		dataIndex: 'payment_time',
+		key: 'payment_time',
+		align: 'center',
+		width: 120
 	},
 	{
 		title: '主账号',
@@ -182,7 +188,14 @@ export const datePayFunc = (handleModal) => [
 		width: 100
 	},
 	{
-		title: '申请日期',
+		title: '打款成功/失败时间',
+		dataIndex: 'payment_time',
+		key: 'payment_time',
+		align: 'center',
+		width: 120
+	},
+	{
+		title: '打款单生成时间',
 		dataIndex: 'created_at',
 		key: 'created_at',
 		align: 'center',
@@ -207,7 +220,8 @@ export const datePayFunc = (handleModal) => [
 		dataIndex: 'action',
 		key: 'action',
 		align: 'center',
-		width: 220,
+		fixed: 'right',
+		width: 200,
 		render: (text, record) => {
 			return <div className='prePay-action-container'>
 				{record.payment_status && record.payment_status == 1 && <Button type='primary' size='small' style={{ width: 80 }} onClick={() => {
@@ -251,21 +265,6 @@ export const dealOrderCols = [
 		key: 'platform_name',
 		align: 'center',
 		width: 100
-
-	},
-	{
-		title: '三方平台订单ID',
-		dataIndex: 'ttp_order_id',
-		key: 'ttp_order_id',
-		align: 'center',
-		render: (text) => {
-			return < Tooltip title={<div style={{ width: '200px' }}>{text}</div>}>
-				<div style={{
-					width: '100px', whiteSpace: 'nowrap', overflow: 'hidden',
-					textOverflow: 'ellipsis'
-				}}>{text}</div>
-			</Tooltip >
-		}
 
 	},
 	{
@@ -338,6 +337,21 @@ export const dealOrderCols = [
 		align: 'center',
 		width: 100
 	},
+	{
+		title: '三方平台订单ID',
+		dataIndex: 'ttp_order_id',
+		key: 'ttp_order_id',
+		align: 'center',
+		render: (text) => {
+			return < Tooltip title={<div style={{ width: '200px' }}>{text}</div>}>
+				<div style={{
+					width: '100px', whiteSpace: 'nowrap', overflow: 'hidden',
+					textOverflow: 'ellipsis'
+				}}>{text}</div>
+			</Tooltip >
+		}
+
+	},
 ];
 
 export const prePayDetailColumns = [
@@ -351,15 +365,6 @@ export const prePayDetailColumns = [
 		dataIndex: 'settle_type_desc',
 		key: 'settle_type_desc',
 		align: 'center',
-
-	}, {
-		title: '付款时间：',
-		dataIndex: 'payment_time',
-		key: 'payment_time',
-		align: 'center',
-		render: (text) => {
-			return text || '-'
-		}
 
 	}, {
 		title: '收款方类型：',
@@ -488,7 +493,7 @@ export const prePayDetailColumns = [
 		align: 'center'
 	},
 	{
-		title: '申请时间：',
+		title: '打款单生成时间：',
 		dataIndex: 'created_at',
 		key: 'created_at',
 		align: 'center'
@@ -565,22 +570,13 @@ export const datePayDetailColumns = [
 		align: 'center',
 
 	}, {
-		title: '付款时间：',
-		dataIndex: 'payment_time',
-		key: 'payment_time',
-		align: 'center',
-		render: (text) => {
-			return text || '-'
-		}
-
-	}, {
 		title: '收款方类型：',
 		dataIndex: 'payee_type_desc',
 		key: 'payee_type_desc',
 		align: 'center',
 
 	}, {
-		title: '申请时间：',
+		title: '打款单生成时间：',
 		dataIndex: 'created_at',
 		key: 'created_at',
 		align: 'center',

@@ -37,7 +37,6 @@ class RelatedChooseInvoice extends React.Component {
 		this.setState({ loading: true });
 		return this.props.actions.getAvailableInvoiceData({
 			record_id: search.payment_slip_id,
-			business_account_type: 3,
 			...obj
 		}).then(() => {
 			if (func && Object.prototype.toString.call(func) === '[object Function]') {

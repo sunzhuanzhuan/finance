@@ -98,7 +98,7 @@ class Modification extends React.Component {
 	render() {
 		const { getFieldDecorator } = this.props.form;
 		const { type, token } = this.state;
-		const { payDetail: { payment_status } } = this.props;
+		const { payDetail: { payment_status, payment_status_desc } } = this.props;
 		const formItemLayout = {
 			labelCol: { span: 6 },
 			wrapperCol: { span: 16 }
@@ -261,7 +261,7 @@ class Modification extends React.Component {
 							)}
 						</FormItem>
 					</Row><Row>
-						<FormItem label='申请时间' {...formItemLayout}>
+						<FormItem label='打款单生成时间' {...formItemLayout}>
 							{getFieldDecorator('created_at')(
 								<Input disabled={true} />
 							)}
@@ -275,13 +275,13 @@ class Modification extends React.Component {
 						</FormItem>
 					</Row>
 					<Row>
-						<FormItem label='付款时间' {...formItemLayout}>
+						<FormItem label='打款成功/失败时间' {...formItemLayout}>
 							{getFieldDecorator('payment_time')(
 								<Input disabled={true} />
 							)}
 						</FormItem>
 					</Row>
-					{token && <Row>
+					{payment_status_desc != '打款失败' ? token && < Row >
 						<FormItem label='打款成功截图' {...formItemLayout}>
 							{getFieldDecorator('payment_screenshot', {
 								rules: [{ required: payment_status == 2, message: '打款撤销备注为必填项!' }],
@@ -303,7 +303,7 @@ class Modification extends React.Component {
 								</OssUpload>
 							)}
 						</FormItem>
-					</Row>}
+					</Row> : null}
 					<Row>
 						<FormItem label='打款备注' {...formItemLayout}>
 							{getFieldDecorator('payment_remark', {

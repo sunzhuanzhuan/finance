@@ -299,8 +299,7 @@ class Detail extends Component {
 				:null}
 			
 			<Row className='accountTitle borderBottomNode' style={{marginTop:'20px'}}>
-				<Col span={3} className='marLeft26'>平台:{detail.trinity?detail.trinity.platform_name:''} </Col>
-				<Col span={2}>汇票方式:{detail.trinity?detail.trinity.return_invoice_type:''} </Col>
+				<Col span={5} className='marLeft26'>平台:{detail.trinity?detail.trinity.platform_name:''} </Col>
 				<Col span={5}>三方下单平台:{detail.trinity?detail.trinity.cooperation_platform_name:''} </Col>
 				<Col span={5}>三方代理:{detail.trinity?detail.trinity.agent_name:''} </Col>
 				<Col span={4}>付款公司:{detail.trinity?detail.trinity.payment_company_name:''} </Col>
@@ -333,9 +332,9 @@ class Detail extends Component {
 						<div>
 							<span className='pad32'>打款单ID:{item.payment_id}</span>
 							<span className='padd60'>打款类型:{item.payment_type}</span>
-							
+							<span className='padd60'>回票方式:{item.return_invoice_type} </span>
 						
-							<span className='padd60' style={{paddingLeft:'260px'}}>
+							<span className='' style={{}}>
 								打款金额:￥{numeral(item.payment_amount).format('0,0.00')}
 								<span className='paybackStatus'>{item.payment_status}</span>
 							</span>

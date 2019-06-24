@@ -2,14 +2,15 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as studioActions from "../actions";
-import { Button, Modal, message } from "antd";
-import StudioManageQuery from '../components/studioQuery'
-import PageTable from '../components/pageTable'
+import { Button, Table, Modal, message } from "antd";
+import SearForm from '../../components/SearchForm'
+import getPagination from '../../components/pagination'
 import StudioModal from '../components/studioModal'
-import Scolltable from "../../components/Scolltable";
-import { studioConfigFunc, isFlashConfig } from "../constants";
+import { studioListSearchFunc } from '../constants/search'
+import { studioConfigFunc } from "../constants";
 import "./studioManage.less";
 import numeral from 'numeral';
+import qs from 'qs'
 
 class StudioManage extends React.Component {
 	constructor() {
@@ -18,17 +19,32 @@ class StudioManage extends React.Component {
 			newModalVisible: false,
 			pageSize: '',
 			record: {},
-			filterParams: {},
 			isClick: false,
+			pullReady: false,
+			loading: false
 		}
 	}
 	componentDidMount() {
+		const search = qs.parse(this.props.location.search.substring(1));
 		const { getStudioMetadata } = this.props.actions;
-		getStudioMetadata();
+		getStudioMetadata().then(() => {
+			this.setState({ pullReady: true });
+		});
+		this.queryData({ ...search.keys });
 	}
-	handlefilterParams = (filterParams) => {
-		this.setState({ filterParams });
+	queryData = (obj, func) => {
+		this.setState({ loading: true });
+		return this.props.actions.getStudioList({ page: 1, page_size: 20, ...obj }).then(() => {
+			if (func && Object.prototype.toString.call(func) === '[object Function]') {
+				func();
+			}
+			this.setState({ loading: false })
+		}).catch(({ errorMsg }) => {
+			this.setState({ loading: false });
+			message.error(errorMsg || '列表加载失败，请重试！');
+		})
 	}
+
 	handleStopStudio = record => {
 		const { getStudioCheck, getStudioNameCheck, getFreezeList, postStopStudio, getStudioList } = this.props.actions;
 		const { studioData: { page } } = this.props;
@@ -92,7 +108,7 @@ class StudioManage extends React.Component {
 	handleStartStudio = (record) => {
 		const { postStartStudio, getStudioList } = this.props.actions;
 		const { studioData: { page } } = this.props;
-		const { pageSize = 20, filterParams } = this.state;
+		const { filterParams } = this.state;
 		Modal.confirm({
 			title: '提示',
 			content: '是否立即启用该工作室?',
@@ -104,7 +120,7 @@ class StudioManage extends React.Component {
 						hidden();
 					});
 					message.success('启用成功！');
-					getStudioList({ ...filterParams, page, page_size: pageSize }).then(() => {
+					getStudioList({ ...filterParams, page, page_size: 20 }).then(() => {
 						message.success('列表已更新');
 					}).catch(({ errorMsg }) => {
 						message.success(errorMsg || '列表加载失败，请重试');
@@ -149,23 +165,16 @@ class StudioManage extends React.Component {
 		this.setState({ pageSize });
 	}
 	render() {
-		const { newModalVisible, record, pageSize, filterParams, isClick } = this.state;
-		const { studioData: { rows, total, page }, studioMetadata: { studio_status = [], studio_type = [], studio_supported_platforms = [], source_type = [] }, freezeList, studioCheck, studioNameCheck } = this.props;
-		let studioConfig = studioConfigFunc(this.handleStopStudio, this.handleStartStudio, this.props.history);
-		return <div className='studio-manage'>
+		const search = qs.parse(this.props.location.search.substring(1));
+		const { newModalVisible, record, pageSize, filterParams, isClick, pullReady, loading } = this.state;
+		const { studioData: { rows, total, page, page_size }, studioMetadata: { studio_status = [], studio_type = [], studio_supported_platforms = [], source_type = [] }, freezeList, studioCheck, studioNameCheck } = this.props;
+		const studioConfig = studioConfigFunc(this.handleStopStudio, this.handleStartStudio, this.props.history);
+		const studioListSearch = studioListSearchFunc({ studio_status, studio_type, studio_supported_platforms });
+		const paginationObj = getPagination(this, search, { total, page, page_size });
+		return <div className='studio-manage-container'>
 			<fieldset className='fieldset_css'>
 				<legend>查询</legend>
-				<StudioManageQuery
-					studioStatus={studio_status}
-					studioType={studio_type}
-					platforms={studio_supported_platforms}
-					isFlash={isFlashConfig}
-					page={page}
-					pageSize={pageSize}
-					questAction={this.props.actions.getStudioList}
-					handlefilterParams={this.handlefilterParams}
-				>
-				</StudioManageQuery>
+				{pullReady && <SearForm data={studioListSearch} getAction={this.queryData} responseLayout={{ xs: 24, sm: 24, md: 10, lg: 8, xxl: 6 }} />}
 			</fieldset>
 			<div className='top-gap'>
 				<Button type='primary' onClick={() => {
@@ -173,20 +182,14 @@ class StudioManage extends React.Component {
 				}}>新建</Button>
 			</div>
 			<div className='top-gap'>
-				<Scolltable scrollClassName='.ant-table-body' widthScroll={2448}>
-					<PageTable
-						columns={studioConfig}
-						dataSource={rows}
-						rowKey='id'
-						questAction={this.props.actions.getStudioList}
-						total={total}
-						current={parseInt(page)}
-						pageSize={parseInt(pageSize)}
-						filterParams={filterParams}
-						handlePageSize={this.handlePageSize}
-						scroll={{ x: 2268 }}
-					></PageTable>
-				</Scolltable>
+				<Table
+					rowKey='id'
+					loading={loading}
+					columns={studioConfig}
+					dataSource={rows}
+					bordered
+					pagination={total > page_size ? paginationObj : false}
+				/>
 			</div>
 			<div>
 				{newModalVisible ? <StudioModal

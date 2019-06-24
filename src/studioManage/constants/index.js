@@ -1,198 +1,132 @@
 import React from "react";
-import { calcSum } from '../../util'
 import numeral from "numeral";
-export const studioConfigFunc = (handleStopStudio, handleStartStudio, history) => {
-	return [
-		{
-			title: '工作室ID',
-			dataIndex: 'id',
-			key: 'id',
-			align: 'center',
-			width: 100,
-			fixed: 'left'
-		},
-		{
-			title: '状态',
-			dataIndex: 'status_display',
-			key: 'status_display',
-			align: 'center',
-			width: 120
-		},
-		{
-			title: '名称',
-			dataIndex: 'name',
-			key: 'name',
-			align: 'center',
-			width: '244px',
-			render: (text, { name }) => {
-				if (name && name.length > 30) {
-					return <div title={name}>
-						{name.slice(0, 29) + '...'}
-					</div>
-				} else {
-					return name
-				}
-			}
-		},
-		{
-			title: '类型',
-			dataIndex: 'type_display',
-			key: 'type_display',
-			align: 'center',
-			width: 100
-		},
-		{
-			title: '平台',
-			dataIndex: 'supported_platforms_display',
-			key: 'supported_platforms_display',
-			align: 'center',
-			width: 100
-		},
-		{
-			title: '快易提',
-			dataIndex: 'is_support_flash',
-			key: 'is_support_flash',
-			align: 'center',
-			width: 120,
-			render: (text) => {
-				const value = text === 1 ? '支持' : '不支持';
-				return value
-			}
-		},
-		{
-			title: '有效期',
-			dataIndex: 'validity',
-			key: 'validity',
-			align: 'center',
-			width: '300px',
-			render: (text, record) => {
-				return `${record.validity_start}~${record.validity_end}`
-			}
-		},
-		{
-			title: '支付方式',
-			dataIndex: 'payment_type',
-			key: 'payment_type',
-			align: 'center',
-			width: 140,
-			render: (text, record) => {
-				const isAlipay = record.is_support_alipay === 1;
-				const isBank = record.payment_type_id !== 0;
-				const value = isAlipay && isBank ? '支付宝&银行卡' : isAlipay ? '支付宝' : '银行卡';
-				return value
-			}
-		},
-		{
-			title: '总限额',
-			dataIndex: 'total_limit',
-			key: 'total_limit',
-			align: 'center',
-			width: 140,
-			render: (text) => {
-				return numeral(text / 100).format('0,0.00');
-			}
-		},
-		{
-			title: '冻结额度',
-			dataIndex: 'total_freeze',
-			key: 'total_freeze',
-			align: 'center',
-			width: 140,
-			render: (text) => {
-				return numeral(text / 100).format('0,0.00');
-			}
-		},
-		{
-			title: '使用额度',
-			dataIndex: 'total_occupy',
-			key: 'total_occupy',
-			align: 'center',
-			width: 140,
-			render: (text) => {
-				return numeral(text / 100).format('0,0.00');
-			}
-		},
-		{
-			title: '剩余额度',
-			dataIndex: 'total_residue',
-			key: 'total_residue',
-			align: 'center',
-			width: 140,
-			render: (text, record) => {
-				const total_limit = parseFloat(record.total_limit / 100);
-				const total_freeze = parseFloat(record.total_freeze / 100);
-				const total_occupy = parseFloat(record.total_occupy / 100);
-				const value = calcSum([total_limit, -total_freeze, -total_occupy]);
-				return numeral(value).format('0,0.00');
-			}
-		},
-		{
-			title: '备注',
-			dataIndex: 'remark',
-			key: 'remark',
-			align: 'center',
-			width: '244px',
-			render: (text, { remark }) => {
-				if (remark && remark.length > 30) {
-					return <div title={remark}>
-						{remark.slice(0, 29) + '...'}
-					</div>
-				} else {
-					return remark
-				}
-			}
-		},
-		{
-			title: '修订时间',
-			dataIndex: 'modified_at',
-			key: 'modified_at',
-			align: 'center',
-			width: 160,
-		},
-		{
-			title: '操作人',
-			dataIndex: 'operator_real_name',
-			key: 'operator_real_name',
-			align: 'center',
-			width: 100,
-		},
-		{
-			title: '操作',
-			dataIndex: 'action',
-			key: 'action',
-			align: 'center',
-			width: 160,
-			fixed: 'right',
-			render: (Text, record) => {
-				return <div>
-					<a href='javascript:;' onClick={() => {
-						history.push(`/finance/studiomanage/new?postType=2&id=${record.id}&name=${record.name}`);
-					}}>编辑</a>
-					{record.status === 1 ? <a href='javascript:;' className='left-gap' onClick={() => {
-						handleStopStudio(record);
-					}}>停用</a> : null
-					}
-					{record.status === 0 || record.status === 2 ? <a href='javascript:;' className='left-gap' onClick={() => {
-						handleStartStudio(record);
-					}}>启用</a> : null}
-					{/* <a href='javascript:;' className='left-gap'>使用详情</a> */}
-				</div>
-			}
-		}
-	]
-}
-export const detailConfig = [
+export const studioConfigFunc = (handleStopStudio, handleStartStudio, history) => [
+	{
+		title: '工作室ID',
+		dataIndex: 'id',
+		key: 'id',
+		align: 'center',
+		width: 80,
+		// fixed: 'left'
+	},
 	{
 		title: '状态',
-		dataIndex: 'source_status_display',
-		key: 'source_status_display',
-		align: 'center'
+		dataIndex: 'status_display',
+		key: 'status_display',
+		align: 'center',
+		width: 120
+	},
+	{
+		title: '名称',
+		dataIndex: 'name',
+		key: 'name',
+		align: 'center',
+		width: '244px',
+		render: (text, { name }) => {
+			if (name && name.length > 30) {
+				return <div title={name}>
+					{name.slice(0, 29) + '...'}
+				</div>
+			} else {
+				return name
+			}
+		}
 	},
 	{
 		title: '类型',
-		dataIndex: 'source_type_display',
-		key: 'source_type_display',
-		align: 'center'
+		dataIndex: 'type_display',
+		key: 'type_display',
+		align: 'center',
+		width: 80
+	},
+	{
+		title: '平台',
+		dataIndex: 'supported_platforms_display',
+		key: 'supported_platforms_display',
+		align: 'center',
+		width: 100
+	},
+	{
+		title: '快易提',
+		dataIndex: 'is_support_flash',
+		key: 'is_support_flash',
+		align: 'center',
+		width: 100,
+		render: (text) => {
+			const value = text === 1 ? '支持' : '不支持';
+			return value
+		}
+	},
+	{
+		title: '非身份证',
+		dataIndex: 'is_support_not_id_card',
+		key: 'is_support_not_id_card',
+		align: 'center',
+		width: 120,
+		render: (text) => {
+			return text == 1 ? '支持' : '不支持';
+		}
+	},
+	{
+		title: '有效期',
+		dataIndex: 'validity',
+		key: 'validity',
+		align: 'center',
+		width: 200,
+		render: (text, record) => {
+			return `${record.validity_start}~${record.validity_end}`
+		}
+	},
+	{
+		title: '支付方式',
+		dataIndex: 'b',
+		key: 'b',
+		align: 'center',
+		width: 140,
+		render: (text, record) => {
+			const isAlipay = record.is_support_alipay === 1;
+			const isBank = record.payment_type_id !== 0;
+			const value = isAlipay && isBank ? '支付宝&银行卡' : isAlipay ? '支付宝' : '银行卡';
+			return value
+		}
+	},
+	{
+		title: '操作',
+		dataIndex: 'action',
+		key: 'action',
+		align: 'center',
+		width: 160,
+		// fixed: 'right',
+		render: (Text, record) => {
+			return <div>
+				<a href='javascript:;' onClick={() => {
+					history.push(`/finance/studiomanage/new?postType=2&id=${record.id}&name=${record.name}`);
+				}}>编辑</a>
+				<a className='little-left-gap' target='_blank' href={`/finance/studioManage/check?id=${record.id}`} >查看</a>
+				{record.status === 1 ? <a href='javascript:;' className='little-left-gap' onClick={() => {
+					handleStopStudio(record);
+				}}>停用</a> : null
+				}
+				{record.status === 0 || record.status === 2 ? <a href='javascript:;' className='little-left-gap' onClick={() => {
+					handleStartStudio(record);
+				}}>启用</a> : null}
+				{/* <a href='javascript:;' className='left-gap'>使用详情</a> */}
+			</div>
+		}
+	}
+]
+export const detailConfig = [
+	{
+		title: '工作室ID',
+		dataIndex: 'studio_id',
+		key: 'studio_id',
+		align: 'center',
+	},
+	{
+		title: '工作室名称',
+		dataIndex: 'name',
+		key: 'name',
+		align: 'center',
 	},
 	{
 		title: '打款单ID',
@@ -204,18 +138,16 @@ export const detailConfig = [
 		}
 	},
 	{
-		title: '工作室ID',
-		dataIndex: 'studio_id',
-		key: 'studio_id',
-		align: 'center',
-
+		title: '状态',
+		dataIndex: 'source_status_display',
+		key: 'source_status_display',
+		align: 'center'
 	},
 	{
-		title: '工作室名称',
-		dataIndex: 'name',
-		key: 'name',
-		align: 'center',
-
+		title: '类型',
+		dataIndex: 'source_type_display',
+		key: 'source_type_display',
+		align: 'center'
 	},
 	{
 		title: '主账号名称',
@@ -237,13 +169,33 @@ export const detailConfig = [
 		}
 	},
 	{
-		title: '订单总金额',
+		title: '占用金额',
 		dataIndex: 'occupy_amount',
 		key: 'occupy_amount',
 		align: 'center',
 		render: (text) => {
 			return numeral(text / 100).format('0,0.00')
 		}
+	},
+	{
+		title: '实付金额',
+		dataIndex: 'payment_amount',
+		key: 'payment_amount',
+		align: 'center',
+		render: (text) => {
+			return numeral(text / 100).format('0,0.00')
+		}
+
+	},
+	{
+		title: '税金',
+		dataIndex: 'tax_to_partner',
+		key: 'tax_to_partner',
+		align: 'center',
+		render: (text) => {
+			return numeral(text / 100).format('0,0.00')
+		}
+
 	},
 	{
 		title: '提现时间',
@@ -313,6 +265,254 @@ export const orderConfig = [
 		align: 'center',
 	}
 ];
+export const detailColumns = [
+	{
+		title: '作室名称：',
+		dataIndex: 'name',
+		key: 'name',
+		align: 'center'
+	},
+	{
+		title: '打款标识：',
+		dataIndex: 'identity',
+		key: 'identity',
+		align: 'center',
+
+	},
+	{
+		title: '类型：',
+		dataIndex: 'type',
+		key: 'type',
+		align: 'center',
+		render: text => {
+			return text == 1 ? '自由' : text == 2 ? '三方' : '-'
+		}
+	},
+	{
+		title: '支持平台：',
+		dataIndex: 'supported_platforms',
+		key: 'supported_platforms',
+		align: 'center',
+		render: text => {
+			return text == 1 ? '不限' : text == 2 ? '快手' : '-'
+		}
+	},
+	{
+		title: '快易提：',
+		dataIndex: 'is_support_flash',
+		key: 'is_support_flash',
+		align: 'center',
+		render: text => {
+			return text == 1 ? '支持' : text == 2 ? '不支持' : '-'
+		}
+	},
+	{
+		title: '非身份证：',
+		dataIndex: 'is_support_not_id_card',
+		key: 'is_support_not_id_card',
+		align: 'center',
+		render: text => {
+			return text == 1 ? '支持' : text == 2 ? '不支持' : '-'
+		}
+	},
+	{
+		title: '总限额：',
+		dataIndex: 'total_limit',
+		key: 'total_limit',
+		align: 'center',
+	},
+	{
+		title: '冻结额度：',
+		dataIndex: 'requirement_name',
+		key: 'requirement_name',
+		align: 'center',
+	},
+	{
+		title: '使用限额：',
+		dataIndex: 'agent_name',
+		key: 'agent_name',
+		align: 'center',
+	},
+	{
+		title: '剩余额度：',
+		dataIndex: 'requirement_company_name',
+		key: 'requirement_company_name',
+		align: 'center',
+	},
+	{
+		title: '单笔限额：',
+		dataIndex: 'single_limit',
+		key: 'single_limit',
+		align: 'center',
+	},
+	{
+		title: '博主单月累计限额：',
+		dataIndex: 'monthly_limit',
+		key: 'monthly_limit',
+		align: 'center',
+	},
+	{
+		title: '支付方式',
+		dataIndex: 'payment_type',
+		key: 'payment_type',
+		align: 'center',
+		colspan: 3,
+		width: 140,
+		render: (text, record) => {
+			const isAlipay = record.is_support_alipay === 1;
+			const isBank = record.payment_type_id !== 0;
+			const value = isAlipay && isBank ? '支付宝&银行卡' : isAlipay ? '支付宝' : '银行卡';
+			return value
+		}
+	},
+	{
+		title: '银行卡开户行：',
+		dataIndex: 'bank_agency',
+		key: 'bank_agency',
+		align: 'center'
+	},
+	{
+		title: '开户支行：',
+		dataIndex: 'bank_agency',
+		key: 'bank_agency',
+		align: 'center',
+	},
+	{
+		title: '开户行所在省：',
+		dataIndex: 'bank_agency_province',
+		key: 'bank_agency_province',
+		align: 'center'
+	},
+	{
+		title: '开户行所在市：',
+		dataIndex: 'bank_agency_city',
+		key: 'bank_agency_city',
+		align: 'center'
+	},
+	{
+		title: '持卡人：',
+		dataIndex: 'real_name',
+		key: 'real_name',
+		align: 'center'
+	},
+	{
+		title: '卡号：',
+		dataIndex: 'card_number',
+		key: 'card_number',
+		align: 'center'
+	},
+	{
+		title: '支付宝名称：',
+		dataIndex: 'alipay_real_name',
+		key: 'alipay_real_name',
+		align: 'center'
+	},
+	{
+		title: '支付宝账号：',
+		dataIndex: 'alipay_card_number',
+		key: 'alipay_card_number',
+		align: 'center'
+	},
+	{
+		title: '税率：',
+		dataIndex: 'invoice_tax_rate',
+		key: 'invoice_tax_rate',
+		align: 'center'
+	},
+	{
+		title: '发票抬头：',
+		dataIndex: 'invoice_provider',
+		key: 'invoice_provider',
+		align: 'center'
+	},
+	{
+		title: '操作人：',
+		dataIndex: 'main_user_name',
+		key: 'main_user_name',
+		align: 'center'
+	},
+	{
+		title: '有效期：',
+		dataIndex: 'validity_time',
+		key: 'validity_time',
+		align: 'center',
+		render: (text, record) => {
+			return record.validity_start + '~' + record.validity_end
+		}
+	},
+	{
+		title: '备注：',
+		dataIndex: 'remark',
+		key: 'remark',
+		align: 'center'
+	},
+	{
+		title: '修订时间：',
+		dataIndex: 'payment_time',
+		key: 'payment_time',
+		align: 'center'
+	}
+];
+export const idCardExportColumns = [
+	{
+		title: '任务ID',
+		dataIndex: 'job_code',
+		key: 'job_code',
+		align: 'center'
+	},
+	{
+		title: '任务名称',
+		dataIndex: 'job_name',
+		key: 'job_name',
+		align: 'center',
+
+	},
+	{
+		title: '月份',
+		dataIndex: 'month',
+		key: 'month',
+		align: 'center',
+	},
+	{
+		title: '启动时间',
+		dataIndex: 'created_at',
+		key: 'created_at',
+		align: 'center',
+	},
+	{
+		title: '开始时间',
+		dataIndex: 'start_at',
+		key: 'start_at',
+		align: 'center',
+		render: text => {
+			return text || '-'
+		}
+	},
+	{
+		title: '结束时间',
+		dataIndex: 'completed_at',
+		key: 'completed_at',
+		align: 'center',
+		render: text => {
+			return text || '-'
+		}
+	},
+	{
+		title: '任务状态',
+		dataIndex: 'status_display',
+		key: 'status_display',
+		align: 'center',
+	},
+	{
+		title: '操作',
+		dataIndex: 'action',
+		key: 'action',
+		align: 'center',
+		render: (text, record) => {
+			return record.status == 3 && <a href={`/api/finance/jobRecord/download?job_result=${record.job_result}`}>下载</a>
+		}
+	}
+];
 export const bankList = {
 	"7": {
 		bankName: "招商银行",
@@ -368,6 +568,7 @@ export const bankList = {
 	}
 };
 export const isFlashConfig = [
+	{ id: '', display: '全部' },
 	{ id: 1, display: '支持' },
 	{ id: 2, display: '不支持' },
 ]

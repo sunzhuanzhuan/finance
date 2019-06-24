@@ -334,6 +334,9 @@ export const extractDetailFunc = (order_status) => {
 			key: 'payment_amount',
 			width: 150,
 			align: 'center',
+			render: (text) => {
+				return <span style={{ color: text > 100000 ? 'red' : '#666' }}>{text}</span>
+			}
 		},
 		{
 			title: '包含订单',
@@ -519,7 +522,18 @@ export const remitOrderFunc = (order_status, handleOutputDetail, handleReceiptsV
 			dataIndex: 'tax_amount',
 			key: 'tax_amount',
 			align: 'center',
+		}, {
+			title: '工作室占用金额',
+			dataIndex: 'occupy_amount',
+			key: 'occupy_amount',
+			align: 'center',
+		},
 
+		{
+			title: '工作室',
+			dataIndex: 'studio_name',
+			key: 'studio_name',
+			align: 'center',
 		},
 		{
 			title: '创建人',

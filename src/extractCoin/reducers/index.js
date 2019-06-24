@@ -13,6 +13,7 @@ import {
 	getPaymentSlipOrderList_success,
 	getPaymentSlipDetail_success,
 	detailForExcel_success,
+	getFlashStudioList_success
 } from '../action/remitOrder';
 /* extractManage */
 export const applyData = handleActions({
@@ -89,6 +90,12 @@ export const detail_for_excel = handleActions({
 	}
 }, [])
 
+export const flashStudioList = handleActions({
+	[getFlashStudioList_success]: (state, action) => {
+		return { ...action.payload.data }
+	}
+}, {})
+
 
 export default combineReducers({
 	applyData,
@@ -101,6 +108,7 @@ export default combineReducers({
 	remitOrder,
 	remitOrderDetail,
 	detail_for_excel,
+	flashStudioList,
 })
 // export const remitOrder=
 

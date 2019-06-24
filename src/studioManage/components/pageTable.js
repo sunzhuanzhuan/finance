@@ -88,7 +88,7 @@ class PageTable extends React.Component {
 			pagination={paginationObj}
 			rowKey={rowKey}
 			bordered
-			scroll={scroll}
+		// scroll={scroll}
 		></Table>
 	}
 }

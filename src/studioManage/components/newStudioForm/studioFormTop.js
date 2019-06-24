@@ -53,6 +53,30 @@ class StudioFormTop extends React.Component {
 		}
 		callback()
 	}
+	checkLimitMoney = (rule, value, callback) => {
+		let newValue = value ? value.replace(/' '/g, '') : '';
+		if (newValue && isNaN(newValue)) {
+			callback('请输入正确的金额');
+			return;
+		}
+		if (parseFloat(newValue) > parseFloat(999999999.99)) {
+			callback('最多可输入9位数');
+			return;
+		}
+		callback();
+	}
+	checkLimitMoneyMonth = (rule, value, callback) => {
+		let newValue = value ? value.replace(/' '/g, '') : '';
+		if (newValue && isNaN(newValue)) {
+			callback('请输入正确的金额');
+			return;
+		}
+		if (parseFloat(newValue) > parseFloat(999999999.99)) {
+			callback('最多可输入9位数');
+			return;
+		}
+		callback();
+	}
 	render() {
 		const { getFieldDecorator, getFieldValue } = this.props.form;
 		const { formItemLayout, platforms, bank } = this.props;
@@ -126,12 +150,51 @@ class StudioFormTop extends React.Component {
 				</FormItem>
 			</Row>
 			<Row>
+				<FormItem label='非身份证' {...formItemLayout}>
+					{getFieldDecorator('is_support_not_id_card', {
+						rules: [{ required: true, message: '请选择是否支持非身份证' }]
+					})(
+						<RadioGroup>
+							<Radio value={1}>支持</Radio>
+							<Radio value={2}>不支持</Radio>
+						</RadioGroup>
+					)}
+				</FormItem>
+			</Row>
+			<Row>
 				<FormItem label='总限额' {...formItemLayout}>
 					{getFieldDecorator('total_limit', {
 						rules: [{
 							required: true, message: '请输入总限额金额'
 						}, {
 							validator: this.checkMoney,
+						}]
+					})(
+						<Input placeholder="请输入" />
+					)}
+				</FormItem>
+			</Row>
+			<Row>
+				<FormItem label='单笔限额' {...formItemLayout}>
+					{getFieldDecorator('single_limit', {
+						rules: [{
+							required: true, message: '请输入单笔限额'
+						},
+						{
+							validator: this.checkLimitMoneyMonth,
+						}]
+					})(
+						<Input placeholder="请输入" />
+					)}
+				</FormItem>
+			</Row>
+			<Row>
+				<FormItem label='博主单月累计限额' {...formItemLayout}>
+					{getFieldDecorator('monthly_limit', {
+						rules: [{
+							required: true, message: '请输入博主单月累计限额'
+						}, {
+							validator: this.checkLimitMoney,
 						}]
 					})(
 						<Input placeholder="请输入" />
@@ -154,8 +217,8 @@ class StudioFormTop extends React.Component {
 					)}
 				</FormItem>
 			</Row>
-			{checkValue && checkValue.includes(1) ? <Alipay form={this.props.form} formItemLayout={formItemLayout}></Alipay> : null}
-			{checkValue && checkValue.includes(2) ? <BankCard form={this.props.form} formItemLayout={formItemLayout} bank={bank}></BankCard> : null}
+			{checkValue && checkValue.includes(1) && <Alipay form={this.props.form} formItemLayout={formItemLayout}></Alipay>}
+			{checkValue && checkValue.includes(2) && <BankCard form={this.props.form} formItemLayout={formItemLayout} bank={bank}></BankCard>}
 		</div>
 	}
 }

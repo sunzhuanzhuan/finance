@@ -35,14 +35,15 @@ class DatePay extends React.Component {
 		this.queryData({ page: 1, page_size: 20, ...search.keys });
 	}
 	handleFetchPlatform = () => {
-		const value = this.form.getFieldValue('cooperation_platform_id').key;
+		const value = this.form.getFieldValue('cooperation_platform_id');
 		if (!value) {
 			message.error('请先选择三方下单平台');
 			return
 		}
-		if (value != this.state.cooperation_platform_id) {
-			this.props.actions.getAgentListByCPId({ cooperation_platform_id: value }).then(res => {
-				this.setState({ cooperation_platform_id: value, agent: res.data })
+		const value1 = this.form.getFieldValue('cooperation_platform_id').key;
+		if (value1 != this.state.cooperation_platform_id) {
+			this.props.actions.getAgentListByCPId({ cooperation_platform_id: value1 }).then(res => {
+				this.setState({ cooperation_platform_id: value1, agent: res.data })
 			})
 		}
 	}

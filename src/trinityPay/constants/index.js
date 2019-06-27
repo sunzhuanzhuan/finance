@@ -121,7 +121,7 @@ export const prePayFunc = (handleModal) => [
 				{record.payment_status && record.payment_status == 2 && <Button type='primary' size='small' style={{ width: 80 }} onClick={() => {
 					handleModal(record.payment_slip_id, REVOCATION, true);
 				}}>打款撤销</Button>}
-				<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/dealorder?payment_slip_id=${record.payment_slip_id}&settle_type=1`} target="_blank">订单详情</Button>
+				<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/zhangwu/detail?order_id=${record.wby_order_id}`} target="_blank">订单详情</Button>
 				{record.payment_status && record.payment_status != 1 && <Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/modification?type=prePay&payment_slip_id=${record.payment_slip_id}`}>编辑</Button>}
 				<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/detail?type=prePay&payment_slip_id=${record.payment_slip_id}`} target="_blank">查看</Button>
 			</div>
@@ -234,7 +234,7 @@ export const datePayFunc = (handleModal) => [
 				{record.payment_status && record.payment_status == 2 && <Button type='primary' size='small' style={{ width: 80 }} onClick={() => {
 					handleModal(record.payment_slip_id, REVOCATION, true);
 				}}>打款撤销</Button>}
-				<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/dealorder?payment_slip_id=${record.payment_slip_id}&settle_type=2`} target="_blank">订单详情</Button>
+				<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/dealorder?payment_slip_id=${record.payment_slip_id}&settle_type=2`} target="_blank">打款明细</Button>
 				{record.payment_status && record.payment_status != 1 && <Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/modification?type=datePay&payment_slip_id=${record.payment_slip_id}`}>编辑</Button>}
 				<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/detail?type=datePay&payment_slip_id=${record.payment_slip_id}`} target="_blank">查看</Button>
 			</div>

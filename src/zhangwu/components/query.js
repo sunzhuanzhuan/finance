@@ -80,7 +80,7 @@ class ListQuery extends React.Component {
 					<Col span={5}>
 						<FormItem label='平台' {...formItemLayout}>
 							{getFieldDecorator('weibo_type', { initialValue: '' })(
-								<Select allowClear>{
+								<Select style={{ width: 140 }} allowClear>{
 									searchDetail.platform ? searchDetail.platform.map((item) => {
 										return <Option value={item.value} key={item.value}> {item.name}</Option>
 									})
@@ -94,7 +94,7 @@ class ListQuery extends React.Component {
 					<Col span={5}>
 						<FormItem label='媒介经理' {...formItemLayout}>
 							{getFieldDecorator('owner_admin_id', { initialValue: '' })(
-								<Select allowClear>{
+								<Select style={{ width: 140 }} allowClear>{
 									searchDetail.resource_media ? searchDetail.resource_media.map((item) => {
 										return <Option value={item.value} key={item.value}> {item.name}</Option>
 									})

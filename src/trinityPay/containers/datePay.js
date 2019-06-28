@@ -9,8 +9,9 @@ import getPagination from '../../components/pagination'
 import { Table, message, Button } from 'antd'
 import { datePaySearchFunc } from '../constants/search'
 import { datePayFunc } from '../constants'
-import './trinityPay.less'
+import Scolltable from '../../components/Scolltable'
 import qs from 'qs'
+import './trinityPay.less'
 class DatePay extends React.Component {
 	constructor() {
 		super();
@@ -92,15 +93,17 @@ class DatePay extends React.Component {
 				{pullReady && <SearForm data={datePaySearch} getAction={this.queryData} responseLayout={{ xs: 24, sm: 24, md: 10, lg: 8, xxl: 6 }} extraFooter={<Button type='primary' style={{ marginLeft: 20 }} onClick={this.handleExport}>导出</Button>} wrappedComponentRef={form => this.form = form} />}
 			</fieldset>
 			<div className='top-gap'>
-				<Table
-					rowKey='payment_slip_id'
-					loading={loading}
-					columns={datePayCols}
-					dataSource={list}
-					bordered
-					scroll={{ x: 1500 }}
-					pagination={paginationObj}
-				/>
+				<Scolltable scrollClassName='.ant-table-body' widthScroll={1700}>
+					<Table
+						rowKey='payment_slip_id'
+						loading={loading}
+						columns={datePayCols}
+						dataSource={list}
+						bordered
+						scroll={{ x: 1500 }}
+						pagination={paginationObj}
+					/>
+				</Scolltable>
 			</div>
 			{modalVisible ? <DateModal
 				key={status}

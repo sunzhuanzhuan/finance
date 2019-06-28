@@ -299,7 +299,7 @@ class Modification extends React.Component {
 									}}
 									multiple={true}
 									disabled={payment_status != 2}
-									showUploadList={{ showPreviewIcon: payment_status == 2 ? true : false, showRemoveIcon: payment_status == 2 ? true : false }}
+									showUploadList={{ showPreviewIcon: true, showRemoveIcon: payment_status == 2 ? true : false }}
 								>
 								</OssUpload>
 							)}

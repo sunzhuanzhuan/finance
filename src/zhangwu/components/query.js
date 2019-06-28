@@ -77,7 +77,7 @@ class ListQuery extends React.Component {
 							)}
 						</FormItem>
 					</Col>
-					<Col span={5}>
+					<Col span={6}>
 						<FormItem label='平台' {...formItemLayout}>
 							{getFieldDecorator('weibo_type', { initialValue: '' })(
 								<Select style={{ width: 140 }} allowClear>{
@@ -128,7 +128,7 @@ class ListQuery extends React.Component {
 							)}
 						</FormItem>
 					</Col>
-					<Col span={7}>
+					<Col span={6}>
 						<FormItem label='账号名称' {...formItemLayout}>
 							{getFieldDecorator('weibo_name', { initialValue: '' })(
 								<Input style={{ width: 140 }} allowClear />

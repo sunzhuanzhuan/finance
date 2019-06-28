@@ -281,7 +281,7 @@ class Modification extends React.Component {
 							)}
 						</FormItem>
 					</Row>
-					{payment_status_desc != '打款失败' ? token && < Row >
+					{payment_status_desc != '打款失败' ? token && < Row>
 						<FormItem label='打款成功截图' {...formItemLayout}>
 							{getFieldDecorator('payment_screenshot', {
 								rules: [{ required: payment_status == 2, message: '打款撤销备注为必填项!' }],
@@ -299,6 +299,7 @@ class Modification extends React.Component {
 									}}
 									multiple={true}
 									disabled={payment_status != 2}
+									showUploadList={{ showPreviewIcon: true, showRemoveIcon: payment_status == 2 ? true : false }}
 								>
 								</OssUpload>
 							)}

@@ -14,6 +14,7 @@ class FormList extends React.PureComponent {
 				data.forEach((item, index) => {
 					let obj = { ...item };
 					obj['rate'] = (item['rate'] * 100).toFixed(2);
+					obj['minRate'] = (item['minRate'] * 100).toFixed(2);
 					setFieldsValue({
 						[index]: obj
 					})

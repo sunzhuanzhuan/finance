@@ -99,7 +99,7 @@ class ApplyTable extends React.Component {
 			// 	/>
 			// }}
 			/> : null}
-			{type === 'add' ? <Table className='top-gap'
+			{type === 'add' ? <Table className='top-gap add-table'
 				rowKey={rowKey}
 				columns={columns}
 				dataSource={dataSource}

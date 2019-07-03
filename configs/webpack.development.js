@@ -4,6 +4,7 @@ const baseConfig = require('./webpack.base')
 
 module.exports = merge(baseConfig, {
 	mode: 'development',
+	devtool: 'inline-source-map',
 	devServer: {
 		port: '7000',
 		historyApiFallback: true,
@@ -16,6 +17,10 @@ module.exports = merge(baseConfig, {
 			// 	target: "http://192.168.20.128:8010",
 			// 	changeOrigin: true
 			// },
+			"/api/common-price/finance": {
+				target: "http://172.16.21.179:19094",
+				changeOrigin: true
+			},
 			"/api": {
 				target: "http://nb.dev-weiboyi.com",
 				changeOrigin: true

@@ -44,11 +44,22 @@ class NewItem extends React.PureComponent {
 				message.error('利润率需为[-30,100]之间的两位小数', 3);
 				return
 			}
+			if (!item['minRate']) {
+				message.error('有未填写的利润率输入框', 3);
+				return
+			}
+			if (!(item['minRate'] >= -30 && item['minRate'] <= 100) || !(/^-?(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/.test(item['minRate']))) {
+				message.error('利润率需为[-30,100]之间的两位小数', 3);
+				return
+			}
 		}
 		params['platformId'] = value;
-		params['trinityProfitRates'] = Object.values(obj).map(item => ({ ...item, rate: (item.rate / 100).toFixed(4).toString(), validParams: true }));
+		params['trinityProfitRates'] = Object.values(obj).map(item => ({ ...item, rate: this.dealRateValue(item.rate), minRate: this.dealRateValue(item.minRate), validParams: true }));
 		onSubmit('add', params);
 	}
+
+	dealRateValue = (val) => (val / 100).toFixed(4).toString()
+
 	render() {
 		const { onCancel, companyList } = this.props;
 		return <div className='top-gap setting-new-item'>

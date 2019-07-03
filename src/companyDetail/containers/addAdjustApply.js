@@ -11,6 +11,8 @@ import "./golden.less";
 import qs from 'qs';
 import difference from 'lodash/difference';
 
+const { info } = Modal;
+
 class AddAdjustApply extends React.Component {
 	constructor() {
 		super();
@@ -100,7 +102,7 @@ class AddAdjustApply extends React.Component {
 				curSelectRows={curSelectRows}
 				handleSelected={this.handleSelected}
 				location={this.props.location}
-				scroll={{ x: 1500 }}
+				scroll={{ x: 1400 }}
 			/>
 			<Row className='top-gap' style={{ textAlign: 'center' }}>
 				<Button className='adjust-apply-btn' type='default' onClick={() => {
@@ -108,7 +110,13 @@ class AddAdjustApply extends React.Component {
 				}}>上一步</Button>
 				<Button className='adjust-apply-btn left-gap' type='primary' disabled={!curSelectRowKeys.length}
 					onClick={
-						() => { this.setState({ tipVisible: true }) }
+						() => {
+							if( curSelectRowKeys.length > 300 ) {
+								info({title: '申请订单数不能超过300个'})
+							}else {
+								this.setState({ tipVisible: true }) 
+							}
+							}
 					}>提交审核</Button>
 			</Row>
 			{tipVisible ? <ApplyModal

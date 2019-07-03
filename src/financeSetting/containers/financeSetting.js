@@ -57,6 +57,7 @@ class Setting extends React.Component {
 		const platformId = trinityProfitRateAll.map(item => item.platformId);
 		const companyList = trinityCompanyList.filter(item => !platformId.includes(item.id));
 		const { visible } = this.state;
+
 		return <div className='setting-container'>
 			<div>
 				<Button type='primary' onClick={this.handleAdd}>新增平台</Button>

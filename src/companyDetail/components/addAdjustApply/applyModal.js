@@ -3,21 +3,27 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import { withRouter } from 'react-router-dom';
 import * as goldenActions from "../../actions/goldenApply";
-import { Modal, Button, Form, Input, message } from "antd";
+import { Modal, Button, Form, Input, message, Select } from "antd";
 import { WBYUploadFile } from 'wbyui';
 import qs from 'qs';
 import numeral from 'numeral';
 const FormItem = Form.Item;
 const { TextArea } = Input;
-
+const { Option } = Select;
 class ApplyModal extends React.Component {
 	constructor() {
 		super();
 		this.state = {
 			isClick: false,
-			loading: false
+			loading: false,
+			priceType: 1
 		}
-		this.attachment = ''
+		this.attachment = '';
+		this.priceTypeOption = [
+			{ label: '利润率/服务费率调整', value: 1 },
+			{ label: '按金额调整', value: 2 },
+			{ label: '调整到订单底价', value: 3 },
+		];
 	}
 	componentDidMount() {
 		this.attachment = ''
@@ -194,17 +200,62 @@ class ApplyModal extends React.Component {
 			callback(' ')
 		}
 	}
+	handleChangePriceType = priceType => {
+		this.setState({ priceType })
+	}
+	getPriceTypeOption = total => {
+		return this.priceTypeOption
+			.filter(item => total > 1 ? item.value !== 2 : item)
+			.map(item => <Option key={item.value} value={item.value}>{item.label}</Option>)
+	}
+	getPriceValueItem = (getFieldDecorator, otherLayout, quoteType) => {
+		const { priceType } = this.state;
+		if( priceType === 3 ) 
+			return null;
+		return priceType === 1 ? [
+			<FormItem key='profit_rate' label='订单利润率' {...otherLayout}>
+				{getFieldDecorator('profit_rate', quoteType == 1 ? {
+					rules: [
+						{ required: true, message: '请输入订单利润率!' },
+						{ validator: this.checkProfitCount }
+					]
+				} : {})(
+					<Input addonAfter={'%'} style={{ width: 200 }} disabled={quoteType == 2} />
+				)}
+			</FormItem>,
+			<FormItem key='service_rate' label='服务费率' {...otherLayout}>
+				{getFieldDecorator('service_rate', quoteType == 2 ? {
+					rules: [
+						{ required: true, message: '请输入服务费率!' },
+						{ validator: this.checkCount }
+					]
+				} : {})(
+					<Input addonAfter={'%'} style={{ width: 200 }} disabled={quoteType == 1} />
+				)}
+			</FormItem>
+		] : 
+		<FormItem label='本次审核最低售卖价' {...otherLayout}>
+			{getFieldDecorator('bottom_price', quoteType == 2 ? {
+				rules: [
+					{ required: true, message: '请输入本次审核最低售卖价!' },
+					{ validator: this.checkCount }
+				]
+			} : {})(
+				<Input style={{ width: 200 }} disabled={quoteType == 1} />
+			)}
+		</FormItem>;
+	}
 	render() {
 		const { getFieldDecorator } = this.props.form;
-		const { isClick } = this.state;
-		const { visible, onCancel, type, goldenToken, quoteType, flag, isApplication } = this.props;
+		const { isClick, priceType } = this.state;
+		const { visible, onCancel, type, goldenToken, quoteType, flag, isApplication, total, goldenMetadata } = this.props;
 		const formItemLayout = {
 			labelCol: { span: 4 },
 			wrapperCol: { span: 20 },
 		};
 		const otherLayout = {
-			labelCol: { span: 4 },
-			wrapperCol: { span: 20 },
+			labelCol: { span: 5 },
+			wrapperCol: { span: 18 },
 		};
 		return <Modal
 			className='adjust-dialog'
@@ -256,26 +307,23 @@ class ApplyModal extends React.Component {
 				</div>
 			</Form> :
 				<Form>
-					<FormItem label='订单利润率' {...otherLayout}>
-						{getFieldDecorator('profit_rate', quoteType == 1 ? {
+					<FormItem label='调价类型' {...otherLayout}>
+						{getFieldDecorator('price_type', {
+							initialValue: priceType,
 							rules: [
-								{ required: true, message: '请输入订单利润率!' },
-								{ validator: this.checkProfitCount }
+								{ required: true, message: '请选择调价类型!' }
 							]
-						} : {})(
-							<Input addonAfter={'%'} style={{ width: 160 }} disabled={quoteType == 2} />
+						})(
+							<Select style={{ width: 200 }} onChange={this.handleChangePriceType} >
+								{
+									this.getPriceTypeOption(total)
+								}
+							</Select>
 						)}
 					</FormItem>
-					<FormItem label='服务费率' {...otherLayout}>
-						{getFieldDecorator('service_rate', quoteType == 2 ? {
-							rules: [
-								{ required: true, message: '请输入服务费率!' },
-								{ validator: this.checkCount }
-							]
-						} : {})(
-							<Input addonAfter={'%'} style={{ width: 160 }} disabled={quoteType == 1} />
-						)}
-					</FormItem>
+					{
+						this.getPriceValueItem(getFieldDecorator, otherLayout, quoteType)
+					}
 					<FormItem label='备注' {...otherLayout}>
 						{getFieldDecorator('remark')(
 							<TextArea placeholder='非必输' style={{ width: 400 }} autosize={{ minRows: 4, maxRows: 6 }} maxLength={50} />

@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as goldenActions from "../actions/goldenApply";
-import { Modal, message, Table, Input } from "antd";
+import { Modal, message, Table, Input, Button } from "antd";
 import AdjustQuery from '../components/adjustQuery';
 import ApplyModal from '../components/addAdjustApply/applyModal'
 import PrevModal from '../components/addAdjustApply/preModal'
@@ -129,12 +129,19 @@ class AdjustApply extends React.Component {
 					questAction={this.props.actions.getApplicationList}
 					pageSize={page_size}
 					location={this.props.location}
-					flag={flag}
-					btnFlag={btnFlag}
 					userList={goldenUserList}
+					action={this.props.actions.getGoldenCompanyId}
 				>
 					{goldenMetadata}
 				</AdjustQuery>
+				<div className='addOperateWrapper'>
+				{flag ? <Button type='primary' className='left-gap' href='/finance/golden/adjustApplyInput'
+					>导入</Button> : null}
+					{btnFlag ? <Button className='left-gap' type="primary"
+						href={`/finance/golden/addAdjustApply?${qs.stringify({ keys: { page_size: 50 } })}`}
+						target='_blank'
+					>添加申请</Button> : null}
+				</div>
 				<Table className='top-gap'
 					rowKey='id'
 					columns={adjustApplyList}

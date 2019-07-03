@@ -435,6 +435,21 @@ export const adjustApplyListFunc = (application_status, handleJump, handleAction
 			width: 120,
 		},
 		{
+			title: '公司简称',
+			dataIndex: 'company_name',
+			key: 'company_name',
+			align: 'center',
+			width: 120,
+		},
+		{
+			title: '报价类型',
+			dataIndex: 'price_type',
+			key: 'price_type',
+			align: 'center',
+			width: 120,
+			render: data => data === 1 ? '成本+服务费' : '默认'
+		},
+		{
 			title: '申请时间',
 			dataIndex: 'created_at',
 			key: 'created_at',
@@ -733,6 +748,41 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				align: 'center',
 				width: 100,
 			},
+			'main_account_name': {
+				title: '主账号名称',
+				dataIndex: 'main_account_name',
+				key: 'main_account_name',
+				align: 'center',
+				width: 120,
+			},
+			'main_account_date': {
+				title: '主账号帐期',
+				dataIndex: 'main_account_date',
+				key: 'main_account_date',
+				align: 'center',
+				width: 120,
+			},
+			'main_account_cor': {
+				title: '主账号合作方式',
+				dataIndex: 'main_account_cor',
+				key: 'main_account_cor',
+				align: 'center',
+				width: 120,
+				render: data => {
+					switch(data) {
+						case 1:
+							return '公司含税';
+						case 2:
+							return '工作室';
+						case 3:
+							return '个人';
+						case 4:
+							return '公司不含税';
+						default:
+							return '无';
+					}
+				}
+			},
 			'account_id': {
 				title: 'account id',
 				dataIndex: 'account_id',
@@ -786,6 +836,20 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 						})}
 					</div>
 				}
+			},
+			'discount_per': {
+				title: '折扣比例',
+				dataIndex: 'discount_per',
+				key: 'discount_per',
+				align: 'center',
+				width: 100,
+			},
+			'order_bottom_price': {
+				title: '订单底价',
+				dataIndex: 'order_bottom_price',
+				key: 'order_bottom_price',
+				align: 'center',
+				width: 100,
 			},
 			'commissioned_price': {
 				title: '应约价',

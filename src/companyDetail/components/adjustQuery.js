@@ -3,6 +3,7 @@ import { Icon, Button, Input, Row, Form, Select, DatePicker, message } from "ant
 import qs from 'qs';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
+import SearchSelect from './SearchSelect';
 moment.locale('zh-cn');
 
 const FormItem = Form.Item;
@@ -72,8 +73,8 @@ class AdjustQuery extends React.Component {
 	}
 	render() {
 		const { getFieldDecorator } = this.props.form;
-		const { flag, btnFlag, userList } = this.props;
-		const { application_status = [] } = this.props.children;
+		const { userList } = this.props;
+		const { application_status = [], quote_type = [] } = this.props.children;
 		return <Form className='adjust-stat'>
 			<Row type="flex" justify="start" gutter={16}>
 				<FormItem label='申请编号' className='left-gap'>
@@ -99,6 +100,17 @@ class AdjustQuery extends React.Component {
 						</Select>
 					)}
 				</FormItem>
+				<FormItem label="申请时间" className='left-gap'>
+					{getFieldDecorator('start_time')(
+						<DatePicker format={dataFormat} placeholder='开始日期' style={{ width: 150 }} />
+					)}
+					~
+						{getFieldDecorator('end_time')(
+						<DatePicker format={dataFormat} placeholder='结束日期' style={{ width: 150 }} />
+					)}
+				</FormItem>
+			</Row>
+			<Row type="flex" justify="start" gutter={16}>
 				<FormItem label='申请状态' className='left-gap'>
 					{getFieldDecorator('status', { initialValue: { key: '', label: '不限' } })(
 						<Select style={{ width: 160 }}
@@ -110,25 +122,40 @@ class AdjustQuery extends React.Component {
 						</Select>
 					)}
 				</FormItem>
-			</Row>
-			<Row type="flex" justify="start" gutter={16}>
-				<FormItem label="申请时间" className='left-gap'>
-					{getFieldDecorator('start_time')(
-						<DatePicker format={dataFormat} placeholder='开始日期' style={{ width: 150 }} />
-					)}
-					~
-						{getFieldDecorator('end_time')(
-						<DatePicker format={dataFormat} placeholder='结束日期' style={{ width: 150 }} />
+				<FormItem label='订单ID' className='left-gap'>
+					{getFieldDecorator('order_id')(
+						<Input placeholder="请输入" />
 					)}
 				</FormItem>
-				<FormItem className='left-gap'>
+				<FormItem label='公司简称' className='left-gap'>
+					{getFieldDecorator('company_id')(
+						<SearchSelect
+							placeholder='公司简称'
+							getPopupContainer={() => document.querySelector('.adjust-stat')}
+							action={this.props.action}
+							keyWord='company_name'
+							dataToList={res => { return res.data }}
+							item={['company_id', 'name']}
+						/>
+					)}
+				</FormItem>
+				<FormItem label='报价类型' className='left-gap'>
+					{getFieldDecorator('quote_type', { initialValue: '' })(
+						<Select placeholder="不限"
+						allowClear style={{ width: 160 }}>
+							<Option value="">不限</Option>
+							{
+								quote_type.map(item => 
+									<Option key={item.id} value={item.id}>{item.display}</Option>
+								)
+							}
+						</Select>
+					)}
+				</FormItem>
+			</Row>
+			<Row>
+				<FormItem className='right-gap'>
 					<Button type="primary" onClick={this.handleSearch}>查询</Button>
-					{flag ? <Button type='primary' className='left-gap' href='/finance/golden/adjustApplyInput'
-					>导入</Button> : null}
-					{btnFlag ? <Button className='left-gap' type="primary"
-						href={`/finance/golden/addAdjustApply?${qs.stringify({ keys: { page_size: 50 } })}`}
-						target='_blank'
-					>添加申请</Button> : null}
 					<a className="reset-filter left-gap" onClick={this.handleClear}><Icon type="retweet" />重置搜索框</a>
 				</FormItem>
 			</Row>

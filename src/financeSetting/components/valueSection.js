@@ -50,7 +50,7 @@ class ValueSection extends React.Component {
 				<div key={k}>
 					<FormItem style={{ display: 'inline-block' }}>
 						{getFieldDecorator(name, {
-							initialValue: { min: "", max: "", rate: "" },
+							initialValue: { min: "", max: "", rate: "", minRate: '' },
 							validateTrigger: 'onBlur',
 							rules: [{ validator: this.checkCount }]
 						})(
@@ -77,7 +77,8 @@ class ValueInput extends React.PureComponent {
 		this.state = {
 			min: value.min,
 			max: value.max,
-			rate: value.rate
+			rate: value.rate,
+			minRate: value.minRate
 		};
 	}
 	componentWillReceiveProps(nextProps) {
@@ -92,33 +93,20 @@ class ValueInput extends React.PureComponent {
 			onChange(Object.assign({}, this.state, changedValue));
 		}
 	}
-	handleMin = e => {
-		const min = e.target.value.trim();
+	handleInput = (value, type) => {
+		const iptValObj = {[type]: value.trim()}
 		if (!('value' in this.props)) {
-			this.setState({ min });
+			this.setState(iptValObj);
 		}
-		this.triggerChange({ min });
-	}
-	handleMax = e => {
-		const max = e.target.value.trim();
-		if (!('value' in this.props)) {
-			this.setState({ max });
-		}
-		this.triggerChange({ max });
-	}
-	handleRate = e => {
-		const rate = e.target.value.trim();
-		if (!('value' in this.props)) {
-			this.setState({ rate: rate });
-		}
-		this.triggerChange({ rate: rate });
+		this.triggerChange(iptValObj);
 	}
 	render() {
-		const { min, max, rate } = this.state;
+		const { min, max, rate, minRate } = this.state;
 		return <span>
-			<Input style={{ width: 110, height: 32, margin: '0 10px' }} placeholder='请输入' onChange={this.handleMin} value={min} />元至
-		<Input style={{ width: 110, height: 32, margin: '0 10px' }} placeholder='请输入' onChange={this.handleMax} value={max} />元，则利润率为
-	<Input style={{ width: 80, height: 32, margin: '0 10px' }} placeholder='输入数值' onChange={this.handleRate} value={rate} />%
-	</span>
+			<Input style={{ width: 110, height: 32, margin: '0 10px' }} placeholder='请输入' onChange={({target: {value}}) => {this.handleInput(value, 'min')}} value={min} />元至
+			<Input style={{ width: 110, height: 32, margin: '0 10px' }} placeholder='请输入' onChange={({target: {value}}) => {this.handleInput(value, 'max')}} value={max} />元，则对外利润率为
+			<Input style={{ width: 80, height: 32, margin: '0 10px' }} placeholder='输入数值' onChange={({target: {value}}) => {this.handleInput(value, 'rate')}} value={rate} />%，最低利润率为
+			<Input style={{ width: 80, height: 32, margin: '0 10px' }} placeholder='输入数值' onChange={({target: {value}}) => {this.handleInput(value, 'minRate')}} value={minRate} />%
+		</span>
 	}
 }

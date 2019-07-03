@@ -167,6 +167,24 @@ class SearchForm extends React.PureComponent {
 						)}
 					</FormItem>
 				</Col>);
+			case 'rangeInput':
+				attr.placeholder = Array.isArray(attr.placeholder)
+					? attr.placeholder
+					: ['请输入', '请输入'];
+				return (<Col
+					{...ResponseLayout}
+					key={itemIndex}
+				>
+					<FormItem label={field.label}>
+						{getFieldDecorator(field.value[0], field.params ? field.params : {})(
+							<Input {...attr} placeholder={attr.placeholder[0]} />
+						)}
+						~
+						{getFieldDecorator(field.value[1], field.params ? field.params : {})(
+							<Input {...attr} placeholder={attr.placeholder[1]} />
+						)}
+					</FormItem>
+				</Col>);
 			case 'select':
 				return (<Col
 					{...ResponseLayout}
@@ -285,7 +303,7 @@ class SearchForm extends React.PureComponent {
 				const keys = {}, labels = {}, { timeKeys } = this.state;
 				for (let key in form_data) {
 					if (Object.prototype.toString.call(form_data[key]) === '[object Object]') {
-						if (form_data[key].key) {
+						if (form_data[key].key || form_data[key].key == 0) {
 							keys[key] = form_data[key].key;
 							labels[key] = form_data[key].label;
 						}

@@ -117,7 +117,7 @@ export const prePayFunc = (handleModal) => [
 				{record.payment_status && record.payment_status == 1 && <Button type='primary' size='small' style={{ width: 80 }} onClick={() => {
 					handleModal(record.payment_slip_id, DEFEATED, true);
 				}}>打款失败</Button>}
-				{record.payment_status && record.payment_status == 2 && <Button type='primary' size='small' style={{ width: 80 }} href={`/finance/invoice/relatedInvoice?payment_slip_id=${record.payment_slip_id}`}>发票关联</Button>}
+				{record.payment_status && record.payment_status == 2 && <Button type='primary' size='small' style={{ width: 80 }} href={`/finance/invoice/relatedInvoice?payment_slip_id=${record.payment_slip_id}&payment_status=pre`}>发票关联</Button>}
 				{record.payment_status && record.payment_status == 2 && <Button type='primary' size='small' style={{ width: 80 }} onClick={() => {
 					handleModal(record.payment_slip_id, REVOCATION, true);
 				}}>打款撤销</Button>}
@@ -230,7 +230,7 @@ export const datePayFunc = (handleModal) => [
 				{record.payment_status && record.payment_status == 1 && <Button type='primary' size='small' style={{ width: 80 }} onClick={() => {
 					handleModal(record.payment_slip_id, DEFEATED, true);
 				}}>打款失败</Button>}
-				{record.payment_status && record.payment_status == 2 && <Button type='primary' size='small' style={{ width: 80 }} href={`/finance/invoice/relatedInvoice?payment_slip_id=${record.payment_slip_id}`}>发票关联</Button>}
+				{record.payment_status && record.payment_status == 2 && <Button type='primary' size='small' style={{ width: 80 }} href={`/finance/invoice/relatedInvoice?payment_slip_id=${record.payment_slip_id}&payment_status=dete`}>发票关联</Button>}
 				{record.payment_status && record.payment_status == 2 && <Button type='primary' size='small' style={{ width: 80 }} onClick={() => {
 					handleModal(record.payment_slip_id, REVOCATION, true);
 				}}>打款撤销</Button>}

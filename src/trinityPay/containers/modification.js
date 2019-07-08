@@ -284,7 +284,7 @@ class Modification extends React.Component {
 					{payment_status_desc != '打款失败' ? token && < Row>
 						<FormItem label='打款成功截图' {...formItemLayout}>
 							{getFieldDecorator('payment_screenshot', {
-								rules: [{ required: payment_status == 2, message: '打款成功备注为必填项!' }],
+								rules: [{ required: payment_status == 2, message: '打款成功截图为必填项!' }],
 								valuePropName: 'fileList',
 								getValueFromEvent: e => e.fileList
 							})(

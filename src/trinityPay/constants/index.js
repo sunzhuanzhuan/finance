@@ -395,6 +395,11 @@ export const prePayDetailColumns = [
 		dataIndex: 'requirement_id',
 		key: 'requirement_id',
 		align: 'center',
+	}, {
+		title: '订单ID：',
+		dataIndex: 'wby_order_id',
+		key: 'wby_order_id',
+		align: 'center',
 	},
 	{
 		title: '三方下单平台：',

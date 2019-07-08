@@ -27,7 +27,7 @@ class Item extends React.PureComponent {
 				return
 			}
 			if (!(/^(([0-9][0-9]*)|(([0]\.\d{1,2}|[0-9][0-9]*\.\d{1,2})))$/.test(item['min']) && /^(([0-9][0-9]*)|(([0]\.\d{1,2}|[0-9][0-9]*\.\d{1,2})))$/.test(item['max']))) {
-				message.error('区间可输入为两位小数', 3);
+				message.error('区间只能为两位小数', 3);
 				return
 			}
 			if (!item['rate']) {

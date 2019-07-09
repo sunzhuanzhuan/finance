@@ -32,8 +32,8 @@ class NewItem extends React.PureComponent {
 				message.error('有未填写的区间输入框', 3);
 				return
 			}
-			if (!(/^(0||[1-9][0-9]*)$/.test(item['min']) && /^(0||[1-9][0-9]*)$/.test(item['max']))) {
-				message.error('区间必须为整数', 3);
+			if (!(/^(([0-9][0-9]*)|(([0]\.\d{1,2}|[0-9][0-9]*\.\d{1,2})))$/.test(item['min']) && /^(([0-9][0-9]*)|(([0]\.\d{1,2}|[0-9][0-9]*\.\d{1,2})))$/.test(item['max']))) {
+				message.error('区间只能为两位小数', 3);
 				return
 			}
 			if (!item['rate']) {

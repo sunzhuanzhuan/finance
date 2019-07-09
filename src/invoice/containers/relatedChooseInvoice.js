@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import * as trinityInvoiceAction from "../actions/trinityInvoice";
 import getPagination from '../../components/pagination'
 import SearForm from '../../components/SearchForm'
-import { Table, Modal, message, Button, Form } from 'antd'
+import { Table, Modal, message, Button, Form, Icon } from 'antd'
 import { relatedInvoiceSearchFunc } from '../constants/search'
 import { availableInvoiceFunc } from '../constants/relatedInvoice'
 import './trinityInvoice.less'
@@ -81,6 +81,13 @@ class RelatedChooseInvoice extends React.Component {
 			});
 		})
 	}
+	handleBack = () => {
+		const search = qs.parse(this.props.location.search.substring(1));
+		this.props.history.push({
+			pathname: '/finance/invoice/relatedInvoice',
+			search: '?' + qs.stringify(search)
+		})
+	}
 	render() {
 		const { getFieldDecorator, getFieldValue, setFieldsValue } = this.props.form;
 		const search = qs.parse(this.props.location.search.substring(1));
@@ -119,7 +126,12 @@ class RelatedChooseInvoice extends React.Component {
 			}),
 		}
 		return <div className='relatedChoose-container'>
-			<legend className='container-title'>选择发票</legend>
+			<legend className='container-title'>
+				<span onClick={this.handleBack}>
+					<Icon type="left-circle-o" style={{ cursor: 'pointer', marginRight: '20px' }} />
+					<span className="title" style={{ cursor: 'pointer' }}>选择发票</span>
+				</span>
+			</legend>
 			{pullReady && <SearForm data={relatedInvoiceSearch} getAction={this.queryData} responseLayout={{ xs: 24, sm: 12, md: 8, lg: 6, xxl: 6 }} />}
 			<div className='top-gap'>
 				<Form>
@@ -141,7 +153,7 @@ class RelatedChooseInvoice extends React.Component {
 				<Button type='primary' onClick={this.handleSubmit}>确定</Button>
 				<Button type='primary' className='left-gap' href={`/finance/invoice/relatedInvoice?payment_slip_id=${search.payment_slip_id}`}>取消</Button>
 			</div>
-		</div>
+		</div >
 	}
 }
 

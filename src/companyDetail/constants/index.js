@@ -481,7 +481,7 @@ export const adjustApplyListFunc = (application_status, handleJump, handleAction
 					</div>
 					{record.status != '3' ? <div>
 						<Button type='primary' size='small' style={{ marginTop: "10px" }} onClick={() => {
-							handleAction('pass', record.id, record.quote_type);
+							handleAction('pass', record.id, record.quote_type, record.company_id);
 						}}>审核通过</Button>
 					</div> : null}
 					{record.status != '3' ? <div>
@@ -489,10 +489,10 @@ export const adjustApplyListFunc = (application_status, handleJump, handleAction
 							handleAction('reject', record.id);
 						}}>驳回</Button>
 					</div> : null}
-					{record.status != '3' ? <div>
+					<div>
 						<Button type='primary' size='small' style={{ marginTop: "10px", width: '68px' }}
 							target='_blank' href={`/api/finance/readjust/export?readjust_application_id=${record.id}`}>导出</Button>
-					</div> : null}
+					</div>
 				</div >
 			}
 		}
@@ -505,7 +505,7 @@ export const addAdjustApplyConfig = [
 		dataIndex: 'order_id',
 		key: 'order_id',
 		align: 'center',
-		width: 100,
+		width: 120,
 		fixed: 'left'
 	},
 	{
@@ -640,16 +640,35 @@ export const readyCheckFunc = (handleDelete) => {
 		}
 	]
 }
-export const adjustApplyDetailFunc = (rel_order_status) => {
+export const adjustApplyDetailFunc = (rel_order_status = []) => {
 	return ary => {
 		const configMap = {
+			'prev_id': {
+				title: '订单ID',
+				dataIndex: 'order_id',
+				key: 'order_id',
+				align: 'center',
+				width: 80,
+				render: (text, record) => {
+					return <div>
+						<div>{text}</div>
+						{record.plan_manager_id && record.plan_manager_id != '0' && <div style={{ display: 'inline-block', backgroundColor: 'red', color: '#fff', padding: '0 10px' }}>含策划</div>}
+					</div>
+				}
+			},
 			'order_id': {
 				title: '订单ID',
 				dataIndex: 'order_id',
 				key: 'order_id',
 				align: 'center',
 				width: 80,
-				fixed: 'left'
+				fixed: 'left',
+				render: (text, record) => {
+					return <div>
+						<div>{text}</div>
+						{record.plan_manager_id && record.plan_manager_id != '0' && <div style={{ display: 'inline-block', backgroundColor: 'red', color: '#fff', padding: '0 10px' }}>含策划</div>}
+					</div>
+				}
 			},
 			'status': {
 				title: '审批状态',
@@ -668,14 +687,14 @@ export const adjustApplyDetailFunc = (rel_order_status) => {
 				dataIndex: 'company_name',
 				key: 'company_name',
 				align: 'center',
-				width: 200,
+				width: 100,
 			},
 			'project_name': {
 				title: '所属项目',
 				dataIndex: 'project_name',
 				key: 'project_name',
 				align: 'center',
-				width: 160,
+				width: 100,
 				render: (text) => {
 					return text ? text : '-'
 				}
@@ -694,12 +713,25 @@ export const adjustApplyDetailFunc = (rel_order_status) => {
 				align: 'center',
 				width: 160,
 			},
+			'requirement_id_name': {
+				title: '需求ID/名称',
+				dataIndex: 'requirement_id_name',
+				key: 'requirement_id_name',
+				align: 'center',
+				width: 120,
+				render: (text, { requirement_id, requirement_name }) => {
+					return <div>
+						<div>{requirement_id}</div>
+						<div>{requirement_name}</div>
+					</div>
+				}
+			},
 			'platform_name': {
 				title: '平台',
 				dataIndex: 'platform_name',
 				key: 'platform_name',
 				align: 'center',
-				width: 160,
+				width: 100,
 			},
 			'account_id': {
 				title: 'account id',
@@ -713,18 +745,62 @@ export const adjustApplyDetailFunc = (rel_order_status) => {
 				dataIndex: 'weibo_name',
 				key: 'weibo_name',
 				align: 'center',
-				width: 160,
+				width: 120,
+			},
+			'plan_manager_id': {
+				title: '是否含策划',
+				dataIndex: 'plan_manager_id',
+				key: 'plan_manager_id',
+				align: 'center',
+				width: 120,
+				render: (text, record) => {
+					return record.plan_manager_id == 0 ? '否' : '是'
+				}
+			},
+			'discount_rate': {
+				title: '折扣比例',
+				dataIndex: 'discount_rate',
+				key: 'discount_rate',
+				align: 'center',
+				width: 80,
+				render: (text, record) => {
+					// const discount = record.price && record.price[0] ? record.price[0].discount_rate : 0;
+					// return record.quote_type != '2' ? numeral(discount).format('0.00%') : '-'
+					return record.quote_type != '2' ? record.price && record.price[0] ? numeral(record.price[0].discount_rate).format('0.00%') : 0 : '-'
+				}
 			},
 			'quoted_price': {
-				title: '成本价',
+				title: '对外成本价',
 				dataIndex: 'quoted_price',
 				key: 'quoted_price',
 				align: 'center',
-				width: 240,
-				render: (text, { price }) => {
-					return <div>
+				width: 260,
+				render: (text, { price = [] }) => {
+					// const flag = price && price[0] ? price[0].trinity_type == 2 : false;
+					return <div style={{ width: 260 }}>
 						{price.map((item, index) => {
-							return <div key={index}>{`${item.price_label}:${item.price}`}</div>
+							return <div key={index}>
+								<div>{`${item.price_label}:${item.open_cost_price}`}</div>
+								{item.trinity_type == 2 ? <div>{`(博主${item.private_open_cost_price},第三方${item.public_open_cost_price})`}</div> : null}
+							</div>
+						})}
+					</div>
+				}
+			},
+			'commissioned_price': {
+				title: '应约价',
+				dataIndex: 'price',
+				key: 'price',
+				align: 'center',
+				width: 260,
+				render: (text, { price = [] }) => {
+					// const flag = price && price[0] ? price[0].trinity_type == 2 : false;
+					return <div style={{ width: 260 }}>
+						{price.map((item, index) => {
+							return <div key={index}>
+								<div>{`${item.price_label}:${item.quoted_price}`}</div>
+								{item.trinity_type == 2 ? <div>{`(博主${item.private_quote_price},第三方${item.public_quote_price})`}</div> : null}
+							</div>
 						})}
 					</div>
 				}
@@ -735,7 +811,7 @@ export const adjustApplyDetailFunc = (rel_order_status) => {
 				key: 'price',
 				align: 'center',
 				width: 240,
-				render: (text, { price }) => {
+				render: (text, { price = [] }) => {
 					return <div>
 						{price.map((item, index) => {
 							return <div key={index}>{`${item.price_label}:${item.quoted_price}`}</div>
@@ -749,14 +825,18 @@ export const adjustApplyDetailFunc = (rel_order_status) => {
 				key: 'history_min_sell_price',
 				align: 'center',
 				width: 240,
-				render: (text) => {
+				render: (text, { history_min_sell_price: { readjust_type } }) => {
 					const item = text ? text.min_sell_price : [];
 					const node = item.length > 0 ? <div>
 						{item.map((item, index) => {
 							return <div key={index}>{`${item.price_label}:${item.min_sell_price}`}</div>
 						})}
-					</div> : '-';
-					return node;
+					</div> : '';
+					const pro = <div>
+						{node}
+						{readjust_type == 2 && <div style={{ color: 'red' }}>（导入excel方式调整）</div>}
+					</div>
+					return pro;
 				}
 			},
 			'history_rate': {
@@ -777,13 +857,32 @@ export const adjustApplyDetailFunc = (rel_order_status) => {
 				key: 'min_sell_price',
 				align: 'center',
 				width: 240,
-				render: (text) => {
+				render: (text, { readjust_type }) => {
 					const node = text ? <div>
 						{text.map((item, index) => {
 							return <div key={index}>{`${item.price_label}:${item.min_sell_price}`}</div>
 						})}
-					</div> : '-';
+						{readjust_type == 2 && <div style={{ color: 'red' }}>（导入excel方式调整）</div>}
+					</div> : '';
 					return node;
+				}
+			},
+			'pre_min_sell_price': {
+				title: '最低售卖价',
+				dataIndex: 'pre_min_sell_price',
+				key: 'pre_min_sell_price',
+				align: 'center',
+				width: 246,
+				render: (text, { price = [], pre_min_sell_price = [] }) => {
+					// const flag = price && price[0] ? price[0].trinity_type == 2 : false;
+					return <div style={{ width: 260 }}>
+						{pre_min_sell_price.map((item, index) => {
+							return <div key={index}>
+								<div>{`${item.price_label}:${item.min_sell_price}`}</div>
+								{item.trinity_type == 2 ? <div>{`(博主${item.private_min_sell_price},第三方${item.public_min_sell_price})`}</div> : null}
+							</div>
+						})}
+					</div>
 				}
 			},
 			'quote_type': {

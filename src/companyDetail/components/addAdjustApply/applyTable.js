@@ -89,15 +89,15 @@ class ApplyTable extends React.Component {
 				pagination={false}
 				loading={loading}
 				rowSelection={rowSelectionObj}
-				footer={() => {
-					return <WBYTableFooter
-						plainOptions={data}
-						selectedRowKeys={ary}
-						onChange={this.onCheckAllChange}
-						title={'全选'}
-						pagination={dataSource.length ? paginationObj : false}
-					/>
-				}}
+			// footer={() => {
+			// 	return <WBYTableFooter
+			// 		plainOptions={data}
+			// 		selectedRowKeys={ary}
+			// 		onChange={this.onCheckAllChange}
+			// 		title={'全选'}
+			// 		pagination={dataSource.length ? paginationObj : false}
+			// 	/>
+			// }}
 			/> : null}
 			{type === 'add' ? <Table className='top-gap'
 				rowKey={rowKey}
@@ -108,15 +108,15 @@ class ApplyTable extends React.Component {
 				pagination={false}
 				loading={loading}
 				rowSelection={rowSelectionObj}
-				footer={() => {
-					return <WBYTableFooter
-						plainOptions={dataSource}
-						selectedRowKeys={ary}
-						onChange={this.onCheckAllChange}
-						title={'全选'}
-						pagination={dataSource.length ? paginationObj : false}
-					/>
-				}}
+			// footer={() => {
+			// 	return <WBYTableFooter
+			// 		plainOptions={dataSource}
+			// 		selectedRowKeys={ary}
+			// 		onChange={this.onCheckAllChange}
+			// 		title={'全选'}
+			// 		pagination={dataSource.length ? paginationObj : false}
+			// 	/>
+			// }}
 			/> : null}
 		</div>
 	}

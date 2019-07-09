@@ -76,6 +76,14 @@ export const {
 });
 
 export const {
+	postPreviewMinSellPrice,
+	postPreviewMinSellPrice_success
+} = createHttpAction('postPreviewMinSellPrice', Interface.postPreviewMinSellPrice, {
+	method: 'post',
+	ignoreToast: true
+});
+
+export const {
 	postPassByReadjust,
 	postPassByReadjust_success
 } = createHttpAction('postPassByReadjust', Interface.postPassByReadjust, {

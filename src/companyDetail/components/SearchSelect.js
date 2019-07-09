@@ -47,11 +47,11 @@ export default class SearchSelect extends React.PureComponent {
 			filterOption={false}
 			onSearch={this.handleSearch}
 			onChange={this.handleChange}
-			notFoundContent={loading ? <Spin size="small" style={{paddingLeft:'10px'}}/> : null}
+			notFoundContent={loading ? <Spin size="small" style={{ paddingLeft: '10px' }} /> : null}
 			style={{ width: 140 }}
 			placeholder="请输入"
 			{...this.props}
-			// onPopupScroll={this.handleScroll}
+		// onPopupScroll={this.handleScroll}
 		>
 			{options}
 		</Select>

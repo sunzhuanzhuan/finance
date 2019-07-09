@@ -198,7 +198,7 @@ class SearchForm extends React.PureComponent {
 									data.selectOptionsChildren.length > 0 &&
 									data.selectOptionsChildren.map((optionItem, index) => (
 										<Option value={data.selectItem ? optionItem[data.selectItem.value] : optionItem.value} key={index}>
-											{data.selectItem ? optionItem[data.selectItem.key] : optionItem.key}
+											{data.selectItem ? optionItem[data.selectItem.key] : optionItem.name}
 										</Option>
 									))}
 							</Select>
@@ -297,10 +297,9 @@ class SearchForm extends React.PureComponent {
 		this.props.form.validateFields((err, values) => {
 			// 表单表单不报错,且props有传递的情况下,才返回表单数据
 			if (!err && this.props.getAction) {
-				const search = qs.parse(this.props.location.search.substring(1));
 				// 字符串类型全部去除两边的空格
 				let form_data = this.removeNotNeedValue(values);
-
+				const search = qs.parse(this.props.location.search.substring(1));
 				const keys = {}, labels = {}, { timeKeys } = this.state;
 				for (let key in form_data) {
 					if (Object.prototype.toString.call(form_data[key]) === '[object Object]') {
@@ -319,7 +318,7 @@ class SearchForm extends React.PureComponent {
 					keys: { ...keys },
 					labels: { ...labels }
 				};
-				Object.keys(params['keys']).forEach(item => { (!params['keys'][item] && params['keys'][item] != 0) ? delete params['keys'][item] : null });
+				Object.keys(params['keys']).forEach(item => { !params['keys'][item] && params['keys'][item] !== 0 ? delete params['keys'][item] : null });
 				const hide = message.loading('查询中，请稍候...');
 				this.props.getAction({ ...params.keys }).then(() => {
 					this.props.history.replace({

@@ -100,7 +100,7 @@ class AddAdjustApply extends React.Component {
 				curSelectRows={curSelectRows}
 				handleSelected={this.handleSelected}
 				location={this.props.location}
-				scroll={{ x: 1600 }}
+				scroll={{ x: 1500 }}
 			/>
 			<Row className='top-gap' style={{ textAlign: 'center' }}>
 				<Button className='adjust-apply-btn' type='default' onClick={() => {

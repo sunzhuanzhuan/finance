@@ -1,9 +1,6 @@
-// import Api from './api';
-
 import axios from 'axios'
 import { notification } from 'antd'
-// import { browserHistory } from 'react-router'
-import history from '../util/history';
+const Cookie = require('js-cookie');
 
 const { Promise, location } = window;
 
@@ -46,6 +43,7 @@ instance.interceptors.request.use(function (config) {
 	if (otherURIReg.test(config.url)) {
 		// config.baseURL = ''
 	}
+	config.headers["X-Access-Token"] = Cookie.get('token') || ''
 	return config;
 }, function (error) {
 	// 对请求错误做些什么

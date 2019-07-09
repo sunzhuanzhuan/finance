@@ -9,6 +9,7 @@ import {
 	getApplyOrderList_success,
 	postApplyReadjust_success,
 	getApplicationDetail_success,
+	postPreviewMinSellPrice_success,
 	getGoldenUserList_success,
 } from '../actions/goldenApply';
 
@@ -62,6 +63,12 @@ export const applyReadjust = handleActions({
 
 export const applicationDetail = handleActions({
 	[getApplicationDetail_success]: (state, action) => {
+		return { ...action.payload.data }
+	}
+}, {})
+
+export const applicationPreview = handleActions({
+	[postPreviewMinSellPrice_success]: (state, action) => {
 		return { ...action.payload.data }
 	}
 }, {})

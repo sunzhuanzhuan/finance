@@ -12,8 +12,12 @@ module.exports = merge(baseConfig, {
 		hot: true,
 		host: 'lg.nip.io',
 		proxy: {
+			// "/api/trinity": {
+			// 	target: "http://192.168.20.128:8010",
+			// 	changeOrigin: true
+			// },
 			"/api": {
-				target: "http://nb.tst-weiboyi.com",
+				target: "http://nb.dev-weiboyi.com",
 				changeOrigin: true
 			}
 		},

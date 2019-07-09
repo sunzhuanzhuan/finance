@@ -11,6 +11,9 @@ import siderMenuReducer from '../siderMenu/reducers'
 import authorizationsReducers from './authorizations'
 import saleIncome from '../saleIncome/reducers'
 import studioManage from '../studioManage/reducers'
+import zhangWu from '../zhangwu/reducers'
+import trinityPay from '../trinityPay/reducers'
+import trinityProfitRate from '../financeSetting/reducers'
 export default combineReducers({
 	commonReducers,
 	routing: routerReducer,
@@ -24,4 +27,7 @@ export default combineReducers({
 	authorizationsReducers,
 	saleIncome,
 	studioManage,
+	zhangWu,
+	trinityPay,
+	trinityProfitRate
 });

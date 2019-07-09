@@ -83,15 +83,10 @@ class RelatedChooseInvoice extends React.Component {
 	}
 	handleBack = () => {
 		const search = qs.parse(this.props.location.search.substring(1));
-		if (search.payment_status == 'pre') {
-			this.props.history.push({
-				pathname: '/finance/trinityPay/prePay'
-			})
-		} else {
-			this.props.history.push({
-				pathname: '/finance/trinityPay/datePay'
-			})
-		}
+		this.props.history.push({
+			pathname: '/finance/invoice/relatedInvoice',
+			search: '?' + qs.stringify(search)
+		})
 	}
 	render() {
 		const { getFieldDecorator, getFieldValue, setFieldsValue } = this.props.form;

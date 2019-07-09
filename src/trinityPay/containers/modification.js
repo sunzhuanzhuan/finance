@@ -69,11 +69,11 @@ class Modification extends React.Component {
 							name: item.name,
 							url: item.url
 						}));
-						obj['payment_remark'] = values['payment_remark'];
+						obj['payment_remark'] = values['payment_remark'] != '' ? values['payment_remark'] : undefined;
 						obj['payment_screenshot'] = qs.stringify(urlArray);
 						break;
 					case 3:
-						obj['payment_remark'] = values['payment_remark'];
+						obj['payment_remark'] = values['payment_remark'] != '' ? values['payment_remark'] : undefined;
 						break;
 					case 4:
 						obj['payment_revoke_reason'] = values['payment_revoke_reason'];

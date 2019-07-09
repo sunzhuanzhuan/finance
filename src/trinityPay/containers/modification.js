@@ -308,7 +308,7 @@ class Modification extends React.Component {
 					<Row>
 						<FormItem label='打款备注' {...formItemLayout}>
 							{getFieldDecorator('payment_remark', {
-								rules: [{ required: payment_status == 3, message: '打款撤失败为必填项!' }, { max: 50, message: '不超过50个字符!' }]
+								rules: [{ required: payment_status == 3, message: '打款失败备注为必填项!' }, { max: 50, message: '不超过50个字符!' }]
 							})(
 								<Input disabled={!(payment_status == 3 || payment_status == 2)} />
 							)}

@@ -1,15 +1,3 @@
-.fieldset_css {
-    border: 1px solid @primary-color;
-    border-radius: 6px;
-    padding: 10px;
-    legend {
-        color: @primary-color;
-        background-color: #fff;
-        width: auto;
-        padding: 0 10px;
-        margin-bottom: 0;
-    }
-}
 .red-font{
     color:red;
 }
@@ -18,6 +6,9 @@
 }
 .top-gap{
     margin-top: 20px;
+}
+.right-gap{
+    margin-right: 20px;
 }
 .add-table {
     .ant-table-fixed-left {
@@ -106,5 +97,43 @@
     }
     .ant-upload-list .ant-upload-list-item .anticon-close{
         font-size: 0px;
+    }
+}
+
+.adjust-apply {
+    legend {
+        width:80px;
+        height:28px;
+        font-size:20px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(51,51,51,1);
+        line-height:28px;
+    }
+    .common_search_width {
+        width: 160px;
+    }
+    .common_time_width {
+        width: 190px;
+        margin-right: 26px;
+    }
+    .adjust_content {
+        width: 1013px;
+        padding: 10px 0 15px 0;
+        margin-bottom: 20px;
+        background: #F7F7F7;
+    }
+    .adjust_query_operate {
+        display: flex;
+        justify-content: flex-end;
+        .ant-btn {
+            margin-right: 20px;
+            &:last-child {
+                margin-right: 50px;
+            }
+        }
+    }
+    .adjust_tabs {
+        margin: 10px 0 0 0;
     }
 }

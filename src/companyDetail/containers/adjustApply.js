@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as goldenActions from "../actions/goldenApply";
-import { Modal, message, Table, Input, Button } from "antd";
+import { Modal, message, Table, Input, Button, Tabs } from "antd";
 import AdjustQuery from '../components/adjustQuery';
 import ApplyModal from '../components/addAdjustApply/applyModal'
 import PrevModal from '../components/addAdjustApply/preModal'
@@ -10,6 +10,7 @@ import { adjustApplyFunc, adjustApplyListFunc, adjustApplyDetailFunc } from "../
 import "./golden.less";
 import qs from 'qs';
 const { TextArea } = Input;
+const { TabPane } = Tabs;
 
 class AdjustApply extends React.Component {
 	constructor() {
@@ -23,7 +24,13 @@ class AdjustApply extends React.Component {
 			btnFlag: false,
 			quoteType: '',
 			readjust_application_id: ''
-		}
+		};
+		this.tabOption = [
+			{ key: 1, name: '全部' },
+			{ key: 2, name: '待处理' },
+			{ key: 3, name: '处理中' },
+			{ key: 4, name: '已处理' },
+		]
 	}
 	componentDidMount() {
 		const search = qs.parse(this.props.location.search.substring(1));
@@ -122,8 +129,29 @@ class AdjustApply extends React.Component {
 			pageSizeOptions: ['20', '50', '100', '200']
 		};
 		const adjustApplyPreview = adjustApplyDetailFunc([])(['prev_id', 'company_name', 'project_name', 'requirement_id_name', 'platform_name', 'weibo_name', 'plan_manager_id', 'discount_rate', 'commissioned_price', 'quoted_price', 'pre_min_sell_price']);
+		const getTabPaneComp = () => {
+			return this.tabOption.map(item => {
+				const { name, key } = item;
+				const count = 100;
+				const tab = <div>
+					<span key='name'>{name}</span>
+					<span key='count'>{count}</span>
+				</div>;
+				return (
+					<TabPane tab={tab} key={key}>
+						<Table
+							rowKey='id'
+							columns={adjustApplyList}
+							dataSource={list}
+							loading={loading}
+							bordered
+							pagination={list.length ? paginationObj : false}
+						></Table>
+					</TabPane>
+				)
+			})
+		};
 		return <div className='adjust-apply'>
-			<fieldset className='fieldset_css'>
 				<legend>订单调价</legend>
 				<AdjustQuery history={this.props.history}
 					questAction={this.props.actions.getApplicationList}
@@ -135,22 +163,18 @@ class AdjustApply extends React.Component {
 					{goldenMetadata}
 				</AdjustQuery>
 				<div className='addOperateWrapper'>
-				{flag ? <Button type='primary' className='left-gap' href='/finance/golden/adjustApplyInput'
+				{flag ? <Button type='primary' icon='download' className='right-gap' href='/finance/golden/adjustApplyInput'
 					>导入</Button> : null}
-					{btnFlag ? <Button className='left-gap' type="primary"
+					{btnFlag ? <Button className='right-gap' type="primary"
 						href={`/finance/golden/addAdjustApply?${qs.stringify({ keys: { page_size: 50 } })}`}
 						target='_blank'
 					>添加申请</Button> : null}
 				</div>
-				<Table className='top-gap'
-					rowKey='id'
-					columns={adjustApplyList}
-					dataSource={list}
-					loading={loading}
-					bordered
-					pagination={list.length ? paginationObj : false}
-				></Table>
-			</fieldset>
+				<Tabs className='adjust_tabs'>
+					{
+						getTabPaneComp()
+					}
+				</Tabs>
 			{tipVisible ? <ApplyModal
 				type={'pass'}
 				flag={flag}

@@ -36,7 +36,7 @@ export default class SearchSelect extends React.PureComponent {
 	}
 	render() {
 		const { data, value, loading } = this.state;
-		const { item: [id, name] } = this.props;
+		const { item: [id, name], className } = this.props;
 		const options = data.map(d => <Option key={d[id]}>{d[name]}</Option>);
 		return <Select
 			showSearch
@@ -48,7 +48,7 @@ export default class SearchSelect extends React.PureComponent {
 			onSearch={this.handleSearch}
 			onChange={this.handleChange}
 			notFoundContent={loading ? <Spin size="small" style={{ paddingLeft: '10px' }} /> : null}
-			style={{ width: 140 }}
+			style={{ width: className ? 160 : 140 }}
 			placeholder="请输入"
 			{...this.props}
 		// onPopupScroll={this.handleScroll}

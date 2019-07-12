@@ -75,16 +75,17 @@ class AdjustQuery extends React.Component {
 		const { getFieldDecorator } = this.props.form;
 		const { userList } = this.props;
 		const { application_status = [], quote_type = [] } = this.props.children;
-		return <Form className='adjust-stat'>
+		return <Form className='adjust-stat adjust_content'>
 			<Row type="flex" justify="start" gutter={16}>
 				<FormItem label='申请编号' className='left-gap'>
 					{getFieldDecorator('readjust_application_id', { initialValue: '' })(
-						<Input placeholder="请输入" />
+						<Input placeholder="请输入" className='common_search_width' />
 					)}
 				</FormItem>
 				<FormItem label='申请人' className='left-gap'>
 					{getFieldDecorator('apply_admin_id', { initialValue: { key: '', label: '不限' } })(
-						<Select style={{ width: 160 }}
+						<Select 
+							className='common_search_width'
 							placeholder="不限"
 							allowClear
 							showSearch
@@ -102,19 +103,17 @@ class AdjustQuery extends React.Component {
 				</FormItem>
 				<FormItem label="申请时间" className='left-gap'>
 					{getFieldDecorator('start_time')(
-						<DatePicker format={dataFormat} placeholder='开始日期' style={{ width: 150 }} />
+						<DatePicker className='common_time_width' format={dataFormat} placeholder='开始时间' />
 					)}
-					~
-						{getFieldDecorator('end_time')(
-						<DatePicker format={dataFormat} placeholder='结束日期' style={{ width: 150 }} />
+					{getFieldDecorator('end_time')(
+					<DatePicker className='common_time_width' format={dataFormat} placeholder='结束时间' />
 					)}
 				</FormItem>
 			</Row>
 			<Row type="flex" justify="start" gutter={16}>
 				<FormItem label='申请状态' className='left-gap'>
 					{getFieldDecorator('status', { initialValue: { key: '', label: '不限' } })(
-						<Select style={{ width: 160 }}
-							labelInValue>
+						<Select className='common_search_width' labelInValue>
 							<Option value="">不限</Option>
 							{application_status.map((item) =>
 								<Option key={item.id} value={item.id}>{item.display}</Option>)
@@ -124,12 +123,13 @@ class AdjustQuery extends React.Component {
 				</FormItem>
 				<FormItem label='订单ID' className='left-gap'>
 					{getFieldDecorator('order_id')(
-						<Input placeholder="请输入" />
+						<Input placeholder="请输入" className='common_search_width' />
 					)}
 				</FormItem>
 				<FormItem label='公司简称' className='left-gap'>
 					{getFieldDecorator('company_id')(
 						<SearchSelect
+							className='common_search_width'
 							placeholder='公司简称'
 							getPopupContainer={() => document.querySelector('.adjust-stat')}
 							action={this.props.action}
@@ -142,7 +142,7 @@ class AdjustQuery extends React.Component {
 				<FormItem label='报价类型' className='left-gap'>
 					{getFieldDecorator('quote_type', { initialValue: '' })(
 						<Select placeholder="不限"
-						allowClear style={{ width: 160 }}>
+						allowClear className='common_search_width'>
 							<Option value="">不限</Option>
 							{
 								quote_type.map(item => 
@@ -153,11 +153,9 @@ class AdjustQuery extends React.Component {
 					)}
 				</FormItem>
 			</Row>
-			<Row>
-				<FormItem className='right-gap'>
-					<Button type="primary" onClick={this.handleSearch}>查询</Button>
-					<a className="reset-filter left-gap" onClick={this.handleClear}><Icon type="retweet" />重置搜索框</a>
-				</FormItem>
+			<Row className='adjust_query_operate'>
+				<Button type="primary" onClick={this.handleSearch}>查询</Button>
+				<Button onClick={this.handleClear}>重置</Button>
 			</Row>
 		</Form >
 	}

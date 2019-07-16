@@ -959,7 +959,7 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				title: '历史审核利润率/服务费率',
 				dataIndex: 'history_rate',
 				key: 'history_rate',
-				width: 140,
+				width: 130,
 				render: (text, record) => {
 					const item = record.history_min_sell_price ? record.history_min_sell_price.min_sell_price : [];
 					const value = record.quote_type === '1' ? record.history_min_sell_price.profit_rate : record.quote_type === '2' ? record.history_min_sell_price.service_rate : null;
@@ -1002,7 +1002,7 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				title: '本次利润率/服务费率',
 				dataIndex: 'quote_type',
 				key: 'quote_type',
-				width: 140,
+				width: 100,
 				render: (text, record) => {
 					const value = text === '1' ? record.profit_rate : text === '2' ? record.service_rate : null;
 					return record.min_sell_price ? value : '-';

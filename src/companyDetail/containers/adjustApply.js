@@ -192,7 +192,7 @@ class AdjustApply extends React.Component {
 						// target='_blank'
 					>添加申请</Button> : null}
 				</div>
-				<Tabs className='adjust_tabs'>
+				<Tabs className='adjust_tabs table_style'>
 					{
 						getTabPaneComp()
 					}

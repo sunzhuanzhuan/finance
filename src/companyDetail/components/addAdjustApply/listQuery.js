@@ -212,7 +212,7 @@ class ListQuery extends React.Component {
 								]
 							})(
 								<SearchSelect
-									className
+									widthSign
 									placeholder='请选择'
 									getPopupContainer={() => document.querySelector('.adjust-stat')}
 									action={this.props.actions.getGoldenCompanyId}
@@ -255,7 +255,7 @@ class ListQuery extends React.Component {
 					<FormItem label='需求名称' className='left-gap'>
 						{getFieldDecorator('requirement_id')(
 							<SearchSelect
-								className
+								widthSign
 								placeholder='请输入'
 								getPopupContainer={() => document.querySelector('.adjust-stat')}
 								action={this.handleFetch}

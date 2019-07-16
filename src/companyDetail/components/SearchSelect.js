@@ -36,9 +36,9 @@ export default class SearchSelect extends React.PureComponent {
 	}
 	render() {
 		const { data, value, loading } = this.state;
-		const { item: [id, name], className, selfWidth } = this.props;
+		const { item: [id, name], widthSign, selfWidth } = this.props;
 		const options = data.map(d => <Option key={d[id]}>{d[name]}</Option>);
-		const style = !selfWidth ? { width: className ? 160 : 140 } : null
+		const style = !selfWidth ? { width: widthSign ? 160 : 140 } : null
 		return <Select
 			showSearch
 			allowClear

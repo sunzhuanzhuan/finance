@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as goldenActions from "../actions/goldenApply";
-import { Button, Row, Modal, message, Table } from "antd";
+import { Button, Row, Modal, message, Table, Icon } from "antd";
 import ListQuery from '../components/addAdjustApply/listQuery';
 import ApplyTable from '../components/addAdjustApply/applyTable';
 import ApplyModal from '../components/addAdjustApply/applyModal';
@@ -30,7 +30,15 @@ class AddAdjustApply extends React.Component {
 		const search = qs.parse(this.props.location.search.substring(1));
 		this.props.actions.getGoldenToken();
 		delete search['requirement_label'];
-		this.queryData({ page: 1, ...search.keys });
+		const { keys:{company_id} } = search;
+		const queryObj = { page: 1, ...search.keys };
+		if(company_id) {
+			const companyId = company_id.key;
+			delete search.keys.company_id;
+			Object.assign(queryObj, {company_id: companyId})
+		}
+
+		this.queryData(queryObj);
 	}
 	queryData = (obj, func) => {
 		this.setState({ loading: true });
@@ -67,20 +75,19 @@ class AddAdjustApply extends React.Component {
 	handleClear = () => {
 		this.setState({ curSelectRowKeys: [], curSelectRows: [], rowsMap: {} });
 	}
+	handleBack = () => {
+		const { history } = this.props;
+		history.go(-1);
+	}
 	render() {
 		const { loading, tipVisible, checkVisible, curSelectRowKeys, curSelectRows } = this.state;
 		const { applyOrderList: { list = [], page, total }, goldenToken } = this.props;
 		const readyList = readyCheckFunc(this.handleDelete);
 		return <div className='add-adjust-apply'>
-			<fieldset className='fieldset_css'>
-				<legend>统计</legend>
-				<div className='left-gap'>
-					已选订单:<span className='red-font' style={{ marginLeft: '10px' }}>{curSelectRowKeys.length}</span>个
-					<Button className='left-gap' type='primary' onClick={() => {
-						this.setState({ checkVisible: true });
-					}}>查看已选</Button>
-				</div>
-			</fieldset>
+			<h2 className='add_adjust_header' onClick={this.handleBack}>
+				<Icon type="arrow-left" />
+				<span className='left-gap'>订单调价</span>
+			</h2>
 			<ListQuery
 				type={'add'}
 				questAction={this.props.actions.getApplyOrderList}
@@ -89,6 +96,12 @@ class AddAdjustApply extends React.Component {
 				curSelectRowKeys={curSelectRowKeys}
 				handleClear={this.handleClear}
 			></ListQuery>
+			<div className='left-gap selected-refactor'>
+				已选订单:<span className='red-font' style={{ marginLeft: '10px' }}>{curSelectRowKeys.length}</span>个
+				<Button className='left-gap' type='primary' onClick={() => {
+					this.setState({ checkVisible: true });
+				}}>查看已选</Button>
+			</div>
 			<ApplyTable
 				type={'add'}
 				rowKey={'order_id'}

@@ -424,7 +424,11 @@ export const adjustApplyListFunc = (application_status, handleJump, handleAction
 			width: 120,
 			render: (text) => {
 				const value = application_status.find(item => item.id == text);
-				return value ? value.display : null
+				const className = text == 3 ? 'dealed' : 'undealed';
+				return value ? <div className={className}>
+				<span></span>
+				<div>{value.display}</div>
+			</div> : null
 			}
 		},
 		{
@@ -486,28 +490,21 @@ export const adjustApplyListFunc = (application_status, handleJump, handleAction
 			dataIndex: 'action',
 			key: 'action',
 			align: 'center',
-			width: 140,
+			width: 180,
 			render: (text, record) => {
 				return <div>
-					<div>
-						<Button type='primary' size='small' target='_blank' onClick={() => {
-							handleJump(record.id, record.company_id);
-						}}>订单详情</Button>
-					</div>
-					{record.status != '3' ? <div>
-						<Button type='primary' size='small' style={{ marginTop: "10px" }} onClick={() => {
-							handleAction('pass', record.id, record.quote_type, record.company_id);
-						}}>审核通过</Button>
-					</div> : null}
-					{record.status != '3' ? <div>
-						<Button type='primary' size='small' style={{ marginTop: "10px", width: '68px' }} onClick={() => {
-							handleAction('reject', record.id);
-						}}>驳回</Button>
-					</div> : null}
-					<div>
-						<Button type='primary' size='small' style={{ marginTop: "10px", width: '68px' }}
-							target='_blank' href={`/api/finance/readjust/export?readjust_application_id=${record.id}`}>导出</Button>
-					</div>
+					<a onClick={() => {handleJump(record.id, record.company_id);}}>订单详情</a>
+					{record.status != '3' ?
+						<a style={{marginLeft: 10}} onClick={() => {handleAction('pass', record.id, record.quote_type, record.company_id);}}>
+							审核通过
+						</a>
+					: null}
+					{record.status != '3' ?
+						<a style={{marginLeft: 10}} onClick={() => {handleAction('reject', record.id);}}>
+							驳回
+						</a>
+					: null}
+					<a style={{marginLeft: 10}} target='_blank' href={`/api/finance/readjust/export?readjust_application_id=${record.id}`}>导出</a>
 				</div >
 			}
 		}
@@ -662,7 +659,6 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				title: '订单ID',
 				dataIndex: 'order_id',
 				key: 'order_id',
-				align: 'center',
 				width: 80,
 				render: (text, record) => {
 					return <div>
@@ -675,7 +671,6 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				title: '订单ID',
 				dataIndex: 'order_id',
 				key: 'order_id',
-				align: 'center',
 				width: 80,
 				fixed: 'left',
 				render: (text, record) => {
@@ -686,87 +681,166 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				}
 			},
 			'status': {
-				title: '审批状态',
+				title: '状态',
 				dataIndex: 'status',
 				key: 'status',
-				align: 'center',
 				width: 130,
 				fixed: 'left',
 				render: (text) => {
 					const value = rel_order_status.find(item => item.id == text);
-					return value ? value.display : null
+					let className = '';
+					switch(text) {
+						case 1:
+							className = 'normal';
+							break;
+						case 2:
+							className = 'resolve';
+							break;
+						case 3:
+							className = 'reject';
+							break;
+						default:
+							className = 'normal';
+							break;
+					}
+					return value ? <div className={className}>
+					<span></span>
+					<div>{value.display}</div>
+				</div> : null
 				}
 			},
 			'company_name': {
 				title: '公司简称',
 				dataIndex: 'company_name',
 				key: 'company_name',
-				align: 'center',
-				width: 100,
+				width: 200,
+				render: (text, record) => {
+					const { platform_name= '-' } = record;
+					return <div className='left_content_td'>
+						<div>{text ? text : '-'}</div>
+						<div>报价类型：</div>
+						<div></div>
+					</div>
+				}
 			},
 			'project_name': {
-				title: '所属项目',
+				title: '所属项目/品牌',
 				dataIndex: 'project_name',
 				key: 'project_name',
-				align: 'center',
-				width: 100,
-				render: (text) => {
-					return text ? text : '-'
+				width: 200,
+				render: (text, record) => {
+					const { platform_name= '-' } = record;
+					return <div className='left_content_td'>
+						<div>所属项目：</div>
+						<div>{text ? text : '-'}</div>
+						<div>所属品牌：</div>
+						<div>{platform_name}</div>
+					</div>
 				}
 			},
 			'requirement_id': {
 				title: '需求ID',
 				dataIndex: 'requirement_id',
 				key: 'requirement_id',
-				align: 'center',
 				width: 80,
 			},
 			'requirement_name': {
 				title: '需求名称',
 				dataIndex: 'requirement_name',
 				key: 'requirement_name',
-				align: 'center',
 				width: 160,
 			},
 			'requirement_id_name': {
-				title: '需求ID/名称',
+				title: '需求ID/需求名称',
 				dataIndex: 'requirement_id_name',
 				key: 'requirement_id_name',
-				align: 'center',
-				width: 120,
+				width: 200,
 				render: (text, { requirement_id, requirement_name }) => {
-					return <div>
+					return <div className='left_content_td'>
+						<div>需求ID：</div>
 						<div>{requirement_id}</div>
+						<div>需求名称：</div>
 						<div>{requirement_name}</div>
 					</div>
 				}
 			},
-			'platform_name': {
-				title: '平台',
-				dataIndex: 'platform_name',
-				key: 'platform_name',
-				align: 'center',
+			'account_id_name': {
+				title: '账号信息',
+				dataIndex: 'account_id',
+				key: 'account_id',
+				width: 200,
+				render: (data, {weibo_name}) => {
+					return <div className='left_content_td'>
+					<div>账号名称：</div>
+					<div>{weibo_name}</div>
+					<div>ID：</div>
+					<div>{data}</div>
+				</div>
+				}
+			},
+			'account_id': {
+				title: 'account id',
+				dataIndex: 'account_id',
+				key: 'account_id',
 				width: 100,
+			},
+			'weibo_name': {
+				title: '账号名称',
+				dataIndex: 'weibo_name',
+				key: 'weibo_name',
+				width: 120,
+			},
+			// 'platform_name': {
+			// 	title: '平台',
+			// 	dataIndex: 'platform_name',
+			// 	key: 'platform_name',
+			// 	align: 'center',
+			// 	width: 100,
+			// },
+			'main_account_info': {
+				title: '主账号信息',
+				dataIndex: 'main_account_name',
+				key: 'main_account_name',
+				width: 200,
+				render: (data, {main_account_date, main_account_cor}) => {
+					const getCorText = (data) => {
+						switch(data) {
+							case 1:
+								return '公司含税';
+							case 2:
+								return '工作室';
+							case 3:
+								return '个人';
+							case 4:
+								return '公司不含税';
+							default:
+								return '无';
+						}
+					}
+					return <div className='left_content_td'>
+					<div>主账号：{data}</div>
+					<div>实时账期：{main_account_date}</div>
+					<div>固定账期：</div>
+					<div>合作方方式：{getCorText(main_account_cor)}</div>
+				</div>
+				}
 			},
 			'main_account_name': {
 				title: '主账号名称',
 				dataIndex: 'main_account_name',
 				key: 'main_account_name',
-				align: 'center',
 				width: 120,
 			},
 			'main_account_date': {
 				title: '主账号帐期',
 				dataIndex: 'main_account_date',
 				key: 'main_account_date',
-				align: 'center',
 				width: 120,
 			},
 			'main_account_cor': {
 				title: '主账号合作方式',
 				dataIndex: 'main_account_cor',
 				key: 'main_account_cor',
-				align: 'center',
 				width: 120,
 				render: data => {
 					switch(data) {
@@ -783,25 +857,10 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 					}
 				}
 			},
-			'account_id': {
-				title: 'account id',
-				dataIndex: 'account_id',
-				key: 'account_id',
-				align: 'center',
-				width: 100,
-			},
-			'weibo_name': {
-				title: '账号名称',
-				dataIndex: 'weibo_name',
-				key: 'weibo_name',
-				align: 'center',
-				width: 120,
-			},
 			'plan_manager_id': {
 				title: '是否含策划',
 				dataIndex: 'plan_manager_id',
 				key: 'plan_manager_id',
-				align: 'center',
 				width: 120,
 				render: (text, record) => {
 					return record.plan_manager_id == 0 ? '否' : '是'
@@ -811,8 +870,7 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				title: '折扣比例',
 				dataIndex: 'discount_rate',
 				key: 'discount_rate',
-				align: 'center',
-				width: 80,
+				width: 100,
 				render: (text, record) => {
 					// const discount = record.price && record.price[0] ? record.price[0].discount_rate : 0;
 					// return record.quote_type != '2' ? numeral(discount).format('0.00%') : '-'
@@ -823,7 +881,6 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				title: '对外成本价',
 				dataIndex: 'quoted_price',
 				key: 'quoted_price',
-				align: 'center',
 				width: 260,
 				render: (text, { price = [] }) => {
 					// const flag = price && price[0] ? price[0].trinity_type == 2 : false;
@@ -841,21 +898,18 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				title: '折扣比例',
 				dataIndex: 'discount_per',
 				key: 'discount_per',
-				align: 'center',
 				width: 100,
 			},
 			'order_bottom_price': {
 				title: '订单底价',
 				dataIndex: 'order_bottom_price',
 				key: 'order_bottom_price',
-				align: 'center',
-				width: 100,
+				width: 260,
 			},
 			'commissioned_price': {
 				title: '应约价',
 				dataIndex: 'price',
 				key: 'price',
-				align: 'center',
 				width: 260,
 				render: (text, { price = [] }) => {
 					// const flag = price && price[0] ? price[0].trinity_type == 2 : false;
@@ -873,8 +927,7 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				title: '应约价',
 				dataIndex: 'price',
 				key: 'price',
-				align: 'center',
-				width: 240,
+				width: 260,
 				render: (text, { price = [] }) => {
 					return <div>
 						{price.map((item, index) => {
@@ -887,8 +940,7 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				title: '历史审核最低售卖价',
 				dataIndex: 'history_min_sell_price',
 				key: 'history_min_sell_price',
-				align: 'center',
-				width: 240,
+				width: 260,
 				render: (text, { history_min_sell_price: { readjust_type } }) => {
 					const item = text ? text.min_sell_price : [];
 					const node = item.length > 0 ? <div>
@@ -907,7 +959,6 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				title: '历史审核利润率/服务费率',
 				dataIndex: 'history_rate',
 				key: 'history_rate',
-				align: 'center',
 				width: 140,
 				render: (text, record) => {
 					const item = record.history_min_sell_price ? record.history_min_sell_price.min_sell_price : [];
@@ -919,8 +970,7 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				title: '本次最低售卖价',
 				dataIndex: 'min_sell_price',
 				key: 'min_sell_price',
-				align: 'center',
-				width: 240,
+				width: 260,
 				render: (text, { readjust_type }) => {
 					const node = text ? <div>
 						{text.map((item, index) => {
@@ -935,7 +985,6 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				title: '最低售卖价',
 				dataIndex: 'pre_min_sell_price',
 				key: 'pre_min_sell_price',
-				align: 'center',
 				width: 246,
 				render: (text, { price = [], pre_min_sell_price = [] }) => {
 					// const flag = price && price[0] ? price[0].trinity_type == 2 : false;
@@ -953,7 +1002,6 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				title: '本次利润率/服务费率',
 				dataIndex: 'quote_type',
 				key: 'quote_type',
-				align: 'center',
 				width: 140,
 				render: (text, record) => {
 					const value = text === '1' ? record.profit_rate : text === '2' ? record.service_rate : null;
@@ -964,7 +1012,6 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				title: '审核时间',
 				dataIndex: 'pass_time',
 				key: 'pass_time',
-				align: 'center',
 				width: 160,
 				render: (text) => {
 					const flag = text === '0000-00-00 00:00:00';
@@ -975,7 +1022,6 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				title: '备注',
 				dataIndex: 'remark',
 				key: 'remark',
-				align: 'center',
 				width: '244px',
 				render: (text, { remark }) => {
 					if (remark && remark.length > 30) {

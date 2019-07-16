@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as goldenActions from "../actions/goldenApply";
-import { Button, Row, Modal, message, Input } from "antd";
+import { Button, Row, Modal, message, Input, Icon } from "antd";
 import ListQuery from '../components/addAdjustApply/listQuery';
 import ApplyTable from '../components/addAdjustApply/applyTable';
 import ApplyModal from '../components/addAdjustApply/applyModal';
@@ -95,20 +95,23 @@ class AdjustApplyDetail extends React.Component {
 	togglePreview = (boolean, func) => {
 		this.setState({ previewVisible: boolean }, func);
 	}
+	handleBack = () => {
+		const { history } = this.props;
+		history.go(-1);
+	}
 	render() {
-		const { loading, tipVisible, rejectVisible, previewVisible, flag, curSelectRowKeys, curSelectRows } = this.state;
+		const { loading, tipVisible, rejectVisible, previewVisible, curSelectRowKeys, curSelectRows } = this.state;
+		const flag = true;
 		const { applicationDetail: { list = [], page = 1, total = 0 }, goldenMetadata: { rel_order_status = [] } } = this.props;
 		const adjustApplyDetail = flag ? 
-			adjustApplyDetailFunc(rel_order_status)(['order_id', 'status', 'company_name', 'project_name', 'requirement_id', 'requirement_name', 'platform_name', 'main_account_name', 'main_account_date', 'main_account_cor', 'account_id', 'weibo_name', 'discount_rate', 'price', 'quoted_price', 'discount_per', 'order_bottom_price', 'history_min_sell_price', 'history_rate', 'min_sell_price', 'quote_type', 'pass_time', 'remark']) 
-			: adjustApplyDetailFunc(rel_order_status)(['order_id', 'status', 'company_name', 'project_name', 'requirement_id', 'requirement_name', 'platform_name', 'main_account_name', 'main_account_date', 'main_account_cor', 'account_id', 'weibo_name', 'discount_rate', 'price', 'discount_per', 'order_bottom_price', 'history_min_sell_price', 'min_sell_price', 'pass_time', 'remark']);
-		const adjustApplyPreview = adjustApplyDetailFunc(rel_order_status)(['prev_id', 'company_name', 'project_name', 'requirement_id_name', 'platform_name', 'main_account_name', 'main_account_date', 'main_account_cor', 'weibo_name', 'discount_rate', 'order_bottom_price', 'commissioned_price', 'quoted_price', 'pre_min_sell_price']);
+			adjustApplyDetailFunc(rel_order_status)(['order_id', 'status', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'main_account_info', 'quoted_price', 'discount_rate', 'order_bottom_price', 'price', 'history_min_sell_price', 'history_rate', 'min_sell_price', 'quote_type', 'pass_time', 'remark']) 
+			: adjustApplyDetailFunc(rel_order_status)(['order_id', 'status', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'main_account_info', 'discount_rate', 'order_bottom_price', 'price', 'history_min_sell_price', 'min_sell_price', 'pass_time', 'remark']);
+		const adjustApplyPreview = adjustApplyDetailFunc(rel_order_status)(['prev_id', 'company_name', 'project_name', 'requirement_id_name', 'main_account_info', 'weibo_name', 'discount_rate', 'order_bottom_price', 'commissioned_price', 'quoted_price', 'pre_min_sell_price']);
 		return <div className='add-adjust-apply'>
-			<fieldset className='fieldset_css'>
-				<legend>统计</legend>
-				<div className='left-gap'>
-					申请订单:<span className='red-font' style={{ marginLeft: '10px' }}>{total}</span>个
-				</div>
-			</fieldset>
+			<h2 className='add_adjust_header' onClick={this.handleBack}>
+				<Icon type="arrow-left" />
+				<span className='left-gap'>订单调价</span>
+			</h2>
 			<ListQuery
 				type={'detail'}
 				questAction={this.props.actions.getApplicationDetail}
@@ -116,6 +119,9 @@ class AdjustApplyDetail extends React.Component {
 				history={this.props.history}
 				rel_order_status={rel_order_status}
 			></ListQuery>
+			<div className='left-gap selected-refactor'>
+				申请订单:<span className='red-font' style={{ marginLeft: '10px' }}>{total}</span>个
+			</div>
 			<ApplyTable
 				type={flag ? 'write_detail' : 'read_detail'}
 				rowKey={'order_id'}
@@ -129,7 +135,7 @@ class AdjustApplyDetail extends React.Component {
 				curSelectRows={curSelectRows}
 				handleSelected={this.handleSelected}
 				location={this.props.location}
-				scroll={flag ? { x: 3130 } : { x: 2530 }}
+				scroll={flag ? { x: 3120 } : { x: 2480 }}
 			>
 			</ApplyTable>
 			{flag ? <Row className='top-gap' style={{ textAlign: 'center' }}>

@@ -2,15 +2,17 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as goldenActions from "../actions/goldenApply";
-import { Modal, message, Table, Input, Button, Tabs } from "antd";
+import { Modal, Form, message, Table, Input, Button, Tabs } from "antd";
 import AdjustQuery from '../components/adjustQuery';
 import ApplyModal from '../components/addAdjustApply/applyModal'
 import PrevModal from '../components/addAdjustApply/preModal'
 import { adjustApplyFunc, adjustApplyListFunc, adjustApplyDetailFunc } from "../constants";
 import "./golden.less";
 import qs from 'qs';
+import SearchSelect from '../components/SearchSelect';
 const { TextArea } = Input;
 const { TabPane } = Tabs;
+const FormItem = Form.Item;
 
 class AdjustApply extends React.Component {
 	constructor() {
@@ -99,9 +101,29 @@ class AdjustApply extends React.Component {
 	togglePreview = (boolean, func) => {
 		this.setState({ previewVisible: boolean }, func);
 	}
+	isShowAddModal = () => {
+		this.setState({addVisible: !this.state.addVisible})
+	}
+	handleOpenAddPage = () => {
+		const {form,history} = this.props;
+		form.validateFields((err, values) => {
+			if (err) return;
+			const { company_id } = values;
+			const src = `/finance/golden/addAdjustApply?${qs.stringify({ keys: { page_size: 20, company_id } })}`;
+			history.push(src);
+			// const $a = document.createElement('a');
+			// 	$a.setAttribute("href", src);
+			// 	$a.setAttribute("target", "_blank");
+			// const evObj = document.createEvent('MouseEvents');
+			// 	evObj.initMouseEvent("click", true, true);
+			// 	$a.dispatchEvent(evObj);
+		})
+	}
 	render() {
-		const { loading, tipVisible, previewVisible, page_size, flag, btnFlag, quoteType, readjust_application_id, rejectVisible, company_id } = this.state;
-		const { applicationList: { list = [], page, total }, goldenMetadata, goldenMetadata: { application_status = [] }, goldenUserList, applicationDetail: { list: detailList = [] } } = this.props;
+		const { loading, tipVisible, previewVisible, page_size, flag, btnFlag, quoteType, readjust_application_id, rejectVisible, company_id, addVisible } = this.state;
+		const { form, applicationList: { list = [], page, total }, goldenMetadata, goldenMetadata: { application_status = [] }, goldenUserList, applicationDetail: { list: detailList = [] } } = this.props;
+		const { getFieldDecorator } = form;
+		const formItemLayout = { labelCol: { span: 6 }, wrapperCol: { span: 16 }, };
 		const search = qs.parse(this.props.location.search.substring(1));
 		const adjustApplyList = flag ? adjustApplyListFunc(application_status, this.handleJump, this.handleAction) : adjustApplyFunc(application_status, this.handleJump);
 		let paginationObj = {
@@ -165,9 +187,9 @@ class AdjustApply extends React.Component {
 				<div className='addOperateWrapper'>
 				{flag ? <Button type='primary' icon='download' className='right-gap' href='/finance/golden/adjustApplyInput'
 					>导入</Button> : null}
-					{btnFlag ? <Button className='right-gap' type="primary"
-						href={`/finance/golden/addAdjustApply?${qs.stringify({ keys: { page_size: 50 } })}`}
-						target='_blank'
+					{btnFlag ? <Button className='right-gap' type="primary" onClick={this.isShowAddModal}
+						// href={`/finance/golden/addAdjustApply?${qs.stringify({ keys: { page_size: 50 } })}`}
+						// target='_blank'
 					>添加申请</Button> : null}
 				</div>
 				<Tabs className='adjust_tabs'>
@@ -205,6 +227,34 @@ class AdjustApply extends React.Component {
 			>
 				备注：<TextArea id='reject-remark' placeholder='非必输' style={{ width: 400, verticalAlign: 'top' }} autosize={{ minRows: 4, maxRows: 6 }} maxLength={50} />
 			</Modal> : null}
+			<Modal 
+				title='选择公司' 
+				width={440}
+				visible={addVisible}
+				destroyOnClose
+				onOk={this.handleOpenAddPage}
+				onCancel={this.isShowAddModal}
+			>
+				<Form>
+					<FormItem label='公司简称' {...formItemLayout}>
+						{getFieldDecorator('company_id', {
+							rules: [
+								{ required: true, message: '请先输入公司简称!' },
+							]
+						})(
+							<SearchSelect
+								selfWidth
+								placeholder='请选择公司'
+								getPopupContainer={() => document.querySelector('.adjust-stat')}
+								action={this.props.actions.getGoldenCompanyId}
+								keyWord='company_name'
+								dataToList={res => { return res.data }}
+								item={['company_id', 'name']}
+							/>
+						)}
+					</FormItem>
+				</Form>
+			</Modal>
 		</div>
 	}
 }
@@ -221,4 +271,4 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => ({
 	actions: bindActionCreators({ ...goldenActions }, dispatch)
 });
-export default connect(mapStateToProps, mapDispatchToProps)(AdjustApply)
+export default connect(mapStateToProps, mapDispatchToProps)(Form.create()(AdjustApply))

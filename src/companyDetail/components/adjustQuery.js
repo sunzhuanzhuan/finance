@@ -54,16 +54,11 @@ class AdjustQuery extends React.Component {
 					labels: { ...labels }
 				};
 				Object.keys(params['keys']).forEach(item => { !params['keys'][item] && params['keys'][item] !== 0 ? delete params['keys'][item] : null });
-				const hide = message.loading('查询中，请稍候...');
-				questAction({ ...params.keys, page: 1, page_size: pageSize }).then(() => {
+				questAction({ ...params.keys, page: 1, page_size: pageSize }, () => {
 					this.props.history.replace({
 						pathname: '/finance/golden/adjustApply',
 						search: `?${qs.stringify(params)}`,
 					})
-					hide();
-				}).catch(({ errorMsg }) => {
-					message.error(errorMsg || '查询失败');
-					hide();
 				});
 			}
 		});

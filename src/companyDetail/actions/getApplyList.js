@@ -6,7 +6,6 @@ const GET_UNDEAL_LIST = 'GET_UNDEAL_LIST';
 const GET_DEALING_LIST = 'GET_DEALING_LIST';
 const GET_DEALED_LIST = 'GET_DEALED_LIST';
 export function getApplyList(params = {}) {
-	console.log('sldkfjlsdkjflsjkdf', params)
 	const { status } = params;
 	let type;
 	switch(parseInt(status)) {

@@ -57,7 +57,7 @@ class AdjustApply extends React.Component {
 		this.setState({ loading: true });
 
 		Promise.all([
-			getApplyList(Object.assign(obj, {status: '0'})),
+			getApplyList(Object.assign(obj, {status: undefined})),
 			getApplyList(Object.assign(obj, {status: '1'})),
 			getApplyList(Object.assign(obj, {status: '2'})),
 			getApplyList(Object.assign(obj, {status: '3'}))
@@ -69,7 +69,9 @@ class AdjustApply extends React.Component {
 		})
 	}
 	queryData = (obj, func) => {
-		this.setState({ loading: true });
+		const { status = '0' } = obj;
+
+		this.setState({ loading: true, activeKey: status.toString() });
 		return this.props.actions.getApplyList({ ...obj }).then(() => {
 			if (func && Object.prototype.toString.call(func) === '[object Function]') {
 				func();
@@ -157,6 +159,7 @@ class AdjustApply extends React.Component {
 				const tabInfo = applyListReducer[dataIndex] || {};
 				const { list = [], page, total } = tabInfo;
 				const status = key !== '0' ? key : undefined; 
+				console.log('lsdkfjlskdfjlskdjf', applyListReducer)
 				const paginationObj = {
 					onChange: (current) => {
 						this.queryData({ ...search.keys, page: current, page_size, status });
@@ -203,7 +206,8 @@ class AdjustApply extends React.Component {
 		return <div className='adjust-apply'>
 				<legend>订单调价</legend>
 				<AdjustQuery history={this.props.history}
-					questAction={this.props.actions.getApplyList}
+					// questAction={this.props.actions.getApplyList}
+					questAction={this.queryData}
 					pageSize={page_size}
 					location={this.props.location}
 					userList={goldenUserList}

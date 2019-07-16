@@ -100,8 +100,7 @@ class AdjustApplyDetail extends React.Component {
 		history.go(-1);
 	}
 	render() {
-		const { loading, tipVisible, rejectVisible, previewVisible, curSelectRowKeys, curSelectRows } = this.state;
-		const flag = true;
+		const { loading, tipVisible, rejectVisible, flag, previewVisible, curSelectRowKeys, curSelectRows } = this.state;
 		const { applicationDetail: { list = [], page = 1, total = 0 }, goldenMetadata: { rel_order_status = [] } } = this.props;
 		const adjustApplyDetail = flag ? 
 			adjustApplyDetailFunc(rel_order_status)(['order_id', 'status', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'main_account_info', 'quoted_price', 'discount_rate', 'order_bottom_price', 'price', 'history_min_sell_price', 'history_rate', 'min_sell_price', 'quote_type', 'pass_time', 'remark']) 

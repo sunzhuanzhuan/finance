@@ -10,6 +10,7 @@ import { adjustApplyFunc, adjustApplyListFunc, adjustApplyDetailFunc } from "../
 import "./golden.less";
 import qs from 'qs';
 import SearchSelect from '../components/SearchSelect';
+import { getApplyList } from '../actions/getApplyList';
 const { TextArea } = Input;
 const { TabPane } = Tabs;
 const FormItem = Form.Item;
@@ -25,19 +26,23 @@ class AdjustApply extends React.Component {
 			flag: false,
 			btnFlag: false,
 			quoteType: '',
-			readjust_application_id: ''
+			readjust_application_id: '',
+			activeKey: 0
 		};
 		this.tabOption = [
-			{ key: 1, name: '全部' },
-			{ key: 2, name: '待处理' },
-			{ key: 3, name: '处理中' },
-			{ key: 4, name: '已处理' },
+			{ key: '0', name: '全部', dataIndex: 'allListInfo' },
+			{ key: '1', name: '待处理', dataIndex: 'undealListInfo' },
+			{ key: '2', name: '处理中', dataIndex: 'dealingListInfo' },
+			{ key: '3', name: '已处理', dataIndex: 'dealedListInfo' },
 		]
 	}
 	componentDidMount() {
 		const search = qs.parse(this.props.location.search.substring(1));
+		const currentTab = parseInt(search.keys.status);
+
 		const { getCompanyDetailAuthorizations, getGoldenMetadata, getGoldenUserList } = this.props.actions;
-		this.queryData({ page: 1, page_size: this.state.page_size, ...search.keys });
+		this.setState({ activeKey: currentTab ? currentTab.toString() : '0' });
+		this.queryAllStatusData({ page: 1, page_size: this.state.page_size, ...search.keys });
 		getCompanyDetailAuthorizations().then(() => {
 			const { companyDetailAuthorizations } = this.props
 			const flag = companyDetailAuthorizations[0].permissions['readjust.finance.operation'];
@@ -47,9 +52,25 @@ class AdjustApply extends React.Component {
 		getGoldenMetadata();
 		getGoldenUserList();
 	}
+	queryAllStatusData = obj => {
+		const { actions: {getApplyList} } = this.props;
+		this.setState({ loading: true });
+
+		Promise.all([
+			getApplyList(Object.assign(obj, {status: '0'})),
+			getApplyList(Object.assign(obj, {status: '1'})),
+			getApplyList(Object.assign(obj, {status: '2'})),
+			getApplyList(Object.assign(obj, {status: '3'}))
+		]).then(() => {
+			this.setState({ loading: false })
+		}).catch(({ errorMsg }) => {
+			this.setState({ loading: false });
+			message.error(errorMsg || '列表加载失败，请重试！');
+		})
+	}
 	queryData = (obj, func) => {
 		this.setState({ loading: true });
-		return this.props.actions.getApplicationList({ ...obj }).then(() => {
+		return this.props.actions.getApplyList({ ...obj }).then(() => {
 			if (func && Object.prototype.toString.call(func) === '[object Function]') {
 				func();
 			}
@@ -119,45 +140,50 @@ class AdjustApply extends React.Component {
 			// 	$a.dispatchEvent(evObj);
 		})
 	}
+	handleChangeTab = activeKey => {
+		this.setState({activeKey});
+	}
 	render() {
-		const { loading, tipVisible, previewVisible, page_size, flag, btnFlag, quoteType, readjust_application_id, rejectVisible, company_id, addVisible } = this.state;
-		const { form, applicationList: { list = [], page, total }, goldenMetadata, goldenMetadata: { application_status = [] }, goldenUserList, applicationDetail: { list: detailList = [] } } = this.props;
+		const { loading, tipVisible, previewVisible, page_size, flag, btnFlag, quoteType, readjust_application_id, rejectVisible, company_id, addVisible, activeKey } = this.state;
+		const { form, goldenMetadata, goldenMetadata: { application_status = [] }, goldenUserList, applicationDetail: { list: detailList = [] }, applyListReducer = {} } = this.props;
 		const { getFieldDecorator } = form;
 		const formItemLayout = { labelCol: { span: 6 }, wrapperCol: { span: 16 }, };
 		const search = qs.parse(this.props.location.search.substring(1));
 		const adjustApplyList = flag ? adjustApplyListFunc(application_status, this.handleJump, this.handleAction) : adjustApplyFunc(application_status, this.handleJump);
-		let paginationObj = {
-			onChange: (current) => {
-				this.queryData({ ...search.keys, page: current, page_size });
-				this.props.history.replace({
-					pathname: this.props.location.pathname,
-					search: `?${qs.stringify({ ...search, keys: { ...search.keys, page: current } })}`,
-				});
-			},
-			onShowSizeChange: (current, pageSize) => {
-				const curPage = Math.ceil(total / pageSize);
-				this.setState({ page_size: pageSize });
-				this.queryData({ ...search.keys, page: curPage, page_size: pageSize });
-				this.props.history.replace({
-					pathname: this.props.location.pathname,
-					search: `?${qs.stringify({ ...search, keys: { ...search.keys, page: curPage, page_size: pageSize } })}`,
-				});
-			},
-			total: parseInt(total),
-			current: parseInt(page),
-			pageSize: parseInt(page_size),
-			showQuickJumper: true,
-			showSizeChanger: true,
-			pageSizeOptions: ['20', '50', '100', '200']
-		};
 		const adjustApplyPreview = adjustApplyDetailFunc([])(['prev_id', 'company_name', 'project_name', 'requirement_id_name', 'platform_name', 'weibo_name', 'plan_manager_id', 'discount_rate', 'commissioned_price', 'quoted_price', 'pre_min_sell_price']);
 		const getTabPaneComp = () => {
 			return this.tabOption.map(item => {
-				const { name, key } = item;
-				const count = 100;
+				const { name, key, dataIndex } = item;
+				const tabInfo = applyListReducer[dataIndex] || {};
+				const { list = [], page, total } = tabInfo;
+				const status = key !== '0' ? key : undefined; 
+				const paginationObj = {
+					onChange: (current) => {
+						this.queryData({ ...search.keys, page: current, page_size, status });
+						this.props.history.replace({
+							pathname: this.props.location.pathname,
+							search: `?${qs.stringify({ ...search, keys: { ...search.keys, page: current, status } })}`,
+						});
+					},
+					onShowSizeChange: (current, pageSize) => {
+						const curPage = Math.ceil(total / pageSize);
+						this.setState({ page_size: pageSize });
+						this.queryData({ ...search.keys, page: curPage, page_size: pageSize, status });
+						this.props.history.replace({
+							pathname: this.props.location.pathname,
+							search: `?${qs.stringify({ ...search, keys: { ...search.keys, page: curPage, page_size: pageSize, status } })}`,
+						});
+					},
+					total: parseInt(total),
+					current: parseInt(page),
+					pageSize: parseInt(page_size),
+					showQuickJumper: true,
+					showSizeChanger: true,
+					pageSizeOptions: ['20', '50', '100', '200']
+				};
 				const tab = <div>
 					<span key='name'>{name}</span>
-					<span key='count'>{count}</span>
+					<span key='count'>{total}</span>
 				</div>;
 				return (
 					<TabPane tab={tab} key={key}>
@@ -173,10 +199,11 @@ class AdjustApply extends React.Component {
 				)
 			})
 		};
+
 		return <div className='adjust-apply'>
 				<legend>订单调价</legend>
 				<AdjustQuery history={this.props.history}
-					questAction={this.props.actions.getApplicationList}
+					questAction={this.props.actions.getApplyList}
 					pageSize={page_size}
 					location={this.props.location}
 					userList={goldenUserList}
@@ -192,7 +219,7 @@ class AdjustApply extends React.Component {
 						// target='_blank'
 					>添加申请</Button> : null}
 				</div>
-				<Tabs className='adjust_tabs table_style'>
+				<Tabs className='adjust_tabs table_style' activeKey={activeKey} onChange={this.handleChangeTab}>
 					{
 						getTabPaneComp()
 					}
@@ -266,9 +293,10 @@ const mapStateToProps = (state) => {
 		goldenUserList: state.companyDetail.goldenUserList,
 		applicationList: state.companyDetail.applicationList,
 		applicationDetail: state.companyDetail.applicationDetail,
+		applyListReducer: state.companyDetail.applyListReducer,
 	}
 }
 const mapDispatchToProps = dispatch => ({
-	actions: bindActionCreators({ ...goldenActions }, dispatch)
+	actions: bindActionCreators({ ...goldenActions, getApplyList }, dispatch)
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Form.create()(AdjustApply))

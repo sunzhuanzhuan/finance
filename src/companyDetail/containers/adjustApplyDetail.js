@@ -98,7 +98,7 @@ class AdjustApplyDetail extends React.Component {
 	render() {
 		const { loading, tipVisible, rejectVisible, previewVisible, flag, curSelectRowKeys, curSelectRows } = this.state;
 		const { applicationDetail: { list = [], page = 1, total = 0 }, goldenMetadata: { rel_order_status = [] } } = this.props;
-		const adjustApplyDetail = flag ? adjustApplyDetailFunc(rel_order_status)(['order_id', 'status', 'company_name', 'project_name', 'requirement_id', 'requirement_name', 'platform_name', 'account_id', 'weibo_name', 'discount_rate', 'price', 'quoted_price', 'history_min_sell_price', 'history_rate', 'min_sell_price', 'quote_type', 'pass_time', 'remark']) : adjustApplyDetailFunc(rel_order_status)(['order_id', 'status', 'company_name', 'project_name', 'requirement_id', 'requirement_name', 'platform_name', 'account_id', 'weibo_name', 'discount_rate', 'price', 'history_min_sell_price', 'min_sell_price', 'pass_time', 'remark']);
+		const adjustApplyDetail = flag ? adjustApplyDetailFunc(rel_order_status)(['order_id', 'policy_id', 'status', 'company_name', 'project_name', 'requirement_id', 'requirement_name', 'platform_name', 'account_id', 'weibo_name', 'discount_rate', 'price', 'quoted_price', 'history_min_sell_price', 'history_rate', 'min_sell_price', 'quote_type', 'pass_time', 'remark']) : adjustApplyDetailFunc(rel_order_status)(['order_id', 'policy_id', 'status', 'company_name', 'project_name', 'requirement_id', 'requirement_name', 'platform_name', 'account_id', 'weibo_name', 'discount_rate', 'price', 'history_min_sell_price', 'min_sell_price', 'pass_time', 'remark']);
 		const adjustApplyPreview = adjustApplyDetailFunc(rel_order_status)(['prev_id', 'company_name', 'project_name', 'requirement_id_name', 'platform_name', 'weibo_name', 'discount_rate', 'commissioned_price', 'quoted_price', 'pre_min_sell_price']);
 		return <div className='add-adjust-apply'>
 			<fieldset className='fieldset_css'>
@@ -127,7 +127,7 @@ class AdjustApplyDetail extends React.Component {
 				curSelectRows={curSelectRows}
 				handleSelected={this.handleSelected}
 				location={this.props.location}
-				scroll={flag ? { x: 2570 } : { x: 1970 }}
+				scroll={flag ? { x: 2770 } : { x: 2150 }}
 			>
 			</ApplyTable>
 			{flag ? <Row className='top-gap' style={{ textAlign: 'center' }}>

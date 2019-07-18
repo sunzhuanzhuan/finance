@@ -24,6 +24,7 @@ class PrevModal extends React.Component {
 				['requirement_name']: item['requirement_name'],
 				['platform_name']: item['platform_name'],
 				['weibo_name']: item['weibo_name'],
+				['plan_manager_id']: item['plan_manager_id'],
 				['pre_min_sell_price']: applicationPreview[item['order_id']],
 				['price']: item['price'],
 				['quote_type']: item['quote_type']

@@ -675,10 +675,10 @@ export const adjustApplyDetailFunc = (rel_order_status = []) => {
 				dataIndex: 'policy_id',
 				key: 'policy_id',
 				align: 'center',
-				width: 130,
+				width: 100,
 				fixed: 'left',
 				render: (text) => {
-					return text > 0 ? <a href={`/account/policy?id=${text}`}>查看</a> : '-'
+					return text > 0 ? <a target="_blank" href={`/account/policy?id=${text}`}>查看</a> : '-'
 				}
 			},
 			'status': {

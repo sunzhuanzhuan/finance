@@ -127,7 +127,7 @@ class AdjustApplyDetail extends React.Component {
 				curSelectRows={curSelectRows}
 				handleSelected={this.handleSelected}
 				location={this.props.location}
-				scroll={flag ? { x: 2850 } : { x: 2260 }}
+				scroll={flag ? { x: 2770 } : { x: 2150 }}
 			>
 			</ApplyTable>
 			{flag ? <Row className='top-gap' style={{ textAlign: 'center' }}>

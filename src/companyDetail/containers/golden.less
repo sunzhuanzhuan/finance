@@ -71,7 +71,13 @@
         margin-left: 24px;
     }
     .reset-btn {
-        margin: 0 26px 0 20px;
+        margin: 0 16px 0 20px;
+    }
+    .order-id-item {
+        padding-left: 9px;
+    }
+    .plan-manage-item {
+        padding-left: 13px;
     }
 }
 .add-adjust-apply{
@@ -157,6 +163,31 @@
     }
     .adjust_tabs {
         margin: 10px 0 0 0;
+        .table_style {
+            .dealed, .undealed, .normal, .resolve, .reject {
+                justify-content: center;
+            }
+        }
+    }
+}
+
+.adjust_detail_tabs {
+    margin-top: 20px;
+    .ant-tabs-bar {
+        margin: 0;
+    }
+    .relative_td {
+        position: relative;
+        .detail_price_info {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height:20px;
+            padding-left: 8px;
+            background:rgba(255,241,240,1);
+            border:1px solid rgba(255,163,158,1);
+        }
     }
 }
 
@@ -190,10 +221,48 @@
     }
     .left_content_td {
         div {
-            text-align: left;
             &:nth-child(even) {
                 margin-bottom: 10px;
             }
         }
+    }
+}
+
+.price_comp {
+    &:not(:first-child) {
+        margin-bottom: 20px;
+    }
+    .price_title {
+        margin-bottom: 10px;
+        padding-left: 10px;
+        font-size:13px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(51,51,51,1);
+        line-height:18px;
+    }
+    .price_detail {
+        display: flex;
+        align-items: center;
+        justify-content: unset;
+        span {
+            display: inline-block;
+        }
+    }
+    .price_dote {
+        width: 6px;
+        height: 6px;
+        border-radius: 6px;
+        margin-right: 5px;
+        &.blogger {
+            background: #FF9C62;
+        }
+        &.trilatreal {
+            background: #62B8FF;
+        }
+    }
+
+    .price_content {
+        width: 50%;
     }
 }

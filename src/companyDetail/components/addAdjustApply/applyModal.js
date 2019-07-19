@@ -3,13 +3,15 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import { withRouter } from 'react-router-dom';
 import * as goldenActions from "../../actions/goldenApply";
-import { Modal, Button, Form, Input, message, Select } from "antd";
+import { Modal, Button, Form, Input, message, Select, Radio } from "antd";
 import { WBYUploadFile } from 'wbyui';
 import qs from 'qs';
 import numeral from 'numeral';
 const FormItem = Form.Item;
 const { TextArea } = Input;
 const { Option } = Select;
+const RadioGroup = Radio.Group;
+
 class ApplyModal extends React.Component {
 	constructor() {
 		super();
@@ -200,13 +202,13 @@ class ApplyModal extends React.Component {
 			callback(' ')
 		}
 	}
-	handleChangePriceType = priceType => {
-		this.setState({ priceType })
+	handleChangePriceType = ({target:{value}}) => {
+		this.setState({ priceType: value })
 	}
 	getPriceTypeOption = total => {
 		return this.priceTypeOption
 			.filter(item => total > 1 ? item.value !== 2 : item)
-			.map(item => <Option key={item.value} value={item.value}>{item.label}</Option>)
+			.map(item => <Radio key={item.value} value={item.value}>{item.label}</Radio>)
 	}
 	getPriceValueItem = (getFieldDecorator, otherLayout, quoteType) => {
 		const { priceType } = this.state;
@@ -254,7 +256,7 @@ class ApplyModal extends React.Component {
 			wrapperCol: { span: 20 },
 		};
 		const otherLayout = {
-			labelCol: { span: 5 },
+			labelCol: { span: 6 },
 			wrapperCol: { span: 18 },
 		};
 		return <Modal
@@ -314,11 +316,11 @@ class ApplyModal extends React.Component {
 								{ required: true, message: '请选择调价类型!' }
 							]
 						})(
-							<Select style={{ width: 200 }} onChange={this.handleChangePriceType} >
-								{
-									this.getPriceTypeOption(total)
-								}
-							</Select>
+							<RadioGroup onChange={this.handleChangePriceType}>
+							{
+								this.getPriceTypeOption(total)
+							}
+							</RadioGroup>
 						)}
 					</FormItem>
 					{

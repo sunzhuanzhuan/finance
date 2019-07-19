@@ -1,56 +1,59 @@
 import Interface from '../constants/Interface'
 import api from '../../api/index';
 import qs from 'qs';
-const GET_ALL_LIST = 'GET_ALL_LIST';
-const GET_UNDEAL_LIST = 'GET_UNDEAL_LIST';
-const GET_DEALING_LIST = 'GET_DEALING_LIST';
-const GET_DEALED_LIST = 'GET_DEALED_LIST';
+const GET_APPLY_LIST = 'GET_APPLY_LIST';
+const GET_APPLY_DETAIL_LIST = 'GET_APPLY_DETAIL_LIST';
 export function getApplyList(params = {}) {
-	const { status } = params;
-	let type;
-	switch(parseInt(status)) {
-		case 1:
-			type = GET_UNDEAL_LIST;
-			break;
-		case 2:
-			type = GET_DEALING_LIST;
-			break;
-		case 3:
-			type = GET_DEALED_LIST;
-			break;
-		default:
-			type = GET_ALL_LIST;
-			break
-	}
+	const { status = 'allOptions' } = params;
 
 	return dispatch => {
 		return api.get(`${Interface.getApplicationList}?${qs.stringify(params)}`)
 		.then(result => {
 			dispatch({
-				type,
-				listData: result.data
+				type: GET_APPLY_LIST,
+				listData: result.data,
+				status
 			})
 		})
 		.catch( () => {
 			dispatch({
-				type,
-				listData: {}
+				type: GET_APPLY_LIST,
+				listData: {},
+				status
+			})
+		});
+	}
+}
+
+export function getApplyDetailList(params = {}) {
+	const { status = 'allOptions' } = params;
+
+	return dispatch => {
+		return api.get(`${Interface.getApplicationDetail}?${qs.stringify(params)}`)
+		.then(result => {
+			dispatch({
+				type: GET_APPLY_DETAIL_LIST,
+				detailListData: result.data,
+				status
+			})
+		})
+		.catch( () => {
+			dispatch({
+				type: GET_APPLY_DETAIL_LIST,
+				detailListData: {},
+				status
 			})
 		});
 	}
 }
 
 export default function applyListReducer(state = {}, action) {
-    const { listData } = action;
+    const { listData, status, detailListData } = action;
     switch (action.type) {
-        case GET_ALL_LIST:
-			return { ...state, allListInfo: listData, updateKey: +new Date() + Math.random()};
-		case GET_UNDEAL_LIST:
-			return { ...state, undealListInfo: listData, updateKey: +new Date() + Math.random()};
-		case GET_DEALING_LIST:
-			return { ...state, dealingListInfo: listData, updateKey: +new Date() + Math.random()};
-		case GET_DEALED_LIST:
-            return { ...state, dealedListInfo: listData, updateKey: +new Date() + Math.random()};
+        case GET_APPLY_LIST:
+			return { ...state, [`applyListStatus${status}`]: listData, updateKey: +new Date() + Math.random()};
+		case GET_APPLY_DETAIL_LIST:
+			return { ...state, [`applyDetailListStatus${status}`]: detailListData, updateKey: +new Date() + Math.random()};
         default:
             return state;
     }

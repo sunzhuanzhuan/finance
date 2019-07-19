@@ -77,7 +77,7 @@ class ApplyTable extends React.Component {
 				dataSource={dataSource}
 				scroll={scroll}
 				bordered
-				pagination={dataSource.length ? paginationObj : false}
+				pagination={paginationObj}
 				loading={loading}
 			/> : null}
 			{type === 'write_detail' ? <Table className='top-gap table_style'
@@ -86,7 +86,7 @@ class ApplyTable extends React.Component {
 				dataSource={dataSource}
 				scroll={scroll}
 				bordered
-				pagination={false}
+				pagination={paginationObj}
 				loading={loading}
 				rowSelection={rowSelectionObj}
 			// footer={() => {
@@ -99,7 +99,7 @@ class ApplyTable extends React.Component {
 			// 	/>
 			// }}
 			/> : null}
-			{type === 'add' ? <Table className='top-gap add-table table_style'
+			{type === 'add' ? <Table className='top-gap add-table'
 				rowKey={rowKey}
 				columns={columns}
 				dataSource={dataSource}

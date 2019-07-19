@@ -124,7 +124,7 @@ class AdjustQuery extends React.Component {
 				<FormItem label='公司简称' className='left-gap'>
 					{getFieldDecorator('company_id')(
 						<SearchSelect
-							className='common_search_width'
+							widthSign
 							placeholder='公司简称'
 							getPopupContainer={() => document.querySelector('.adjust-stat')}
 							action={this.props.action}

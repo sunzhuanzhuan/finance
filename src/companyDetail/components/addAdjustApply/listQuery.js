@@ -290,7 +290,12 @@ class ListQuery extends React.Component {
 				</Row>
 				<Row type="flex" justify="space-between">
 					<div>
-						{type === 'detail' ? <FormItem label='是否含策划' className='left-gap'>
+						<FormItem label='订单ID' className='sec-line-margin order-id-item'>
+							{getFieldDecorator('order_id')(
+								<Input placeholder='请输入ID号，多个以空格隔开' style={{ width: 406 }} />
+							)}
+						</FormItem>
+						{type === 'detail' ? <FormItem label='含策划' className='left-gap plan-manage-item'>
 							{getFieldDecorator('is_plan_manage')(
 								<Select
 									style={{ width: 160 }}
@@ -304,11 +309,6 @@ class ListQuery extends React.Component {
 								</Select>
 							)}
 						</FormItem> : null}	
-						<FormItem label='订单ID' className='sec-line-margin'>
-							{getFieldDecorator('order_id')(
-								<Input placeholder='请输入ID' style={{ width: 160 }} />
-							)}
-						</FormItem>
 					</div>
 					<FormItem>
 						<Button type='primary' onClick={this.handleSearch}>查询</Button>

@@ -27,21 +27,14 @@ class AdjustApply extends React.Component {
 			btnFlag: false,
 			quoteType: '',
 			readjust_application_id: '',
-			activeKey: 0
+			activeKey: 'allOptions'
 		};
-		this.tabOption = [
-			{ key: '0', name: '全部', dataIndex: 'allListInfo' },
-			{ key: '1', name: '待处理', dataIndex: 'undealListInfo' },
-			{ key: '2', name: '处理中', dataIndex: 'dealingListInfo' },
-			{ key: '3', name: '已处理', dataIndex: 'dealedListInfo' },
-		]
 	}
 	componentDidMount() {
 		const search = qs.parse(this.props.location.search.substring(1));
-		const currentTab = parseInt(search.keys.status);
-
+		const currentTab = search.keys ? search.keys.status : 'allOptions';
 		const { getCompanyDetailAuthorizations, getGoldenMetadata, getGoldenUserList } = this.props.actions;
-		this.setState({ activeKey: currentTab ? currentTab.toString() : '0' });
+		this.setState({ activeKey: currentTab ? currentTab.toString() : 'allOptions' });
 		this.queryAllStatusData({ page: 1, page_size: this.state.page_size, ...search.keys });
 		getCompanyDetailAuthorizations().then(() => {
 			const { companyDetailAuthorizations } = this.props
@@ -54,8 +47,8 @@ class AdjustApply extends React.Component {
 	}
 	queryAllStatusData = obj => {
 		const { actions: {getApplyList} } = this.props;
-		this.setState({ loading: true });
-
+		const { status = 'allOptions' } = obj;
+		this.setState({ loading: true, activeKey: status.toString() });
 		Promise.all([
 			getApplyList(Object.assign(obj, {status: undefined})),
 			getApplyList(Object.assign(obj, {status: '1'})),
@@ -69,8 +62,7 @@ class AdjustApply extends React.Component {
 		})
 	}
 	queryData = (obj, func) => {
-		const { status = '0' } = obj;
-
+		const { status = 'allOptions' } = obj;
 		this.setState({ loading: true, activeKey: status.toString() });
 		return this.props.actions.getApplyList({ ...obj }).then(() => {
 			if (func && Object.prototype.toString.call(func) === '[object Function]') {
@@ -147,19 +139,20 @@ class AdjustApply extends React.Component {
 	}
 	render() {
 		const { loading, tipVisible, previewVisible, page_size, flag, btnFlag, quoteType, readjust_application_id, rejectVisible, company_id, addVisible, activeKey } = this.state;
-		const { form, goldenMetadata, goldenMetadata: { application_status = [] }, goldenUserList, applicationDetail: { list: detailList = [] }, applyListReducer = {} } = this.props;
+		const { form, goldenMetadata, goldenMetadata: { application_status = [], quote_type = [] }, goldenUserList, applicationDetail: { list: detailList = [] }, applyListReducer = {} } = this.props;
 		const { getFieldDecorator } = form;
 		const formItemLayout = { labelCol: { span: 6 }, wrapperCol: { span: 16 }, };
 		const search = qs.parse(this.props.location.search.substring(1));
-		const adjustApplyList = flag ? adjustApplyListFunc(application_status, this.handleJump, this.handleAction) : adjustApplyFunc(application_status, this.handleJump);
+		const adjustApplyList = flag ? adjustApplyListFunc(application_status, quote_type, this.handleJump, this.handleAction) : adjustApplyFunc(application_status, this.handleJump);
 		const adjustApplyPreview = adjustApplyDetailFunc([])(['prev_id', 'company_name', 'project_name', 'requirement_id_name', 'platform_name', 'weibo_name', 'plan_manager_id', 'discount_rate', 'commissioned_price', 'quoted_price', 'pre_min_sell_price']);
+		const dealStatusArr = Array.isArray(application_status) && application_status.length  ? [{id: 'allOptions', display: '全部'}, ...application_status] : [];
 		const getTabPaneComp = () => {
-			return this.tabOption.map(item => {
-				const { name, key, dataIndex } = item;
-				const tabInfo = applyListReducer[dataIndex] || {};
+			return dealStatusArr.map(item => {
+				const { id, display } = item;
+
+				const tabInfo = applyListReducer[`applyListStatus${id}`] || {};
 				const { list = [], page, total } = tabInfo;
-				const status = key !== '0' ? key : undefined; 
-				console.log('lsdkfjlskdfjlskdjf', applyListReducer)
+				const status = id !== 'allOptions' ? id : undefined; 
 				const paginationObj = {
 					onChange: (current) => {
 						this.queryData({ ...search.keys, page: current, page_size, status });
@@ -185,12 +178,13 @@ class AdjustApply extends React.Component {
 					pageSizeOptions: ['20', '50', '100', '200']
 				};
 				const tab = <div>
-					<span key='name'>{name}</span>
+					<span key='name'>{display}</span>
 					<span key='count'>{total}</span>
 				</div>;
 				return (
-					<TabPane tab={tab} key={key}>
+					<TabPane tab={tab} key={id}>
 						<Table
+							className='table_style'
 							rowKey='id'
 							columns={adjustApplyList}
 							dataSource={list}
@@ -206,8 +200,7 @@ class AdjustApply extends React.Component {
 		return <div className='adjust-apply'>
 				<legend>订单调价</legend>
 				<AdjustQuery history={this.props.history}
-					// questAction={this.props.actions.getApplyList}
-					questAction={this.queryData}
+					questAction={this.queryAllStatusData}
 					pageSize={page_size}
 					location={this.props.location}
 					userList={goldenUserList}
@@ -223,7 +216,7 @@ class AdjustApply extends React.Component {
 						// target='_blank'
 					>添加申请</Button> : null}
 				</div>
-				<Tabs className='adjust_tabs table_style' activeKey={activeKey} onChange={this.handleChangeTab}>
+				<Tabs className='adjust_tabs' activeKey={activeKey} onChange={this.handleChangeTab}>
 					{
 						getTabPaneComp()
 					}

@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import { withRouter } from 'react-router-dom';
 import * as goldenActions from "../../actions/goldenApply";
-import { Modal, Button, Table, message } from "antd";
+import { Table, message } from "antd";
 
-class PrevModal extends React.Component {
+class PreTable extends React.Component {
 	constructor() {
 		super();
 		this.state = {
@@ -46,7 +46,7 @@ class PrevModal extends React.Component {
 	}
 	render() {
 		const { data } = this.state;
-		const { visible, onCancel, columns, isApplication, readjustId, companyId, applicationDetail: { page, total } } = this.props;
+		const { columns, isApplication, readjustId, companyId, applicationDetail: { page, total } } = this.props;
 		let applicationPaginationObj = {
 			onChange: (current) => {
 				this.queryData({ page: current, page_size: 50, status: 1, readjust_application_id: readjustId, company_id: companyId });
@@ -60,19 +60,14 @@ class PrevModal extends React.Component {
 			total: parseInt(data.length),
 			showQuickJumper: true,
 		};
-		return <Modal title='预览结果' visible={visible} width={'100%'}
-			footer={[<Button key='close' type='primary' onClick={onCancel}>关闭</Button>]}
-			onCancel={onCancel}
-			maskClosable={false}
-		>
-			<Table 
-				rowKey='order_id' 
-				columns={columns} 
-				dataSource={data} 
-				bordered 
-				pagination={isApplication ? applicationPaginationObj : paginationObj} 
-				scroll={{ x: 1700 }} />
-		</Modal>
+		console.log('sdlfkjsdlkfjskldjf', columns, data)
+		return <Table 
+			rowKey='order_id' 
+			columns={columns} 
+			dataSource={data} 
+			bordered 
+			pagination={isApplication ? applicationPaginationObj : paginationObj} 
+			scroll={{ x: 1700 }} />
 	}
 }
 
@@ -85,4 +80,4 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => ({
 	actions: bindActionCreators({ ...goldenActions }, dispatch)
 });
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(PrevModal))
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(PreTable))

@@ -21,7 +21,6 @@ class AdjustApply extends React.Component {
 		this.state = {
 			page_size: 20,
 			tipVisible: false,
-			previewVisible: false,
 			loading: false,
 			flag: false,
 			btnFlag: false,
@@ -45,7 +44,7 @@ class AdjustApply extends React.Component {
 		getGoldenMetadata();
 		getGoldenUserList();
 	}
-	queryAllStatusData = obj => {
+	queryAllStatusData = (obj, func) => {
 		const { actions: {getApplyList} } = this.props;
 		const { status = 'allOptions' } = obj;
 		this.setState({ loading: true, activeKey: status.toString() });
@@ -55,6 +54,8 @@ class AdjustApply extends React.Component {
 			getApplyList(Object.assign(obj, {status: '2'})),
 			getApplyList(Object.assign(obj, {status: '3'}))
 		]).then(() => {
+			if(typeof func === 'function')
+				func();
 			this.setState({ loading: false })
 		}).catch(({ errorMsg }) => {
 			this.setState({ loading: false });
@@ -113,9 +114,6 @@ class AdjustApply extends React.Component {
 			message.error(errorMsg || '操作失败！');
 		})
 	}
-	togglePreview = (boolean, func) => {
-		this.setState({ previewVisible: boolean }, func);
-	}
 	isShowAddModal = () => {
 		this.setState({addVisible: !this.state.addVisible})
 	}
@@ -138,7 +136,7 @@ class AdjustApply extends React.Component {
 		this.setState({activeKey});
 	}
 	render() {
-		const { loading, tipVisible, previewVisible, page_size, flag, btnFlag, quoteType, readjust_application_id, rejectVisible, company_id, addVisible, activeKey } = this.state;
+		const { loading, tipVisible, page_size, flag, btnFlag, quoteType, readjust_application_id, rejectVisible, company_id, addVisible, activeKey } = this.state;
 		const { form, goldenMetadata, goldenMetadata: { application_status = [], quote_type = [] }, goldenUserList, applicationDetail: { list: detailList = [] }, applyListReducer = {} } = this.props;
 		const { getFieldDecorator } = form;
 		const formItemLayout = { labelCol: { span: 6 }, wrapperCol: { span: 16 }, };
@@ -151,11 +149,11 @@ class AdjustApply extends React.Component {
 				const { id, display } = item;
 
 				const tabInfo = applyListReducer[`applyListStatus${id}`] || {};
-				const { list = [], page, total } = tabInfo;
+				const { list = [], page, total, page_size: tableSize } = tabInfo;
 				const status = id !== 'allOptions' ? id : undefined; 
 				const paginationObj = {
 					onChange: (current) => {
-						this.queryData({ ...search.keys, page: current, page_size, status });
+						this.queryData({ ...search.keys, page: current, page_size: tableSize, status });
 						this.props.history.replace({
 							pathname: this.props.location.pathname,
 							search: `?${qs.stringify({ ...search, keys: { ...search.keys, page: current, status } })}`,
@@ -167,12 +165,12 @@ class AdjustApply extends React.Component {
 						this.queryData({ ...search.keys, page: curPage, page_size: pageSize, status });
 						this.props.history.replace({
 							pathname: this.props.location.pathname,
-							search: `?${qs.stringify({ ...search, keys: { ...search.keys, page: curPage, page_size: pageSize, status } })}`,
+							search: `?${qs.stringify({ ...search, keys: { ...search.keys, page: curPage, status } })}`, //, page_size: pageSize
 						});
 					},
 					total: parseInt(total),
 					current: parseInt(page),
-					pageSize: parseInt(page_size),
+					pageSize: parseInt(tableSize),
 					showQuickJumper: true,
 					showSizeChanger: true,
 					pageSizeOptions: ['20', '50', '100', '200']
@@ -233,17 +231,10 @@ class AdjustApply extends React.Component {
 				quoteType={quoteType}
 				readjustId={readjust_application_id}
 				companyId={company_id}
-				togglePreview={this.togglePreview}
+				columns={adjustApplyPreview}
+				curSelectRows={detailList}
 			>
 			</ApplyModal> : null}
-			{previewVisible && <PrevModal visible={previewVisible}
-				isApplication={true}
-				readjustId={readjust_application_id}
-				companyId={company_id}
-				curSelectRows={detailList}
-				onCancel={() => { this.setState({ previewVisible: false }) }}
-				columns={adjustApplyPreview}
-			/>}
 			{rejectVisible ? <Modal title='订单调价处理' visible={rejectVisible}
 				onOk={() => { this.handleReject(readjust_application_id) }}
 				onCancel={() => { this.setState({ rejectVisible: false }) }}

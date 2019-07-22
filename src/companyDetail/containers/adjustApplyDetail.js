@@ -21,7 +21,6 @@ class AdjustApplyDetail extends React.Component {
 		this.state = {
 			tipVisible: false,
 			rejectVisible: false,
-			previewVisible: false,
 			loading: false,
 			flag: false,
 			curSelectRowKeys: [],
@@ -114,9 +113,6 @@ class AdjustApplyDetail extends React.Component {
 			message.error(errorMsg || '操作失败！');
 		})
 	}
-	togglePreview = (boolean, func) => {
-		this.setState({ previewVisible: boolean }, func);
-	}
 	handleBack = () => {
 		const { history } = this.props;
 		history.go(-1);
@@ -125,14 +121,14 @@ class AdjustApplyDetail extends React.Component {
 		this.setState({activeKey});
 	}
 	render() {
-		const { loading, tipVisible, rejectVisible, flag, previewVisible, curSelectRowKeys, curSelectRows, activeKey, applyId } = this.state;
+		const { loading, tipVisible, rejectVisible, flag, curSelectRowKeys, curSelectRows, activeKey, applyId } = this.state;
 		const { goldenMetadata: { rel_order_status = [], quote_type = [] }, applyListReducer = {} } = this.props;
 		const allDetailList = applyListReducer[`applyDetailListStatusallOptions`] || {};
 		const { total: allTotal } = allDetailList;
 		const adjustApplyDetail = flag ? 
 			adjustApplyDetailFunc(rel_order_status, quote_type)(['order_id', 'status', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'main_account_info', 'quoted_price', 'discount_rate', 'order_bottom_price', 'commissioned_price', 'history_min_sell_price', 'history_rate', 'min_sell_price', 'quote_type', 'pass_time', 'remark']) 
 			: adjustApplyDetailFunc(rel_order_status, quote_type)(['order_id', 'status', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'main_account_info', 'discount_rate', 'order_bottom_price', 'commissioned_price', 'history_min_sell_price', 'min_sell_price', 'pass_time', 'remark']);
-		const adjustApplyPreview = adjustApplyDetailFunc(rel_order_status, quote_type)(['prev_id', 'company_name', 'project_name', 'requirement_id_name', 'main_account_info', 'weibo_name', 'discount_rate', 'order_bottom_price', 'commissioned_price', 'quoted_price', 'pre_min_sell_price']);
+		const adjustApplyPreview = adjustApplyDetailFunc(rel_order_status, quote_type)(['prev_id', 'company_name', 'project_name', 'requirement_id_name', 'main_account_info', 'discount_rate', 'order_bottom_price', 'commissioned_price', 'quoted_price', 'pre_min_sell_price']);
 		const dealStatusArr = Array.isArray(rel_order_status) && rel_order_status.length  ? [{id: 'allOptions', display: '全部'}, ...rel_order_status] : [];
 		const getTabPaneComp = () => {
 			return dealStatusArr.map(item => {
@@ -159,7 +155,7 @@ class AdjustApplyDetail extends React.Component {
 							curSelectRows={curSelectRows}
 							handleSelected={this.handleSelected}
 							location={this.props.location}
-							scroll={flag ? { x: 3120 } : { x: 2420 }}
+							scroll={flag ? { x: 3400 } : { x: 2780 }}
 						>
 						</ApplyTable>
 					</TabPane>
@@ -200,18 +196,13 @@ class AdjustApplyDetail extends React.Component {
 				curSelectRowKeys={curSelectRowKeys}
 				curSelectRows={curSelectRows}
 				handleClear={this.handleClear}
-				togglePreview={this.togglePreview}
 				onCancel={() => { this.setState({ tipVisible: false }) }}
 				location={this.props.location}
 				quoteType={curSelectRows.length > 0 ? curSelectRows[0].quote_type : null}
 				flag={flag}
+				columns={adjustApplyPreview}
 			>
 			</ApplyModal> : null}
-			{previewVisible && <PrevModal visible={previewVisible}
-				curSelectRows={curSelectRows}
-				onCancel={() => { this.setState({ previewVisible: false }) }}
-				columns={adjustApplyPreview}
-			/>}
 			{rejectVisible ? <Modal title='订单调价处理' visible={rejectVisible}
 				onOk={this.handleReject}
 				onCancel={() => { this.setState({ rejectVisible: false }) }}

@@ -60,7 +60,6 @@ class PreTable extends React.Component {
 			total: parseInt(data.length),
 			showQuickJumper: true,
 		};
-		console.log('sdlfkjsdlkfjskldjf', columns, data)
 		return <Table 
 			rowKey='order_id' 
 			columns={columns} 

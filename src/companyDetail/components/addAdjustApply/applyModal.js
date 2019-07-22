@@ -7,6 +7,7 @@ import { Modal, Button, Form, Input, message, Select, Radio } from "antd";
 import { WBYUploadFile } from 'wbyui';
 import qs from 'qs';
 import numeral from 'numeral';
+import PreTable from './preTable';
 const FormItem = Form.Item;
 const { TextArea } = Input;
 const { Option } = Select;
@@ -23,8 +24,8 @@ class ApplyModal extends React.Component {
 		this.attachment = '';
 		this.priceTypeOption = [
 			{ label: '利润率/服务费率调整', value: 1 },
-			{ label: '按金额调整', value: 2 },
-			{ label: '调整到订单底价', value: 3 },
+			{ label: '按金额调整', value: 3 },
+			{ label: '调整到订单底价', value: 4 },
 		];
 	}
 	componentDidMount() {
@@ -57,7 +58,7 @@ class ApplyModal extends React.Component {
 	}
 	handleApplicationPreview = e => {
 		e.preventDefault();
-		const { readjustId, companyId, togglePreview } = this.props;
+		const { readjustId, companyId } = this.props;
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
 				const hide = message.loading('加载中,请稍候...');
@@ -72,9 +73,7 @@ class ApplyModal extends React.Component {
 						readjust_application_id: readjustId
 					}
 					this.props.actions.postPreviewMinSellPrice(params).then(() => {
-						togglePreview(true, () => {
-							hide();
-						})
+						this.setState({isShowPreview: true})
 					}).catch(({ errorMsg }) => {
 						hide();
 						message.error(errorMsg || '获取预览结果失败，请重试！');
@@ -85,7 +84,7 @@ class ApplyModal extends React.Component {
 	}
 	handlePreview = e => {
 		const search = qs.parse(this.props.location.search.substring(1));
-		const { curSelectRowKeys, togglePreview } = this.props;
+		const { curSelectRowKeys } = this.props;
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
@@ -99,9 +98,7 @@ class ApplyModal extends React.Component {
 					readjust_application_id: search.readjust_application_id
 				}
 				this.props.actions.postPreviewMinSellPrice(params).then(() => {
-					togglePreview(true, () => {
-						hide();
-					})
+					this.setState({isShowPreview: true})
 				}).catch(({ errorMsg }) => {
 					hide();
 					message.error(errorMsg || '获取预览结果失败，请重试！');
@@ -112,7 +109,7 @@ class ApplyModal extends React.Component {
 	handleSubmit = (e) => {
 		const attachment = this.attachment;
 		const search = qs.parse(this.props.location.search.substring(1));
-		const { type, queryAction, onCancel, curSelectRowKeys, curSelectRows, handleClear } = this.props;
+		const { type, queryAction, onCancel, curSelectRowKeys, curSelectRows, handleClear, companyDetailAuthorizations = [] } = this.props;
 		const { postApplyReadjust, postPassByOrderIds, postPassByReadjust } = this.props.actions;
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
@@ -157,13 +154,21 @@ class ApplyModal extends React.Component {
 					})
 				} else if (type === 'pass') {
 					this.setState({ isClick: true });
+					const finance = companyDetailAuthorizations[0].permissions['readjust.finance.audit'];
+					const sale = companyDetailAuthorizations[0].permissions['readjust.sale.audit'];
+					const audit_type = finance ? 1 : sale ? 2 : undefined;
+
 					const params = {
 						...values,
+						min_sell_price: parseInt(values['min_sell_price']) ? parseInt(values['min_sell_price']) : 0,
 						profit_rate: values['profit_rate'] && values['profit_rate'] != 0 ? values['profit_rate'] / 100 : 0,
 						service_rate: values['service_rate'] && values['service_rate'] != 0 ? values['service_rate'] / 100 : 0,
-						readjust_application_id: this.props.readjustId
+						readjust_application_id: this.props.readjustId,
+						audit_type
 					};
 					Object.keys(params).forEach(item => { !params[item] && params[item] !== 0 ? delete params[item] : null });
+					console.log('slkdfjlsdkfjsldjf', params)
+
 					this.handleFunction(postPassByReadjust, params)(() => {
 						queryAction({ page: 1, page_size: this.props.page_size, ...search.keys }, () => {
 							message.success('操作成功！');
@@ -190,7 +195,7 @@ class ApplyModal extends React.Component {
 			callback(' ')
 		}
 	}
-	checkCount = (rule, value, callback) => {
+	checkCount = (_, value, callback) => {
 		const reg = /^((100|-30|0)(\.0{1,2})?|[0-9]?\d(\.\d\d?)?|-([0-2]?\d)(\.\d\d?)?)$/;
 		if (value) {
 			if (reg.test(value.toString())) {
@@ -202,77 +207,90 @@ class ApplyModal extends React.Component {
 			callback(' ')
 		}
 	}
+
+	checkCountNum = (_, value, callback) => {
+		const reg = /^\d+$/;
+		if (value) {
+			if (reg.test(value.toString())) {
+				callback();
+				return;
+			}
+			callback('请填写大于0的值！');
+		} else {
+			callback(' ')
+		}
+	}
+
 	handleChangePriceType = ({target:{value}}) => {
 		this.setState({ priceType: value })
 	}
 	getPriceTypeOption = total => {
 		return this.priceTypeOption
-			.filter(item => total > 1 ? item.value !== 2 : item)
+			.filter(item => total > 1 ? item.value !== 3 : item)
 			.map(item => <Radio key={item.value} value={item.value}>{item.label}</Radio>)
 	}
 	getPriceValueItem = (getFieldDecorator, otherLayout, quoteType) => {
 		const { priceType } = this.state;
-		if( priceType === 3 ) 
+		if( priceType === 4 ) 
 			return null;
 		return priceType === 1 ? [
 			<FormItem key='profit_rate' label='订单利润率' {...otherLayout}>
-				{getFieldDecorator('profit_rate', quoteType == 1 ? {
+				{getFieldDecorator('profit_rate', {
 					rules: [
 						{ required: true, message: '请输入订单利润率!' },
 						{ validator: this.checkProfitCount }
 					]
-				} : {})(
+				})(
 					<Input addonAfter={'%'} style={{ width: 200 }} disabled={quoteType == 2} />
 				)}
 			</FormItem>,
 			<FormItem key='service_rate' label='服务费率' {...otherLayout}>
-				{getFieldDecorator('service_rate', quoteType == 2 ? {
+				{getFieldDecorator('service_rate', {
 					rules: [
 						{ required: true, message: '请输入服务费率!' },
 						{ validator: this.checkCount }
 					]
-				} : {})(
+				})(
 					<Input addonAfter={'%'} style={{ width: 200 }} disabled={quoteType == 1} />
 				)}
 			</FormItem>
 		] : 
 		<FormItem label='本次审核最低售卖价' {...otherLayout}>
-			{getFieldDecorator('bottom_price', quoteType == 2 ? {
+			{getFieldDecorator('min_sell_price', {
 				rules: [
 					{ required: true, message: '请输入本次审核最低售卖价!' },
-					{ validator: this.checkCount }
+					{ validator: this.checkCountNum }
 				]
-			} : {})(
+			})(
 				<Input style={{ width: 200 }} disabled={quoteType == 1} />
 			)}
 		</FormItem>;
 	}
 	render() {
 		const { getFieldDecorator } = this.props.form;
-		const { isClick, priceType } = this.state;
-		const { visible, onCancel, type, goldenToken, quoteType, flag, isApplication, total, goldenMetadata } = this.props;
+		const { isClick, priceType, isShowPreview } = this.state;
+		const { visible, onCancel, type, goldenToken, quoteType, flag, isApplication, total, curSelectRows = [], columns = [], readjustId } = this.props;
 		const formItemLayout = {
 			labelCol: { span: 4 },
 			wrapperCol: { span: 20 },
 		};
 		const otherLayout = {
-			labelCol: { span: 6 },
+			labelCol: { span: 4 },
 			wrapperCol: { span: 18 },
 		};
 		return <Modal
 			className='adjust-dialog'
 			visible={visible}
-			width={700}
+			width={1000}
 			title={type === 'add' ? '批量订单调价申请' : '订单调价处理'}
 			onCancel={onCancel}
 			maskClosable={false}
 			wrapClassName='adjust-dialog-list'
 			footer={flag ? [
-				<Button key='preview' type="primary" disabled={isClick} onClick={isApplication ? this.handleApplicationPreview : this.handlePreview}>预览结果</Button>,
-				<Button key="submit" type="primary" disabled={isClick} onClick={this.handleSubmit}>确认提交</Button>,
+				<Button key="submit" type="primary" disabled={isClick} onClick={this.handleSubmit}>确定</Button>,
 				<Button key="back" onClick={onCancel}>取消</Button>
 			] : [
-					<Button key="submit" type="primary" disabled={isClick} onClick={this.handleSubmit}>确认提交</Button>,
+					<Button key="submit" type="primary" disabled={isClick} onClick={this.handleSubmit}>确定</Button>,
 					<Button key="back" onClick={onCancel}>取消</Button>
 				]}
 		>
@@ -310,7 +328,7 @@ class ApplyModal extends React.Component {
 			</Form> :
 				<Form>
 					<FormItem label='调价类型' {...otherLayout}>
-						{getFieldDecorator('price_type', {
+						{getFieldDecorator('readjust_type', {
 							initialValue: priceType,
 							rules: [
 								{ required: true, message: '请选择调价类型!' }
@@ -330,6 +348,17 @@ class ApplyModal extends React.Component {
 						{getFieldDecorator('remark')(
 							<TextArea placeholder='非必输' style={{ width: 400 }} autosize={{ minRows: 4, maxRows: 6 }} maxLength={50} />
 						)}
+						<Button key='preview' style={{marginLeft: 20}} type="primary" disabled={isClick} onClick={isApplication ? this.handleApplicationPreview : this.handlePreview}>预览结果</Button>
+					</FormItem>
+					<FormItem className='previewItem'>
+						{
+							isShowPreview ? <PreTable 
+							readjustId={readjustId}
+							isApplication={isApplication}
+							curSelectRows={curSelectRows}
+							columns={columns}
+						></PreTable> : null
+						}
 					</FormItem>
 				</Form>}
 		</Modal>
@@ -338,6 +367,7 @@ class ApplyModal extends React.Component {
 
 const mapStateToProps = (state) => {
 	return {
+		companyDetailAuthorizations: state.companyDetail.companyDetailAuthorizations,
 		goldenToken: state.companyDetail.goldenToken,
 		applicationDetail: state.companyDetail.applicationDetail,
 		applicationPreview: state.companyDetail.applicationPreview,

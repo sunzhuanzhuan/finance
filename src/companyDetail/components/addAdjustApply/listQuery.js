@@ -191,6 +191,9 @@ class ListQuery extends React.Component {
 		const { form, type = 'add', projectList, platformList, rel_order_status } = this.props;
 		const { getFieldDecorator } = form;
 		const { projectLoading, weiboLoading } = this.state;
+		const orderClass = type === 'add' ? 'add-sec-line-margin order-id-item' : 'sec-line-margin order-id-item';
+		const resetClass = type === 'add' ? 'add-reset-btn' : 'reset-btn';
+
 		return <div>
 			<Form className='adjust-stat adjust-refactor'>
 				<Row type="flex" justify="start">
@@ -290,8 +293,8 @@ class ListQuery extends React.Component {
 				</Row>
 				<Row type="flex" justify="space-between">
 					<div>
-						<FormItem label='订单ID' className='sec-line-margin order-id-item'>
-							{getFieldDecorator('order_id')(
+						<FormItem label='订单ID' className={orderClass}>
+							{getFieldDecorator('order_ids')(
 								<Input placeholder='请输入ID号，多个以空格隔开' style={{ width: 406 }} />
 							)}
 						</FormItem>
@@ -312,7 +315,7 @@ class ListQuery extends React.Component {
 					</div>
 					<FormItem>
 						<Button type='primary' onClick={this.handleSearch}>查询</Button>
-						<Button className='reset-btn' onClick={this.handleClear}>重置</Button>
+						<Button className={resetClass} onClick={this.handleClear}>重置</Button>
 					</FormItem>
 				</Row>
 			</Form>

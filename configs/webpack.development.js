@@ -21,10 +21,6 @@ module.exports = merge(baseConfig, {
 				target: "http://172.16.21.179:19094",
 				changeOrigin: true
 			},
-			"/api/finance": {
-				target: "http://192.168.100.117:30002",
-				changeOrigin: true
-			},
 			"/api": {
 				target: "http://nb.dev-weiboyi.com",
 				changeOrigin: true

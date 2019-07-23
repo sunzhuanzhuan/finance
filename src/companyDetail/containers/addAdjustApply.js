@@ -81,7 +81,7 @@ class AddAdjustApply extends React.Component {
 	}
 	render() {
 		const { loading, tipVisible, checkVisible, curSelectRowKeys, curSelectRows } = this.state;
-		const { applyOrderList: { list = [], page, total }, goldenToken } = this.props;
+		const { applyOrderList: { list = [], page, total = 0, all_total = 0 }, goldenToken } = this.props;
 		const readyList = readyCheckFunc(this.handleDelete);
 		return <div className='add-adjust-apply'>
 			<h2 className='add_adjust_header' onClick={this.handleBack}>
@@ -101,6 +101,7 @@ class AddAdjustApply extends React.Component {
 				<Button className='left-gap' type='primary' onClick={() => {
 					this.setState({ checkVisible: true });
 				}}>查看已选</Button>
+				{/* { list.length ? <span className='total-info'>{`总共${all_total}条;不符合条件${all_total - total}条`}</span> : null} */}
 			</div>
 			<ApplyTable
 				type={'add'}

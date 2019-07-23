@@ -80,9 +80,6 @@ class AdjustApply extends React.Component {
 			search: `?${qs.stringify({ readjust_application_id: id, company_id, keys: { readjust_application_id: id, company_id, page_size: 50 } })}`,
 		});
 	}
-	handleInput = () => {
-		this.props.history.push('/finance/golden/adjustApplyInput')
-	}
 	handleExport = (readjust_application_id) => {
 		this.props.actions.getExport({ readjust_application_id })
 	}

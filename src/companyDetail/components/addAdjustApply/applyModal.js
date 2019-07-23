@@ -33,7 +33,7 @@ class ApplyModal extends React.Component {
 	handleFunction = (action, params) => {
 		return func => {
 			const hide = message.loading('操作中，请稍候...');
-			action({ ...params }).then((res) => {
+			action({ ...params }).then(res => {
 				func(res);
 				hide();
 			}).catch(({ errorMsg }) => {
@@ -55,6 +55,28 @@ class ApplyModal extends React.Component {
 			message.error(errorMsg || '列表加载失败，请重试！');
 		})
 	}
+	handleConfirmModal = (params, title, finance, sale) => {
+		if(finance) {
+			Modal.confirm({
+				title,
+				onOk: () => {
+					Object.assign(params, {commit: 1});
+					this.props.actions.postPreviewMinSellPrice(params).then(() => {
+						this.setState({isShowPreview: true})
+					})
+				},
+				onCancel: () => {
+					this.setState({isShowPreview: false})
+				},
+			});
+		}
+		if(sale) {
+			Modal.info({
+				title,
+				onOk: () => {},
+			});
+		}
+	}
 	handleApplicationPreview = e => {
 		e.preventDefault();
 		const { readjustId, companyId, companyDetailAuthorizations } = this.props;
@@ -73,10 +95,12 @@ class ApplyModal extends React.Component {
 						profit_rate: values['profit_rate'] && values['profit_rate'] != 0 ? numeral(values['profit_rate'] / 100).format('0.0000') : 0,
 						service_rate: values['service_rate'] && values['service_rate'] != 0 ? numeral(values['service_rate'] / 100).format('0.0000') : 0,
 						readjust_application_id: readjustId, 
-						audit_type
+						audit_type,
+						commit: 2,
 					}
-					this.props.actions.postPreviewMinSellPrice(params).then(() => {
-						this.setState({isShowPreview: true})
+					this.props.actions.postPreviewMinSellPrice(params).then(result => {
+						const { data } = result;
+						this.handleConfirmModal(params, data, finance, sale );
 					}).catch(({ errorMsg }) => {
 						hide();
 						message.error(errorMsg || '获取预览结果失败，请重试！');
@@ -88,24 +112,26 @@ class ApplyModal extends React.Component {
 	handlePreview = e => {
 		const search = qs.parse(this.props.location.search.substring(1));
 		const { curSelectRowKeys, companyDetailAuthorizations = [] } = this.props;
+		const finance = companyDetailAuthorizations[0].permissions['readjust.finance.audit'];
+		const sale = companyDetailAuthorizations[0].permissions['readjust.sale.audit'];
+		const audit_type = finance ? 1 : sale ? 2 : undefined;
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
 				const hide = message.loading('加载中,请稍候...');
 				const order_ids = curSelectRowKeys.toString();
-				const finance = companyDetailAuthorizations[0].permissions['readjust.finance.audit'];
-				const sale = companyDetailAuthorizations[0].permissions['readjust.sale.audit'];
-				const audit_type = finance ? 1 : sale ? 2 : undefined;
 				const params = {
 					...values,
 					order_ids,
 					profit_rate: values['profit_rate'] && values['profit_rate'] != 0 ? numeral(values['profit_rate'] / 100).format('0.0000') : 0,
 					service_rate: values['service_rate'] && values['service_rate'] != 0 ? numeral(values['service_rate'] / 100).format('0.0000') : 0,
 					readjust_application_id: search.readjust_application_id,
-					audit_type
+					audit_type,
+					commit: 2,
 				}
-				this.props.actions.postPreviewMinSellPrice(params).then(() => {
-					this.setState({isShowPreview: true})
+				this.props.actions.postPreviewMinSellPrice(params).then(result => {
+					const { data } = result;
+					this.handleConfirmModal(params, data, finance, sale );
 				}).catch(({ errorMsg }) => {
 					hide();
 					message.error(errorMsg || '获取预览结果失败，请重试！');
@@ -116,8 +142,11 @@ class ApplyModal extends React.Component {
 	handleSubmit = (e) => {
 		const attachment = this.attachment;
 		const search = qs.parse(this.props.location.search.substring(1));
-		const { type, queryAction, onCancel, curSelectRowKeys, curSelectRows, handleClear, companyDetailAuthorizations = [] } = this.props;
+		const { type, onCancel, curSelectRowKeys, curSelectRows, handleClear, companyDetailAuthorizations = [] } = this.props;
 		const { postApplyReadjust, postPassByOrderIds, postPassByReadjust } = this.props.actions;
+		const finance = companyDetailAuthorizations[0].permissions['readjust.finance.audit'];
+		const sale = companyDetailAuthorizations[0].permissions['readjust.sale.audit'];
+		const audit_type = finance ? 1 : sale ? 2 : undefined;
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
@@ -148,43 +177,69 @@ class ApplyModal extends React.Component {
 						order_ids: curSelectRowKeys.toString(),
 						profit_rate: values['profit_rate'] && values['profit_rate'] != 0 ? numeral(values['profit_rate'] / 100).format('0.0000') : 0,
 						service_rate: values['service_rate'] && values['service_rate'] != 0 ? numeral(values['service_rate'] / 100).format('0.0000') : 0,
-						readjust_application_id: search.readjust_application_id
+						readjust_application_id: search.readjust_application_id,
+						audit_type,
+						commit: 2,
 					};
 					Object.keys(params).forEach(item => { !params[item] && params[item] !== 0 ? delete params[item] : null });
-					this.handleFunction(postPassByOrderIds, params)(() => {
-						queryAction({ page: 1, ...search.keys }, () => {
-							message.success('操作成功！');
-							this.setState({ isClick: false });
-							handleClear();
-							onCancel();
-						})
+					this.handleFunction(postPassByOrderIds, params)(result => {
+						const { data } = result;
+						const qurey = { page: 1, ...search.keys };
+						this.handleSubmitConfirm(postPassByReadjust, params, qurey, data, finance, sale);
 					})
 				} else if (type === 'pass') {
 					this.setState({ isClick: true });
-					const finance = companyDetailAuthorizations[0].permissions['readjust.finance.audit'];
-					const sale = companyDetailAuthorizations[0].permissions['readjust.sale.audit'];
-					const audit_type = finance ? 1 : sale ? 2 : undefined;
-
 					const params = {
 						...values,
 						min_sell_price: parseInt(values['min_sell_price']) ? parseInt(values['min_sell_price']) : 0,
 						profit_rate: values['profit_rate'] && values['profit_rate'] != 0 ? values['profit_rate'] / 100 : 0,
 						service_rate: values['service_rate'] && values['service_rate'] != 0 ? values['service_rate'] / 100 : 0,
 						readjust_application_id: this.props.readjustId,
-						audit_type
+						audit_type,
+						commit: 2,
 					};
 					Object.keys(params).forEach(item => { !params[item] && params[item] !== 0 ? delete params[item] : null });
 
-					this.handleFunction(postPassByReadjust, params)(() => {
-						queryAction({ page: 1, page_size: this.props.page_size, ...search.keys }, () => {
-							message.success('操作成功！');
-							this.setState({ isClick: false });
-							onCancel();
-						})
+					this.handleFunction(postPassByReadjust, params)(result => {
+						const { data } = result;
+						const qurey = { page: 1, page_size: this.props.page_size, ...search.keys };
+						this.handleSubmitConfirm(postPassByReadjust, params, qurey, data, finance, sale);
 					});
 				}
 			}
 		});
+	}
+	handleSubmitConfirm = (action, params, query, data, finance, sale) => {
+		const { queryAction, onCancel, handleClear, type } = this.props;
+
+		if(finance) {
+			return Modal.confirm({
+				title: data,
+				onOk: () => {
+					Object.assign(params, {commit: 1});
+					action(params).then(() => {
+						queryAction(query, () => {
+							message.success('操作成功！');
+							this.setState({ isClick: false });
+							onCancel();
+							if(type === 'detail')
+							{
+								handleClear();
+							}
+						});
+					})
+				},
+				onCancel: () => {
+					this.setState({ isClick: false });
+				},
+			});
+		}
+		if(sale) {
+			return Modal.info({
+				title: data,
+				onOk: () => { this.setState({ isClick: false }) },
+			});
+		}
 	}
 	handleFileChange = (fileList) => {
 		this.attachment = (fileList.map(item => item.url)).toString();

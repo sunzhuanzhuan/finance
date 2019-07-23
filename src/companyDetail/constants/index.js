@@ -17,7 +17,7 @@ const getPriceContent = (item = {}) => {
 		trilateralRate
 	} = item;
 	return (
-		<div className='price_comp' style={{ width: 300 }} key={+new Date() + Math.random()}>
+		<div className='price_comp' key={+new Date() + Math.random()}>
 			<div className='price_title'>
 				<span>{titleLable}：{titlePrice}</span>
 				{isShowRate && !isShowDetail ? <span style={{marginLeft: 20}}>{rateTitle}：{baseRate}</span> : null}
@@ -898,10 +898,10 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				title: '对外成本价',
 				dataIndex: 'quoted_price',
 				key: 'quoted_price',
-				width: 300,
+				width: 310,
 				render: (_, { price = [] }) => {
 					// const flag = price && price[0] ? price[0].trinity_type == 2 : false;
-					return <div style={{ width: 300 }}>
+					return <div>
 						{price.map(item => {
 							const showObj = {
 								isShowDetail: item.trinity_type == 2,
@@ -926,13 +926,13 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				title: '订单底价',
 				dataIndex: 'order_bottom_price',
 				key: 'order_bottom_price',
-				width: 300,
+				width: 310,
 				render: (_, { price = [] }) => {
 					// quote_type 判断展示利用率或服务费率
 					// public_base_price 阳价 三方 public_base_profit_rate 利用率
 					// private_base_price 阴价 博主 private_base_profit_rate 利用率
 					// trinity_type === 2 显示阴阳价 判断是否展示 若 非三方 如何展示
-					return <div style={{ width: 300 }}>
+					return <div>
 						{price.map(item => {
 							const showObj = {
 								isShowDetail: item.trinity_type == 2,
@@ -955,12 +955,12 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				title: '应约价',
 				dataIndex: 'price',
 				key: 'price',
-				width: 300,
+				width: 310,
 				render: (text, { price = [] }) => {
 					// const flag = price && price[0] ? price[0].trinity_type == 2 : false;
 					// private_quote_price 阴价 利用率  private_profit_rate
 					// public_quote_price 阳价 利用率  public_profit_rate
-					return <div style={{ width: 300 }}>
+					return <div>
 						{price.map(item => {
 							const showObj = {
 								isShowDetail: item.trinity_type == 2,
@@ -996,7 +996,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				title: '历史审核最低售卖价',
 				dataIndex: 'history_min_sell_price',
 				key: 'history_min_sell_price',
-				width: 300,
+				width: 310,
 				className: 'relative_td',
 				render: (text, { history_min_sell_price: { readjust_type } }) => {
 					const item = text ? text.min_sell_price : [];
@@ -1033,7 +1033,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				title: '本次审核最低售卖价',
 				dataIndex: 'min_sell_price',
 				key: 'min_sell_price',
-				width: 300,
+				width: 310,
 				render: (text, { readjust_type }) => {
 					const node = text ? text.map(item => {
 							const showObj = {

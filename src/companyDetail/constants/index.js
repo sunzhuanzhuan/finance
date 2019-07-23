@@ -931,7 +931,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 					// quote_type 判断展示利用率或服务费率
 					// public_base_price 阳价 三方 public_base_profit_rate 利用率
 					// private_base_price 阴价 博主 private_base_profit_rate 利用率
-					// trinity_type === 2 显示阴阳价 判断是否展示 若 非三方 如何展示
+					// trinity_type === 2 显示阴阳价 判断是否展示
 					return <div>
 						{price.map(item => {
 							const showObj = {
@@ -939,7 +939,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 								isShowRate: true,
 								rateTitle: item.quote_type == 2 ? '服务费率' : '利润率',
 								titleLable: item.price_label,
-								titlePrice: item.open_cost_price,
+								titlePrice: item.base_price,
 								baseRate: item.quote_type == 2 ? item.service_fees_rate :  item.private_profit_rate,
 								bloggerPrice: item.private_base_price,
 								bloggerRate: item.private_base_profit_rate,

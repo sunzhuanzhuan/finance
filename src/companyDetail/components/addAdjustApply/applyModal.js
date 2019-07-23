@@ -57,10 +57,13 @@ class ApplyModal extends React.Component {
 	}
 	handleApplicationPreview = e => {
 		e.preventDefault();
-		const { readjustId, companyId } = this.props;
+		const { readjustId, companyId, companyDetailAuthorizations } = this.props;
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
 				const hide = message.loading('加载中,请稍候...');
+				const finance = companyDetailAuthorizations[0].permissions['readjust.finance.audit'];
+				const sale = companyDetailAuthorizations[0].permissions['readjust.sale.audit'];
+				const audit_type = finance ? 1 : sale ? 2 : undefined;
 				this.queryData({ page: 1, page_size: 50, status: 1, readjust_application_id: readjustId, company_id: companyId }).then(() => {
 					const { applicationDetail: { list = [] } } = this.props;
 					const order_ids = list.map(item => item.order_id).toString();
@@ -69,7 +72,8 @@ class ApplyModal extends React.Component {
 						order_ids,
 						profit_rate: values['profit_rate'] && values['profit_rate'] != 0 ? numeral(values['profit_rate'] / 100).format('0.0000') : 0,
 						service_rate: values['service_rate'] && values['service_rate'] != 0 ? numeral(values['service_rate'] / 100).format('0.0000') : 0,
-						readjust_application_id: readjustId
+						readjust_application_id: readjustId, 
+						audit_type
 					}
 					this.props.actions.postPreviewMinSellPrice(params).then(() => {
 						this.setState({isShowPreview: true})
@@ -83,18 +87,22 @@ class ApplyModal extends React.Component {
 	}
 	handlePreview = e => {
 		const search = qs.parse(this.props.location.search.substring(1));
-		const { curSelectRowKeys } = this.props;
+		const { curSelectRowKeys, companyDetailAuthorizations = [] } = this.props;
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
 				const hide = message.loading('加载中,请稍候...');
 				const order_ids = curSelectRowKeys.toString();
+				const finance = companyDetailAuthorizations[0].permissions['readjust.finance.audit'];
+				const sale = companyDetailAuthorizations[0].permissions['readjust.sale.audit'];
+				const audit_type = finance ? 1 : sale ? 2 : undefined;
 				const params = {
 					...values,
 					order_ids,
 					profit_rate: values['profit_rate'] && values['profit_rate'] != 0 ? numeral(values['profit_rate'] / 100).format('0.0000') : 0,
 					service_rate: values['service_rate'] && values['service_rate'] != 0 ? numeral(values['service_rate'] / 100).format('0.0000') : 0,
-					readjust_application_id: search.readjust_application_id
+					readjust_application_id: search.readjust_application_id,
+					audit_type
 				}
 				this.props.actions.postPreviewMinSellPrice(params).then(() => {
 					this.setState({isShowPreview: true})
@@ -227,28 +235,28 @@ class ApplyModal extends React.Component {
 			.filter(item => total > 1 ? item.value !== 3 : item)
 			.map(item => <Radio key={item.value} value={item.value}>{item.label}</Radio>)
 	}
-	getPriceValueItem = (getFieldDecorator, otherLayout, quoteType) => {
+	getPriceValueItem = (getFieldDecorator, otherLayout, quoteType, curSelectRows = []) => {
 		const { priceType } = this.state;
 		if( priceType === 4 ) 
 			return null;
 		return priceType === 1 ? [
 			<FormItem key='profit_rate' label='订单利润率' {...otherLayout}>
-				{getFieldDecorator('profit_rate', {
+				{getFieldDecorator('profit_rate', quoteType != 2 ? {
 					rules: [
 						{ required: true, message: '请输入订单利润率!' },
 						{ validator: this.checkProfitCount }
 					]
-				})(
+				} : {})(
 					<Input addonAfter={'%'} style={{ width: 200 }} disabled={quoteType == 2} />
 				)}
 			</FormItem>,
 			<FormItem key='service_rate' label='服务费率' {...otherLayout}>
-				{getFieldDecorator('service_rate', {
+				{getFieldDecorator('service_rate', quoteType != 1 ? {
 					rules: [
 						{ required: true, message: '请输入服务费率!' },
 						{ validator: this.checkCount }
 					]
-				})(
+				} : {})(
 					<Input addonAfter={'%'} style={{ width: 200 }} disabled={quoteType == 1} />
 				)}
 			</FormItem>
@@ -260,7 +268,7 @@ class ApplyModal extends React.Component {
 					{ validator: this.checkCountNum }
 				]
 			})(
-				<Input style={{ width: 200 }} disabled={quoteType == 1} />
+				<Input style={{ width: 200 }} disabled={curSelectRows.length > 1} />
 			)}
 		</FormItem>;
 	}
@@ -340,7 +348,7 @@ class ApplyModal extends React.Component {
 						)}
 					</FormItem>
 					{
-						this.getPriceValueItem(getFieldDecorator, otherLayout, quoteType)
+						this.getPriceValueItem(getFieldDecorator, otherLayout, quoteType, curSelectRows)
 					}
 					<FormItem label='备注' {...otherLayout}>
 						{getFieldDecorator('remark')(

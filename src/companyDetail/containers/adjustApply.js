@@ -98,10 +98,14 @@ class AdjustApply extends React.Component {
 		this.setState({ rejectVisible: true, readjust_application_id });
 	}
 	handleReject = (readjust_application_id) => {
+		const { companyDetailAuthorizations = [] } = this.props;
 		const search = qs.parse(this.props.location.search.substring(1));
 		const { postRejectByReadjustId } = this.props.actions;
 		const remark = document.querySelector('#reject-remark').value;
-		const params = { readjust_application_id, remark };
+		const finance = companyDetailAuthorizations[0].permissions['readjust.finance.audit'];
+		const sale = companyDetailAuthorizations[0].permissions['readjust.sale.audit'];
+		const audit_type = finance ? 1 : sale ? 2 : undefined;
+		const params = { readjust_application_id, remark, audit_type };
 		const hide = message.loading('操作中，请稍候...');
 		postRejectByReadjustId({ ...params }).then(() => {
 			this.queryData({ page: 1, page_size: this.state.page_size, ...search }, () => {

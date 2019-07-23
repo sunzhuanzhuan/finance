@@ -42,6 +42,18 @@ class RelatedInvoice extends React.Component {
 			this.queryData();
 		})
 	}
+	handleBack = () => {
+		const search = qs.parse(this.props.location.search.substring(1));
+		if (search.payment_status == 'pre') {
+			this.props.history.push({
+				pathname: '/finance/trinityPay/prePay'
+			})
+		} else {
+			this.props.history.push({
+				pathname: '/finance/trinityPay/datePay'
+			})
+		}
+	}
 	render() {
 		const search = qs.parse(this.props.location.search.substring(1));
 		const { loading } = this.state;
@@ -49,7 +61,14 @@ class RelatedInvoice extends React.Component {
 		const relatedInvoiceCols = relatedInvoiceFunc(this.handleDel);
 		const paginationObj = getPagination(this, search, { total, page, page_size });
 		return <div className='relatedInvoice-container'>
-			<legend className='container-title'>关联发票</legend>
+			<legend className='container-title'>
+				<span onClick={this.handleBack}>
+					<Icon type="left-circle-o" style={{ cursor: 'pointer', marginRight: '20px' }} />
+					<span className="title" style={{ cursor: 'pointer' }}>关联发票</span>
+				</span>
+
+
+			</legend>
 			<Statistics title={'统计项'} render={Stat(search, statistic)} />
 			<div className='top-gap'>
 				<Table
@@ -74,12 +93,11 @@ const mapDispatchToProps = dispatch => ({
 	actions: bindActionCreators({ ...trinityInvoiceAction }, dispatch)
 });
 export default connect(mapStateToProps, mapDispatchToProps)(RelatedInvoice)
-
 function Stat(search, statistic) {
 	return <div style={{ padding: '0 10px' }}>
 		<span className='left-gap'>应回发票金额：<span className='red-font little-left-gap'>{statistic && numeral(statistic.return_invoice_amount).format('0,0.00')}</span>元</span>
 		<span className='left-gap'>已关联发票金额：<span className='red-font little-left-gap'>{statistic && numeral(statistic.relation_amount).format('0,0.00')}</span>元</span>
 		<span className='left-gap'>还需发票金额：<span className='red-font little-left-gap'>{statistic && numeral(statistic.invoice_surplus).format('0,0.00')}</span>元</span>
-		<Button className='left-gap' type='primary' href={`/finance/invoice/relatedChooseInvoice?payment_slip_id=${search.payment_slip_id}`}>选择发票</Button>
+		<Button className='left-gap' type='primary' href={`/finance/invoice/relatedChooseInvoice?payment_slip_id=${search.payment_slip_id}&payment_status=${search.payment_status}`}>选择发票</Button>
 	</div>
 }

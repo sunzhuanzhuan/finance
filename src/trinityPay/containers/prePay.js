@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
+import Scolltable from '../../components/Scolltable'
 import * as trinityPayAction from "../actions";
 import SearForm from '../../components/SearchForm'
 import Statistics from '../components/Statistics'
@@ -96,15 +97,17 @@ class PrePay extends React.Component {
 				{pullReady && <SearForm data={prePaySearch} getAction={this.queryData} responseLayout={{ xs: 24, sm: 24, md: 10, lg: 8, xxl: 6 }} extraFooter={<Button type='primary' style={{ marginLeft: 20 }} onClick={this.handleExport}>导出</Button>} wrappedComponentRef={form => this.form = form} />}
 			</fieldset>
 			<div className='top-gap'>
-				<Table
-					rowKey='payment_slip_id'
-					loading={loading}
-					columns={prePayCols}
-					dataSource={list}
-					bordered
-					pagination={paginationObj}
-					scroll={{ x: 1540 }}
-				/>
+				<Scolltable scrollClassName='.ant-table-body' widthScroll={1700}>
+					<Table
+						rowKey='payment_slip_id'
+						loading={loading}
+						columns={prePayCols}
+						dataSource={list}
+						bordered
+						pagination={paginationObj}
+						scroll={{ x: 1540 }}
+					/>
+				</Scolltable>
 			</div>
 			{modalVisible ? <PreModal
 				key={status}

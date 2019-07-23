@@ -69,11 +69,11 @@ class Modification extends React.Component {
 							name: item.name,
 							url: item.url
 						}));
-						obj['payment_remark'] = values['payment_remark'];
+						obj['payment_remark'] = values['payment_remark'] != '' ? values['payment_remark'] : undefined;
 						obj['payment_screenshot'] = qs.stringify(urlArray);
 						break;
 					case 3:
-						obj['payment_remark'] = values['payment_remark'];
+						obj['payment_remark'] = values['payment_remark'] != '' ? values['payment_remark'] : undefined;
 						break;
 					case 4:
 						obj['payment_revoke_reason'] = values['payment_revoke_reason'];
@@ -281,10 +281,10 @@ class Modification extends React.Component {
 							)}
 						</FormItem>
 					</Row>
-					{payment_status_desc != '打款失败' ? token && < Row >
+					{payment_status_desc != '打款失败' ? token && < Row>
 						<FormItem label='打款成功截图' {...formItemLayout}>
 							{getFieldDecorator('payment_screenshot', {
-								rules: [{ required: payment_status == 2, message: '打款撤销备注为必填项!' }],
+								rules: [{ required: payment_status == 2, message: '打款成功截图为必填项!' }],
 								valuePropName: 'fileList',
 								getValueFromEvent: e => e.fileList
 							})(
@@ -299,6 +299,7 @@ class Modification extends React.Component {
 									}}
 									multiple={true}
 									disabled={payment_status != 2}
+									showUploadList={{ showPreviewIcon: true, showRemoveIcon: payment_status == 2 ? true : false }}
 								>
 								</OssUpload>
 							)}
@@ -307,7 +308,7 @@ class Modification extends React.Component {
 					<Row>
 						<FormItem label='打款备注' {...formItemLayout}>
 							{getFieldDecorator('payment_remark', {
-								rules: [{ required: (payment_status == 2 || payment_status == 3), message: '打款撤销备注为必填项!' }, { max: 50, message: '不超过50个字符!' }]
+								rules: [{ required: payment_status == 3, message: '打款失败备注为必填项!' }, { max: 50, message: '不超过50个字符!' }]
 							})(
 								<Input disabled={!(payment_status == 3 || payment_status == 2)} />
 							)}

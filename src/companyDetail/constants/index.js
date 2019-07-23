@@ -720,6 +720,17 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 					</div>
 				}
 			},
+			'policy_id': {
+				title: '政策',
+				dataIndex: 'policy_id',
+				key: 'policy_id',
+				align: 'center',
+				width: 100,
+				fixed: 'left',
+				render: (text) => {
+					return text > 0 ? <a target="_blank" href={`/account/policy?id=${text}`}>查看</a> : '-'
+				}
+			},
 			'status': {
 				title: '状态',
 				dataIndex: 'status',

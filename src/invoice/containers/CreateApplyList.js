@@ -739,8 +739,9 @@ class CreateApplyList extends Component {
 				sm: { span: 14 },
 			},
 		};
-		const { meta: { order_associate_type, beneficiary_company, invoice_type, invoice_content_type }, corpInfo = {}, form: { getFieldDecorator }, countInfo = {}, data = {} } = this.props;
-		console.log(corpInfo);
+		const { meta: { order_associate_type, beneficiary_company, invoice_type, invoice_content_type }, corpInfo = {},
+			form: { getFieldDecorator }, countInfo = {}, data = {} } = this.props;
+		let invoiceContentType = invoice_content_type ? invoice_content_type.filter((item) => item.id != 3 && item.id != 4) : null;
 		let widthStyle = {
 			width: '400px'
 		}
@@ -896,8 +897,8 @@ class CreateApplyList extends Component {
 						})(
 							<RadioGroup>
 								{
-									invoice_content_type == undefined ? null : invoice_content_type.map((item, index) => {
-										return <Radio key={index} value={item.id}>{item.display}</Radio>
+									invoiceContentType == null ? null : invoiceContentType.map((item, index) => {
+										return < Radio key={index} value={item.id} > {item.display}</Radio>
 									})
 								}
 							</RadioGroup>
@@ -911,7 +912,7 @@ class CreateApplyList extends Component {
 							<RadioGroup>
 								{
 									beneficiary_company == undefined ? null : beneficiary_company.map((item, index) => {
-										return <Radio disabled={item.id == 1 || item.id == 2  ? true : false} key={index} value={item.id}>{item.display}</Radio>
+										return <Radio disabled={item.id == 1 || item.id == 2 ? true : false} key={index} value={item.id}>{item.display}</Radio>
 									})
 								}
 							</RadioGroup>

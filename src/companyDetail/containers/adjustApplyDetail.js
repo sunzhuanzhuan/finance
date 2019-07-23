@@ -6,7 +6,6 @@ import { Button, Row, Modal, message, Input, Icon, Tabs } from "antd";
 import ListQuery from '../components/addAdjustApply/listQuery';
 import ApplyTable from '../components/addAdjustApply/applyTable';
 import ApplyModal from '../components/addAdjustApply/applyModal';
-import PrevModal from '../components/addAdjustApply/preModal'
 import { adjustApplyDetailFunc } from "../constants";
 import "./golden.less";
 import { getApplyDetailList } from '../actions/getApplyList';

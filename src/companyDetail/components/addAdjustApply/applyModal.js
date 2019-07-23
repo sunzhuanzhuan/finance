@@ -3,14 +3,13 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import { withRouter } from 'react-router-dom';
 import * as goldenActions from "../../actions/goldenApply";
-import { Modal, Button, Form, Input, message, Select, Radio } from "antd";
+import { Modal, Button, Form, Input, message, Radio } from "antd";
 import { WBYUploadFile } from 'wbyui';
 import qs from 'qs';
 import numeral from 'numeral';
 import PreTable from './preTable';
 const FormItem = Form.Item;
 const { TextArea } = Input;
-const { Option } = Select;
 const RadioGroup = Radio.Group;
 
 class ApplyModal extends React.Component {
@@ -167,7 +166,6 @@ class ApplyModal extends React.Component {
 						audit_type
 					};
 					Object.keys(params).forEach(item => { !params[item] && params[item] !== 0 ? delete params[item] : null });
-					console.log('slkdfjlsdkfjsldjf', params)
 
 					this.handleFunction(postPassByReadjust, params)(() => {
 						queryAction({ page: 1, page_size: this.props.page_size, ...search.keys }, () => {

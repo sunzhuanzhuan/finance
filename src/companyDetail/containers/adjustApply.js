@@ -5,7 +5,6 @@ import * as goldenActions from "../actions/goldenApply";
 import { Modal, Form, message, Table, Input, Button, Tabs } from "antd";
 import AdjustQuery from '../components/adjustQuery';
 import ApplyModal from '../components/addAdjustApply/applyModal'
-import PrevModal from '../components/addAdjustApply/preModal'
 import { adjustApplyFunc, adjustApplyListFunc, adjustApplyDetailFunc } from "../constants";
 import "./golden.less";
 import qs from 'qs';
@@ -163,7 +162,7 @@ class AdjustApply extends React.Component {
 							search: `?${qs.stringify({ ...search, keys: { ...search.keys, page: current, status } })}`,
 						});
 					},
-					onShowSizeChange: (current, pageSize) => {
+					onShowSizeChange: (_, pageSize) => {
 						const curPage = Math.ceil(total / pageSize);
 						this.setState({ page_size: pageSize });
 						this.queryData({ ...search.keys, page: curPage, page_size: pageSize, status });

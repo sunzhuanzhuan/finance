@@ -56,25 +56,36 @@ class ApplyModal extends React.Component {
 		})
 	}
 	handleConfirmModal = (params, title, finance, sale) => {
-		if(finance) {
-			Modal.confirm({
-				title,
-				onOk: () => {
-					Object.assign(params, {commit: 1});
-					this.props.actions.postPreviewMinSellPrice(params).then(() => {
-						this.setState({isShowPreview: true})
-					})
-				},
-				onCancel: () => {
-					this.setState({isShowPreview: false})
-				},
-			});
-		}
-		if(sale) {
-			Modal.info({
-				title,
-				onOk: () => {},
-			});
+		const isOk = typeof title === 'string';
+		if( isOk ) {
+			if(finance) {
+				Modal.confirm({
+					title,
+					onOk: () => {
+						const hideSecond = message.loading('加载中,请稍候...');
+						Object.assign(params, {commit: 1});
+
+						this.props.actions.postPreviewMinSellPrice(params).then(() => {
+							hideSecond();
+							this.setState({isShowPreview: true});
+						}).catch(({ errorMsg }) => {
+							hideSecond();
+							message.error(errorMsg || '获取预览结果失败，请重试！');
+						})
+					},
+					onCancel: () => {
+						this.setState({isShowPreview: false});
+					},
+				});
+			}
+			if(sale) {
+				Modal.info({
+					title,
+					onOk: () => {},
+				});
+			}
+		}else {
+			this.setState({isShowPreview: true});
 		}
 	}
 	handleApplicationPreview = e => {
@@ -100,6 +111,7 @@ class ApplyModal extends React.Component {
 					}
 					this.props.actions.postPreviewMinSellPrice(params).then(result => {
 						const { data } = result;
+						hide();
 						this.handleConfirmModal(params, data, finance, sale );
 					}).catch(({ errorMsg }) => {
 						hide();
@@ -209,36 +221,46 @@ class ApplyModal extends React.Component {
 			}
 		});
 	}
-	handleSubmitConfirm = (action, params, query, data, finance, sale) => {
+	handleSubmitConfirm = (action, params, query, data = {}, finance, sale) => {
 		const { queryAction, onCancel, handleClear, type } = this.props;
-
-		if(finance) {
-			return Modal.confirm({
-				title: data,
-				onOk: () => {
-					Object.assign(params, {commit: 1});
-					action(params).then(() => {
-						queryAction(query, () => {
-							message.success('操作成功！');
-							this.setState({ isClick: false });
-							onCancel();
-							if(type === 'detail')
-							{
-								handleClear();
-							}
-						});
-					})
-				},
-				onCancel: () => {
-					this.setState({ isClick: false });
-				},
-			});
-		}
-		if(sale) {
-			return Modal.info({
-				title: data,
-				onOk: () => { this.setState({ isClick: false }) },
-			});
+		const { msg } = data;
+		if(msg) {
+			if(finance) {
+				return Modal.confirm({
+					title: msg,
+					onOk: () => {
+						Object.assign(params, {commit: 1});
+						action(params).then(() => {
+							queryAction(query, () => {
+								message.success('操作成功！');
+								this.setState({ isClick: false });
+								onCancel();
+								if(type === 'detail')
+								{
+									handleClear();
+								}
+							});
+						})
+					},
+					onCancel: () => {
+						this.setState({ isClick: false });
+					},
+				});
+			}
+			if(sale) {
+				return Modal.info({
+					title: msg,
+					onOk: () => { this.setState({ isClick: false }) },
+				});
+			}
+		}else {
+			message.success('操作成功！');
+			this.setState({ isClick: false });
+			onCancel();
+			if(type === 'detail')
+			{
+				handleClear();
+			}
 		}
 	}
 	handleFileChange = (fileList) => {
@@ -283,11 +305,11 @@ class ApplyModal extends React.Component {
 	}
 
 	handleChangePriceType = ({target:{value}}) => {
-		this.setState({ priceType: value })
+		this.setState({ priceType: value, isShowPreview: false })
 	}
-	getPriceTypeOption = total => {
+	getPriceTypeOption = (curSelectRows = []) => {
 		return this.priceTypeOption
-			.filter(item => total > 1 ? item.value !== 3 : item)
+			.filter(item => curSelectRows.length > 1 ? item.value !== 3 : item)
 			.map(item => <Radio key={item.value} value={item.value}>{item.label}</Radio>)
 	}
 	getPriceValueItem = (getFieldDecorator, otherLayout, quoteType, curSelectRows = []) => {
@@ -397,7 +419,7 @@ class ApplyModal extends React.Component {
 						})(
 							<RadioGroup onChange={this.handleChangePriceType}>
 							{
-								this.getPriceTypeOption(total)
+								this.getPriceTypeOption(curSelectRows)
 							}
 							</RadioGroup>
 						)}

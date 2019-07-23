@@ -91,13 +91,17 @@ class AdjustApplyDetail extends React.Component {
 	}
 	handleReject = () => {
 		const search = qs.parse(this.props.location.search.substring(1));
+		const { companyDetailAuthorizations } = this.props; 
 		const { postRejectByOrderIds } = this.props.actions;
 		const { curSelectRowKeys } = this.state;
 		const remark = document.querySelector('#reject-remark').value;
+		const finance = companyDetailAuthorizations[0].permissions['readjust.finance.audit'];
+		const sale = companyDetailAuthorizations[0].permissions['readjust.sale.audit'];
+		const audit_type = finance ? 1 : sale ? 2 : undefined;
 		const params = {
 			order_ids: curSelectRowKeys.toString(),
 			readjust_application_id: search.readjust_application_id,
-			remark
+			remark, audit_type
 		};
 		const hide = message.loading('操作中，请稍候...');
 		postRejectByOrderIds({ ...params }).then(() => {

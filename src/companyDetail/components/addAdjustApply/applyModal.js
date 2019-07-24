@@ -312,6 +312,30 @@ class ApplyModal extends React.Component {
 			.filter(item => curSelectRows.length > 1 ? item.value !== 3 : item)
 			.map(item => <Radio key={item.value} value={item.value}>{item.label}</Radio>)
 	}
+	getAmountAdjustItem = (getFieldDecorator, otherLayout, curSelectRows = []) => {
+		if(curSelectRows.length != 1)
+			return null;
+
+		const { price = []} = curSelectRows[0];
+		if(!price.length)
+			return null;
+		return price.map(item => {
+			const { price_label, price_id } = item;
+			const label = `${price_label}最低售卖价`;
+			return (
+				<FormItem key={price_id} label={label} {...otherLayout}>
+					{getFieldDecorator(price_id, {
+						rules: [
+							{ required: true, message: `请输入${label}!` },
+							{ validator: this.checkCountNum }
+						]
+					})(
+						<Input style={{ width: 200 }} disabled={curSelectRows.length > 1} />
+					)}
+				</FormItem>
+			)
+		})
+	}
 	getPriceValueItem = (getFieldDecorator, otherLayout, quoteType, curSelectRows = []) => {
 		const { priceType } = this.state;
 		if( priceType === 4 ) 
@@ -338,16 +362,19 @@ class ApplyModal extends React.Component {
 				)}
 			</FormItem>
 		] : 
-		<FormItem label='本次审核最低售卖价' {...otherLayout}>
-			{getFieldDecorator('min_sell_price', {
-				rules: [
-					{ required: true, message: '请输入本次审核最低售卖价!' },
-					{ validator: this.checkCountNum }
-				]
-			})(
-				<Input style={{ width: 200 }} disabled={curSelectRows.length > 1} />
-			)}
-		</FormItem>;
+		// this.getAmountAdjustItem(getFieldDecorator, otherLayout, curSelectRows);
+
+			<FormItem label='本次审核最低售卖价' {...otherLayout}>
+				{getFieldDecorator('min_sell_price', {
+					rules: [
+						{ required: true, message: '请输入本次审核最低售卖价!' },
+						{ validator: this.checkCountNum }
+					]
+				})(
+					<Input style={{ width: 200 }} disabled={curSelectRows.length > 1} />
+				)}
+			</FormItem>
+
 	}
 	render() {
 		const { getFieldDecorator } = this.props.form;

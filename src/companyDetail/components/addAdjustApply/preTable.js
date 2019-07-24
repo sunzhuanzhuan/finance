@@ -66,7 +66,7 @@ class PreTable extends React.Component {
 			dataSource={data} 
 			bordered 
 			pagination={isApplication ? applicationPaginationObj : paginationObj} 
-			scroll={{ x: 1700 }} />
+			scroll={{ x: 2000 }} />
 	}
 }
 

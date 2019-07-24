@@ -352,7 +352,7 @@ class ApplyModal extends React.Component {
 	render() {
 		const { getFieldDecorator } = this.props.form;
 		const { isClick, priceType, isShowPreview } = this.state;
-		const { visible, onCancel, type, goldenToken, quoteType, flag, isApplication, total, curSelectRows = [], columns = [], readjustId } = this.props;
+		const { visible, onCancel, type, goldenToken, quoteType, flag, isApplication, curSelectRows = [], columns = [], readjustId } = this.props;
 		const formItemLayout = {
 			labelCol: { span: 4 },
 			wrapperCol: { span: 20 },

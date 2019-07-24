@@ -1055,15 +1055,20 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				title: '最低售卖价',
 				dataIndex: 'pre_min_sell_price',
 				key: 'pre_min_sell_price',
-				width: 246,
-				render: (text, { price = [], pre_min_sell_price = [] }) => {
+				width: 310,
+				render: (_, { pre_min_sell_price = [] }) => {
 					// const flag = price && price[0] ? price[0].trinity_type == 2 : false;
-					return <div style={{ width: 260 }}>
-						{pre_min_sell_price.map((item, index) => {
-							return <div key={index}>
-								<div>{`${item.price_label}:${item.min_sell_price}`}</div>
-								{item.trinity_type == 2 ? <div>{`(博主${item.private_min_sell_price},第三方${item.public_min_sell_price})`}</div> : null}
-							</div>
+					return <div>
+						{pre_min_sell_price.map(item => {
+							const showObj = {
+								isShowDetail: item.trinity_type == 2,
+								isShowRate: false,
+								titleLable: item.price_label,
+								titlePrice: item.min_sell_price,
+								bloggerPrice: item.private_min_sell_price,
+								trilateralPrice: item.public_min_sell_price,
+							}
+							return getPriceContent(showObj);
 						})}
 					</div>
 				}

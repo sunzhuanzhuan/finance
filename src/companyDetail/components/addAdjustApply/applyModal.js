@@ -90,7 +90,7 @@ class ApplyModal extends React.Component {
 	}
 	handleApplicationPreview = e => {
 		e.preventDefault();
-		const { readjustId, companyId, companyDetailAuthorizations } = this.props;
+		const { readjustId, companyId, companyDetailAuthorizations, curSelectRows = [] } = this.props;
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
 				const hide = message.loading('加载中,请稍候...');
@@ -108,7 +108,22 @@ class ApplyModal extends React.Component {
 						readjust_application_id: readjustId, 
 						audit_type,
 						commit: 2,
+					};
+
+					if(params.readjust_type == 3) {
+						const { price = [] } = curSelectRows[0];
+						const priceIds = price.map(item => item.price_id);
+						const set_min_sell_price = priceIds.map(item => {
+							const obj = {
+								price_id: item,
+								input_min_sell_price: params[item]
+							};
+							delete params[item];
+							return obj;
+						});
+						Object.assign(params, {set_min_sell_price});
 					}
+					
 					this.props.actions.postPreviewMinSellPrice(params).then(result => {
 						const { data } = result;
 						hide();
@@ -123,7 +138,7 @@ class ApplyModal extends React.Component {
 	}
 	handlePreview = e => {
 		const search = qs.parse(this.props.location.search.substring(1));
-		const { curSelectRowKeys, companyDetailAuthorizations = [] } = this.props;
+		const { curSelectRowKeys, companyDetailAuthorizations = [], curSelectRows = [] } = this.props;
 		const finance = companyDetailAuthorizations[0].permissions['readjust.finance.audit'];
 		const sale = companyDetailAuthorizations[0].permissions['readjust.sale.audit'];
 		const audit_type = finance ? 1 : sale ? 2 : undefined;
@@ -140,6 +155,19 @@ class ApplyModal extends React.Component {
 					readjust_application_id: search.readjust_application_id,
 					audit_type,
 					commit: 2,
+				};
+				if(params.readjust_type == 3) {
+					const { price = [] } = curSelectRows[0];
+					const priceIds = price.map(item => item.price_id);
+					const set_min_sell_price = priceIds.map(item => {
+						const obj = {
+							price_id: item,
+							input_min_sell_price: params[item]
+						};
+						delete params[item];
+						return obj;
+					});
+					Object.assign(params, {set_min_sell_price});
 				}
 				this.props.actions.postPreviewMinSellPrice(params).then(result => {
 					const { data } = result;
@@ -154,7 +182,7 @@ class ApplyModal extends React.Component {
 	handleSubmit = (e) => {
 		const attachment = this.attachment;
 		const search = qs.parse(this.props.location.search.substring(1));
-		const { type, onCancel, curSelectRowKeys, curSelectRows, handleClear, companyDetailAuthorizations = [] } = this.props;
+		const { type, onCancel, curSelectRowKeys, curSelectRows, companyDetailAuthorizations = [] } = this.props;
 		const { postApplyReadjust, postPassByOrderIds, postPassByReadjust } = this.props.actions;
 		const finance = companyDetailAuthorizations[0].permissions['readjust.finance.audit'];
 		const sale = companyDetailAuthorizations[0].permissions['readjust.sale.audit'];
@@ -193,6 +221,19 @@ class ApplyModal extends React.Component {
 						audit_type,
 						commit: 2,
 					};
+					if(params.readjust_type == 3) {
+						const { price = [] } = curSelectRows[0];
+						const priceIds = price.map(item => item.price_id);
+						const set_min_sell_price = priceIds.map(item => {
+							const obj = {
+								price_id: item,
+								input_min_sell_price: params[item]
+							};
+							delete params[item];
+							return obj;
+						});
+						Object.assign(params, {set_min_sell_price});
+					}
 					Object.keys(params).forEach(item => { !params[item] && params[item] !== 0 ? delete params[item] : null });
 					this.handleFunction(postPassByOrderIds, params)(result => {
 						const { data } = result;
@@ -210,6 +251,19 @@ class ApplyModal extends React.Component {
 						audit_type,
 						commit: 2,
 					};
+					if(params.readjust_type == 3) {
+						const { price = [] } = curSelectRows[0];
+						const priceIds = price.map(item => item.price_id);
+						const set_min_sell_price = priceIds.map(item => {
+							const obj = {
+								price_id: item,
+								input_min_sell_price: params[item]
+							};
+							delete params[item];
+							return obj;
+						});
+						Object.assign(params, {set_min_sell_price});
+					}
 					Object.keys(params).forEach(item => { !params[item] && params[item] !== 0 ? delete params[item] : null });
 
 					this.handleFunction(postPassByReadjust, params)(result => {
@@ -254,13 +308,17 @@ class ApplyModal extends React.Component {
 				});
 			}
 		}else {
-			message.success('操作成功！');
 			this.setState({ isClick: false });
+			queryAction(query, () => {
+				message.success('操作成功！');
+				this.setState({ isClick: false });
+				onCancel();
+				if(type === 'detail')
+				{
+					handleClear();
+				}
+			});
 			onCancel();
-			if(type === 'detail')
-			{
-				handleClear();
-			}
 		}
 	}
 	handleFileChange = (fileList) => {
@@ -308,8 +366,9 @@ class ApplyModal extends React.Component {
 		this.setState({ priceType: value, isShowPreview: false })
 	}
 	getPriceTypeOption = (curSelectRows = []) => {
+		const {type} = this.props;
 		return this.priceTypeOption
-			.filter(item => curSelectRows.length > 1 ? item.value !== 3 : item)
+			.filter(item => curSelectRows.length > 1 || type === 'pass' ? item.value !== 3 : item)
 			.map(item => <Radio key={item.value} value={item.value}>{item.label}</Radio>)
 	}
 	getAmountAdjustItem = (getFieldDecorator, otherLayout, curSelectRows = []) => {
@@ -362,18 +421,18 @@ class ApplyModal extends React.Component {
 				)}
 			</FormItem>
 		] : 
-		// this.getAmountAdjustItem(getFieldDecorator, otherLayout, curSelectRows);
+		this.getAmountAdjustItem(getFieldDecorator, otherLayout, curSelectRows);
 
-			<FormItem label='本次审核最低售卖价' {...otherLayout}>
-				{getFieldDecorator('min_sell_price', {
-					rules: [
-						{ required: true, message: '请输入本次审核最低售卖价!' },
-						{ validator: this.checkCountNum }
-					]
-				})(
-					<Input style={{ width: 200 }} disabled={curSelectRows.length > 1} />
-				)}
-			</FormItem>
+			// <FormItem label='本次审核最低售卖价' {...otherLayout}>
+			// 	{getFieldDecorator('min_sell_price', {
+			// 		rules: [
+			// 			{ required: true, message: '请输入本次审核最低售卖价!' },
+			// 			{ validator: this.checkCountNum }
+			// 		]
+			// 	})(
+			// 		<Input style={{ width: 200 }} disabled={curSelectRows.length > 1} />
+			// 	)}
+			// </FormItem>
 
 	}
 	render() {

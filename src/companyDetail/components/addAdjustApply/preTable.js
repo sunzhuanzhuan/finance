@@ -62,6 +62,7 @@ class PreTable extends React.Component {
 		};
 		return <Table 
 			rowKey='order_id' 
+			className='preTable'
 			columns={columns} 
 			dataSource={data} 
 			bordered 

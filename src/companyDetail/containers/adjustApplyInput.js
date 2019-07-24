@@ -17,38 +17,51 @@ class AdjustApplyInput extends React.Component {
 	componentDidMount() {
 		this.props.actions.getCompanyDetailAuthorizations()
 	}
-	confirmUpload = (obj, content, finance, sale, title) => {
+	confirmUpload = (obj, content, finance, sale, data = {}) => {
 		const { postImportApplication } = this.props.actions;
 		const { fileList } = this.state;
-		if(finance) {
-			Modal.confirm({
-				title,
-				onOk: () => {
-					content.set('commit', 1);
-					const hide = message.loading("上传中，请稍候...");
-					postImportApplication(content).then(() => {
-						let ary = [...fileList,
-							{
-								uid: obj.file.uid,
-								name: '已导入' + obj.file.name,
-								status: 'done',
-								url: '',
-							}];
-							this.setState({ fileList: ary });
-							hide();
-							message.success('上传成功！');
-					})
-				},
-				onCancel: () => {
-					this.setState({isShowPreview: false})
-				},
-			});
-		}
-		if(sale) {
-			Modal.info({
-				title,
-				onOk: () => {},
-			});
+		const { msg } = data;
+		if(msg) {
+			if(finance) {
+				return Modal.confirm({
+					title: msg,
+					onOk: () => {
+						content.set('commit', 1);
+						const hide = message.loading("上传中，请稍候...");
+						postImportApplication(content).then(() => {
+							let ary = [...fileList,
+								{
+									uid: obj.file.uid,
+									name: '已导入' + obj.file.name,
+									status: 'done',
+									url: '',
+								}];
+								this.setState({ fileList: ary });
+								hide();
+								message.success('上传成功！');
+						})
+					},
+					onCancel: () => {
+						this.setState({isShowPreview: false})
+					},
+				});
+			}
+			if(sale) {
+				return Modal.info({
+					title: msg,
+					onOk: () => {},
+				});
+			}
+		}else {
+			let ary = [...fileList,
+				{
+					uid: obj.file.uid,
+					name: '已导入' + obj.file.name,
+					status: 'done',
+					url: '',
+				}];
+				this.setState({ fileList: ary });
+				message.success('上传成功！');
 		}
 	}
 	render() {
@@ -78,9 +91,10 @@ class AdjustApplyInput extends React.Component {
 					const { data } = result;
 					hide();
 					this.confirmUpload(obj, content, finance, sale, data);
+					return;
 				}).catch(({ errorMsg }) => {
 					hide();
-					message.error(errorMsg || '上传失败！')
+					message.error(errorMsg || '上传失败！');
 				});
 			}
 		};

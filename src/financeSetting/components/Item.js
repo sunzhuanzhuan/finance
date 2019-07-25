@@ -34,16 +34,16 @@ class Item extends React.PureComponent {
 				message.error('有未填写的利润率输入框', 3);
 				return
 			}
-			if (!(Number(item['rate']) >= -30 && Number(item['rate']) <= 100) || !(/^-?(([0-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/.test(item['rate']))) {
-				message.error('利润率需为[-30,100]之间的两位小数', 3);
+			if (!(Number(item['rate']) >= -30 && Number(item['rate']) < 100) || !(/^-?(([0-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/.test(item['rate']))) {
+				message.error('利润率须为（-30,100）之间的两位小数', 3);
 				return
 			}
 			if (!item['minRate']) {
 				message.error('有未填写的利润率输入框', 3);
 				return
 			}
-			if (!(Number(item['minRate']) >= -30 && Number(item['minRate']) <= 100) || !(/^-?(([0-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/.test(item['minRate']))) {
-				message.error('利润率需为[-30,100]之间的两位小数', 3);
+			if (!(Number(item['minRate']) >= -30 && Number(item['minRate']) < 100) || !(/^-?(([0-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/.test(item['minRate']))) {
+				message.error('利润率需为（-30,100）之间的两位小数', 3);
 				return
 			}
 		}

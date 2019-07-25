@@ -124,7 +124,8 @@ class AdjustApplyDetail extends React.Component {
 		this.setState({activeKey});
 	}
 	render() {
-		const { loading, tipVisible, rejectVisible, flag, curSelectRowKeys, curSelectRows, activeKey, applyId } = this.state;
+		const { loading, tipVisible, rejectVisible, curSelectRowKeys, curSelectRows, activeKey, applyId } = this.state;
+		let flag= false;
 		const { goldenMetadata: { rel_order_status = [], quote_type = [] }, applyListReducer = {} } = this.props;
 		const allDetailList = applyListReducer[`applyDetailListStatusallOptions`] || {};
 		const { total: allTotal } = allDetailList;
@@ -158,7 +159,7 @@ class AdjustApplyDetail extends React.Component {
 							curSelectRows={curSelectRows}
 							handleSelected={this.handleSelected}
 							location={this.props.location}
-							scroll={flag ? { x: 3455 } : { x: 2858 }}
+							scroll={flag ? { x: 3755 } : { x: 3149 }}
 						>
 						</ApplyTable>
 					</TabPane>

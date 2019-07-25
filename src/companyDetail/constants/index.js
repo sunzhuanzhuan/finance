@@ -764,11 +764,11 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				title: '公司简称',
 				dataIndex: 'company_name',
 				key: 'company_name',
-				width: 200,
+				width: 220,
 				render: (text = '-', record) => {
 					const { platform_name= '-', quote_type: quoteVal } = record;
 					const value = quote_type.find(item => item.id == quoteVal) || {};
-					return <div className={`left_content_td ${record.warningClass}`}>
+					return <div className={`left_content_td ${record.warningClass}`} style={{width: 184}}>
 						<div>{text}</div>
 						<div>报价类型：{value.display || '未知'}</div>
 						<div></div>
@@ -779,7 +779,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				title: '所属项目/品牌',
 				dataIndex: 'project_name',
 				key: 'project_name',
-				width: 200,
+				width: 220,
 				render: (text, record) => {
 					const { platform_name= '-' } = record;
 					return <div className={`left_content_td ${record.warningClass}`}>
@@ -806,7 +806,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				title: '需求ID/需求名称',
 				dataIndex: 'requirement_id_name',
 				key: 'requirement_id_name',
-				width: 200,
+				width: 220,
 				render: (text, { requirement_id, requirement_name, warningClass }) => {
 					return <div className={`left_content_td ${warningClass}`}>
 						<div>需求ID：</div>
@@ -820,7 +820,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				title: '账号信息',
 				dataIndex: 'account_id',
 				key: 'account_id',
-				width: 200,
+				width: 310,
 				render: (data, {weibo_name, warningClass}) => {
 					return <div className={`left_content_td ${warningClass}`}>
 					<div>账号名称：</div>
@@ -864,7 +864,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 					</Tooltip>,
 				dataIndex: 'weibo_name',
 				key: 'weibo_name',
-				width: 200,
+				width: 310,
 				render: (data, {order_default_cycle, default_cycle, partner_type_name, warningClass}) => {
 					return <div className={warningClass}>
 					<div>主账号：{data}</div>
@@ -1066,7 +1066,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				}
 			},
 			'pre_min_sell_price': {
-				title: '最低售卖价',
+				title: '本次审核最低售卖价',
 				dataIndex: 'pre_min_sell_price',
 				key: 'pre_min_sell_price',
 				width: 310,

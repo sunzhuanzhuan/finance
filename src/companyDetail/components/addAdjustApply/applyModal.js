@@ -535,6 +535,7 @@ class ApplyModal extends React.Component {
 					<FormItem className='previewItem'>
 						{
 							isShowPreview ? <PreTable 
+							readjustType={priceType}
 							readjustId={readjustId}
 							isApplication={isApplication}
 							curSelectRows={curSelectRows}

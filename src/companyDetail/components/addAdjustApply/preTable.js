@@ -13,14 +13,16 @@ class PreTable extends React.Component {
 		}
 	}
 	componentDidMount() {
-		const { curSelectRows, applicationPreview, isApplication, applicationDetail: { list = [] } } = this.props;
+		const { curSelectRows, applicationPreview, isApplication, applicationDetail: { list = [] }, readjustType } = this.props;
 		let array = isApplication ? list : curSelectRows;
 		let isShowWarning;
+		let previewRateVal;
 
 		const ary = array.map(item => {
 			const minSellPrice = applicationPreview[item['order_id']] || [];
 			minSellPrice.forEach(minItem => {
-				const { price_id, min_sell_price } = minItem;
+				const { price_id, min_sell_price, profit_rate, service_rate } = minItem;
+				previewRateVal = item['quote_type'] == 1 ? profit_rate : service_rate;
 				const bottomItem = item['price'].find(bottomItem => bottomItem.price_id == price_id) || {};
 				if((min_sell_price - bottomItem.base_price) <= 0)
 					isShowWarning = true;
@@ -37,7 +39,9 @@ class PreTable extends React.Component {
 				['pre_min_sell_price']: minSellPrice,
 				['price']: item['price'],
 				['quote_type']: item['quote_type'],
-				warningClass: isShowWarning ? 'warning_wrapper' : ''
+				['warningClass']: isShowWarning ? 'warning_wrapper' : '',
+				['previewReadjustType']: readjustType,
+				['previewRateVal']: previewRateVal
 			};
 			return obj
 		});

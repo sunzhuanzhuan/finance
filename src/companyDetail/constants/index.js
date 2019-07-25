@@ -956,9 +956,9 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 								titlePrice: item.base_price,
 								baseRate: item.quote_type == 2 ? item.service_fees_rate :  item.private_profit_rate,
 								bloggerPrice: item.private_base_price,
-								bloggerRate: item.private_base_profit_rate,
+								bloggerRate: item.quote_type == 1 ? item.private_base_profit_rate : item.service_fees_rate,
 								trilateralPrice: item.public_base_price,
-								trilateralRate: item.public_base_profit_rate
+								trilateralRate: item.quote_type == 1 ? item.public_base_profit_rate : item.service_fees_rate
 							}
 							return getPriceContent(showObj)
 						})}
@@ -984,9 +984,9 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 								titlePrice: item.quoted_price,
 								baseRate: item.quote_type == 2 ? item.service_fees_rate :  item.private_profit_rate,
 								bloggerPrice: item.private_quote_price,
-								bloggerRate: item.private_profit_rate,
+								bloggerRate: item.quote_type == 1 ? item.private_profit_rate : item.service_fees_rate,
 								trilateralPrice: item.public_quote_price,
-								trilateralRate: item.public_profit_rate
+								trilateralRate: item.quote_type == 1 ? item.public_profit_rate : item.service_fees_rate
 							}
 							return getPriceContent(showObj);
 						})}
@@ -1095,6 +1095,19 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				render: (text, record) => {
 					const value = text == '1' ? record.profit_rate : text == '2' ? record.service_rate : null;
 					return record.min_sell_price ? value : '-';
+				}
+			},
+			'preview_quote_type': {
+				title: '本次利润率/服务费率',
+				dataIndex: 'quote_type',
+				key: 'quote_type',
+				width: 100,
+				render: (_, { previewReadjustType, previewRateVal, warningClass }) => {
+					return (
+						<div className={warningClass}>
+							{ previewReadjustType == '1' ? previewRateVal : '-' }
+						</div>
+					);
 				}
 			},
 			'pass_time': {

@@ -124,22 +124,20 @@ class AdjustApplyDetail extends React.Component {
 		this.setState({activeKey});
 	}
 	render() {
-		const { loading, tipVisible, rejectVisible, curSelectRowKeys, curSelectRows, activeKey, applyId } = this.state;
-		let flag= false;
+		const { loading, tipVisible, rejectVisible, flag, curSelectRowKeys, curSelectRows, activeKey, applyId } = this.state;
 		const { goldenMetadata: { rel_order_status = [], quote_type = [] }, applyListReducer = {} } = this.props;
 		const allDetailList = applyListReducer[`applyDetailListStatusallOptions`] || {};
 		const { total: allTotal } = allDetailList;
 		const adjustApplyDetail = flag ? 
 			adjustApplyDetailFunc(rel_order_status, quote_type)(['order_id', 'policy_id', 'status', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'main_account_info', 'quoted_price', 'discount_rate', 'order_bottom_price', 'commissioned_price', 'history_min_sell_price', 'history_rate', 'min_sell_price', 'quote_type', 'pass_time', 'remark']) 
 			: adjustApplyDetailFunc(rel_order_status, quote_type)(['order_id', 'policy_id', 'status', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'main_account_info', 'discount_rate', 'order_bottom_price', 'commissioned_price', 'history_min_sell_price', 'min_sell_price', 'pass_time', 'remark']);
-		const adjustApplyPreview = adjustApplyDetailFunc(rel_order_status, quote_type)(['prev_id', 'company_name', 'project_name', 'requirement_id_name', 'main_account_info', 'discount_rate', 'order_bottom_price', 'commissioned_price', 'quoted_price', 'pre_min_sell_price']);
+		const adjustApplyPreview = adjustApplyDetailFunc(rel_order_status, quote_type)(['prev_id', 'company_name', 'project_name', 'requirement_id_name', 'main_account_info', 'discount_rate', 'order_bottom_price', 'commissioned_price', 'quoted_price', 'pre_min_sell_price', 'preview_quote_type']);
 		const dealStatusArr = Array.isArray(rel_order_status) && rel_order_status.length  ? [{id: 'allOptions', display: '全部'}, ...rel_order_status] : [];
 		const getTabPaneComp = () => {
 			return dealStatusArr.map(item => {
 				const { id, display } = item;
 				const tabInfo = applyListReducer[`applyDetailListStatus${id}`] || {};
 				const { list = [], page, total } = tabInfo;
-				const status = id !== 'allOptions' ? id : undefined; 
 				const tab = <div>
 					<span key='name'>{display}</span>
 					<span key='count'>{total}</span>

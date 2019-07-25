@@ -14,8 +14,18 @@ class PreTable extends React.Component {
 	}
 	componentDidMount() {
 		const { curSelectRows, applicationPreview, isApplication, applicationDetail: { list = [] } } = this.props;
-		let array = isApplication ? list : curSelectRows
+		let array = isApplication ? list : curSelectRows;
+		let isShowWarning;
+
 		const ary = array.map(item => {
+			const minSellPrice = applicationPreview[item['order_id']] || [];
+			minSellPrice.forEach(minItem => {
+				const { price_id, min_sell_price } = minItem;
+				const bottomItem = item['price'].find(bottomItem => bottomItem.price_id == price_id) || {};
+				if((min_sell_price - bottomItem.base_price) <= 0)
+					isShowWarning = true;
+			})
+
 			let obj = {
 				['order_id']: item['order_id'],
 				['company_name']: item['company_name'],
@@ -24,9 +34,10 @@ class PreTable extends React.Component {
 				['requirement_name']: item['requirement_name'],
 				['platform_name']: item['platform_name'],
 				['weibo_name']: item['weibo_name'],
-				['pre_min_sell_price']: applicationPreview[item['order_id']],
+				['pre_min_sell_price']: minSellPrice,
 				['price']: item['price'],
-				['quote_type']: item['quote_type']
+				['quote_type']: item['quote_type'],
+				warningClass: isShowWarning ? 'warning_wrapper' : ''
 			};
 			return obj
 		});
@@ -67,7 +78,7 @@ class PreTable extends React.Component {
 			dataSource={data} 
 			bordered 
 			pagination={isApplication ? applicationPaginationObj : paginationObj} 
-			scroll={{ x: 2000 }} />
+			scroll={{ x: 2400 }} />
 	}
 }
 

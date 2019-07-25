@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import { withRouter } from 'react-router-dom';
 import * as goldenActions from "../../actions/goldenApply";
-import { Modal, Button, Form, Input, message, Radio } from "antd";
+import { Modal, Button, Form, Input, message, Radio, Popover } from "antd";
 import { WBYUploadFile } from 'wbyui';
 import qs from 'qs';
 import numeral from 'numeral';
@@ -371,6 +371,9 @@ class ApplyModal extends React.Component {
 			.filter(item => curSelectRows.length > 1 || type === 'pass' ? item.value !== 3 : item)
 			.map(item => <Radio key={item.value} value={item.value}>{item.label}</Radio>)
 	}
+	handleInputChange = () => {
+		this.setState({isShowPreview: false});
+	}
 	getAmountAdjustItem = (getFieldDecorator, otherLayout, curSelectRows = []) => {
 		if(curSelectRows.length != 1)
 			return null;
@@ -379,18 +382,28 @@ class ApplyModal extends React.Component {
 		if(!price.length)
 			return null;
 		return price.map(item => {
-			const { price_label, price_id } = item;
+			const { price_label, price_id, base_price } = item;
 			const label = `${price_label}最低售卖价`;
+			const showTitle = label.length > 8 ? <Popover content={label}
+						placement="topLeft">
+					{`${label.substr(0, 8)}...`}
+				</Popover> : label;
+			const priceTitle = price_label.length > 8 ? <Popover content={price_label}
+							placement="topLeft">
+					{`${price_label.substr(0, 8)}...`}
+				</Popover> : price_label;
+
 			return (
-				<FormItem key={price_id} label={label} {...otherLayout}>
+				<FormItem key={price_id} label={showTitle} {...otherLayout}>
 					{getFieldDecorator(price_id, {
 						rules: [
 							{ required: true, message: `请输入${label}!` },
 							{ validator: this.checkCountNum }
 						]
 					})(
-						<Input style={{ width: 200 }} disabled={curSelectRows.length > 1} />
+						<Input style={{ width: 200 }} disabled={curSelectRows.length > 1} onChange={this.handleInputChange} />
 					)}
+					<span style={{marginLeft: 20}}>{priceTitle}：{base_price}</span>
 				</FormItem>
 			)
 		})
@@ -407,7 +420,7 @@ class ApplyModal extends React.Component {
 						{ validator: this.checkProfitCount }
 					]
 				} : {})(
-					<Input addonAfter={'%'} style={{ width: 200 }} disabled={quoteType == 2} />
+					<Input addonAfter={'%'} style={{ width: 200 }} disabled={quoteType == 2} onChange={this.handleInputChange} />
 				)}
 			</FormItem>,
 			<FormItem key='service_rate' label='服务费率' {...otherLayout}>
@@ -417,7 +430,7 @@ class ApplyModal extends React.Component {
 						{ validator: this.checkCount }
 					]
 				} : {})(
-					<Input addonAfter={'%'} style={{ width: 200 }} disabled={quoteType == 1} />
+					<Input addonAfter={'%'} style={{ width: 200 }} disabled={quoteType == 1} onChange={this.handleInputChange} />
 				)}
 			</FormItem>
 		] : 

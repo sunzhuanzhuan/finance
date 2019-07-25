@@ -701,7 +701,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				key: 'order_id',
 				width: 80,
 				render: (text, record) => {
-					return <div>
+					return <div className={record.warningClass}>
 						<div>{text}</div>
 						{record.plan_manager_id && record.plan_manager_id != '0' && <div style={{ display: 'inline-block', backgroundColor: 'red', color: '#fff', padding: '0 10px' }}>含策划</div>}
 					</div>
@@ -714,7 +714,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				width: 80,
 				fixed: 'left',
 				render: (text, record) => {
-					return <div>
+					return <div className={record.warningClass}>
 						<div>{text}</div>
 						{record.plan_manager_id && record.plan_manager_id != '0' && <div style={{ display: 'inline-block', backgroundColor: 'red', color: '#fff', padding: '0 10px' }}>含策划</div>}
 					</div>
@@ -737,7 +737,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				key: 'status',
 				width: 130,
 				fixed: 'left',
-				render: (text) => {
+				render: (text, record) => {
 					const value = rel_order_status.find(item => item.id == text);
 					let className = '';
 					switch(text) {
@@ -754,7 +754,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 							className = 'normal';
 							break;
 					}
-					return value ? <div className={className}>
+					return value ? <div className={`${className} ${record.warningClass}`}>
 					<span></span>
 					<div>{value.display}</div>
 				</div> : null
@@ -768,7 +768,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				render: (text = '-', record) => {
 					const { platform_name= '-', quote_type: quoteVal } = record;
 					const value = quote_type.find(item => item.id == quoteVal) || {};
-					return <div className='left_content_td'>
+					return <div className={`left_content_td ${record.warningClass}`}>
 						<div>{text}</div>
 						<div>报价类型：{value.display || '未知'}</div>
 						<div></div>
@@ -782,7 +782,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				width: 200,
 				render: (text, record) => {
 					const { platform_name= '-' } = record;
-					return <div className='left_content_td'>
+					return <div className={`left_content_td ${record.warningClass}`}>
 						<div>所属项目：</div>
 						<div>{text ? text : '-'}</div>
 						<div>所属品牌：</div>
@@ -807,8 +807,8 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				dataIndex: 'requirement_id_name',
 				key: 'requirement_id_name',
 				width: 200,
-				render: (text, { requirement_id, requirement_name }) => {
-					return <div className='left_content_td'>
+				render: (text, { requirement_id, requirement_name, warningClass }) => {
+					return <div className={`left_content_td ${warningClass}`}>
 						<div>需求ID：</div>
 						<div>{requirement_id}</div>
 						<div>需求名称：</div>
@@ -821,8 +821,8 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				dataIndex: 'account_id',
 				key: 'account_id',
 				width: 200,
-				render: (data, {weibo_name}) => {
-					return <div className='left_content_td'>
+				render: (data, {weibo_name, warningClass}) => {
+					return <div className={`left_content_td ${warningClass}`}>
 					<div>账号名称：</div>
 					<div>{weibo_name}</div>
 					<div>ID：</div>
@@ -841,6 +841,9 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				dataIndex: 'weibo_name',
 				key: 'weibo_name',
 				width: 120,
+				render: (data, record) => {
+					return <div className={record.warningClass}>{data}</div>
+				}
 			},
 			'platform_name': {
 				title: '平台',
@@ -848,6 +851,9 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				key: 'platform_name',
 				align: 'center',
 				width: 100,
+				render: (data, record) => {
+					return <div className={record.warningClass}>{data}</div>
+				}
 			},
 			'main_account_info': {
 				title: <Tooltip title={<div>
@@ -859,8 +865,8 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				dataIndex: 'weibo_name',
 				key: 'weibo_name',
 				width: 200,
-				render: (data, {order_default_cycle, default_cycle, partner_type_name}) => {
-					return <div>
+				render: (data, {order_default_cycle, default_cycle, partner_type_name, warningClass}) => {
+					return <div className={warningClass}>
 					<div>主账号：{data}</div>
 					<div>实时账期：{default_cycle}</div>
 					<div>固定账期：{parseInt(order_default_cycle) || '-'}</div>
@@ -879,8 +885,12 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				dataIndex: 'plan_manager_id',
 				key: 'plan_manager_id',
 				width: 120,
-				render: (text, record) => {
-					return record.plan_manager_id == 0 ? '否' : '是'
+				render: (_, record) => {
+					return (
+						<div className={record.warningClass}>
+							{record.plan_manager_id == 0 ? '否' : '是'}
+						</div>
+					)
 				}
 			},
 			'discount_rate': {
@@ -891,7 +901,11 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				render: (_, record) => {
 					// const discount = record.price && record.price[0] ? record.price[0].discount_rate : 0;
 					// return record.quote_type != '2' ? numeral(discount).format('0.00%') : '-'
-					return record.quote_type != '2' ? record.price && record.price[0] ? numeral(record.price[0].discount_rate).format('0.00%') : 0 : '-'
+					return (
+						<div className={record.warningClass}>
+							{record.quote_type != '2' ? record.price && record.price[0] ? numeral(record.price[0].discount_rate).format('0.00%') : 0 : '-'}
+						</div>
+					)
 				}
 			},
 			'quoted_price': {
@@ -899,9 +913,9 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				dataIndex: 'quoted_price',
 				key: 'quoted_price',
 				width: 310,
-				render: (_, { price = [] }) => {
+				render: (_, { price = [], warningClass }) => {
 					// const flag = price && price[0] ? price[0].trinity_type == 2 : false;
-					return <div>
+					return <div className={warningClass}>
 						{price.map(item => {
 							const showObj = {
 								isShowDetail: item.trinity_type == 2,
@@ -927,12 +941,12 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				dataIndex: 'order_bottom_price',
 				key: 'order_bottom_price',
 				width: 310,
-				render: (_, { price = [] }) => {
+				render: (_, { price = [], warningClass }) => {
 					// quote_type 判断展示利用率或服务费率
 					// public_base_price 阳价 三方 public_base_profit_rate 利用率
 					// private_base_price 阴价 博主 private_base_profit_rate 利用率
 					// trinity_type === 2 显示阴阳价 判断是否展示
-					return <div>
+					return <div className={warningClass}>
 						{price.map(item => {
 							const showObj = {
 								isShowDetail: item.trinity_type == 2,
@@ -956,11 +970,11 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				dataIndex: 'price',
 				key: 'price',
 				width: 310,
-				render: (text, { price = [] }) => {
+				render: (text, { price = [], warningClass }) => {
 					// const flag = price && price[0] ? price[0].trinity_type == 2 : false;
 					// private_quote_price 阴价 利用率  private_profit_rate
 					// public_quote_price 阳价 利用率  public_profit_rate
-					return <div>
+					return <div className={warningClass}>
 						{price.map(item => {
 							const showObj = {
 								isShowDetail: item.trinity_type == 2,
@@ -1056,9 +1070,9 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				dataIndex: 'pre_min_sell_price',
 				key: 'pre_min_sell_price',
 				width: 310,
-				render: (_, { pre_min_sell_price = [] }) => {
+				render: (_, { pre_min_sell_price = [], warningClass }) => {
 					// const flag = price && price[0] ? price[0].trinity_type == 2 : false;
-					return <div>
+					return <div className={warningClass}>
 						{pre_min_sell_price.map(item => {
 							const showObj = {
 								isShowDetail: item.trinity_type == 2,
@@ -1079,7 +1093,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				key: 'quote_type',
 				width: 100,
 				render: (text, record) => {
-					const value = text === '1' ? record.profit_rate : text === '2' ? record.service_rate : null;
+					const value = text == '1' ? record.profit_rate : text == '2' ? record.service_rate : null;
 					return record.min_sell_price ? value : '-';
 				}
 			},

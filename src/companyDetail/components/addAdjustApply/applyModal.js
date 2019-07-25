@@ -365,10 +365,9 @@ class ApplyModal extends React.Component {
 	handleChangePriceType = ({target:{value}}) => {
 		this.setState({ priceType: value, isShowPreview: false })
 	}
-	getPriceTypeOption = (curSelectRows = []) => {
-		const {type} = this.props;
+	getPriceTypeOption = (curSelectRows = [], type, total) => {
 		return this.priceTypeOption
-			.filter(item => curSelectRows.length > 1 || type === 'pass' ? item.value !== 3 : item)
+			.filter(item => curSelectRows.length > 1 || (type === 'pass' && parseInt(total) > 1) ? item.value !== 3 : item)
 			.map(item => <Radio key={item.value} value={item.value}>{item.label}</Radio>)
 	}
 	handleInputChange = () => {
@@ -451,7 +450,7 @@ class ApplyModal extends React.Component {
 	render() {
 		const { getFieldDecorator } = this.props.form;
 		const { isClick, priceType, isShowPreview } = this.state;
-		const { visible, onCancel, type, goldenToken, quoteType, flag, isApplication, curSelectRows = [], columns = [], readjustId } = this.props;
+		const { visible, onCancel, type, goldenToken, quoteType, flag, isApplication, curSelectRows = [], columns = [], readjustId, applicationDetail: { total } } = this.props;
 		const formItemLayout = {
 			labelCol: { span: 4 },
 			wrapperCol: { span: 20 },
@@ -518,7 +517,7 @@ class ApplyModal extends React.Component {
 						})(
 							<RadioGroup onChange={this.handleChangePriceType}>
 							{
-								this.getPriceTypeOption(curSelectRows)
+								this.getPriceTypeOption(curSelectRows, type, total)
 							}
 							</RadioGroup>
 						)}

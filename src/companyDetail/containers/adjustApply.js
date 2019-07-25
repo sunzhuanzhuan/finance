@@ -85,6 +85,14 @@ class AdjustApply extends React.Component {
 	}
 	handleAction = (type, readjust_application_id, quote_type, company_id) => {
 		if (type === 'pass') {
+			const params = {
+				page: 1,
+				readjust_application_id,
+				company_id,
+				page_size: 50,
+				status: 1
+			}
+			this.props.actions.getApplicationDetail(params);
 			this.setState({ tipVisible: true, quoteType: quote_type, readjust_application_id, company_id });
 		} else if (type === 'reject') {
 			this.showReject(readjust_application_id);

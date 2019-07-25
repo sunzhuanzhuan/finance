@@ -365,7 +365,7 @@ export const goldenFlowConfig = [
 	}
 ]
 
-export const adjustApplyFunc = (application_status, handleJump) => {
+export const adjustApplyFunc = (application_status, quote_type, handleJump) => {
 	return [
 		{
 			title: '申请编号',
@@ -391,6 +391,24 @@ export const adjustApplyFunc = (application_status, handleJump) => {
 			key: 'real_name',
 			align: 'center',
 			width: 120,
+		},
+		{
+			title: '公司简称',
+			dataIndex: 'company_name',
+			key: 'company_name',
+			align: 'center',
+			width: 120,
+		},
+		{
+			title: '报价类型',
+			dataIndex: 'quote_type',
+			key: 'quote_type',
+			align: 'center',
+			width: 120,
+			render: text => {
+				const value = quote_type.find(item => item.id == text) || {};
+				return <div>{value.display || '-'}</div>
+			}
 		},
 		{
 			title: '申请时间',
@@ -874,6 +892,18 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				</div>
 				}
 			},
+			'main_account_info_sale': {
+				title: '主账号信息',
+				dataIndex: 'weibo_name',
+				key: 'weibo_name',
+				width: 310,
+				render: (data, {partner_type_name, warningClass}) => {
+					return <div className={warningClass}>
+					<div>主账号：{data}</div>
+					<div>合作方方式：{partner_type_name}</div>
+				</div>
+				}
+			},
 			'main_account_name': {
 				title: '主账号名称',
 				dataIndex: 'main_account_name',
@@ -987,6 +1017,30 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 								bloggerRate: item.quote_type == 1 ? item.private_profit_rate : item.service_fees_rate,
 								trilateralPrice: item.public_quote_price,
 								trilateralRate: item.quote_type == 1 ? item.public_profit_rate : item.service_fees_rate
+							}
+							return getPriceContent(showObj);
+						})}
+					</div>
+				}
+			},
+			'commissioned_price_sale': {
+				title: '应约价',
+				dataIndex: 'price',
+				key: 'price',
+				width: 310,
+				render: (text, { price = [], warningClass }) => {
+					// const flag = price && price[0] ? price[0].trinity_type == 2 : false;
+					// private_quote_price 阴价 利用率  private_profit_rate
+					// public_quote_price 阳价 利用率  public_profit_rate
+					return <div className={warningClass}>
+						{price.map(item => {
+							const showObj = {
+								isShowDetail: item.trinity_type == 2,
+								isShowRate: false,
+								titleLable: item.price_label,
+								titlePrice: item.quoted_price,
+								bloggerPrice: item.private_quote_price,
+								trilateralPrice: item.public_quote_price,
 							}
 							return getPriceContent(showObj);
 						})}

@@ -16,6 +16,7 @@ class PreTable extends React.Component {
 		const { curSelectRows, applicationPreview, isApplication, applicationDetail: { list = [] }, readjustType } = this.props;
 		let array = isApplication ? list : curSelectRows;
 		let isShowWarning;
+		let isExistWarning;
 		let previewRateVal;
 
 		const ary = array.map(item => {
@@ -25,8 +26,10 @@ class PreTable extends React.Component {
 				const { price_id, min_sell_price, profit_rate, service_rate } = minItem;
 				previewRateVal = item['quote_type'] == 1 ? profit_rate : service_rate;
 				const bottomItem = item['price'].find(bottomItem => bottomItem.price_id == price_id) || {};
-				if((min_sell_price - bottomItem.base_price) < 0)
+				if((min_sell_price - bottomItem.base_price) < 0) {
 					isShowWarning = true;
+					isExistWarning = true;
+				}
 			})
 
 			let obj = {
@@ -46,7 +49,7 @@ class PreTable extends React.Component {
 			};
 			return obj
 		});
-		this.setState({ data: ary, isShowWarning })
+		this.setState({ data: ary, isExistWarning })
 	}
 	queryData = (obj, func) => {
 		this.setState({ loading: true });
@@ -61,7 +64,7 @@ class PreTable extends React.Component {
 		})
 	}
 	render() {
-		const { data, isShowWarning } = this.state;
+		const { data, isExistWarning } = this.state;
 		const { columns, isApplication, readjustId, companyId, applicationDetail: { page, total } } = this.props;
 		let applicationPaginationObj = {
 			onChange: (current) => {
@@ -78,7 +81,7 @@ class PreTable extends React.Component {
 		};
 		return (
 			<div>
-				{isShowWarning ? <Alert closable style={{marginBottom: '20px'}} message="请注意标红的订单：订单最低售卖价小于了订单底价，建议修改调价方式/利润率/服务费率。" type="warning" showIcon /> : null}
+				{isExistWarning ? <Alert closable style={{marginBottom: '20px'}} message="请注意标红的订单：订单最低售卖价小于了订单底价，建议修改调价方式/利润率/服务费率。" type="warning" showIcon /> : null}
 				<Table 
 				rowKey='order_id' 
 				className='preTable'

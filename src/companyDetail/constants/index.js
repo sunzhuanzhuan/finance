@@ -784,12 +784,11 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				key: 'company_name',
 				width: 220,
 				render: (text = '-', record) => {
-					const { platform_name= '-', quote_type: quoteVal } = record;
+					const { quote_type: quoteVal } = record;
 					const value = quote_type.find(item => item.id == quoteVal) || {};
 					return <div className={`left_content_td ${record.warningClass}`} style={{width: 184}}>
 						<div>{text}</div>
 						<div>报价类型：{value.display || '未知'}</div>
-						<div></div>
 					</div>
 				}
 			},
@@ -798,13 +797,11 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				dataIndex: 'project_name',
 				key: 'project_name',
 				width: 220,
-				render: (text, record) => {
+				render: (text = '-', record) => {
 					const { platform_name= '-' } = record;
 					return <div className={`left_content_td ${record.warningClass}`}>
-						<div>所属项目：</div>
-						<div>{text ? text : '-'}</div>
-						<div>所属品牌：</div>
-						<div>{platform_name}</div>
+						<div>所属项目：{text}</div>
+						<div>所属品牌：{platform_name}</div>
 					</div>
 				}
 			},
@@ -825,12 +822,10 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				dataIndex: 'requirement_id_name',
 				key: 'requirement_id_name',
 				width: 220,
-				render: (text, { requirement_id, requirement_name, warningClass }) => {
+				render: (text, { requirement_id = '-', requirement_name = '-', warningClass }) => {
 					return <div className={`left_content_td ${warningClass}`}>
-						<div>需求ID：</div>
-						<div>{requirement_id}</div>
-						<div>需求名称：</div>
-						<div>{requirement_name}</div>
+						<div>需求ID：{requirement_id}</div>
+						<div>需求名称：{requirement_name}</div>
 					</div>
 				}
 			},
@@ -839,12 +834,10 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				dataIndex: 'account_id',
 				key: 'account_id',
 				width: 310,
-				render: (data, {weibo_name, warningClass}) => {
+				render: (data = '-', {weibo_name = '-', warningClass}) => {
 					return <div className={`left_content_td ${warningClass}`}>
-					<div>账号名称：</div>
-					<div>{weibo_name}</div>
-					<div>ID：</div>
-					<div>{data}</div>
+					<div>账号名称：{weibo_name}</div>
+					<div>ID：{data}</div>
 				</div>
 				}
 			},
@@ -1028,7 +1021,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				dataIndex: 'price',
 				key: 'price',
 				width: 310,
-				render: (text, { price = [], warningClass }) => {
+				render: (_, { price = [], warningClass }) => {
 					// const flag = price && price[0] ? price[0].trinity_type == 2 : false;
 					// private_quote_price 阴价 利用率  private_profit_rate
 					// public_quote_price 阳价 利用率  public_profit_rate
@@ -1052,7 +1045,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				dataIndex: 'price',
 				key: 'price',
 				width: 260,
-				render: (text, { price = [] }) => {
+				render: (_, { price = [] }) => {
 					return <div>
 						{price.map((item, index) => {
 							return <div key={index}>{`${item.price_label}:${item.quoted_price}`}</div>
@@ -1179,7 +1172,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				dataIndex: 'remark',
 				key: 'remark',
 				width: '244px',
-				render: (text, { remark }) => {
+				render: (_, { remark }) => {
 					if (remark && remark.length > 30) {
 						return <div title={remark}>
 							{remark.slice(0, 29) + '...'}

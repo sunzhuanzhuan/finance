@@ -350,7 +350,7 @@ class ApplyModal extends React.Component {
 	}
 
 	checkCountNum = (_, value, callback) => {
-		const reg = /^\d+$/;
+		const reg = /^(?!(0[0-9]{0,}$))[0-9]{1,}[.]{0,}[0-9]{0,}$/;
 		if (value) {
 			if (reg.test(value.toString())) {
 				callback();

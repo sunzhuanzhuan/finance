@@ -129,8 +129,8 @@ class AdjustApplyDetail extends React.Component {
 		const allDetailList = applyListReducer[`applyDetailListStatusallOptions`] || {};
 		const { total: allTotal } = allDetailList;
 		const adjustApplyDetail = flag ? 
-			adjustApplyDetailFunc(rel_order_status, quote_type)(['order_id', 'policy_id', 'status', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'main_account_info', 'quoted_price', 'discount_rate', 'order_bottom_price', 'commissioned_price', 'history_min_sell_price', 'history_rate', 'min_sell_price', 'quote_type', 'pass_time', 'remark']) 
-			: adjustApplyDetailFunc(rel_order_status, quote_type)(['order_id', 'policy_id', 'status', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'main_account_info_sale', 'discount_rate', 'commissioned_price_sale', 'pass_time', 'remark']);
+			adjustApplyDetailFunc(rel_order_status, quote_type)(['order_id', 'policy_id', 'status', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'main_account_info', 'quoted_price', 'discount_rate', 'order_bottom_price', 'commissioned_price', 'history_min_sell_price', 'history_rate', 'min_sell_price', 'quote_type', 'auditor_name', 'pass_time', 'remark']) 
+			: adjustApplyDetailFunc(rel_order_status, quote_type)(['order_id', 'policy_id', 'status', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'main_account_info_sale', 'discount_rate', 'commissioned_price_sale', 'auditor_name', 'pass_time', 'remark']);
 		const adjustApplyPreview = adjustApplyDetailFunc(rel_order_status, quote_type)(['prev_id', 'company_name', 'project_name', 'requirement_id_name', 'main_account_info', 'discount_rate', 'order_bottom_price', 'commissioned_price', 'quoted_price', 'pre_min_sell_price', 'preview_quote_type']);
 		const dealStatusArr = Array.isArray(rel_order_status) && rel_order_status.length  ? [{id: 'allOptions', display: '全部'}, ...rel_order_status] : [];
 		const getTabPaneComp = () => {
@@ -157,7 +157,7 @@ class AdjustApplyDetail extends React.Component {
 							curSelectRows={curSelectRows}
 							handleSelected={this.handleSelected}
 							location={this.props.location}
-							scroll={flag ? { x: 3755 } : { x: 2290 }}
+							scroll={flag ? { x: 3970 } : { x: 2475 }}
 						>
 						</ApplyTable>
 					</TabPane>

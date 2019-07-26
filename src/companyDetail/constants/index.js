@@ -782,7 +782,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				title: '公司简称',
 				dataIndex: 'company_name',
 				key: 'company_name',
-				width: 220,
+				width: 230,
 				render: (text = '-', record) => {
 					const { quote_type: quoteVal } = record;
 					const value = quote_type.find(item => item.id == quoteVal) || {};
@@ -796,7 +796,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				title: '所属项目/品牌',
 				dataIndex: 'project_name',
 				key: 'project_name',
-				width: 220,
+				width: 230,
 				render: (text = '-', record) => {
 					const { platform_name= '-' } = record;
 					return <div className={`left_content_td ${record.warningClass}`}>
@@ -821,7 +821,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				title: '需求ID/需求名称',
 				dataIndex: 'requirement_id_name',
 				key: 'requirement_id_name',
-				width: 220,
+				width: 230,
 				render: (text, { requirement_id = '-', requirement_name = '-', warningClass }) => {
 					return <div className={`left_content_td ${warningClass}`}>
 						<div>需求ID：{requirement_id}</div>
@@ -833,7 +833,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				title: '账号信息',
 				dataIndex: 'account_id',
 				key: 'account_id',
-				width: 310,
+				width: 320,
 				render: (data = '-', {weibo_name = '-', warningClass}) => {
 					return <div className={`left_content_td ${warningClass}`}>
 					<div>账号名称：{weibo_name}</div>
@@ -875,7 +875,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 					</Tooltip>,
 				dataIndex: 'weibo_name',
 				key: 'weibo_name',
-				width: 310,
+				width: 320,
 				render: (data, {order_default_cycle, default_cycle, partner_type_name, warningClass}) => {
 					return <div className={warningClass}>
 					<div>主账号：{data}</div>
@@ -889,10 +889,10 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				title: '主账号信息',
 				dataIndex: 'weibo_name',
 				key: 'weibo_name',
-				width: 310,
+				width: 320,
 				render: (data, {partner_type_name, warningClass}) => {
 					return <div className={warningClass}>
-					<div>主账号：{data}</div>
+					<div style={{marginBottom: 10}}>主账号：{data}</div>
 					<div>合作方方式：{partner_type_name}</div>
 				</div>
 				}
@@ -935,7 +935,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				title: '对外成本价',
 				dataIndex: 'quoted_price',
 				key: 'quoted_price',
-				width: 310,
+				width: 320,
 				render: (_, { price = [], warningClass }) => {
 					// const flag = price && price[0] ? price[0].trinity_type == 2 : false;
 					return <div className={warningClass}>
@@ -963,7 +963,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				title: '订单底价',
 				dataIndex: 'order_bottom_price',
 				key: 'order_bottom_price',
-				width: 310,
+				width: 320,
 				render: (_, { price = [], warningClass }) => {
 					// quote_type 判断展示利用率或服务费率
 					// public_base_price 阳价 三方 public_base_profit_rate 利用率
@@ -992,7 +992,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				title: '应约价',
 				dataIndex: 'price',
 				key: 'price',
-				width: 310,
+				width: 320,
 				render: (text, { price = [], warningClass }) => {
 					// const flag = price && price[0] ? price[0].trinity_type == 2 : false;
 					// private_quote_price 阴价 利用率  private_profit_rate
@@ -1020,7 +1020,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				title: '应约价',
 				dataIndex: 'price',
 				key: 'price',
-				width: 310,
+				width: 320,
 				render: (_, { price = [], warningClass }) => {
 					// const flag = price && price[0] ? price[0].trinity_type == 2 : false;
 					// private_quote_price 阴价 利用率  private_profit_rate
@@ -1057,7 +1057,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				title: '历史审核最低售卖价',
 				dataIndex: 'history_min_sell_price',
 				key: 'history_min_sell_price',
-				width: 310,
+				width: 320,
 				className: 'relative_td',
 				render: (text, { history_min_sell_price: { readjust_type } }) => {
 					const item = text ? text.min_sell_price : [];
@@ -1094,7 +1094,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				title: '本次审核最低售卖价',
 				dataIndex: 'min_sell_price',
 				key: 'min_sell_price',
-				width: 310,
+				width: 320,
 				render: (text, { readjust_type }) => {
 					const node = text ? text.map(item => {
 							const showObj = {
@@ -1116,7 +1116,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				title: '本次审核最低售卖价',
 				dataIndex: 'pre_min_sell_price',
 				key: 'pre_min_sell_price',
-				width: 310,
+				width: 320,
 				render: (_, { pre_min_sell_price = [], warningClass }) => {
 					// const flag = price && price[0] ? price[0].trinity_type == 2 : false;
 					return <div className={warningClass}>
@@ -1165,6 +1165,15 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				render: (text) => {
 					const flag = text === '0000-00-00 00:00:00';
 					return !flag ? text : '-';
+				}
+			},
+			'auditor_name': {
+				title: '审核人',
+				dataIndex: 'auditor_name',
+				key: 'auditor_name',
+				width: 160,
+				render: (text = '-') => {
+					return text;
 				}
 			},
 			'remark': {

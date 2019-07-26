@@ -19,6 +19,7 @@ class PreTable extends React.Component {
 		let previewRateVal;
 
 		const ary = array.map(item => {
+			isShowWarning = false;
 			const minSellPrice = applicationPreview[item['order_id']] || [];
 			minSellPrice.forEach(minItem => {
 				const { price_id, min_sell_price, profit_rate, service_rate } = minItem;

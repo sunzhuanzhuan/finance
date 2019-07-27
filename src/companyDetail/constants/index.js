@@ -1078,7 +1078,8 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 							return getPriceContent(showObj);
 						})}
 					</div> : null;
-					const pro = readjust_type == 2 ? <div key='tips' className='detail_price_info'>导入Excel方式调整</div> : null;
+					// const pro = readjust_type == 2 ? <div key='tips' className='detail_price_info'>导入Excel方式调整</div> : null;
+					const pro = <div key='tips' className='detail_price_info'>导入Excel方式调整</div>;
 
 					return [node, pro];
 				}
@@ -1101,6 +1102,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				dataIndex: 'min_sell_price',
 				key: 'min_sell_price',
 				width: 320,
+				className: 'relative_td',
 				render: (text, { readjust_type }) => {
 					const node = text ? text.map(item => {
 							const showObj = {
@@ -1113,7 +1115,8 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 							}
 							return getPriceContent(showObj);
 						}) : null;
-					const pro = readjust_type == 2 ? <div key='tips' className='detail_price_info'>导入Excel方式调整</div> : null;
+					// const pro = readjust_type == 2 ? <div key='tips' className='detail_price_info'>导入Excel方式调整</div> : null;
+					const pro = <div key='tips' className='detail_price_info'>导入Excel方式调整</div>;
 
 					return [node, pro];
 				}

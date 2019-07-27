@@ -45,7 +45,10 @@ class PreTable extends React.Component {
 				['quote_type']: item['quote_type'],
 				['warningClass']: isShowWarning ? 'warning_wrapper' : '',
 				['previewReadjustType']: readjustType,
-				['previewRateVal']: previewRateVal
+				['previewRateVal']: previewRateVal,
+				['default_cycle']: item['default_cycle'],
+				['order_default_cycle']: item['order_default_cycle'],
+				['partner_type_name']: item['partner_type_name']
 			};
 			return obj
 		});

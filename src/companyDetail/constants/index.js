@@ -792,7 +792,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 					const value = quote_type.find(item => item.id == quoteVal) || {};
 					return <div className={`left_content_td ${record.warningClass}`} style={{width: 184}}>
 						<div>{text}</div>
-						<div>报价类型：{value.display || '未知'}</div>
+						<div>报价类型：{value.display || '-'}</div>
 					</div>
 				}
 			},
@@ -881,11 +881,13 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				key: 'weibo_name',
 				width: 320,
 				render: (data, {order_default_cycle, default_cycle, partner_type_name, warningClass}) => {
+					const defaultCycle = default_cycle ? `${default_cycle}天` : '-';
+					const orderCycle = order_default_cycle ? `${order_default_cycle}天` : '-'
 					return <div className={warningClass}>
 					<div>主账号：{data}</div>
-					<div>实时账期：{default_cycle}</div>
-					<div>固定账期：{parseInt(order_default_cycle) || '-'}</div>
-					<div>合作方方式：{partner_type_name}</div>
+					<div>实时账期：{defaultCycle}</div>
+					<div>固定账期：{orderCycle}</div>
+					<div>合作方式：{partner_type_name}</div>
 				</div>
 				}
 			},

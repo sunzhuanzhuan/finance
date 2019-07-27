@@ -232,7 +232,7 @@ class AdjustApply extends React.Component {
 				flag={flag}
 				isApplication={true}
 				visible={tipVisible}
-				queryAction={this.queryData}
+				queryAction={this.queryAllStatusData}
 				onCancel={() => { this.setState({ tipVisible: false }) }}
 				location={this.props.location}
 				page_size={page_size}

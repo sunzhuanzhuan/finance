@@ -145,12 +145,12 @@ class AdjustApply extends React.Component {
 	}
 	render() {
 		const { loading, tipVisible, page_size, flag, btnFlag, quoteType, readjust_application_id, rejectVisible, company_id, addVisible, activeKey } = this.state;
-		const { form, goldenMetadata, goldenMetadata: { application_status = [], quote_type = [] }, goldenUserList, applicationDetail: { list: detailList = [] }, applyListReducer = {} } = this.props;
+		const { form, goldenMetadata, goldenMetadata: { application_status = [], rel_order_status = [], quote_type = [] }, goldenUserList, applicationDetail: { list: detailList = [] }, applyListReducer = {} } = this.props;
 		const { getFieldDecorator } = form;
 		const formItemLayout = { labelCol: { span: 6 }, wrapperCol: { span: 16 }, };
 		const search = qs.parse(this.props.location.search.substring(1));
 		const adjustApplyList = flag ? adjustApplyListFunc(application_status, quote_type, this.handleJump, this.handleAction) : adjustApplyFunc(application_status, quote_type, this.handleJump);
-		const adjustApplyPreview = adjustApplyDetailFunc([])(['prev_id', 'company_name', 'project_name', 'requirement_id_name', 'platform_name', 'weibo_name', 'plan_manager_id', 'discount_rate', 'order_bottom_price', 'commissioned_price', 'quoted_price', 'pre_min_sell_price', 'preview_quote_type']);
+		const adjustApplyPreview = adjustApplyDetailFunc(rel_order_status, quote_type)(['prev_id', 'company_name', 'project_name', 'requirement_id_name', 'main_account_info', 'discount_rate', 'order_bottom_price', 'commissioned_price', 'quoted_price', 'pre_min_sell_price', 'preview_quote_type']);
 		const dealStatusArr = Array.isArray(application_status) && application_status.length  ? [{id: 'allOptions', display: '全部'}, ...application_status] : [];
 		const getTabPaneComp = () => {
 			return dealStatusArr.map(item => {

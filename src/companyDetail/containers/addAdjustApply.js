@@ -84,7 +84,7 @@ class AddAdjustApply extends React.Component {
 		const { loading, tipVisible, checkVisible, curSelectRowKeys, curSelectRows } = this.state;
 		const { applyOrderList: { list = [], page, total = 0, all_total = 0 }, goldenToken, goldenMetadata: { quote_type = [] } } = this.props;
 		const readyList = readyCheckFunc(this.handleDelete);
-		console.log('sldkfjsldkjfsdlkjf', quote_type)
+
 		return <div className='add-adjust-apply'>
 			<h2 className='add_adjust_header' onClick={this.handleBack}>
 				<Icon type="arrow-left" />

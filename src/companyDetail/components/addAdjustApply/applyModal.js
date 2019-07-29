@@ -381,28 +381,20 @@ class ApplyModal extends React.Component {
 		if(!price.length)
 			return null;
 		return price.map(item => {
-			const { price_label, price_id, base_price } = item;
-			const label = `${price_label}最低售卖价`;
-			const showTitle = label.length > 8 ? <Popover content={label}
-						placement="topLeft">
-					{`${label.substr(0, 8)}...`}
-				</Popover> : label;
-			const priceTitle = price_label.length > 8 ? <Popover content={price_label}
-							placement="topLeft">
-					{`${price_label.substr(0, 8)}...`}
-				</Popover> : price_label;
+			const { price_label, price_id, quoted_price } = item;
 
 			return (
-				<FormItem key={price_id} label={showTitle} {...otherLayout}>
+				<FormItem key={price_id} label='最低售卖价' {...otherLayout}>
 					{getFieldDecorator(price_id, {
 						rules: [
-							{ required: true, message: `请输入${label}!` },
+							{ required: true, message: `请输入最低售卖价!` },
 							{ validator: this.checkCountNum }
 						]
 					})(
 						<Input style={{ width: 200 }} disabled={curSelectRows.length > 1} onChange={this.handleInputChange} />
 					)}
-					<span style={{marginLeft: 20}}>{priceTitle}：{base_price}</span>
+					<span style={{marginLeft: 20}}>应约价：{quoted_price}</span>
+					<div style={{lineHeight: '12px', margin: '4px 0', color: 'rgba(0, 0, 0, 0.45)'}}>{price_label}</div>
 				</FormItem>
 			)
 		})

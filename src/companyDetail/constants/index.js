@@ -898,8 +898,8 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 						</div>}>
 						主账号信息<Icon style={{marginLeft: 5}} type="question-circle" />
 					</Tooltip>,
-				dataIndex: 'weibo_name',
-				key: 'weibo_name',
+				dataIndex: 'identity_name',
+				key: 'identity_name',
 				width: 320,
 				render: (data, {order_default_cycle, default_cycle, partner_type_name, warningClass}) => {
 					const defaultCycle = default_cycle ? `${default_cycle}天` : '-';
@@ -914,8 +914,8 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 			},
 			'main_account_info_sale': {
 				title: '主账号信息',
-				dataIndex: 'weibo_name',
-				key: 'weibo_name',
+				dataIndex: 'identity_name',
+				key: 'identity_name',
 				width: 320,
 				render: (data, {partner_type_name, warningClass}) => {
 					return <div className={warningClass}>

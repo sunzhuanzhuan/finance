@@ -721,10 +721,14 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				title: '订单ID',
 				dataIndex: 'order_id',
 				key: 'order_id',
-				width: 80,
+				width: 160,
 				render: (text, record) => {
+					const { quote_type: quoteVal } = record;
+					const value = quote_type.find(item => item.id == quoteVal) || {};
+
 					return <div className={record.warningClass}>
 						<div>{text}</div>
+						<div>报价类型：{value.display || '-'}</div>
 						{record.plan_manager_id && record.plan_manager_id != '0' && <div style={{ display: 'inline-block', backgroundColor: 'red', color: '#fff', padding: '0 10px' }}>含策划</div>}
 					</div>
 				}
@@ -733,11 +737,15 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				title: '订单ID',
 				dataIndex: 'order_id',
 				key: 'order_id',
-				width: 80,
+				width: 160,
 				fixed: 'left',
 				render: (text, record) => {
+					const { quote_type: quoteVal } = record;
+					const value = quote_type.find(item => item.id == quoteVal) || {};
+
 					return <div className={record.warningClass}>
 						<div>{text}</div>
+						<div>报价类型：{value.display || '-'}</div>
 						{record.plan_manager_id && record.plan_manager_id != '0' && <div style={{ display: 'inline-block', backgroundColor: 'red', color: '#fff', padding: '0 10px' }}>含策划</div>}
 					</div>
 				}
@@ -788,11 +796,8 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				key: 'company_name',
 				width: 230,
 				render: (text = '-', record) => {
-					const { quote_type: quoteVal } = record;
-					const value = quote_type.find(item => item.id == quoteVal) || {};
-					return <div className={`left_content_td ${record.warningClass}`} style={{width: 184}}>
+					return <div className={`${record.warningClass}`} style={{width: 184}}>
 						<div>{text}</div>
-						<div>报价类型：{value.display || '-'}</div>
 					</div>
 				}
 			},

@@ -573,14 +573,24 @@ export const adjustApplyListFunc = (application_status, quote_type, handleJump, 
 	]
 }
 
-export const addAdjustApplyConfig = [
+export const addAdjustApplyConfig = (quote_type = []) => [
 	{
 		title: '订单ID',
 		dataIndex: 'order_id',
 		key: 'order_id',
 		align: 'center',
-		width: 120,
-		fixed: 'left'
+		width: 180,
+		fixed: 'left',
+		render: (data, record) => {
+			const { quote_type: quoteVal } = record;
+			const value = quote_type.find(item => item.id == quoteVal) || {};
+			return (
+				<div>
+					<div>{data}</div>
+					<div>报价类型：{value.display || '-'}</div>
+				</div>
+			)
+		}
 	},
 	{
 		title: '公司简称',

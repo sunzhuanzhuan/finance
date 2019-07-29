@@ -29,6 +29,7 @@ class AddAdjustApply extends React.Component {
 	componentDidMount() {
 		const search = qs.parse(this.props.location.search.substring(1));
 		this.props.actions.getGoldenToken();
+		this.props.actions.getGoldenMetadata();
 		delete search['requirement_label'];
 		const { keys:{company_id} } = search;
 		const queryObj = { page: 1, ...search.keys };
@@ -81,8 +82,9 @@ class AddAdjustApply extends React.Component {
 	}
 	render() {
 		const { loading, tipVisible, checkVisible, curSelectRowKeys, curSelectRows } = this.state;
-		const { applyOrderList: { list = [], page, total = 0, all_total = 0 }, goldenToken } = this.props;
+		const { applyOrderList: { list = [], page, total = 0, all_total = 0 }, goldenToken, goldenMetadata: { quote_type = [] } } = this.props;
 		const readyList = readyCheckFunc(this.handleDelete);
+		console.log('sldkfjsldkjfsdlkjf', quote_type)
 		return <div className='add-adjust-apply'>
 			<h2 className='add_adjust_header' onClick={this.handleBack}>
 				<Icon type="arrow-left" />
@@ -106,7 +108,7 @@ class AddAdjustApply extends React.Component {
 			<ApplyTable
 				type={'add'}
 				rowKey={'order_id'}
-				columns={addAdjustApplyConfig}
+				columns={addAdjustApplyConfig(quote_type)}
 				dataSource={list}
 				loading={loading}
 				queryAction={this.queryData}
@@ -156,7 +158,8 @@ class AddAdjustApply extends React.Component {
 const mapStateToProps = (state) => {
 	return {
 		applyOrderList: state.companyDetail.applyOrderList,
-		goldenToken: state.companyDetail.goldenToken
+		goldenToken: state.companyDetail.goldenToken,
+		goldenMetadata: state.companyDetail.goldenMetadata,
 	}
 }
 const mapDispatchToProps = dispatch => ({

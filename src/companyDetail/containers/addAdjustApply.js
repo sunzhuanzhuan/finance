@@ -30,6 +30,7 @@ class AddAdjustApply extends React.Component {
 		const search = qs.parse(this.props.location.search.substring(1));
 		this.props.actions.getGoldenToken();
 		this.props.actions.getGoldenMetadata();
+		this.props.actions.getCompanyDetailAuthorizations();
 		delete search['requirement_label'];
 		const { keys:{company_id} } = search;
 		const queryObj = { page: 1, ...search.keys };
@@ -118,7 +119,7 @@ class AddAdjustApply extends React.Component {
 				curSelectRows={curSelectRows}
 				handleSelected={this.handleSelected}
 				location={this.props.location}
-				scroll={{ x: 1400 }}
+				scroll={{ x: 1900 }}
 			/>
 			<Row className='top-gap' style={{ textAlign: 'center' }}>
 				<Button className='adjust-apply-btn' type='default' onClick={() => {

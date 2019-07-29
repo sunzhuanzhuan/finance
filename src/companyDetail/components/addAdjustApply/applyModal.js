@@ -28,7 +28,8 @@ class ApplyModal extends React.Component {
 		];
 	}
 	componentDidMount() {
-		this.attachment = ''
+		this.attachment = '';
+		this.props.actions.getCompanyDetailAuthorizations();
 	}
 	handleFunction = (action, params) => {
 		return func => {

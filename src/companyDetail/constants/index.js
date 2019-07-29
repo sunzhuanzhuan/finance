@@ -603,12 +603,14 @@ export const addAdjustApplyConfig = (quote_type = []) => [
 		dataIndex: 'company_name',
 		key: 'company_name',
 		align: 'center',
+		width: 230,
 	},
 	{
 		title: '所属项目',
 		dataIndex: 'project_name',
 		key: 'project_name',
 		align: 'center',
+		width: 230,
 		render: (text) => {
 			return text ? text : '-'
 		}
@@ -618,36 +620,42 @@ export const addAdjustApplyConfig = (quote_type = []) => [
 		dataIndex: 'requirement_id',
 		key: 'requirement_id',
 		align: 'center',
+		width: 80,
 	},
 	{
 		title: '需求名称',
 		dataIndex: 'requirement_name',
 		key: 'requirement_name',
 		align: 'center',
+		width: 160,
 	},
 	{
 		title: '平台',
 		dataIndex: 'platform_name',
 		key: 'platform_name',
 		align: 'center',
+		width: 100,
 	},
 	{
 		title: 'account id',
 		dataIndex: 'account_id',
 		key: 'account_id',
 		align: 'center',
+		width: 100,
 	},
 	{
 		title: '账号名称',
 		dataIndex: 'weibo_name',
 		key: 'weibo_name',
 		align: 'center',
+		width: 120,
 	},
 	{
 		title: '应约价',
 		dataIndex: 'price',
 		key: 'price',
 		align: 'center',
+		width: 320,
 		render: (text, { price }) => {
 			return <div>
 				{price.map((item, index) => {
@@ -661,6 +669,7 @@ export const addAdjustApplyConfig = (quote_type = []) => [
 		dataIndex: 'last_min_sell_price',
 		key: 'last_min_sell_price',
 		align: 'center',
+		width: 320,
 		render: (text) => {
 			const node = text ? <div>
 				{text.map((item, index) => {

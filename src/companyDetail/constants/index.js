@@ -983,7 +983,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 								rateTitle: item.quote_type == 2 ? '服务费率' : '利润率',
 								titleLable: item.price_label,
 								titlePrice: item.base_price,
-								baseRate: item.quote_type == 2 ? item.service_fees_rate :  item.private_profit_rate,
+								baseRate: item.quote_type == 2 ? item.service_fees_rate :  item.private_base_profit_rate,
 								bloggerPrice: item.private_base_price,
 								bloggerRate: item.quote_type == 1 ? item.private_base_profit_rate : item.service_fees_rate,
 								trilateralPrice: item.public_base_price,

@@ -16,13 +16,13 @@ const getPriceContent = (item = {}) => {
 		trilateralPrice, 
 		trilateralRate
 	} = item;
-	const dealTitlePrice = titlePrice ? numeral(titlePrice).format('0.00') : '-';
-	const dealBloggerPrice = bloggerPrice ? numeral(bloggerPrice).format('0.00') : '-';
-	const dealTrilPrice = trilateralPrice ? numeral(trilateralPrice).format('0.00') : '-';
+	const dealTitlePrice = titlePrice || titlePrice == 0 ? numeral(titlePrice).format('0.00') : '-';
+	const dealBloggerPrice = bloggerPrice || bloggerPrice == 0 ? numeral(bloggerPrice).format('0.00') : '-';
+	const dealTrilPrice = trilateralPrice || trilateralPrice == 0 ? numeral(trilateralPrice).format('0.00') : '-';
 
-	const dealBaseRate = baseRate ? numeral(baseRate).format('0.00%') : '-';
-	const dealBlogRate = bloggerRate ? numeral(bloggerRate).format('0.00%') : '-';
-	const dealTrilgRate = trilateralRate ? numeral(trilateralRate).format('0.00%') : '-';
+	const dealBaseRate = baseRate || baseRate == 0 ? numeral(baseRate).format('0.00%') : '-';
+	const dealBlogRate = bloggerRate || bloggerRate == 0 ? numeral(bloggerRate).format('0.00%') : '-';
+	const dealTrilgRate = trilateralRate || trilateralRate == 0 ? numeral(trilateralRate).format('0.00%') : '-';
 
 	return (
 		<div className='price_comp' key={+new Date() + Math.random()}>
@@ -1114,8 +1114,8 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				width: 130,
 				render: (_, {history_min_sell_price, quote_type, }) => {
 					const item = history_min_sell_price ? history_min_sell_price.min_sell_price : [];
-					const profitRate = history_min_sell_price.profit_rate ? numeral(history_min_sell_price.profit_rate).format('0.00%') : '-';
-					const serviceRate = history_min_sell_price.service_rate ? numeral(history_min_sell_price.service_rate).format('0.00%') : '-';
+					const profitRate = history_min_sell_price.profit_rate || history_min_sell_price.profit_rate == 0 ? numeral(history_min_sell_price.profit_rate).format('0.00%') : '-';
+					const serviceRate = history_min_sell_price.service_rate || history_min_sell_price.service_rate == 0 ? numeral(history_min_sell_price.service_rate).format('0.00%') : '-';
 					const value = quote_type === '1' ? profitRate : quote_type === '2' ? serviceRate : '-';
 					return item.length > 0 ? value : '-';
 				}
@@ -1173,8 +1173,8 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				key: 'quote_type',
 				width: 100,
 				render: (text, {profit_rate, service_rate, min_sell_price}) => {
-					const profitRate = profit_rate ? numeral(profit_rate).format('0.00%') : '-';
-					const serviceRate = service_rate ? numeral(service_rate).format('0.00%') : '-';
+					const profitRate = profit_rate || profit_rate == 0 ? numeral(profit_rate).format('0.00%') : '-';
+					const serviceRate = service_rate || service_rate == 0 ? numeral(service_rate).format('0.00%') : '-';
 					const value = text == '1' ? profitRate : text == '2' ? serviceRate : '-';
 					return min_sell_price ? value : '-';
 				}
@@ -1185,7 +1185,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				key: 'quote_type',
 				width: 100,
 				render: (_, { previewReadjustType, previewRateVal, warningClass }) => {
-					const rateVal = previewRateVal ? numeral(previewRateVal).format('0.00%') : '-'
+					const rateVal = previewRateVal || previewRateVal == 0 ? numeral(previewRateVal).format('0.00%') : '-'
 					return (
 						<div className={warningClass}>
 							{ previewReadjustType == '1' ? rateVal : '-' }

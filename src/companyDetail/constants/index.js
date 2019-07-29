@@ -16,6 +16,10 @@ const getPriceContent = (item = {}) => {
 		trilateralPrice, 
 		trilateralRate
 	} = item;
+	const dealTitlePrice = titlePrice ? numeral(titlePrice).format('0.00') : '-';
+	const dealBloggerPrice = bloggerPrice ? numeral(bloggerPrice).format('0.00') : '-';
+	const dealTrilPrice = trilateralPrice ? numeral(trilateralPrice).format('0.00') : '-';
+	
 	const dealBaseRate = baseRate ? numeral(baseRate).format('0.00%') : '-';
 	const dealBlogRate = bloggerRate ? numeral(bloggerRate).format('0.00%') : '-';
 	const dealTrilgRate = trilateralRate ? numeral(trilateralRate).format('0.00%') : '-';
@@ -23,19 +27,19 @@ const getPriceContent = (item = {}) => {
 	return (
 		<div className='price_comp' key={+new Date() + Math.random()}>
 			<div className='price_title'>
-				<span>{titleLable}：{titlePrice}</span>
+				<span>{titleLable}：{dealTitlePrice}</span>
 				{isShowRate && !isShowDetail ? <span style={{marginLeft: 20}}>{rateTitle}：{dealBaseRate}</span> : null}
 			</div>
 			{
 				isShowDetail ? [
 					<div key='blogger' className='price_detail'>
 						<span className='price_dote blogger'></span>
-						<span className='price_content'>博主：{bloggerPrice}</span>
+						<span className='price_content'>博主：{dealBloggerPrice}</span>
 						{ isShowRate ? <span>{rateTitle}：{dealBlogRate}</span> : null }
 					</div>,
 					<div key='trinity' className='price_detail'>
 						<span className='price_dote trilatreal'></span>
-						<span className='price_content'>三方：{trilateralPrice}</span>
+						<span className='price_content'>三方：{dealTrilPrice}</span>
 						{ isShowRate ? <span>{rateTitle}：{dealTrilgRate}</span> : null }
 					</div>
 				] : null

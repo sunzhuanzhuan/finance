@@ -19,7 +19,7 @@ const getPriceContent = (item = {}) => {
 	const dealTitlePrice = titlePrice ? numeral(titlePrice).format('0.00') : '-';
 	const dealBloggerPrice = bloggerPrice ? numeral(bloggerPrice).format('0.00') : '-';
 	const dealTrilPrice = trilateralPrice ? numeral(trilateralPrice).format('0.00') : '-';
-	
+
 	const dealBaseRate = baseRate ? numeral(baseRate).format('0.00%') : '-';
 	const dealBlogRate = bloggerRate ? numeral(bloggerRate).format('0.00%') : '-';
 	const dealTrilgRate = trilateralRate ? numeral(trilateralRate).format('0.00%') : '-';
@@ -728,7 +728,7 @@ export const readyCheckFunc = (handleDelete) => {
 		}
 	]
 }
-export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) => {
+export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], readjust_type = []) => {
 	return ary => {
 		const configMap = {
 			'prev_id': {
@@ -1084,8 +1084,9 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				key: 'history_min_sell_price',
 				width: 320,
 				className: 'relative_td',
-				render: (text, { history_min_sell_price: { readjust_type } }) => {
+				render: (text, { history_min_sell_price: { readjust_type: readJustType } }) => {
 					const item = text ? text.min_sell_price : [];
+					const value = readjust_type.find(item => item.id == readJustType) || {};
 					const node = item.length > 0 ? <div>
 						{item.map(item => {
 							const showObj = {
@@ -1099,8 +1100,9 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 							return getPriceContent(showObj);
 						})}
 					</div> : null;
+					//readjust_type
 					// const pro = readjust_type == 2 ? <div key='tips' className='detail_price_info'>导入Excel方式调整</div> : null;
-					const pro = <div key='tips' className='detail_price_info'>导入Excel方式调整</div>;
+					const pro = value.display ? <div key='tips' className='detail_price_info'>{value.display}</div> : null;
 
 					return [node, pro];
 				}
@@ -1124,7 +1126,8 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				key: 'min_sell_price',
 				width: 320,
 				className: 'relative_td',
-				render: (text, { readjust_type }) => {
+				render: (text, { readjust_type: readJustType }) => {
+					const value = readjust_type.find(item => item.id == readJustType) || {};
 					const node = text ? text.map(item => {
 							const showObj = {
 								isShowDetail: item.trinity_type == 2,
@@ -1137,7 +1140,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 							return getPriceContent(showObj);
 						}) : null;
 					// const pro = readjust_type == 2 ? <div key='tips' className='detail_price_info'>导入Excel方式调整</div> : null;
-					const pro = <div key='tips' className='detail_price_info'>导入Excel方式调整</div>;
+					const pro = value.display ? <div key='tips' className='detail_price_info'>{value.display}</div> : null;
 
 					return [node, pro];
 				}
@@ -1205,8 +1208,8 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 				dataIndex: 'auditor_name',
 				key: 'auditor_name',
 				width: 160,
-				render: (text = '-') => {
-					return text;
+				render: text => {
+					return text || '-';
 				}
 			},
 			'remark': {
@@ -1220,7 +1223,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = []) =>
 							{remark.slice(0, 29) + '...'}
 						</div>
 					} else {
-						return remark
+						return remark || '-'
 					}
 				}
 			}

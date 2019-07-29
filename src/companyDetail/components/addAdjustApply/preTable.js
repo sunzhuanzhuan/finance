@@ -84,7 +84,7 @@ class PreTable extends React.Component {
 		};
 		return (
 			<div>
-				{isExistWarning ? <Alert closable style={{marginBottom: '20px'}} message="请注意标红的订单：订单最低售卖价小于了订单底价，建议修改调价方式/利润率/服务费率。" type="warning" showIcon /> : null}
+				{isExistWarning ? <Alert closable style={{marginBottom: '20px'}} message="请注意标红的订单：订单最低售卖价小于订单底价，建议修改调价类型/利润率/服务费率。" type="warning" showIcon /> : null}
 				<Table 
 				rowKey='order_id' 
 				className='preTable'

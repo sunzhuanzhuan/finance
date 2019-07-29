@@ -224,14 +224,7 @@ class ListQuery extends React.Component {
 									item={['company_id', 'name']}
 								/>
 							)}
-						</FormItem> : <FormItem label='审批状态' className='left-gap'>
-							{getFieldDecorator('status')(
-								<Select style={{ width: 160 }} placeholder="审批状态" allowClear labelInValue>
-									<Option value=''>全部</Option>
-									{rel_order_status.map(({ id, display }) => (<Option key={id} value={id}>{display}</Option>))}
-								</Select>
-							)}
-						</FormItem>}
+						</FormItem> : null}
 					<FormItem label='所属项目' className='left-gap'>
 						{getFieldDecorator('project_id')(
 							<Select
@@ -295,7 +288,7 @@ class ListQuery extends React.Component {
 					<div>
 						<FormItem label='订单ID' className={orderClass}>
 							{getFieldDecorator('order_ids')(
-								<Input placeholder='请输入ID号，多个以空格隔开' style={{ width: 406 }} />
+								<Input placeholder='请输入ID号，多个以空格隔开' style={{ width: 380 }} />
 							)}
 						</FormItem>
 						{type === 'detail' ? <FormItem label='含策划' className='left-gap plan-manage-item'>

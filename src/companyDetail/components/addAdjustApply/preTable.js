@@ -34,6 +34,7 @@ class PreTable extends React.Component {
 
 			let obj = {
 				['order_id']: item['order_id'],
+				['status']: item['status'],
 				['company_name']: item['company_name'],
 				['project_name']: item['project_name'],
 				['requirement_id']: item['requirement_id'],

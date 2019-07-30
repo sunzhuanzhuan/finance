@@ -809,6 +809,34 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				</div> : null
 				}
 			},
+			'statusPre': {
+				title: '状态',
+				dataIndex: 'status',
+				key: 'status',
+				width: 130,
+				render: (text, record) => {
+					const value = rel_order_status.find(item => item.id == text);
+					let className = '';
+					switch(text) {
+						case 1:
+							className = 'normal';
+							break;
+						case 2:
+							className = 'resolve';
+							break;
+						case 3:
+							className = 'reject';
+							break;
+						default:
+							className = 'normal';
+							break;
+					}
+					return value ? <div className={`${className} ${record.warningClass}`}>
+					<span></span>
+					<div>{value.display}</div>
+				</div> : null
+				}
+			},
 			'company_name': {
 				title: '公司简称',
 				dataIndex: 'company_name',

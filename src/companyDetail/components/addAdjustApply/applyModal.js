@@ -399,7 +399,7 @@ class ApplyModal extends React.Component {
 						<Input style={{ width: 200 }} disabled={curSelectRows.length > 1} onChange={this.handleInputChange} />
 					)}
 					<span style={{marginLeft: 20}}>应约价：{quoted_price}</span>
-					<div style={{lineHeight: '12px', margin: '4px 0', color: 'rgba(0, 0, 0, 0.45)'}}>({price_label})</div>
+					<div style={{lineHeight: '16px', margin: '4px 0', color: 'rgba(0, 0, 0, 0.45)'}}>( {price_label} )</div>
 				</FormItem>
 			)
 		})

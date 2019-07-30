@@ -558,7 +558,7 @@ export const adjustApplyListFunc = (application_status, quote_type, handleJump, 
 			dataIndex: 'action',
 			key: 'action',
 			align: 'center',
-			width: 180,
+			width: 190,
 			render: (text, record) => {
 				return <div>
 					<a onClick={() => {handleJump(record.id, record.company_id);}}>订单详情</a>

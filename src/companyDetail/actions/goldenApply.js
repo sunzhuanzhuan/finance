@@ -30,6 +30,13 @@ export const {
 });
 
 export const {
+	getPlatformIcon,
+	getPlatformIcon_success
+} = createHttpAction('getPlatformIcon', Interface.getPlatformListIcon, {
+	method: 'get'
+});
+
+export const {
 	getRequirement,
 	getRequirement_success
 } = createHttpAction('getRequirement', Interface.getRequirement, {

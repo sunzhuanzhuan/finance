@@ -579,7 +579,7 @@ export const adjustApplyListFunc = (application_status, quote_type, handleJump, 
 	]
 }
 
-export const addAdjustApplyConfig = (quote_type = []) => [
+export const addAdjustApplyConfig = (quote_type = [], platformIcon = []) => [
 	{
 		title: '订单ID',
 		dataIndex: 'order_id',
@@ -606,49 +606,43 @@ export const addAdjustApplyConfig = (quote_type = []) => [
 		width: 230,
 	},
 	{
-		title: '所属项目',
+		title: '所属项目/品牌',
 		dataIndex: 'project_name',
 		key: 'project_name',
-		align: 'center',
 		width: 230,
-		render: (text) => {
-			return text ? text : '-'
+		render: (text = '-', record) => {
+			const { platform_name= '-' } = record;
+			return <div className={`left_content_td ${record.warningClass}`}>
+				<div>所属项目：{text}</div>
+				<div>所属品牌：{platform_name}</div>
+			</div>
 		}
 	},
 	{
-		title: '需求ID',
-		dataIndex: 'requirement_id',
-		key: 'requirement_id',
-		align: 'center',
-		width: 80,
+		title: '需求ID/需求名称',
+		dataIndex: 'requirement_id_name',
+		key: 'requirement_id_name',
+		width: 230,
+		render: (text, { requirement_id = '-', requirement_name = '-', warningClass }) => {
+			return <div className={`left_content_td ${warningClass}`}>
+				<div>需求ID：{requirement_id}</div>
+				<div>需求名称：{requirement_name}</div>
+			</div>
+		}
 	},
 	{
-		title: '需求名称',
-		dataIndex: 'requirement_name',
-		key: 'requirement_name',
-		align: 'center',
-		width: 160,
-	},
-	{
-		title: '平台',
-		dataIndex: 'platform_name',
-		key: 'platform_name',
-		align: 'center',
-		width: 100,
-	},
-	{
-		title: 'account id',
+		title: '账号信息',
 		dataIndex: 'account_id',
 		key: 'account_id',
-		align: 'center',
-		width: 100,
-	},
-	{
-		title: '账号名称',
-		dataIndex: 'weibo_name',
-		key: 'weibo_name',
-		align: 'center',
-		width: 120,
+		width: 320,
+		render: (data = '-', {weibo_name = '-', platform_id, warningClass}) => {
+			const platformInfo = platformIcon.find(item => item.id == platform_id) || {};
+			return <div className={`left_content_td platform_wrapper ${warningClass}`}>
+			{platformInfo.platformIcon ? <img className='platform-icon-img' src={platformInfo.platformIcon}/> : null}
+			<div>账号名称：{weibo_name}</div>
+			<div>ID：{data}</div>
+		</div>
+		}
 	},
 	{
 		title: '应约价',
@@ -739,7 +733,7 @@ export const readyCheckFunc = (handleDelete) => {
 		}
 	]
 }
-export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], readjust_type = []) => {
+export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], readjust_type = [], platformIcon = []) => {
 	return ary => {
 		const configMap = {
 			'prev_id': {
@@ -868,8 +862,10 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				dataIndex: 'account_id',
 				key: 'account_id',
 				width: 320,
-				render: (data = '-', {weibo_name = '-', warningClass}) => {
-					return <div className={`left_content_td ${warningClass}`}>
+				render: (data = '-', {weibo_name = '-', platform_id, warningClass}) => {
+					const platformInfo = platformIcon.find(item => item.id == platform_id) || {};
+					return <div className={`left_content_td platform_wrapper ${warningClass}`}>
+					{platformInfo.platformIcon ? <img className='platform-icon-img' src={platformInfo.platformIcon}/> : null}
 					<div>账号名称：{weibo_name}</div>
 					<div>ID：{data}</div>
 				</div>
@@ -1110,7 +1106,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 							}
 							return getPriceContent(showObj);
 						})}
-					</div> : null;
+					</div> : '-';
 					//readjust_type
 					// const pro = readjust_type == 2 ? <div key='tips' className='detail_price_info'>导入Excel方式调整</div> : null;
 					const pro = value.display ? <div key='tips' className='detail_price_info'>{value.display}</div> : null;
@@ -1149,7 +1145,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 								trilateralPrice: item.public_min_sell_price,
 							}
 							return getPriceContent(showObj);
-						}) : null;
+						}) : '-';
 					// const pro = readjust_type == 2 ? <div key='tips' className='detail_price_info'>导入Excel方式调整</div> : null;
 					const pro = value.display ? <div key='tips' className='detail_price_info'>{value.display}</div> : null;
 

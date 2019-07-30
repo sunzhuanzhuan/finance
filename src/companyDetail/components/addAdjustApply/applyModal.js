@@ -350,7 +350,9 @@ class ApplyModal extends React.Component {
 	}
 
 	checkCountNum = (value, callback, quoted_price) => {
-		const reg = /^([1-9]\d*(\.\d*[1-9])?)|(0\.\d*[1-9])$/;
+		// const reg = /^([1-9]\d*(\.\d*[1-9])?)|(0\.\d*[1-9])$/;
+		const reg = /^[1-9]\d*$/;
+
 		const valueMax = value - quoted_price <= 0;
 		if (value) {
 			if (reg.test(value.toString()) && valueMax) {
@@ -358,7 +360,7 @@ class ApplyModal extends React.Component {
 			}else if(reg.test(value.toString()) && !valueMax) {
 				callback('最低售卖价不能大于应约价！');
 			}else {
-				callback('请填写大于0的值！');
+				callback('请输入大于0的正整数！');
 			}
 		} else {
 			callback(' ')

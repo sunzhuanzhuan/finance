@@ -31,7 +31,7 @@ class AdjustApply extends React.Component {
 	componentDidMount() {
 		const search = qs.parse(this.props.location.search.substring(1));
 		const currentTab = search.keys ? search.keys.status : 'allOptions';
-		const { getCompanyDetailAuthorizations, getGoldenMetadata, getGoldenUserList } = this.props.actions;
+		const { getCompanyDetailAuthorizations, getGoldenMetadata, getGoldenUserList, getPlatformIcon } = this.props.actions;
 		this.setState({ activeKey: currentTab ? currentTab.toString() : 'allOptions' });
 		this.queryAllStatusData({ page: 1, page_size: this.state.page_size, ...search.keys });
 		getCompanyDetailAuthorizations().then(() => {
@@ -42,6 +42,7 @@ class AdjustApply extends React.Component {
 		})
 		getGoldenMetadata();
 		getGoldenUserList();
+		getPlatformIcon();
 	}
 	queryAllStatusData = (obj, func) => {
 		const { actions: {getApplyList} } = this.props;
@@ -145,12 +146,12 @@ class AdjustApply extends React.Component {
 	}
 	render() {
 		const { loading, tipVisible, page_size, flag, btnFlag, quoteType, readjust_application_id, rejectVisible, company_id, addVisible, activeKey } = this.state;
-		const { form, goldenMetadata, goldenMetadata: { application_status = [], rel_order_status = [], quote_type = [], readjust_type = [] }, goldenUserList, applicationDetail: { list: detailList = [] }, applyListReducer = {} } = this.props;
+		const { form, goldenMetadata, goldenMetadata: { application_status = [], rel_order_status = [], quote_type = [], readjust_type = [] }, goldenUserList, applicationDetail: { list: detailList = [] }, applyListReducer = {}, platformIcon = [] } = this.props;
 		const { getFieldDecorator } = form;
 		const formItemLayout = { labelCol: { span: 6 }, wrapperCol: { span: 16 }, };
 		const search = qs.parse(this.props.location.search.substring(1));
 		const adjustApplyList = flag ? adjustApplyListFunc(application_status, quote_type, this.handleJump, this.handleAction) : adjustApplyFunc(application_status, quote_type, this.handleJump);
-		const adjustApplyPreview = adjustApplyDetailFunc(rel_order_status, quote_type, readjust_type)(['prev_id', 'company_name', 'project_name', 'requirement_id_name', 'platform_name', 'weibo_name', 'plan_manager_id', 'main_account_info', 'discount_rate', 'order_bottom_price', 'commissioned_price', 'quoted_price', 'pre_min_sell_price', 'preview_quote_type']);
+		const adjustApplyPreview = adjustApplyDetailFunc(rel_order_status, quote_type, readjust_type, platformIcon)(['prev_id', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'platform_name', 'weibo_name', 'plan_manager_id', 'main_account_info', 'discount_rate', 'order_bottom_price', 'commissioned_price', 'quoted_price', 'pre_min_sell_price', 'preview_quote_type']);
 		const dealStatusArr = Array.isArray(application_status) && application_status.length  ? [{id: 'allOptions', display: '全部'}, ...application_status] : [];
 		const getTabPaneComp = () => {
 			return dealStatusArr.map(item => {
@@ -290,6 +291,7 @@ const mapStateToProps = (state) => {
 		applicationList: state.companyDetail.applicationList,
 		applicationDetail: state.companyDetail.applicationDetail,
 		applyListReducer: state.companyDetail.applyListReducer,
+		platformIcon: state.companyDetail.platformIconList,
 	}
 }
 const mapDispatchToProps = dispatch => ({

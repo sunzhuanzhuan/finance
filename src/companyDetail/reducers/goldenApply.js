@@ -3,6 +3,7 @@ import {
 	getCompanyDetailAuthorizations_success,
 	getGoldenMetadata_success,
 	getPlatform_success,
+	getPlatformIcon_success,
 	getProject_success,
 	getGoldenToken_success,
 	getApplicationList_success,
@@ -27,6 +28,12 @@ export const goldenMetadata = handleActions({
 
 export const platformList = handleActions({
 	[getPlatform_success]: (state, action) => {
+		return [...action.payload.data]
+	}
+}, [])
+
+export const platformIconList = handleActions({
+	[getPlatformIcon_success]: (state, action) => {
 		return [...action.payload.data]
 	}
 }, [])

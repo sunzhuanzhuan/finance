@@ -71,7 +71,7 @@ class ApplyTable extends React.Component {
 				}
 			};
 		return <div>
-			{type === 'read_detail' ? <Table className='top-gap table_style'
+			{type === 'read_detail' ? <Table className='top-gap read-detail-table table_style'
 				rowKey={rowKey}
 				columns={columns}
 				dataSource={dataSource}
@@ -80,7 +80,7 @@ class ApplyTable extends React.Component {
 				pagination={paginationObj}
 				loading={loading}
 			/> : null}
-			{type === 'write_detail' ? <Table className='top-gap table_style'
+			{type === 'write_detail' ? <Table className='top-gap detail-table table_style'
 				rowKey={rowKey}
 				columns={columns}
 				dataSource={dataSource}

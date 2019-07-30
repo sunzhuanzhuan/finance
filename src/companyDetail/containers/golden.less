@@ -45,6 +45,23 @@
         top: 0;
     }
 }
+.detail-table, .read-detail-table {
+    .ant-table-fixed {
+        table-layout: fixed;
+        width: 473px;
+      }
+    
+      .ant-table-tbody > tr > td {
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+}
+
+.read-detail-table {
+    .ant-table-fixed {
+        width: 411px;
+    }
+}
 
 .price_comp {
     &:not(:first-child) {

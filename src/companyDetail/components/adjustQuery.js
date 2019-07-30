@@ -106,16 +106,6 @@ class AdjustQuery extends React.Component {
 				</FormItem>
 			</Row>
 			<Row type="flex" justify="start" gutter={16}>
-				<FormItem label='申请状态' className='left-gap'>
-					{getFieldDecorator('status', { initialValue: { key: '', label: '不限' } })(
-						<Select className='common_search_width' labelInValue>
-							<Option value="">不限</Option>
-							{application_status.map((item) =>
-								<Option key={item.id} value={item.id}>{item.display}</Option>)
-							}
-						</Select>
-					)}
-				</FormItem>
 				<FormItem label='订单ID' className='left-gap'>
 					{getFieldDecorator('order_id')(
 						<Input placeholder="请输入" className='common_search_width' />
@@ -147,10 +137,10 @@ class AdjustQuery extends React.Component {
 						</Select>
 					)}
 				</FormItem>
-			</Row>
-			<Row className='adjust_query_operate'>
-				<Button type="primary" onClick={this.handleSearch}>查询</Button>
-				<Button onClick={this.handleClear}>重置</Button>
+				<FormItem className='left-gap adjust_apply_query'>
+					<Button type="primary" onClick={this.handleSearch}>查询</Button>
+					<Button onClick={this.handleClear}>重置</Button>
+				</FormItem>
 			</Row>
 		</Form >
 	}

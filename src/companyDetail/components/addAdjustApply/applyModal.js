@@ -349,14 +349,17 @@ class ApplyModal extends React.Component {
 		}
 	}
 
-	checkCountNum = (_, value, callback) => {
+	checkCountNum = (value, callback, quoted_price) => {
 		const reg = /^([1-9]\d*(\.\d*[1-9])?)|(0\.\d*[1-9])$/;
+		const valueMax = value - quoted_price <= 0;
 		if (value) {
-			if (reg.test(value.toString())) {
+			if (reg.test(value.toString()) && valueMax) {
 				callback();
-				return;
+			}else if(reg.test(value.toString()) && !valueMax) {
+				callback('最低售卖价不能大于应约价！');
+			}else {
+				callback('请填写大于0的值！');
 			}
-			callback('请填写大于0的值！');
 		} else {
 			callback(' ')
 		}
@@ -388,7 +391,7 @@ class ApplyModal extends React.Component {
 					{getFieldDecorator(price_id, {
 						rules: [
 							{ required: true, message: `请输入最低售卖价!` },
-							{ validator: this.checkCountNum }
+							{ validator: (_, value, callback) => this.checkCountNum(value, callback, quoted_price) }
 						]
 					})(
 						<Input style={{ width: 200 }} disabled={curSelectRows.length > 1} onChange={this.handleInputChange} />

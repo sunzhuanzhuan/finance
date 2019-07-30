@@ -158,7 +158,7 @@ class AdjustApplyDetail extends React.Component {
 							curSelectRows={curSelectRows}
 							handleSelected={this.handleSelected}
 							location={this.props.location}
-							scroll={flag ? { x: 4120 } : { x: 2620 }}
+							scroll={flag ? { x: 4060 } : { x: 2620 }}
 						>
 						</ApplyTable>
 					</TabPane>

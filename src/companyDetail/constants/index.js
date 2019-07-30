@@ -841,9 +841,9 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '公司简称',
 				dataIndex: 'company_name',
 				key: 'company_name',
-				width: 230,
+				width: 160,
 				render: (text, record) => {
-					return <div className={`${record.warningClass}`} style={{width: 184}}>
+					return <div className={`${record.warningClass}`}>
 						<div>{text || '-'}</div>
 					</div>
 				}
@@ -1251,7 +1251,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '备注',
 				dataIndex: 'remark',
 				key: 'remark',
-				width: '244px',
+				width: 244,
 				render: (_, { remark }) => {
 					if (remark && remark.length > 30) {
 						return <div title={remark}>

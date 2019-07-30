@@ -42,6 +42,7 @@ class PreTable extends React.Component {
 				['platform_name']: item['platform_name'],
 				['platform_id']: item['platform_id'],
 				['account_id']: item['account_id'],
+				['brand_name']: item['brand_name'],
 				['identity_name']: item['identity_name'],
 				['weibo_name']: item['weibo_name'],
 				['plan_manager_id']: item['plan_manager_id'],

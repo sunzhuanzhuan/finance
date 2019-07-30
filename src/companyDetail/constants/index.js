@@ -610,11 +610,11 @@ export const addAdjustApplyConfig = (quote_type = [], platformIcon = []) => [
 		dataIndex: 'project_name',
 		key: 'project_name',
 		width: 230,
-		render: (text = '-', record) => {
-			const { platform_name= '-' } = record;
+		render: (text, record) => {
+			const { brand_name } = record;
 			return <div className={`left_content_td ${record.warningClass}`}>
-				<div>所属项目：{text}</div>
-				<div>所属品牌：{platform_name}</div>
+				<div>所属项目：{text || '-'}</div>
+				<div>所属品牌：{brand_name || '-'}</div>
 			</div>
 		}
 	},
@@ -842,9 +842,9 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				dataIndex: 'company_name',
 				key: 'company_name',
 				width: 230,
-				render: (text = '-', record) => {
+				render: (text, record) => {
 					return <div className={`${record.warningClass}`} style={{width: 184}}>
-						<div>{text}</div>
+						<div>{text || '-'}</div>
 					</div>
 				}
 			},
@@ -853,11 +853,11 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				dataIndex: 'project_name',
 				key: 'project_name',
 				width: 230,
-				render: (text = '-', record) => {
-					const { platform_name= '-' } = record;
+				render: (text, record) => {
+					const { brand_name } = record;
 					return <div className={`left_content_td ${record.warningClass}`}>
-						<div>所属项目：{text}</div>
-						<div>所属品牌：{platform_name}</div>
+						<div>所属项目：{text || '-'}</div>
+						<div>所属品牌：{brand_name || '-'}</div>
 					</div>
 				}
 			},

@@ -100,6 +100,7 @@ class AdjustQuery extends React.Component {
 					{getFieldDecorator('start_time')(
 						<DatePicker className='common_time_width' format={dataFormat} placeholder='开始时间' />
 					)}
+					<span className='time_line'>—</span>
 					{getFieldDecorator('end_time')(
 					<DatePicker className='common_time_width' format={dataFormat} placeholder='结束时间' />
 					)}

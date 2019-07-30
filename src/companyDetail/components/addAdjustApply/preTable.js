@@ -39,7 +39,9 @@ class PreTable extends React.Component {
 				['requirement_id']: item['requirement_id'],
 				['requirement_name']: item['requirement_name'],
 				['platform_name']: item['platform_name'],
+				['identity_name']: item['identity_name'],
 				['weibo_name']: item['weibo_name'],
+				['plan_manager_id']: item['plan_manager_id'],
 				['pre_min_sell_price']: minSellPrice,
 				['price']: item['price'],
 				['quote_type']: item['quote_type'],
@@ -92,7 +94,7 @@ class PreTable extends React.Component {
 				dataSource={data} 
 				bordered 
 				pagination={isApplication ? applicationPaginationObj : paginationObj} 
-				scroll={{ x: 2400 }} />
+				scroll={{ x: 3500 }} />
 			</div>
 		)
 	}

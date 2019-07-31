@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as goldenActions from "../actions/goldenApply";
-import { Button, Row, Modal, message, Table, Icon } from "antd";
+import { Button, Row, Modal, message, Table, Icon, Alert } from "antd";
 import ListQuery from '../components/addAdjustApply/listQuery';
 import ApplyTable from '../components/addAdjustApply/applyTable';
 import ApplyModal from '../components/addAdjustApply/applyModal';
@@ -86,6 +86,7 @@ class AddAdjustApply extends React.Component {
 		const { loading, tipVisible, checkVisible, curSelectRowKeys, curSelectRows } = this.state;
 		const { applyOrderList: { list = [], page, total = 0, all_total = 0 }, goldenToken, goldenMetadata: { quote_type = [] }, platformIcon = [] } = this.props;
 		const readyList = readyCheckFunc(this.handleDelete);
+		const totalMsg = `查询结果共${all_total}个，${total}个符合调价要求，${all_total - total}不符合：A端创建/订单已申请调价且尚未审批/非客户待确认状态订单无法申请调价。`
 
 		return <div className='add-adjust-apply'>
 			<h2 className='add_adjust_header' onClick={this.handleBack}>
@@ -100,6 +101,7 @@ class AddAdjustApply extends React.Component {
 				curSelectRowKeys={curSelectRowKeys}
 				handleClear={this.handleClear}
 			></ListQuery>
+			{ all_total - total > 0 ? <Alert className='add-list-total-info' message={totalMsg} type="warning" showIcon /> : null }
 			<div className='left-gap selected-refactor'>
 				已选订单:<span className='red-font' style={{ marginLeft: '10px' }}>{curSelectRowKeys.length}</span>个
 				<Button className='left-gap' type='primary' onClick={() => {

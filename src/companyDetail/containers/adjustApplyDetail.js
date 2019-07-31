@@ -11,6 +11,7 @@ import "./golden.less";
 import { getApplyDetailList } from '../actions/getApplyList';
 import qs from 'qs';
 import difference from 'lodash/difference';
+import Scolltable from '@/components/Scolltable';
 const { TextArea } = Input;
 const { TabPane } = Tabs;
 
@@ -134,6 +135,7 @@ class AdjustApplyDetail extends React.Component {
 			: adjustApplyDetailFunc(rel_order_status, quote_type, readjust_type, platformIcon)(['order_id', 'policy_id', 'status', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'main_account_info_sale', 'discount_rate', 'commissioned_price_sale', 'auditor_name', 'pass_time', 'remark']);
 		const adjustApplyPreview = adjustApplyDetailFunc(rel_order_status, quote_type, readjust_type, platformIcon)(['prev_id', 'statusPre', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'main_account_info', 'discount_rate', 'order_bottom_price', 'commissioned_price', 'quoted_price', 'pre_min_sell_price', 'preview_quote_type']);
 		const dealStatusArr = Array.isArray(rel_order_status) && rel_order_status.length  ? [{id: 'allOptions', display: '全部'}, ...rel_order_status] : [];
+		const scrollX = flag ? 4080 : 2620;
 		const getTabPaneComp = () => {
 			return dealStatusArr.map(item => {
 				const { id, display } = item;
@@ -145,22 +147,24 @@ class AdjustApplyDetail extends React.Component {
 				</div>;
 				return (
 					<TabPane tab={tab} key={id}>
-						<ApplyTable
-							type={flag ? 'write_detail' : 'read_detail'}
-							rowKey={'order_id'}
-							columns={adjustApplyDetail}
-							dataSource={list}
-							loading={loading}
-							queryAction={this.queryData}
-							page={parseInt(page)}
-							total={parseInt(total)}
-							curSelectRowKeys={curSelectRowKeys}
-							curSelectRows={curSelectRows}
-							handleSelected={this.handleSelected}
-							location={this.props.location}
-							scroll={flag ? { x: 4080 } : { x: 2620 }}
-						>
-						</ApplyTable>
+						<Scolltable scrollClassName='.ant-table-body' widthScroll={scrollX}>
+							<ApplyTable
+								type={flag ? 'write_detail' : 'read_detail'}
+								rowKey={'order_id'}
+								columns={adjustApplyDetail}
+								dataSource={list}
+								loading={loading}
+								queryAction={this.queryData}
+								page={parseInt(page)}
+								total={parseInt(total)}
+								curSelectRowKeys={curSelectRowKeys}
+								curSelectRows={curSelectRows}
+								handleSelected={this.handleSelected}
+								location={this.props.location}
+								scroll={{ x: scrollX }}
+							>
+							</ApplyTable>
+						</Scolltable>
 					</TabPane>
 				)
 			})

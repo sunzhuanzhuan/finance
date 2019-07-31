@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import { withRouter } from 'react-router-dom';
 import * as goldenActions from "../../actions/goldenApply";
-import { Modal, Button, Form, Input, message, Radio, Popover } from "antd";
+import { Modal, Button, Form, Input, message, Radio, Tooltip, Icon } from "antd";
 import { WBYUploadFile } from 'wbyui';
 import qs from 'qs';
 import numeral from 'numeral';
@@ -456,11 +456,16 @@ class ApplyModal extends React.Component {
 			labelCol: { span: 4 },
 			wrapperCol: { span: 18 },
 		};
+		const adjustTitle = <Tooltip placement='right' trigger='click' title={<div>
+				订单调价仅用于调低的情况，最低售卖价最大等于应约价，如果计算的最低售卖价大于应约价，则最低售卖价默认等于应约价
+			</div>}>
+			<div style={{width: 120}}>订单调价处理<Icon style={{marginLeft: 5}} type="question-circle" /></div>
+		</Tooltip>;
 		return <Modal
 			className='adjust-dialog'
 			visible={visible}
 			width={1000}
-			title={type === 'add' ? '批量订单调价申请' : '订单调价处理'}
+			title={type === 'add' ? '批量订单调价申请' : adjustTitle}
 			onCancel={onCancel}
 			maskClosable={false}
 			wrapClassName='adjust-dialog-list'

@@ -39,7 +39,8 @@ class AddAdjustApply extends React.Component {
 		if(company_id) {
 			const companyId = company_id.key;
 			delete search.keys.company_id;
-			Object.assign(queryObj, {company_id: companyId})
+			Object.assign(queryObj, {company_id: companyId});
+			this.setState({companyId});
 		}
 
 		this.queryData(queryObj);
@@ -84,11 +85,10 @@ class AddAdjustApply extends React.Component {
 		history.go(-1);
 	}
 	render() {
-		const { loading, tipVisible, checkVisible, curSelectRowKeys, curSelectRows } = this.state;
+		const { loading, tipVisible, checkVisible, curSelectRowKeys, curSelectRows, companyId } = this.state;
 		const { applyOrderList: { list = [], page, total = 0, all_total = 0 }, goldenToken, goldenMetadata: { quote_type = [] }, platformIcon = [] } = this.props;
 		const readyList = readyCheckFunc(this.handleDelete);
-		const totalMsg = `查询结果共${all_total}个，${total}个符合调价要求，${all_total - total}不符合：A端创建/订单已申请调价且尚未审批/非客户待确认状态订单无法申请调价。`
-
+		const totalMsg = `查询结果共${all_total}个，${total}个符合调价要求，${all_total - total}不符合：A端创建/订单已申请调价且尚未审批/非客户待确认状态订单无法申请调价。`;
 		return <div className='add-adjust-apply'>
 			<h2 className='add_adjust_header' onClick={this.handleBack}>
 				<Icon type="arrow-left" />
@@ -96,6 +96,7 @@ class AddAdjustApply extends React.Component {
 			</h2>
 			<ListQuery
 				type={'add'}
+				companyId={companyId}
 				questAction={this.props.actions.getApplyOrderList}
 				location={this.props.location}
 				history={this.props.history}

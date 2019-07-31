@@ -5,9 +5,9 @@ import * as goldenActions from "../../actions/goldenApply";
 import { Input, Row, Col, Form, Select, Button, Icon, message, Spin, Modal } from "antd";
 import SearchSelect from '../SearchSelect';
 import qs from 'qs';
-
 import moment from 'moment';
 import 'moment/locale/zh-cn';
+import { shallowEqual } from '@/util';
 moment.locale('zh-cn');
 
 const FormItem = Form.Item;
@@ -15,8 +15,8 @@ const Option = Select.Option;
 
 
 class ListQuery extends React.Component {
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
 		this.state = {
 			projectLoading: false,
 			weiboLoading: false,
@@ -40,6 +40,18 @@ class ListQuery extends React.Component {
 		}
 		this.props.form.validateFields();
 	}
+
+	static getDerivedStateFromProps(nextProps, prevState) {
+		const { companyId = '' } = nextProps;
+		const { company_id = '' } = prevState;
+		if(!shallowEqual(companyId, company_id)) {
+			return {
+				company_id: companyId,
+			}
+		}
+		return null;
+	}
+
 	handleFetch = (obj) => {
 		let company_id = '';
 		if (this.props.type === 'add') {
@@ -193,7 +205,6 @@ class ListQuery extends React.Component {
 		const { projectLoading, weiboLoading } = this.state;
 		const orderClass = type === 'add' ? 'add-sec-line-margin order-id-item' : 'sec-line-margin order-id-item';
 		const resetClass = type === 'add' ? 'add-reset-btn' : 'reset-btn';
-
 		return <div>
 			<Form className='adjust-stat adjust-refactor'>
 				<Row type="flex" justify="start">

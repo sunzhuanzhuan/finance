@@ -135,7 +135,6 @@ class AdjustApplyDetail extends React.Component {
 			: adjustApplyDetailFunc(rel_order_status, quote_type, readjust_type, platformIcon)(['order_id', 'policy_id', 'status', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'main_account_info_sale', 'discount_rate', 'commissioned_price_sale', 'auditor_name', 'pass_time', 'remark']);
 		const adjustApplyPreview = adjustApplyDetailFunc(rel_order_status, quote_type, readjust_type, platformIcon)(['prev_id', 'statusPre', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'main_account_info', 'discount_rate', 'order_bottom_price', 'commissioned_price', 'quoted_price', 'pre_min_sell_price', 'preview_quote_type']);
 		const dealStatusArr = Array.isArray(rel_order_status) && rel_order_status.length  ? [{id: 'allOptions', display: '全部'}, ...rel_order_status] : [];
-		const scrollX = flag ? 4080 : 2620;
 		const getTabPaneComp = () => {
 			return dealStatusArr.map(item => {
 				const { id, display } = item;
@@ -147,7 +146,7 @@ class AdjustApplyDetail extends React.Component {
 				</div>;
 				return (
 					<TabPane tab={tab} key={id}>
-						<Scolltable scrollClassName='.ant-table-body' widthScroll={scrollX}>
+						<Scolltable scrollClassName='.ant-table-body' widthScroll={flag ? 4200 : 2700}>
 							<ApplyTable
 								type={flag ? 'write_detail' : 'read_detail'}
 								rowKey={'order_id'}
@@ -161,7 +160,7 @@ class AdjustApplyDetail extends React.Component {
 								curSelectRows={curSelectRows}
 								handleSelected={this.handleSelected}
 								location={this.props.location}
-								scroll={{ x: scrollX }}
+								scroll={flag ? { x: 4080 } : { x: 2620 }}
 							>
 							</ApplyTable>
 						</Scolltable>

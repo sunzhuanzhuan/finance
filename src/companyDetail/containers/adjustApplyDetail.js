@@ -11,7 +11,6 @@ import "./golden.less";
 import { getApplyDetailList } from '../actions/getApplyList';
 import qs from 'qs';
 import difference from 'lodash/difference';
-import Scolltable from '@/components/Scolltable';
 const { TextArea } = Input;
 const { TabPane } = Tabs;
 
@@ -146,24 +145,22 @@ class AdjustApplyDetail extends React.Component {
 				</div>;
 				return (
 					<TabPane tab={tab} key={id}>
-						<Scolltable scrollClassName='.ant-table-body' widthScroll={flag ? 4200 : 2700}>
-							<ApplyTable
-								type={flag ? 'write_detail' : 'read_detail'}
-								rowKey={'order_id'}
-								columns={adjustApplyDetail}
-								dataSource={list}
-								loading={loading}
-								queryAction={this.queryData}
-								page={parseInt(page)}
-								total={parseInt(total)}
-								curSelectRowKeys={curSelectRowKeys}
-								curSelectRows={curSelectRows}
-								handleSelected={this.handleSelected}
-								location={this.props.location}
-								scroll={flag ? { x: 4080 } : { x: 2620 }}
-							>
-							</ApplyTable>
-						</Scolltable>
+						<ApplyTable
+							type={flag ? 'write_detail' : 'read_detail'}
+							rowKey={'order_id'}
+							columns={adjustApplyDetail}
+							dataSource={list}
+							loading={loading}
+							queryAction={this.queryData}
+							page={parseInt(page)}
+							total={parseInt(total)}
+							curSelectRowKeys={curSelectRowKeys}
+							curSelectRows={curSelectRows}
+							handleSelected={this.handleSelected}
+							location={this.props.location}
+							scroll={flag ? { x: 4080 } : { x: 2620 }}
+						>
+						</ApplyTable>
 					</TabPane>
 				)
 			})

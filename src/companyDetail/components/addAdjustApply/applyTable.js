@@ -3,7 +3,7 @@ import { Table } from "antd";
 import { WBYTableFooter } from 'wbyui'
 import qs from 'qs'
 import difference from 'lodash/difference';
-
+import Scolltable from '@/components/Scolltable';
 
 class ApplyTable extends React.Component {
 	constructor() {
@@ -71,7 +71,7 @@ class ApplyTable extends React.Component {
 				}
 			};
 		return <div>
-			{type === 'read_detail' ? <Table className='top-gap read-detail-table table_style'
+			{type === 'read_detail' ? <Scolltable scrollClassName='.ant-table-body' widthScroll={2700}><Table className='top-gap read-detail-table table_style'
 				rowKey={rowKey}
 				columns={columns}
 				dataSource={dataSource}
@@ -79,8 +79,8 @@ class ApplyTable extends React.Component {
 				bordered
 				pagination={paginationObj}
 				loading={loading}
-			/> : null}
-			{type === 'write_detail' ? <Table className='top-gap detail-table table_style'
+			/></Scolltable> : null}
+			{type === 'write_detail' ? <Scolltable scrollClassName='.ant-table-body' widthScroll={4200}><Table className='top-gap detail-table table_style'
 				rowKey={rowKey}
 				columns={columns}
 				dataSource={dataSource}
@@ -98,8 +98,8 @@ class ApplyTable extends React.Component {
 			// 		pagination={dataSource.length ? paginationObj : false}
 			// 	/>
 			// }}
-			/> : null}
-			{type === 'add' ? <Table className='top-gap add-table table_style'
+			/></Scolltable> : null}
+			{type === 'add' ? <Scolltable scrollClassName='.ant-table-body' widthScroll={1900}><Table className='top-gap add-table table_style'
 				rowKey={rowKey}
 				columns={columns}
 				dataSource={dataSource}
@@ -117,7 +117,7 @@ class ApplyTable extends React.Component {
 			// 		pagination={dataSource.length ? paginationObj : false}
 			// 	/>
 			// }}
-			/> : null}
+			/></Scolltable> : null}
 		</div>
 	}
 }

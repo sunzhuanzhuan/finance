@@ -10,7 +10,6 @@ import { addAdjustApplyConfig, readyCheckFunc } from "../constants";
 import "./golden.less";
 import qs from 'qs';
 import difference from 'lodash/difference';
-import Scolltable from '@/components/Scolltable';
 
 const { info } = Modal;
 
@@ -111,23 +110,21 @@ class AddAdjustApply extends React.Component {
 				}}>查看已选</Button>
 				{/* { list.length ? <span className='total-info'>{`总共${all_total}条;不符合条件${all_total - total}条`}</span> : null} */}
 			</div>
-			<Scolltable scrollClassName='.ant-table-body' widthScroll={1900}>
-				<ApplyTable
-					type={'add'}
-					rowKey={'order_id'}
-					columns={addAdjustApplyConfig(quote_type, platformIcon)}
-					dataSource={list}
-					loading={loading}
-					queryAction={this.queryData}
-					page={parseInt(page)}
-					total={parseInt(total)}
-					curSelectRowKeys={curSelectRowKeys}
-					curSelectRows={curSelectRows}
-					handleSelected={this.handleSelected}
-					location={this.props.location}
-					scroll={{ x: 1900 }}
-				/>
-			</Scolltable>
+			<ApplyTable
+				type={'add'}
+				rowKey={'order_id'}
+				columns={addAdjustApplyConfig(quote_type, platformIcon)}
+				dataSource={list}
+				loading={loading}
+				queryAction={this.queryData}
+				page={parseInt(page)}
+				total={parseInt(total)}
+				curSelectRowKeys={curSelectRowKeys}
+				curSelectRows={curSelectRows}
+				handleSelected={this.handleSelected}
+				location={this.props.location}
+				scroll={{ x: 1900 }}
+			/>
 			<Row className='top-gap' style={{ textAlign: 'center' }}>
 				<Button className='adjust-apply-btn' type='default' onClick={() => {
 					this.props.history.push('/finance/golden/adjustApply')

@@ -1146,12 +1146,12 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				dataIndex: 'history_rate',
 				key: 'history_rate',
 				width: 130,
-				render: (_, {history_min_sell_price, quote_type, }) => {
+				render: (_, {history_min_sell_price = {}, quote_type, }) => {
 					const item = history_min_sell_price ? history_min_sell_price.min_sell_price : [];
 					const profitRate = history_min_sell_price.profit_rate || history_min_sell_price.profit_rate == 0 ? numeral(history_min_sell_price.profit_rate).format('0.00%') : '-';
 					const serviceRate = history_min_sell_price.service_rate || history_min_sell_price.service_rate == 0 ? numeral(history_min_sell_price.service_rate).format('0.00%') : '-';
 					const value = quote_type === '1' ? profitRate : quote_type === '2' ? serviceRate : '-';
-					return item.length > 0 ? value : '-';
+					return item.length > 0 && history_min_sell_price.readjust_type == '1' ? value : '-';
 				}
 			},
 			'min_sell_price': {
@@ -1206,11 +1206,11 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				dataIndex: 'quote_type',
 				key: 'quote_type',
 				width: 100,
-				render: (text, {profit_rate, service_rate, min_sell_price}) => {
+				render: (text, {profit_rate, service_rate, min_sell_price, readjust_type}) => {
 					const profitRate = profit_rate || profit_rate == 0 ? numeral(profit_rate).format('0.00%') : '-';
 					const serviceRate = service_rate || service_rate == 0 ? numeral(service_rate).format('0.00%') : '-';
 					const value = text == '1' ? profitRate : text == '2' ? serviceRate : '-';
-					return min_sell_price ? value : '-';
+					return min_sell_price && readjust_type == '1' ? value : '-';
 				}
 			},
 			'preview_quote_type': {

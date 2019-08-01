@@ -952,7 +952,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				render: (data, {partner_type_name, warningClass}) => {
 					return <div className={warningClass}>
 					<div style={{marginBottom: 10}}>主账号：{data}</div>
-					<div>合作方方式：{partner_type_name}</div>
+					<div>合作方式：{partner_type_name}</div>
 				</div>
 				}
 			},

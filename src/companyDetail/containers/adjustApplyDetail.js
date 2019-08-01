@@ -125,8 +125,7 @@ class AdjustApplyDetail extends React.Component {
 		this.setState({activeKey});
 	}
 	render() {
-		const { loading, tipVisible, rejectVisible, curSelectRowKeys, curSelectRows, activeKey, applyId } = this.state;
-		const flag = false;
+		const { loading, tipVisible, rejectVisible, flag, curSelectRowKeys, curSelectRows, activeKey, applyId } = this.state;
 		const { goldenMetadata: { rel_order_status = [], quote_type = [], readjust_type = [] }, applyListReducer = {}, platformIcon = [] } = this.props;
 		const allDetailList = applyListReducer[`applyDetailListStatusallOptions`] || {};
 		const { total: allTotal } = allDetailList;

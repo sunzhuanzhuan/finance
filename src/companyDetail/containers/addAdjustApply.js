@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as goldenActions from "../actions/goldenApply";
-import { Button, Row, Modal, message, Table } from "antd";
+import { Button, Row, Modal, message, Table, Icon, Alert } from "antd";
 import ListQuery from '../components/addAdjustApply/listQuery';
 import ApplyTable from '../components/addAdjustApply/applyTable';
 import ApplyModal from '../components/addAdjustApply/applyModal';
@@ -10,6 +10,8 @@ import { addAdjustApplyConfig, readyCheckFunc } from "../constants";
 import "./golden.less";
 import qs from 'qs';
 import difference from 'lodash/difference';
+
+const { info } = Modal;
 
 class AddAdjustApply extends React.Component {
 	constructor() {
@@ -27,8 +29,20 @@ class AddAdjustApply extends React.Component {
 	componentDidMount() {
 		const search = qs.parse(this.props.location.search.substring(1));
 		this.props.actions.getGoldenToken();
+		this.props.actions.getGoldenMetadata();
+		this.props.actions.getPlatformIcon();
+		this.props.actions.getCompanyDetailAuthorizations();
 		delete search['requirement_label'];
-		this.queryData({ page: 1, ...search.keys });
+		const { keys:{company_id} } = search;
+		const queryObj = { page: 1, ...search.keys, page_size: 200 };
+		if(company_id) {
+			const companyId = company_id.key;
+			delete search.keys.company_id;
+			Object.assign(queryObj, {company_id: companyId});
+			this.setState({companyId});
+		}
+
+		this.queryData(queryObj);
 	}
 	queryData = (obj, func) => {
 		this.setState({ loading: true });
@@ -65,32 +79,41 @@ class AddAdjustApply extends React.Component {
 	handleClear = () => {
 		this.setState({ curSelectRowKeys: [], curSelectRows: [], rowsMap: {} });
 	}
+	handleBack = () => {
+		const { history } = this.props;
+		history.go(-1);
+	}
 	render() {
-		const { loading, tipVisible, checkVisible, curSelectRowKeys, curSelectRows } = this.state;
-		const { applyOrderList: { list = [], page, total }, goldenToken } = this.props;
+		const { loading, tipVisible, checkVisible, curSelectRowKeys, curSelectRows, companyId } = this.state;
+		const { applyOrderList: { list = [], page, total = 0, all_total = 0 }, goldenToken, goldenMetadata: { quote_type = [] }, platformIcon = [] } = this.props;
 		const readyList = readyCheckFunc(this.handleDelete);
+		const totalMsg = `查询结果共${all_total}个，${total}个符合调价要求，${all_total - total}不符合：A端创建/订单已申请调价且尚未审批/非客户待确认状态订单无法申请调价。`;
 		return <div className='add-adjust-apply'>
-			<fieldset className='fieldset_css'>
-				<legend>统计</legend>
-				<div className='left-gap'>
-					已选订单:<span className='red-font' style={{ marginLeft: '10px' }}>{curSelectRowKeys.length}</span>个
-					<Button className='left-gap' type='primary' onClick={() => {
-						this.setState({ checkVisible: true });
-					}}>查看已选</Button>
-				</div>
-			</fieldset>
+			<h2 className='add_adjust_header' onClick={this.handleBack}>
+				<Icon type="arrow-left" />
+				<span className='left-gap'>订单调价</span>
+			</h2>
 			<ListQuery
 				type={'add'}
+				companyId={companyId}
 				questAction={this.props.actions.getApplyOrderList}
 				location={this.props.location}
 				history={this.props.history}
 				curSelectRowKeys={curSelectRowKeys}
 				handleClear={this.handleClear}
 			></ListQuery>
+			{ all_total - total > 0 ? <Alert className='add-list-total-info' message={totalMsg} type="warning" showIcon /> : null }
+			<div className='left-gap selected-refactor'>
+				已选订单:<span className='red-font' style={{ marginLeft: '10px' }}>{curSelectRowKeys.length}</span>个
+				<Button className='left-gap' type='primary' onClick={() => {
+					this.setState({ checkVisible: true });
+				}}>查看已选</Button>
+				{/* { list.length ? <span className='total-info'>{`总共${all_total}条;不符合条件${all_total - total}条`}</span> : null} */}
+			</div>
 			<ApplyTable
 				type={'add'}
 				rowKey={'order_id'}
-				columns={addAdjustApplyConfig}
+				columns={addAdjustApplyConfig(quote_type, platformIcon)}
 				dataSource={list}
 				loading={loading}
 				queryAction={this.queryData}
@@ -100,7 +123,7 @@ class AddAdjustApply extends React.Component {
 				curSelectRows={curSelectRows}
 				handleSelected={this.handleSelected}
 				location={this.props.location}
-				scroll={{ x: 1500 }}
+				scroll={{ x: 1900 }}
 			/>
 			<Row className='top-gap' style={{ textAlign: 'center' }}>
 				<Button className='adjust-apply-btn' type='default' onClick={() => {
@@ -108,7 +131,13 @@ class AddAdjustApply extends React.Component {
 				}}>上一步</Button>
 				<Button className='adjust-apply-btn left-gap' type='primary' disabled={!curSelectRowKeys.length}
 					onClick={
-						() => { this.setState({ tipVisible: true }) }
+						() => {
+							if( curSelectRowKeys.length > 300 ) {
+								info({title: '申请订单数不能超过300个'})
+							}else {
+								this.setState({ tipVisible: true }) 
+							}
+							}
 					}>提交审核</Button>
 			</Row>
 			{tipVisible ? <ApplyModal
@@ -134,7 +163,9 @@ class AddAdjustApply extends React.Component {
 const mapStateToProps = (state) => {
 	return {
 		applyOrderList: state.companyDetail.applyOrderList,
-		goldenToken: state.companyDetail.goldenToken
+		goldenToken: state.companyDetail.goldenToken,
+		goldenMetadata: state.companyDetail.goldenMetadata,
+		platformIcon: state.companyDetail.platformIconList,
 	}
 }
 const mapDispatchToProps = dispatch => ({

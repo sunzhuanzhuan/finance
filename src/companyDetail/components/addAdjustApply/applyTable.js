@@ -3,13 +3,25 @@ import { Table } from "antd";
 import { WBYTableFooter } from 'wbyui'
 import qs from 'qs'
 import difference from 'lodash/difference';
-
+import Scolltable from '@/components/Scolltable';
+import { events } from '@/util';
 
 class ApplyTable extends React.Component {
 	constructor() {
 		super();
 		this.state = {
+			leftWidth: 0
 		}
+		events.on('message', this.collapsedListener); 
+	}
+	collapsedListener = isClosed => {
+		this.setState({leftWidth: isClosed ? 40 : 200});
+	}
+	componentDidMount() {
+		const leftSlide = document.getElementsByClassName('ant-layout-sider-trigger')[0];
+		const leftWidth = leftSlide && leftSlide.clientWidth;
+
+		this.setState({leftWidth});
 	}
 	onCheckAllChange = e => {
 		const { type, curSelectRowKeys, dataSource, handleSelected } = this.props;
@@ -43,6 +55,7 @@ class ApplyTable extends React.Component {
 	}
 	render() {
 		const { type, rowKey, loading, columns, dataSource, page, total, queryAction, curSelectRowKeys, handleSelected, scroll = {} } = this.props;
+		const { leftWidth } = this.state;
 		const search = qs.parse(this.props.location.search.substring(1));
 		const data = type === 'write_detail' ? dataSource.filter(item => item.status === '1') : dataSource;
 		const ary = this.selectedAry(type);
@@ -71,22 +84,22 @@ class ApplyTable extends React.Component {
 				}
 			};
 		return <div>
-			{type === 'read_detail' ? <Table className='top-gap'
+			{type === 'read_detail' ? <Scolltable scrollClassName='.ant-table-body' widthScroll={leftWidth == '200' ? 2780 : 2700}><Table className='top-gap read-detail-table table_style'
 				rowKey={rowKey}
 				columns={columns}
 				dataSource={dataSource}
 				scroll={scroll}
 				bordered
-				pagination={dataSource.length ? paginationObj : false}
+				pagination={paginationObj}
 				loading={loading}
-			/> : null}
-			{type === 'write_detail' ? <Table className='top-gap'
+			/></Scolltable> : null}
+			{type === 'write_detail' ? <Scolltable scrollClassName='.ant-table-body' widthScroll={leftWidth == '200' ? 4360 : 4200}><Table className='top-gap detail-table table_style'
 				rowKey={rowKey}
 				columns={columns}
 				dataSource={dataSource}
 				scroll={scroll}
 				bordered
-				pagination={false}
+				pagination={paginationObj}
 				loading={loading}
 				rowSelection={rowSelectionObj}
 			// footer={() => {
@@ -98,8 +111,8 @@ class ApplyTable extends React.Component {
 			// 		pagination={dataSource.length ? paginationObj : false}
 			// 	/>
 			// }}
-			/> : null}
-			{type === 'add' ? <Table className='top-gap'
+			/></Scolltable> : null}
+			{type === 'add' ? <Scolltable scrollClassName='.ant-table-body' widthScroll={leftWidth == '200' ? 2050 : 1900}><Table className='top-gap add-table table_style'
 				rowKey={rowKey}
 				columns={columns}
 				dataSource={dataSource}
@@ -117,7 +130,7 @@ class ApplyTable extends React.Component {
 			// 		pagination={dataSource.length ? paginationObj : false}
 			// 	/>
 			// }}
-			/> : null}
+			/></Scolltable> : null}
 		</div>
 	}
 }

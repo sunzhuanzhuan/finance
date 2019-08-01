@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as goldenActions from '../actions/goldenApply'
-import { Upload, Icon, message, Button } from 'antd';
+import { Upload, Icon, message, Button, Modal } from 'antd';
 import './golden.less'
 const Dragger = Upload.Dragger;
 
@@ -14,7 +14,66 @@ class AdjustApplyInput extends React.Component {
 			fileList: []
 		}
 	}
+	componentDidMount() {
+		this.props.actions.getCompanyDetailAuthorizations()
+	}
+	confirmUpload = (obj, content, finance, sale, data = {}) => {
+		const { postImportApplication } = this.props.actions;
+		const { fileList } = this.state;
+		const { msg } = data;
+		if(msg) {
+			if(finance) {
+				return Modal.confirm({
+					title: msg,
+					onOk: () => {
+						content.set('commit', 1);
+						const hide = message.loading("上传中，请稍候...");
+						postImportApplication(content).then(() => {
+							let ary = [...fileList,
+								{
+									uid: obj.file.uid,
+									name: '已导入' + obj.file.name,
+									status: 'done',
+									url: '',
+								}];
+								this.setState({ fileList: ary });
+								hide();
+								message.success('上传成功！');
+						})
+					},
+					onCancel: () => {
+						this.setState({isShowPreview: false})
+					},
+				});
+			}
+			if(sale) {
+				return Modal.info({
+					title: msg,
+					onOk: () => {},
+				});
+			}
+		}else {
+			let ary = [...fileList,
+				{
+					uid: obj.file.uid,
+					name: '已导入' + obj.file.name,
+					status: 'done',
+					url: '',
+				}];
+				this.setState({ fileList: ary });
+				message.success('上传成功！');
+		}
+	}
 	render() {
+		const { companyDetailAuthorizations = [] } = this.props;
+		let finance;
+		let sale;
+		if(companyDetailAuthorizations.length){
+			finance = companyDetailAuthorizations[0].permissions['readjust.finance.audit'];
+			sale = companyDetailAuthorizations[0].permissions['readjust.sale.audit'];
+		}
+		const audit_type = finance ? 1 : sale ? 2 : undefined;
+
 		const props = {
 			headers: { "Content-Type": "application/x-www-form-urlencoded" },
 			accept: ".xlsx,.xls",
@@ -24,23 +83,18 @@ class AdjustApplyInput extends React.Component {
 			customRequest: obj => {
 				const hide = message.loading("上传中，请稍候...");
 				const { postImportApplication } = this.props.actions;
-				const { fileList } = this.state;
 				let content = new window.FormData();
 				content.append('file_path', obj.file);
-				postImportApplication(content).then(() => {
-					let ary = [...fileList,
-					{
-						uid: obj.file.uid,
-						name: '已导入' + obj.file.name,
-						status: 'done',
-						url: '',
-					}];
-					this.setState({ fileList: ary });
+				content.append('audit_type', audit_type);
+				content.append('commit', 2);
+				postImportApplication(content).then(result => {
+					const { data } = result;
 					hide();
-					message.success('上传成功！');
+					this.confirmUpload(obj, content, finance, sale, data);
+					return;
 				}).catch(({ errorMsg }) => {
 					hide();
-					message.error(errorMsg || '上传失败！')
+					message.error(errorMsg || '上传失败！');
 				});
 			}
 		};
@@ -61,8 +115,9 @@ class AdjustApplyInput extends React.Component {
 		</div>
 	}
 }
-const mapStateToProps = () => {
+const mapStateToProps = state => {
 	return {
+		companyDetailAuthorizations: state.companyDetail.companyDetailAuthorizations,
 	}
 };
 const mapDispatchToProps = dispatch => ({

@@ -5,9 +5,9 @@ import * as goldenActions from "../../actions/goldenApply";
 import { Input, Row, Col, Form, Select, Button, Icon, message, Spin, Modal } from "antd";
 import SearchSelect from '../SearchSelect';
 import qs from 'qs';
-
 import moment from 'moment';
 import 'moment/locale/zh-cn';
+import { shallowEqual } from '@/util';
 moment.locale('zh-cn');
 
 const FormItem = Form.Item;
@@ -15,8 +15,8 @@ const Option = Select.Option;
 
 
 class ListQuery extends React.Component {
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
 		this.state = {
 			projectLoading: false,
 			weiboLoading: false,
@@ -40,6 +40,18 @@ class ListQuery extends React.Component {
 		}
 		this.props.form.validateFields();
 	}
+
+	static getDerivedStateFromProps(nextProps, prevState) {
+		const { companyId = '' } = nextProps;
+		const { company_id = '' } = prevState;
+		if(!shallowEqual(companyId, company_id)) {
+			return {
+				company_id: companyId,
+			}
+		}
+		return null;
+	}
+
 	handleFetch = (obj) => {
 		let company_id = '';
 		if (this.props.type === 'add') {
@@ -163,7 +175,7 @@ class ListQuery extends React.Component {
 		let params = {};
 		if (type === 'add') {
 			params = {
-				keys: { ...keys },
+				keys: { ...keys, page_size: 200 },
 				labels: { ...labels }
 			}
 		} else if (type === 'detail') {
@@ -180,16 +192,23 @@ class ListQuery extends React.Component {
 		this.handleFunction(type)(questAction, params);
 	}
 	handleClear = () => {
+		const { form, type } = this.props;
+
 		this.props.form.resetFields();
+		if(type === 'add')
+			form.validateFields(['company_id'])
+
 	}
 	render() {
-		const { getFieldDecorator } = this.props.form;
+		const { form, type = 'add', projectList, platformList, rel_order_status } = this.props;
+		const { getFieldDecorator } = form;
 		const { projectLoading, weiboLoading } = this.state;
-		const { type = 'add', projectList, platformList, rel_order_status } = this.props;
+		const orderClass = type === 'add' ? 'add-sec-line-margin order-id-item' : 'sec-line-margin order-id-item';
+		const resetClass = type === 'add' ? 'add-reset-btn' : 'reset-btn';
 		return <div>
-			<Form className='adjust-stat'>
-				<Row type="flex" justify="start" gutter={16} style={{ padding: '10px 0' }}>
-					<FormItem label='每页显示' className='left-gap'>
+			<Form className='adjust-stat adjust-refactor'>
+				<Row type="flex" justify="start">
+					{/* <FormItem label='每页显示' className='left-gap'>
 						{getFieldDecorator('page_size', { initialValue: 50 })(
 							<Select style={{ width: 60 }}>
 								<Option value={20}>20</Option>
@@ -198,16 +217,17 @@ class ListQuery extends React.Component {
 								<Option value={200}>200</Option>
 							</Select>
 						)}
-					</FormItem>
+					</FormItem> */}
 					{type === 'add' ?
-						<FormItem className='left-gap'>
+						<FormItem label='公司简称'>
 							{getFieldDecorator('company_id', {
 								rules: [
 									{ required: true, message: '请先输入公司简称!' },
 								]
 							})(
 								<SearchSelect
-									placeholder='公司简称'
+									widthSign
+									placeholder='请选择'
 									getPopupContainer={() => document.querySelector('.adjust-stat')}
 									action={this.props.actions.getGoldenCompanyId}
 									keyWord='company_name'
@@ -215,21 +235,14 @@ class ListQuery extends React.Component {
 									item={['company_id', 'name']}
 								/>
 							)}
-						</FormItem> : <FormItem className='left-gap'>
-							{getFieldDecorator('status')(
-								<Select style={{ width: 140 }} placeholder="审批状态" allowClear labelInValue>
-									<Option value=''>全部</Option>
-									{rel_order_status.map(({ id, display }) => (<Option key={id} value={id}>{display}</Option>))}
-								</Select>
-							)}
-						</FormItem>}
-					<FormItem className='left-gap'>
+						</FormItem> : null}
+					<FormItem label='所属项目' className='left-gap'>
 						{getFieldDecorator('project_id')(
 							<Select
 								id='project_id'
 								className='query-multiple-select'
 								style={{ width: 160 }}
-								placeholder="所属项目"
+								placeholder="请选择"
 								allowClear
 								showSearch
 								labelInValue
@@ -246,10 +259,11 @@ class ListQuery extends React.Component {
 							</Select>
 						)}
 					</FormItem>
-					<FormItem className='left-gap'>
+					<FormItem label='需求名称' className='left-gap'>
 						{getFieldDecorator('requirement_id')(
 							<SearchSelect
-								placeholder='需求名称'
+								widthSign
+								placeholder='请输入'
 								getPopupContainer={() => document.querySelector('.adjust-stat')}
 								action={this.handleFetch}
 								keyWord='requirement_name'
@@ -258,25 +272,11 @@ class ListQuery extends React.Component {
 							/>
 						)}
 					</FormItem>
-					{type === 'detail' ? <FormItem className='left-gap'>
-						{getFieldDecorator('is_plan_manage')(
-							<Select
-								style={{ width: 120 }}
-								placeholder="是否含策划"
-								allowClear
-								showSearch
-								labelInValue
-							>
-								<Option value="1">是</Option>
-								<Option value="2">否</Option>
-							</Select>
-						)}
-					</FormItem> : null}
-					<FormItem className='left-gap'>
+					<FormItem label='平台' className='left-gap'>
 						{getFieldDecorator('weibo_type')(
 							<Select
 								id='weibo_type'
-								style={{ width: 120 }}
+								style={{ width: 160 }}
 								placeholder="平台"
 								allowClear
 								showSearch
@@ -294,16 +294,32 @@ class ListQuery extends React.Component {
 							</Select>
 						)}
 					</FormItem>
-					<FormItem className='left-gap'>
-						{getFieldDecorator('order_id')(
-							<Input placeholder='订单ID' style={{ width: 120 }} />
-						)}
-					</FormItem>
 				</Row>
-				<Row type="flex" justify="center" gutter={16} style={{ padding: '10px 0' }}>
+				<Row type="flex" justify="space-between">
+					<div>
+						<FormItem label='订单ID' className={orderClass}>
+							{getFieldDecorator('order_ids')(
+								<Input placeholder='请输入ID号，多个以空格隔开' style={{ width: 380 }} />
+							)}
+						</FormItem>
+						{type === 'detail' ? <FormItem label='含策划' className='left-gap plan-manage-item'>
+							{getFieldDecorator('is_plan_manage')(
+								<Select
+									style={{ width: 160 }}
+									placeholder="是否含策划"
+									allowClear
+									showSearch
+									labelInValue
+								>
+									<Option value="1">是</Option>
+									<Option value="2">否</Option>
+								</Select>
+							)}
+						</FormItem> : null}	
+					</div>
 					<FormItem>
 						<Button type='primary' onClick={this.handleSearch}>查询</Button>
-						<a className="reset-filter left-gap" onClick={this.handleClear}><Icon type="retweet" />重置搜索框</a>
+						<Button className={resetClass} onClick={this.handleClear}>重置</Button>
 					</FormItem>
 				</Row>
 			</Form>

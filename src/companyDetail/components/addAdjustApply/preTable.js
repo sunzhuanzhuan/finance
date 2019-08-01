@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import { withRouter } from 'react-router-dom';
 import * as goldenActions from "../../actions/goldenApply";
-import { Modal, Button, Table, message } from "antd";
+import { Table, message, Alert } from "antd";
 
-class PrevModal extends React.Component {
+class PreTable extends React.Component {
 	constructor() {
 		super();
 		this.state = {
@@ -13,25 +13,52 @@ class PrevModal extends React.Component {
 		}
 	}
 	componentDidMount() {
-		const { curSelectRows, applicationPreview, isApplication, applicationDetail: { list = [] } } = this.props;
-		let array = isApplication ? list : curSelectRows
+		const { curSelectRows, applicationPreview, isApplication, applicationDetail: { list = [] }, readjustType } = this.props;
+		let array = isApplication ? list : curSelectRows;
+		let isShowWarning;
+		let isExistWarning;
+		let previewRateVal;
+
 		const ary = array.map(item => {
+			isShowWarning = false;
+			const minSellPrice = applicationPreview[item['order_id']] || [];
+			minSellPrice.forEach(minItem => {
+				const { price_id, min_sell_price, profit_rate, service_rate } = minItem;
+				previewRateVal = item['quote_type'] == 1 ? profit_rate : service_rate;
+				const bottomItem = item['price'].find(bottomItem => bottomItem.price_id == price_id) || {};
+				if((min_sell_price - bottomItem.base_price) < 0) {
+					isShowWarning = true;
+					isExistWarning = true;
+				}
+			})
+
 			let obj = {
 				['order_id']: item['order_id'],
+				['status']: item['status'],
 				['company_name']: item['company_name'],
 				['project_name']: item['project_name'],
 				['requirement_id']: item['requirement_id'],
 				['requirement_name']: item['requirement_name'],
 				['platform_name']: item['platform_name'],
+				['platform_id']: item['platform_id'],
+				['account_id']: item['account_id'],
+				['brand_name']: item['brand_name'],
+				['identity_name']: item['identity_name'],
 				['weibo_name']: item['weibo_name'],
 				['plan_manager_id']: item['plan_manager_id'],
-				['pre_min_sell_price']: applicationPreview[item['order_id']],
+				['pre_min_sell_price']: minSellPrice,
 				['price']: item['price'],
-				['quote_type']: item['quote_type']
+				['quote_type']: item['quote_type'],
+				['warningClass']: isShowWarning ? 'warning_wrapper' : '',
+				['previewReadjustType']: readjustType,
+				['previewRateVal']: previewRateVal,
+				['default_cycle']: item['default_cycle'],
+				['order_default_cycle']: item['order_default_cycle'],
+				['partner_type_name']: item['partner_type_name']
 			};
 			return obj
 		});
-		this.setState({ data: ary })
+		this.setState({ data: ary, isExistWarning })
 	}
 	queryData = (obj, func) => {
 		this.setState({ loading: true });
@@ -46,8 +73,8 @@ class PrevModal extends React.Component {
 		})
 	}
 	render() {
-		const { data } = this.state;
-		const { visible, onCancel, columns, isApplication, readjustId, companyId, applicationDetail: { page, total } } = this.props;
+		const { data, isExistWarning } = this.state;
+		const { columns, isApplication, readjustId, companyId, applicationDetail: { page, total } } = this.props;
 		let applicationPaginationObj = {
 			onChange: (current) => {
 				this.queryData({ page: current, page_size: 50, status: 1, readjust_application_id: readjustId, company_id: companyId });
@@ -61,19 +88,19 @@ class PrevModal extends React.Component {
 			total: parseInt(data.length),
 			showQuickJumper: true,
 		};
-		return <Modal title='预览结果' visible={visible} width={'100%'}
-			footer={[<Button key='close' type='primary' onClick={onCancel}>关闭</Button>]}
-			onCancel={onCancel}
-			maskClosable={false}
-		>
-			<Table 
+		return (
+			<div>
+				{isExistWarning ? <Alert closable style={{marginBottom: '20px'}} message="请注意标红的订单：订单最低售卖价小于订单底价，建议修改调价类型/利润率/服务费率。" type="warning" showIcon /> : null}
+				<Table 
 				rowKey='order_id' 
+				className='preTable'
 				columns={columns} 
 				dataSource={data} 
 				bordered 
 				pagination={isApplication ? applicationPaginationObj : paginationObj} 
-				scroll={{ x: 1700 }} />
-		</Modal>
+				scroll={{ x: 3300 }} />
+			</div>
+		)
 	}
 }
 
@@ -86,4 +113,4 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => ({
 	actions: bindActionCreators({ ...goldenActions }, dispatch)
 });
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(PrevModal))
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(PreTable))

@@ -31,4 +31,5 @@ export default {
 	getGoldenUserList: '/finance/invoice/application/createUserList',
 	getGoldenCompanyId: '/finance/commonApi/getCompanyIndistinct',
 	postImportApplication: '/finance/readjust/importOperateApplication',
+	getPlatformListIcon: '/operator-gateway/common/v1/platformList',
 }

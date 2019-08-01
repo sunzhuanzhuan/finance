@@ -2,16 +2,17 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as goldenActions from "../actions/goldenApply";
-import { Button, Row, Modal, message, Input } from "antd";
+import { Button, Row, Modal, message, Input, Icon, Tabs } from "antd";
 import ListQuery from '../components/addAdjustApply/listQuery';
 import ApplyTable from '../components/addAdjustApply/applyTable';
 import ApplyModal from '../components/addAdjustApply/applyModal';
-import PrevModal from '../components/addAdjustApply/preModal'
 import { adjustApplyDetailFunc } from "../constants";
 import "./golden.less";
+import { getApplyDetailList } from '../actions/getApplyList';
 import qs from 'qs';
 import difference from 'lodash/difference';
 const { TextArea } = Input;
+const { TabPane } = Tabs;
 
 class AdjustApplyDetail extends React.Component {
 	constructor() {
@@ -19,28 +20,48 @@ class AdjustApplyDetail extends React.Component {
 		this.state = {
 			tipVisible: false,
 			rejectVisible: false,
-			previewVisible: false,
 			loading: false,
 			flag: false,
 			curSelectRowKeys: [],
 			curSelectRows: [],
 			rowsMap: {},
+			activeKey: 'allOptions',
+			applyId: ''
 		}
 	}
 	componentDidMount() {
 		const search = qs.parse(this.props.location.search.substring(1));
-		const { getCompanyDetailAuthorizations, getGoldenMetadata } = this.props.actions;
+		const { getCompanyDetailAuthorizations, getGoldenMetadata, getPlatformIcon } = this.props.actions;
 		getCompanyDetailAuthorizations().then(() => {
 			const { companyDetailAuthorizations } = this.props
 			const flag = companyDetailAuthorizations[0].permissions['readjust.finance.operation'];
 			this.setState({ flag });
 		})
 		getGoldenMetadata();
-		this.queryData({ page: 1, ...search.keys });
+		getPlatformIcon();
+		this.queryAllStatusData({ page: 1, ...search.keys });
+		this.setState({applyId: search.readjust_application_id || ''})
+	}
+	queryAllStatusData = query => {
+		const { actions: {getApplyDetailList} } = this.props;
+		const { status = 'allOptions' } = query;
+		this.setState({ loading: true, activeKey: status.toString() });
+
+		return Promise.all([
+			getApplyDetailList({...query, status: undefined}),
+			getApplyDetailList({...query, status: '1'}),
+			getApplyDetailList({...query, status: '2'}),
+			getApplyDetailList({...query, status: '3'}),
+		]).then(() => {
+			this.setState({ loading: false })
+		}).catch(({ errorMsg }) => {
+			this.setState({ loading: false });
+			message.error(errorMsg || '列表加载失败，请重试！');
+		})
 	}
 	queryData = (obj, func) => {
 		this.setState({ loading: true });
-		return this.props.actions.getApplicationDetail({ ...obj }).then(() => {
+		return this.props.actions.getApplyDetailList({ ...obj }).then(() => {
 			if (func && Object.prototype.toString.call(func) === '[object Function]') {
 				func();
 			}
@@ -71,13 +92,17 @@ class AdjustApplyDetail extends React.Component {
 	}
 	handleReject = () => {
 		const search = qs.parse(this.props.location.search.substring(1));
+		const { companyDetailAuthorizations } = this.props; 
 		const { postRejectByOrderIds } = this.props.actions;
 		const { curSelectRowKeys } = this.state;
 		const remark = document.querySelector('#reject-remark').value;
+		const finance = companyDetailAuthorizations[0].permissions['readjust.finance.audit'];
+		const sale = companyDetailAuthorizations[0].permissions['readjust.sale.audit'];
+		const audit_type = finance ? 1 : sale ? 2 : undefined;
 		const params = {
 			order_ids: curSelectRowKeys.toString(),
 			readjust_application_id: search.readjust_application_id,
-			remark
+			remark, audit_type
 		};
 		const hide = message.loading('操作中，请稍候...');
 		postRejectByOrderIds({ ...params }).then(() => {
@@ -92,44 +117,74 @@ class AdjustApplyDetail extends React.Component {
 			message.error(errorMsg || '操作失败！');
 		})
 	}
-	togglePreview = (boolean, func) => {
-		this.setState({ previewVisible: boolean }, func);
+	handleBack = () => {
+		const { history } = this.props;
+		history.go(-1);
+	}
+	handleChangeTab = activeKey => {
+		this.setState({activeKey});
 	}
 	render() {
-		const { loading, tipVisible, rejectVisible, previewVisible, flag, curSelectRowKeys, curSelectRows } = this.state;
-		const { applicationDetail: { list = [], page = 1, total = 0 }, goldenMetadata: { rel_order_status = [] } } = this.props;
-		const adjustApplyDetail = flag ? adjustApplyDetailFunc(rel_order_status)(['order_id', 'policy_id', 'status', 'company_name', 'project_name', 'requirement_id', 'requirement_name', 'platform_name', 'account_id', 'weibo_name', 'discount_rate', 'price', 'quoted_price', 'history_min_sell_price', 'history_rate', 'min_sell_price', 'quote_type', 'pass_time', 'remark']) : adjustApplyDetailFunc(rel_order_status)(['order_id', 'policy_id', 'status', 'company_name', 'project_name', 'requirement_id', 'requirement_name', 'platform_name', 'account_id', 'weibo_name', 'discount_rate', 'price', 'history_min_sell_price', 'min_sell_price', 'pass_time', 'remark']);
-		const adjustApplyPreview = adjustApplyDetailFunc(rel_order_status)(['prev_id', 'company_name', 'project_name', 'requirement_id_name', 'platform_name', 'weibo_name', 'discount_rate', 'commissioned_price', 'quoted_price', 'pre_min_sell_price']);
+		const { loading, tipVisible, rejectVisible, flag, curSelectRowKeys, curSelectRows, activeKey, applyId } = this.state;
+		const { goldenMetadata: { rel_order_status = [], quote_type = [], readjust_type = [] }, applyListReducer = {}, platformIcon = [] } = this.props;
+		const allDetailList = applyListReducer[`applyDetailListStatusallOptions`] || {};
+		const { total: allTotal } = allDetailList;
+		const adjustApplyDetail = flag ? 
+			adjustApplyDetailFunc(rel_order_status, quote_type, readjust_type, platformIcon)(['order_id', 'policy_id', 'status', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'main_account_info', 'quoted_price', 'discount_rate', 'order_bottom_price', 'commissioned_price', 'history_min_sell_price', 'history_rate', 'min_sell_price', 'quote_type', 'auditor_name', 'pass_time', 'remark']) 
+			: adjustApplyDetailFunc(rel_order_status, quote_type, readjust_type, platformIcon)(['order_id', 'policy_id', 'status', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'main_account_info_sale', 'discount_rate', 'commissioned_price_sale', 'auditor_name', 'pass_time', 'remark']);
+		const adjustApplyPreview = adjustApplyDetailFunc(rel_order_status, quote_type, readjust_type, platformIcon)(['prev_id', 'statusPre', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'main_account_info', 'quoted_price', 'discount_rate', 'order_bottom_price', 'commissioned_price', 'pre_min_sell_price', 'preview_quote_type']);
+		const dealStatusArr = Array.isArray(rel_order_status) && rel_order_status.length  ? [{id: 'allOptions', display: '全部'}, ...rel_order_status] : [];
+		const getTabPaneComp = () => {
+			return dealStatusArr.map(item => {
+				const { id, display } = item;
+				const tabInfo = applyListReducer[`applyDetailListStatus${id}`] || {};
+				const { list = [], page, total } = tabInfo;
+				const tab = <div>
+					<span key='name'>{display}</span>
+					<span key='count'>{total}</span>
+				</div>;
+				return (
+					<TabPane tab={tab} key={id}>
+						<ApplyTable
+							type={flag ? 'write_detail' : 'read_detail'}
+							rowKey={'order_id'}
+							columns={adjustApplyDetail}
+							dataSource={list}
+							loading={loading}
+							queryAction={this.queryData}
+							page={parseInt(page)}
+							total={parseInt(total)}
+							curSelectRowKeys={curSelectRowKeys}
+							curSelectRows={curSelectRows}
+							handleSelected={this.handleSelected}
+							location={this.props.location}
+							scroll={flag ? { x: 4080 } : { x: 2620 }}
+						>
+						</ApplyTable>
+					</TabPane>
+				)
+			})
+		};
 		return <div className='add-adjust-apply'>
-			<fieldset className='fieldset_css'>
-				<legend>统计</legend>
-				<div className='left-gap'>
-					申请订单:<span className='red-font' style={{ marginLeft: '10px' }}>{total}</span>个
-				</div>
-			</fieldset>
+			<h2 className='add_adjust_header' onClick={this.handleBack}>
+				<Icon type="arrow-left" />
+				<span className='left-gap'>订单详情 - 申请编号{applyId}</span>
+			</h2>
 			<ListQuery
 				type={'detail'}
-				questAction={this.props.actions.getApplicationDetail}
+				questAction={this.queryAllStatusData}
 				location={this.props.location}
 				history={this.props.history}
 				rel_order_status={rel_order_status}
 			></ListQuery>
-			<ApplyTable
-				type={flag ? 'write_detail' : 'read_detail'}
-				rowKey={'order_id'}
-				columns={adjustApplyDetail}
-				dataSource={list}
-				loading={loading}
-				queryAction={this.queryData}
-				page={parseInt(page)}
-				total={parseInt(total)}
-				curSelectRowKeys={curSelectRowKeys}
-				curSelectRows={curSelectRows}
-				handleSelected={this.handleSelected}
-				location={this.props.location}
-				scroll={flag ? { x: 2770 } : { x: 2150 }}
-			>
-			</ApplyTable>
+			<Tabs className='adjust_tabs adjust_detail_tabs' activeKey={activeKey} onChange={this.handleChangeTab}>
+				{
+					getTabPaneComp()
+				}
+			</Tabs>
+			{/* <div className='left-gap selected-refactor'>
+				申请订单:<span className='red-font' style={{ marginLeft: '10px' }}>{total}</span>个
+			</div> */}
 			{flag ? <Row className='top-gap' style={{ textAlign: 'center' }}>
 				<Button className='adjust-apply-btn' type='primary' onClick={() => {
 					this.setState({ tipVisible: true });
@@ -138,23 +193,19 @@ class AdjustApplyDetail extends React.Component {
 			</Row> : null}
 			{tipVisible ? <ApplyModal
 				type={'detail'}
+				total={allTotal}
 				visible={tipVisible}
 				queryAction={this.queryData}
 				curSelectRowKeys={curSelectRowKeys}
 				curSelectRows={curSelectRows}
 				handleClear={this.handleClear}
-				togglePreview={this.togglePreview}
 				onCancel={() => { this.setState({ tipVisible: false }) }}
 				location={this.props.location}
 				quoteType={curSelectRows.length > 0 ? curSelectRows[0].quote_type : null}
 				flag={flag}
+				columns={adjustApplyPreview}
 			>
 			</ApplyModal> : null}
-			{previewVisible && <PrevModal visible={previewVisible}
-				curSelectRows={curSelectRows}
-				onCancel={() => { this.setState({ previewVisible: false }) }}
-				columns={adjustApplyPreview}
-			/>}
 			{rejectVisible ? <Modal title='订单调价处理' visible={rejectVisible}
 				onOk={this.handleReject}
 				onCancel={() => { this.setState({ rejectVisible: false }) }}
@@ -170,10 +221,11 @@ const mapStateToProps = (state) => {
 	return {
 		companyDetailAuthorizations: state.companyDetail.companyDetailAuthorizations,
 		goldenMetadata: state.companyDetail.goldenMetadata,
-		applicationDetail: state.companyDetail.applicationDetail
+		applyListReducer: state.companyDetail.applyListReducer,
+		platformIcon: state.companyDetail.platformIconList,
 	}
 }
 const mapDispatchToProps = dispatch => ({
-	actions: bindActionCreators({ ...goldenActions }, dispatch)
+	actions: bindActionCreators({ ...goldenActions, getApplyDetailList }, dispatch)
 });
 export default connect(mapStateToProps, mapDispatchToProps)(AdjustApplyDetail);

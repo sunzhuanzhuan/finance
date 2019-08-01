@@ -175,7 +175,7 @@ class ListQuery extends React.Component {
 		let params = {};
 		if (type === 'add') {
 			params = {
-				keys: { ...keys },
+				keys: { ...keys, page_size: 200 },
 				labels: { ...labels }
 			}
 		} else if (type === 'detail') {

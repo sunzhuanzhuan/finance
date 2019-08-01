@@ -28,9 +28,8 @@ const getPriceContent = (item = {}) => {
 	return (
 		<div className='price_comp' key={+new Date() + Math.random()}>
 			<div className='price_title'>
-				<span>{titleLable}：{dealTitlePrice}</span>
-				{(isShowRate && !isShowDetail) || isServiceRate ? <span style={{marginLeft: 20}}>{rateTitle}：{dealBaseRate}</span> : null}
-
+				<span style={{marginRight: 20}}>{titleLable}：{dealTitlePrice}</span>
+				{(isShowRate && !isShowDetail) || isServiceRate ? <span className='nowrap-span'>{rateTitle}：{dealBaseRate}</span> : null}
 			</div>
 			{
 				isShowDetail ? [

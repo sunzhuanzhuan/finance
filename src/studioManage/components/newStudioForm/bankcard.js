@@ -13,7 +13,7 @@ class BankCard extends React.Component {
 		// this.handleCheckCard = debounce(this.checkCard, 800);
 	}
 	checkCard = (rule, value, callback) => {
-		const reg = /^[1-9]\d{0,30}$/;
+		const reg = /^[0-9]\d{0,30}$/;
 		if (!reg.test(value) || !value) {
 			callback('请输入正确的银行卡信息');
 			return

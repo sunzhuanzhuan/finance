@@ -72,6 +72,7 @@ class ApplyTable extends React.Component {
 		if(type === 'add') {
 			Object.assign(paginationObj, {
 				showSizeChanger: true,
+				pageSizeOptions: ['20', '50', '100', '200'],
 				onShowSizeChange: (page, pageSize) => {
 					queryAction({ ...search.keys, page, page_size: pageSize  });
 				},

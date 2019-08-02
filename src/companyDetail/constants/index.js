@@ -774,7 +774,6 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				key: 'policy_id',
 				align: 'center',
 				width: 100,
-				fixed: 'left',
 				render: (text) => {
 					return text > 0 ? <a target="_blank" href={`/account/policy?id=${text}`}>查看</a> : '-'
 				}

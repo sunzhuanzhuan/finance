@@ -54,7 +54,7 @@ class ApplyTable extends React.Component {
 		return flag ? ary : curAry
 	}
 	render() {
-		const { type, rowKey, loading, columns, dataSource, page, total, queryAction, curSelectRowKeys, handleSelected, scroll = {} } = this.props;
+		const { type, rowKey, loading, columns, dataSource, page, total, addPageSize = 20, queryAction, curSelectRowKeys, handleSelected, scroll = {} } = this.props;
 		const { leftWidth } = this.state;
 		const search = qs.parse(this.props.location.search.substring(1));
 		const data = type === 'write_detail' ? dataSource.filter(item => item.status === '1') : dataSource;
@@ -69,6 +69,18 @@ class ApplyTable extends React.Component {
 			pageSize: parseInt(page_size),
 			showQuickJumper: true,
 		};
+		if(type === 'add') {
+			Object.assign(paginationObj, {
+				showSizeChanger: true,
+				onShowSizeChange: (page, pageSize) => {
+					queryAction({ ...search.keys, page, page_size: pageSize  });
+				},
+				onChange: (page, pageSize) => {
+					queryAction({ ...search.keys, page, page_size: pageSize });
+				},
+				pageSize: addPageSize,
+			})
+		}
 		let rowSelectionObj = type === 'write_detail' ? {
 			selectedRowKeys: curSelectRowKeys,
 			onChange: (selectedRowKeys, selectedRows) => {
@@ -118,7 +130,7 @@ class ApplyTable extends React.Component {
 				dataSource={dataSource}
 				scroll={scroll}
 				bordered
-				pagination={false}
+				pagination={paginationObj}
 				loading={loading}
 				rowSelection={rowSelectionObj}
 			// footer={() => {

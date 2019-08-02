@@ -85,7 +85,7 @@ class AddAdjustApply extends React.Component {
 	}
 	render() {
 		const { loading, tipVisible, checkVisible, curSelectRowKeys, curSelectRows, companyId } = this.state;
-		const { applyOrderList: { list = [], page, total = 0, all_total = 0 }, goldenToken, goldenMetadata: { quote_type = [] }, platformIcon = [] } = this.props;
+		const { applyOrderList: { list = [], page, page_size, total = 0, all_total = 0 }, goldenToken, goldenMetadata: { quote_type = [] }, platformIcon = [] } = this.props;
 		const readyList = readyCheckFunc(this.handleDelete);
 		const totalMsg = `查询结果共${all_total}个，${total}个符合调价要求，${all_total - total}不符合：A端创建/订单已申请调价且尚未审批/非客户待确认状态订单无法申请调价。`;
 		return <div className='add-adjust-apply'>
@@ -118,6 +118,7 @@ class AddAdjustApply extends React.Component {
 				loading={loading}
 				queryAction={this.queryData}
 				page={parseInt(page)}
+				addPageSize={parseInt(page_size)}
 				total={parseInt(total)}
 				curSelectRowKeys={curSelectRowKeys}
 				curSelectRows={curSelectRows}

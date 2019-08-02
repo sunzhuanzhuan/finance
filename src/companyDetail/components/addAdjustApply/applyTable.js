@@ -84,7 +84,7 @@ class ApplyTable extends React.Component {
 				}
 			};
 		return <div>
-			{type === 'read_detail' ? <Scolltable scrollClassName='.ant-table-body' widthScroll={leftWidth == '200' ? 3100 : 2960}><Table className='top-gap read-detail-table table_style'
+			{type === 'read_detail' ? <Scolltable scrollClassName='.ant-table-body' widthScroll={leftWidth == '200' ? 2920 : 2740}><Table className='top-gap read-detail-table table_style'
 				rowKey={rowKey}
 				columns={columns}
 				dataSource={dataSource}

@@ -1029,9 +1029,12 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 					// trinity_type === 2 显示阴阳价 判断是否展示
 					return <div className={warningClass}>
 						{price.map(item => {
+							const { created_time } = item;
+							const createTime = moment(created_time * 1000).format('YYYY-MM-DD HH:mm:ss');
+							const isBefore = moment(createTime).isBefore('2019-08-01 22:00:00');
 							const showObj = {
 								isShowDetail: item.trinity_type == 2,
-								isShowRate: true,
+								isShowRate: !isBefore,
 								rateTitle: item.quote_type == 2 ? '服务费率' : '利润率',
 								titleLable: item.price_label,
 								titlePrice: item.base_price,

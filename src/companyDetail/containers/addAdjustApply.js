@@ -10,6 +10,7 @@ import { addAdjustApplyConfig, readyCheckFunc } from "../constants";
 import "./golden.less";
 import qs from 'qs';
 import difference from 'lodash/difference';
+import { getAddApplyList, clearAddApplyList } from '../actions/getApplyList';
 
 const { info } = Modal;
 
@@ -32,6 +33,7 @@ class AddAdjustApply extends React.Component {
 		this.props.actions.getGoldenMetadata();
 		this.props.actions.getPlatformIcon();
 		this.props.actions.getCompanyDetailAuthorizations();
+		this.props.actions.clearAddApplyList();
 		delete search['requirement_label'];
 		const { keys:{company_id} } = search;
 		// const queryObj = { page: 1, ...search.keys, page_size: 200 };
@@ -41,12 +43,11 @@ class AddAdjustApply extends React.Component {
 			// Object.assign(queryObj, {company_id: companyId});
 			this.setState({companyId});
 		}
-
 		// this.queryData(queryObj);
 	}
 	queryData = (obj, func) => {
 		this.setState({ loading: true });
-		return this.props.actions.getApplyOrderList({ ...obj }).then(() => {
+		return this.props.actions.getAddApplyList({ ...obj }).then(() => {
 			if (func && Object.prototype.toString.call(func) === '[object Function]') {
 				func();
 			}
@@ -83,14 +84,13 @@ class AddAdjustApply extends React.Component {
 		const { history } = this.props;
 		history.go(-1);
 	}
-	handleSearchCompany = () => {
-		this.setState({ isShowList: true })
-	}
 	render() {
 		const { loading, tipVisible, checkVisible, curSelectRowKeys, curSelectRows, companyId, isShowList } = this.state;
-		const { applyOrderList: { list = [], page, page_size, total = 0, all_total = 0 }, goldenToken, goldenMetadata: { quote_type = [] }, platformIcon = [] } = this.props;
+		const { addApplyListReducer = {}, goldenToken, goldenMetadata: { quote_type = [] }, platformIcon = [] } = this.props;
+		const {list = [], page, page_size, total = 0, all_total = 0} = addApplyListReducer['addApplyList'] || {};
 		const readyList = readyCheckFunc(this.handleDelete);
 		const totalMsg = `查询结果共${all_total}个，${total}个符合调价要求，${all_total - total}不符合：A端创建/订单已申请调价且尚未审批/非客户待确认状态订单无法申请调价。`;
+
 		return <div className='add-adjust-apply'>
 			<h2 className='add_adjust_header' onClick={this.handleBack}>
 				<Icon type="arrow-left" />
@@ -98,15 +98,14 @@ class AddAdjustApply extends React.Component {
 			</h2>
 			<ListQuery
 				type={'add'}
-				handleSearch={this.handleSearchCompany}
 				companyId={companyId}
-				questAction={this.props.actions.getApplyOrderList}
+				questAction={this.props.actions.getAddApplyList}
 				location={this.props.location}
 				history={this.props.history}
 				curSelectRowKeys={curSelectRowKeys}
 				handleClear={this.handleClear}
 			></ListQuery>
-			{ isShowList && all_total - total > 0 ? <Alert className='add-list-total-info' message={totalMsg} type="warning" showIcon /> : null }
+			{ all_total - total > 0 ? <Alert className='add-list-total-info' message={totalMsg} type="warning" showIcon /> : null }
 			<div className='left-gap selected-refactor'>
 				已选订单:<span className='red-font' style={{ marginLeft: '10px' }}>{curSelectRowKeys.length}</span>个
 				<Button className='left-gap' type='primary' onClick={() => {
@@ -118,12 +117,12 @@ class AddAdjustApply extends React.Component {
 				type={'add'}
 				rowKey={'order_id'}
 				columns={addAdjustApplyConfig(quote_type, platformIcon)}
-				dataSource={isShowList ? list : []}
+				dataSource={list}
 				loading={loading}
 				queryAction={this.queryData}
-				page={isShowList ? parseInt(page) : 0}
+				page={parseInt(page)}
 				addPageSize={parseInt(page_size)}
-				total={isShowList ? parseInt(total) : 0}
+				total={parseInt(total)}
 				curSelectRowKeys={curSelectRowKeys}
 				curSelectRows={curSelectRows}
 				handleSelected={this.handleSelected}
@@ -167,14 +166,14 @@ class AddAdjustApply extends React.Component {
 
 const mapStateToProps = (state) => {
 	return {
-		applyOrderList: state.companyDetail.applyOrderList,
 		goldenToken: state.companyDetail.goldenToken,
 		goldenMetadata: state.companyDetail.goldenMetadata,
 		platformIcon: state.companyDetail.platformIconList,
+		addApplyListReducer: state.companyDetail.applyListReducer,
 	}
 }
 const mapDispatchToProps = dispatch => ({
-	actions: bindActionCreators({ ...goldenActions }, dispatch)
+	actions: bindActionCreators({ ...goldenActions, getAddApplyList, clearAddApplyList }, dispatch)
 });
 export default connect(mapStateToProps, mapDispatchToProps)(AddAdjustApply)
 function CheckModal(props) {

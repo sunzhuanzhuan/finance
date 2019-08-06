@@ -38,7 +38,10 @@ class AdjustApply extends React.Component {
 			const { companyDetailAuthorizations } = this.props
 			const flag = companyDetailAuthorizations[0].permissions['readjust.finance.operation'];
 			const btnFlag = companyDetailAuthorizations[0].permissions['readjust.sale.operation'];
-			this.setState({ flag, btnFlag });
+			const finance = companyDetailAuthorizations[0].permissions['readjust.finance.audit'];
+			const sale = companyDetailAuthorizations[0].permissions['readjust.sale.audit'];
+			const audit_type = finance ? 1 : sale ? 2 : undefined;
+			this.setState({ flag, btnFlag, audit_type });
 		})
 		getGoldenMetadata();
 		getGoldenUserList();
@@ -103,13 +106,10 @@ class AdjustApply extends React.Component {
 		this.setState({ rejectVisible: true, readjust_application_id });
 	}
 	handleReject = (readjust_application_id) => {
-		const { companyDetailAuthorizations = [] } = this.props;
+		const { audit_type } = this.state;
 		const search = qs.parse(this.props.location.search.substring(1));
 		const { postRejectByReadjustId } = this.props.actions;
 		const remark = document.querySelector('#reject-remark').value;
-		const finance = companyDetailAuthorizations[0].permissions['readjust.finance.audit'];
-		const sale = companyDetailAuthorizations[0].permissions['readjust.sale.audit'];
-		const audit_type = finance ? 1 : sale ? 2 : undefined;
 		const params = { readjust_application_id, remark, audit_type };
 		const hide = message.loading('操作中，请稍候...');
 		postRejectByReadjustId({ ...params }).then(() => {
@@ -145,18 +145,17 @@ class AdjustApply extends React.Component {
 		this.setState({activeKey});
 	}
 	render() {
-		const { loading, tipVisible, page_size, flag, btnFlag, quoteType, readjust_application_id, rejectVisible, company_id, addVisible, activeKey } = this.state;
+		const { loading, tipVisible, page_size, flag, btnFlag, quoteType, readjust_application_id, rejectVisible, company_id, addVisible, activeKey, audit_type } = this.state;
 		const { form, goldenMetadata, goldenMetadata: { application_status = [], rel_order_status = [], quote_type = [], readjust_type = [] }, goldenUserList, applicationDetail: { list: detailList = [] }, applyListReducer = {}, platformIcon = [] } = this.props;
 		const { getFieldDecorator } = form;
 		const formItemLayout = { labelCol: { span: 6 }, wrapperCol: { span: 16 }, };
 		const search = qs.parse(this.props.location.search.substring(1));
-		const adjustApplyList = flag ? adjustApplyListFunc(application_status, quote_type, this.handleJump, this.handleAction) : adjustApplyFunc(application_status, quote_type, this.handleJump);
+		const adjustApplyList = flag ? adjustApplyListFunc(audit_type, application_status, quote_type, this.handleJump, this.handleAction) : adjustApplyFunc(application_status, quote_type, this.handleJump);
 		const adjustApplyPreview = adjustApplyDetailFunc(rel_order_status, quote_type, readjust_type, platformIcon)(['prev_id', 'statusPre', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'main_account_info', 'quoted_price', 'discount_rate', 'order_bottom_price', 'commissioned_price', 'pre_min_sell_price', 'preview_quote_type']);
 		const dealStatusArr = Array.isArray(application_status) && application_status.length  ? [{id: 'allOptions', display: '全部'}, ...application_status] : [];
 		const getTabPaneComp = () => {
 			return dealStatusArr.map(item => {
 				const { id, display } = item;
-
 				const tabInfo = applyListReducer[`applyListStatus${id}`] || {};
 				const { list = [], page, total, page_size: tableSize } = tabInfo;
 				const status = id !== 'allOptions' ? id : undefined; 

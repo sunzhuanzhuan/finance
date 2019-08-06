@@ -471,7 +471,7 @@ export const adjustApplyFunc = (application_status, quote_type, handleJump) => {
 	]
 }
 
-export const adjustApplyListFunc = (application_status, quote_type, handleJump, handleAction) => {
+export const adjustApplyListFunc = (audit_type, application_status, quote_type, handleJump, handleAction) => {
 	return [
 		{
 			title: '申请编号',
@@ -571,7 +571,7 @@ export const adjustApplyListFunc = (application_status, quote_type, handleJump, 
 							驳回
 						</a>
 					: null}
-					<a style={{marginLeft: 10}} target='_blank' href={`/api/finance/readjust/export?readjust_application_id=${record.id}`}>导出</a>
+					<a style={{marginLeft: 10}} target='_blank' href={`/api/finance/readjust/export?readjust_application_id=${record.id}&audit_type=${audit_type}`}>导出</a>
 				</div >
 			}
 		}
@@ -1147,7 +1147,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '历史审核利润率/服务费率',
 				dataIndex: 'history_rate',
 				key: 'history_rate',
-				width: 130,
+				width: 120,
 				render: (_, {history_min_sell_price = {}, quote_type, }) => {
 					const item = history_min_sell_price ? history_min_sell_price.min_sell_price : [];
 					const profitRate = history_min_sell_price.profit_rate || history_min_sell_price.profit_rate == 0 ? numeral(history_min_sell_price.profit_rate).format('0.00%') : '-';
@@ -1207,7 +1207,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '本次利润率/服务费率',
 				dataIndex: 'quote_type',
 				key: 'quote_type',
-				width: 100,
+				width: 90,
 				render: (text, {profit_rate, service_rate, min_sell_price, readjust_type}) => {
 					const profitRate = profit_rate || profit_rate == 0 ? numeral(profit_rate).format('0.00%') : '-';
 					const serviceRate = service_rate || service_rate == 0 ? numeral(service_rate).format('0.00%') : '-';

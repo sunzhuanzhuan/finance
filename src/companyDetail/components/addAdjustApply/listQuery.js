@@ -174,10 +174,12 @@ class ListQuery extends React.Component {
 		}
 		let params = {};
 		if (type === 'add') {
+			const {page_size = 20} = keys;
 			params = {
-				keys: { ...keys, page_size: 200 },
+				keys: { ...keys, page_size },
 				labels: { ...labels }
 			}
+			this.props.handleSearch();
 		} else if (type === 'detail') {
 			params = {
 				keys: {

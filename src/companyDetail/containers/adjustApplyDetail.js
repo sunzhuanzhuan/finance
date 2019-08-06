@@ -22,6 +22,7 @@ class AdjustApplyDetail extends React.Component {
 			rejectVisible: false,
 			loading: false,
 			flag: false,
+			costFlag: false,
 			curSelectRowKeys: [],
 			curSelectRows: [],
 			rowsMap: {},
@@ -35,7 +36,8 @@ class AdjustApplyDetail extends React.Component {
 		getCompanyDetailAuthorizations().then(() => {
 			const { companyDetailAuthorizations } = this.props
 			const flag = companyDetailAuthorizations[0].permissions['readjust.finance.operation'];
-			this.setState({ flag });
+			const costFlag = companyDetailAuthorizations[0].permissions['readjust.finance.filter'];
+			this.setState({ flag, costFlag });
 		})
 		getGoldenMetadata();
 		getPlatformIcon();
@@ -125,14 +127,19 @@ class AdjustApplyDetail extends React.Component {
 		this.setState({activeKey});
 	}
 	render() {
-		const { loading, tipVisible, rejectVisible, flag, curSelectRowKeys, curSelectRows, activeKey, applyId } = this.state;
+		const { loading, tipVisible, rejectVisible, flag, costFlag, curSelectRowKeys, curSelectRows, activeKey, applyId } = this.state;
 		const { goldenMetadata: { rel_order_status = [], quote_type = [], readjust_type = [] }, applyListReducer = {}, platformIcon = [] } = this.props;
 		const allDetailList = applyListReducer[`applyDetailListStatusallOptions`] || {};
 		const { total: allTotal } = allDetailList;
+		const financeColArr = ['order_id', 'status', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'main_account_info', 'policy_id', 'quoted_price', 'discount_rate', 'order_bottom_price', 'commissioned_price', 'history_min_sell_price', 'history_rate', 'min_sell_price', 'quote_type', 'auditor_name', 'pass_time', 'remark'];
+		const detailColArr = costFlag ? financeColArr : financeColArr.filter(item => item !== 'quoted_price' && item !== 'policy_id');
+		const financeWidth = costFlag ? 4080 : 3760;
+		const preFinanceArr = ['prev_id', 'statusPre', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'main_account_info', 'quoted_price', 'discount_rate', 'order_bottom_price', 'commissioned_price', 'pre_min_sell_price', 'preview_quote_type'];
+		const dealPreArr = costFlag ? preFinanceArr : preFinanceArr.filter(item => item !== 'quoted_price');
 		const adjustApplyDetail = flag ? 
-			adjustApplyDetailFunc(rel_order_status, quote_type, readjust_type, platformIcon)(['order_id', 'policy_id', 'status', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'main_account_info', 'quoted_price', 'discount_rate', 'order_bottom_price', 'commissioned_price', 'history_min_sell_price', 'history_rate', 'min_sell_price', 'quote_type', 'auditor_name', 'pass_time', 'remark']) 
-			: adjustApplyDetailFunc(rel_order_status, quote_type, readjust_type, platformIcon)(['order_id', 'status', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'discount_rate', 'commissioned_price_sale', 'history_min_sell_price', 'min_sell_price', 'auditor_name', 'pass_time', 'remark']);
-		const adjustApplyPreview = adjustApplyDetailFunc(rel_order_status, quote_type, readjust_type, platformIcon)(['prev_id', 'statusPre', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'main_account_info', 'quoted_price', 'discount_rate', 'order_bottom_price', 'commissioned_price', 'pre_min_sell_price', 'preview_quote_type']);
+			adjustApplyDetailFunc(rel_order_status, quote_type, readjust_type, platformIcon)(detailColArr) 
+			: adjustApplyDetailFunc(rel_order_status, quote_type, readjust_type, platformIcon)(['order_id', 'status', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'commissioned_price_sale', 'history_min_sell_price', 'min_sell_price', 'auditor_name', 'pass_time', 'remark']);
+		const adjustApplyPreview = adjustApplyDetailFunc(rel_order_status, quote_type, readjust_type, platformIcon)(dealPreArr);
 		const dealStatusArr = Array.isArray(rel_order_status) && rel_order_status.length  ? [{id: 'allOptions', display: '全部'}, ...rel_order_status] : [];
 		const getTabPaneComp = () => {
 			return dealStatusArr.map(item => {
@@ -158,7 +165,7 @@ class AdjustApplyDetail extends React.Component {
 							curSelectRows={curSelectRows}
 							handleSelected={this.handleSelected}
 							location={this.props.location}
-							scroll={flag ? { x: 4080 } : { x: 2620 }}
+							scroll={flag ? { x: financeWidth } : { x: 2620 }}
 						>
 						</ApplyTable>
 					</TabPane>

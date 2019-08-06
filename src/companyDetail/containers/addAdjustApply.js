@@ -34,15 +34,15 @@ class AddAdjustApply extends React.Component {
 		this.props.actions.getCompanyDetailAuthorizations();
 		delete search['requirement_label'];
 		const { keys:{company_id} } = search;
-		const queryObj = { page: 1, ...search.keys, page_size: 200 };
+		// const queryObj = { page: 1, ...search.keys, page_size: 200 };
 		if(company_id) {
 			const companyId = company_id.key;
-			delete search.keys.company_id;
-			Object.assign(queryObj, {company_id: companyId});
+			// delete search.keys.company_id;
+			// Object.assign(queryObj, {company_id: companyId});
 			this.setState({companyId});
 		}
 
-		this.queryData(queryObj);
+		// this.queryData(queryObj);
 	}
 	queryData = (obj, func) => {
 		this.setState({ loading: true });
@@ -83,9 +83,12 @@ class AddAdjustApply extends React.Component {
 		const { history } = this.props;
 		history.go(-1);
 	}
+	handleSearchCompany = () => {
+		this.setState({ isShowList: true })
+	}
 	render() {
-		const { loading, tipVisible, checkVisible, curSelectRowKeys, curSelectRows, companyId } = this.state;
-		const { applyOrderList: { list = [], page, total = 0, all_total = 0 }, goldenToken, goldenMetadata: { quote_type = [] }, platformIcon = [] } = this.props;
+		const { loading, tipVisible, checkVisible, curSelectRowKeys, curSelectRows, companyId, isShowList } = this.state;
+		const { applyOrderList: { list = [], page, page_size, total = 0, all_total = 0 }, goldenToken, goldenMetadata: { quote_type = [] }, platformIcon = [] } = this.props;
 		const readyList = readyCheckFunc(this.handleDelete);
 		const totalMsg = `查询结果共${all_total}个，${total}个符合调价要求，${all_total - total}不符合：A端创建/订单已申请调价且尚未审批/非客户待确认状态订单无法申请调价。`;
 		return <div className='add-adjust-apply'>
@@ -95,6 +98,7 @@ class AddAdjustApply extends React.Component {
 			</h2>
 			<ListQuery
 				type={'add'}
+				handleSearch={this.handleSearchCompany}
 				companyId={companyId}
 				questAction={this.props.actions.getApplyOrderList}
 				location={this.props.location}
@@ -102,7 +106,7 @@ class AddAdjustApply extends React.Component {
 				curSelectRowKeys={curSelectRowKeys}
 				handleClear={this.handleClear}
 			></ListQuery>
-			{ all_total - total > 0 ? <Alert className='add-list-total-info' message={totalMsg} type="warning" showIcon /> : null }
+			{ isShowList && all_total - total > 0 ? <Alert className='add-list-total-info' message={totalMsg} type="warning" showIcon /> : null }
 			<div className='left-gap selected-refactor'>
 				已选订单:<span className='red-font' style={{ marginLeft: '10px' }}>{curSelectRowKeys.length}</span>个
 				<Button className='left-gap' type='primary' onClick={() => {
@@ -114,11 +118,12 @@ class AddAdjustApply extends React.Component {
 				type={'add'}
 				rowKey={'order_id'}
 				columns={addAdjustApplyConfig(quote_type, platformIcon)}
-				dataSource={list}
+				dataSource={isShowList ? list : []}
 				loading={loading}
 				queryAction={this.queryData}
-				page={parseInt(page)}
-				total={parseInt(total)}
+				page={isShowList ? parseInt(page) : 0}
+				addPageSize={parseInt(page_size)}
+				total={isShowList ? parseInt(total) : 0}
 				curSelectRowKeys={curSelectRowKeys}
 				curSelectRows={curSelectRows}
 				handleSelected={this.handleSelected}

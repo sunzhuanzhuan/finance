@@ -1,8 +1,8 @@
 import React from "react";
-import { Popover, Button, Icon, Tooltip } from 'antd';
+import { Popover, Icon, Tooltip } from 'antd';
 import { Link } from 'react-router-dom';
 import numeral from 'numeral';
-
+import moment from 'moment';
 const getPriceContent = (item = {}) => {
 	const {
 		isShowDetail,
@@ -29,7 +29,7 @@ const getPriceContent = (item = {}) => {
 		<div className='price_comp' key={+new Date() + Math.random()}>
 			<div className='price_title'>
 				<span style={{marginRight: 20}}>{titleLable}<span className='nowrap-span'>：{dealTitlePrice}</span></span>
-				{(isShowRate && !isShowDetail) || isServiceRate ? <span className='nowrap-span'>{rateTitle}：{dealBaseRate}</span> : null}
+				{(isShowRate && !isShowDetail) || (isShowRate && isServiceRate) ? <span className='nowrap-span'>{rateTitle}：{dealBaseRate}</span> : null}
 			</div>
 			{
 				isShowDetail ? [
@@ -471,7 +471,7 @@ export const adjustApplyFunc = (application_status, quote_type, handleJump) => {
 	]
 }
 
-export const adjustApplyListFunc = (application_status, quote_type, handleJump, handleAction) => {
+export const adjustApplyListFunc = (audit_type, application_status, quote_type, handleJump, handleAction) => {
 	return [
 		{
 			title: '申请编号',
@@ -571,7 +571,7 @@ export const adjustApplyListFunc = (application_status, quote_type, handleJump, 
 							驳回
 						</a>
 					: null}
-					<a style={{marginLeft: 10}} target='_blank' href={`/api/finance/readjust/export?readjust_application_id=${record.id}`}>导出</a>
+					<a style={{marginLeft: 10}} target='_blank' href={`/api/finance/readjust/export?readjust_application_id=${record.id}&audit_type=${audit_type}`}>导出</a>
 				</div >
 			}
 		}
@@ -774,7 +774,6 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				key: 'policy_id',
 				align: 'center',
 				width: 100,
-				fixed: 'left',
 				render: (text) => {
 					return text > 0 ? <a target="_blank" href={`/account/policy?id=${text}`}>查看</a> : '-'
 				}
@@ -1030,9 +1029,12 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 					// trinity_type === 2 显示阴阳价 判断是否展示
 					return <div className={warningClass}>
 						{price.map(item => {
+							const { created_time } = item;
+							const createTime = moment(created_time * 1000).format('YYYY-MM-DD HH:mm:ss');
+							const isBefore = moment(createTime).isBefore('2019-08-01 22:00:00');
 							const showObj = {
 								isShowDetail: item.trinity_type == 2,
-								isShowRate: true,
+								isShowRate: !isBefore,
 								rateTitle: item.quote_type == 2 ? '服务费率' : '利润率',
 								titleLable: item.price_label,
 								titlePrice: item.base_price,
@@ -1058,9 +1060,12 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 					// public_quote_price 阳价 利用率  public_profit_rate
 					return <div className={warningClass}>
 						{price.map(item => {
+							const { created_time } = item;
+							const createTime = moment(created_time * 1000).format('YYYY-MM-DD HH:mm:ss');
+							const isBefore = moment(createTime).isBefore('2019-08-01 22:00:00');
 							const showObj = {
 								isShowDetail: item.trinity_type == 2,
-								isShowRate: true,
+								isShowRate: !isBefore,
 								rateTitle: item.quote_type == 2 ? '服务费率' : '利润率',
 								titleLable: item.price_label,
 								titlePrice: item.quoted_price,
@@ -1106,8 +1111,8 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				width: 260,
 				render: (_, { price = [] }) => {
 					return <div>
-						{price.map((item, index) => {
-							return <div key={index}>{`${item.price_label}:${item.quoted_price}`}</div>
+						{price.map(item => {
+							return <div key={+new Date() + Math.random()}>{`${item.price_label}:${item.quoted_price}`}</div>
 						})}
 					</div>
 				}
@@ -1145,7 +1150,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '历史审核利润率/服务费率',
 				dataIndex: 'history_rate',
 				key: 'history_rate',
-				width: 130,
+				width: 120,
 				render: (_, {history_min_sell_price = {}, quote_type, }) => {
 					const item = history_min_sell_price ? history_min_sell_price.min_sell_price : [];
 					const profitRate = history_min_sell_price.profit_rate || history_min_sell_price.profit_rate == 0 ? numeral(history_min_sell_price.profit_rate).format('0.00%') : '-';
@@ -1205,7 +1210,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '本次利润率/服务费率',
 				dataIndex: 'quote_type',
 				key: 'quote_type',
-				width: 100,
+				width: 90,
 				render: (text, {profit_rate, service_rate, min_sell_price, readjust_type}) => {
 					const profitRate = profit_rate || profit_rate == 0 ? numeral(profit_rate).format('0.00%') : '-';
 					const serviceRate = service_rate || service_rate == 0 ? numeral(service_rate).format('0.00%') : '-';

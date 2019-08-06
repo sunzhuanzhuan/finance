@@ -1032,7 +1032,6 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 							const { created_time } = item;
 							const createTime = moment(created_time * 1000).format('YYYY-MM-DD HH:mm:ss');
 							const isBefore = moment(createTime).isBefore('2019-08-01 22:00:00');
-							console.log('lskdfjlksdjflsdkfj', created_time, createTime, isBefore)
 							const showObj = {
 								isShowDetail: item.trinity_type == 2,
 								isShowRate: !isBefore,

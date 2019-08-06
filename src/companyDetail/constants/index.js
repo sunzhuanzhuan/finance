@@ -29,7 +29,7 @@ const getPriceContent = (item = {}) => {
 		<div className='price_comp' key={+new Date() + Math.random()}>
 			<div className='price_title'>
 				<span style={{marginRight: 20}}>{titleLable}<span className='nowrap-span'>：{dealTitlePrice}</span></span>
-				{(isShowRate && !isShowDetail) || isServiceRate ? <span className='nowrap-span'>{rateTitle}：{dealBaseRate}</span> : null}
+				{(isShowRate && !isShowDetail) || (isShowRate && isServiceRate) ? <span className='nowrap-span'>{rateTitle}：{dealBaseRate}</span> : null}
 			</div>
 			{
 				isShowDetail ? [
@@ -1032,6 +1032,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 							const { created_time } = item;
 							const createTime = moment(created_time * 1000).format('YYYY-MM-DD HH:mm:ss');
 							const isBefore = moment(createTime).isBefore('2019-08-01 22:00:00');
+							console.log('lskdfjlksdjflsdkfj', created_time, createTime, isBefore)
 							const showObj = {
 								isShowDetail: item.trinity_type == 2,
 								isShowRate: !isBefore,

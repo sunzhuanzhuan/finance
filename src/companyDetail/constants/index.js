@@ -1111,8 +1111,8 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				width: 260,
 				render: (_, { price = [] }) => {
 					return <div>
-						{price.map((item, index) => {
-							return <div key={index}>{`${item.price_label}:${item.quoted_price}`}</div>
+						{price.map(item => {
+							return <div key={+new Date() + Math.random()}>{`${item.price_label}:${item.quoted_price}`}</div>
 						})}
 					</div>
 				}

@@ -179,6 +179,7 @@ class ListQuery extends React.Component {
 				keys: { ...keys, page_size },
 				labels: { ...labels }
 			}
+			this.props.handleSearch();
 		} else if (type === 'detail') {
 			params = {
 				keys: {

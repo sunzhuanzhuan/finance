@@ -1,8 +1,8 @@
 import React from "react";
-import { Popover, Button, Icon, Tooltip } from 'antd';
+import { Popover, Icon, Tooltip } from 'antd';
 import { Link } from 'react-router-dom';
 import numeral from 'numeral';
-
+import moment from 'moment';
 const getPriceContent = (item = {}) => {
 	const {
 		isShowDetail,
@@ -1057,9 +1057,12 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 					// public_quote_price 阳价 利用率  public_profit_rate
 					return <div className={warningClass}>
 						{price.map(item => {
+							const { created_time } = item;
+							const createTime = moment(created_time * 1000).format('YYYY-MM-DD HH:mm:ss');
+							const isBefore = moment(createTime).isBefore('2019-08-01 22:00:00');
 							const showObj = {
 								isShowDetail: item.trinity_type == 2,
-								isShowRate: true,
+								isShowRate: !isBefore,
 								rateTitle: item.quote_type == 2 ? '服务费率' : '利润率',
 								titleLable: item.price_label,
 								titlePrice: item.quoted_price,

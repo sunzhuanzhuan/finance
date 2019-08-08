@@ -51,22 +51,22 @@ class AdjustApply extends React.Component {
 		getGoldenUserList();
 		getPlatformIcon();
 	}
-	getListQueryFunc = (obj, application_status = [], applyListReducer = {}, getApplyList) => {
+	getListQueryFunc = (obj, application_status = [], applyListReducer = {}, getApplyList, isSearch) => {
 		if(application_status.length)
 			return application_status.map(item => {
 				const { id } = item;
 				const status = id !== 'allOptions' ? id : undefined; 
 				const tabInfo = applyListReducer[`applyListStatus${id}`] || {};
 				const { page = 1, page_size = 20 } = tabInfo;
-				return getApplyList(Object.assign(obj, {status, page, page_size}));
+				return getApplyList(Object.assign(obj, {status, page: isSearch ? 1 : page, page_size}));
 			})
 		return null;
 	}
-	queryAllStatusData = (obj, func) => {
+	queryAllStatusData = (obj, func, isSearch) => {
 		const { actions: {getApplyList}, goldenMetadata: { application_status = []}, applyListReducer } = this.props;
 		const dealStatusArr = Array.isArray(application_status) && application_status.length  ? [{id: 'allOptions', display: '全部'}, ...application_status] : [];
 		this.setState({ loading: true });
-		Promise.all(this.getListQueryFunc(obj, dealStatusArr, applyListReducer, getApplyList)).then(() => {
+		Promise.all(this.getListQueryFunc(obj, dealStatusArr, applyListReducer, getApplyList, isSearch)).then(() => {
 			if(typeof func === 'function')
 				func();
 			this.setState({ loading: false })
@@ -158,6 +158,9 @@ class AdjustApply extends React.Component {
 			search: `?${qs.stringify({ ...search, keys: { ...search.keys, status: activeKey } })}`,
 		});
 	}
+	handleSearchList = (obj, func) => {
+		this.queryAllStatusData(obj, func, true);
+	}
 	render() {
 		const { loading, tipVisible, page_size, flag, btnFlag, costFlag, quoteType, readjust_application_id, rejectVisible, company_id, addVisible, activeKey, audit_type } = this.state;
 		const { form, goldenMetadata, goldenMetadata: { application_status = [], rel_order_status = [], quote_type = [], readjust_type = [] }, goldenUserList, applicationDetail: { list: detailList = [] }, applyListReducer = {}, platformIcon = [] } = this.props;
@@ -222,7 +225,7 @@ class AdjustApply extends React.Component {
 		return <div className='adjust-apply'>
 				<legend>订单调价</legend>
 				<AdjustQuery history={this.props.history}
-					questAction={this.queryAllStatusData}
+					questAction={this.handleSearchList}
 					pageSize={page_size}
 					location={this.props.location}
 					userList={goldenUserList}

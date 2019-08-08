@@ -537,7 +537,7 @@ class ApplyModal extends React.Component {
 						)}
 						<Button key='preview' style={{marginLeft: 20}} type="primary" disabled={isClick} onClick={isApplication ? this.handleApplicationPreview : this.handlePreview}>预览结果</Button>
 					</FormItem>
-					<FormItem className='previewItem'>
+					<FormItem className='previewItem moreThanOneTable'>
 						{
 							isShowPreview ? <PreTable 
 							readjustType={priceType}

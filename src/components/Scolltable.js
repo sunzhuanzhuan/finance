@@ -22,12 +22,17 @@ class Scolltable extends React.Component {
 		//需要隐藏滚动条的组件
 		let nameTrue = this.props.scrollClassName
 		const isTrue = this.props.scrollClassName.indexOf('.') === -1
+		const { isMoreThanOne } = this.props
 		if (isTrue) {
 			nameTrue = '.' + nameTrue
 		}
 		this.hiddenScroll = document.querySelector(nameTrue)
 		//在低部的滚动条
-		this.bottomScroll = document.querySelector('.top')
+		if(isMoreThanOne) {
+			this.bottomScroll = document.querySelector('.moreThanOneTable .top')
+		}else {
+			this.bottomScroll = document.querySelector('.top')
+		}
 
 		//监听滚动条
 		this.bottomScroll && this.bottomScroll.addEventListener('scroll', this.bottomScrollEvent)

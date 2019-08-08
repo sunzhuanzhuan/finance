@@ -8,7 +8,7 @@ import { Layout, Button, Icon } from 'antd';
 import SiderMenu from '../components/SiderMenu'
 import { getUserLoginInfo, getUserConfigKey } from '../login/actions'
 import { resetSiderAuth, getAuthorizations } from '../actions'
-import { sensors } from '../util/sensor/sensors.js'
+// import { sensors } from '../util/sensor/sensors.js'
 const { Header, Content } = Layout;
 const Cookies = require('js-cookie');
 window.Cookies = Cookies;
@@ -36,10 +36,10 @@ class App extends Component {
 		let Info = await this.props.actions.getUserLoginInfo();
 		let userInfoId = Info.data.user_info.user_id
 		//神策的代码不应该阻塞，去掉await, 使用then的成功回调。
-		this.props.actions.getUserConfigKey({ keys: 'shence_base_url_for_b' }).then((res) => {
-			let userResult = res.data.shence_base_url_for_b
-			sensors(userInfoId, userResult.value, 101)
-		});
+		// this.props.actions.getUserConfigKey({ keys: 'shence_base_url_for_b' }).then((res) => {
+		// 	let userResult = res.data.shence_base_url_for_b
+		// 	sensors(userInfoId, userResult.value, 101)
+		// });
 
 		this.setState({
 			isLoaded: true

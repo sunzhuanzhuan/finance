@@ -34,7 +34,6 @@ class AdjustApply extends React.Component {
 		const currentTab = search.keys ? search.keys.status : 'allOptions';
 		const { getCompanyDetailAuthorizations, getGoldenMetadata, getGoldenUserList, getPlatformIcon } = this.props.actions;
 		this.setState({ activeKey: currentTab ? currentTab.toString() : 'allOptions' });
-		this.queryAllStatusData({ page: 1, page_size: this.state.page_size, ...search.keys });
 		getCompanyDetailAuthorizations().then(() => {
 			const { companyDetailAuthorizations } = this.props
 			const flag = companyDetailAuthorizations[0].permissions['readjust.finance.operation'];
@@ -45,20 +44,29 @@ class AdjustApply extends React.Component {
 			const audit_type = finance ? 1 : sale ? 2 : undefined;
 			this.setState({ flag, btnFlag, audit_type, costFlag });
 		})
-		getGoldenMetadata();
+		getGoldenMetadata().then(() => {
+
+			this.queryAllStatusData({ page: 1, page_size: this.state.page_size, ...search.keys });
+		});
 		getGoldenUserList();
 		getPlatformIcon();
 	}
-	queryAllStatusData = (obj, func) => {
-		const { actions: {getApplyList} } = this.props;
-		const { status = 'allOptions' } = obj;
-		this.setState({ loading: true, activeKey: status.toString() });
-		Promise.all([
-			getApplyList(Object.assign(obj, {status: undefined})),
-			getApplyList(Object.assign(obj, {status: '1'})),
-			getApplyList(Object.assign(obj, {status: '2'})),
-			getApplyList(Object.assign(obj, {status: '3'}))
-		]).then(() => {
+	getListQueryFunc = (obj, application_status = [], applyListReducer = {}, getApplyList, isSearch) => {
+		if(application_status.length)
+			return application_status.map(item => {
+				const { id } = item;
+				const status = id !== 'allOptions' ? id : undefined; 
+				const tabInfo = applyListReducer[`applyListStatus${id}`] || {};
+				const { page = 1, page_size = 20 } = tabInfo;
+				return getApplyList(Object.assign(obj, {status, page: isSearch ? 1 : page, page_size}));
+			})
+		return null;
+	}
+	queryAllStatusData = (obj, func, isSearch) => {
+		const { actions: {getApplyList}, goldenMetadata: { application_status = []}, applyListReducer } = this.props;
+		const dealStatusArr = Array.isArray(application_status) && application_status.length  ? [{id: 'allOptions', display: '全部'}, ...application_status] : [];
+		this.setState({ loading: true });
+		Promise.all(this.getListQueryFunc(obj, dealStatusArr, applyListReducer, getApplyList, isSearch)).then(() => {
 			if(typeof func === 'function')
 				func();
 			this.setState({ loading: false })
@@ -115,11 +123,10 @@ class AdjustApply extends React.Component {
 		const params = { readjust_application_id, remark, audit_type };
 		const hide = message.loading('操作中，请稍候...');
 		postRejectByReadjustId({ ...params }).then(() => {
-			this.queryData({ page: 1, page_size: this.state.page_size, ...search }, () => {
-				message.success('操作成功！');
-				hide();
-				this.setState({ rejectVisible: false });
-			})
+			this.setState({ rejectVisible: false });
+			this.queryAllStatusData({ ...search });
+			hide();
+			message.success('操作成功！');
 		}).catch(({ errorMsg }) => {
 			hide();
 			message.error(errorMsg || '操作失败！');
@@ -144,7 +151,15 @@ class AdjustApply extends React.Component {
 		})
 	}
 	handleChangeTab = activeKey => {
+		const search = qs.parse(this.props.location.search.substring(1));
 		this.setState({activeKey});
+		this.props.history.replace({
+			pathname: this.props.location.pathname,
+			search: `?${qs.stringify({ ...search, keys: { ...search.keys, status: activeKey } })}`,
+		});
+	}
+	handleSearchList = (obj, func) => {
+		this.queryAllStatusData(obj, func, true);
 	}
 	render() {
 		const { loading, tipVisible, page_size, flag, btnFlag, costFlag, quoteType, readjust_application_id, rejectVisible, company_id, addVisible, activeKey, audit_type } = this.state;
@@ -210,7 +225,7 @@ class AdjustApply extends React.Component {
 		return <div className='adjust-apply'>
 				<legend>订单调价</legend>
 				<AdjustQuery history={this.props.history}
-					questAction={this.queryAllStatusData}
+					questAction={this.handleSearchList}
 					pageSize={page_size}
 					location={this.props.location}
 					userList={goldenUserList}

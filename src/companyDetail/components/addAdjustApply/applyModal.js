@@ -238,7 +238,7 @@ class ApplyModal extends React.Component {
 					this.handleFunction(postPassByOrderIds, params)(result => {
 						const { data } = result;
 						const qurey = { page: 1, ...search.keys };
-						this.handleSubmitConfirm(postPassByReadjust, params, qurey, data, finance, sale);
+						this.handleSubmitConfirm(postPassByOrderIds, params, qurey, data, finance, sale);
 					})
 				} else if (type === 'pass') {
 					this.setState({ isClick: true });
@@ -294,6 +294,10 @@ class ApplyModal extends React.Component {
 									handleClear();
 								}
 							});
+						}).catch(result => {
+							this.setState({ isClick: false });
+							const {errorMsg} = result;
+							message.error(errorMsg || '操作失败！');
 						})
 					},
 					onCancel: () => {
@@ -533,7 +537,7 @@ class ApplyModal extends React.Component {
 						)}
 						<Button key='preview' style={{marginLeft: 20}} type="primary" disabled={isClick} onClick={isApplication ? this.handleApplicationPreview : this.handlePreview}>预览结果</Button>
 					</FormItem>
-					<FormItem className='previewItem'>
+					<FormItem className='previewItem moreThanOneTable'>
 						{
 							isShowPreview ? <PreTable 
 							readjustType={priceType}

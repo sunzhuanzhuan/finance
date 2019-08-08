@@ -4,6 +4,7 @@ import { bindActionCreators } from "redux";
 import { withRouter } from 'react-router-dom';
 import * as goldenActions from "../../actions/goldenApply";
 import { Table, message, Alert } from "antd";
+import Scolltable from '@/components/Scolltable';
 
 class PreTable extends React.Component {
 	constructor() {
@@ -91,14 +92,17 @@ class PreTable extends React.Component {
 		return (
 			<div>
 				{isExistWarning ? <Alert closable style={{marginBottom: '20px'}} message="请注意标红的订单：订单最低售卖价小于订单底价，建议修改调价类型/利润率/服务费率。" type="warning" showIcon /> : null}
-				<Table 
-				rowKey='order_id' 
-				className='preTable'
-				columns={columns} 
-				dataSource={data} 
-				bordered 
-				pagination={isApplication ? applicationPaginationObj : paginationObj} 
-				scroll={{ x: 3300 }} />
+				<Scolltable scrollClassName='.preTable .ant-table-body' widthScroll={3670}>
+					<Table 
+						rowKey='order_id' 
+						className='preTable'
+						columns={columns} 
+						dataSource={data} 
+						bordered 
+						pagination={isApplication ? applicationPaginationObj : paginationObj} 
+						scroll={{ x: 3300 }}
+					/>
+				</Scolltable>
 			</div>
 		)
 	}

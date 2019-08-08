@@ -55,19 +55,18 @@ class AdjustApply extends React.Component {
 		if(application_status.length)
 			return application_status.map(item => {
 				const { id } = item;
+				const status = id !== 'allOptions' ? id : undefined; 
 				const tabInfo = applyListReducer[`applyListStatus${id}`] || {};
 				const { page = 1, page_size = 20 } = tabInfo;
-				return getApplyList(Object.assign(obj, {status: id, page, page_size}));
+				return getApplyList(Object.assign(obj, {status, page, page_size}));
 			})
 		return null;
 	}
 	queryAllStatusData = (obj, func) => {
 		const { actions: {getApplyList}, goldenMetadata: { application_status = []}, applyListReducer } = this.props;
+		const dealStatusArr = Array.isArray(application_status) && application_status.length  ? [{id: 'allOptions', display: '全部'}, ...application_status] : [];
 		this.setState({ loading: true });
-		Promise.all([
-			getApplyList(Object.assign(obj, {status: undefined})),
-			this.getListQueryFunc(obj, application_status, applyListReducer, getApplyList)
-		]).then(() => {
+		Promise.all(this.getListQueryFunc(obj, dealStatusArr, applyListReducer, getApplyList)).then(() => {
 			if(typeof func === 'function')
 				func();
 			this.setState({ loading: false })
@@ -124,11 +123,10 @@ class AdjustApply extends React.Component {
 		const params = { readjust_application_id, remark, audit_type };
 		const hide = message.loading('操作中，请稍候...');
 		postRejectByReadjustId({ ...params }).then(() => {
-			this.queryData({ page: 1, page_size: this.state.page_size, ...search }, () => {
-				message.success('操作成功！');
-				hide();
-				this.setState({ rejectVisible: false });
-			})
+			this.setState({ rejectVisible: false });
+			this.queryAllStatusData({ ...search });
+			hide();
+			message.success('操作成功！');
 		}).catch(({ errorMsg }) => {
 			hide();
 			message.error(errorMsg || '操作失败！');

@@ -34,7 +34,6 @@ class AdjustApply extends React.Component {
 		const currentTab = search.keys ? search.keys.status : 'allOptions';
 		const { getCompanyDetailAuthorizations, getGoldenMetadata, getGoldenUserList, getPlatformIcon } = this.props.actions;
 		this.setState({ activeKey: currentTab ? currentTab.toString() : 'allOptions' });
-		this.queryAllStatusData({ page: 1, page_size: this.state.page_size, ...search.keys });
 		getCompanyDetailAuthorizations().then(() => {
 			const { companyDetailAuthorizations } = this.props
 			const flag = companyDetailAuthorizations[0].permissions['readjust.finance.operation'];
@@ -45,19 +44,29 @@ class AdjustApply extends React.Component {
 			const audit_type = finance ? 1 : sale ? 2 : undefined;
 			this.setState({ flag, btnFlag, audit_type, costFlag });
 		})
-		getGoldenMetadata();
+		getGoldenMetadata().then(() => {
+
+			this.queryAllStatusData({ page: 1, page_size: this.state.page_size, ...search.keys });
+		});
 		getGoldenUserList();
 		getPlatformIcon();
 	}
+	getListQueryFunc = (obj, application_status = [], applyListReducer = {}, getApplyList) => {
+		if(application_status.length)
+			return application_status.map(item => {
+				const { id } = item;
+				const tabInfo = applyListReducer[`applyListStatus${id}`] || {};
+				const { page = 1, page_size = 20 } = tabInfo;
+				return getApplyList(Object.assign(obj, {status: id, page, page_size}));
+			})
+		return null;
+	}
 	queryAllStatusData = (obj, func) => {
-		const { actions: {getApplyList} } = this.props;
-		const { status = 'allOptions' } = obj;
-		this.setState({ loading: true, activeKey: status.toString() });
+		const { actions: {getApplyList}, goldenMetadata: { application_status = []}, applyListReducer } = this.props;
+		this.setState({ loading: true });
 		Promise.all([
 			getApplyList(Object.assign(obj, {status: undefined})),
-			getApplyList(Object.assign(obj, {status: '1'})),
-			getApplyList(Object.assign(obj, {status: '2'})),
-			getApplyList(Object.assign(obj, {status: '3'}))
+			this.getListQueryFunc(obj, application_status, applyListReducer, getApplyList)
 		]).then(() => {
 			if(typeof func === 'function')
 				func();
@@ -144,7 +153,12 @@ class AdjustApply extends React.Component {
 		})
 	}
 	handleChangeTab = activeKey => {
+		const search = qs.parse(this.props.location.search.substring(1));
 		this.setState({activeKey});
+		this.props.history.replace({
+			pathname: this.props.location.pathname,
+			search: `?${qs.stringify({ ...search, keys: { ...search.keys, status: activeKey } })}`,
+		});
 	}
 	render() {
 		const { loading, tipVisible, page_size, flag, btnFlag, costFlag, quoteType, readjust_application_id, rejectVisible, company_id, addVisible, activeKey, audit_type } = this.state;

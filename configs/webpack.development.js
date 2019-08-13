@@ -22,7 +22,7 @@ module.exports = merge(baseConfig, {
 			// 	changeOrigin: true
 			// },
 			"/api": {
-				target: "http://nb.pre-weiboyi.com",
+				target: "http://nb.dev-weiboyi.com",
 				changeOrigin: true
 			}
 		},

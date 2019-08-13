@@ -14,6 +14,7 @@ import studioManage from '../studioManage/reducers'
 import zhangWu from '../zhangwu/reducers'
 import trinityPay from '../trinityPay/reducers'
 import trinityProfitRate from '../financeSetting/reducers'
+import receivable from '../receivablesInquiries/reducers'
 export default combineReducers({
 	commonReducers,
 	routing: routerReducer,
@@ -29,5 +30,6 @@ export default combineReducers({
 	studioManage,
 	zhangWu,
 	trinityPay,
-	trinityProfitRate
+	trinityProfitRate,
+	receivable, //应收款查询
 });

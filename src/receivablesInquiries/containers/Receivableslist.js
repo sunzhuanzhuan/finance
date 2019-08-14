@@ -35,9 +35,14 @@ class Receivableslist extends React.Component {
 		})
 	}
 
+	getTotalWidth = (arr = []) => {
+		return arr.reduce((accumulator, item) => accumulator + parseInt(item.width), 0);
+	}
+
 	render() {
 		const { receivableList: { total = 0, page = 1, page_size = 20, list} } = this.props;
 		const { searchQuery, loading } = this.state;
+		const totalWidth = this.getTotalWidth(receivableCol);
 		const pagination = {
 			onChange: current => {
 				Object.assign(searchQuery, {page: current});
@@ -70,7 +75,7 @@ class Receivableslist extends React.Component {
 				<span className='total-margin'>总欠款：<span className='total-color'>{page}</span></span>
 				<>汇款待分配金额：<span className='total-color'>{page_size}</span></>
 			</div>
-			<Scolltable isMoreThanOne scrollClassName='.ant-table-body' widthScroll={2900}>
+			<Scolltable isMoreThanOne scrollClassName='.ant-table-body' widthScroll={totalWidth}>
 				<Table 
 					className='receivable-tablef'
 					rowKey='id' 
@@ -79,7 +84,7 @@ class Receivableslist extends React.Component {
 					bordered 
 					pagination={pagination} 
 					loading={loading}
-					scroll={{ x: 2900 }}
+					scroll={{ x: totalWidth }}
 				/>
 			</Scolltable>
 		</div>

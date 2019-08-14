@@ -1,13 +1,10 @@
 import React from 'react'
-import { connect } from 'react-redux';
-import { bindActionCreators } from "redux";
-import './receivable.less';
 import { Form, Input, Button, Row, Select, DatePicker } from "antd";
 import SearchSelect from '@/components/SearchSelect';
 
 const FormItem = Form.Item;
 
-class ReceivableQuery extends React.Component {
+class ReceivableOffQuery extends React.Component {
 	constructor() {
 		super();
 		this.state = {
@@ -36,7 +33,7 @@ class ReceivableQuery extends React.Component {
 		}
 	}
 	getFormItemComp = queryItems => {
-		const { form } = this.props;
+		const { form, showExport } = this.props;
 		const { getFieldDecorator } = form;
 
 		return queryItems.map(item => {
@@ -44,6 +41,7 @@ class ReceivableQuery extends React.Component {
 			if(compType === 'operate')
 				return (
 					<FormItem key={key} className='operate-wrapper'>
+						{ showExport ? <Button type='primary' onClick={() => {this.handleSearch('export')}}>导出</Button> : null }
 						<Button type='primary' onClick={() => {this.handleSearch('search')}}>查询</Button>
 						<Button type='ghost' onClick={() => {this.handleSearch('reset')}}>重置</Button>
 					</FormItem>
@@ -58,7 +56,7 @@ class ReceivableQuery extends React.Component {
 		})
 	}
 	handleSearch = type => {
-		const { form, handleSearch } = this.props;
+		const { form, handleSearch, handleExport } = this.props;
 
 		if(type === 'reset') {
 			form.resetFields();
@@ -70,6 +68,8 @@ class ReceivableQuery extends React.Component {
 				Object.assign(values, {page: 1, page_size: 20})
 				handleSearch(values);
 			})
+		}else if(type === 'export') {
+			handleExport()
 		}
 	}
 	getFormRowComp = () => {
@@ -101,7 +101,7 @@ class ReceivableQuery extends React.Component {
 					</div>
 				</Row>,
 			]
-		}else if(queryLen >= 9) {
+		}else if(queryLen >= 9 && queryLen < 13) {
 			return [
 				<Row key='row-first'>
 					{this.getFormItemComp(valueItems.splice(0, 4))}
@@ -110,6 +110,29 @@ class ReceivableQuery extends React.Component {
 					{this.getFormItemComp(valueItems.splice(0, 4))}
 				</Row>,
 				<Row key='row-third' className='flex-row'>
+					<div className='left-comp'>
+						{this.getFormItemComp(valueItems)}
+					</div>
+					<div className='right-comp'>
+						{this.getFormItemComp(operateItem)}
+					</div>
+				</Row>
+			]
+		}else if(queryLen >= 13) {
+			return [
+				<Row key='row-first'>
+					{this.getFormItemComp(valueItems.splice(0, 4))}
+				</Row>,
+				<Row key='row-second'>
+					{this.getFormItemComp(valueItems.splice(0, 4))}
+				</Row>,
+				<Row key='row-third'>
+					{this.getFormItemComp(valueItems.splice(0, 4))}
+				</Row>,
+				<Row key='row-fourth' className='flex-row'>
+					<div className='left-comp'>
+						{this.getFormItemComp(valueItems)}
+					</div>
 					<div className='right-comp'>
 						{this.getFormItemComp(operateItem)}
 					</div>
@@ -124,11 +147,11 @@ class ReceivableQuery extends React.Component {
 
 	render() {
 		return (
-			<Form className='rece-query'>
+			<Form className='rece-query rece-add-query'>
 				{this.getFormRowComp()}
 			</Form>
 		)
 	}
 }
 
-export default Form.create()(ReceivableQuery);
+export default Form.create()(ReceivableOffQuery)

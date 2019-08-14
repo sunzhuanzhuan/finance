@@ -15,6 +15,7 @@ import zhangWu from '../zhangwu/reducers'
 import trinityPay from '../trinityPay/reducers'
 import trinityProfitRate from '../financeSetting/reducers'
 import receivable from '../receivablesInquiries/reducers'
+import receivableOff from '../receivablesOff/reducers'
 export default combineReducers({
 	commonReducers,
 	routing: routerReducer,
@@ -32,4 +33,5 @@ export default combineReducers({
 	trinityPay,
 	trinityProfitRate,
 	receivable, //应收款查询
+	receivableOff, //应收款核销
 });

@@ -10,10 +10,10 @@ const getPriceContent = (item = {}) => {
 		rateTitle,
 		baseRate,
 		titleLable,
-		titlePrice, 
-		bloggerPrice, 
-		bloggerRate, 
-		trilateralPrice, 
+		titlePrice,
+		bloggerPrice,
+		bloggerRate,
+		trilateralPrice,
 		trilateralRate
 	} = item;
 	const isServiceRate = rateTitle == '服务费率';
@@ -28,7 +28,7 @@ const getPriceContent = (item = {}) => {
 	return (
 		<div className='price_comp' key={+new Date() + Math.random()}>
 			<div className='price_title'>
-				<span style={{marginRight: 20}}>{titleLable}<span className='nowrap-span'>：{dealTitlePrice}</span></span>
+				<span style={{ marginRight: 20 }}>{titleLable}<span className='nowrap-span'>：{dealTitlePrice}</span></span>
 				{(isShowRate && !isShowDetail) || (isShowRate && isServiceRate) ? <span className='nowrap-span'>{rateTitle}：{dealBaseRate}</span> : null}
 			</div>
 			{
@@ -36,12 +36,12 @@ const getPriceContent = (item = {}) => {
 					<div key='blogger' className='price_detail'>
 						<span className='price_dote blogger'></span>
 						<span className='price_content'>博主：{dealBloggerPrice}</span>
-						{ isShowRate && !isServiceRate ? <span>{rateTitle}：{dealBlogRate}</span> : null }
+						{isShowRate && !isServiceRate ? <span>{rateTitle}：{dealBlogRate}</span> : null}
 					</div>,
 					<div key='trinity' className='price_detail'>
 						<span className='price_dote trilatreal'></span>
 						<span className='price_content'>三方：{dealTrilPrice}</span>
-						{ isShowRate && !isServiceRate ? <span>{rateTitle}：{dealTrilgRate}</span> : null }
+						{isShowRate && !isServiceRate ? <span>{rateTitle}：{dealTrilgRate}</span> : null}
 					</div>
 				] : null
 			}
@@ -263,7 +263,7 @@ export const accountFlowFunc = (handleDetail, content, account_type) => {
 			key: 'action',
 			aligin: 'center',
 			render: (text, record) => {
-				if ((record.billing_type == 2) || (record.billing_type_display == '其他')) {
+				if ((record.billing_type == 2) || (record.billing_type == 36) || (record.billing_type_display == '其他')) {
 					return <span>-</span>
 				} else {
 					const node = content ? <div>{content.key}：<a target='_blank' href={content.link}>{content.value}</a></div> : '';
@@ -490,9 +490,9 @@ export const adjustApplyListFunc = (audit_type, application_status, quote_type, 
 				const value = application_status.find(item => item.id == text);
 				const className = text == 3 ? 'dealed' : 'undealed';
 				return value ? <div className={className}>
-				<span></span>
-				<div>{value.display}</div>
-			</div> : null
+					<span></span>
+					<div>{value.display}</div>
+				</div> : null
 			}
 		},
 		{
@@ -560,18 +560,18 @@ export const adjustApplyListFunc = (audit_type, application_status, quote_type, 
 			width: 190,
 			render: (text, record) => {
 				return <div>
-					<a onClick={() => {handleJump(record.id, record.company_id);}}>订单详情</a>
+					<a onClick={() => { handleJump(record.id, record.company_id); }}>订单详情</a>
 					{record.status != '3' ?
-						<a style={{marginLeft: 10}} onClick={() => {handleAction('pass', record.id, record.quote_type, record.company_id);}}>
+						<a style={{ marginLeft: 10 }} onClick={() => { handleAction('pass', record.id, record.quote_type, record.company_id); }}>
 							审核通过
 						</a>
-					: null}
+						: null}
 					{record.status != '3' ?
-						<a style={{marginLeft: 10}} onClick={() => {handleAction('reject', record.id);}}>
+						<a style={{ marginLeft: 10 }} onClick={() => { handleAction('reject', record.id); }}>
 							驳回
 						</a>
-					: null}
-					<a style={{marginLeft: 10}} target='_blank' href={`/api/finance/readjust/export?readjust_application_id=${record.id}&audit_type=${audit_type}`}>导出</a>
+						: null}
+					<a style={{ marginLeft: 10 }} target='_blank' href={`/api/finance/readjust/export?readjust_application_id=${record.id}&audit_type=${audit_type}`}>导出</a>
 				</div >
 			}
 		}
@@ -634,13 +634,13 @@ export const addAdjustApplyConfig = (quote_type = [], platformIcon = []) => [
 		dataIndex: 'account_id',
 		key: 'account_id',
 		width: 320,
-		render: (data = '-', {weibo_name = '-', platform_id, warningClass}) => {
+		render: (data = '-', { weibo_name = '-', platform_id, warningClass }) => {
 			const platformInfo = platformIcon.find(item => item.id == platform_id) || {};
 			return <div className={`left_content_td platform_wrapper ${warningClass}`}>
-			{platformInfo.platformIcon ? <img className='platform-icon-img' src={platformInfo.platformIcon}/> : null}
-			<div>账号名称：{weibo_name}</div>
-			<div>ID：{data}</div>
-		</div>
+				{platformInfo.platformIcon ? <img className='platform-icon-img' src={platformInfo.platformIcon} /> : null}
+				<div>账号名称：{weibo_name}</div>
+				<div>ID：{data}</div>
+			</div>
 		}
 	},
 	{
@@ -787,7 +787,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				render: (text, record) => {
 					const value = rel_order_status.find(item => item.id == text);
 					let className = '';
-					switch(text) {
+					switch (text) {
 						case 1:
 							className = 'normal';
 							break;
@@ -802,9 +802,9 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 							break;
 					}
 					return value ? <div className={`${className} ${record.warningClass}`}>
-					<span></span>
-					<div>{value.display}</div>
-				</div> : null
+						<span></span>
+						<div>{value.display}</div>
+					</div> : null
 				}
 			},
 			'statusPre': {
@@ -815,7 +815,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				render: (text, record) => {
 					const value = rel_order_status.find(item => item.id == text);
 					let className = '';
-					switch(text) {
+					switch (text) {
 						case 1:
 							className = 'normal';
 							break;
@@ -830,9 +830,9 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 							break;
 					}
 					return value ? <div className={`${className} ${record.warningClass}`}>
-					<span></span>
-					<div>{value.display}</div>
-				</div> : null
+						<span></span>
+						<div>{value.display}</div>
+					</div> : null
 				}
 			},
 			'company_name': {
@@ -888,13 +888,13 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				dataIndex: 'account_id',
 				key: 'account_id',
 				width: 320,
-				render: (data = '-', {weibo_name = '-', platform_id, warningClass}) => {
+				render: (data = '-', { weibo_name = '-', platform_id, warningClass }) => {
 					const platformInfo = platformIcon.find(item => item.id == platform_id) || {};
 					return <div className={`left_content_td platform_wrapper ${warningClass}`}>
-					{platformInfo.platformIcon ? <img className='platform-icon-img' src={platformInfo.platformIcon}/> : null}
-					<div>账号名称：{weibo_name}</div>
-					<div>ID：{data}</div>
-				</div>
+						{platformInfo.platformIcon ? <img className='platform-icon-img' src={platformInfo.platformIcon} /> : null}
+						<div>账号名称：{weibo_name}</div>
+						<div>ID：{data}</div>
+					</div>
 				}
 			},
 			'account_id': {
@@ -924,23 +924,23 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 			},
 			'main_account_info': {
 				title: <Tooltip title={<div>
-							<div>固定账期:发起订单调价申请时刻的账期</div>
-							<div>实时账期:当前时刻的账期</div>
-						</div>}>
-						主账号信息<Icon style={{marginLeft: 5}} type="question-circle" />
-					</Tooltip>,
+					<div>固定账期:发起订单调价申请时刻的账期</div>
+					<div>实时账期:当前时刻的账期</div>
+				</div>}>
+					主账号信息<Icon style={{ marginLeft: 5 }} type="question-circle" />
+				</Tooltip>,
 				dataIndex: 'identity_name',
 				key: 'identity_name',
 				width: 320,
-				render: (data, {order_default_cycle, default_cycle, partner_type_name, warningClass}) => {
+				render: (data, { order_default_cycle, default_cycle, partner_type_name, warningClass }) => {
 					const defaultCycle = default_cycle ? `${default_cycle}天` : '-';
 					const orderCycle = order_default_cycle ? `${order_default_cycle}天` : '-'
 					return <div className={warningClass}>
-					<div>主账号：{data}</div>
-					<div>实时账期：{defaultCycle}</div>
-					<div>固定账期：{orderCycle}</div>
-					<div>合作方式：{partner_type_name}</div>
-				</div>
+						<div>主账号：{data}</div>
+						<div>实时账期：{defaultCycle}</div>
+						<div>固定账期：{orderCycle}</div>
+						<div>合作方式：{partner_type_name}</div>
+					</div>
 				}
 			},
 			'main_account_info_sale': {
@@ -948,11 +948,11 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				dataIndex: 'identity_name',
 				key: 'identity_name',
 				width: 320,
-				render: (data, {partner_type_name, warningClass}) => {
+				render: (data, { partner_type_name, warningClass }) => {
 					return <div className={warningClass}>
-					<div style={{marginBottom: 10}}>主账号：{data}</div>
-					<div>合作方式：{partner_type_name}</div>
-				</div>
+						<div style={{ marginBottom: 10 }}>主账号：{data}</div>
+						<div>合作方式：{partner_type_name}</div>
+					</div>
 				}
 			},
 			'main_account_name': {
@@ -1038,7 +1038,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 								rateTitle: item.quote_type == 2 ? '服务费率' : '利润率',
 								titleLable: item.price_label,
 								titlePrice: item.base_price,
-								baseRate: item.quote_type == 2 ? item.service_fees_rate :  item.private_base_profit_rate,
+								baseRate: item.quote_type == 2 ? item.service_fees_rate : item.private_base_profit_rate,
 								bloggerPrice: item.private_base_price,
 								bloggerRate: item.quote_type == 1 ? item.private_base_profit_rate : item.service_fees_rate,
 								trilateralPrice: item.public_base_price,
@@ -1069,7 +1069,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 								rateTitle: item.quote_type == 2 ? '服务费率' : '利润率',
 								titleLable: item.price_label,
 								titlePrice: item.quoted_price,
-								baseRate: item.quote_type == 2 ? item.service_fees_rate :  item.private_profit_rate,
+								baseRate: item.quote_type == 2 ? item.service_fees_rate : item.private_profit_rate,
 								bloggerPrice: item.private_quote_price,
 								bloggerRate: item.quote_type == 1 ? item.private_profit_rate : item.service_fees_rate,
 								trilateralPrice: item.public_quote_price,
@@ -1151,7 +1151,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				dataIndex: 'history_rate',
 				key: 'history_rate',
 				width: 120,
-				render: (_, {history_min_sell_price = {}, quote_type, }) => {
+				render: (_, { history_min_sell_price = {}, quote_type, }) => {
 					const item = history_min_sell_price ? history_min_sell_price.min_sell_price : [];
 					const profitRate = history_min_sell_price.profit_rate || history_min_sell_price.profit_rate == 0 ? numeral(history_min_sell_price.profit_rate).format('0.00%') : '-';
 					const serviceRate = history_min_sell_price.service_rate || history_min_sell_price.service_rate == 0 ? numeral(history_min_sell_price.service_rate).format('0.00%') : '-';
@@ -1168,16 +1168,16 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				render: (text, { readjust_type: readJustType }) => {
 					const value = readjust_type.find(item => item.id == readJustType) || {};
 					const node = text ? text.map(item => {
-							const showObj = {
-								isShowDetail: item.trinity_type == 2,
-								isShowRate: false,
-								titleLable: item.price_label,
-								titlePrice: item.min_sell_price,
-								bloggerPrice: item.private_min_sell_price,
-								trilateralPrice: item.public_min_sell_price,
-							}
-							return getPriceContent(showObj);
-						}) : '-';
+						const showObj = {
+							isShowDetail: item.trinity_type == 2,
+							isShowRate: false,
+							titleLable: item.price_label,
+							titlePrice: item.min_sell_price,
+							bloggerPrice: item.private_min_sell_price,
+							trilateralPrice: item.public_min_sell_price,
+						}
+						return getPriceContent(showObj);
+					}) : '-';
 					// const pro = readjust_type == 2 ? <div key='tips' className='detail_price_info'>导入Excel方式调整</div> : null;
 					const pro = value.display ? <div key='tips' className='detail_price_info'>{value.display}</div> : null;
 
@@ -1211,7 +1211,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				dataIndex: 'quote_type',
 				key: 'quote_type',
 				width: 90,
-				render: (text, {profit_rate, service_rate, min_sell_price, readjust_type}) => {
+				render: (text, { profit_rate, service_rate, min_sell_price, readjust_type }) => {
 					const profitRate = profit_rate || profit_rate == 0 ? numeral(profit_rate).format('0.00%') : '-';
 					const serviceRate = service_rate || service_rate == 0 ? numeral(service_rate).format('0.00%') : '-';
 					const value = text == '1' ? profitRate : text == '2' ? serviceRate : '-';
@@ -1227,7 +1227,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 					const rateVal = previewRateVal || previewRateVal == 0 ? numeral(previewRateVal).format('0.00%') : '-'
 					return (
 						<div className={warningClass}>
-							{ previewReadjustType == '1' ? rateVal : '-' }
+							{previewReadjustType == '1' ? rateVal : '-'}
 						</div>
 					);
 				}

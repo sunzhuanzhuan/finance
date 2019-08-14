@@ -263,7 +263,7 @@ export const accountFlowFunc = (handleDetail, content, account_type) => {
 			key: 'action',
 			aligin: 'center',
 			render: (text, record) => {
-				if ((record.billing_type == 2) || (record.billing_type == 36) || (record.billing_type_display == '其他')) {
+				if ((record.billing_type == 2) || (record.billing_type == 36) || (record.billing_type == 37) || (record.billing_type_display == '其他')) {
 					return <span>-</span>
 				} else {
 					const node = content ? <div>{content.key}：<a target='_blank' href={content.link}>{content.value}</a></div> : '';

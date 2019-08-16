@@ -1,10 +1,10 @@
 import React from 'react'
 import { Modal, Form, Table, Button, Input, Radio, Checkbox, Select, Icon } from "antd";
 import { getOffAddFormItems, getOffOptions } from '../constants';
-import * as goldenActions from "../../companyDetail/actions/goldenApply";
 import { getTotalWidth } from '@/util';
 import { Scolltable } from '@/components';
 import SearchSelect from '@/components/SearchSelect';
+import qs from 'qs';
 
 const { TextArea } = Input;
 const FormItem = Form.Item;
@@ -23,7 +23,8 @@ class ReceOffModal extends React.Component {
 	}
 
 	getModalContent = () => {
-		const { type, columns, dataSource, handleOk } = this.props;
+		const { type, columns, dataSource, handleOk, action, form } = this.props;
+		const { getFieldDecorator } = form;
 		if(type === 'preview') {
 			const totalWidth = getTotalWidth(columns);
 			return (
@@ -50,6 +51,29 @@ class ReceOffModal extends React.Component {
 			return (
 				<Form {...formItemLayout}>
 					{ this.getOffItemsComp() }
+				</Form>
+			)
+		}else if(type === 'add') {
+			const formItemLayout = { labelCol: { span: 6 }, wrapperCol: { span: 16 }, };
+			return (
+				<Form>
+					<FormItem label='公司简称' {...formItemLayout}>
+						{getFieldDecorator('company_id', {
+							rules: [
+								{ required: true, message: '请先输入公司简称!' },
+							]
+						})(
+							<SearchSelect
+								selfWidth
+								placeholder='请选择公司'
+								action={action}
+								keyWord='company_name'
+								dataToList={res => { return res.data }}
+								item={['company_id', 'name']}
+								style={{width: 250}}
+							/>
+						)}
+					</FormItem>
 				</Form>
 			)
 		}
@@ -115,12 +139,19 @@ class ReceOffModal extends React.Component {
 	}
 
 	handleOk = () => {
-		const { type, form } = this.props;
+		const { type, form, history } = this.props;
 
 		if(type === 'off') {
 			form.validateFields((errs, values) => {
-				// if(errs) return;
+				if(errs) return;
 				this.setState({fieldsValues: values, previewVisible: true});
+			})
+		}else if(type === 'edit') {
+			form.validateFields((errs, values) => {
+				if(errs) return;
+				const { company_id } = values;
+				const src = `/finance/receivableoff/add?${qs.stringify({ keys: { company_id } })}`;
+				history.push(src);
 			})
 		}
 	}

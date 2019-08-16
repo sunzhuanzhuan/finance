@@ -2,17 +2,14 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import './receivableOff.less';
-import { Modal, Form, message, Table, Button } from "antd";
+import { Form, message, Table, Button } from "antd";
 import ReceivableOffQuery from './ReceivableOffQuery';
 import { getOffListQueryKeys, getOffQueryItems, getOffListColIndex, getReceOffCol } from '../constants';
 import * as receivableOffAction from "../actions/receivableOff";
 import * as goldenActions from "../../companyDetail/actions/goldenApply";
 import { getTotalWidth } from '@/util';
-import qs from 'qs';
 import { Scolltable } from '@/components';
-import SearchSelect from '@/components/SearchSelect';
-const FormItem = Form.Item;
-
+import ReceOffModal from './ReceOffModal';
 class ReceivablesOffList extends React.Component {
 	constructor() {
 		super();
@@ -41,16 +38,6 @@ class ReceivablesOffList extends React.Component {
 		})
 	}
 
-	handleOpenAddPage = () => {
-		const { form, history } = this.props;
-		form.validateFields((errs, values) => {
-			if(errs) return;
-			const { company_id } = values;
-			const src = `/finance/receivableoff/add?${qs.stringify({ keys: { company_id } })}`;
-			history.push(src);
-		})
-	}
-
 	handleTableOperate = (operateType, record) => {
 		switch(operateType) {
 			case 'detail':
@@ -61,6 +48,7 @@ class ReceivablesOffList extends React.Component {
 			case 'preview':
 				return;
 			case 'edit':
+				this.setState({editVisible: true})
 				return;
 			default:
 				return;
@@ -68,10 +56,8 @@ class ReceivablesOffList extends React.Component {
 	}
 
 	render() {
-		const { receivableOffList: { total = 0, page = 1, page_size = 20, list }, form } = this.props;
-		const { searchQuery, loading, addVisible } = this.state;
-		const { getFieldDecorator } = form;
-		const formItemLayout = { labelCol: { span: 6 }, wrapperCol: { span: 16 }, };
+		const { receivableOffList: { total = 0, page = 1, page_size = 20, list } } = this.props;
+		const { searchQuery, loading, addVisible, editVisible } = this.state;
 		const totalWidth = getTotalWidth(getReceOffCol(getOffListColIndex));
 		const pagination = {
 			onChange: current => {
@@ -121,34 +107,23 @@ class ReceivablesOffList extends React.Component {
 					scroll={{ x: totalWidth }}
 				/>
 			</Scolltable>
-			<Modal 
-				title='选择公司' 
-				width={440}
+			<ReceOffModal 
+				type='add'
 				visible={addVisible}
-				destroyOnClose
-				onOk={this.handleOpenAddPage}
-				onCancel={() => {this.setState({addVisible: !addVisible})}}
-			>
-				<Form>
-					<FormItem label='公司简称' {...formItemLayout}>
-						{getFieldDecorator('company_id', {
-							rules: [
-								{ required: true, message: '请先输入公司简称!' },
-							]
-						})(
-							<SearchSelect
-								selfWidth
-								placeholder='请选择公司'
-								action={this.props.getGoldenCompanyId}
-								keyWord='company_name'
-								dataToList={res => { return res.data }}
-								item={['company_id', 'name']}
-								style={{width: 250}}
-							/>
-						)}
-					</FormItem>
-				</Form>
-			</Modal>
+				width={440}
+				title='选择公司'
+				action={this.props.getGoldenCompanyId}
+				handleCancel={() => {this.setState({addVisible: !addVisible})}} 
+			/>
+			<ReceOffModal 
+				type='off'
+				visible={editVisible}
+				initialValue=''
+				width={800}
+				title='应收款核销'
+				handleCancel={this.handleModalCancel} 
+				handleOk={ () => {this.handleModalOk('off')}}
+			/>
 		</div>
 	}
 }

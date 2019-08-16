@@ -64,7 +64,6 @@ class ReceivablesOffDetail extends React.Component {
 			const { list = [], page, total, page_size: tableSize } = tabInfo;
 			const totalMsg = `查询结果共${0}个，${0}个符合核销要求，${1 - 0}不符合：预约订单/派单活动未结案、拓展业务活动未审核通过、应收款金额为0的订单不能进行核销。`;
 			const columns = getReceOffCol(getOffDetailCloIndex[key]);
-			console.log('sldfkjsdlkfjsldkfj', columns)
 			const totalWidth = getTotalWidth(columns);
 			const pagination = {
 				onChange: (current) => {

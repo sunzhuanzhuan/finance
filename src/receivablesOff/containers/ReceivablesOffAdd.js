@@ -200,12 +200,11 @@ class ReceivablesOfflist extends React.Component {
 			<ReceOffModal 
 				type='off'
 				visible={offVisible}
+				initialValue=''
 				width={800}
 				title='应收款核销'
 				handleCancel={this.handleModalCancel} 
 				handleOk={ () => {this.handleModalOk('off')}}
-				columns={getReceOffCol(tabColArr)}
-				dataSource={this.state[`selectedRows-${checkedKey}`]}
 			/>
 		</div>
 	}

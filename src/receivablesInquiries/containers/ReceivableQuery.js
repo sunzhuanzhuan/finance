@@ -1,6 +1,4 @@
 import React from 'react'
-import { connect } from 'react-redux';
-import { bindActionCreators } from "redux";
 import './receivable.less';
 import { Form, Input, Button, Row, Select, DatePicker } from "antd";
 import SearchSelect from '@/components/SearchSelect';

@@ -54,6 +54,9 @@
         word-wrap: break-word;
         word-break: break-all;
     }
+    a:not(:first-child) {
+        margin-left: 10px;
+    }
 }
 
 .rece-wrapper {
@@ -81,8 +84,47 @@
     }
 }
 .rece-add-wrapper {
+    height: ~'calc(100% - 32px)';
+    overflow: auto;
+
     .ant-table-fixed {
         width: 175px;
     }
+    
+    .rece_tabs {
+        position: unset;
+    }
+
+    .rece-footer {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        padding: 10px;
+        margin: 0;
+        box-shadow: 0 2px 8px #d9d9d9;
+        background: #fff;
+        .ant-btn {
+          margin-right: 10px;
+        }
+    }
+}
+.ant-layout-content > div {
+    height: 100%;
 }
 
+.rece-off-confirm-modal {
+    .fields-info {
+        display: flex;
+        .fields-icon {
+            width: 100px;
+            font-size: 36px;
+            color: @primary-color;
+        }
+    }    
+    .fields-tip {
+        margin-top: 24px;
+    }
+}

@@ -72,73 +72,35 @@ class ReceivableOffQuery extends React.Component {
 			handleExport()
 		}
 	}
+
 	getFormRowComp = () => {
 		const { queryItems = [] } = this.props;
-		const queryLen = queryItems.length;
+		const queryLen = queryItems.length - 1;
 		const valueItems = queryItems.filter(item => item.compType !== 'operate');
 		const operateItem = queryItems.filter(item => item.compType === 'operate');
+		const rowLen = Math.ceil(queryLen / 4)
+		const queryLenArr = new Array(rowLen).join(",").split(",");
 
-		if(queryLen < 5) {
-			return <Row className='flex-row'>
-				<div key='flex-left' className='left-comp'>
+		const ValueRow = queryLenArr.map( _ => {
+			if( valueItems.length >= 4)
+				return (
+					<Row key={+new Date() + Math.random()}>
+						{this.getFormItemComp(valueItems.splice(0, 4))}
+					</Row>
+				)
+			return null;
+		});
+		const OperateRow = (
+			<Row key='row-second' className='flex-row'>
+				<div className='left-comp'>
 					{this.getFormItemComp(valueItems)}
 				</div>
-				<div key='flex-right' className='right-comp'>
+				<div className='right-comp'>
 					{this.getFormItemComp(operateItem)}
 				</div>
 			</Row>
-		}else if(queryLen >=5 && queryLen < 9) {
-			return [
-				<Row key='row-first'>
-					{this.getFormItemComp(valueItems.splice(0, 4))}
-				</Row>,
-				<Row key='row-second' className='flex-row'>
-					<div className='left-comp'>
-						{this.getFormItemComp(valueItems)}
-					</div>
-					<div className='right-comp'>
-						{this.getFormItemComp(operateItem)}
-					</div>
-				</Row>,
-			]
-		}else if(queryLen >= 9 && queryLen < 13) {
-			return [
-				<Row key='row-first'>
-					{this.getFormItemComp(valueItems.splice(0, 4))}
-				</Row>,
-				<Row key='row-second'>
-					{this.getFormItemComp(valueItems.splice(0, 4))}
-				</Row>,
-				<Row key='row-third' className='flex-row'>
-					<div className='left-comp'>
-						{this.getFormItemComp(valueItems)}
-					</div>
-					<div className='right-comp'>
-						{this.getFormItemComp(operateItem)}
-					</div>
-				</Row>
-			]
-		}else if(queryLen >= 13) {
-			return [
-				<Row key='row-first'>
-					{this.getFormItemComp(valueItems.splice(0, 4))}
-				</Row>,
-				<Row key='row-second'>
-					{this.getFormItemComp(valueItems.splice(0, 4))}
-				</Row>,
-				<Row key='row-third'>
-					{this.getFormItemComp(valueItems.splice(0, 4))}
-				</Row>,
-				<Row key='row-fourth' className='flex-row'>
-					<div className='left-comp'>
-						{this.getFormItemComp(valueItems)}
-					</div>
-					<div className='right-comp'>
-						{this.getFormItemComp(operateItem)}
-					</div>
-				</Row>
-			]
-		}
+		);
+		return [ValueRow, OperateRow]
 	}
 
 	handleSelectSearch = () => {

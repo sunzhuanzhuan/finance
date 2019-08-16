@@ -5,6 +5,7 @@ import lazyLoadComponent from '../components/LazyLoadComponent'
 // 懒加载路由级组件
 const List = lazyLoadComponent(() => import("./containers/ReceivablesOffList"))
 const Add = lazyLoadComponent(() => import("./containers/ReceivablesOffAdd"))
+const Detail = lazyLoadComponent(() => import("./containers/ReceivablesOffDetail"))
 
 class ReceivableOff extends Component {
 	state = {}
@@ -13,6 +14,7 @@ class ReceivableOff extends Component {
 			<div>
 				<Route exact path="/finance/receivableoff/list" component={List} />
 				<Route exact path="/finance/receivableoff/add" component={Add} />
+				<Route exact path="/finance/receivableoff/detail" component={Detail} />
 			</div>
 		);
 	}

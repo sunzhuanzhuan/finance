@@ -7,6 +7,7 @@ import ReceivableQuery from './ReceivableQuery';
 import { getQueryItems, receivableCol } from '../constants';
 import * as receivableAction from "../actions/receivable";
 import { Scolltable } from '@/components';
+import { getTotalWidth } from '@/util';
 
 class Receivableslist extends React.Component {
 	constructor() {
@@ -35,14 +36,10 @@ class Receivableslist extends React.Component {
 		})
 	}
 
-	getTotalWidth = (arr = []) => {
-		return arr.reduce((accumulator, item) => accumulator + parseInt(item.width), 0);
-	}
-
 	render() {
 		const { receivableList: { total = 0, page = 1, page_size = 20, list} } = this.props;
 		const { searchQuery, loading } = this.state;
-		const totalWidth = this.getTotalWidth(receivableCol);
+		const totalWidth = getTotalWidth(receivableCol);
 		const pagination = {
 			onChange: current => {
 				Object.assign(searchQuery, {page: current});

@@ -4,9 +4,10 @@ import { bindActionCreators } from "redux";
 import './receivableOff.less';
 import { Modal, Form, message, Table, Button } from "antd";
 import ReceivableOffQuery from './ReceivableOffQuery';
-import { getQueryItems, receivableCol } from '../constants';
+import { getOffListQueryKeys, getOffQueryItems, getOffListColIndex, getReceOffCol } from '../constants';
 import * as receivableOffAction from "../actions/receivableOff";
 import * as goldenActions from "../../companyDetail/actions/goldenApply";
+import { getTotalWidth } from '@/util';
 import qs from 'qs';
 import { Scolltable } from '@/components';
 import SearchSelect from '@/components/SearchSelect';
@@ -50,11 +51,28 @@ class ReceivablesOffList extends React.Component {
 		})
 	}
 
+	handleTableOperate = (operateType, record) => {
+		switch(operateType) {
+			case 'detail':
+				const { history } = this.props;
+				const src = `/finance/receivableoff/detail`;
+				history.push(src);
+				return;
+			case 'preview':
+				return;
+			case 'edit':
+				return;
+			default:
+				return;
+		}
+	}
+
 	render() {
-		const { receivableList: { total = 0, page = 1, page_size = 20, list }, form } = this.props;
+		const { receivableOffList: { total = 0, page = 1, page_size = 20, list }, form } = this.props;
 		const { searchQuery, loading, addVisible } = this.state;
 		const { getFieldDecorator } = form;
 		const formItemLayout = { labelCol: { span: 6 }, wrapperCol: { span: 16 }, };
+		const totalWidth = getTotalWidth(getReceOffCol(getOffListColIndex));
 		const pagination = {
 			onChange: current => {
 				Object.assign(searchQuery, {page: current});
@@ -76,7 +94,8 @@ class ReceivablesOffList extends React.Component {
 		return <div className='rece-wrapper'>
 			<div className='rece-title'>应收账款核销</div>
 			<ReceivableOffQuery 
-				queryItems={getQueryItems()}
+				showMore
+				queryItems={getOffQueryItems(getOffListQueryKeys)}
 				handleSearch={this.handleSearch}
 			/>
 			<div className='export-btn-wrapper'>
@@ -90,16 +109,16 @@ class ReceivablesOffList extends React.Component {
 				<span className='total-margin'>赠点/返点账户抵扣：<span className='total-color'>{page}</span></span>
 				<>小金库抵扣：<span className='total-color'>{page_size}</span></>
 			</div>
-			<Scolltable isMoreThanOne scrollClassName='.ant-table-body' widthScroll={2900}>
+			<Scolltable isMoreThanOne scrollClassName='.ant-table-body' widthScroll={totalWidth}>
 				<Table 
 					className='receivable-table'
 					rowKey='id' 
-					columns={receivableCol} 
+					columns={getReceOffCol(getOffListColIndex, this.handleTableOperate)} 
 					dataSource={list} 
 					bordered 
 					pagination={pagination} 
 					loading={loading}
-					scroll={{ x: 2900 }}
+					scroll={{ x: totalWidth }}
 				/>
 			</Scolltable>
 			<Modal 
@@ -135,8 +154,9 @@ class ReceivablesOffList extends React.Component {
 }
 
 const mapStateToProps = (state) => {
+	console.log('sdlfkjsdlkfjsldkfj', state);
 	return {
-		receivableList: state.receivable.receivableList
+		receivableOffList: state.receivableOff.receivableOffList
 	}
 }
 const mapDispatchToProps = dispatch => (bindActionCreators({...receivableOffAction, ...goldenActions}, dispatch));

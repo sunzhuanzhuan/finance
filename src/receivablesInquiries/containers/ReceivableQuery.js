@@ -1,8 +1,8 @@
 import React from 'react'
 import './receivable.less';
-import { Form, Input, Button, Row, Select, DatePicker } from "antd";
+import { Form, Input, Button, Row, Select, DatePicker, InputNumber } from "antd";
 import SearchSelect from '@/components/SearchSelect';
-
+const { Option } = Select;
 const FormItem = Form.Item;
 
 class ReceivableQuery extends React.Component {
@@ -11,24 +11,43 @@ class ReceivableQuery extends React.Component {
 		this.state = {
 		};
 	}
-	getFormItem = compType => {
+	getSelectOption = key => {
+		const { queryOptions } = this.props;
+		if(!queryOptions[key]) return null;
+		return queryOptions[key].map(item => {
+			const { name, value } = item;
+			return <Option key={value} value={value}>{name}</Option>
+		})
+	}
+	getFormItem = item => {
+		const { compType, key, dataIndex, optionKey } = item;
 		switch(compType) {
 			case 'input':
 				return <Input placeholder="请输入" className='common_search_width' />;
 			case 'searchSelect':
 				return <SearchSelect
-							action={this.handleSelectSearch} 
+							action={this.props.action} 
 							style={{ width: 170 }}
 							placeholder='请选择'
 							getPopupContainer={() => document.querySelector('.rece-query')}
-							keyWord='company_name'
+							keyWord={key}
 							dataToList={res => { return res.data }}
-							item={['company_id', 'name']}
+							item={dataIndex}
 						/>;
 			case 'select':
-				return <Select placeholder="请输入" className='common_search_width' />;
+				return <Select 
+					placeholder="请选择" 
+					className='common_search_width'
+					filterOption={(input, option) => (
+						option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+					)}
+				>
+					{ this.getSelectOption(optionKey) }
+				</Select>;
 			case 'date':
-				return <DatePicker placeholder="请输入" className='common_search_width' />;
+				return <DatePicker placeholder="请选择" className='common_search_width' />;
+			case 'inputNumber':
+				return <InputNumber min={0} className='common_search_width' />;
 			default:
 				return <Input placeholder="请输入" className='common_search_width' />;
 		}
@@ -49,7 +68,7 @@ class ReceivableQuery extends React.Component {
 			return (
 				<FormItem key={key} label={label} >
 					{getFieldDecorator(key, { initialValue: undefined })(
-						this.getFormItem(compType)
+						this.getFormItem(item)
 					)}
 				</FormItem>
 			)
@@ -78,10 +97,10 @@ class ReceivableQuery extends React.Component {
 		const rowLen = Math.ceil(queryLen / 4)
 		const queryLenArr = new Array(rowLen).join(",").split(",");
 
-		const ValueRow = queryLenArr.map( _ => {
+		const ValueRow = queryLenArr.map( (_, index) => {
 			if( valueItems.length >= 4)
 				return (
-					<Row key={+new Date() + Math.random()}>
+					<Row key={index}>
 						{this.getFormItemComp(valueItems.splice(0, 4))}
 					</Row>
 				)
@@ -98,10 +117,6 @@ class ReceivableQuery extends React.Component {
 			</Row>
 		);
 		return [ValueRow, OperateRow]
-	}
-
-	handleSelectSearch = () => {
-
 	}
 
 	render() {

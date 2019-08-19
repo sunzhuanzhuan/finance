@@ -1,8 +1,12 @@
 import { combineReducers } from 'redux'
-import { receivableList } from './receivable'
+import { receivableList, receSearchOptions, reservationList, campaignList, extendBusinessList } from './receivable'
 
 export default combineReducers({
-    receivableList
+    receivableList,
+    receSearchOptions,
+    reservationList,
+    campaignList,
+    extendBusinessList
 })
 
 

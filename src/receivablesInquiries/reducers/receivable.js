@@ -2,9 +2,9 @@ import { handleActions } from 'redux-actions';
 import {
 	getReceivableList_success,
 	getReceSearchOptions_success,
-	getReservationList_success,
-	getCampaignList_success,
-	getExtendBusinessList_success
+	reservationList_success,
+	campaignList_success,
+	extendBusinessList_success
 } from '../actions/receivable';
 
 // 应收款查询列表
@@ -25,21 +25,22 @@ export const receSearchOptions = handleActions({
 
 // 预约订单应收款查询
 export const reservationList = handleActions({
-	[getReservationList_success]: (state, action) => {
+	[reservationList_success]: (state, action) => {
+		console.log('sldkfjlksdjflksdjf', action)
 		return { ...action.payload.data }
 	}
 }, {});
 
 // 微闪投应收款查询
 export const campaignList = handleActions({
-	[getCampaignList_success]: (state, action) => {
+	[campaignList_success]: (state, action) => {
 		return { ...action.payload.data }
 	}
 }, {});
 
 // 拓展业务应收款查询
 export const extendBusinessList = handleActions({
-	[getExtendBusinessList_success]: (state, action) => {
+	[extendBusinessList_success]: (state, action) => {
 		return { ...action.payload.data }
 	}
 }, {});

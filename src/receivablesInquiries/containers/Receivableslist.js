@@ -4,12 +4,12 @@ import { bindActionCreators } from "redux";
 import './receivable.less';
 import { message, Table, Button, Alert } from "antd";
 import ReceivableQuery from './ReceivableQuery';
-import { getQueryItems, receivableCol } from '../constants';
+import { getQueryItems, getQueryKeys, receivableCol } from '../constants';
 import * as receivableAction from "../actions/receivable";
 import * as goldenActions from "../../companyDetail/actions/goldenApply";
 import { Scolltable } from '@/components';
-import { getTotalWidth } from '@/util';
-
+import { getTotalWidth, downloadByATag } from '@/util';
+import qs from 'qs';
 class Receivableslist extends React.Component {
 	constructor() {
 		super();
@@ -36,6 +36,12 @@ class Receivableslist extends React.Component {
 			this.setState({ loading: false });
 			message.error(errorMsg || '列表加载失败，请重试！');
 		})
+	}
+
+	handleExport = () => {
+		const { searchQuery } = this.state;
+
+		downloadByATag(`/api/receivables/query/exportCompanyList?${qs.stringify(searchQuery)}`);
 	}
 
 	render() {
@@ -74,15 +80,13 @@ class Receivableslist extends React.Component {
 		return <div className='rece-wrapper'>
 			<div className='rece-title'>应收账款查询</div>
 			<ReceivableQuery 
-				queryItems={getQueryItems()}
+				showExport
+				queryItems={getQueryItems(getQueryKeys['receivableList'])}
 				queryOptions={receSearchOptions}
 				handleSearch={this.handleSearch}
+				handleExport={this.handleExport}
 				action={getGoldenCompanyId}
 			/>
-			<div className='export-btn-wrapper'>
-				<Button type='primary'>导出</Button>
-			</div>
-			
 			<Alert className='list-total-info' message={TotalMsg} type="warning" showIcon />
 			<Scolltable isMoreThanOne scrollClassName='.ant-table-body' widthScroll={totalWidth}>
 				<Table 

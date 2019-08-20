@@ -1,13 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
-import { message, Table, Button, Alert, Tabs } from "antd";
+import { message, Table, Alert, Tabs } from "antd";
 import ReceivableQuery from './ReceivableQuery';
-import { getTabOptions, getQueryItems, getQueryKeys, getReceivableDetailCol } from '../constants';
+import { getTabOptions, getQueryItems, getQueryKeys, getReceivableDetailCol, getColKeys } from '../constants';
 import * as receivableAction from "../actions/receivable";
 import * as goldenActions from "../../companyDetail/actions/goldenApply";
-import { getTotalWidth } from '@/util';
+import { getTotalWidth, downloadByATag } from '@/util';
 import { Scolltable } from '@/components';
+import qs from 'qs';
 
 const { TabPane } = Tabs;
 
@@ -17,43 +18,49 @@ class ReceivablesDetail extends React.Component {
 		this.state = {
 			addVisible: false,
 			activeKey: 'reservationList',
+			loading: false
 		};
-	}
-	componentDidMount() {
-
 	}
 
 	handleSearch = (key, searchQuery) => {
-		this.setState({[`searchQuery-${key}`]: searchQuery});
-		Object.assign(searchQuery, {key});
+		this.setState({[`searchQuery-${key}`]: searchQuery, loading: true});
+		if(typeof this.props[key] === 'function') {
+			this.props[key](searchQuery).then(() => {
+				this.setState({ loading: false })
+			}).catch(({ errorMsg }) => {
+				this.setState({ loading: false });
+				message.error(errorMsg || '列表加载失败，请重试！');
+			})
+		}
 
 	}
 
-	handleExportList = () => {
-		
+	handleExportList = key => {
+		downloadByATag(`/api/receivables/query/exportCompanyList?${qs.stringify(this.state[`searchQuery-${key}`])}`);
 	}
 
 	getTabPaneComp = () => {
 		const { receivable = {} } = this.props;
+		const { loading } = this.state;
 		const { receSearchOptions } = receivable;
 		return getTabOptions.map(item => {
 			const { tab, key } = item;
 			const tabInfo = receivable[key] || {};
 			const { list = [], page, total, page_size: tableSize } = tabInfo;
 			const totalMsg = `应收款金额${0}`;
-			const columns = getReceivableDetailCol();
+			const columns = getReceivableDetailCol(getColKeys[key]);
 			const totalWidth = getTotalWidth(columns);
 			const pagination = {
-				onChange: (current) => {
-					Object.assign(this.state[`searchQuery-${key}`], {page: current});
-					this.setState({[`searchQuery-${key}`]: this.state[`searchQuery-${key}`]});
-					this.handleSearch(key, this.state[`searchQuery-${key}`]);
-				},
-				onShowSizeChange: (_, pageSize) => {
-					Object.assign(this.state[`searchQuery-${key}`], {page_size: pageSize});
-					this.setState({[`searchQuery-${key}`]: this.state[`searchQuery-${key}`]});
-					this.handleSearch(key, this.state[`searchQuery-${key}`]);
-				},
+				// onChange: (current) => {
+				// 	Object.assign(this.state[`searchQuery-${key}`], {page: current});
+				// 	this.setState({[`searchQuery-${key}`]: this.state[`searchQuery-${key}`]});
+				// 	this.handleSearch(key, this.state[`searchQuery-${key}`]);
+				// },
+				// onShowSizeChange: (_, pageSize) => {
+				// 	Object.assign(this.state[`searchQuery-${key}`], {page_size: pageSize});
+				// 	this.setState({[`searchQuery-${key}`]: this.state[`searchQuery-${key}`]});
+				// 	this.handleSearch(key, this.state[`searchQuery-${key}`]);
+				// },
 				total: parseInt(total),
 				current: parseInt(page),
 				pageSize: parseInt(tableSize),
@@ -72,11 +79,12 @@ class ReceivablesDetail extends React.Component {
 						queryItems={getQueryItems(getQueryKeys[key])}
 						queryOptions={receSearchOptions}
 						handleSearch={searchQuery => {this.handleSearch(key, searchQuery)}} 
-						handleExport={this.handleExportList}
+						handleExport={() => {this.handleExportList(key)}}
 					/>
 					{ <Alert className='list-total-info' message={totalMsg} type="warning" showIcon /> }
 					<Scolltable isMoreThanOne scrollClassName='.ant-table-body' widthScroll={totalWidth}>
 						<Table 
+							loading={loading}
 							className='receivable-table'
 							rowKey='id' 
 							columns={columns} 

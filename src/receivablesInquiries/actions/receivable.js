@@ -19,24 +19,24 @@ export const {
 //----------------------------应收款详情------------------------
 // 预约订单应收款查询
 export const {
-	getReservationList,
-	getReservationList_success
-} = createHttpAction('getReservationList', Interface.getReservationList, {
+	reservationList,
+	reservationList_success
+} = createHttpAction('reservationList', Interface.getReservationList, {
 	method: 'get'
 });
 
 // 微闪投应收款查询
 export const {
-	getCampaignList,
-	getCampaignList_success
-} = createHttpAction('getCampaignList', Interface.getCampaignList, {
+	campaignList,
+	campaignList_success
+} = createHttpAction('campaignList', Interface.getCampaignList, {
 	method: 'get'
 });
 
 // 拓展业务应收款查询
 export const {
-	getExtendBusinessList,
-	getExtendBusinessList_success
-} = createHttpAction('getExtendBusinessList', Interface.getExtendBusinessList, {
+	extendBusinessList,
+	extendBusinessList_success
+} = createHttpAction('extendBusinessList', Interface.getExtendBusinessList, {
 	method: 'get'
 });

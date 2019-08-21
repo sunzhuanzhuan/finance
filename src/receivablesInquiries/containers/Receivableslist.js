@@ -88,7 +88,7 @@ class Receivableslist extends React.Component {
 				action={getGoldenCompanyId}
 			/>
 			<Alert className='list-total-info' message={TotalMsg} type="warning" showIcon />
-			<Scolltable isMoreThanOne scrollClassName='.ant-table-body' widthScroll={totalWidth}>
+			<Scolltable scrollClassName='.ant-table-body' widthScroll={totalWidth}>
 				<Table 
 					className='receivable-tablef'
 					rowKey='id' 

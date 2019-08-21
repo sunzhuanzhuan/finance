@@ -27,21 +27,28 @@ class ReceOffModal extends React.Component {
 		const { getFieldDecorator } = form;
 		if(type === 'preview') {
 			const totalWidth = getTotalWidth(columns);
+			const wrapperClass = 'preview-off';
 			return (
-				<>
+				<div className={wrapperClass}>
 					<Button type="primary" onClick={handleOk}>清空已选</Button>
-					<Scolltable isMoreThanOne scrollClassName='.ant-table-body' widthScroll={totalWidth}>
+					<Scolltable 
+						isMoreThanOne 
+						wrapperClass={wrapperClass}
+						scrollClassName={`.${wrapperClass} .ant-table-body`}
+						widthScroll={totalWidth}
+					>
 						<Table
 							className='top-gap'
+							bordered
 							rowKey='id'
 							columns={columns}
 							dataSource={dataSource}
 							size="small"
 							pagination={false}
-							scroll={{ y: 760, x: totalWidth }}
+							scroll={{ y: 760, x: totalWidth * 2 }}
 						/>
 					</Scolltable>
-				</>
+				</div>
 			)
 		}else if(type === 'off') {
 			const formItemLayout = {

@@ -72,8 +72,9 @@ class ReceivablesDetail extends React.Component {
 				<span>{tab}</span>
 				<span>{total}</span>
 			</div> : <div>{tab}</div>;
+			const wrapperClass = `moreThanOneTable${key}`;
 			return (
-				<TabPane tab={tabTitle} key={key}>
+				<TabPane tab={tabTitle} key={key} className={wrapperClass}>
 					<ReceivableQuery 
 						showExport
 						queryItems={getQueryItems(getQueryKeys[key])}
@@ -82,7 +83,12 @@ class ReceivablesDetail extends React.Component {
 						handleExport={() => {this.handleExportList(key)}}
 					/>
 					{ <Alert className='list-total-info' message={totalMsg} type="warning" showIcon /> }
-					<Scolltable isMoreThanOne scrollClassName='.ant-table-body' widthScroll={totalWidth}>
+					<Scolltable 
+						isMoreThanOne 
+						wrapperClass={wrapperClass}
+						scrollClassName={`.${wrapperClass} .ant-table-body`}
+						widthScroll={totalWidth}
+					>
 						<Table 
 							loading={loading}
 							className='receivable-table'

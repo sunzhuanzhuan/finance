@@ -103,8 +103,9 @@ class ReceivablesOfflist extends React.Component {
 				<span>{tab}</span>
 				<span>{total}</span>
 			</div> : <div>{tab}</div>;
+			const wrapperClass = `moreThanOneTable${key}`;
 			return (
-				<TabPane tab={tabTitle} key={key}>
+				<TabPane tab={tabTitle} key={key} className={wrapperClass}>
 					<ReceivableOffQuery 
 						showExport
 						queryItems={getOffQueryItems(getOffAddQueryKeys[key])}
@@ -118,7 +119,12 @@ class ReceivablesOfflist extends React.Component {
 							this.setState({ checkVisible: true, checkedKey: key });
 						}}>查看已选</Button>
 					</div>
-					<Scolltable isMoreThanOne scrollClassName='.ant-table-body' widthScroll={totalWidth}>
+					<Scolltable 
+						isMoreThanOne 
+						wrapperClass={wrapperClass}
+						scrollClassName={`.${wrapperClass} .ant-table-body`} 
+						widthScroll={totalWidth}
+					>
 						<Table 
 							className='receivable-table'
 							rowKey='id' 

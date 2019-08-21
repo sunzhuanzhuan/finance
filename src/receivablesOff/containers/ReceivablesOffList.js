@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import './receivableOff.less';
 import { Form, message, Table, Button } from "antd";
 import ReceivableOffQuery from './ReceivableOffQuery';
-import { getOffListQueryKeys, getOffQueryItems, getOffListColIndex, getReceOffCol } from '../constants';
+import { getOffListQueryKeys, getOffQueryItems, getOffOptions, getOffListColIndex, getReceOffCol } from '../constants';
 import * as receivableOffAction from "../actions/receivableOff";
 import * as goldenActions from "../../companyDetail/actions/goldenApply";
 import { getTotalWidth } from '@/util';
@@ -56,7 +56,7 @@ class ReceivablesOffList extends React.Component {
 	}
 
 	render() {
-		const { receivableOffList: { total = 0, page = 1, page_size = 20, list } } = this.props;
+		const { receivableOffList: { total = 0, page = 1, page_size = 20, list }, history } = this.props;
 		const { searchQuery, loading, addVisible, editVisible } = this.state;
 		const totalWidth = getTotalWidth(getReceOffCol(getOffListColIndex));
 		const pagination = {
@@ -77,10 +77,11 @@ class ReceivablesOffList extends React.Component {
 			showSizeChanger: true,
 			pageSizeOptions: ['20', '50', '100', '200']
 		};
+		console.log('sldkfjlsdkjflsdkjf', getOffListQueryKeys, getOffQueryItems(getOffListQueryKeys))
 		return <div className='rece-wrapper'>
 			<div className='rece-title'>应收账款核销</div>
-			<ReceivableOffQuery 
-				showMore
+			<ReceivableOffQuery
+				queryOptions={getOffOptions()} 
 				queryItems={getOffQueryItems(getOffListQueryKeys)}
 				handleSearch={this.handleSearch}
 			/>
@@ -110,6 +111,7 @@ class ReceivablesOffList extends React.Component {
 			<ReceOffModal 
 				type='add'
 				visible={addVisible}
+				history={history}
 				width={440}
 				title='选择公司'
 				action={this.props.getGoldenCompanyId}
@@ -129,7 +131,6 @@ class ReceivablesOffList extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-	console.log('sdlfkjsdlkfjsldkfj', state);
 	return {
 		receivableOffList: state.receivableOff.receivableOffList
 	}

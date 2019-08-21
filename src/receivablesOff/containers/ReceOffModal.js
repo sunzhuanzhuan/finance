@@ -153,6 +153,13 @@ class ReceOffModal extends React.Component {
 				const src = `/finance/receivableoff/add?${qs.stringify({ keys: { company_id } })}`;
 				history.push(src);
 			})
+		}else if(type === 'add') {
+			form.validateFields((errs, values) => {
+				if(errs) return;
+				const { company_id } = values;
+				const src = `/finance/receivableoff/add?${qs.stringify({ keys: { company_id } })}`;
+				history.push(src);
+			})
 		}
 	}
 

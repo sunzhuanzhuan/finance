@@ -8,51 +8,60 @@ export const getTabOptions = [
 ]
 
 export const getOffListQueryKeys = [
-    'company', 'debt', 'salePerson', 'saler', 'area', 'date', 'time', 'percentage', 'compGMV', 'saleGMV', 'count', 'goldCount', 'operate'
+    'verification_code', 'type', 'company_id', 'sale_id', 'time', 'is_record_sale_income', 'is_decrease_company_gmv', 'is_decrease_sale_gmv', 'gift_amount_range', 'warehouse_amount_range', 'invoice_application_id', 'order_id_type', 'operate'
 ];
 
 export const getOffDetailQueryKeys = {
-    yuyueyuyue: ['salePerson', 'company', 'debt', 'area', 'date', 'time', 'where', 'project', 'demandname', 'platform', 'saleManage', 
-    'ordertime', 'saleGMV', 'compGMV', 'percentage', 'count', 'goldCount', 'saler', 'brand', 'operate'
-],
-    weishantou: ['salePerson', 'company', 'debt', 'date2', 'time', 'where', 'project', 'platform', 'saleManage', 
-    'activetime', 'saleGMV', 'compGMV', 'percentage', 'count', 'goldCount', 'saler', 'brand', 'operate'
-],
-    tuozhanyewu: ['salePerson', 'company', 'debt', 'date2', 'time', 'where', 'project', 'saleManage', 
-    'offtime', 'saleGMV', 'compGMV', 'percentage', 'count', 'goldCount', 'saler', 'brand', 'operate' ],
+    yuyueyuyue: [
+        'verification_code', 'company_id', 'sale_id', 'order_id', 'time', 'region', 'project_id', 
+        'requirement_id', 'pid', 'type', 'order_complete_time', 'is_decrease_sale_gmv', 
+        'is_decrease_company_gmv', 'is_record_sale_income', 'gift_amount_range', 
+        'warehouse_amount_range', 'invoice_application_id', 'brand_id', 'operate'
+    ],
+    weishantou: [
+        'verification_code', 'company_id', 'sale_id', 'date2', 'time', 'region', 'project_id', 
+        'pid', 'type', 'is_decrease_sale_gmv', 'is_decrease_company_gmv', 
+        'is_record_sale_income', 'active_time', 'gift_amount_range', 'warehouse_amount_range', 'invoice_application_id', 
+        'brand_id', 'operate'
+    ],
+    tuozhanyewu: [
+        'verification_code', 'company_id', 'sale_id', 'date2', 'time', 'region', 'project_id', 'type', 
+        'is_decrease_sale_gmv', 'is_decrease_company_gmv', 'is_record_sale_income', 'offtime', 
+        'gift_amount_range', 'warehouse_amount_range', 'invoice_application_id', 'brand_id', 'operate' 
+    ],
 };
 
 export const getOffAddQueryKeys = {
-    yuyueyuyue: ['saler', 'date', 'ordertime', 'brand', 'project', 'demandname', 'platform', 'account', 'operate'],
-    weishantou: ['saler', 'date2', 'activetime', 'brand', 'project', 'platform', 'account', 'operate'],
-    tuozhanyewu: ['saler', 'date2', 'offtime', 'brand', 'project', 'operate'],
+    yuyueyuyue: ['order_id', 'invoice_application_id', 'order_complete_time', 'project_id', 'brand_id', 'pid', 'account_id', 'operate'],
+    weishantou: ['order_id', 'active_time', 'brand_id', 'invoice_application_id', 'project_id', 'pid', 'account_id', 'operate'],
+    tuozhanyewu: ['order_id', 'invoice_application_id', 'offtime', 'brand_id', 'project_id', 'operate'],
 };
 
 export const getOffQueryItems = queryArr => {
     const allQuery =  [
-        {label: '公司简称', key: 'company', compType: 'searchSelect'},
-        {label: '销售', key: 'debt', compType: 'select'},
-        {label: '核销编号', key: 'salePerson', compType: 'input'},
-        {label: '核销类型', key: 'saleManage', compType: 'input'},
-        {label: '发票申请单ID', key: 'saler', compType: 'input'},
-        {label: '订单类型', key: 'area', compType: 'searchSelect'},
-        {label: '订单ID', key: 'date', compType: 'input'},
+        {label: '公司简称', key: 'company_id', compType: 'searchSelect'},
+        {label: '销售', key: 'sale_id', compType: 'searchSelect'},
+        {label: '核销编号', key: 'verification_code', compType: 'input'},
+        {label: '核销类型', key: 'type', compType: 'select', optionKey: 'type'},
+        {label: '发票申请单ID', key: 'invoice_application_id', compType: 'input'},
+        {label: '订单ID', key: 'order_id', compType: 'input'},
         {label: '活动ID', key: 'date2', compType: 'input'},
-        {label: '核销时间', key: 'time', compType: 'input'},
-        {label: '是否计提提成', key: 'percentage', compType: 'input'},
-        {label: '是否扣减公司GMV', key: 'compGMV', compType: 'input'},
-        {label: '是否扣减销售GMV', key: 'saleGMV', compType: 'input'},
-        {label: '赠送/返点账户抵扣金额', key: 'count', compType: 'input'},
-        {label: '小金库抵扣金额', key: 'goldCount', compType: 'input'},
-        {label: '区域', key: 'where', compType: 'select'},
-        {label: '所属项目', key: 'project', compType: 'input'},
-        {label: '品牌', key: 'brand', compType: 'input'},
-        {label: '需求名称', key: 'demandname', compType: 'input'},
-        {label: '平台', key: 'platform', compType: 'select'},
-        {label: '订单执行完成时间', key: 'ordertime', compType: 'date'},
-        {label: '活动结算时间', key: 'activetime', compType: 'date'},
+        {label: '核销时间', key: 'time', compType: 'date'},
+        {label: '是否计提提成', key: 'is_record_sale_income', compType: 'input'},
+        {label: '是否扣减公司GMV', key: 'is_decrease_company_gmv', compType: 'input'},
+        {label: '是否扣减销售GMV', key: 'is_decrease_sale_gmv', compType: 'input'},
+        {label: '赠送/返点账户抵扣金额', key: 'gift_amount_range', compType: 'input'},
+        {label: '小金库抵扣金额', key: 'warehouse_amount_range', compType: 'input'},
+        {label: '区域', key: 'region', compType: 'select'},
+        {label: '所属项目', key: 'project_id', compType: 'input'},
+        {label: '品牌', key: 'brand_id', compType: 'input'},
+        {label: '需求名称', key: 'requirement_id', compType: 'input'},
+        {label: '平台', key: 'pid', compType: 'select'},
+        {label: '订单执行完成时间', key: 'order_complete_time', compType: 'date'},
+        {label: '活动结算时间', key: 'active_time', compType: 'date'},
         {label: '审核时间', key: 'offtime', compType: 'date'},
-        {label: '账号名称', key: 'account', compType: 'input'},
+        {label: '账号名称', key: 'account_id', compType: 'input'},
+        {compType: 'order_id_type', key: 'order_id_type'},
         {compType: 'operate', key: 'operate'}
     ];
     return queryArr.map(item => allQuery.find(queryItem => queryItem.key === item));
@@ -78,12 +87,21 @@ export const getOffAddFormItems = () => {
 export const getOffOptions = () => {
     return {
         GMV: [
+            { label: '请选择' },
             { label: '扣减', value: 1 },
             { label: '不扣减', value: 0 }
         ],
         payment: [
+            { label: '请选择' },
             { label: '计提', value: 1 },
             { label: '不计提', value: 0 }
+        ],
+        type: [
+            { label: '请选择' },
+            { label: '客户整体折让', value: 1 }, 
+            { label: '订单折让（赔偿）', value: 2 }, 
+            { label: '坏账清理', value: 3 }, 
+            { label: '其他', value: 4 }, 
         ],
         discount: [
             { label: <span>赠送/返点<Input style={{width: 70, margin: '3px 10px 0'}} /><span>赠送/返点余额500.00，最多可抵扣500.00</span></span>, value: 1 }, 
@@ -94,27 +112,27 @@ export const getOffOptions = () => {
 }
 
 export const getOffListColIndex = [
-    'id', 'company', 'saler', 'offtype', 'offcount', 'offaccount', 'count', 'discountcount', 'ispercent', 'iscompany', 'issaler', 'offtime', 'offperson', 'operate',
+    'verification_code', 'company_name', 'sale_name', 'type', 'total_verification_amount', 'debt_amount', 'gift_amount', 'warehouse_amount', 'is_decrease_company_gmv', 'is_decrease_sale_gmv', 'is_record_sale_income', 'created_at', 'operator_name', 'operate',
 ];
 
 export const getOffDetailCloIndex = {
-    yuyueyuyue: ['id', 'offtype', '订单IDnoFIxed', 'company', 'saler', '所属项目/品牌', '需求ID/需求名称', '账号信息', '发票申请单ID', '订单执行完成时间', 'offcount', 'offaccount', 'count', 'discountcount', 'iscompany', 'ispercent', 'issaler', 'offperson', 'offtime'],
-    weishantou: ['id', 'offtype', '活动名称/活动类型/活动状态', 'company', 'saler', '所属项目/品牌', '账号信息', '发票申请单ID', '活动结算时间', 'offcount', 'offaccount', 'count', 'discountcount', 'iscompany', 'ispercent', 'issaler', 'offperson', 'offtime'],
-    tuozhanyewu: ['id', 'offtype', '活动ID', '活动名称/活动类型/活动状态', 'company', 'saler', '所属项目/品牌', '发票申请单ID', '审核时间', 'offcount', 'offaccount', 'count', 'discountcount', 'iscompany', 'ispercent', 'issaler', 'offperson', 'offtime'],
+    yuyueyuyue: ['verification_code', 'type', 'order_id_no_fIxed', 'company_name', 'saler_region', 'project_brand', 'require_id_name', 'account_info', 'invoice_application_id', 'execution_completed_time', 'total_verification_amount', 'debt_amount', 'gift_amount', 'warehouse_amount', 'is_decrease_company_gmv', 'is_record_sale_income', 'is_decrease_sale_gmv', 'operator_name', 'created_at'],
+    weishantou: ['verification_code', 'type', 'campaign_id_no_fIxed', '活动名称', 'company_name', 'saler_region', 'project_brand', 'account_info', 'invoice_application_id', 'settlement_time', 'total_verification_amount', 'debt_amount', 'gift_amount', 'warehouse_amount', 'is_decrease_company_gmv', 'is_record_sale_income', 'is_decrease_sale_gmv', 'operator_name', 'created_at'],
+    tuozhanyewu: ['verification_code', 'type', 'id', 'business_name', 'company_name', 'saler_region', 'project_brand', 'invoice_application_id', 'pass_time', 'total_verification_amount', 'debt_amount', 'gift_amount', 'warehouse_amount', 'is_decrease_company_gmv', 'is_record_sale_income', 'is_decrease_sale_gmv', 'operator_name', 'created_at'],
 }
 
 export const getReceAddColIndex = {
-    yuyueyuyue: ['订单ID', '订单状态', '所属项目/品牌', '需求ID/需求名称', '账号信息', '发票申请单ID', '订单执行完成时间', '应收款金额', 'offcount', '对外报价', '执行价', '质检返款', '现金结算', '赠送账户结算', '赔偿金额', '手工质检金额', '已核销金额', '已回款金额'],
-    weishantou: ['活动ID', '订单状态', '所属项目/品牌', '账号信息', '发票申请单ID', '活动结算时间', '应收款金额', 'offcount', '执行价', '质检返款', '现金结算', '赠送账户结算', '手工质检金额', '已核销金额', '已回款金额'],
-    tuozhanyewu: ['活动ID', '活动名称/活动类型/活动状态', '所属项目/品牌', '发票申请单ID', '审核时间', '应收款金额', 'offcount', '活动费用', '现金结算', '赠送账户结算', '已核销金额', '已回款金额'],
+    yuyueyuyue: ['order_id', 'project_brand', 'require_id_name', 'account_info', 'invoice_application_id', 'execution_completed_time', 'verification_amount', 'total_verification_amount', 'quoted_price', 'deal_price', 'inspection_deducted_amount', 'cash', 'gift', 'reparation_amount', 'manual_qc_amount', 'has_verification_amount', 'has_payback_amount'],
+    weishantou: ['campaign_id', 'project_brand', 'account_info', 'invoice_application_id', 'settlement_time', 'verification_amount', 'total_verification_amount', 'deal_price', 'inspection_deducted_amount', 'cash', 'gift', 'manual_qc_amount', 'has_verification_amount', 'has_payback_amount'],
+    tuozhanyewu: ['id', 'active_name_type', 'project_brand', 'invoice_application_id', 'pass_time', 'verification_amount', 'total_verification_amount', 'cost', 'cash', 'gift', 'has_verification_amount', 'has_payback_amount'],
 }
 
 export const getReceOffCol = ( col, action ) => {
     const allCol =  [
         {
             title: '订单ID',
-            dataIndex: '订单ID',
-            key: '订单ID',
+            dataIndex: 'order_id',
+            key: 'order_id',
             width: 100,
             fixed: 'left',
             align: 'center',
@@ -124,8 +142,8 @@ export const getReceOffCol = ( col, action ) => {
         },
         {
             title: '订单ID',
-            dataIndex: '订单ID',
-            key: '订单IDnoFIxed',
+            dataIndex: 'order_id',
+            key: 'order_id_no_fIxed',
             width: 100,
             align: 'center',
             render: () => {
@@ -134,8 +152,8 @@ export const getReceOffCol = ( col, action ) => {
         },
         {
             title: '活动ID',
-            dataIndex: '活动ID',
-            key: '活动ID',
+            dataIndex: 'campaign_id',
+            key: 'campaign_id',
             width: 100,
             fixed: 'left',
             align: 'center',
@@ -144,9 +162,20 @@ export const getReceOffCol = ( col, action ) => {
             }
         },
         {
-            title: '发票申请单ID',
-            dataIndex: '发票申请单ID',
-            key: '发票申请单ID',
+            title: '活动ID',
+            dataIndex: 'campaign_id',
+            key: 'campaign_id_no_fIxed',
+            width: 100,
+            fixed: 'left',
+            align: 'center',
+            render: () => {
+                return '-'
+            }
+        },
+        {
+            title: '活动名称',
+            dataIndex: '活动名称',
+            key: '活动名称',
             width: 100,
             align: 'center',
             render: () => {
@@ -154,25 +183,56 @@ export const getReceOffCol = ( col, action ) => {
             }
         },
         {
-            title: '活动名称/活动类型/活动状态',
-            dataIndex: '活动名称/活动类型/活动状态',
-            key: '活动名称/活动类型/活动状态',
+            title: '活动名称',
+            dataIndex: 'business_name',
+            key: 'business_name',
             width: 100,
             align: 'center',
             render: () => {
+                return '-'
+            }
+        },
+        {
+            title: '活动ID',
+            dataIndex: 'id',
+            key: 'id',
+            width: 100,
+            align: 'center',
+            render: () => {
+                return '-'
+            }
+        },
+        {
+            title: '发票申请单ID',
+            dataIndex: 'invoice_application_id',
+            key: 'invoice_application_id',
+            width: 100,
+            align: 'center',
+            render: () => {
+                return '-'
+            }
+        },
+        {
+            title: '活动名称/活动类型',
+            dataIndex: 'active_name_type',
+            key: 'active_name_type',
+            width: 100,
+            align: 'center',
+            render: (_, record) => {
+                const {type = '-', status = '-', business_name = '-'} = record;
                 return (
                     <div>
-                        <div>活动名称：</div>
-                        <div>活动类型：</div>
-                        <div>活动状态：</div>
+                        <div>活动名称：{business_name}</div>
+                        <div>活动类型：{type}</div>
+                        {/* <div>活动状态：{status}</div> */}
                     </div>
                 ) 
             }
         },
         {
             title: '活动结算时间',
-            dataIndex: '活动结算时间',
-            key: '活动结算时间',
+            dataIndex: 'settlement_time',
+            key: 'settlement_time',
             width: 100,
             align: 'center',
             render: () => {
@@ -181,8 +241,8 @@ export const getReceOffCol = ( col, action ) => {
         },
         {
             title: '活动费用',
-            dataIndex: '活动费用',
-            key: '活动费用',
+            dataIndex: 'cost',
+            key: 'cost',
             width: 100,
             align: 'center',
             render: () => {
@@ -201,54 +261,57 @@ export const getReceOffCol = ( col, action ) => {
         },
         {
             title: '所属项目/品牌',
-            dataIndex: '所属项目/品牌',
-            key: '所属项目/品牌',
+            dataIndex: 'project_brand',
+            key: 'project_brand',
             width: 100,
             align: 'center',
-            render: () => {
+            render: (_, record) => {
+                const {project_name = '-', brand_name = '-'} = record;
                 return (
-                    <div>
-                        <div>项目：</div>
-                        <div>品牌：</div>
-                    </div>
+                    <>
+                        <div>项目：{project_name}</div>
+                        <div>品牌：{brand_name}</div>
+                    </>
                 )
             }
         },
         {
             title: '需求ID/需求名称',
-            dataIndex: '需求ID/需求名称',
-            key: '需求ID/需求名称',
+            dataIndex: 'require_id_name',
+            key: 'require_id_name',
             width: 100,
             align: 'center',
-            render: () => {
+            render: (_, record) => {
+                const {requirement_name = '-', requirement_id = '-'} = record;
                 return (
                     <div>
-                        <div>需求ID：</div>
-                        <div>需求名称：</div>
+                        <div>需求ID：{requirement_id}</div>
+                        <div>需求名称：{requirement_name}</div>
                     </div>
                 )
             }
         },
         {
             title: '账号信息',
-            dataIndex: '账号信息',
-            key: '账号信息',
+            dataIndex: 'account_info',
+            key: 'account_info',
             width: 100,
             align: 'center',
-            render: () => {
+            render: (_, record) => {
+                const {weibo_name = '-', account_id = '-', platform_name = '-'} = record;
                 return (
                     <div>
-                        <div>平台：</div>
-                        <div>账号名称：</div>
-                        <div>ID：</div>
+                        <div>平台：{platform_name}</div>
+                        <div>账号名称：{weibo_name}</div>
+                        <div>ID：{account_id}</div>
                     </div>
                 )
             }
         },
         {
             title: '订单执行完成时间',
-            dataIndex: '订单执行完成时间',
-            key: '订单执行完成时间',
+            dataIndex: 'execution_completed_time',
+            key: 'execution_completed_time',
             width: 100,
             align: 'center',
             render: () => {
@@ -257,8 +320,8 @@ export const getReceOffCol = ( col, action ) => {
         },
         {
             title: '对外报价',
-            dataIndex: '对外报价',
-            key: '对外报价',
+            dataIndex: 'quoted_price',
+            key: 'quoted_price',
             width: 100,
             align: 'center',
             render: () => {
@@ -267,8 +330,8 @@ export const getReceOffCol = ( col, action ) => {
         },
         {
             title: '执行价',
-            dataIndex: '执行价',
-            key: '执行价',
+            dataIndex: 'deal_price',
+            key: 'deal_price',
             width: 100,
             align: 'center',
             render: () => {
@@ -277,8 +340,8 @@ export const getReceOffCol = ( col, action ) => {
         },
         {
             title: '质检返款',
-            dataIndex: '质检返款',
-            key: '质检返款',
+            dataIndex: 'inspection_deducted_amount',
+            key: 'inspection_deducted_amount',
             width: 100,
             align: 'center',
             render: () => {
@@ -287,8 +350,8 @@ export const getReceOffCol = ( col, action ) => {
         },
         {
             title: '赠送账户结算',
-            dataIndex: '赠送账户结算',
-            key: '赠送账户结算',
+            dataIndex: 'gift',
+            key: 'gift',
             width: 100,
             align: 'center',
             render: () => {
@@ -296,9 +359,9 @@ export const getReceOffCol = ( col, action ) => {
             }
         },
         {
-            title: '赔偿金额',
-            dataIndex: '赔偿金额',
-            key: '赔偿金额',
+            title: '赔偿',
+            dataIndex: 'reparation_amount',
+            key: 'reparation_amount',
             width: 100,
             align: 'center',
             render: () => {
@@ -306,9 +369,9 @@ export const getReceOffCol = ( col, action ) => {
             }
         },
         {
-            title: '手工质检金额',
-            dataIndex: '手工质检金额',
-            key: '手工质检金额',
+            title: '手工质检',
+            dataIndex: 'manual_qc_amount',
+            key: 'manual_qc_amount',
             width: 100,
             align: 'center',
             render: () => {
@@ -317,8 +380,8 @@ export const getReceOffCol = ( col, action ) => {
         },
         {
             title: '已核销金额',
-            dataIndex: '已核销金额',
-            key: '已核销金额',
+            dataIndex: 'has_verification_amount',
+            key: 'has_verification_amount',
             width: 100,
             align: 'center',
             render: () => {
@@ -327,8 +390,8 @@ export const getReceOffCol = ( col, action ) => {
         },
         {
             title: '已回款金额',
-            dataIndex: '已回款金额',
-            key: '已回款金额',
+            dataIndex: 'has_payback_amount',
+            key: 'has_payback_amount',
             width: 100,
             align: 'center',
             render: () => {
@@ -337,8 +400,8 @@ export const getReceOffCol = ( col, action ) => {
         },
         {
             title: '应收款金额',
-            dataIndex: '应收款金额',
-            key: '应收款金额',
+            dataIndex: 'verification_amount',
+            key: 'verification_amount',
             width: 100,
             align: 'center',
             render: () => {
@@ -347,8 +410,8 @@ export const getReceOffCol = ( col, action ) => {
         },
         {
             title: '现金结算',
-            dataIndex: '现金结算',
-            key: '现金结算',
+            dataIndex: 'cash',
+            key: 'cash',
             width: 100,
             align: 'center',
             render: () => {
@@ -357,8 +420,8 @@ export const getReceOffCol = ( col, action ) => {
         },
         {
             title: '审核时间',
-            dataIndex: '审核时间',
-            key: '审核时间',
+            dataIndex: 'pass_time',
+            key: 'pass_time',
             width: 100,
             align: 'center',
             render: () => {
@@ -367,93 +430,108 @@ export const getReceOffCol = ( col, action ) => {
         },
         {
             title: '核销编号',
-            dataIndex: 'id',
-            key: 'id',
+            dataIndex: 'verification_code',
+            key: 'verification_code',
             width: 100,
             align: 'center',
         },
         {
             title: '公司简称',
-            dataIndex: 'company',
-            key: 'company',
+            dataIndex: 'company_name',
+            key: 'company_name',
             width: 100,
             align: 'center',
         },
         {
             title: '所属销售/区域',
-            dataIndex: 'saler',
-            key: 'saler',
+            dataIndex: 'saler_region',
+            key: 'saler_region',
+            width: 100,
+            align: 'center',
+            render: (_, record) => {
+                const {sale_name = '-', region = '-'} = record;
+                return (
+                    <>
+                        <div>销售：{sale_name}</div>
+                        <div>区域：{region}</div>
+                    </>
+                )
+            }
+        },
+        {
+            title: '所属销售',
+            dataIndex: 'sale_name',
+            key: 'sale_name',
             width: 100,
             align: 'center',
         },
-        
         {
             title: '核销类型',
-            dataIndex: 'offtype',
-            key: 'offtype',
+            dataIndex: 'type',
+            key: 'type',
             width: 100,
             align: 'center',
         },
         {
             title: '本次核销金额',
-            dataIndex: 'offcount',
-            key: 'offcount',
+            dataIndex: 'total_verification_amount',
+            key: 'total_verification_amount',
             width: 100,
             align: 'center',
         },
         {
             title: '核销账户金额',
-            dataIndex: 'offaccount',
-            key: 'offaccount',
+            dataIndex: 'debt_amount',
+            key: 'debt_amount',
             width: 100,
             align: 'center',
         },
         {
             title: '赠送/返点账户抵扣金额',
-            dataIndex: 'count',
-            key: 'count',
+            dataIndex: 'gift_amount',
+            key: 'gift_amount',
             width: 100,
             align: 'center',
         },
         {
             title: '小金库抵扣金额',
-            dataIndex: 'discountcount',
-            key: 'discountcount',
+            dataIndex: 'warehouse_amount',
+            key: 'warehouse_amount',
             width: 100,
             align: 'center',
         },
         {
             title: '是否计提提成',
-            dataIndex: 'ispercent',
-            key: 'ispercent',
+            dataIndex: 'is_record_sale_income',
+            key: 'is_record_sale_income',
             width: 100,
             align: 'center',
         },
         {
             title: '是否扣减公司GMV',
-            dataIndex: 'iscompany',
-            key: 'iscompany',
+            dataIndex: 'is_decrease_company_gmv',
+            key: 'is_decrease_company_gmv',
             width: 100,
             align: 'center',
         },
         {
             title: '是否扣减销售GMV',
-            dataIndex: 'issaler',
-            key: 'issaler',
+            dataIndex: 'is_decrease_sale_gmv',
+            key: 'is_decrease_sale_gmv',
             width: 100,
             align: 'center',
         },
         {
             title: '核销时间',
-            dataIndex: 'offtime',
-            key: 'offtime',
+            dataIndex: 'created_at',
+            key: 'created_at',
             width: 100,
             align: 'center',
         },
         {
             title: '核销人员',
-            dataIndex: 'offperson',
-            key: 'offperson',
+            dataIndex: 'operator_name',
+            key: 'operator_name',
             width: 100,
             align: 'center',
         },

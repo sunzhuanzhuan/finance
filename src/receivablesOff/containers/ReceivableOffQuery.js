@@ -1,7 +1,8 @@
 import React from 'react'
-import { Form, Input, Button, Row, Select, DatePicker } from "antd";
+import { Form, Input, InputNumber, Button, Row, Select, DatePicker } from "antd";
 import SearchSelect from '@/components/SearchSelect';
 
+const { Option } = Select;
 const FormItem = Form.Item;
 
 class ReceivableOffQuery extends React.Component {
@@ -9,6 +10,14 @@ class ReceivableOffQuery extends React.Component {
 		super();
 		this.state = {
 		};
+	}
+	getSelectOption = key => {
+		const { queryOptions } = this.props;
+		if(!queryOptions[key]) return null;
+		return queryOptions[key].map(item => {
+			const { name, value } = item;
+			return <Option key={value} value={value}>{name}</Option>
+		})
 	}
 	getFormItem = compType => {
 		switch(compType) {
@@ -38,7 +47,7 @@ class ReceivableOffQuery extends React.Component {
 
 		return queryItems.map(item => {
 			const {label, compType, key} = item;
-			if(compType === 'operate')
+			if(compType === 'operate') {
 				return (
 					<FormItem key={key} className='operate-wrapper'>
 						{ showExport ? <Button type='primary' onClick={() => {this.handleSearch('export')}}>导出</Button> : null }
@@ -46,6 +55,32 @@ class ReceivableOffQuery extends React.Component {
 						<Button type='ghost' onClick={() => {this.handleSearch('reset')}}>重置</Button>
 					</FormItem>
 				)
+			}else if(compType === 'order_id_type') {
+				return (
+					<span key='rangeAndValue' className='order-id-type-wrapper'>
+					<FormItem className='order-id-type-item' >
+						{getFieldDecorator('receivables_aging_range', { initialValue: undefined })(
+							<Select 
+								placeholder="请选择" 
+								className='range-value'
+								filterOption={(input, option) => (
+									option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+								)}
+							>
+								{ this.getSelectOption('receivables_aging_range') }
+							</Select>
+						)}
+					</FormItem>
+					<span className='range-value-sign'>{'>'}</span>
+					<FormItem className='order-id-type-item' >
+						{getFieldDecorator('receivables_amount', { initialValue: undefined })(
+							<InputNumber className='range-value' min={0}/>
+						)}
+					</FormItem>
+				</span>
+				)
+			}
+				
 			return (
 				<FormItem key={key} label={label} >
 					{getFieldDecorator(key, { initialValue: undefined })(

@@ -77,7 +77,6 @@ class ReceivablesOffList extends React.Component {
 			showSizeChanger: true,
 			pageSizeOptions: ['20', '50', '100', '200']
 		};
-		console.log('sldkfjlsdkjflsdkjf', getOffListQueryKeys, getOffQueryItems(getOffListQueryKeys))
 		return <div className='rece-wrapper'>
 			<div className='rece-title'>应收账款核销</div>
 			<ReceivableOffQuery

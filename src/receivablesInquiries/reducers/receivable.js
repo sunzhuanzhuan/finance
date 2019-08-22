@@ -26,7 +26,6 @@ export const receSearchOptions = handleActions({
 // 预约订单应收款查询
 export const reservationList = handleActions({
 	[reservationList_success]: (state, action) => {
-		console.log('sldkfjlksdjflksdjf', action)
 		return { ...action.payload.data }
 	}
 }, {});

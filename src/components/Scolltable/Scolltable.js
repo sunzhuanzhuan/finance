@@ -49,7 +49,7 @@ class Scolltable extends React.Component {
 		const isIos = browserInfo.versions.ios;
 		return (
 			<div className={isIos ? 'is-ios' : 'is-windows'}>
-				{isIos ? <div className='scrollbar'>
+				{!isIos ? <div className='scrollbar'>
 					<div className='top'>
 						<div style={{ width: widthScroll, height: 20 }}></div>
 					</div>

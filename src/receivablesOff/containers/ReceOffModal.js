@@ -27,15 +27,15 @@ class ReceOffModal extends React.Component {
 		const { getFieldDecorator } = form;
 		if(type === 'preview') {
 			const totalWidth = getTotalWidth(columns);
-			const wrapperClass = 'preview-off';
+			const wrapperClass = 'rece-off-modal';
 			return (
-				<div className={wrapperClass}>
+				<div>
 					<Button type="primary" onClick={handleOk}>清空已选</Button>
 					<Scolltable 
 						isMoreThanOne 
 						wrapperClass={wrapperClass}
 						scrollClassName={`.${wrapperClass} .ant-table-body`}
-						widthScroll={totalWidth}
+						widthScroll={totalWidth * 1.3}
 					>
 						<Table
 							className='top-gap'
@@ -45,7 +45,7 @@ class ReceOffModal extends React.Component {
 							dataSource={dataSource}
 							size="small"
 							pagination={false}
-							scroll={{ y: 760, x: totalWidth * 2 }}
+							scroll={{ y: 760, x: totalWidth }}
 						/>
 					</Scolltable>
 				</div>

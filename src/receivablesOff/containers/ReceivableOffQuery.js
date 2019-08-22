@@ -13,8 +13,8 @@ class ReceivableOffQuery extends React.Component {
 	}
 	getSelectOption = key => {
 		const { queryOptions } = this.props;
-		if(!queryOptions[key]) return null;
-		return queryOptions[key].map(item => {
+		if(!queryOptions(key)) return null;
+		return queryOptions(key).map(item => {
 			const { name, value } = item;
 			return <Option key={value} value={value}>{name}</Option>
 		})

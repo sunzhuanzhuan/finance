@@ -69,30 +69,28 @@ export const getOffQueryItems = queryArr => {
 
 export const getOffAddFormItems = () => {
     return [
-        {label: '公司简称', key: 'company', compType: 'searchSelect'},
-        {label: '所属销售', key: 'debt', compType: 'searchSelect'},
-        {label: '本次可核销金额', key: 'salePerson', compType: 'input'},
-        {label: '本次核销金额', key: 'saleManage', compType: 'input', required: true},
-        {label: '核销类型', key: 'saler', compType: 'select', required: true},
-        {label: '抵扣账户/金额', key: 'area', compType: 'checkbox', optionKey: 'discount', required: true},
-        {label: '核销账户', key: 'time', compType: 'input'},
-        {label: '是否扣减公司GMV', key: 'compGMV', compType: 'radio', optionKey: 'GMV', required: true},
-        {label: '是否扣减销售GMV', key: 'saleGMV', compType: 'radio', optionKey: 'GMV', required: true},
-        {label: '核销订单是否计提提成', key: 'percentage', compType: 'radio', optionKey: 'payment', required: true},
-        {label: '核销说明', key: 'count', compType: 'upload'},
-        {label: '备注', key: 'goldCount', compType: 'textarea'},
+        {label: '公司简称', key: 'company_id', compType: 'searchSelect', required: true},
+        {label: '所属销售', key: 'sale_id', compType: 'searchSelect'},
+        {label: '本次核销金额', key: 'verification_amount', compType: 'inputNumber', required: true},
+        {label: '核销类型', key: 'type', compType: 'select', optionKey: 'type', required: true},
+        {label: '抵扣账户/金额', key: 'check_box_item', compType: 'checkbox', optionKey: 'discount', required: true},
+        {label: '核销账户金额', key: 'debt_amount', compType: 'input', required: true},
+        {label: '是否扣减公司GMV', key: 'is_decrease_company_gmv', compType: 'radio', optionKey: 'GMV', required: true},
+        {label: '是否扣减销售GMV', key: 'is_decrease_sale_gmv', compType: 'radio', optionKey: 'GMV', required: true},
+        {label: '是否计提提成', key: 'is_record_sale_income', compType: 'radio', optionKey: 'payment', required: true},
+        {label: '核销说明', key: 'attach', compType: 'upload'},
+
+        {label: '备注', key: 'remark', compType: 'textarea'},
     ]
 }
 
-export const getOffOptions = () => {
-    return {
+export const getOffOptions = (index) => {
+    const options =  {
         GMV: [
-            { label: '请选择' },
             { label: '扣减', value: 1 },
             { label: '不扣减', value: 0 }
         ],
         payment: [
-            { label: '请选择' },
             { label: '计提', value: 1 },
             { label: '不计提', value: 0 }
         ],
@@ -103,12 +101,12 @@ export const getOffOptions = () => {
             { label: '坏账清理', value: 3 }, 
             { label: '其他', value: 4 }, 
         ],
-        discount: [
-            { label: <span>赠送/返点<Input style={{width: 70, margin: '3px 10px 0'}} /><span>赠送/返点余额500.00，最多可抵扣500.00</span></span>, value: 1 }, 
-            { label: <span>小金库<Input style={{width: 70, margin: '10px 10px 0'}} /><span>小金库余额500.00，最多可抵扣500.00</span></span>, value: 2 }, 
-            { label: <span style={{marginTop: 14, display: 'inline-block'}}>无抵扣</span>, value: 3 }, 
+        offCheckOption: [
+            {label: '赠送/返点', value: 'gift_amount'}, 
+            {label: '小金库', value: 'warehouse_amount'}, 
         ]
-    }
+    };
+    return options[index] || []
 }
 
 export const getOffListColIndex = [

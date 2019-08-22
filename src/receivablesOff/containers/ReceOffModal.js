@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, Form, Table, Button, Input, Radio, Checkbox, Select, Icon } from "antd";
+import { Modal, Form, Table, Button, Input, Radio, Checkbox, Select, Icon, InputNumber, Upload } from "antd";
 import { getOffAddFormItems, getOffOptions } from '../constants';
 import { getTotalWidth } from '@/util';
 import { Scolltable } from '@/components';
@@ -51,12 +51,8 @@ class ReceOffModal extends React.Component {
 				</div>
 			)
 		}else if(type === 'off') {
-			const formItemLayout = {
-				labelCol: { span: 6 },
-				wrapperCol: { span: 14 },
-			};
 			return (
-				<Form {...formItemLayout}>
+				<Form>
 					{ this.getOffItemsComp() }
 				</Form>
 			)
@@ -86,15 +82,77 @@ class ReceOffModal extends React.Component {
 		}
 	}
 
+	handleChended = (e) => {
+		const { target } = e;
+		const { value, checked } = target;
+
+		this.setState({[value]: checked});
+	}
+
+	getCheckboxItem = () => {
+		const { form } = this.props;
+		const { getFieldDecorator } = form;
+		return getOffOptions('offCheckOption').map(item => {
+			const { label, value } = item;
+			const countTips = `${label}余额500.00，最多可抵扣500.00`
+			return (
+				<div key={value} className='checkbox-wrapper'>
+					<Checkbox 
+						checked={this.state[value]} 
+						value={value} 
+						onChange={this.handleChended}
+					>
+						{label}
+					</Checkbox>
+					{
+						this.state[value] ? 
+						<FormItem className='checkbox-form-item'>
+							{getFieldDecorator(value, 
+							{ 
+								initialValue: undefined,
+								rules: [
+									{
+										required: this.state[value],
+										message: `请输入${label}抵扣金额`,
+									}
+								],
+							})(
+								<InputNumber min={0} placeholder="请输入"/>
+							)}
+							<span className='checkbox-item-tips'>{countTips}</span>
+						</FormItem> : null
+					}
+				</div>
+				
+			)
+		})
+		
+	}
+
 	getOffItemsComp = () => {
 		const { form } = this.props;
 		const { getFieldDecorator } = form;
+		const formItemLayout = {
+			labelCol: { span: 6 },
+			wrapperCol: { span: 14 },
+		};
+		const formItemLayoutCheck = {
+			labelCol: { span: 6 },
+			wrapperCol: { span: 18 },
+		};
 
 		return getOffAddFormItems().map(item => {
 			const { key, label, compType, optionKey, required } = item;
-			const tips = compType === 'input' ? '请输入' : '请选择'
+			const tips = compType === 'input' ? '请输入' : '请选择';
+			if(key === 'check_box_item') {
+				return (
+					<FormItem key={key} label={label} {...formItemLayoutCheck} >
+						{this.getCheckboxItem(compType, optionKey)}
+					</FormItem>
+				)
+			}
 			return (
-				<FormItem key={key} label={label} >
+				<FormItem key={key} label={label} {...formItemLayout} >
 					{getFieldDecorator(key, 
 					{ 
 						initialValue: undefined,
@@ -116,6 +174,8 @@ class ReceOffModal extends React.Component {
 		switch(compType) {
 			case 'input':
 				return <Input placeholder="请输入"/>;
+			case 'inputNumber':
+				return <InputNumber className='common-input-numner' min={0} placeholder="请输入"/>;
 			case 'select':
 				return <Select placeholder="请输入"/>;
 			case 'searchSelect':
@@ -129,11 +189,23 @@ class ReceOffModal extends React.Component {
 							item={['company_id', 'name']}
 						/>;
 			case 'checkbox':
-				return <CheckboxGroup options={getOffOptions()[optionKey]} />;
+				return <CheckboxGroup options={getOffOptions(optionKey)} />;
 			case 'radio':
-				return <RadioGroup options={getOffOptions()[optionKey]}/>;
+				return <RadioGroup options={getOffOptions(optionKey)}/>;
 			case 'upload':
-				return <div placeholder="请输入"/>;
+				return  <>
+					<Upload 
+						action='https://www.mocky.io/v2/5cc8019d300000980a055e76'
+						listType='picture' 
+						className='upload-list-inline'
+						accept="image/png, image/gif, image/jpg"
+					>
+						<Button>
+							<Icon type="upload" /> 上传
+						</Button>
+					</Upload>
+					<div>支持多图，仅支持jpg\gif\png图片文件，单个文件不能超过3M</div>
+				</>;
 			case 'textarea':
 				return <TextArea autosize={{ minRows: 4, maxRows: 6 }} placeholder="请输入"/>;
 			default:
@@ -210,9 +282,19 @@ class ReceOffModal extends React.Component {
 export default Form.create()(ReceOffModal)
 function ConfirmModal(props) {
 	const { visible, title, fieldsValues, onOk, onCancel } = props;
-	const allFields = Object.keys(fieldsValues).map(key => {
-		const fieldInfo = getOffAddFormItems().find(fieldItem => fieldItem.key === key);
-		return `${fieldInfo.label}：${fieldsValues[key] || '-'}`;
+	const allFields = Object.keys(fieldsValues)
+		.filter(key => key !== 'gift_amount' && key !== 'warehouse_amount')
+		.map(key => {
+			const fieldInfo = getOffAddFormItems().find(fieldItem => fieldItem.key === key);
+			return `${fieldInfo.label}：${fieldsValues[key] || '-'}`;
+		});
+	let isShowDeduct = false;
+	const deductItems = getOffOptions('offCheckOption').map(item => {
+		const {value, label} = item;
+		if(fieldsValues[value]) {
+			isShowDeduct = true;
+			return <div key={value}>{`${label}：${fieldsValues[value] || '-'}`}</div>;
+		}
 	})
 
 	return (
@@ -233,6 +315,10 @@ function ConfirmModal(props) {
 							return <div key={item}>{item}</div>
 						})
 					}
+						<div className='deduct-wrapper'>
+							<div>抵扣账户/金额：</div>
+							{ isShowDeduct ? <div>{deductItems}</div> : '-' }
+						</div> 
 				</div>
 			</div>	
 			<div className='fields-tip'>

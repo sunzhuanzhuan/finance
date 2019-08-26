@@ -57,33 +57,49 @@ class ReceivableOffQuery extends React.Component {
 				)
 			}else if(compType === 'order_id_type') {
 				return (
-					<span key='rangeAndValue' className='order-id-type-wrapper'>
-					<FormItem className='order-id-type-item' >
-						{getFieldDecorator('receivables_aging_range', { initialValue: undefined })(
-							<Select 
-								placeholder="请选择" 
-								className='range-value'
-								filterOption={(input, option) => (
-									option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-								)}
-							>
-								{ this.getSelectOption('receivables_aging_range') }
-							</Select>
-						)}
+					<span key={key} className='order-id-type-wrapper'>
+						<FormItem className='order-id-type-item' >
+							{getFieldDecorator('receivables_aging_range')(
+								<Select 
+									placeholder="请选择" 
+									className='range-value'
+									filterOption={(input, option) => (
+										option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+									)}
+								>
+									{ this.getSelectOption('receivables_aging_range') }
+								</Select>
+							)}
+						</FormItem>
+						<span className='range-value-sign'>{'>'}</span>
+						<FormItem className='order-id-type-item' >
+							{getFieldDecorator('receivables_amount')(
+								<InputNumber className='range-value' min={0}/>
+							)}
+						</FormItem>
+					</span>
+				)
+			}else if(compType === 'number_range') {
+				return (
+					<FormItem key={key} label={label} className='number_range_wrapper'>
+						<FormItem className='number_range_item' >
+							{getFieldDecorator(`${key}_min`)(
+								<InputNumber className='range-value' min={0}/>
+							)}
+						</FormItem>
+						<span className='range-value-sign'>{'~'}</span>
+						<FormItem className='number_range_item' >
+							{getFieldDecorator(`${key}_max`)(
+								<InputNumber className='range-value' min={0}/>
+							)}
+						</FormItem>
 					</FormItem>
-					<span className='range-value-sign'>{'>'}</span>
-					<FormItem className='order-id-type-item' >
-						{getFieldDecorator('receivables_amount', { initialValue: undefined })(
-							<InputNumber className='range-value' min={0}/>
-						)}
-					</FormItem>
-				</span>
 				)
 			}
 				
 			return (
 				<FormItem key={key} label={label} >
-					{getFieldDecorator(key, { initialValue: undefined })(
+					{getFieldDecorator(key)(
 						this.getFormItem(compType)
 					)}
 				</FormItem>

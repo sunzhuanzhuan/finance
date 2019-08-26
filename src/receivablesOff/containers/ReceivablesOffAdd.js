@@ -209,6 +209,7 @@ class ReceivablesOfflist extends React.Component {
 				initialValue=''
 				width={800}
 				title='应收款核销'
+				action={this.props.getGoldenCompanyId}
 				handleCancel={this.handleModalCancel} 
 				handleOk={ () => {this.handleModalOk('off')}}
 			/>

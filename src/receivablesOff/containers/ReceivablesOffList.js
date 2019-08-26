@@ -45,8 +45,8 @@ class ReceivablesOffList extends React.Component {
 				const src = `/finance/receivableoff/detail`;
 				history.push(src);
 				return;
-			case 'preview':
-				return;
+			case 'check':
+				return this.setState({checkVisible: true});
 			case 'edit':
 				this.setState({editVisible: true})
 				return;
@@ -55,9 +55,15 @@ class ReceivablesOffList extends React.Component {
 		}
 	}
 
+	handleCloseModal = (modalType) => {
+		this.setState({
+			[modalType]: !this.state[modalType]
+		})
+	}
+
 	render() {
 		const { receivableOffList: { total = 0, page = 1, page_size = 20, list }, history } = this.props;
-		const { searchQuery, loading, addVisible, editVisible } = this.state;
+		const { searchQuery, loading, addVisible, editVisible, checkVisible } = this.state;
 		const totalWidth = getTotalWidth(getReceOffCol(getOffListColIndex));
 		const pagination = {
 			onChange: current => {
@@ -114,16 +120,46 @@ class ReceivablesOffList extends React.Component {
 				width={440}
 				title='选择公司'
 				action={this.props.getGoldenCompanyId}
-				handleCancel={() => {this.setState({addVisible: !addVisible})}} 
+				handleCancel={() => {this.handleCloseModal('addVisible')}} 
 			/>
 			<ReceOffModal 
 				type='off'
+				isEdit
 				visible={editVisible}
-				initialValue=''
+				initialValue={{isEdit: true}}
 				width={800}
 				title='应收款核销'
-				handleCancel={this.handleModalCancel} 
-				handleOk={ () => {this.handleModalOk('off')}}
+				action={this.props.getGoldenCompanyId}
+				handleCancel={() => {this.handleCloseModal('editVisible')}}
+				handleOk={ () => {this.handleCloseModal('editVisible')}}
+			/>
+			<ReceOffModal 
+				type='check'
+				visible={checkVisible}
+				footer={
+					[
+						<Button key="back" onClick={() => {this.handleCloseModal('checkVisible')}}>
+							返回
+						</Button>
+					]
+				}
+				initialValue={{
+					attach: undefined,
+					company_id: undefined,
+					debt_amount: undefined,
+					is_decrease_company_gmv: undefined,
+					is_decrease_sale_gmv: undefined,
+					is_record_sale_income: undefined,
+					remark: undefined,
+					sale_id: undefined,
+					type: undefined,
+					verification_amount: undefined,
+					gift_amount: 300,
+					warehouse_amount: 200
+				}}
+				width={800}
+				title='核销信息'
+				handleCancel={() => {this.handleCloseModal('checkVisible')}} 
 			/>
 		</div>
 	}

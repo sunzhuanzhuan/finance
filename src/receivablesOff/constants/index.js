@@ -8,26 +8,26 @@ export const getTabOptions = [
 ]
 
 export const getOffListQueryKeys = [
-    'verification_code', 'type', 'company_id', 'sale_id', 'time', 'is_record_sale_income', 'is_decrease_company_gmv', 'is_decrease_sale_gmv', 'gift_amount_range', 'warehouse_amount_range', 'invoice_application_id', 'order_id_type', 'operate'
+    'verification_code', 'type', 'company_id', 'sale_id', 'time', 'is_record_sale_income', 'is_decrease_company_gmv', 'is_decrease_sale_gmv', 'gift_amount', 'warehouse_amount', 'invoice_application_id', 'order_id_type', 'operate'
 ];
 
 export const getOffDetailQueryKeys = {
     yuyueyuyue: [
         'verification_code', 'company_id', 'sale_id', 'order_id', 'time', 'region', 'project_id', 
         'requirement_id', 'pid', 'type', 'order_complete_time', 'is_decrease_sale_gmv', 
-        'is_decrease_company_gmv', 'is_record_sale_income', 'gift_amount_range', 
-        'warehouse_amount_range', 'invoice_application_id', 'brand_id', 'operate'
+        'is_decrease_company_gmv', 'is_record_sale_income', 'gift_amount', 
+        'warehouse_amount', 'invoice_application_id', 'brand_id', 'operate'
     ],
     weishantou: [
         'verification_code', 'company_id', 'sale_id', 'date2', 'time', 'region', 'project_id', 
         'pid', 'type', 'is_decrease_sale_gmv', 'is_decrease_company_gmv', 
-        'is_record_sale_income', 'active_time', 'gift_amount_range', 'warehouse_amount_range', 'invoice_application_id', 
+        'is_record_sale_income', 'active_time', 'gift_amount', 'warehouse_amount', 'invoice_application_id', 
         'brand_id', 'operate'
     ],
     tuozhanyewu: [
         'verification_code', 'company_id', 'sale_id', 'date2', 'time', 'region', 'project_id', 'type', 
         'is_decrease_sale_gmv', 'is_decrease_company_gmv', 'is_record_sale_income', 'offtime', 
-        'gift_amount_range', 'warehouse_amount_range', 'invoice_application_id', 'brand_id', 'operate' 
+        'gift_amount', 'warehouse_amount_range', 'invoice_application_id', 'brand_id', 'operate' 
     ],
 };
 
@@ -50,8 +50,8 @@ export const getOffQueryItems = queryArr => {
         {label: '是否计提提成', key: 'is_record_sale_income', compType: 'input'},
         {label: '是否扣减公司GMV', key: 'is_decrease_company_gmv', compType: 'input'},
         {label: '是否扣减销售GMV', key: 'is_decrease_sale_gmv', compType: 'input'},
-        {label: '赠送/返点账户抵扣金额', key: 'gift_amount_range', compType: 'input'},
-        {label: '小金库抵扣金额', key: 'warehouse_amount_range', compType: 'input'},
+        {label: '赠送/返点账户抵扣金额', key: 'gift_amount', compType: 'number_range'},
+        {label: '小金库抵扣金额', key: 'warehouse_amount', compType: 'number_range'},
         {label: '区域', key: 'region', compType: 'select'},
         {label: '所属项目', key: 'project_id', compType: 'input'},
         {label: '品牌', key: 'brand_id', compType: 'input'},
@@ -69,17 +69,16 @@ export const getOffQueryItems = queryArr => {
 
 export const getOffAddFormItems = () => {
     return [
-        {label: '公司简称', key: 'company_id', compType: 'searchSelect', required: true},
-        {label: '所属销售', key: 'sale_id', compType: 'searchSelect'},
-        {label: '本次核销金额', key: 'verification_amount', compType: 'inputNumber', required: true},
+        {label: '公司简称', key: 'company_id', compType: 'searchSelect', required: true, disabled: true},
+        {label: '所属销售', key: 'sale_id', compType: 'searchSelect', disabled: true},
+        {label: '本次核销金额', key: 'verification_amount', compType: 'inputNumber', required: true, disabled: true},
         {label: '核销类型', key: 'type', compType: 'select', optionKey: 'type', required: true},
-        {label: '抵扣账户/金额', key: 'check_box_item', compType: 'checkbox', optionKey: 'discount', required: true},
-        {label: '核销账户金额', key: 'debt_amount', compType: 'input', required: true},
+        {label: '抵扣账户/金额', key: 'check_box_item', compType: 'checkbox', optionKey: 'discount', required: true, disabled: true},
+        {label: '核销账户金额', key: 'debt_amount', compType: 'input', required: true, disabled: true},
         {label: '是否扣减公司GMV', key: 'is_decrease_company_gmv', compType: 'radio', optionKey: 'GMV', required: true},
         {label: '是否扣减销售GMV', key: 'is_decrease_sale_gmv', compType: 'radio', optionKey: 'GMV', required: true},
         {label: '是否计提提成', key: 'is_record_sale_income', compType: 'radio', optionKey: 'payment', required: true},
         {label: '核销说明', key: 'attach', compType: 'upload'},
-
         {label: '备注', key: 'remark', compType: 'textarea'},
     ]
 }
@@ -474,7 +473,7 @@ export const getReceOffCol = ( col, action ) => {
             render:(_, record) => {
                 return <>
                     <a onClick={ () => { action('detail', record)}}>订单详情</a>
-                    <a onClick={ () => { action('preview', record)}}>查看</a>
+                    <a onClick={ () => { action('check', record)}}>查看</a>
                     <a onClick={ () => { action('edit', record)}}>编辑</a>
                 </>
             }

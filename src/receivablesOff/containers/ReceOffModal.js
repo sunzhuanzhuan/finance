@@ -23,63 +23,71 @@ class ReceOffModal extends React.Component {
 	}
 
 	getModalContent = () => {
-		const { type, columns, dataSource, handleOk, action, form } = this.props;
-		const { getFieldDecorator } = form;
+		const { type, initialValue } = this.props;
 		if(type === 'preview') {
-			const totalWidth = getTotalWidth(columns);
-			const wrapperClass = 'rece-off-modal';
-			return (
-				<div>
-					<Button type="primary" onClick={handleOk}>清空已选</Button>
-					<Scolltable 
-						isMoreThanOne 
-						wrapperClass={wrapperClass}
-						scrollClassName={`.${wrapperClass} .ant-table-body`}
-						widthScroll={totalWidth * 1.3}
-					>
-						<Table
-							className='top-gap'
-							bordered
-							rowKey='id'
-							columns={columns}
-							dataSource={dataSource}
-							size="small"
-							pagination={false}
-							scroll={{ y: 760, x: totalWidth }}
-						/>
-					</Scolltable>
-				</div>
-			)
+			return this.getPreviewTableComp();
 		}else if(type === 'off') {
-			return (
-				<Form>
-					{ this.getOffItemsComp() }
-				</Form>
-			)
+			return this.getOffFormComp();
 		}else if(type === 'add') {
-			const formItemLayout = { labelCol: { span: 6 }, wrapperCol: { span: 16 }, };
-			return (
-				<Form>
-					<FormItem label='公司简称' {...formItemLayout}>
-						{getFieldDecorator('company_id', {
-							rules: [
-								{ required: true, message: '请先输入公司简称!' },
-							]
-						})(
-							<SearchSelect
-								selfWidth
-								placeholder='请选择公司'
-								action={action}
-								keyWord='company_name'
-								dataToList={res => { return res.data }}
-								item={['company_id', 'name']}
-								style={{width: 250}}
-							/>
-						)}
-					</FormItem>
-				</Form>
-			)
+			return this.getAddComp();
+		}else if(type === 'check') {
+			return getValueCheckComp(initialValue);
 		}
+	}
+
+	getPreviewTableComp = () => {
+		const { columns, dataSource, handleOk } = this.props;
+		const totalWidth = getTotalWidth(columns);
+		const wrapperClass = 'rece-off-modal';
+		return (
+			<div>
+				<Button type="primary" onClick={handleOk}>清空已选</Button>
+				<Scolltable 
+					isMoreThanOne 
+					wrapperClass={wrapperClass}
+					scrollClassName={`.${wrapperClass} .ant-table-body`}
+					widthScroll={totalWidth * 1.3}
+				>
+					<Table
+						className='top-gap'
+						bordered
+						rowKey='id'
+						columns={columns}
+						dataSource={dataSource}
+						size="small"
+						pagination={false}
+						scroll={{ y: 760, x: totalWidth }}
+					/>
+				</Scolltable>
+			</div>
+		)
+	}
+
+	getAddComp = () => {
+		const { form, action } = this.props;
+		const { getFieldDecorator } = form;
+		const formItemLayout = { labelCol: { span: 6 }, wrapperCol: { span: 16 }, };
+		return (
+			<Form>
+				<FormItem label='公司简称' {...formItemLayout}>
+					{getFieldDecorator('company_id', {
+						rules: [
+							{ required: true, message: '请先输入公司简称!' },
+						]
+					})(
+						<SearchSelect
+							selfWidth
+							placeholder='请选择公司'
+							action={action}
+							keyWord='company_name'
+							dataToList={res => { return res.data }}
+							item={['company_id', 'name']}
+							style={{width: 250}}
+						/>
+					)}
+				</FormItem>
+			</Form>
+		)
 	}
 
 	handleChended = (e) => {
@@ -89,7 +97,7 @@ class ReceOffModal extends React.Component {
 		this.setState({[value]: checked});
 	}
 
-	getCheckboxItem = () => {
+	getCheckboxItem = (isStatic) => {
 		const { form } = this.props;
 		const { getFieldDecorator } = form;
 		return getOffOptions('offCheckOption').map(item => {
@@ -98,6 +106,7 @@ class ReceOffModal extends React.Component {
 			return (
 				<div key={value} className='checkbox-wrapper'>
 					<Checkbox 
+						disabled={isStatic}
 						checked={this.state[value]} 
 						value={value} 
 						onChange={this.handleChended}
@@ -117,7 +126,7 @@ class ReceOffModal extends React.Component {
 									}
 								],
 							})(
-								<InputNumber min={0} placeholder="请输入"/>
+								<InputNumber disabled={isStatic} min={0} placeholder="请输入"/>
 							)}
 							<span className='checkbox-item-tips'>{countTips}</span>
 						</FormItem> : null
@@ -129,8 +138,8 @@ class ReceOffModal extends React.Component {
 		
 	}
 
-	getOffItemsComp = () => {
-		const { form } = this.props;
+	getOffFormComp = () => {
+		const { form, isEdit } = this.props;
 		const { getFieldDecorator } = form;
 		const formItemLayout = {
 			labelCol: { span: 6 },
@@ -141,46 +150,54 @@ class ReceOffModal extends React.Component {
 			wrapperCol: { span: 18 },
 		};
 
-		return getOffAddFormItems().map(item => {
-			const { key, label, compType, optionKey, required } = item;
-			const tips = compType === 'input' ? '请输入' : '请选择';
-			if(key === 'check_box_item') {
-				return (
-					<FormItem key={key} label={label} {...formItemLayoutCheck} >
-						{this.getCheckboxItem(compType, optionKey)}
-					</FormItem>
-				)
-			}
-			return (
-				<FormItem key={key} label={label} {...formItemLayout} >
-					{getFieldDecorator(key, 
-					{ 
-						initialValue: undefined,
-						rules: [
-							{
-								required,
-								message: `${tips}${label}`,
-							}
-						],
-					})(
-						this.getFormItem(compType, optionKey)
-					)}
-				</FormItem>
-			)
-		})
+		return (
+			<Form>
+				{
+					getOffAddFormItems().map(item => {
+						const { key, label, compType, optionKey, required, disabled } = item;
+						const tips = compType === 'input' ? '请输入' : '请选择';
+						const isStatic = isEdit && disabled;
+
+						if(key === 'check_box_item')
+							return (
+								<FormItem key={key} label={label} {...formItemLayoutCheck} >
+									{this.getCheckboxItem(isStatic)}
+								</FormItem>
+							)
+						return (
+							<FormItem key={key} label={label} {...formItemLayout} >
+								{getFieldDecorator(key, 
+								{ 
+									initialValue: undefined,
+									rules: [
+										{
+											required,
+											message: `${tips}${label}`,
+										}
+									],
+								})(
+									this.getFormItem(compType, optionKey, isStatic)
+								)}
+							</FormItem>
+						)
+					})
+				}
+			</Form>
+		)
 	}
 
-	getFormItem = (compType, optionKey) => {
+	getFormItem = (compType, optionKey, disabled) => {
 		switch(compType) {
 			case 'input':
-				return <Input placeholder="请输入"/>;
+				return <Input disabled={disabled} placeholder="请输入"/>;
 			case 'inputNumber':
-				return <InputNumber className='common-input-numner' min={0} placeholder="请输入"/>;
+				return <InputNumber disabled={disabled} className='common-input-numner' min={0} max={2} placeholder="请输入"/>;
 			case 'select':
-				return <Select placeholder="请输入"/>;
+				return <Select disabled={disabled} placeholder="请输入"/>;
 			case 'searchSelect':
 				return <SearchSelect
-							action={this.handleSelectSearch} 
+							disabled={disabled}
+							action={this.props.action} 
 							style={{ width: '100%' }}
 							placeholder='请选择'
 							getPopupContainer={() => document.querySelector('.rece-query')}
@@ -189,9 +206,9 @@ class ReceOffModal extends React.Component {
 							item={['company_id', 'name']}
 						/>;
 			case 'checkbox':
-				return <CheckboxGroup options={getOffOptions(optionKey)} />;
+				return <CheckboxGroup disabled={disabled} options={getOffOptions(optionKey)} />;
 			case 'radio':
-				return <RadioGroup options={getOffOptions(optionKey)}/>;
+				return <RadioGroup disabled={disabled} options={getOffOptions(optionKey)}/>;
 			case 'upload':
 				return  <>
 					<Upload 
@@ -222,7 +239,8 @@ class ReceOffModal extends React.Component {
 
 		if(type === 'off') {
 			form.validateFields((errs, values) => {
-				if(errs) return;
+				// if(errs) return;
+				console.log('lsdkjflksdjflsdkjf', values)
 				this.setState({fieldsValues: values, previewVisible: true});
 			})
 		}else if(type === 'edit') {
@@ -256,7 +274,7 @@ class ReceOffModal extends React.Component {
 		return [
 				<Modal
 					key='commonModal'
-					wrapClassName='rece-off-modal'
+					wrapClassName='rece-off-modal rece-off-confirm-modal'
 					visible={visible}
 					width={width}
 					title={title}
@@ -282,21 +300,7 @@ class ReceOffModal extends React.Component {
 export default Form.create()(ReceOffModal)
 function ConfirmModal(props) {
 	const { visible, title, fieldsValues, onOk, onCancel } = props;
-	const allFields = Object.keys(fieldsValues)
-		.filter(key => key !== 'gift_amount' && key !== 'warehouse_amount')
-		.map(key => {
-			const fieldInfo = getOffAddFormItems().find(fieldItem => fieldItem.key === key);
-			return `${fieldInfo.label}：${fieldsValues[key] || '-'}`;
-		});
-	let isShowDeduct = false;
-	const deductItems = getOffOptions('offCheckOption').map(item => {
-		const {value, label} = item;
-		if(fieldsValues[value]) {
-			isShowDeduct = true;
-			return <div key={value}>{`${label}：${fieldsValues[value] || '-'}`}</div>;
-		}
-	})
-
+	
 	return (
 		<Modal
 			wrapClassName='rece-off-confirm-modal'
@@ -307,23 +311,52 @@ function ConfirmModal(props) {
 			onCancel={onCancel}
 			onOk={onOk}
 		>
+			{getValueCheckComp(fieldsValues, true)}
+		</Modal>
+	)
+}
+
+function getValueCheckComp(fieldsValues, isConfirm) {
+	const className = isConfirm ? 'fields-con' : 'flex-fields-con'
+	const allFields = getOffAddFormItems().map(item => {
+		let isShowDeduct;
+		const { label, key } = item;
+		const deductItems = getOffOptions('offCheckOption').map(item => {
+			const {value, label} = item;
+			if(fieldsValues[value]) {
+				isShowDeduct = true;
+				return <div key={value}>{`${label}：${fieldsValues[value] || '-'}`}</div>;
+			}
+		});
+
+		if( key === 'check_box_item')
+			return (
+				<div className='deduct-wrapper'>
+					<div>{label}：</div>
+					{ isShowDeduct ? <div>{deductItems}</div> : '-' }
+				</div> 
+			)
+		return `${label}：${fieldsValues[key] || '-'}`
+	})
+
+	return (
+		<>
 			<div className='fields-info'>
-				<Icon type="info-circle" className='fields-icon' />
-				<div className='fields-con'>
+				{ isConfirm ? <Icon type="info-circle" className='fields-icon' /> : null }
+				<div className={className}>
 					{
 						allFields.map(item => {
 							return <div key={item}>{item}</div>
 						})
 					}
-						<div className='deduct-wrapper'>
-							<div>抵扣账户/金额：</div>
-							{ isShowDeduct ? <div>{deductItems}</div> : '-' }
-						</div> 
 				</div>
 			</div>	
-			<div className='fields-tip'>
-				核销后无法撤回，请核对以上信息，谨慎操作，是否确认核销操作？
-			</div>
-		</Modal>
+			{
+				isConfirm ? 
+				<div className='fields-tip'>
+					核销后无法撤回，请核对以上信息，谨慎操作，是否确认核销操作？
+				</div> : null
+			}
+		</>
 	)
 }

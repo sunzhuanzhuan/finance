@@ -56,19 +56,19 @@ class CompleteApplyList extends Component {
 	submitStepA = (show) => () => {
 		this.setState({ stepA: show })
 	}
-	submitStepB = async () => {
+	submitStepB = () => {
 		let { detail: { id = 0 } } = this.props;
 		this.setState({ stepBLoading: true })
-		let data = await createAssociation({
+		createAssociation({
 			id,
 			orders: this.totalBox.totalItem
-		})
-		this.setState({ stepBLoading: false })
-		if (data.code === 1000) {
+		}).then((data) => {
+			this.setState({ stepBLoading: false })
 			this.success(data)
-		} else {
-			message.error(data.msg || '操作失败', 2)
-		}
+		}).catch(({ errorMsg }) => {
+			this.setState({ stepBLoading: false })
+			message.error(errorMsg || '操作失败', 2)
+		})
 		this.submitStepA(false)()
 	}
 	success = (data) => {

@@ -32,9 +32,9 @@ export const getOffDetailQueryKeys = {
 };
 
 export const getOffAddQueryKeys = {
-    yuyueyuyue: ['order_id', 'invoice_application_id', 'order_complete_time', 'project_id', 'brand_id', 'pid', 'account_id', 'operate'],
-    weishantou: ['order_id', 'active_time', 'brand_id', 'invoice_application_id', 'project_id', 'pid', 'account_id', 'operate'],
-    tuozhanyewu: ['order_id', 'invoice_application_id', 'offtime', 'brand_id', 'project_id', 'operate'],
+    yuyueyuyue: ['invoice_application_id', 'order_id', 'order_complete_time', 'brand_id', 'project_id', 'requirement_id', 'pid', 'account_id', 'operate'],
+    weishantou: ['date2', 'active_time', 'brand_id', 'invoice_application_id', 'project_id', 'pid', 'account_id', 'operate'],
+    tuozhanyewu: ['date2', 'invoice_application_id', 'offtime', 'brand_id', 'project_id', 'operate'],
 };
 
 export const getOffQueryItems = queryArr => {
@@ -67,6 +67,12 @@ export const getOffQueryItems = queryArr => {
     return queryArr.map(item => allQuery.find(queryItem => queryItem.key === item));
 }
 
+const validateRemarkText = (rule, value, callback) => {
+    if(value.trim().length > 50) {
+        callback('最多输入50个汉字');
+    }
+    callback();
+};
 export const getOffAddFormItems = () => {
     return [
         {label: '公司简称', key: 'company_id', compType: 'searchSelect', required: true, disabled: true},
@@ -79,7 +85,7 @@ export const getOffAddFormItems = () => {
         {label: '是否扣减销售GMV', key: 'is_decrease_sale_gmv', compType: 'radio', optionKey: 'GMV', required: true},
         {label: '是否计提提成', key: 'is_record_sale_income', compType: 'radio', optionKey: 'payment', required: true},
         {label: '核销说明', key: 'attach', compType: 'upload'},
-        {label: '备注', key: 'remark', compType: 'textarea'},
+        {label: '备注', key: 'remark', compType: 'textarea', validator: validateRemarkText},
     ]
 }
 
@@ -103,6 +109,7 @@ export const getOffOptions = (index) => {
         offCheckOption: [
             {label: '赠送/返点', value: 'gift_amount'}, 
             {label: '小金库', value: 'warehouse_amount'}, 
+            {label: '无抵扣', value: 'no'}, 
         ]
     };
     return options[index] || []

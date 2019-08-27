@@ -15,7 +15,8 @@ class ReceOffModal extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			fieldsValues: {}
+			fieldsValues: {},
+			no: true
 		};
 	}
 	componentDidMount() {
@@ -90,11 +91,18 @@ class ReceOffModal extends React.Component {
 		)
 	}
 
-	handleChended = (e) => {
+	handleChecked = (e) => {
 		const { target } = e;
 		const { value, checked } = target;
-
-		this.setState({[value]: checked});
+		if(checked && value !== 'no') {
+			this.setState({no: false});
+		}else if(checked && value === 'no') {
+			this.setState({gift_amount: false, warehouse_amount: false})
+		}
+		
+		this.setState({[value]: checked}, () => {
+			this.handleChangeIptNum();
+		});
 	}
 
 	getCheckboxItem = (isStatic) => {
@@ -102,19 +110,19 @@ class ReceOffModal extends React.Component {
 		const { getFieldDecorator } = form;
 		return getOffOptions('offCheckOption').map(item => {
 			const { label, value } = item;
-			const countTips = `${label}余额500.00，最多可抵扣500.00`
+			const countTips = `${label}余额500.00，最多可抵扣500.00`;
 			return (
 				<div key={value} className='checkbox-wrapper'>
 					<Checkbox 
 						disabled={isStatic}
 						checked={this.state[value]} 
 						value={value} 
-						onChange={this.handleChended}
+						onChange={this.handleChecked}
 					>
 						{label}
 					</Checkbox>
 					{
-						this.state[value] ? 
+						this.state[value] && value !== 'no' ? 
 						<FormItem className='checkbox-form-item'>
 							{getFieldDecorator(value, 
 							{ 
@@ -126,7 +134,12 @@ class ReceOffModal extends React.Component {
 									}
 								],
 							})(
-								<InputNumber disabled={isStatic} min={0} placeholder="请输入"/>
+								<InputNumber 
+									disabled={isStatic} 
+									min={0} placeholder="请输入"
+									// precision={2}
+									onBlur={val => {this.handleChangeIptNum(value, val)}}
+								/>
 							)}
 							<span className='checkbox-item-tips'>{countTips}</span>
 						</FormItem> : null
@@ -154,7 +167,7 @@ class ReceOffModal extends React.Component {
 			<Form>
 				{
 					getOffAddFormItems().map(item => {
-						const { key, label, compType, optionKey, required, disabled } = item;
+						const { key, label, compType, optionKey, required, disabled, validator } = item;
 						const tips = compType === 'input' ? '请输入' : '请选择';
 						const isStatic = isEdit && disabled;
 
@@ -170,13 +183,15 @@ class ReceOffModal extends React.Component {
 								{ 
 									initialValue: undefined,
 									rules: [
-										{
+										validator ? {
+											validator
+										} : {
 											required,
 											message: `${tips}${label}`,
 										}
 									],
 								})(
-									this.getFormItem(compType, optionKey, isStatic)
+									this.getFormItem(key, compType, optionKey, isStatic)
 								)}
 							</FormItem>
 						)
@@ -186,12 +201,29 @@ class ReceOffModal extends React.Component {
 		)
 	}
 
-	getFormItem = (compType, optionKey, disabled) => {
+	handleChangeIptNum = () => {
+		const { form } = this.props;
+		const offCountObj = form.getFieldsValue(['verification_amount', 'gift_amount', 'warehouse_amount']);
+		const { verification_amount = 0, gift_amount = 0, warehouse_amount = 0 } = offCountObj;
+
+		const debt_amount = verification_amount - gift_amount - warehouse_amount;
+
+		form.setFieldsValue({debt_amount})
+	}
+
+	getFormItem = (key, compType, optionKey, disabled) => {
 		switch(compType) {
 			case 'input':
 				return <Input disabled={disabled} placeholder="请输入"/>;
 			case 'inputNumber':
-				return <InputNumber disabled={disabled} className='common-input-numner' min={0} max={2} placeholder="请输入"/>;
+				return <InputNumber 
+					disabled={disabled} 
+					className='common-input-numner' 
+					min={0} max={2} 
+					placeholder="请输入"
+					// precision={2}
+					onBlur={value => {this.handleChangeIptNum(key, value)}}
+				/>;
 			case 'select':
 				return <Select disabled={disabled} placeholder="请输入"/>;
 			case 'searchSelect':

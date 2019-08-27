@@ -272,7 +272,6 @@ class ReceOffModal extends React.Component {
 		if(type === 'off') {
 			form.validateFields((errs, values) => {
 				// if(errs) return;
-				console.log('lsdkjflksdjflsdkjf', values)
 				this.setState({fieldsValues: values, previewVisible: true});
 			})
 		}else if(type === 'edit') {

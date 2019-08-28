@@ -11,6 +11,10 @@ class ReceivableQuery extends React.Component {
 		this.state = {
 		};
 	}
+	componentDidMount() {
+		const { form, initialValue = {} } = this.props;
+		form.setFieldsValue(initialValue);
+	}
 	getSelectOption = key => {
 		const { queryOptions = {}, isList } = this.props;
 		if(!queryOptions[key]) return null;

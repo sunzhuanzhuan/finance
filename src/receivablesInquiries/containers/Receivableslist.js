@@ -44,6 +44,13 @@ class Receivableslist extends React.Component {
 		downloadByATag(`/api/receivables/query/exportCompanyList?${qs.stringify(searchQuery)}`);
 	}
 
+	handleJumpToDetail = receivables_aging_range => {
+		this.props.history.push({
+			pathname: '/finance/receivable/detail',
+			search: `?${qs.stringify({receivables_aging_range})}`,
+		});
+	}
+
 	render() {
 		const { 
 			receivableList: { total = {}, list = [], statistic = {}}, 
@@ -59,7 +66,7 @@ class Receivableslist extends React.Component {
 				<>回款待分配金额：<span className='total-color'>{total_wait_allocation_amount}</span></>
 			</div>
 		);
-		const totalWidth = getTotalWidth(receivableCol);
+		const totalWidth = getTotalWidth(receivableCol());
 		const pagination = {
 			// onChange: current => {
 			// 	Object.assign(searchQuery, {page: current});
@@ -93,9 +100,9 @@ class Receivableslist extends React.Component {
 			<Alert className='list-total-info' message={TotalMsg} type="warning" showIcon />
 			<Scolltable scrollClassName='.ant-table-body' widthScroll={totalWidth}>
 				<Table 
-					className='receivable-tablef'
+					className='receivable-table'
 					rowKey='company_name' 
-					columns={receivableCol} 
+					columns={receivableCol(this.handleJumpToDetail)} 
 					dataSource={[totalRaw, ...list]} 
 					bordered 
 					pagination={pagination} 
@@ -109,7 +116,95 @@ class Receivableslist extends React.Component {
 
 const mapStateToProps = (state) => {
 	return {
-		receivableList: state.receivable.receivableList,
+		// receivableList: state.receivable.receivableList,
+		receivableList: {
+			"total": {
+				"receivables_amount": 1,
+				"wait_allocation_amount": 4,
+				"M0": 600,
+				"M1": 800,
+				"M2": 800,
+				"M3": 800,
+				"M4": 800,
+				"M5": 800,
+				"M6": 800,
+				"M7": 800,
+				"M8": 800,
+				"M9": 800,
+				"M10-M12": 800,
+				"-M12": 800,
+				"M12-": 800,
+				"M12-M24": 800,
+				"M24-M36": 800,
+				"M36-M48": 800,
+				"M48-M60": 800,
+				"M60-": 800,
+				"modified_at": "2019-08-16 18:50:56"
+			},
+			"list": [
+				{
+					"company_name": "野韭菜",
+					"salesman_region": "华北",
+					"sale_name": "林明",                
+					"sale_supervisor_name": "张吉",
+					"sale_manager_name": "徐涛", 
+					"receivables_amount": 1,
+					"wait_allocation_amount": 4,
+					"M0": 600,
+					"M1": 800,
+					"M2": 800,
+					"M3": 800,
+					"M4": 800,
+					"M5": 800,
+					"M6": 800,
+					"M7": 800,
+					"M8": 800,
+					"M9": 800,
+					"M10-M12": 800,
+					"-M12": 800,
+					"M12-": 800,
+					"M12-M24": 800,
+					"M24-M36": 800,
+					"M36-M48": 800,
+					"M48-M60": 800,
+					"M60-": 800,
+					"modified_at": "2019-08-16 18:50:56"
+				},
+				{
+					"company_name": "野韭菜2",
+					"salesman_region": "华北",
+					"sale_name": "林明",                
+					"sale_supervisor_name": "张吉",
+					"sale_manager_name": "徐涛", 
+					"receivables_amount": 1,
+					"wait_allocation_amount": 4,
+					"M0": 600,
+					"M1": 800,
+					"M2": 800,
+					"M3": 800,
+					"M4": 800,
+					"M5": 800,
+					"M6": 800,
+					"M7": 800,
+					"M8": 800,
+					"M9": 800,
+					"M10-M12": 800,
+					"-M12": 800,
+					"M12-": 800,
+					"M12-M24": 800,
+					"M24-M36": 800,
+					"M36-M48": 800,
+					"M48-M60": 800,
+					"M60-": 800,
+					"modified_at": "2019-08-16 18:50:56"
+				}
+			],
+			"statistic": {
+				"company_num": "4800.00",
+				"total_arrears_amount": "3800.00",
+				"total_wait_allocation_amount": "1000.00"
+			}
+		},
 		receSearchOptions: state.receivable.receSearchOptions,
 	}
 }

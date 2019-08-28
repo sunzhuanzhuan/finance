@@ -32,7 +32,6 @@ class ReceivablesDetail extends React.Component {
 				message.error(errorMsg || '列表加载失败，请重试！');
 			})
 		}
-
 	}
 
 	handleExportList = key => {
@@ -40,7 +39,8 @@ class ReceivablesDetail extends React.Component {
 	}
 
 	getTabPaneComp = () => {
-		const { receivable = {} } = this.props;
+		const { receivable = {}, location } = this.props;
+		const search = qs.parse(location.search.substring(1));
 		const { loading } = this.state;
 		const { receSearchOptions } = receivable;
 		const defaultQuery = { page: 1, page_size: 20 };
@@ -80,6 +80,7 @@ class ReceivablesDetail extends React.Component {
 				<TabPane tab={tabTitle} key={key} className={wrapperClass}>
 					<ReceivableQuery 
 						showExport
+						initialValue={search}
 						queryItems={getQueryItems(getQueryKeys[key])}
 						queryOptions={receSearchOptions}
 						handleSearch={searchQuery => {this.handleSearch(key, searchQuery)}} 

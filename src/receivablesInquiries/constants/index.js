@@ -240,7 +240,14 @@ export const getReceivableDetailCol = keys => {
     return keys.map(item => allCols.find(queryItem => queryItem.key === item));
 }
 
-export const receivableCol = [
+const mRender = (data = '-', mKey, handleJump) => {
+    const className = data ? 'detail_entry_comp' : '';
+    return (
+        <div className={className} onClick={() => {handleJump(mKey)}}>{data}</div>
+    )
+}
+
+export const receivableCol = handleJump => [
     {
         title: '公司简称',
         dataIndex: 'company_name',
@@ -274,91 +281,91 @@ export const receivableCol = [
         dataIndex: 'M0',
         key: 'M0',
         width: 100,
-        render
+        render: data => mRender(data, 2, handleJump) 
     },
     {
         title: 'M1',
         dataIndex: 'M1',
         key: 'M1',
         width: 100,
-        render
+        render: data => mRender(data, 3, handleJump)
     },
     {
         title: 'M2',
         dataIndex: 'M2',
         key: 'M2',
         width: 100,
-        render
+        render: data => mRender(data, 4, handleJump)
     },
     {
         title: 'M3',
         dataIndex: 'M3',
         key: 'M3',
         width: 100,
-        render
+        render: data => mRender(data, 5, handleJump)
     },
     {
         title: 'M4',
         dataIndex: 'M4',
         key: 'M4',
         width: 100,
-        render
+        render: data => mRender(data, 6, handleJump)
     },
     {
         title: 'M5',
         dataIndex: 'M5',
         key: 'M5',
         width: 100,
-        render
+        render: data => mRender(data, 7, handleJump)
     },
     {
         title: 'M6',
         dataIndex: 'M6',
         key: 'M6',
         width: 100,
-        render
+        render: data => mRender(data, 8, handleJump)
     },
     {
         title: 'M7',
         dataIndex: 'M7',
         key: 'M7',
         width: 100,
-        render
+        render: data => mRender(data, 9, handleJump)
     },
     {
         title: 'M8',
         dataIndex: 'M8',
         key: 'M8',
         width: 100,
-        render
+        render: data => mRender(data, 10, handleJump)
     },
     {
         title: 'M9',
         dataIndex: 'M9',
         key: 'M9',
         width: 100,
-        render
+        render: data => mRender(data, 11, handleJump)
     },
     {
         title: 'M10-M12',
         dataIndex: 'M10-M12',
         key: 'M10-M12',
         width: 100,
-        render
+        render: data => mRender(data, 12, handleJump)
     },
     {
         title: 'M12以内',
         dataIndex: '-M12',
         key: '-M12',
         width: 100,
-        render
+        render: data => mRender(data, 13, handleJump)
     },
     {
         title: 'M12以上',
         dataIndex: 'M12+',
         key: 'M12+',
         width: 100,
-        render
+        render: data => mRender(data, 14, handleJump)
     },
 
     {
@@ -366,35 +373,35 @@ export const receivableCol = [
         dataIndex: 'M12-M24',
         key: 'M12-M24',
         width: 100,
-        render
+        render: data => mRender(data, 15, handleJump)
     },
     {
         title: '2-3年',
         dataIndex: 'M24-M36',
         key: 'M24-M36',
         width: 100,
-        render
+        render: data => mRender(data, 16, handleJump)
     },
     {
         title: '3-4年',
         dataIndex: 'M36-M48',
         key: 'M36-M48',
         width: 100,
-        render
+        render: data => mRender(data, 17, handleJump)
     },
     {
         title: '4-5年',
         dataIndex: 'M48-M60',
         key: 'M48-M60',
         width: 100,
-        render
+        render: data => mRender(data, 18, handleJump)
     },
     {
         title: '5年以上',
         dataIndex: 'M60+',
         key: 'M60+',
         width: 100,
-        render
+        render: data => mRender(data, 19, handleJump)
     },
 
     {

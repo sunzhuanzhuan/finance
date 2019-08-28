@@ -1,6 +1,6 @@
 import React from 'react'
 import './receivable.less';
-import { Form, Input, Button, Row, Select, DatePicker, InputNumber } from "antd";
+import { Form, Input, Button, Select, DatePicker, InputNumber } from "antd";
 import SearchSelect from '@/components/SearchSelect';
 const { Option } = Select;
 const FormItem = Form.Item;
@@ -12,11 +12,13 @@ class ReceivableQuery extends React.Component {
 		};
 	}
 	getSelectOption = key => {
-		const { queryOptions } = this.props;
+		const { queryOptions = {}, isList } = this.props;
 		if(!queryOptions[key]) return null;
+		
 		return queryOptions[key].map(item => {
 			const { name, value } = item;
-			return <Option key={value} value={value}>{name}</Option>
+			const dealName = key === 'receivables_aging_range' && isList ? `${name}>0` : name;
+			return <Option key={value} value={value}>{dealName}</Option>
 		})
 	}
 	getFormItem = item => {
@@ -47,7 +49,7 @@ class ReceivableQuery extends React.Component {
 			case 'date':
 				return <DatePicker placeholder="请选择" className='common_search_width' />;
 			case 'inputNumber':
-				return <InputNumber min={0} className='common_search_width' />;
+				return <InputNumber placeholder="请输入" min={0} className='common_search_width' />;
 			default:
 				return <Input placeholder="请输入" className='common_search_width' />;
 		}

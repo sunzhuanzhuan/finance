@@ -46,10 +46,11 @@ class Receivableslist extends React.Component {
 
 	render() {
 		const { 
-			receivableList: { total = 0, page = 1, page_size = 20, list, statistic = {}}, 
+			receivableList: { total = {}, list = [], statistic = {}}, 
 			getGoldenCompanyId, receSearchOptions = {} 
 		} = this.props;
-		const { searchQuery, loading } = this.state;
+		const { loading } = this.state;
+		const totalRaw = Object.assign(total, {company_name: '总计'});
 		const { company_num = 0, total_receivables_amount = 0, total_wait_allocation_amount = 0, } = statistic;
 		const TotalMsg = (
 			<div className='total-info-wrapper'>
@@ -60,19 +61,20 @@ class Receivableslist extends React.Component {
 		);
 		const totalWidth = getTotalWidth(receivableCol);
 		const pagination = {
-			onChange: current => {
-				Object.assign(searchQuery, {page: current});
-				this.setState({searchQuery});
-				this.handleSearch(searchQuery);
-			},
-			onShowSizeChange: (_, pageSize) => {
-				Object.assign(searchQuery, {page_size: pageSize});
-				this.setState({searchQuery});
-				this.handleSearch(searchQuery);
-			},
-			total: parseInt(total),
-			current: parseInt(page),
-			pageSize: parseInt(page_size),
+			// onChange: current => {
+			// 	Object.assign(searchQuery, {page: current});
+			// 	this.setState({searchQuery});
+			// 	this.handleSearch(searchQuery);
+			// },
+			// onShowSizeChange: (_, pageSize) => {
+			// 	Object.assign(searchQuery, {page_size: pageSize});
+			// 	this.setState({searchQuery});
+			// 	this.handleSearch(searchQuery);
+			// },
+			// total: parseInt(total),
+			// current: parseInt(page),
+			// pageSize: parseInt(page_size),
+			defaultPageSize: 20,
 			showQuickJumper: true,
 			showSizeChanger: true,
 			pageSizeOptions: ['20', '50', '100', '200']
@@ -81,6 +83,7 @@ class Receivableslist extends React.Component {
 			<div className='rece-title'>应收账款查询</div>
 			<ReceivableQuery 
 				showExport
+				isList
 				queryItems={getQueryItems(getQueryKeys['receivableList'])}
 				queryOptions={receSearchOptions}
 				handleSearch={this.handleSearch}
@@ -91,9 +94,9 @@ class Receivableslist extends React.Component {
 			<Scolltable scrollClassName='.ant-table-body' widthScroll={totalWidth}>
 				<Table 
 					className='receivable-tablef'
-					rowKey='id' 
+					rowKey='company_name' 
 					columns={receivableCol} 
-					dataSource={list} 
+					dataSource={[totalRaw, ...list]} 
 					bordered 
 					pagination={pagination} 
 					loading={loading}

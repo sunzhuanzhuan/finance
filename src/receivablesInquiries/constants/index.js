@@ -5,6 +5,12 @@ export const getTabOptions = [
     { tab: '拓展业务', key: 'extendBusinessList' },
 ];
 
+export const getTableId = {
+    reservationList: 'order_id',
+    campaignList: 'campaign_id',
+    extendBusinessList: 'business_id',
+}
+
 export const getQueryItems = keys => {
     const allOpts = [
         {label: '公司简称', compType: 'searchSelect', key: 'company_id', dataIndex: ['company_id', 'name']},

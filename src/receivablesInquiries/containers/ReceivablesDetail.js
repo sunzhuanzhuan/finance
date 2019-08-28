@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import { message, Table, Alert, Tabs } from "antd";
 import ReceivableQuery from './ReceivableQuery';
-import { getTabOptions, getQueryItems, getQueryKeys, getReceivableDetailCol, getColKeys } from '../constants';
+import { getTabOptions, getQueryItems, getQueryKeys, getReceivableDetailCol, getColKeys, getTableId } from '../constants';
 import * as receivableAction from "../actions/receivable";
 import * as goldenActions from "../../companyDetail/actions/goldenApply";
 import { getTotalWidth, downloadByATag } from '@/util';
@@ -43,24 +43,27 @@ class ReceivablesDetail extends React.Component {
 		const { receivable = {} } = this.props;
 		const { loading } = this.state;
 		const { receSearchOptions } = receivable;
+		const defaultQuery = { page: 1, page_size: 20 };
 		return getTabOptions.map(item => {
 			const { tab, key } = item;
 			const tabInfo = receivable[key] || {};
-			const { list = [], page, total, page_size: tableSize } = tabInfo;
-			const totalMsg = `应收款金额${0}`;
+			const { list = [], page, total, page_size: tableSize, statistic = {} } = tabInfo;
+			const { total_receivables_amount = 0 } = statistic;
+			const totalMsg = `应收款金额${total_receivables_amount}`;
 			const columns = getReceivableDetailCol(getColKeys[key]);
 			const totalWidth = getTotalWidth(columns);
+			const searchQuery = this.state[`searchQuery-${key}`] || defaultQuery;
 			const pagination = {
-				// onChange: (current) => {
-				// 	Object.assign(this.state[`searchQuery-${key}`], {page: current});
-				// 	this.setState({[`searchQuery-${key}`]: this.state[`searchQuery-${key}`]});
-				// 	this.handleSearch(key, this.state[`searchQuery-${key}`]);
-				// },
-				// onShowSizeChange: (_, pageSize) => {
-				// 	Object.assign(this.state[`searchQuery-${key}`], {page_size: pageSize});
-				// 	this.setState({[`searchQuery-${key}`]: this.state[`searchQuery-${key}`]});
-				// 	this.handleSearch(key, this.state[`searchQuery-${key}`]);
-				// },
+				onChange: (current) => {
+					Object.assign(searchQuery, {page: current});
+					this.setState({[`searchQuery-${key}`]: searchQuery});
+					this.handleSearch(key, searchQuery);
+				},
+				onShowSizeChange: (_, pageSize) => {
+					Object.assign(searchQuery, {page_size: pageSize});
+					this.setState({[`searchQuery-${key}`]: searchQuery});
+					this.handleSearch(key, searchQuery);
+				},
 				total: parseInt(total),
 				current: parseInt(page),
 				pageSize: parseInt(tableSize),
@@ -92,7 +95,7 @@ class ReceivablesDetail extends React.Component {
 						<Table 
 							loading={loading}
 							className='receivable-table'
-							rowKey='id' 
+							rowKey={getTableId[key]} 
 							columns={columns} 
 							dataSource={list} 
 							bordered 
@@ -111,12 +114,12 @@ class ReceivablesDetail extends React.Component {
 
 	render() {
 		const { activeKey } = this.state;
-		const comp = <div>
-			<span>{`预约订单：${0}个|${0}元`}</span>
-			<span className='total-margin'>{`派单活动：${0}个|${0}元`}</span>
-			<span>{`公司拓展业务：${0}个|${0}元`}</span>
-			<span className='total-margin'>{`当前已选可核销金额 ${0.00}元`}</span>
-		</div>;
+		// const comp = <div>
+		// 	<span>{`预约订单：${0}个|${0}元`}</span>
+		// 	<span className='total-margin'>{`派单活动：${0}个|${0}元`}</span>
+		// 	<span>{`公司拓展业务：${0}个|${0}元`}</span>
+		// 	<span className='total-margin'>{`当前已选可核销金额 ${0.00}元`}</span>
+		// </div>;
 
 		return <div className='rece-wrapper rece-detail-wrapper'>
 			<div className='rece-title'>应收款订单明细</div>

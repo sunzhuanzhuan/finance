@@ -121,34 +121,8 @@ class ReceivableQuery extends React.Component {
 	}
 	getFormRowComp = () => {
 		const { queryItems = [] } = this.props;
-		const queryLen = queryItems.length;
-		const valueItems = queryItems.filter(item => item.compType !== 'operate');
-		const operateItem = queryItems.filter(item => item.compType === 'operate');
-		const rowLen = Math.ceil(queryLen / 4)
-		const queryLenArr = new Array(rowLen).join(",").split(",");
 
 		return this.getFormItemComp(queryItems)
-
-		// const ValueRow = queryLenArr.map( (_, index) => {
-		// 	if( valueItems.length >= 4)
-		// 		return (
-		// 			<Row key={index}>
-		// 				{this.getFormItemComp(valueItems.splice(0, 4))}
-		// 			</Row>
-		// 		)
-		// 	return null;
-		// });
-		// const OperateRow = (
-		// 	<Row key='row-second' className='flex-row'>
-		// 		<div className='left-comp'>
-		// 			{this.getFormItemComp(valueItems)}
-		// 		</div>
-		// 		<div className='right-comp'>
-		// 			{this.getFormItemComp(operateItem)}
-		// 		</div>
-		// 	</Row>
-		// );
-		// return [ValueRow, OperateRow]
 	}
 
 	render() {

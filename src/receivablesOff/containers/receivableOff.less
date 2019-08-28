@@ -13,7 +13,7 @@
         border: none;
     }
     .ant-alert {
-        width: 1212px;
+        width: 100%;
         margin-bottom: 20px;
     }
     .total-color {
@@ -26,9 +26,10 @@
         margin-top: 20px;
     }
     .rece-add-query {
-        width: 1212px;
+        width: 100%;
+        padding-right: 30px;
         .ant-form-item-label {
-            width: 125px;
+            margin-left: 30px;
         }
     }
 }
@@ -37,6 +38,14 @@
     width: 1070px;
     padding-top: 10px;
     background: #F7F7F7;
+    &:after {
+        content: ".";
+        clear: both;
+        display: block;
+        height: 0;
+        overflow: hidden;
+        visibility: hidden;
+    }
     .flex-row {
         .left-comp {
             float: left;
@@ -49,15 +58,10 @@
         display: inline-block;
         vertical-align: top;
     }
-    .ant-form-item-label {
-        width: 90px;
-    }
     .operate-wrapper {
-        .ant-btn-primary {
+        float: right;
+        .ant-btn {
             margin-left: 20px;
-        }
-        .ant-btn-ghost {
-            margin: 0 30px 0 20px;
         }
     }
     .common_search_width {
@@ -79,12 +83,6 @@
        
     }
     .number_range_wrapper {
-        // .ant-form-item-label {
-        //     width: 234px;
-        // }
-        // .number_range_item {
-
-        // }
         .range-value {
             width: 71px;
         }

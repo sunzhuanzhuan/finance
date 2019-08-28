@@ -27,7 +27,7 @@ export const getOffDetailQueryKeys = {
     tuozhanyewu: [
         'verification_code', 'company_id', 'sale_id', 'date2', 'time', 'region', 'project_id', 'type', 
         'is_decrease_sale_gmv', 'is_decrease_company_gmv', 'is_record_sale_income', 'offtime', 
-        'gift_amount', 'warehouse_amount_range', 'invoice_application_id', 'brand_id', 'operate' 
+        'gift_amount', 'warehouse_amount', 'invoice_application_id', 'brand_id', 'operate' 
     ],
 };
 

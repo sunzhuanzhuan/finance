@@ -80,17 +80,17 @@ class ReceivablesOffDetail extends React.Component {
 				</div>;
 			const columns = getReceOffCol(getOffDetailCloIndex[key], receMetaData);
 			const totalWidth = getTotalWidth(columns);
-			const searchStateKey = `searchQuery-${key}`;
+			const searchQuery = this.state[`searchQuery-${key}`] || { page: 1, page_size: 20 };
 			const pagination = {
 				onChange: (current) => {
-					Object.assign(this.state[searchStateKey], {page: current});
-					this.setState({[searchStateKey]: this.state[searchStateKey]});
-					this.handleSearch(key, this.state[searchStateKey]);
+					Object.assign(searchQuery, {page: current});
+					this.setState({[`searchQuery-${key}`]: searchQuery});
+					this.handleSearch(key, searchQuery);
 				},
 				onShowSizeChange: (_, pageSize) => {
-					Object.assign(this.state[searchStateKey], {page_size: pageSize});
-					this.setState({[searchStateKey]: this.state[searchStateKey]});
-					this.handleSearch(key, this.state[searchStateKey]);
+					Object.assign(searchQuery, {page_size: pageSize});
+					this.setState({[`searchQuery-${key}`]: searchQuery});
+					this.handleSearch(key, searchQuery);
 				},
 				total: parseInt(total),
 				current: parseInt(page),
@@ -142,16 +142,9 @@ class ReceivablesOffDetail extends React.Component {
 
 	render() {
 		const { activeKey } = this.state;
-		const comp = <div>
-			<span>{`预约订单：${0}个|${0}元`}</span>
-			<span className='total-margin'>{`派单活动：${0}个|${0}元`}</span>
-			<span>{`公司拓展业务：${0}个|${0}元`}</span>
-			<span className='total-margin'>{`当前已选可核销金额 ${0.00}元`}</span>
-		</div>;
 
 		return <div className='rece-wrapper rece-detail-wrapper'>
 			<div className='rece-title'>核销订单明细</div>
-			{/* <Alert message={comp} type="warning" showIcon /> */}
 			<Tabs className='rece_tabs' activeKey={activeKey} onChange={this.handleChangeTab}>
 				{
 					this.getTabPaneComp()

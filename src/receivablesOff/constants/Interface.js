@@ -3,4 +3,5 @@ export default {
 	getReceivableOffList: '/finance/readjust/applicationList',
 	getReceOffDetailList: '/finance/readjust/applicationList',
 	getReceAddOffList: '/finance/readjust/applicationList',
+	addReceOffItem: '/receivables/verification/commit',
 }

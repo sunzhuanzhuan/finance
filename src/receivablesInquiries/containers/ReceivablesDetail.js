@@ -43,7 +43,6 @@ class ReceivablesDetail extends React.Component {
 		const search = qs.parse(location.search.substring(1));
 		const { loading } = this.state;
 		const { receSearchOptions } = receivable;
-		const defaultQuery = { page: 1, page_size: 20 };
 		return getTabOptions.map(item => {
 			const { tab, key } = item;
 			const tabInfo = receivable[key] || {};
@@ -52,7 +51,7 @@ class ReceivablesDetail extends React.Component {
 			const totalMsg = `应收款金额${total_receivables_amount}`;
 			const columns = getReceivableDetailCol(getColKeys[key]);
 			const totalWidth = getTotalWidth(columns);
-			const searchQuery = this.state[`searchQuery-${key}`] || defaultQuery;
+			const searchQuery = this.state[`searchQuery-${key}`] || { page: 1, page_size: 20 };
 			const pagination = {
 				onChange: (current) => {
 					Object.assign(searchQuery, {page: current});

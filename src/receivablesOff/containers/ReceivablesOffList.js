@@ -7,6 +7,7 @@ import ReceivableOffQuery from './ReceivableOffQuery';
 import { getOffListQueryKeys, getOffQueryItems, getOffOptions, getOffListColIndex, getReceOffCol } from '../constants';
 import * as receivableOffAction from "../actions/receivableOff";
 import * as goldenActions from "../../companyDetail/actions/goldenApply";
+import { addReceOffItem } from '../actions/receivableAdd';
 import qs from 'qs';
 import { getTotalWidth } from '@/util';
 import { Scolltable } from '@/components';
@@ -41,19 +42,19 @@ class ReceivablesOffList extends React.Component {
 		})
 	}
 
-	handleTableOperate = (operateType, operateInfo) => {
+	handleTableOperate = (operateType, recordInfo) => {
 		switch(operateType) {
 			case 'detail':
 				const { history } = this.props;
 				history.push({
 					pathname: '/finance/receivableoff/detail',
-					search: `?${qs.stringify({verification_id: operateInfo})}`,
+					search: `?${qs.stringify({verification_id: recordInfo})}`,
 				});
 				return;
 			case 'check':
-				return this.setState({checkVisible: true});
+				return this.setState({checkVisible: true, recordInfo});
 			case 'edit':
-				this.setState({editVisible: true})
+				this.setState({offVisible: true, recordInfo})
 				return;
 			default:
 				return;
@@ -62,14 +63,26 @@ class ReceivablesOffList extends React.Component {
 
 	handleCloseModal = (modalType) => {
 		this.setState({
-			[modalType]: !this.state[modalType]
+			[modalType]: !this.state[modalType],
+			recordInfo: undefined
 		})
 	}
 
+	handleModalOk = (modalType, values) => {
+		this.props.addReceOffItem(values).then(() => {});
+		this.handleCloseModal(modalType);
+	}
+
 	render() {
-		const { receivableOffList: { total = 0, page = 1, page_size = 20, list = [], statistic = {} }, receMetaData = {}, history } = this.props;
-		const { verification_total = '-', order_amount = '-', verification_amount_total = '-', debt_amount_total = '-', gift_amount_total = '-', warehouse_amount_total = '-' } = statistic;
-		const { searchQuery, loading, addVisible, editVisible, checkVisible } = this.state;
+		const { 
+			receivableOffList: { total = 0, page = 1, page_size = 20, list = [], statistic = {} }, 
+			receMetaData = {}, history 
+		} = this.props;
+		const { 
+			verification_total = '-', order_amount = '-', verification_amount_total = '-', 
+			debt_amount_total = '-', gift_amount_total = '-', warehouse_amount_total = '-' 
+		} = statistic;
+		const { searchQuery, loading, addVisible, offVisible, checkVisible, recordInfo } = this.state;
 		const totalWidth = getTotalWidth(getReceOffCol(getOffListColIndex));
 		const pagination = {
 			onChange: current => {
@@ -131,17 +144,19 @@ class ReceivablesOffList extends React.Component {
 			<ReceOffModal 
 				type='off'
 				isEdit
-				visible={editVisible}
-				initialValue={{isEdit: true}}
+				visible={offVisible}
+				options={getOffOptions}
+				initialValue={recordInfo}
 				width={800}
 				title='应收款核销'
 				action={this.props.getGoldenCompanyId}
-				handleCancel={() => {this.handleCloseModal('editVisible')}}
-				handleOk={ () => {this.handleCloseModal('editVisible')}}
+				handleCancel={() => {this.handleCloseModal('offVisible')}}
+				handleOk={this.handleModalOk}
 			/>
 			<ReceOffModal 
 				type='check'
-				visible={checkVisible}
+				visible={checkVisible} 
+				options={getOffOptions}
 				footer={
 					[
 						<Button key="back" onClick={() => {this.handleCloseModal('checkVisible')}}>
@@ -149,20 +164,7 @@ class ReceivablesOffList extends React.Component {
 						</Button>
 					]
 				}
-				initialValue={{
-					attach: undefined,
-					company_id: undefined,
-					debt_amount: undefined,
-					is_decrease_company_gmv: undefined,
-					is_decrease_sale_gmv: undefined,
-					is_record_sale_income: undefined,
-					remark: undefined,
-					sale_id: undefined,
-					type: undefined,
-					verification_amount: undefined,
-					gift_amount: 300,
-					warehouse_amount: 200
-				}}
+				initialValue={recordInfo}
 				width={800}
 				title='核销信息'
 				handleCancel={() => {this.handleCloseModal('checkVisible')}} 
@@ -172,6 +174,7 @@ class ReceivablesOffList extends React.Component {
 }
 
 const mapStateToProps = (state) => {
+	console.log('lsdkjflskdjflskdfj', state);
 	return {
 		// receivableOffList: state.receivableOff.receivableOffList,
 		// receMetaData: state.receivableOff.receMetaData,
@@ -259,5 +262,5 @@ const mapStateToProps = (state) => {
 
 	}
 }
-const mapDispatchToProps = dispatch => (bindActionCreators({...receivableOffAction, ...goldenActions}, dispatch));
+const mapDispatchToProps = dispatch => (bindActionCreators({...receivableOffAction, ...goldenActions, addReceOffItem}, dispatch));
 export default connect(mapStateToProps, mapDispatchToProps)(Form.create()(ReceivablesOffList))

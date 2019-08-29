@@ -40,7 +40,11 @@ class ReceivableOffQuery extends React.Component {
 			case 'select':
 				return <Select 
 						placeholder="请选择" 
-						className='common_search_width'>
+						className='common_search_width'
+						filterOption={(input, option) => (
+							option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+						)}
+					>
 							{ this.getSelectOption(optionKey) }
 					</Select>;
 			case 'date':

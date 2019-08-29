@@ -73,7 +73,7 @@ export const getOffQueryItems = queryArr => {
 }
 
 const validateRemarkText = (rule, value, callback) => {
-    if(value.trim().length > 50) {
+    if(value && value.trim().length > 50) {
         callback('最多输入50个汉字');
     }
     callback();
@@ -84,7 +84,7 @@ export const getOffAddFormItems = () => {
         {label: '所属销售', key: 'sale_id', compType: 'searchSelect', disabled: true},
         {label: '本次核销金额', key: 'verification_amount', compType: 'inputNumber', required: true, disabled: true},
         {label: '核销类型', key: 'type', compType: 'select', optionKey: 'verification_type', required: true},
-        {label: '抵扣账户/金额', key: 'check_box_item', compType: 'checkbox', optionKey: 'discount', required: true, disabled: true},
+        {label: '抵扣账户/金额', key: 'check_box_item', compType: 'check_box_item', required: true, disabled: true},
         {label: '核销账户金额', key: 'debt_amount', compType: 'input', required: true, disabled: true},
         {label: '是否扣减公司GMV', key: 'is_decrease_company_gmv', compType: 'radio', optionKey: 'GMV', required: true},
         {label: '是否扣减销售GMV', key: 'is_decrease_sale_gmv', compType: 'radio', optionKey: 'GMV', required: true},

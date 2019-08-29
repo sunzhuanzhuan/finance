@@ -1,30 +1,37 @@
 import React from 'react'
 import { Modal, Form, Table, Button, Input, Radio, Checkbox, Select, Icon, InputNumber, Upload } from "antd";
-import { getOffAddFormItems, getOffOptions } from '../constants';
-import { getTotalWidth } from '@/util';
+import { getOffAddFormItems } from '../constants';
+import { getTotalWidth, shallowEqual } from '@/util';
 import { Scolltable } from '@/components';
 import SearchSelect from '@/components/SearchSelect';
 import qs from 'qs';
 
 const { TextArea } = Input;
 const FormItem = Form.Item;
-const CheckboxGroup = Checkbox.Group;
 const RadioGroup = Radio.Group;
 
 class ReceOffModal extends React.Component {
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
 		this.state = {
-			fieldsValues: {},
-			no: true
 		};
 	}
-	componentDidMount() {
-
+	static getDerivedStateFromProps(nextProps, prevState) {
+		const { initialValue = {}, type } = nextProps;
+		const { stateInitValue } = prevState;
+		if(type === 'off' && !shallowEqual(initialValue, stateInitValue)) {
+			const { gift_amount, warehouse_amount } = initialValue;
+			return {
+				stateInitValue: initialValue,
+				gift_amount: Boolean(gift_amount),
+				warehouse_amount: Boolean(warehouse_amount),
+				no: !gift_amount && !warehouse_amount
+			}
+		}
+		return null
 	}
-
 	getModalContent = () => {
-		const { type, initialValue } = this.props;
+		const { type, initialValue = {}, options = {} } = this.props;
 		if(type === 'preview') {
 			return this.getPreviewTableComp();
 		}else if(type === 'off') {
@@ -32,10 +39,9 @@ class ReceOffModal extends React.Component {
 		}else if(type === 'add') {
 			return this.getAddComp();
 		}else if(type === 'check') {
-			return getValueCheckComp(initialValue);
+			return getValueCheckComp(initialValue, false, options);
 		}
 	}
-
 	getPreviewTableComp = () => {
 		const { columns, dataSource, handleOk } = this.props;
 		const totalWidth = getTotalWidth(columns);
@@ -106,9 +112,9 @@ class ReceOffModal extends React.Component {
 	}
 
 	getCheckboxItem = (isStatic) => {
-		const { form } = this.props;
+		const { form, initialValue = {}, options = {} } = this.props;
 		const { getFieldDecorator } = form;
-		return getOffOptions['offCheckOption'].map(item => {
+		return options['offCheckOption'].map(item => {
 			const { display, id } = item;
 			const countTips = `${display}余额500.00，最多可抵扣500.00`;
 			return (
@@ -126,7 +132,7 @@ class ReceOffModal extends React.Component {
 						<FormItem className='checkbox-form-item'>
 							{getFieldDecorator(id, 
 							{ 
-								initialValue: undefined,
+								initialValue: initialValue[id],
 								rules: [
 									{
 										required: this.state[id],
@@ -152,7 +158,7 @@ class ReceOffModal extends React.Component {
 	}
 
 	getOffFormComp = () => {
-		const { form, isEdit } = this.props;
+		const { form, isEdit, initialValue = {}, options = {} } = this.props;
 		const { getFieldDecorator } = form;
 		const formItemLayout = {
 			labelCol: { span: 6 },
@@ -181,7 +187,7 @@ class ReceOffModal extends React.Component {
 							<FormItem key={key} label={label} {...formItemLayout} >
 								{getFieldDecorator(key, 
 								{ 
-									initialValue: undefined,
+									initialValue: initialValue[key],
 									rules: [
 										validator ? {
 											validator
@@ -191,7 +197,7 @@ class ReceOffModal extends React.Component {
 										}
 									],
 								})(
-									this.getFormItem(key, compType, optionKey, isStatic)
+									this.getFormItem(key, compType, optionKey, isStatic, options)
 								)}
 							</FormItem>
 						)
@@ -218,7 +224,13 @@ class ReceOffModal extends React.Component {
 		})
 	}
 
-	getFormItem = (key, compType, optionKey, disabled) => {
+	getSelectOptions = () => {
+		const { options = {} } = this.props;
+
+
+	}
+
+	getFormItem = (key, compType, optionKey, disabled, options) => {
 		switch(compType) {
 			case 'input':
 				return <Input disabled={disabled} placeholder="请输入"/>;
@@ -232,7 +244,15 @@ class ReceOffModal extends React.Component {
 					onBlur={value => {this.handleChangeIptNum(key, value)}}
 				/>;
 			case 'select':
-				return <Select disabled={disabled} placeholder="请输入"/>;
+				return <Select 
+						disabled={disabled} 
+						placeholder="请输入"
+						filterOption={(input, option) => (
+							option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+						)}
+					>
+						{this.getSelectOptions(optionKey)}
+					</Select>;
 			case 'searchSelect':
 				return <SearchSelect
 							disabled={disabled}
@@ -244,13 +264,11 @@ class ReceOffModal extends React.Component {
 							dataToList={res => { return res.data }}
 							item={['company_id', 'name']}
 						/>;
-			case 'checkbox':
-				return <CheckboxGroup disabled={disabled} options={getOffOptions[optionKey]} />;
 			case 'radio':
 				return <RadioGroup 
 					disabled={disabled} 
 				>
-					{this.getRadioItem(getOffOptions[optionKey])}
+					{this.getRadioItem(options[optionKey])}
 				</RadioGroup>;
 			case 'upload':
 				return  <>
@@ -273,24 +291,13 @@ class ReceOffModal extends React.Component {
 		}
 	}
 
-	handleSelectSearch = () => {
-
-	}
-
 	handleOk = () => {
 		const { type, form, history } = this.props;
 
 		if(type === 'off') {
-			form.validateFields((errs, values) => {
+			form.validateFields((errs, fieldsValues) => {
 				// if(errs) return;
-				this.setState({fieldsValues: values, previewVisible: true});
-			})
-		}else if(type === 'edit') {
-			form.validateFields((errs, values) => {
-				if(errs) return;
-				const { company_id } = values;
-				const src = `/finance/receivableoff/add?${qs.stringify({ keys: { company_id } })}`;
-				history.push(src);
+				this.setState({fieldsValues, previewVisible: true});
 			})
 		}else if(type === 'add') {
 			form.validateFields((errs, values) => {
@@ -303,11 +310,13 @@ class ReceOffModal extends React.Component {
 	}
 
 	handleConfirm = () =>{
-		
+		const { fieldsValues } = this.state;
+		this.props.handleOk('offVisible', fieldsValues);
+		this.setState({previewVisible: false, fieldsValues: undefined});
 	}
 
 	handleCancel = () => {
-		this.setState({previewVisible: false, fieldsValues: {}});
+		this.setState({previewVisible: false, fieldsValues: undefined});
 	}
 
 	render() {
@@ -341,7 +350,7 @@ class ReceOffModal extends React.Component {
 
 export default Form.create()(ReceOffModal)
 function ConfirmModal(props) {
-	const { visible, title, fieldsValues, onOk, onCancel } = props;
+	const { visible, title, fieldsValues = {}, onOk, onCancel, options = {} } = props;
 	
 	return (
 		<Modal
@@ -353,24 +362,25 @@ function ConfirmModal(props) {
 			onCancel={onCancel}
 			onOk={onOk}
 		>
-			{getValueCheckComp(fieldsValues, true)}
+			{getValueCheckComp(fieldsValues, true, options)}
 		</Modal>
 	)
 }
 
-function getValueCheckComp(fieldsValues, isConfirm) {
-	const className = isConfirm ? 'fields-con' : 'flex-fields-con'
-	const allFields = getOffAddFormItems().map(item => {
-		let isShowDeduct;
-		const { label, key } = item;
-		const deductItems = getOffOptions['offCheckOption'].map(item => {
-			const {value, label} = item;
-			if(fieldsValues[value]) {
+function getValueCheckComp(fieldsValues, isConfirm, options) {
+	const className = isConfirm ? 'fields-con' : 'flex-fields-con';
+	let isShowDeduct;
+	const deductItems = options['offCheckOption']
+		.filter(item => item.id !== 'no')
+		.map(item => {
+			const {id, display} = item;
+			if(fieldsValues[id]) {
 				isShowDeduct = true;
-				return <div key={value}>{`${label}：${fieldsValues[value] || '-'}`}</div>;
+				return <div key={id}>{`${display}：${fieldsValues[id] || '-'}`}</div>;
 			}
 		});
-
+	const allFields = getOffAddFormItems().map(item => {
+		const { label, key } = item;
 		if( key === 'check_box_item')
 			return (
 				<div key={key} className='deduct-wrapper'>

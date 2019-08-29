@@ -2,14 +2,15 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import './receivableOff.less';
-import { message, Table, Button, Alert, Tabs } from "antd";
+import { message, Table, Alert, Tabs } from "antd";
 import ReceivableOffQuery from './ReceivableOffQuery';
-import { getTabOptions, getOffDetailQueryKeys, getOffQueryItems, getOffDetailCloIndex, getReceOffCol } from '../constants';
+import { getTabOptions, getOffDetailQueryKeys, getOffQueryItems, getOffDetailCloIndex, getReceOffCol, getTableId } from '../constants';
 import * as receivableOffAction from "../actions/receivableOff";
 import * as goldenActions from "../../companyDetail/actions/goldenApply";
 import { getTotalWidth } from '@/util';
 import { Scolltable } from '@/components';
-import { getReceAddList } from '../actions/receivableAdd';
+import { getReceOffDetailList } from '../actions/receivableAdd';
+import qs from 'qs';
 
 const { TabPane } = Tabs;
 
@@ -22,32 +23,35 @@ class ReceivablesOffDetail extends React.Component {
 		};
 	}
 	componentDidMount() {
+		const { location } = this.props;
+		const search = qs.parse(location.search.substring(1));
 
+		this.queryAllTabsData(Object.assign(search, { page: 1, page_size: 20}));
 	}
-	static getDerivedStateFromProps(nextProps, prevState) {
-		const { progress, errorMsg } = nextProps;
-		const { progress: stateProgress } = prevState;
-		if(progress !== stateProgress) {
-			if(progress === 3) {
-				try {
-					if (typeof message.destroy === 'function') {
-						message.destroy();
-					}
-					message.error(errorMsg || '列表加载失败，请重试！');
-				} catch (error) {
-					console.log(error);
-				}
-			}
-			return {
-				progress,
-			}
-		}
-		return null;
+	queryAllTabsData = queryObj => {
+		this.setState({ loading: true });
+		Promise.all(this.getAllTabsActions(queryObj)).then(() => {
+			this.setState({ loading: false })
+		}).catch(({ errorMsg }) => {
+			this.setState({ loading: false });
+			message.error(errorMsg || '列表加载失败，请重试！');
+		})
+	}
+	getAllTabsActions = queryObj => {
+		return getTabOptions.map(item => {
+			const { key } = item;
+			return this.props.getReceOffDetailList(Object.assign(queryObj, {key}));
+		})
 	}
 	handleSearch = (key, searchQuery) => {
 		this.setState({[`searchQuery-${key}`]: searchQuery});
 		Object.assign(searchQuery, {key});
-		this.props.getReceAddList(searchQuery);
+		this.props.getReceOffDetailList(searchQuery).then(() => {
+			this.setState({loading: false});
+		}).catch(({ errorMsg }) => {
+			this.setState({ loading: false });
+			message.error(errorMsg || '列表加载失败，请重试！');
+		});
 	}
 
 	handleExportList = () => {
@@ -55,26 +59,38 @@ class ReceivablesOffDetail extends React.Component {
 	}
 
 	getTabPaneComp = () => {
-		const { receAddListInfo = {} } = this.props;
-		const { progress } = receAddListInfo;
+		const { receAddListInfo = {}, receMetaData = {}, location } = this.props;
+		const { loading } = this.state;
+		const search = qs.parse(location.search.substring(1));
 
 		return getTabOptions.map(item => {
 			const { tab, key } = item;
-			const tabInfo = receAddListInfo[`receAddInfo-${key}`] || {};
-			const { list = [], page, total, page_size: tableSize } = tabInfo;
-			const totalMsg = `查询结果共${0}个，${0}个符合核销要求，${1 - 0}不符合：预约订单/派单活动未结案、拓展业务活动未审核通过、应收款金额为0的订单不能进行核销。`;
-			const columns = getReceOffCol(getOffDetailCloIndex[key]);
+			const tabInfo = receAddListInfo[`receDetailInfo-${key}`] || {};
+			const { list = [], page, total, page_size: tableSize, statistic = {} } = tabInfo;
+			const { 
+				order_amount = '-', verification_amount_total = '-', debt_amount_total = '-', 
+				gift_amount_total = '-', warehouse_amount_total = '-' 
+			} = statistic;
+			const TotalMsg = <div className='total-info-wrapper'>
+					<>订单数：<span className='total-color'>{order_amount}</span></>
+					<span className='total-margin'>总核销金额：<span className='total-color'>{verification_amount_total}</span></span>
+					<>核销账户金额：<span className='total-color'>{debt_amount_total}</span></>
+					<span className='total-margin'>赠送/返点账户抵扣：<span className='total-color'>{gift_amount_total}</span></span>
+					<>小金库抵扣：<span className='total-color'>{warehouse_amount_total}</span></>
+				</div>;
+			const columns = getReceOffCol(getOffDetailCloIndex[key], receMetaData);
 			const totalWidth = getTotalWidth(columns);
+			const searchStateKey = `searchQuery-${key}`;
 			const pagination = {
 				onChange: (current) => {
-					Object.assign(this.state[`searchQuery-${key}`], {page: current});
-					this.setState({[`searchQuery-${key}`]: this.state[`searchQuery-${key}`]});
-					this.handleSearch(key, this.state[`searchQuery-${key}`]);
+					Object.assign(this.state[searchStateKey], {page: current});
+					this.setState({[searchStateKey]: this.state[searchStateKey]});
+					this.handleSearch(key, this.state[searchStateKey]);
 				},
 				onShowSizeChange: (_, pageSize) => {
-					Object.assign(this.state[`searchQuery-${key}`], {page_size: pageSize});
-					this.setState({[`searchQuery-${key}`]: this.state[`searchQuery-${key}`]});
-					this.handleSearch(key, this.state[`searchQuery-${key}`]);
+					Object.assign(this.state[searchStateKey], {page_size: pageSize});
+					this.setState({[searchStateKey]: this.state[searchStateKey]});
+					this.handleSearch(key, this.state[searchStateKey]);
 				},
 				total: parseInt(total),
 				current: parseInt(page),
@@ -92,11 +108,12 @@ class ReceivablesOffDetail extends React.Component {
 				<TabPane tab={tabTitle} key={key} className={wrapperClass}>
 					<ReceivableOffQuery 
 						showExport
+						initialValue={search}
 						queryItems={getOffQueryItems(getOffDetailQueryKeys[key])}
 						handleSearch={searchQuery => {this.handleSearch(key, searchQuery)}} 
 						handleExport={this.handleExportList}
 					/>
-					{ <Alert className='add-list-total-info' message={totalMsg} type="warning" showIcon /> }
+					{ <Alert className='add-list-total-info' message={TotalMsg} type="warning" showIcon /> }
 					<Scolltable 
 						isMoreThanOne 
 						wrapperClass={wrapperClass}
@@ -105,12 +122,12 @@ class ReceivablesOffDetail extends React.Component {
 					>
 						<Table 
 							className='receivable-table'
-							rowKey='id' 
+							rowKey={getTableId[key]} 
 							columns={columns} 
 							dataSource={list} 
 							bordered 
 							pagination={pagination} 
-							loading={progress === 1}
+							loading={loading}
 							scroll={{ x: totalWidth }}
 						/>
 					</Scolltable>
@@ -145,13 +162,12 @@ class ReceivablesOffDetail extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-	const { receivableOff: { receAddReducer: receAddListInfo }} = state;
+	const { receivableOff: { receAddReducer: receAddListInfo, receMetaData }} = state;
 	
 	return {
 		receAddListInfo,
-		progress: receAddListInfo.progress,
-		errorMsg: receAddListInfo.errorMsg
+		receMetaData
 	}
 }
-const mapDispatchToProps = dispatch => (bindActionCreators({...receivableOffAction, ...goldenActions, getReceAddList}, dispatch));
+const mapDispatchToProps = dispatch => (bindActionCreators({...receivableOffAction, ...goldenActions, getReceOffDetailList}, dispatch));
 export default connect(mapStateToProps, mapDispatchToProps)(ReceivablesOffDetail)

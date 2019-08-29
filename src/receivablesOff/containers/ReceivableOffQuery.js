@@ -11,15 +11,19 @@ class ReceivableOffQuery extends React.Component {
 		this.state = {
 		};
 	}
+	componentDidMount() {
+		// const { form, initialValue = {} } = this.props;
+		// form.setFieldsValue(initialValue);
+	}
 	getSelectOption = key => {
-		const { queryOptions } = this.props;
-		if(!queryOptions(key)) return null;
-		return queryOptions(key).map(item => {
-			const { name, value } = item;
-			return <Option key={value} value={value}>{name}</Option>
+		const { queryOptions = {} } = this.props;
+		if(!queryOptions[key]) return null;
+		return queryOptions[key].map(item => {
+			const { id, display } = item;
+			return <Option key={id} value={id}>{display}</Option>
 		})
 	}
-	getFormItem = compType => {
+	getFormItem = (compType, optionKey) => {
 		switch(compType) {
 			case 'input':
 				return <Input placeholder="请输入" className='common_search_width' />;
@@ -34,7 +38,11 @@ class ReceivableOffQuery extends React.Component {
 							item={['company_id', 'name']}
 						/>;
 			case 'select':
-				return <Select placeholder="请输入" className='common_search_width' />;
+				return <Select 
+						placeholder="请选择" 
+						className='common_search_width'>
+							{ this.getSelectOption(optionKey) }
+					</Select>;
 			case 'date':
 				return <DatePicker placeholder="请输入" className='common_search_width' />;
 			default:
@@ -46,7 +54,7 @@ class ReceivableOffQuery extends React.Component {
 		const { getFieldDecorator } = form;
 
 		return queryItems.map(item => {
-			const {label, compType, key} = item;
+			const {label, compType, key, optionKey} = item;
 			if(compType === 'operate') {
 				return (
 					<FormItem key={key} className='operate-wrapper'>
@@ -59,22 +67,23 @@ class ReceivableOffQuery extends React.Component {
 				return (
 					<span key={key} className='order-id-type-wrapper'>
 						<FormItem className='order-id-type-item' >
-							{getFieldDecorator('receivables_aging_range')(
+							{getFieldDecorator('prduct_line')(
 								<Select 
-									placeholder="请选择" 
+									allowClear
+									placeholder="订单类型" 
 									className='range-value'
 									filterOption={(input, option) => (
 										option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
 									)}
 								>
-									{ this.getSelectOption('receivables_aging_range') }
+									{ this.getSelectOption('prduct_line') }
 								</Select>
 							)}
 						</FormItem>
 						<span className='range-value-sign'>{'>'}</span>
 						<FormItem className='order-id-type-item' >
 							{getFieldDecorator('receivables_amount')(
-								<InputNumber className='range-value' min={0}/>
+								<Input className='range-value' placeholder='订单/活动ID'/>
 							)}
 						</FormItem>
 					</span>
@@ -100,7 +109,7 @@ class ReceivableOffQuery extends React.Component {
 			return (
 				<FormItem key={key} label={label} >
 					{getFieldDecorator(key)(
-						this.getFormItem(compType)
+						this.getFormItem(compType, optionKey)
 					)}
 				</FormItem>
 			)

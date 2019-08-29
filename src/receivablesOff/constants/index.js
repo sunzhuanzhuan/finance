@@ -1,11 +1,16 @@
 import React from "react";
-import { Input } from 'antd';
 
 export const getTabOptions = [
     { tab: '预约', key: 'yuyueyuyue' },
     { tab: '微闪投', key: 'weishantou' },
     { tab: '拓展业务', key: 'tuozhanyewu' },
-]
+];
+
+export const getTableId = {
+    yuyueyuyue: 'order_id',
+    weishantou: 'campaign_id',
+    tuozhanyewu: 'verification_id',
+}
 
 export const getOffListQueryKeys = [
     'verification_code', 'type', 'company_id', 'sale_id', 'time', 'is_record_sale_income', 'is_decrease_company_gmv', 'is_decrease_sale_gmv', 'gift_amount', 'warehouse_amount', 'invoice_application_id', 'order_id_type', 'operate'
@@ -42,14 +47,14 @@ export const getOffQueryItems = queryArr => {
         {label: '公司简称', key: 'company_id', compType: 'searchSelect'},
         {label: '销售', key: 'sale_id', compType: 'searchSelect'},
         {label: '核销编号', key: 'verification_code', compType: 'input'},
-        {label: '核销类型', key: 'type', compType: 'select', optionKey: 'type'},
+        {label: '核销类型', key: 'type', compType: 'select', optionKey: 'verification_type'},
         {label: '发票申请单ID', key: 'invoice_application_id', compType: 'input'},
         {label: '订单ID', key: 'order_id', compType: 'input'},
         {label: '活动ID', key: 'date2', compType: 'input'},
         {label: '核销时间', key: 'time', compType: 'date'},
-        {label: '是否计提提成', key: 'is_record_sale_income', compType: 'input'},
-        {label: '是否扣减公司GMV', key: 'is_decrease_company_gmv', compType: 'input'},
-        {label: '是否扣减销售GMV', key: 'is_decrease_sale_gmv', compType: 'input'},
+        {label: '是否计提提成', key: 'is_record_sale_income', compType: 'select', optionKey: 'payment'},
+        {label: '是否扣减公司GMV', key: 'is_decrease_company_gmv', compType: 'select', optionKey: 'GMV'},
+        {label: '是否扣减销售GMV', key: 'is_decrease_sale_gmv', compType: 'select', optionKey: 'GMV'},
         {label: '赠送/返点账户抵扣金额', key: 'gift_amount', compType: 'number_range'},
         {label: '小金库抵扣金额', key: 'warehouse_amount', compType: 'number_range'},
         {label: '区域', key: 'region', compType: 'select'},
@@ -61,7 +66,7 @@ export const getOffQueryItems = queryArr => {
         {label: '活动结算时间', key: 'active_time', compType: 'date'},
         {label: '审核时间', key: 'offtime', compType: 'date'},
         {label: '账号名称', key: 'account_id', compType: 'input'},
-        {compType: 'order_id_type', key: 'order_id_type'},
+        {compType: 'order_id_type', key: 'order_id_type', optionKey: 'prduct_line'},
         {compType: 'operate', key: 'operate'}
     ];
     return queryArr.map(item => allQuery.find(queryItem => queryItem.key === item));
@@ -78,7 +83,7 @@ export const getOffAddFormItems = () => {
         {label: '公司简称', key: 'company_id', compType: 'searchSelect', required: true, disabled: true},
         {label: '所属销售', key: 'sale_id', compType: 'searchSelect', disabled: true},
         {label: '本次核销金额', key: 'verification_amount', compType: 'inputNumber', required: true, disabled: true},
-        {label: '核销类型', key: 'type', compType: 'select', optionKey: 'type', required: true},
+        {label: '核销类型', key: 'type', compType: 'select', optionKey: 'verification_type', required: true},
         {label: '抵扣账户/金额', key: 'check_box_item', compType: 'checkbox', optionKey: 'discount', required: true, disabled: true},
         {label: '核销账户金额', key: 'debt_amount', compType: 'input', required: true, disabled: true},
         {label: '是否扣减公司GMV', key: 'is_decrease_company_gmv', compType: 'radio', optionKey: 'GMV', required: true},
@@ -89,31 +94,21 @@ export const getOffAddFormItems = () => {
     ]
 }
 
-export const getOffOptions = (index) => {
-    const options =  {
+export const getOffOptions = {
         GMV: [
-            { label: '扣减', value: 1 },
-            { label: '不扣减', value: 0 }
+            { display: '扣减', id: 1 },
+            { display: '不扣减', id: 0 }
         ],
         payment: [
-            { label: '计提', value: 1 },
-            { label: '不计提', value: 0 }
-        ],
-        type: [
-            { label: '请选择' },
-            { label: '客户整体折让', value: 1 }, 
-            { label: '订单折让（赔偿）', value: 2 }, 
-            { label: '坏账清理', value: 3 }, 
-            { label: '其他', value: 4 }, 
+            { display: '计提', id: 1 },
+            { display: '不计提', id: 0 }
         ],
         offCheckOption: [
-            {label: '赠送/返点', value: 'gift_amount'}, 
-            {label: '小金库', value: 'warehouse_amount'}, 
-            {label: '无抵扣', value: 'no'}, 
+            {display: '赠送/返点', id: 'gift_amount'}, 
+            {display: '小金库', id: 'warehouse_amount'}, 
+            {display: '无抵扣', id: 'no'}, 
         ]
     };
-    return options[index] || []
-}
 
 export const getOffListColIndex = [
     'verification_code', 'company_name', 'sale_name', 'type', 'total_verification_amount', 'debt_amount', 'gift_amount', 'warehouse_amount', 'is_decrease_company_gmv', 'is_decrease_sale_gmv', 'is_record_sale_income', 'created_at', 'operator_name', 'operate',
@@ -137,7 +132,13 @@ const render = (data = '-') => {
     )
 }
 
-export const getReceOffCol = ( col, action ) => {
+const isRender = data => {
+    return (
+        data == 1 ? '是' : '否'
+    )
+}
+
+export const getReceOffCol = ( col, receMetaData = {}, action ) => {
     const allCol =  [
         {
             title: '订单ID',
@@ -167,7 +168,6 @@ export const getReceOffCol = ( col, action ) => {
             dataIndex: 'campaign_id',
             key: 'campaign_id_no_fIxed',
             width: 100,
-            fixed: 'left',
             render
         },
         {
@@ -406,7 +406,11 @@ export const getReceOffCol = ( col, action ) => {
             dataIndex: 'type',
             key: 'type',
             width: 100,
-            render
+            render: data => {
+                const { verification_type = [] } = receMetaData;
+                const typeItem = verification_type.find(item => item.id == data);
+                return typeItem ? typeItem.display : '-'
+            }
         },
         {
             title: '本次核销金额',
@@ -441,21 +445,21 @@ export const getReceOffCol = ( col, action ) => {
             dataIndex: 'is_record_sale_income',
             key: 'is_record_sale_income',
             width: 100,
-            render
+            render: isRender
         },
         {
             title: '是否扣减公司GMV',
             dataIndex: 'is_decrease_company_gmv',
             key: 'is_decrease_company_gmv',
             width: 100,
-            render
+            render: isRender
         },
         {
             title: '是否扣减销售GMV',
             dataIndex: 'is_decrease_sale_gmv',
             key: 'is_decrease_sale_gmv',
             width: 100,
-            render
+            render: isRender
         },
         {
             title: '核销时间',
@@ -478,8 +482,9 @@ export const getReceOffCol = ( col, action ) => {
             width: 145,
             fixed: 'right',
             render:(_, record) => {
+                const { verification_id } = record;
                 return <>
-                    <a onClick={ () => { action('detail', record)}}>订单详情</a>
+                    <a onClick={ () => { action('detail', verification_id)}}>订单详情</a>
                     <a onClick={ () => { action('check', record)}}>查看</a>
                     <a onClick={ () => { action('edit', record)}}>编辑</a>
                 </>

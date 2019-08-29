@@ -52,7 +52,7 @@ class ReceOffModal extends React.Component {
 					<Table
 						className='top-gap'
 						bordered
-						rowKey='id'
+						rowKey='verification_id'
 						columns={columns}
 						dataSource={dataSource}
 						size="small"
@@ -108,29 +108,29 @@ class ReceOffModal extends React.Component {
 	getCheckboxItem = (isStatic) => {
 		const { form } = this.props;
 		const { getFieldDecorator } = form;
-		return getOffOptions('offCheckOption').map(item => {
-			const { label, value } = item;
-			const countTips = `${label}余额500.00，最多可抵扣500.00`;
+		return getOffOptions['offCheckOption'].map(item => {
+			const { display, id } = item;
+			const countTips = `${display}余额500.00，最多可抵扣500.00`;
 			return (
-				<div key={value} className='checkbox-wrapper'>
+				<div key={id} className='checkbox-wrapper'>
 					<Checkbox 
 						disabled={isStatic}
-						checked={this.state[value]} 
-						value={value} 
+						checked={this.state[id]} 
+						value={id} 
 						onChange={this.handleChecked}
 					>
-						{label}
+						{display}
 					</Checkbox>
 					{
-						this.state[value] && value !== 'no' ? 
+						this.state[id] && id !== 'no' ? 
 						<FormItem className='checkbox-form-item'>
-							{getFieldDecorator(value, 
+							{getFieldDecorator(id, 
 							{ 
 								initialValue: undefined,
 								rules: [
 									{
-										required: this.state[value],
-										message: `请输入${label}抵扣金额`,
+										required: this.state[id],
+										message: `请输入${display}抵扣金额`,
 									}
 								],
 							})(
@@ -138,7 +138,7 @@ class ReceOffModal extends React.Component {
 									disabled={isStatic} 
 									min={0} placeholder="请输入"
 									// precision={2}
-									onBlur={val => {this.handleChangeIptNum(value, val)}}
+									onBlur={val => {this.handleChangeIptNum(id, val)}}
 								/>
 							)}
 							<span className='checkbox-item-tips'>{countTips}</span>
@@ -211,6 +211,13 @@ class ReceOffModal extends React.Component {
 		form.setFieldsValue({debt_amount})
 	}
 
+	getRadioItem = (option = []) => {
+		return option.map(item => {
+			const {id, display} = item;
+			return <Radio key={id} value={id}>{display}</Radio>
+		})
+	}
+
 	getFormItem = (key, compType, optionKey, disabled) => {
 		switch(compType) {
 			case 'input':
@@ -238,9 +245,13 @@ class ReceOffModal extends React.Component {
 							item={['company_id', 'name']}
 						/>;
 			case 'checkbox':
-				return <CheckboxGroup disabled={disabled} options={getOffOptions(optionKey)} />;
+				return <CheckboxGroup disabled={disabled} options={getOffOptions[optionKey]} />;
 			case 'radio':
-				return <RadioGroup disabled={disabled} options={getOffOptions(optionKey)}/>;
+				return <RadioGroup 
+					disabled={disabled} 
+				>
+					{this.getRadioItem(getOffOptions[optionKey])}
+				</RadioGroup>;
 			case 'upload':
 				return  <>
 					<Upload 
@@ -352,7 +363,7 @@ function getValueCheckComp(fieldsValues, isConfirm) {
 	const allFields = getOffAddFormItems().map(item => {
 		let isShowDeduct;
 		const { label, key } = item;
-		const deductItems = getOffOptions('offCheckOption').map(item => {
+		const deductItems = getOffOptions['offCheckOption'].map(item => {
 			const {value, label} = item;
 			if(fieldsValues[value]) {
 				isShowDeduct = true;
@@ -362,7 +373,7 @@ function getValueCheckComp(fieldsValues, isConfirm) {
 
 		if( key === 'check_box_item')
 			return (
-				<div className='deduct-wrapper'>
+				<div key={key} className='deduct-wrapper'>
 					<div>{label}：</div>
 					{ isShowDeduct ? <div>{deductItems}</div> : '-' }
 				</div> 

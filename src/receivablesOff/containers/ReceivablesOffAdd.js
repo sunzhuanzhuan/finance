@@ -7,10 +7,11 @@ import ReceivableOffQuery from './ReceivableOffQuery';
 import { getTabOptions, getOffAddQueryKeys, getOffQueryItems, getReceAddColIndex, getReceOffCol, getTableId, getOffOptions } from '../constants';
 import * as receivableOffAction from "../actions/receivableOff";
 import * as goldenActions from "../../companyDetail/actions/goldenApply";
-import { getTotalWidth } from '@/util';
+import { getTotalWidth, downloadByATag } from '@/util';
 import { Scolltable } from '@/components';
 import { getReceAddList, clearReceList, addReceOffItem } from '../actions/receivableAdd';
 import ReceOffModal from './ReceOffModal';
+import qs from 'qs';
 
 const { TabPane } = Tabs;
 
@@ -33,8 +34,8 @@ class ReceivablesOfflist extends React.Component {
 		this.props.getReceAddList(searchQuery);
 	}
 
-	handleExportList = () => {
-		
+	handleExportList = key => {
+		downloadByATag(`/api/receivables/verification/exportVerificationOrder?${qs.stringify(this.state[`searchQuery-${key}`])}`);
 	}
 
 	handleSelectRows = (key, selectedRowKeys, selectedRows) => {
@@ -95,7 +96,7 @@ class ReceivablesOfflist extends React.Component {
 						showExport
 						queryItems={getOffQueryItems(getOffAddQueryKeys[key])}
 						handleSearch={searchQuery => {this.handleSearch(key, searchQuery)}} 
-						handleExport={this.handleExportList}
+						handleExport={ () => {this.handleExportList(key)}}
 					/>
 					{ <Alert className='add-list-total-info' message={totalMsg} type="warning" showIcon /> }
 					<div className='rece-add-seledcted'>

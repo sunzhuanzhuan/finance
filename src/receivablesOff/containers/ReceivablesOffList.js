@@ -9,7 +9,7 @@ import * as receivableOffAction from "../actions/receivableOff";
 import * as goldenActions from "../../companyDetail/actions/goldenApply";
 import { addReceOffItem } from '../actions/receivableAdd';
 import qs from 'qs';
-import { getTotalWidth } from '@/util';
+import { getTotalWidth, downloadByATag } from '@/util';
 import { Scolltable } from '@/components';
 import ReceOffModal from './ReceOffModal';
 
@@ -73,6 +73,12 @@ class ReceivablesOffList extends React.Component {
 		this.handleCloseModal(modalType);
 	}
 
+	handleExportList = () => {
+		const { searchQuery = {} } = this.state;
+
+		downloadByATag(`/api/receivables/verification/exportVerification?${qs.stringify(searchQuery)}`);
+	}
+
 	render() {
 		const { 
 			receivableOffList: { total = 0, page = 1, page_size = 20, list = [], statistic = {} }, 
@@ -111,7 +117,7 @@ class ReceivablesOffList extends React.Component {
 			/>
 			<div className='export-btn-wrapper'>
 				<Button type='primary' icon='plus' onClick={() => {this.setState({addVisible: !addVisible})}}>新增核销</Button>
-				<Button type='primary' icon='upload'>全部导出</Button>
+				<Button type='primary' icon='upload' onClick={this.handleExportList}>全部导出</Button>
 			</div>
 			<div className='total-info-wrapper'>
 				<>核销次数：<span className='total-color'>{verification_total}</span>个</>
@@ -179,7 +185,6 @@ class ReceivablesOffList extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-	console.log('lsdkjflskdjflskdfj', state);
 	return {
 		// receivableOffList: state.receivableOff.receivableOffList,
 		// receMetaData: state.receivableOff.receMetaData,

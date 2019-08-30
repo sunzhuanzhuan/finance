@@ -7,7 +7,7 @@ import ReceivableOffQuery from './ReceivableOffQuery';
 import { getTabOptions, getOffDetailQueryKeys, getOffQueryItems, getOffDetailCloIndex, getReceOffCol, getTableId } from '../constants';
 import * as receivableOffAction from "../actions/receivableOff";
 import * as goldenActions from "../../companyDetail/actions/goldenApply";
-import { getTotalWidth } from '@/util';
+import { getTotalWidth, downloadByATag } from '@/util';
 import { Scolltable } from '@/components';
 import { getReceOffDetailList } from '../actions/receivableAdd';
 import qs from 'qs';
@@ -54,8 +54,8 @@ class ReceivablesOffDetail extends React.Component {
 		});
 	}
 
-	handleExportList = () => {
-		
+	handleExportList = key => {
+		downloadByATag(`/api/receivables/verification/exportVerificationDetail?${qs.stringify(this.state[`searchQuery-${key}`])}`);
 	}
 
 	getTabPaneComp = () => {
@@ -111,7 +111,7 @@ class ReceivablesOffDetail extends React.Component {
 						initialValue={search}
 						queryItems={getOffQueryItems(getOffDetailQueryKeys[key])}
 						handleSearch={searchQuery => {this.handleSearch(key, searchQuery)}} 
-						handleExport={this.handleExportList}
+						handleExport={ () => {this.handleExportList(key)}}
 					/>
 					{ <Alert className='add-list-total-info' message={TotalMsg} type="warning" showIcon /> }
 					<Scolltable 

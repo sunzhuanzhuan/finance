@@ -18,9 +18,9 @@ class ReceOffModal extends React.Component {
 		};
 	}
 	static getDerivedStateFromProps(nextProps, prevState) {
-		const { initialValue = {}, type } = nextProps;
+		const { initialValue, type } = nextProps;
 		const { stateInitValue } = prevState;
-		if(type === 'off' && !shallowEqual(initialValue, stateInitValue)) {
+		if(type === 'off' && initialValue && !shallowEqual(initialValue, stateInitValue)) {
 			const { gift_amount, warehouse_amount } = initialValue;
 			return {
 				stateInitValue: initialValue,
@@ -32,7 +32,8 @@ class ReceOffModal extends React.Component {
 		return null
 	}
 	getModalContent = () => {
-		const { type, initialValue = {}, options = {} } = this.props;
+		const { type, options = {} } = this.props;
+		const { stateInitValue = {} } = this.state;
 		if(type === 'preview') {
 			return this.getPreviewTableComp();
 		}else if(type === 'off') {
@@ -40,7 +41,7 @@ class ReceOffModal extends React.Component {
 		}else if(type === 'add') {
 			return this.getAddComp();
 		}else if(type === 'check') {
-			return getValueCheckComp(initialValue, false, options);
+			return getValueCheckComp(stateInitValue, false, options);
 		}
 	}
 	getPreviewTableComp = () => {
@@ -114,7 +115,8 @@ class ReceOffModal extends React.Component {
 	}
 
 	getCheckboxItem = (isStatic) => {
-		const { form, initialValue = {}, options = {} } = this.props;
+		const { form, options = {} } = this.props;
+		const { stateInitValue = {} } = this.state;
 		const { getFieldDecorator } = form;
 		return options['offCheckOption'].map(item => {
 			const { display, id } = item;
@@ -138,7 +140,7 @@ class ReceOffModal extends React.Component {
 						<FormItem className='checkbox-form-item'>
 							{getFieldDecorator(id, 
 							{ 
-								initialValue: initialValue[id],
+								initialValue: stateInitValue[id],
 								rules: [
 									{
 										required: this.state[id],
@@ -164,7 +166,8 @@ class ReceOffModal extends React.Component {
 	}
 
 	getOffFormComp = () => {
-		const { form, isEdit, initialValue = {}, options = {} } = this.props;
+		const { form, isEdit, options = {} } = this.props;
+		const { stateInitValue = {} } = this.state;
 		const { getFieldDecorator } = form;
 		const formItemLayout = {
 			labelCol: { span: 6 },
@@ -189,11 +192,17 @@ class ReceOffModal extends React.Component {
 									{this.getCheckboxItem(isStatic)}
 								</FormItem>
 							)
+						if(compType === 'unalterable')
+								return (
+									<FormItem key={key} label={label} {...formItemLayout} >
+										{this.getUnalterableItem(stateInitValue[key])}
+									</FormItem>
+								)
 						return (
 							<FormItem key={key} label={label} {...formItemLayout} >
 								{getFieldDecorator(key, 
 								{ 
-									initialValue: initialValue[key],
+									initialValue: stateInitValue[key],
 									rules: [
 										validator ? {
 											validator
@@ -215,12 +224,14 @@ class ReceOffModal extends React.Component {
 
 	handleChangeIptNum = () => {
 		const { form } = this.props;
+		const { stateInitValue = {} } = this.state;
 		const offCountObj = form.getFieldsValue(['verification_amount', 'gift_amount', 'warehouse_amount']);
 		const { verification_amount = 0, gift_amount = 0, warehouse_amount = 0 } = offCountObj;
 
 		const debt_amount = verification_amount - gift_amount - warehouse_amount;
 
-		form.setFieldsValue({debt_amount})
+		Object.assign(stateInitValue, {debt_amount});
+		this.setState({stateInitValue});
 	}
 
 	getRadioItem = (option = []) => {
@@ -239,15 +250,20 @@ class ReceOffModal extends React.Component {
 		})
 	}
 
+	getUnalterableItem = (staticVal = '') => {
+		return <div className='unalterableComp'>{staticVal}</div>
+	}
+
 	getFormItem = (key, compType, optionKey, actionKey, disabled, options) => {
 		switch(compType) {
-			case 'input':
+			case 'unalterable':
 				return <Input disabled={disabled} placeholder="请输入"/>;
 			case 'inputNumber':
 				return <InputNumber 
 					disabled={disabled} 
 					className='common-input-numner' 
-					min={0} max={2} 
+					min={0}
+					// max={} 
 					placeholder="请输入"
 					// precision={2}
 					onBlur={value => {this.handleChangeIptNum(key, value)}}
@@ -330,7 +346,7 @@ class ReceOffModal extends React.Component {
 
 	render() {
 		const { visible, width, title, footer, handleCancel } = this.props;
-		const { previewVisible, fieldsValues } = this.state;
+		const { previewVisible, fieldsValues, stateInitValue } = this.state;
 		return [
 				<Modal
 					key='commonModal'

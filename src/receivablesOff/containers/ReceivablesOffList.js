@@ -138,7 +138,9 @@ class ReceivablesOffList extends React.Component {
 				history={history}
 				width={440}
 				title='选择公司'
-				action={this.props.getGoldenCompanyId}
+				actionKeyMap={{
+					company: this.props.getGoldenCompanyId
+				}}
 				handleCancel={() => {this.handleCloseModal('addVisible')}} 
 			/>
 			<ReceOffModal 
@@ -149,7 +151,10 @@ class ReceivablesOffList extends React.Component {
 				initialValue={recordInfo}
 				width={800}
 				title='应收款核销'
-				action={this.props.getGoldenCompanyId}
+				actionKeyMap={{
+					company: this.props.getGoldenCompanyId,
+					sale: this.props.getGoldenCompanyId
+				}}
 				handleCancel={() => {this.handleCloseModal('offVisible')}}
 				handleOk={this.handleModalOk}
 			/>

@@ -158,7 +158,7 @@ class ReceivablesOfflist extends React.Component {
 			})
 		}else if(modalType === 'offVisible') { 
 			this.setState({offVisible: false});
-			this.props.addReceOffItem(values).then(() => {});
+			this.props.addReceOffItem(values).then((result) => {});
 		}
 	}
 
@@ -203,7 +203,10 @@ class ReceivablesOfflist extends React.Component {
 				options={Object.assign(getOffOptions, receMetaData)}
 				width={800}
 				title='应收款核销'
-				action={this.props.getGoldenCompanyId}
+				actionKeyMap={{
+					company: this.props.getGoldenCompanyId,
+					sale: this.props.getGoldenCompanyId
+				}}
 				handleCancel={this.handleModalCancel} 
 				handleOk={this.handleModalOk}
 			/>

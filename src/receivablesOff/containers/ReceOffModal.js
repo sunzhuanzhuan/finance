@@ -9,6 +9,7 @@ import qs from 'qs';
 const { TextArea } = Input;
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
+const { Option } = Select;
 
 class ReceOffModal extends React.Component {
 	constructor(props) {
@@ -71,7 +72,7 @@ class ReceOffModal extends React.Component {
 	}
 
 	getAddComp = () => {
-		const { form, action } = this.props;
+		const { form, actionKeyMap } = this.props;
 		const { getFieldDecorator } = form;
 		const formItemLayout = { labelCol: { span: 6 }, wrapperCol: { span: 16 }, };
 		return (
@@ -85,7 +86,7 @@ class ReceOffModal extends React.Component {
 						<SearchSelect
 							selfWidth
 							placeholder='请选择公司'
-							action={action}
+							action={actionKeyMap['company']}
 							keyWord='company_name'
 							dataToList={res => { return res.data }}
 							item={['company_id', 'name']}
@@ -100,6 +101,7 @@ class ReceOffModal extends React.Component {
 	handleChecked = (e) => {
 		const { target } = e;
 		const { value, checked } = target;
+
 		if(checked && value !== 'no') {
 			this.setState({no: false});
 		}else if(checked && value === 'no') {
@@ -116,12 +118,16 @@ class ReceOffModal extends React.Component {
 		const { getFieldDecorator } = form;
 		return options['offCheckOption'].map(item => {
 			const { display, id } = item;
+			const checkedVal = id !== 'no' ? this.state[id] : 
+				this.state[id] || 
+				(!this.state['gift_amount']) && 
+				(!this.state['warehouse_amount']);
 			const countTips = `${display}余额500.00，最多可抵扣500.00`;
 			return (
 				<div key={id} className='checkbox-wrapper'>
 					<Checkbox 
 						disabled={isStatic}
-						checked={this.state[id]} 
+						checked={checkedVal} 
 						value={id} 
 						onChange={this.handleChecked}
 					>
@@ -173,13 +179,13 @@ class ReceOffModal extends React.Component {
 			<Form>
 				{
 					getOffAddFormItems().map(item => {
-						const { key, label, compType, optionKey, required, disabled, validator } = item;
+						const { key, label, compType, optionKey, actionKey, required, disabled, validator } = item;
 						const tips = compType === 'input' ? '请输入' : '请选择';
 						const isStatic = isEdit && disabled;
 
 						if(key === 'check_box_item')
 							return (
-								<FormItem key={key} label={label} {...formItemLayoutCheck} >
+								<FormItem required key={key} label={label} {...formItemLayoutCheck} >
 									{this.getCheckboxItem(isStatic)}
 								</FormItem>
 							)
@@ -197,7 +203,7 @@ class ReceOffModal extends React.Component {
 										}
 									],
 								})(
-									this.getFormItem(key, compType, optionKey, isStatic, options)
+									this.getFormItem(key, compType, optionKey, actionKey, isStatic, options)
 								)}
 							</FormItem>
 						)
@@ -224,13 +230,16 @@ class ReceOffModal extends React.Component {
 		})
 	}
 
-	getSelectOptions = () => {
+	getSelectOptions = (optionKey) => {
 		const { options = {} } = this.props;
-
-
+		if(!options[optionKey]) return null;
+		return options[optionKey].map(item => {
+			const { id, display } = item;
+			return <Option key={id} value={id}>{display}</Option>
+		})
 	}
 
-	getFormItem = (key, compType, optionKey, disabled, options) => {
+	getFormItem = (key, compType, optionKey, actionKey, disabled, options) => {
 		switch(compType) {
 			case 'input':
 				return <Input disabled={disabled} placeholder="请输入"/>;
@@ -256,7 +265,7 @@ class ReceOffModal extends React.Component {
 			case 'searchSelect':
 				return <SearchSelect
 							disabled={disabled}
-							action={this.props.action} 
+							action={this.props.actionKeyMap[actionKey]} 
 							style={{ width: '100%' }}
 							placeholder='请选择'
 							getPopupContainer={() => document.querySelector('.rece-query')}
@@ -297,7 +306,7 @@ class ReceOffModal extends React.Component {
 		if(type === 'off') {
 			form.validateFields((errs, fieldsValues) => {
 				// if(errs) return;
-				this.setState({fieldsValues, previewVisible: true});
+				this.setState({fieldsValues, previewVisible: true, gift_amount: false, warehouse_amount: false});
 			})
 		}else if(type === 'add') {
 			form.validateFields((errs, values) => {
@@ -369,8 +378,10 @@ function ConfirmModal(props) {
 
 function getValueCheckComp(fieldsValues, isConfirm, options) {
 	const className = isConfirm ? 'fields-con' : 'flex-fields-con';
+	const checkOption = options['offCheckOption'] || []
 	let isShowDeduct;
-	const deductItems = options['offCheckOption']
+
+	const deductItems = checkOption
 		.filter(item => item.id !== 'no')
 		.map(item => {
 			const {id, display} = item;

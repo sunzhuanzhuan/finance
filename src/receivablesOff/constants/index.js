@@ -80,12 +80,12 @@ const validateRemarkText = (rule, value, callback) => {
 };
 export const getOffAddFormItems = () => {
     return [
-        {label: '公司简称', key: 'company_id', compType: 'searchSelect', required: true, disabled: true},
-        {label: '所属销售', key: 'sale_id', compType: 'searchSelect', disabled: true},
-        {label: '本次核销金额', key: 'verification_amount', compType: 'inputNumber', required: true, disabled: true},
+        {label: '公司简称', key: 'company_id', compType: 'searchSelect', actionKey: 'company', disabled: true},
+        {label: '所属销售', key: 'sale_id', compType: 'searchSelect', actionKey: 'sale', disabled: true},
+        {label: '本次核销金额', key: 'verification_amount', compType: 'inputNumber', disabled: true},
         {label: '核销类型', key: 'type', compType: 'select', optionKey: 'verification_type', required: true},
         {label: '抵扣账户/金额', key: 'check_box_item', compType: 'check_box_item', required: true, disabled: true},
-        {label: '核销账户金额', key: 'debt_amount', compType: 'input', required: true, disabled: true},
+        {label: '核销账户金额', key: 'debt_amount', compType: 'input', disabled: true},
         {label: '是否扣减公司GMV', key: 'is_decrease_company_gmv', compType: 'radio', optionKey: 'GMV', required: true},
         {label: '是否扣减销售GMV', key: 'is_decrease_sale_gmv', compType: 'radio', optionKey: 'GMV', required: true},
         {label: '是否计提提成', key: 'is_record_sale_income', compType: 'radio', optionKey: 'payment', required: true},

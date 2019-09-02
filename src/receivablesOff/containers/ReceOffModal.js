@@ -334,6 +334,12 @@ class ReceOffModal extends React.Component {
 		}
 	}
 
+	handleCommonCancel = () => {
+		const { handleCancel } = this.props;
+		handleCancel();
+		this.setState({stateInitValue: undefined});
+	}
+
 	handleConfirm = () =>{
 		const { fieldsValues } = this.state;
 		this.props.handleOk('offVisible', fieldsValues);
@@ -345,8 +351,8 @@ class ReceOffModal extends React.Component {
 	}
 
 	render() {
-		const { visible, width, title, footer, handleCancel } = this.props;
-		const { previewVisible, fieldsValues, stateInitValue } = this.state;
+		const { visible, width, title, footer } = this.props;
+		const { previewVisible, fieldsValues } = this.state;
 		return [
 				<Modal
 					key='commonModal'
@@ -356,7 +362,7 @@ class ReceOffModal extends React.Component {
 					title={title}
 					footer={footer}
 					destroyOnClose
-					onCancel={handleCancel}
+					onCancel={this.handleCommonCancel}
 					onOk={this.handleOk}
 				>
 					{ this.getModalContent() }

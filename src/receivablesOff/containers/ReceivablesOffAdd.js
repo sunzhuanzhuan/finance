@@ -82,7 +82,7 @@ class ReceivablesOfflist extends React.Component {
 					this.handleSelectRows(key, selectedRowKeys, selectedRows);
 				},
 				getCheckboxProps: record => ({
-					// disabled: record.status != 1
+					disabled: record.status != 1
 				}),
 			};
 			const tabTitle = total != undefined ? <div>
@@ -107,7 +107,8 @@ class ReceivablesOfflist extends React.Component {
 							onClick={() => {
 								this.setState({ checkVisible: true, checkedKey: key });
 							}}
-							>查看已选
+						>
+							查看已选
 						</Button>
 					</div>
 					<Scolltable 

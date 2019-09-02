@@ -543,8 +543,14 @@ class ApplyList extends Component {
 					return <p>
 						<p>申请单金额:{record.amount}</p>
 						<p>已开票金额:{record.real_amount}</p>
-						{record.type == 1 || record.type == 5 ? <p><p>已回款金额:{record.payback_amount}</p>
-							<p>待回款金额:{calcSum(arrWaitMoney).toFixed(2)}</p></p> : null}
+						{
+							record.type == 1 || record.type == 5 ? 
+							<p>
+								<p>应回款金额:{record.real_amount}</p>
+								<p>已回款金额:{record.payback_amount}</p>
+								<p>待回款金额:{calcSum(arrWaitMoney).toFixed(2)}</p>
+							</p> : null
+						}
 					</p>
 				}
 			},

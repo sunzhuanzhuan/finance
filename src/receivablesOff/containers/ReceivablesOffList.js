@@ -7,7 +7,7 @@ import ReceivableOffQuery from './ReceivableOffQuery';
 import { getOffListQueryKeys, getOffQueryItems, getOffOptions, getOffListColIndex, getReceOffCol } from '../constants';
 import * as receivableOffAction from "../actions/receivableOff";
 import * as goldenActions from "../../companyDetail/actions/goldenApply";
-import { addReceOffItem } from '../actions/receivableAdd';
+import { editReceOffItem } from '../actions/receivableAdd';
 import qs from 'qs';
 import { getTotalWidth, downloadByATag } from '@/util';
 import { Scolltable } from '@/components';
@@ -69,7 +69,17 @@ class ReceivablesOffList extends React.Component {
 	}
 
 	handleModalOk = (modalType, values) => {
-		this.props.addReceOffItem(values).then(() => {});
+		// const submitObj = {
+		// 	verification_id: '',
+		// 	attach: '',
+		// 	type: '',
+		// 	remark: '',
+		// 	is_record_sale_income: '',
+		// 	is_decrease_company_gmv: '',
+		// 	is_decrease_sale_gmv: '',
+		// };
+
+		this.props.editReceOffItem(values).then(() => {});
 		this.handleCloseModal(modalType);
 	}
 
@@ -272,5 +282,5 @@ const mapStateToProps = (state) => {
 
 	}
 }
-const mapDispatchToProps = dispatch => (bindActionCreators({...receivableOffAction, ...goldenActions, addReceOffItem}, dispatch));
+const mapDispatchToProps = dispatch => (bindActionCreators({...receivableOffAction, ...goldenActions, editReceOffItem}, dispatch));
 export default connect(mapStateToProps, mapDispatchToProps)(Form.create()(ReceivablesOffList))

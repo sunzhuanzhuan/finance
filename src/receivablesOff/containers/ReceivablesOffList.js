@@ -123,7 +123,10 @@ class ReceivablesOffList extends React.Component {
 			<ReceivableOffQuery
 				queryOptions={Object.assign(getOffOptions, receMetaData)} 
 				queryItems={getOffQueryItems(getOffListQueryKeys)}
-				handleSearch={this.handleSearch}
+				handleSearch={this.handleSearch} 
+				actionKeyMap={{
+					company: this.props.getGoldenCompanyId
+				}}
 			/>
 			<div className='export-btn-wrapper'>
 				<Button type='primary' icon='plus' onClick={() => {this.setState({addVisible: !addVisible})}}>新增核销</Button>

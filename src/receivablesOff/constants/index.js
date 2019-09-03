@@ -44,8 +44,8 @@ export const getOffAddQueryKeys = {
 
 export const getOffQueryItems = queryArr => {
     const allQuery =  [
-        {label: '公司简称', key: 'company_id', compType: 'searchSelect'},
-        {label: '销售', key: 'sale_id', compType: 'searchSelect'},
+        {label: '公司简称', key: 'company_id', compType: 'searchSelect', actionKey: 'company', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},
+        {label: '销售', key: 'sale_id', compType: 'searchSelect', actionKey: 'company', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},
         {label: '核销编号', key: 'verification_code', compType: 'input'},
         {label: '核销类型', key: 'type', compType: 'select', optionKey: 'verification_type'},
         {label: '发票申请单ID', key: 'invoice_application_id', compType: 'input'},
@@ -196,7 +196,7 @@ export const getReceOffCol = ( col, receMetaData = {}, action ) => {
             title: '发票申请单ID',
             dataIndex: 'invoice_application_id',
             key: 'invoice_application_id',
-            width: 100,
+            width: 180,
             render
         },
         {
@@ -240,7 +240,7 @@ export const getReceOffCol = ( col, receMetaData = {}, action ) => {
             title: '所属项目/品牌',
             dataIndex: 'project_brand',
             key: 'project_brand',
-            width: 100,
+            width: 180,
             render: (_, record) => {
                 const {project_name = '-', brand_name = '-'} = record;
                 return (
@@ -255,7 +255,7 @@ export const getReceOffCol = ( col, receMetaData = {}, action ) => {
             title: '需求ID/需求名称',
             dataIndex: 'require_id_name',
             key: 'require_id_name',
-            width: 100,
+            width: 180,
             render: (_, record) => {
                 const {requirement_name = '-', requirement_id = '-'} = record;
                 return (
@@ -270,7 +270,7 @@ export const getReceOffCol = ( col, receMetaData = {}, action ) => {
             title: '账号信息',
             dataIndex: 'account_info',
             key: 'account_info',
-            width: 100,
+            width: 180,
             render: (_, record) => {
                 const {weibo_name = '-', account_id = '-', platform_name = '-'} = record;
                 return (
@@ -286,77 +286,77 @@ export const getReceOffCol = ( col, receMetaData = {}, action ) => {
             title: '订单执行完成时间',
             dataIndex: 'execution_completed_time',
             key: 'execution_completed_time',
-            width: 100,
+            width: 180,
             render
         },
         {
             title: '对外报价',
             dataIndex: 'quoted_price',
             key: 'quoted_price',
-            width: 100,
+            width: 110,
             render
         },
         {
             title: '执行价',
             dataIndex: 'deal_price',
             key: 'deal_price',
-            width: 100,
+            width: 110,
             render
         },
         {
             title: '质检返款',
             dataIndex: 'inspection_deducted_amount',
             key: 'inspection_deducted_amount',
-            width: 100,
+            width: 110,
             render
         },
         {
             title: '赠送账户结算',
             dataIndex: 'gift',
             key: 'gift',
-            width: 100,
+            width: 110,
             render
         },
         {
             title: '赔偿',
             dataIndex: 'reparation_amount',
             key: 'reparation_amount',
-            width: 100,
+            width: 110,
             render
         },
         {
             title: '手工质检',
             dataIndex: 'manual_qc_amount',
             key: 'manual_qc_amount',
-            width: 100,
+            width: 110,
             render
         },
         {
             title: '已核销金额',
             dataIndex: 'has_verification_amount',
             key: 'has_verification_amount',
-            width: 100,
+            width: 110,
             render
         },
         {
             title: '已回款金额',
             dataIndex: 'has_payback_amount',
             key: 'has_payback_amount',
-            width: 100,
+            width: 110,
             render
         },
         {
             title: '应收款金额',
             dataIndex: 'verification_amount',
             key: 'verification_amount',
-            width: 100,
+            width: 110,
             render
         },
         {
             title: '现金结算',
             dataIndex: 'cash',
             key: 'cash',
-            width: 100,
+            width: 110,
             render
         },
         {
@@ -417,7 +417,7 @@ export const getReceOffCol = ( col, receMetaData = {}, action ) => {
             title: '本次核销金额',
             dataIndex: 'total_verification_amount',
             key: 'total_verification_amount',
-            width: 100,
+            width: 110,
             render
         },
         {

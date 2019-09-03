@@ -97,6 +97,9 @@ class ReceivablesOfflist extends React.Component {
 						queryItems={getOffQueryItems(getOffAddQueryKeys[key])}
 						handleSearch={searchQuery => {this.handleSearch(key, searchQuery)}} 
 						handleExport={ () => {this.handleExportList(key)}}
+						actionKeyMap={{
+							company: this.props.getGoldenCompanyId
+						}}
 					/>
 					{ <Alert className='add-list-total-info' message={totalMsg} type="warning" showIcon /> }
 					<div className='rece-add-seledcted'>

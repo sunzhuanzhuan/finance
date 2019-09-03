@@ -18,9 +18,9 @@ class ReceOffModal extends React.Component {
 		};
 	}
 	static getDerivedStateFromProps(nextProps, prevState) {
-		const { initialValue, type } = nextProps;
+		const { initialValue } = nextProps;
 		const { stateInitValue } = prevState;
-		if(type === 'off' && initialValue && !shallowEqual(initialValue, stateInitValue)) {
+		if(initialValue && !shallowEqual(initialValue, stateInitValue)) {
 			const { gift_amount, warehouse_amount } = initialValue;
 			return {
 				stateInitValue: initialValue,

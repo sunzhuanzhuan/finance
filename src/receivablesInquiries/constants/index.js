@@ -13,15 +13,15 @@ export const getTableId = {
 
 export const getQueryItems = keys => {
     const allOpts = [
-        {label: '公司简称', compType: 'searchSelect', key: 'company_id', dataIndex: ['company_id', 'name']},
-        {label: '销售', compType: 'searchSelect', key: 'sale_name', dataIndex: ['saleid', 'salename']},
-        {label: '销售主管', compType: 'searchSelect', key: 'sale_supervisor_name', dataIndex: ['salemanageid', 'salemanagename']},
-        {label: '销售经理', compType: 'searchSelect', key: 'sale_manager_name', dataIndex: ['salerid', 'salername']},
+        {label: '公司简称', compType: 'searchSelect', key: 'company_id', actionKey: 'company', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},
+        {label: '销售', compType: 'searchSelect', key: 'sale_name', actionKey: 'company', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},
+        {label: '销售主管', compType: 'searchSelect', key: 'sale_supervisor_name', actionKey: 'company', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},
+        {label: '销售经理', compType: 'searchSelect', key: 'sale_manager_name', actionKey: 'company', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},
         {label: '区域', compType: 'select', key: 'salesman_region'},
         {label: '截止日期', compType: 'date', key: 'time'},
         {label: '回款待分配', compType: 'inputNumber', key: 'wait_allocation_amount'},
         {label: '欠款', compType: 'select', key: 'receivables_aging_range', optionKey: 'receivables_aging_range'},
-        {label: '执行人', compType: 'searchSelect', key: 'executor_admin_user', dataIndex: ['areaid', 'areaname']},
+        {label: '执行人', compType: 'searchSelect', key: 'executor_admin_user', actionKey: 'company', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},
         {label: '发票申请单ID', compType: 'input', key: 'invoice_application_id'},
         {label: '订单ID', compType: 'input', key: 'order_id'},
         {label: '活动ID', compType: 'input', key: 'campaign_id'},

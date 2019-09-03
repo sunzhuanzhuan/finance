@@ -84,6 +84,9 @@ class ReceivablesDetail extends React.Component {
 						queryOptions={receSearchOptions}
 						handleSearch={searchQuery => {this.handleSearch(key, searchQuery)}} 
 						handleExport={() => {this.handleExportList(key)}}
+						actionKeyMap={{
+							company: this.props.getGoldenCompanyId
+						}}
 					/>
 					{ <Alert className='list-total-info' message={totalMsg} type="warning" showIcon /> }
 					<Scolltable 

@@ -95,7 +95,9 @@ class Receivableslist extends React.Component {
 				queryOptions={receSearchOptions}
 				handleSearch={this.handleSearch}
 				handleExport={this.handleExport}
-				action={getGoldenCompanyId}
+				actionKeyMap={{
+					company: this.props.getGoldenCompanyId
+				}}
 			/>
 			<Alert className='list-total-info' message={TotalMsg} type="warning" showIcon />
 			<Scolltable scrollClassName='.ant-table-body' widthScroll={totalWidth}>

@@ -23,19 +23,21 @@ class ReceivableOffQuery extends React.Component {
 			return <Option key={id} value={id}>{display}</Option>
 		})
 	}
-	getFormItem = (compType, optionKey) => {
+	getFormItem = item => {
+		const { compType, optionKey, actionKey, dataIndex, keyWord } = item;
+		const { actionKeyMap = {} } = this.props;
 		switch(compType) {
 			case 'input':
 				return <Input placeholder="请输入" className='common_search_width' />;
 			case 'searchSelect':
 				return <SearchSelect
-							action={this.handleSelectSearch} 
+							action={actionKeyMap[actionKey]} 
 							style={{ width: 170 }}
 							placeholder='请选择'
 							getPopupContainer={() => document.querySelector('.rece-query')}
-							keyWord='company_name'
+							keyWord={keyWord}
 							dataToList={res => { return res.data }}
-							item={['company_id', 'name']}
+							item={dataIndex}
 						/>;
 			case 'select':
 				return <Select 
@@ -113,7 +115,7 @@ class ReceivableOffQuery extends React.Component {
 			return (
 				<FormItem key={key} label={label} >
 					{getFieldDecorator(key)(
-						this.getFormItem(compType, optionKey)
+						this.getFormItem(item)
 					)}
 				</FormItem>
 			)

@@ -112,6 +112,9 @@ class ReceivablesOffDetail extends React.Component {
 						queryItems={getOffQueryItems(getOffDetailQueryKeys[key])}
 						handleSearch={searchQuery => {this.handleSearch(key, searchQuery)}} 
 						handleExport={ () => {this.handleExportList(key)}}
+						actionKeyMap={{
+							company: this.props.getGoldenCompanyId
+						}}
 					/>
 					{ <Alert className='add-list-total-info' message={TotalMsg} type="warning" showIcon /> }
 					<Scolltable 

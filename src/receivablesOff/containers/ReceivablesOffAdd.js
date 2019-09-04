@@ -24,6 +24,10 @@ class ReceivablesOfflist extends React.Component {
 		};
 	}
 
+	componentDidMount() {
+		this.props.getReceMetaData();
+	}
+
 	componentWillUnmount() {
 		this.props.clearReceList();
 	}
@@ -163,7 +167,14 @@ class ReceivablesOfflist extends React.Component {
 			})
 		}else if(modalType === 'offVisible') { 
 			this.setState({offVisible: false});
-			this.props.addReceOffItem(values).then((result) => {});
+			this.props.addReceOffItem(values).then((result) => {
+				const { history } = this.props;
+				history.push('/finance/receivableoff/list');
+			})
+			.catch(error => {
+				const { history } = this.props;
+				history.push('/finance/receivableoff/list');
+			});
 		}
 	}
 

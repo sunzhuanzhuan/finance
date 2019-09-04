@@ -51,7 +51,7 @@ export const getOffQueryItems = queryArr => {
         {label: '发票申请单ID', key: 'invoice_application_id', compType: 'input'},
         {label: '订单ID', key: 'order_id', compType: 'input'},
         {label: '活动ID', key: 'date2', compType: 'input'},
-        {label: '核销时间', key: 'time', compType: 'date'},
+        {label: '核销时间', key: 'time', compType: 'date', submitKey:['created_at_start', 'created_at_end']},
         {label: '是否计提提成', key: 'is_record_sale_income', compType: 'select', optionKey: 'payment'},
         {label: '是否扣减公司GMV', key: 'is_decrease_company_gmv', compType: 'select', optionKey: 'GMV'},
         {label: '是否扣减销售GMV', key: 'is_decrease_sale_gmv', compType: 'select', optionKey: 'GMV'},
@@ -62,9 +62,9 @@ export const getOffQueryItems = queryArr => {
         {label: '品牌', key: 'brand_id', compType: 'input'},
         {label: '需求名称', key: 'requirement_id', compType: 'input'},
         {label: '平台', key: 'pid', compType: 'select'},
-        {label: '订单执行完成时间', key: 'order_complete_time', compType: 'date'},
-        {label: '活动结算时间', key: 'active_time', compType: 'date'},
-        {label: '审核时间', key: 'offtime', compType: 'date'},
+        {label: '订单执行完成时间', key: 'order_complete_time', compType: 'date', submitKey:['time_start', 'time_end']},
+        {label: '活动结算时间', key: 'active_time', compType: 'date', submitKey:['time_start', 'time_end']},
+        {label: '审核时间', key: 'offtime', compType: 'date', submitKey:['time_start', 'time_end']},
         {label: '账号名称', key: 'account_id', compType: 'input'},
         {compType: 'order_id_type', key: 'order_id_type', optionKey: 'prduct_line'},
         {compType: 'operate', key: 'operate'}
@@ -72,20 +72,29 @@ export const getOffQueryItems = queryArr => {
     return queryArr.map(item => allQuery.find(queryItem => queryItem.key === item));
 }
 
-const validateRemarkText = (rule, value, callback) => {
+const validateRemarkText = (_, value, callback) => {
     if(value && value.trim().length > 50) {
         callback('最多输入50个汉字');
     }
     callback();
 };
+const verificationMount = (_, value, callback, totalVal, errorMsg) => {
+    const [firstMsg, secondMsg] = errorMsg;
+    if(!value) {
+        callback(firstMsg);
+    }else if (value - totalVal > 0) {
+        callback(secondMsg || firstMsg)
+    }
+    callback()
+}
 export const getOffAddFormItems = () => {
     return [
         {label: '公司简称', key: 'company_name', compType: 'unalterable'},
         {label: '所属销售', key: 'sale_name', compType: 'unalterable'},
         {label: '本次可核销金额', key: 'can_verification_amount', compType: 'unalterable'},
-        {label: '本次核销金额', key: 'verification_amount', compType: 'inputNumber', required: true, disabled: true},
+        {label: '本次核销金额', key: 'verification_amount', compType: 'inputNumber', required: true, disabled: true, validator: verificationMount},
         {label: '核销类型', key: 'type', compType: 'select', optionKey: 'verification_type', required: true},
-        {label: '抵扣账户/金额', key: 'check_box_item', compType: 'check_box_item', required: true, disabled: true},
+        {label: '抵扣账户/金额', key: 'check_box_item', compType: 'check_box_item', required: true, disabled: true, validator: verificationMount},
         {label: '核销账户金额', key: 'debt_amount', compType: 'unalterable'},
         {label: '是否扣减公司GMV', key: 'is_decrease_company_gmv', compType: 'radio', optionKey: 'GMV', required: true},
         {label: '是否扣减销售GMV', key: 'is_decrease_sale_gmv', compType: 'radio', optionKey: 'GMV', required: true},

@@ -1,19 +1,16 @@
 import React from 'react'
-import { Form, Input, InputNumber, Button, Row, Select, DatePicker } from "antd";
+import { Form, Input, InputNumber, Button, Select, DatePicker } from "antd";
 import SearchSelect from '@/components/SearchSelect';
 
 const { Option } = Select;
 const FormItem = Form.Item;
+const { RangePicker } = DatePicker;
 
 class ReceivableOffQuery extends React.Component {
 	constructor() {
 		super();
 		this.state = {
 		};
-	}
-	componentDidMount() {
-		// const { form, initialValue = {} } = this.props;
-		// form.setFieldsValue(initialValue);
 	}
 	getSelectOption = key => {
 		const { queryOptions = {} } = this.props;
@@ -50,7 +47,7 @@ class ReceivableOffQuery extends React.Component {
 							{ this.getSelectOption(optionKey) }
 					</Select>;
 			case 'date':
-				return <DatePicker placeholder="请输入" className='common_search_width' />;
+				return <RangePicker />;
 			default:
 				return <Input placeholder="请输入" className='common_search_width' />;
 		}
@@ -60,7 +57,7 @@ class ReceivableOffQuery extends React.Component {
 		const { getFieldDecorator } = form;
 
 		return queryItems.map(item => {
-			const {label, compType, key, optionKey} = item;
+			const {label, compType, key} = item;
 			if(compType === 'operate') {
 				return (
 					<FormItem key={key} className='operate-wrapper'>
@@ -121,6 +118,22 @@ class ReceivableOffQuery extends React.Component {
 			)
 		})
 	}
+	dealValuesDate = values => {
+		const { queryItems = [] } = this.props;
+		const valueKeys = Object.keys(values);
+		const dateItems = queryItems.filter(item => item.compType === 'date');
+		dateItems.forEach(item => {
+			const { key, submitKey = [] } = item;
+			const dateKey = valueKeys.find(valuekey => valuekey === key);
+			if(values[dateKey]) {
+				submitKey.forEach((submitItem, index) => {
+					values[submitItem] = values[dateKey][index].format('YYYY-MM-DD')
+				})
+				delete values[dateKey];
+			}
+		})
+		return values;
+	}
 	handleSearch = type => {
 		const { form, handleSearch, handleExport } = this.props;
 
@@ -131,8 +144,10 @@ class ReceivableOffQuery extends React.Component {
 			form.validateFields((errors, values) => {
 				if(errors)
 					return null;
-				Object.assign(values, {page: 1, page_size: 20})
-				handleSearch(values);
+				const dealValues = this.dealValuesDate(values);
+
+				Object.assign(dealValues, {page: 1, page_size: 20});
+				handleSearch(dealValues);
 			})
 		}else if(type === 'export') {
 			handleExport()
@@ -142,10 +157,6 @@ class ReceivableOffQuery extends React.Component {
 	getFormRowComp = () => {
 		const { queryItems = [] } = this.props;
 		return this.getFormItemComp(queryItems)
-	}
-
-	handleSelectSearch = () => {
-
 	}
 
 	render() {

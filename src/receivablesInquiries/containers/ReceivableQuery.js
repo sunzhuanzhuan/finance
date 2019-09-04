@@ -73,32 +73,32 @@ class ReceivableQuery extends React.Component {
 						<Button type='ghost' onClick={() => {this.handleSearch('reset')}}>重置</Button>
 					</FormItem>
 				)
-		}else if(compType === 'rangeAndValue') {
-			return (
-				<span key='rangeAndValue' className='range-value-wrapper'>
-					<FormItem className='range-value-item' >
-						{getFieldDecorator('receivables_aging_range', { initialValue: undefined })(
-							<Select 
-								placeholder="请选择" 
-								className='range-value'
-								filterOption={(input, option) => (
-									option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-								)}
-							>
-								{ this.getSelectOption('receivables_aging_range') }
-							</Select>
-						)}
-					</FormItem>
-					<span className='range-value-sign'>{'>'}</span>
-					<FormItem className='range-value-item' >
-						{getFieldDecorator('receivables_amount', { initialValue: undefined })(
-							<InputNumber className='range-value' min={0}/>
-						)}
-					</FormItem>
-				</span>
-				
-			)
-		}
+			}else if(compType === 'rangeAndValue') {
+				return (
+					<span key='rangeAndValue' className='range-value-wrapper'>
+						<FormItem className='range-value-item' >
+							{getFieldDecorator('receivables_aging_range', { initialValue: undefined })(
+								<Select 
+									placeholder="请选择" 
+									className='range-value'
+									filterOption={(input, option) => (
+										option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+									)}
+								>
+									{ this.getSelectOption('receivables_aging_range') }
+								</Select>
+							)}
+						</FormItem>
+						<span className='range-value-sign'>{'>'}</span>
+						<FormItem className='range-value-item' >
+							{getFieldDecorator('receivables_amount', { initialValue: undefined })(
+								<InputNumber className='range-value' min={0}/>
+							)}
+						</FormItem>
+					</span>
+					
+				)
+			}
 				
 			return (
 				<FormItem key={key} label={label} >

@@ -243,7 +243,8 @@ const mapStateToProps = (state) => {
 					"company_name": '简称1', // 厂商简称
 					"sale_name": '销售1', // 所属销售
 					"type": 1, // 核销类型(需要对照配置信息表)
-					"total_verification_amount": 4, // 本次核销金额
+					'can_verification_amount': 100,
+					"verification_amount": 4, // 本次核销金额
 					"debt_amount": 7, // 核销账户金额
 					"gift_amount": 1, // 赠送/返点账户抵扣金额
 					"warehouse_amount": "500.00", // 小金库抵扣金额
@@ -259,7 +260,8 @@ const mapStateToProps = (state) => {
 					"company_name": '简称2', // 厂商简称
 					"sale_name": '销售2', // 所属销售
 					"type": 1, // 核销类型(需要对照配置信息表)
-					"total_verification_amount": 4, // 本次核销金额
+					'can_verification_amount': 100,
+					"verification_amount": 4, // 本次核销金额
 					"debt_amount": 7, // 核销账户金额
 					"gift_amount": 1, // 赠送/返点账户抵扣金额
 					"warehouse_amount": "500.00", // 小金库抵扣金额

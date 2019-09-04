@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, Form, Table, Button, Input, Radio, Checkbox, Select, Icon, InputNumber, Upload } from "antd";
+import { Modal, Form, Table, Button, Input, Radio, Checkbox, Select, Icon, InputNumber, Upload, message } from "antd";
 import { getOffAddFormItems } from '../constants';
 import { getTotalWidth, shallowEqual } from '@/util';
 import { Scolltable } from '@/components';
@@ -91,7 +91,8 @@ class ReceOffModal extends React.Component {
 							keyWord='company_name'
 							dataToList={res => { return res.data }}
 							item={['company_id', 'name']}
-							style={{width: 250}}
+							style={{width: 250}} 
+							autoFocus
 						/>
 					)}
 				</FormItem>
@@ -114,7 +115,7 @@ class ReceOffModal extends React.Component {
 		});
 	}
 
-	getCheckboxItem = (isStatic) => {
+	getCheckboxItem = (isStatic, validator) => {
 		const { form, options = {} } = this.props;
 		const { stateInitValue = {} } = this.state;
 		const { getFieldDecorator } = form;
@@ -124,7 +125,12 @@ class ReceOffModal extends React.Component {
 				this.state[id] || 
 				(!this.state['gift_amount']) && 
 				(!this.state['warehouse_amount']);
-			const countTips = `${display}余额500.00，最多可抵扣500.00`;
+			const account = 500.00;
+			const countTips = `${display}余额${account}，最多可抵扣${account}`;
+			const errorMsg = [
+				`请输入${display}抵扣金额`,
+				`${display}的抵扣金额不能大于${display}的余额`
+			]
 			return (
 				<div key={id} className='checkbox-wrapper'>
 					<Checkbox 
@@ -143,8 +149,9 @@ class ReceOffModal extends React.Component {
 								initialValue: stateInitValue[id],
 								rules: [
 									{
-										required: this.state[id],
-										message: `请输入${display}抵扣金额`,
+										validator: (rule, value, callback) => {
+											validator(rule, value, callback, account, errorMsg)
+										}
 									}
 								],
 							})(
@@ -159,7 +166,6 @@ class ReceOffModal extends React.Component {
 						</FormItem> : null
 					}
 				</div>
-				
 			)
 		})
 		
@@ -183,13 +189,14 @@ class ReceOffModal extends React.Component {
 				{
 					getOffAddFormItems().map(item => {
 						const { key, label, compType, optionKey, actionKey, required, disabled, validator } = item;
-						const tips = compType === 'input' ? '请输入' : '请选择';
+						const tips = compType === 'input' || compType === 'inputNumber' ? '请输入' : '请选择';
 						const isStatic = isEdit && disabled;
+						const formItemCls = compType === 'upload' ? 'upload-form-item' : ''
 
 						if(key === 'check_box_item')
 							return (
 								<FormItem required key={key} label={label} {...formItemLayoutCheck} >
-									{this.getCheckboxItem(isStatic)}
+									{this.getCheckboxItem(isStatic, validator)}
 								</FormItem>
 							)
 						if(compType === 'unalterable')
@@ -199,13 +206,15 @@ class ReceOffModal extends React.Component {
 									</FormItem>
 								)
 						return (
-							<FormItem key={key} label={label} {...formItemLayout} >
+							<FormItem className={formItemCls} key={key} label={label} {...formItemLayout} >
 								{getFieldDecorator(key, 
 								{ 
 									initialValue: stateInitValue[key],
 									rules: [
 										validator ? {
-											validator
+											validator: (rule, value, callback) => {
+												validator(rule, value, callback, stateInitValue['can_verification_amount'], ['必输输大于0且小于等于本次可核销金额的值'])
+											}
 										} : {
 											required,
 											message: `${tips}${label}`,
@@ -222,16 +231,31 @@ class ReceOffModal extends React.Component {
 		)
 	}
 
+	getErrorTips = msg => {
+		try {
+			if (typeof message.destroy === 'function') {
+				message.destroy();
+			}
+			message.error(msg || '操作失败！');
+		}catch (error) {
+			console.log(error);
+		}
+	};
+
 	handleChangeIptNum = () => {
 		const { form } = this.props;
 		const { stateInitValue = {} } = this.state;
 		const offCountObj = form.getFieldsValue(['verification_amount', 'gift_amount', 'warehouse_amount']);
 		const { verification_amount = 0, gift_amount = 0, warehouse_amount = 0 } = offCountObj;
-
-		const debt_amount = verification_amount - gift_amount - warehouse_amount;
+		const totalDiscount = Number(gift_amount) + Number(warehouse_amount);
+		const debt_amount = verification_amount - totalDiscount;
+		const isIllegalVal = totalDiscount - verification_amount > 0;
+		
+		if(isIllegalVal)
+			this.getErrorTips('抵扣金额的和不能大于本次核销金额!');
 
 		Object.assign(stateInitValue, {debt_amount});
-		this.setState({stateInitValue});
+		this.setState({stateInitValue, isIllegalVal});
 	}
 
 	getRadioItem = (option = []) => {
@@ -254,6 +278,17 @@ class ReceOffModal extends React.Component {
 		return <div className='unalterableComp'>{staticVal}</div>
 	}
 
+	handlePreview = async file => {
+		if (!file.url && !file.preview) {
+			file.preview = await getBase64(file.originFileObj);
+		}
+	
+		this.setState({
+			previewImage: file.url || file.preview,
+			previewPicVisible: true,
+		});
+	};
+
 	getFormItem = (key, compType, optionKey, actionKey, disabled, options) => {
 		switch(compType) {
 			case 'unalterable':
@@ -271,7 +306,7 @@ class ReceOffModal extends React.Component {
 			case 'select':
 				return <Select 
 						disabled={disabled} 
-						placeholder="请输入"
+						placeholder="请选择"
 						filterOption={(input, option) => (
 							option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
 						)}
@@ -299,13 +334,15 @@ class ReceOffModal extends React.Component {
 				return  <>
 					<Upload 
 						action='https://www.mocky.io/v2/5cc8019d300000980a055e76'
-						listType='picture' 
-						className='upload-list-inline'
-						accept="image/png, image/gif, image/jpg"
+						listType="picture-card"
+						accept="image/png, image/gif, image/jpg" 
+						onPreview={this.handlePreview}
+						
 					>
-						<Button>
-							<Icon type="upload" /> 上传
-						</Button>
+						<div>
+							<Icon type="plus" />
+							<div className="ant-upload-text">上传</div>
+						</div>
 					</Upload>
 					<div>支持多图，仅支持jpg\gif\png图片文件，单个文件不能超过3M</div>
 				</>;
@@ -321,8 +358,14 @@ class ReceOffModal extends React.Component {
 
 		if(type === 'off') {
 			form.validateFields((errs, fieldsValues) => {
-				// if(errs) return;
-				this.setState({fieldsValues, previewVisible: true, gift_amount: false, warehouse_amount: false});
+				if(errs) return;
+				const { isIllegalVal } = this.state;
+				if(isIllegalVal) {
+					this.getErrorTips('抵扣金额的和不能大于本次核销金额!');
+				}else {
+					this.setState({fieldsValues, previewVisible: true});
+				}
+
 			})
 		}else if(type === 'add') {
 			form.validateFields((errs, values) => {
@@ -337,22 +380,22 @@ class ReceOffModal extends React.Component {
 	handleCommonCancel = () => {
 		const { handleCancel } = this.props;
 		handleCancel();
-		this.setState({stateInitValue: undefined});
+		this.setState({stateInitValue: undefined, gift_amount: false, warehouse_amount: false});
 	}
 
 	handleConfirm = () =>{
 		const { fieldsValues } = this.state;
 		this.props.handleOk('offVisible', fieldsValues);
-		this.setState({previewVisible: false, fieldsValues: undefined});
+		this.setState({previewVisible: false, fieldsValues: undefined, gift_amount: false, warehouse_amount: false});
 	}
 
 	handleCancel = () => {
-		this.setState({previewVisible: false, fieldsValues: undefined});
+		this.setState({previewVisible: false, fieldsValues: undefined, previewPicVisible: false});
 	}
 
 	render() {
 		const { visible, width, title, footer } = this.props;
-		const { previewVisible, fieldsValues } = this.state;
+		const { previewVisible, fieldsValues, previewPicVisible, previewImage } = this.state;
 		return [
 				<Modal
 					key='commonModal'
@@ -375,6 +418,10 @@ class ReceOffModal extends React.Component {
 					onOk={this.handleConfirm} 
 					onCancel={this.handleCancel}
 				/>
+				,
+				<Modal key='previewPicture' visible={previewPicVisible} footer={null} onCancel={this.handleCancel}>
+					<img alt="example" style={{ width: '100%' }} src={previewImage} />
+				</Modal>
 		]
 	}
 }
@@ -444,4 +491,13 @@ function getValueCheckComp(fieldsValues, isConfirm, options) {
 			}
 		</>
 	)
+}
+
+function getBase64(file) {
+	return new Promise((resolve, reject) => {
+		const reader = new FileReader();
+		reader.readAsDataURL(file);
+		reader.onload = () => resolve(reader.result);
+		reader.onerror = error => reject(error);
+	});
 }

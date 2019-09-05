@@ -250,8 +250,8 @@ const mapStateToProps = (state) => {
 					"warehouse_amount": "500.00", // 小金库抵扣金额
 					"is_record_sale_income": 1, // 是否计提提成
 					"is_decrease_company_gmv": 1, // 是否扣减公司GMV
-					"is_decrease_sale_gmv": 1, // 是否扣减销售GMV
-					"created_at": "2019-07-25 18:47:04", // 核销时间
+					"is_decrease_sale_gmv": 0, // 是否扣减销售GMV
+					"created_at": "2018-09-25 18:47:04", // 核销时间
 					"operator_name": "校长" // 核销人员
 				},
 				{
@@ -265,7 +265,7 @@ const mapStateToProps = (state) => {
 					"debt_amount": 7, // 核销账户金额
 					"gift_amount": 1, // 赠送/返点账户抵扣金额
 					"warehouse_amount": "500.00", // 小金库抵扣金额
-					"is_record_sale_income": 1, // 是否计提提成
+					"is_record_sale_income": 0, // 是否计提提成
 					"is_decrease_company_gmv": 1, // 是否扣减公司GMV
 					"is_decrease_sale_gmv": 1, // 是否扣减销售GMV
 					"created_at": "2019-07-25 18:47:04", // 核销时间

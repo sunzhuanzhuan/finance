@@ -5,7 +5,7 @@ import { getTotalWidth, shallowEqual } from '@/util';
 import { Scolltable } from '@/components';
 import SearchSelect from '@/components/SearchSelect';
 import qs from 'qs';
-
+import moment from 'moment';
 const { TextArea } = Input;
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -174,6 +174,7 @@ class ReceOffModal extends React.Component {
 	getOffFormComp = () => {
 		const { form, isEdit, options = {} } = this.props;
 		const { stateInitValue = {} } = this.state;
+		const { created_at } = stateInitValue;
 		const { getFieldDecorator } = form;
 		const formItemLayout = {
 			labelCol: { span: 6 },
@@ -183,6 +184,8 @@ class ReceOffModal extends React.Component {
 			labelCol: { span: 6 },
 			wrapperCol: { span: 18 },
 		};
+		const isSameMonth = moment(created_at).isSame(moment(), 'year') && 
+			moment(created_at).isSame(moment(), 'month');
 
 		return (
 			<Form>
@@ -190,7 +193,8 @@ class ReceOffModal extends React.Component {
 					getOffAddFormItems().map(item => {
 						const { key, label, compType, optionKey, actionKey, required, disabled, validator } = item;
 						const tips = compType === 'input' || compType === 'inputNumber' ? '请输入' : '请选择';
-						const isStatic = isEdit && disabled;
+						const radioStatic = isEdit && !isSameMonth;
+						const isStatic = compType === 'radio' ? radioStatic : isEdit && disabled;
 						const formItemCls = compType === 'upload' ? 'upload-form-item' : ''
 
 						if(key === 'check_box_item')
@@ -212,6 +216,7 @@ class ReceOffModal extends React.Component {
 									initialValue: stateInitValue[key],
 									rules: [
 										validator ? {
+											required,
 											validator: (rule, value, callback) => {
 												validator(rule, value, callback, stateInitValue['can_verification_amount'], ['必输输大于0且小于等于本次可核销金额的值'])
 											}
@@ -254,7 +259,8 @@ class ReceOffModal extends React.Component {
 		if(isIllegalVal)
 			this.getErrorTips('抵扣金额的和不能大于本次核销金额!');
 
-		Object.assign(stateInitValue, {debt_amount});
+		if(verification_amount)
+			Object.assign(stateInitValue, {debt_amount});
 		this.setState({stateInitValue, isIllegalVal});
 	}
 
@@ -288,6 +294,8 @@ class ReceOffModal extends React.Component {
 			previewPicVisible: true,
 		});
 	};
+
+	handleChangePic = ({ fileList }) => this.setState({ fileList });
 
 	getFormItem = (key, compType, optionKey, actionKey, disabled, options) => {
 		switch(compType) {
@@ -331,20 +339,21 @@ class ReceOffModal extends React.Component {
 					{this.getRadioItem(options[optionKey])}
 				</RadioGroup>;
 			case 'upload':
+				const { fileList = [] } = this.state;
 				return  <>
 					<Upload 
+						multiple
+						disabled={fileList.length >= 5}
 						action='https://www.mocky.io/v2/5cc8019d300000980a055e76'
-						listType="picture-card"
 						accept="image/png, image/gif, image/jpg" 
+						listType="picture-card"
+						fileList={fileList}
 						onPreview={this.handlePreview}
-						
+						onChange={this.handleChangePic}
 					>
-						<div>
-							<Icon type="plus" />
-							<div className="ant-upload-text">上传</div>
-						</div>
+						<div className="ant-upload-text">上传</div>
 					</Upload>
-					<div>支持多图，仅支持jpg\gif\png图片文件，单个文件不能超过3M</div>
+					<div className='upload-infos'>支持最多5张图片上传，仅支持jpg\gif\png图片文件，单个文件不能超过3M</div>
 				</>;
 			case 'textarea':
 				return <TextArea autosize={{ minRows: 4, maxRows: 6 }} placeholder="请输入"/>;
@@ -459,8 +468,14 @@ function getValueCheckComp(fieldsValues, isConfirm, options) {
 				return <div key={id}>{`${display}：${fieldsValues[id] || '-'}`}</div>;
 			}
 		});
+	const radioValueMap = {
+		0: '否',
+		1: '是',
+		'-': '-'
+	}
 	const allFields = getOffAddFormItems().map(item => {
-		const { label, key } = item;
+		const { label, key, compType } = item;
+		const fieldValue = fieldsValues[key] !== undefined ? fieldsValues[key] : '-';
 		if( key === 'check_box_item')
 			return (
 				<div key={key} className='deduct-wrapper'>
@@ -468,7 +483,7 @@ function getValueCheckComp(fieldsValues, isConfirm, options) {
 					{ isShowDeduct ? <div>{deductItems}</div> : '-' }
 				</div> 
 			)
-		return `${label}：${fieldsValues[key] || '-'}`
+		return `${label}：${compType === 'radio' ? radioValueMap[fieldValue] : fieldValue}`;
 	})
 
 	return (

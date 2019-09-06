@@ -10,6 +10,7 @@ import * as goldenActions from "../../companyDetail/actions/goldenApply";
 import { Scolltable } from '@/components';
 import { getTotalWidth, downloadByATag } from '@/util';
 import qs from 'qs';
+import numeral from 'numeral';
 class Receivableslist extends React.Component {
 	constructor() {
 		super();
@@ -62,8 +63,8 @@ class Receivableslist extends React.Component {
 		const TotalMsg = (
 			<div className='total-info-wrapper'>
 				<>公司数量：<span className='total-color'>{company_num}</span></>
-				<span className='total-margin'>总欠款：<span className='total-color'>{total_receivables_amount}</span></span>
-				<>回款待分配金额：<span className='total-color'>{total_wait_allocation_amount}</span></>
+				<span className='total-margin'>总欠款：<span className='total-color'>{numeral(total_receivables_amount).format('0.00')}</span></span>
+				<>回款待分配金额：<span className='total-color'>{numeral(total_wait_allocation_amount).format('0.00')}</span></>
 			</div>
 		);
 		const totalWidth = getTotalWidth(receivableCol());
@@ -96,7 +97,7 @@ class Receivableslist extends React.Component {
 				handleSearch={this.handleSearch}
 				handleExport={this.handleExport}
 				actionKeyMap={{
-					company: this.props.getGoldenCompanyId
+					company: getGoldenCompanyId
 				}}
 			/>
 			<Alert className='list-total-info' message={TotalMsg} type="warning" showIcon />

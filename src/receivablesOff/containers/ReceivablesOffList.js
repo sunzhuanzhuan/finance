@@ -263,8 +263,8 @@ const mapStateToProps = (state) => {
 					'can_verification_amount': 100,
 					"verification_amount": 4, // 本次核销金额
 					"debt_amount": 7, // 核销账户金额
-					"gift_amount": 1, // 赠送/返点账户抵扣金额
-					"warehouse_amount": "500.00", // 小金库抵扣金额
+					"gift_amount": 11, // 赠送/返点账户抵扣金额
+					"warehouse_amount": "5001.00", // 小金库抵扣金额
 					"is_record_sale_income": 0, // 是否计提提成
 					"is_decrease_company_gmv": 1, // 是否扣减公司GMV
 					"is_decrease_sale_gmv": 1, // 是否扣减销售GMV

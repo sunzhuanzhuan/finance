@@ -1,4 +1,6 @@
 import React from "react";
+import { Popconfirm } from 'antd';
+import numeral from 'numeral';
 
 export const getTabOptions = [
     { tab: '预约', key: 'yuyueyuyue' },
@@ -9,7 +11,7 @@ export const getTabOptions = [
 export const getTableId = {
     yuyueyuyue: 'order_id',
     weishantou: 'campaign_id',
-    tuozhanyewu: 'verification_id',
+    tuozhanyewu: 'id',
 }
 
 export const getOffListQueryKeys = [
@@ -78,30 +80,32 @@ const validateRemarkText = (_, value, callback) => {
     }
     callback();
 };
-const verificationMount = (_, value, callback, totalVal, errorMsg) => {
+const verificationMount = (_, value, callback, totalVal, errorMsg, moreThanZero) => {
     const [firstMsg, secondMsg] = errorMsg;
-    if(!value) {
+    const emptyCondition = moreThanZero ? !(value > 0) : !(value || value >= 0)
+    if(emptyCondition) {
         callback(firstMsg);
     }else if (value - totalVal > 0) {
         callback(secondMsg || firstMsg)
     }
     callback()
 }
-export const getOffAddFormItems = () => {
-    return [
+export const getOffAddFormItems = (arrKey) => {
+    const itemsArr = [
         {label: '公司简称', key: 'company_name', compType: 'unalterable'},
         {label: '所属销售', key: 'sale_name', compType: 'unalterable'},
-        {label: '本次可核销金额', key: 'can_verification_amount', compType: 'unalterable'},
-        {label: '本次核销金额', key: 'verification_amount', compType: 'inputNumber', required: true, disabled: true, validator: verificationMount},
+        {label: '本次可核销金额', key: 'can_verification_amount', compType: 'unalterable', isNumber: true},
+        {label: '本次核销金额', key: 'verification_amount', compType: 'inputNumber', isNumber: true, required: true, disabled: true, validator: verificationMount},
         {label: '核销类型', key: 'type', compType: 'select', optionKey: 'verification_type', required: true},
         {label: '抵扣账户/金额', key: 'check_box_item', compType: 'check_box_item', required: true, disabled: true, validator: verificationMount},
-        {label: '核销账户金额', key: 'debt_amount', compType: 'unalterable'},
+        {label: '核销账户金额', key: 'debt_amount', compType: 'unalterable', isNumber: true},
         {label: '是否扣减公司GMV', key: 'is_decrease_company_gmv', compType: 'radio', optionKey: 'GMV', required: true},
         {label: '是否扣减销售GMV', key: 'is_decrease_sale_gmv', compType: 'radio', optionKey: 'GMV', required: true},
         {label: '是否计提提成', key: 'is_record_sale_income', compType: 'radio', optionKey: 'payment', required: true},
         {label: '核销说明', key: 'attach', compType: 'upload'},
         {label: '备注', key: 'remark', compType: 'textarea', validator: validateRemarkText},
-    ]
+    ];
+    return arrKey ? arrKey.map(item => itemsArr.find(itemKey => itemKey.key === item)) : itemsArr;
 }
 
 export const getOffOptions = {
@@ -144,11 +148,15 @@ const render = (data = '-') => {
 
 const isRender = data => {
     return (
-        data == 1 ? '是' : '否'
+        data !== undefined ? data == 1 ? '是' : '否' : '-'
     )
 }
 
-export const getReceOffCol = ( col, receMetaData = {}, action ) => {
+const renderNum = data => {
+    return data !== undefined ? numeral(data).format('0.00') : '-'
+}
+
+export const getReceOffCol = ( col, receMetaData = {}, action, activeKey ) => {
     const allCol =  [
         {
             title: '订单ID',
@@ -236,7 +244,7 @@ export const getReceOffCol = ( col, receMetaData = {}, action ) => {
             dataIndex: 'cost',
             key: 'cost',
             width: 100,
-            render
+            render: renderNum
         },
         {
             title: '订单状态',
@@ -303,70 +311,70 @@ export const getReceOffCol = ( col, receMetaData = {}, action ) => {
             dataIndex: 'quoted_price',
             key: 'quoted_price',
             width: 110,
-            render
+            render: renderNum
         },
         {
             title: '执行价',
             dataIndex: 'deal_price',
             key: 'deal_price',
             width: 110,
-            render
+            render: renderNum
         },
         {
             title: '质检返款',
             dataIndex: 'inspection_deducted_amount',
             key: 'inspection_deducted_amount',
             width: 110,
-            render
+            render: renderNum
         },
         {
             title: '赠送账户结算',
             dataIndex: 'gift',
             key: 'gift',
             width: 110,
-            render
+            render: renderNum
         },
         {
             title: '赔偿',
             dataIndex: 'reparation_amount',
             key: 'reparation_amount',
             width: 110,
-            render
+            render: renderNum
         },
         {
             title: '手工质检',
             dataIndex: 'manual_qc_amount',
             key: 'manual_qc_amount',
             width: 110,
-            render
+            render: renderNum
         },
         {
             title: '已核销金额',
             dataIndex: 'has_verification_amount',
             key: 'has_verification_amount',
             width: 110,
-            render
+            render: renderNum
         },
         {
             title: '已回款金额',
             dataIndex: 'has_payback_amount',
             key: 'has_payback_amount',
             width: 110,
-            render
+            render: renderNum
         },
         {
             title: '应收款金额',
             dataIndex: 'verification_amount',
             key: 'verification_amount',
             width: 110,
-            render
+            render: renderNum
         },
         {
             title: '现金结算',
             dataIndex: 'cash',
             key: 'cash',
             width: 110,
-            render
+            render: renderNum
         },
         {
             title: '审核时间',
@@ -427,28 +435,28 @@ export const getReceOffCol = ( col, receMetaData = {}, action ) => {
             dataIndex: 'total_verification_amount',
             key: 'total_verification_amount',
             width: 110,
-            render
+            render: renderNum
         },
         {
             title: '核销账户金额',
             dataIndex: 'debt_amount',
             key: 'debt_amount',
             width: 100,
-            render
+            render: renderNum
         },
         {
             title: '赠送/返点账户抵扣金额',
             dataIndex: 'gift_amount',
             key: 'gift_amount',
             width: 100,
-            render
+            render: renderNum
         },
         {
             title: '小金库抵扣金额',
             dataIndex: 'warehouse_amount',
             key: 'warehouse_amount',
             width: 100,
-            render
+            render: renderNum
         },
         {
             title: '是否计提提成',
@@ -497,6 +505,27 @@ export const getReceOffCol = ( col, receMetaData = {}, action ) => {
                     <a onClick={ () => { action('detail', verification_id)}}>订单详情</a>
                     <a onClick={ () => { action('check', record)}}>查看</a>
                     <a onClick={ () => { action('edit', record)}}>编辑</a>
+                </>
+            }
+        },
+        {
+            title: '操作',
+            dataIndex: 'previewOperate',
+            key: 'previewOperate',
+            width: 100,
+            fixed: 'right',
+            render:(_, record) => {
+                const dataKey = getTableId[activeKey];
+
+                return <>
+                    <Popconfirm 
+                        title="是否确定删除？" 
+                        okText="确定" 
+                        cancelText="取消"
+                        onConfirm={() => {action(record[dataKey], dataKey)}}
+                    >
+                        <a>删除</a>
+                    </Popconfirm>
                 </>
             }
         },

@@ -1,11 +1,12 @@
 import React from 'react'
 import { Modal, Form, Table, Button, Input, Radio, Checkbox, Select, Icon, InputNumber, Upload, message } from "antd";
 import { getOffAddFormItems } from '../constants';
-import { getTotalWidth, shallowEqual } from '@/util';
+import { getTotalWidth } from '@/util';
 import { Scolltable } from '@/components';
 import SearchSelect from '@/components/SearchSelect';
 import qs from 'qs';
 import moment from 'moment';
+import numeral from 'numeral';
 const { TextArea } = Input;
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -18,11 +19,12 @@ class ReceOffModal extends React.Component {
 		};
 	}
 	static getDerivedStateFromProps(nextProps, prevState) {
-		const { initialValue } = nextProps;
-		const { stateInitValue } = prevState;
-		if(initialValue && !shallowEqual(initialValue, stateInitValue)) {
+		const { initialValue = {}, visible } = nextProps;
+		const { stateVisible } = prevState;
+		if(stateVisible !== visible) {
 			const { gift_amount, warehouse_amount } = initialValue;
 			return {
+				stateVisible: visible,
 				stateInitValue: initialValue,
 				gift_amount: Boolean(gift_amount),
 				warehouse_amount: Boolean(warehouse_amount),
@@ -157,8 +159,8 @@ class ReceOffModal extends React.Component {
 							})(
 								<InputNumber 
 									disabled={isStatic} 
-									min={0} placeholder="请输入"
-									// precision={2}
+									placeholder="请输入"
+									precision={2}
 									onBlur={val => {this.handleChangeIptNum(id, val)}}
 								/>
 							)}
@@ -218,7 +220,7 @@ class ReceOffModal extends React.Component {
 										validator ? {
 											required,
 											validator: (rule, value, callback) => {
-												validator(rule, value, callback, stateInitValue['can_verification_amount'], ['必输输大于0且小于等于本次可核销金额的值'])
+												validator(rule, value, callback, stateInitValue['can_verification_amount'], ['必输输大于0且小于等于本次可核销金额的值'], true)
 											}
 										} : {
 											required,
@@ -253,10 +255,10 @@ class ReceOffModal extends React.Component {
 		const offCountObj = form.getFieldsValue(['verification_amount', 'gift_amount', 'warehouse_amount']);
 		const { verification_amount = 0, gift_amount = 0, warehouse_amount = 0 } = offCountObj;
 		const totalDiscount = Number(gift_amount) + Number(warehouse_amount);
-		const debt_amount = verification_amount - totalDiscount;
+		const debt_amount = numeral(verification_amount - totalDiscount).format('0.00');
 		const isIllegalVal = totalDiscount - verification_amount > 0;
-		
-		if(isIllegalVal)
+
+		if(isIllegalVal && totalDiscount && verification_amount)
 			this.getErrorTips('抵扣金额的和不能大于本次核销金额!');
 
 		if(verification_amount)
@@ -305,10 +307,8 @@ class ReceOffModal extends React.Component {
 				return <InputNumber 
 					disabled={disabled} 
 					className='common-input-numner' 
-					min={0}
-					// max={} 
 					placeholder="请输入"
-					// precision={2}
+					precision={2}
 					onBlur={value => {this.handleChangeIptNum(key, value)}}
 				/>;
 			case 'select':
@@ -364,17 +364,18 @@ class ReceOffModal extends React.Component {
 
 	handleOk = () => {
 		const { type, form, history } = this.props;
+		const { stateInitValue } = this.state;
 
 		if(type === 'off') {
 			form.validateFields((errs, fieldsValues) => {
-				if(errs) return;
+				// if(errs) return;
 				const { isIllegalVal } = this.state;
 				if(isIllegalVal) {
 					this.getErrorTips('抵扣金额的和不能大于本次核销金额!');
 				}else {
-					this.setState({fieldsValues, previewVisible: true});
+					Object.assign(stateInitValue, fieldsValues);
+					this.setState({stateInitValue, previewVisible: true});
 				}
-
 			})
 		}else if(type === 'add') {
 			form.validateFields((errs, values) => {
@@ -386,25 +387,21 @@ class ReceOffModal extends React.Component {
 		}
 	}
 
-	handleCommonCancel = () => {
-		const { handleCancel } = this.props;
-		handleCancel();
-		this.setState({stateInitValue: undefined, gift_amount: false, warehouse_amount: false});
-	}
-
 	handleConfirm = () =>{
-		const { fieldsValues } = this.state;
-		this.props.handleOk('offVisible', fieldsValues);
-		this.setState({previewVisible: false, fieldsValues: undefined, gift_amount: false, warehouse_amount: false});
+		const { stateInitValue } = this.state;
+		this.props.handleOk('offVisible', stateInitValue);
+		this.setState({
+			previewVisible: false
+		});
 	}
 
 	handleCancel = () => {
-		this.setState({previewVisible: false, fieldsValues: undefined, previewPicVisible: false});
+		this.setState({previewVisible: false, previewPicVisible: false});
 	}
 
 	render() {
-		const { visible, width, title, footer } = this.props;
-		const { previewVisible, fieldsValues, previewPicVisible, previewImage } = this.state;
+		const { visible, width, title, footer, handleCancel, options } = this.props;
+		const { previewVisible, stateInitValue, previewPicVisible, previewImage } = this.state;
 		return [
 				<Modal
 					key='commonModal'
@@ -414,7 +411,7 @@ class ReceOffModal extends React.Component {
 					title={title}
 					footer={footer}
 					destroyOnClose
-					onCancel={this.handleCommonCancel}
+					onCancel={handleCancel}
 					onOk={this.handleOk}
 				>
 					{ this.getModalContent() }
@@ -423,12 +420,18 @@ class ReceOffModal extends React.Component {
 					key='confirmModal'
 					visible={previewVisible} 
 					title='应收核销'
-					fieldsValues={fieldsValues} 
+					options={options}
+					fieldsValues={stateInitValue} 
 					onOk={this.handleConfirm} 
 					onCancel={this.handleCancel}
 				/>
 				,
-				<Modal key='previewPicture' visible={previewPicVisible} footer={null} onCancel={this.handleCancel}>
+				<Modal 
+					key='previewPicture' 
+					visible={previewPicVisible} 
+					footer={null} 
+					onCancel={this.handleCancel}
+				>
 					<img alt="example" style={{ width: '100%' }} src={previewImage} />
 				</Modal>
 		]
@@ -438,7 +441,11 @@ class ReceOffModal extends React.Component {
 export default Form.create()(ReceOffModal)
 function ConfirmModal(props) {
 	const { visible, title, fieldsValues = {}, onOk, onCancel, options = {} } = props;
-	
+	const itemKeys = [
+		'can_verification_amount', 'verification_amount', 'check_box_item', 
+		'debt_amount', 'is_decrease_company_gmv', 'is_decrease_sale_gmv', 
+		'is_record_sale_income'
+	];
 	return (
 		<Modal
 			wrapClassName='rece-off-confirm-modal'
@@ -449,33 +456,34 @@ function ConfirmModal(props) {
 			onCancel={onCancel}
 			onOk={onOk}
 		>
-			{getValueCheckComp(fieldsValues, true, options)}
+			{getValueCheckComp(fieldsValues, true, options, itemKeys)}
 		</Modal>
 	)
 }
 
-function getValueCheckComp(fieldsValues, isConfirm, options) {
+function getValueCheckComp(fieldsValues, isConfirm, options, itemKeys) {
 	const className = isConfirm ? 'fields-con' : 'flex-fields-con';
 	const checkOption = options['offCheckOption'] || []
 	let isShowDeduct;
+	const getNumeral = value => {
+		return value || value == 0 ? numeral(value).format('0.00') : '-';
+	}
 
 	const deductItems = checkOption
 		.filter(item => item.id !== 'no')
 		.map(item => {
 			const {id, display} = item;
-			if(fieldsValues[id]) {
+			if(fieldsValues[id])
 				isShowDeduct = true;
-				return <div key={id}>{`${display}：${fieldsValues[id] || '-'}`}</div>;
-			}
+			return <div key={id}>{`${display}：${getNumeral(fieldsValues[id])}`}</div>;
 		});
 	const radioValueMap = {
 		0: '否',
 		1: '是',
-		'-': '-'
 	}
-	const allFields = getOffAddFormItems().map(item => {
-		const { label, key, compType } = item;
-		const fieldValue = fieldsValues[key] !== undefined ? fieldsValues[key] : '-';
+	const allFields = getOffAddFormItems(itemKeys).map(item => {
+		const { label, key, compType, isNumber, optionKey } = item;
+		let showValue;
 		if( key === 'check_box_item')
 			return (
 				<div key={key} className='deduct-wrapper'>
@@ -483,7 +491,18 @@ function getValueCheckComp(fieldsValues, isConfirm, options) {
 					{ isShowDeduct ? <div>{deductItems}</div> : '-' }
 				</div> 
 			)
-		return `${label}：${compType === 'radio' ? radioValueMap[fieldValue] : fieldValue}`;
+		if(compType === 'radio') {
+			showValue = radioValueMap[fieldsValues[key]] || '-';
+		}else if(compType === 'select') {
+			const selectOption = options[optionKey] || [];
+			const itemInfo = selectOption.find(optItem => optItem.id == fieldsValues[key]) || {};
+			showValue = itemInfo.display || '-';
+		}else if(isNumber) {
+			showValue = getNumeral(fieldsValues[key]);
+		}else {
+			showValue = fieldsValues[key] || '-';
+		}
+		return `${label}：${showValue}`;
 	})
 
 	return (

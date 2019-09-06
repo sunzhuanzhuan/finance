@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import './receivableOff.less';
-import { Table, Button, Alert, Tabs } from "antd";
+import { Table, Button, Alert, Tabs, message } from "antd";
 import ReceivableOffQuery from './ReceivableOffQuery';
 import { getTabOptions, getOffAddQueryKeys, getOffQueryItems, getReceAddColIndex, getReceOffCol, getTableId, getOffOptions } from '../constants';
 import * as receivableOffAction from "../actions/receivableOff";
@@ -33,9 +33,15 @@ class ReceivablesOfflist extends React.Component {
 	}
 
 	handleSearch = (key, searchQuery) => {
-		this.setState({[`searchQuery-${key}`]: searchQuery});
+		this.setState({[`searchQuery-${key}`]: searchQuery, loading: true});
 		Object.assign(searchQuery, {key});
-		this.props.getReceAddList(searchQuery);
+
+		this.props.getReceAddList(searchQuery).then(() => {
+			this.setState({loading: false});
+		}).catch(({ errorMsg }) => {
+			this.setState({ loading: false });
+			message.error(errorMsg || '列表加载失败，请重试！');
+		});
 	}
 
 	handleExportList = key => {
@@ -112,7 +118,7 @@ class ReceivablesOfflist extends React.Component {
 							className='left-gap' type='primary' 
 							disabled={disabled} 
 							onClick={() => {
-								this.setState({ checkVisible: true, checkedKey: key });
+								this.setState({ checkVisible: true });
 							}}
 						>
 							查看已选
@@ -138,7 +144,7 @@ class ReceivablesOfflist extends React.Component {
 					</Scolltable>
 					<div className='rece-footer'>
 						<Button disabled={disabled} type='primary' onClick={() => {
-							this.setState({ offVisible: true, checkedKey: key });
+							this.setState({ offVisible: true });
 						}}>核销订单</Button>
 					</div>
 				</TabPane>
@@ -154,34 +160,43 @@ class ReceivablesOfflist extends React.Component {
 		this.setState({
 			checkVisible: false,
 			offVisible: false,
-			checkedKey: undefined
 		})
 	}
 
 	handleModalOk = (modalType, values) => {
-		const { checkedKey } = this.state;
+		const { activeKey } = this.state;
 		if(modalType === 'preview') {
 			this.setState({
-				[`selectedRowKeys-${checkedKey}`]: [], 
-				[`selectedRows-${checkedKey}`]: [], 
+				[`selectedRowKeys-${activeKey}`]: [], 
+				[`selectedRows-${activeKey}`]: [], 
 			})
 		}else if(modalType === 'offVisible') { 
-			this.setState({offVisible: false});
-			this.props.addReceOffItem(values).then((result) => {
+			this.props.addReceOffItem(values).then(() => {
 				const { history } = this.props;
+				this.setState({offVisible: false});
 				history.push('/finance/receivableoff/list');
 			})
-			.catch(error => {
-				const { history } = this.props;
-				history.push('/finance/receivableoff/list');
+			.catch(({errorMsg}) => {
+				message.error(errorMsg || '操作失败');
 			});
 		}
 	}
 
+	handleRemoveSelected = (id, itemKey) => {
+		const { activeKey } = this.state;
+		const rowKeys = this.state[`selectedRowKeys-${activeKey}`];
+		const rows = this.state[`selectedRows-${activeKey}`];
+
+		this.setState({
+			[`selectedRowKeys-${activeKey}`]: rowKeys.filter(item => item !== id), 
+			[`selectedRows-${activeKey}`]: rows.filter(item => item[itemKey] !== id),
+		})
+	}
+
 	render() {
 		const { receMetaData = {} } = this.props;
-		const { activeKey, checkVisible, offVisible, checkedKey } = this.state;
-		const tabColArr = checkedKey !== undefined ? getReceAddColIndex[checkedKey] : [];
+		const { activeKey, checkVisible, offVisible } = this.state;
+		const tabColArr = getReceAddColIndex[activeKey] || [];
 		const title = <div>
 			<span>{`新增核销-${'保洁'}`}</span>
 			<span className='total-margin'>{`销售：${'懒猫'}`}</span>
@@ -210,8 +225,8 @@ class ReceivablesOfflist extends React.Component {
 				handleCancel={this.handleModalCancel} 
 				handleOk={ () => {this.handleModalOk('preview')}}
 				footer={null}
-				columns={getReceOffCol(tabColArr)}
-				dataSource={this.state[`selectedRows-${checkedKey}`]}
+				columns={getReceOffCol([...tabColArr, 'previewOperate'], receMetaData, this.handleRemoveSelected, activeKey)}
+				dataSource={this.state[`selectedRows-${activeKey}`]}
 			/>
 			<ReceOffModal 
 				type='off'
@@ -235,7 +250,40 @@ const mapStateToProps = (state) => {
 	
 	return {
 		receAddListInfo,
-		receMetaData,
+		receMetaData: {
+			"prduct_line": [   // 订单类型
+				{
+					"id": 2,
+					"display": "微闪投"
+				},
+				{
+					"id": 3,
+					"display": "预约订单"
+				},
+				{
+					"id": 7,
+					"display": "拓展业务"
+				}
+			],
+			"verification_type": [   // 核销类型
+				{
+					"id": 1,
+					"display": "客户整体折让"
+				},
+				{
+					"id": 2,
+					"display": "订单折让(赔偿)"
+				},
+				{
+					"id": 3,
+					"display": "坏账清理"
+				},
+				{
+					"id": 4,
+					"display": "其他"
+				}
+			]
+		},
 	}
 }
 const mapDispatchToProps = dispatch => (

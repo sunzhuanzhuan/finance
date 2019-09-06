@@ -1,4 +1,6 @@
 import React from "react";
+import numeral from 'numeral';
+
 export const getTabOptions = [
     { tab: '预约', key: 'reservationList' },
     { tab: '微闪投', key: 'campaignList' },
@@ -56,6 +58,10 @@ const render = (data = '-') => {
     return (
         <div>{data}</div>
     )
+}
+
+const renderNum = data => {
+    return data !== undefined ? numeral(data).format('0.00') : '-'
 }
 
 export const getReceivableDetailCol = keys => {
@@ -234,16 +240,17 @@ export const getReceivableDetailCol = keys => {
             dataIndex: 'receivables_amount',
             key: 'receivables_amount',
             width: 100,
-            render
+            render: renderNum
         }
     ];
     return keys.map(item => allCols.find(queryItem => queryItem.key === item));
 }
 
-const mRender = (data = '-', mKey, handleJump) => {
+const mRender = (data, mKey, handleJump) => {
     const className = data ? 'detail_entry_comp' : '';
+    const showData = data !== undefined ? numeral(data).format('0.00') : '-'; 
     return (
-        <div className={className} onClick={() => {handleJump(mKey)}}>{data}</div>
+        <div className={className} onClick={() => {handleJump(mKey)}}>{showData}</div>
     )
 }
 
@@ -267,14 +274,14 @@ export const receivableCol = handleJump => [
         dataIndex: 'receivables_amount',
         key: 'receivables_amount',
         width: 100,
-        render
+        render: renderNum
     },
     {
         title: '回款待分配',
         dataIndex: 'wait_allocation_amount',
         key: 'wait_allocation_amount',
         width: 100,
-        render
+        render: renderNum
     },
     {
         title: 'M0',

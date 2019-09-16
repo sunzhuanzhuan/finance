@@ -1,5 +1,5 @@
 import React from "react";
-import { Popover, Icon, Tooltip } from 'antd';
+import { Popover, Icon, Tooltip, Table } from 'antd';
 import { Link } from 'react-router-dom';
 import numeral from 'numeral';
 import moment from 'moment';
@@ -1016,6 +1016,105 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				dataIndex: 'discount_per',
 				key: 'discount_per',
 				width: 100,
+			},
+			'published_price': {
+				title: '刊例价/渠道价',
+				dataIndex: 'published_price',
+				key: 'published_price',
+				width: 640,
+				render: () => {
+					const columns = [
+						{
+							title: '',
+							key: 'empty',
+							width: 50,
+							children: [
+								{
+									title: '',
+									dataIndex: 'price_title',
+									width: 50,
+									key: 'empty_child'
+								}
+							]
+						},
+						{
+							title: '发布',
+							key: 'publish',
+							children: [
+								{
+									title: '刊例价',
+									dataIndex: 'publish_price',
+									key: 'publish_price',
+									width: 50,
+									align: 'center'
+								},
+								{
+									title: '渠道价',
+									dataIndex: 'publish_channel_price',
+									key: 'publish_channel_price',
+									width: 50,
+									align: 'center'
+								},
+								{
+									title: '微播易对外报价',
+									dataIndex: 'publish_weiboyi',
+									key: 'publish_weiboyi',
+									width: 100,
+									align: 'center'
+								},
+							]
+						},
+						{
+							title: '原创',
+							key: 'original',
+							children: [
+								{
+									title: '刊例价',
+									dataIndex: 'original_price',
+									key: 'original_price',
+									width: 50,
+									align: 'center'
+								},
+								{
+									title: '渠道价',
+									dataIndex: 'original_channel',
+									key: 'original_channel',
+									width: 50,
+									align: 'center'
+								},
+								{
+									title: '微播易对外报价',
+									dataIndex: 'original_weiboyi',
+									key: 'original_weiboyi',
+									width: 100,
+									align: 'center'
+								},
+							]
+						}
+					];
+					return [
+						<div key='price_time' style={{width: '100%', textAlign: 'center', border: '1px solid #e8e8e8', borderBottom: 0, padding: '6px 4px', fontWeight: 500, color: 'rgba(0, 0, 0, 0.85)', background: '#fafafa'}}>价格有效期至：2019-6-5</div>,
+						<Table
+							key='price_table'
+							columns={columns}
+							dataSource={[
+								{
+									'price_title': '多一',
+									'publish_price': '刊例价',
+									'publish_channel_price': '渠道价',
+									'publish_weiboyi': '微播易对外报价',
+									'original_price': '刊例价',
+									'original_channel': '渠道价',
+									'original_weiboyi': '微播易对外报价',
+								}
+							]}
+							bordered
+							size="middle"
+							pagination={false}
+							// scroll={{ x: '130%', y: 240 }}
+						/>
+					]
+				}
 			},
 			'order_bottom_price': {
 				title: '订单底价',

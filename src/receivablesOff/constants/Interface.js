@@ -1,8 +1,8 @@
 export default {
-	getReceMetaData: '/receivables/verification/metadata',
+	getReceMetaData: '/finance/receivables/verification/metadata',
 	getReceivableOffList: '/finance/readjust/applicationList',
 	getReceOffDetailList: '/finance/readjust/applicationList',
 	getReceAddOffList: '/finance/readjust/applicationList',
-	addReceOffItem: '/receivables/verification/commit',
-	editReceOffItem: '/receivables/verification/edit',
+	addReceOffItem: '/finance/receivables/verification/commit',
+	editReceOffItem: '/finance/receivables/verification/edit',
 }

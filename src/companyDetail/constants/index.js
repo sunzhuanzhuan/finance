@@ -1093,7 +1093,12 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 						}
 					];
 					return [
-						<div key='price_time' style={{width: '100%', textAlign: 'center', border: '1px solid #e8e8e8', borderBottom: 0, padding: '6px 4px', fontWeight: 500, color: 'rgba(0, 0, 0, 0.85)', background: '#fafafa'}}>价格有效期至：2019-6-5</div>,
+						<div 
+							key='price_info' 
+							className='price_info'
+							style={{width: '100%', textAlign: 'center', border: '1px solid #e8e8e8', borderBottom: 0, padding: '6px 4px', fontWeight: 500, color: 'rgba(0, 0, 0, 0.85)', background: '#fafafa'}}>
+								各价格均为订单创建时刻的价格
+						</div>,
 						<Table
 							key='price_table'
 							columns={columns}

@@ -92,7 +92,7 @@ class PreTable extends React.Component {
 		return (
 			<div>
 				{isExistWarning ? <Alert closable style={{marginBottom: '20px'}} message="请注意标红的订单：订单最低售卖价小于订单底价，建议修改调价类型/利润率/服务费率。" type="warning" showIcon /> : null}
-				<Scolltable isMoreThanOne scrollClassName='.preTable .ant-table-body' widthScroll={3670}>
+				<Scolltable isMoreThanOne scrollClassName='.preTable .ant-table-body' widthScroll={4000}>
 					<Table 
 						rowKey='order_id' 
 						className='preTable'
@@ -100,7 +100,7 @@ class PreTable extends React.Component {
 						dataSource={data} 
 						bordered 
 						pagination={isApplication ? applicationPaginationObj : paginationObj} 
-						scroll={{ x: 3300 }}
+						scroll={{ x: 3600 }}
 					/>
 				</Scolltable>
 			</div>

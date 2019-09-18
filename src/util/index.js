@@ -182,8 +182,7 @@ var events = new EventEmitter()
  * return Number
  */
 const getTotalWidth = (arr = []) => {
-	const finalWidth = arr.reduce((accumulator, item) => accumulator + parseInt(item.width), 0) || 0;
-	return finalWidth;
+	return arr.reduce((accumulator, item) => accumulator + parseInt(item.width), 0);
 }
 
 /**

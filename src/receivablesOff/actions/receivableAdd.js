@@ -92,8 +92,8 @@ export function editReceOffItem(newInfo = {}, key) {
 }
 
 export default function receAddReducer(state = {}, action) {
-    const { listData, key } = action;
-    switch (action.type) {
+	const { listData, key, type } = action;
+    switch (type) {
         case GET_RECE_DETAIL_LIST:
 			return { ...state, [`receDetailInfo-${key}`]: listData, updateKey: +new Date() + Math.random()};
 		case GET_RECE_ADD_LIST:

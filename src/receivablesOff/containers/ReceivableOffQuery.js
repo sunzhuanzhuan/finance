@@ -57,7 +57,7 @@ class ReceivableOffQuery extends React.Component {
 		const { getFieldDecorator } = form;
 
 		return queryItems.map(item => {
-			const {label, compType, key} = item;
+			const {label, compType, key, rangeKey = []} = item;
 			if(compType === 'operate') {
 				return (
 					<FormItem key={key} className='operate-wrapper'>
@@ -95,13 +95,13 @@ class ReceivableOffQuery extends React.Component {
 				return (
 					<FormItem key={key} label={label} className='number_range_wrapper'>
 						<FormItem className='number_range_item' >
-							{getFieldDecorator(`${key}_min`)(
+							{getFieldDecorator(rangeKey[0])(
 								<InputNumber className='range-value' min={0}/>
 							)}
 						</FormItem>
 						<span className='range-value-sign'>{'~'}</span>
 						<FormItem className='number_range_item' >
-							{getFieldDecorator(`${key}_max`)(
+							{getFieldDecorator(rangeKey[1])(
 								<InputNumber className='range-value' min={0}/>
 							)}
 						</FormItem>

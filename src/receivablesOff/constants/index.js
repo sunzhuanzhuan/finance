@@ -26,22 +26,22 @@ export const getOffDetailQueryKeys = {
         'warehouse_amount', 'invoice_application_id', 'brand_id', 'operate'
     ],
     weishantou: [
-        'verification_code', 'company_id', 'sale_id', 'date2', 'time', 'region', 'project_id', 
+        'verification_code', 'company_id', 'sale_id', 'campaign_id', 'time', 'region', 'project_id', 
         'pid', 'type', 'is_decrease_sale_gmv', 'is_decrease_company_gmv', 
         'is_record_sale_income', 'active_time', 'gift_amount', 'warehouse_amount', 'invoice_application_id', 
         'brand_id', 'operate'
     ],
     tuozhanyewu: [
-        'verification_code', 'company_id', 'sale_id', 'date2', 'time', 'region', 'project_id', 'type', 
+        'verification_code', 'company_id', 'sale_id', 'id', 'time', 'region', 'project_id', 'type', 
         'is_decrease_sale_gmv', 'is_decrease_company_gmv', 'is_record_sale_income', 'offtime', 
         'gift_amount', 'warehouse_amount', 'invoice_application_id', 'brand_id', 'operate' 
     ],
 };
 
 export const getOffAddQueryKeys = {
-    yuyueyuyue: ['invoice_application_id', 'order_id', 'order_complete_time', 'brand_id', 'project_id', 'requirement_id', 'pid', 'account_id', 'operate'],
-    weishantou: ['date2', 'active_time', 'brand_id', 'invoice_application_id', 'project_id', 'pid', 'account_id', 'operate'],
-    tuozhanyewu: ['date2', 'invoice_application_id', 'offtime', 'brand_id', 'project_id', 'operate'],
+    yuyueyuyue: ['order_id', 'invoice_application_id', 'order_complete_time', 'brand_id', 'project_id', 'requirement_id', 'pid', 'account_id', 'operate'],
+    weishantou: ['campaign_id', 'active_time', 'brand_id', 'invoice_application_id', 'project_id', 'pid', 'account_id', 'operate'],
+    tuozhanyewu: ['id', 'invoice_application_id', 'offtime', 'brand_id', 'project_id', 'operate'],
 };
 
 export const getOffQueryItems = queryArr => {
@@ -52,13 +52,14 @@ export const getOffQueryItems = queryArr => {
         {label: '核销类型', key: 'type', compType: 'select', optionKey: 'verification_type'},
         {label: '发票申请单ID', key: 'invoice_application_id', compType: 'input'},
         {label: '订单ID', key: 'order_id', compType: 'input'},
-        {label: '活动ID', key: 'date2', compType: 'input'},
+        {label: '活动ID', key: 'campaign_id', compType: 'input'},
+        {label: '活动ID', key: 'id', compType: 'input'},
         {label: '核销时间', key: 'time', compType: 'date', submitKey:['created_at_start', 'created_at_end']},
         {label: '是否计提提成', key: 'is_record_sale_income', compType: 'select', optionKey: 'payment'},
         {label: '是否扣减公司GMV', key: 'is_decrease_company_gmv', compType: 'select', optionKey: 'GMV'},
         {label: '是否扣减销售GMV', key: 'is_decrease_sale_gmv', compType: 'select', optionKey: 'GMV'},
-        {label: '赠送/返点账户抵扣金额', key: 'gift_amount', compType: 'number_range'},
-        {label: '小金库抵扣金额', key: 'warehouse_amount', compType: 'number_range'},
+        {label: '赠送/返点账户抵扣金额', key: 'gift_amount', compType: 'number_range', rangeKey: ['total_gift_amount_min', 'total_gift_amount_max']},
+        {label: '小金库抵扣金额', key: 'warehouse_amount', compType: 'number_range', rangeKey: ['total_warehouse_amount_min', 'total_warehouse_amount_max']},
         {label: '区域', key: 'region', compType: 'select'},
         {label: '所属项目', key: 'project_id', compType: 'input'},
         {label: '品牌', key: 'brand_id', compType: 'input'},
@@ -134,10 +135,16 @@ export const getOffDetailCloIndex = {
     tuozhanyewu: ['verification_code', 'type', 'id', 'business_name', 'company_name', 'saler_region', 'project_brand', 'invoice_application_id', 'pass_time', 'total_verification_amount', 'debt_amount', 'gift_amount', 'warehouse_amount', 'is_decrease_company_gmv', 'is_record_sale_income', 'is_decrease_sale_gmv', 'operator_name', 'created_at'],
 }
 
+// export const getReceAddColIndex = {
+//     yuyueyuyue: ['order_id', 'project_brand', 'require_id_name', 'account_info', 'invoice_application_id', 'execution_completed_time', 'verification_amount', 'total_verification_amount', 'quoted_price', 'deal_price', 'inspection_deducted_amount', 'cash', 'gift', 'reparation_amount', 'manual_qc_amount', 'has_verification_amount', 'has_payback_amount'],
+//     weishantou: ['campaign_id', 'project_brand', 'account_info', 'invoice_application_id', 'settlement_time', 'verification_amount', 'total_verification_amount', 'deal_price', 'inspection_deducted_amount', 'cash', 'gift', 'manual_qc_amount', 'has_verification_amount', 'has_payback_amount'],
+//     tuozhanyewu: ['id', 'active_name_type', 'project_brand', 'invoice_application_id', 'pass_time', 'verification_amount', 'total_verification_amount', 'cost', 'cash', 'gift', 'has_verification_amount', 'has_payback_amount'],
+// }
+
 export const getReceAddColIndex = {
-    yuyueyuyue: ['order_id', 'project_brand', 'require_id_name', 'account_info', 'invoice_application_id', 'execution_completed_time', 'verification_amount', 'total_verification_amount', 'quoted_price', 'deal_price', 'inspection_deducted_amount', 'cash', 'gift', 'reparation_amount', 'manual_qc_amount', 'has_verification_amount', 'has_payback_amount'],
-    weishantou: ['campaign_id', 'project_brand', 'account_info', 'invoice_application_id', 'settlement_time', 'verification_amount', 'total_verification_amount', 'deal_price', 'inspection_deducted_amount', 'cash', 'gift', 'manual_qc_amount', 'has_verification_amount', 'has_payback_amount'],
-    tuozhanyewu: ['id', 'active_name_type', 'project_brand', 'invoice_application_id', 'pass_time', 'verification_amount', 'total_verification_amount', 'cost', 'cash', 'gift', 'has_verification_amount', 'has_payback_amount'],
+    yuyueyuyue: ['order_id_no_fIxed', 'project_brand', 'require_id_name', 'account_info', 'invoice_application_id', 'execution_completed_time', 'verification_amount', 'total_verification_amount'],
+    weishantou: ['campaign_id_no_fIxed', 'project_brand', 'account_info', 'invoice_application_id', 'settlement_time', 'verification_amount', 'total_verification_amount'],
+    tuozhanyewu: ['id', 'active_name_type', 'project_brand', 'invoice_application_id', 'pass_time', 'verification_amount', 'total_verification_amount'],
 }
 
 const render = (data = '-') => {

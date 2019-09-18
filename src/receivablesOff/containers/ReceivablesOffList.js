@@ -4,12 +4,12 @@ import { bindActionCreators } from "redux";
 import './receivableOff.less';
 import { Form, message, Table, Button } from "antd";
 import ReceivableOffQuery from './ReceivableOffQuery';
-import { getOffListQueryKeys, getOffQueryItems, getOffOptions, getOffListColIndex, getReceOffCol } from '../constants';
+import { getTotalWidth, downloadByATag } from '@/util';
+import { getOffListQueryKeys, getOffQueryItems, getOffOptions, getReceOffCol, getOffListColIndex } from '../constants';
 import * as receivableOffAction from "../actions/receivableOff";
 import * as goldenActions from "../../companyDetail/actions/goldenApply";
 import { editReceOffItem } from '../actions/receivableAdd';
 import qs from 'qs';
-import { getTotalWidth, downloadByATag } from '@/util';
 import { Scolltable } from '@/components';
 import ReceOffModal from './ReceOffModal';
 
@@ -198,92 +198,95 @@ class ReceivablesOffList extends React.Component {
 }
 
 const mapStateToProps = (state) => {
+	console.log('s;dfjklskdjflksdjf',state);
+	const { receivableOff = {} } = state;
+	const { receivableOffList = {}, receMetaData = {}} = receivableOff;
 	return {
-		// receivableOffList: state.receivableOff.receivableOffList,
-		// receMetaData: state.receivableOff.receMetaData,
-		receMetaData: {
-			"prduct_line": [   // 订单类型
-				{
-					"id": 2,
-					"display": "微闪投"
-				},
-				{
-					"id": 3,
-					"display": "预约订单"
-				},
-				{
-					"id": 7,
-					"display": "拓展业务"
-				}
-			],
-			"verification_type": [   // 核销类型
-				{
-					"id": 1,
-					"display": "客户整体折让"
-				},
-				{
-					"id": 2,
-					"display": "订单折让(赔偿)"
-				},
-				{
-					"id": 3,
-					"display": "坏账清理"
-				},
-				{
-					"id": 4,
-					"display": "其他"
-				}
-			]
-		},
-		receivableOffList: {
-			"list": [
-				{
-					"verification_id": 78,
-					"verification_code": "ZQ201907250001", // 核销编号
-					"company_name": '简称1', // 厂商简称
-					"sale_name": '销售1', // 所属销售
-					"type": 1, // 核销类型(需要对照配置信息表)
-					'can_verification_amount': 100,
-					"verification_amount": 4, // 本次核销金额
-					"debt_amount": 7, // 核销账户金额
-					"gift_amount": 1, // 赠送/返点账户抵扣金额
-					"warehouse_amount": "500.00", // 小金库抵扣金额
-					"is_record_sale_income": 1, // 是否计提提成
-					"is_decrease_company_gmv": 1, // 是否扣减公司GMV
-					"is_decrease_sale_gmv": 0, // 是否扣减销售GMV
-					"created_at": "2018-09-25 18:47:04", // 核销时间
-					"operator_name": "校长" // 核销人员
-				},
-				{
-					"verification_id": 79,
-					"verification_code": "ZQ201907250001", // 核销编号
-					"company_name": '简称2', // 厂商简称
-					"sale_name": '销售2', // 所属销售
-					"type": 1, // 核销类型(需要对照配置信息表)
-					'can_verification_amount': 100,
-					"verification_amount": 4, // 本次核销金额
-					"debt_amount": 7, // 核销账户金额
-					"gift_amount": 11, // 赠送/返点账户抵扣金额
-					"warehouse_amount": "5001.00", // 小金库抵扣金额
-					"is_record_sale_income": 0, // 是否计提提成
-					"is_decrease_company_gmv": 1, // 是否扣减公司GMV
-					"is_decrease_sale_gmv": 1, // 是否扣减销售GMV
-					"created_at": "2019-07-25 18:47:04", // 核销时间
-					"operator_name": "校长" // 核销人员
-				}
-			],
-			"statistic": {
-				"verification_total": "4800.00", // 核销次数
-				"order_amount": "3800.00", // 订单数
-				"verification_amount_total": "1000.00", // 核销金额
-				"debt_amount_total": "3300.00", // 核销账户金额
-				"gift_amount_total": "-3300.00", // 赠送/返点账户抵扣
-				"warehouse_amount_total": "-3300.00" // 小金库抵扣
-			},
-			"page": "1",
-			"page_size": "20",
-			"total": 14
-		}
+		receivableOffList,
+		receMetaData,
+		// receMetaData: {
+		// 	"prduct_line": [   // 订单类型
+		// 		{
+		// 			"id": 2,
+		// 			"display": "微闪投"
+		// 		},
+		// 		{
+		// 			"id": 3,
+		// 			"display": "预约订单"
+		// 		},
+		// 		{
+		// 			"id": 7,
+		// 			"display": "拓展业务"
+		// 		}
+		// 	],
+		// 	"verification_type": [   // 核销类型
+		// 		{
+		// 			"id": 1,
+		// 			"display": "客户整体折让"
+		// 		},
+		// 		{
+		// 			"id": 2,
+		// 			"display": "订单折让(赔偿)"
+		// 		},
+		// 		{
+		// 			"id": 3,
+		// 			"display": "坏账清理"
+		// 		},
+		// 		{
+		// 			"id": 4,
+		// 			"display": "其他"
+		// 		}
+		// 	]
+		// },
+		// receivableOffList: {
+		// 	"list": [
+		// 		{
+		// 			"verification_id": 78,
+		// 			"verification_code": "ZQ201907250001", // 核销编号
+		// 			"company_name": '简称1', // 厂商简称
+		// 			"sale_name": '销售1', // 所属销售
+		// 			"type": 1, // 核销类型(需要对照配置信息表)
+		// 			'can_verification_amount': 100,
+		// 			"verification_amount": 4, // 本次核销金额
+		// 			"debt_amount": 7, // 核销账户金额
+		// 			"gift_amount": 1, // 赠送/返点账户抵扣金额
+		// 			"warehouse_amount": "500.00", // 小金库抵扣金额
+		// 			"is_record_sale_income": 1, // 是否计提提成
+		// 			"is_decrease_company_gmv": 1, // 是否扣减公司GMV
+		// 			"is_decrease_sale_gmv": 0, // 是否扣减销售GMV
+		// 			"created_at": "2018-09-25 18:47:04", // 核销时间
+		// 			"operator_name": "校长" // 核销人员
+		// 		},
+		// 		{
+		// 			"verification_id": 79,
+		// 			"verification_code": "ZQ201907250001", // 核销编号
+		// 			"company_name": '简称2', // 厂商简称
+		// 			"sale_name": '销售2', // 所属销售
+		// 			"type": 1, // 核销类型(需要对照配置信息表)
+		// 			'can_verification_amount': 100,
+		// 			"verification_amount": 4, // 本次核销金额
+		// 			"debt_amount": 7, // 核销账户金额
+		// 			"gift_amount": 11, // 赠送/返点账户抵扣金额
+		// 			"warehouse_amount": "5001.00", // 小金库抵扣金额
+		// 			"is_record_sale_income": 0, // 是否计提提成
+		// 			"is_decrease_company_gmv": 1, // 是否扣减公司GMV
+		// 			"is_decrease_sale_gmv": 1, // 是否扣减销售GMV
+		// 			"created_at": "2019-07-25 18:47:04", // 核销时间
+		// 			"operator_name": "校长" // 核销人员
+		// 		}
+		// 	],
+		// 	"statistic": {
+		// 		"verification_total": "4800.00", // 核销次数
+		// 		"order_amount": "3800.00", // 订单数
+		// 		"verification_amount_total": "1000.00", // 核销金额
+		// 		"debt_amount_total": "3300.00", // 核销账户金额
+		// 		"gift_amount_total": "-3300.00", // 赠送/返点账户抵扣
+		// 		"warehouse_amount_total": "-3300.00" // 小金库抵扣
+		// 	},
+		// 	"page": "1",
+		// 	"page_size": "20",
+		// 	"total": 14
+		// }
 
 	}
 }

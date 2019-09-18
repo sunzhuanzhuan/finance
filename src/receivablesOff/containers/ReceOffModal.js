@@ -299,6 +299,11 @@ class ReceOffModal extends React.Component {
 
 	handleChangePic = ({ fileList }) => this.setState({ fileList });
 
+	beforeUpload = file => {
+		console.log('slkdfjlsdjflksdjf', file)
+		// return false;
+	}
+
 	getFormItem = (key, compType, optionKey, actionKey, disabled, options) => {
 		switch(compType) {
 			case 'unalterable':
@@ -350,6 +355,8 @@ class ReceOffModal extends React.Component {
 						fileList={fileList}
 						onPreview={this.handlePreview}
 						onChange={this.handleChangePic}
+						beforeUpload={this.beforeUpload}
+						// customRequest={this.handleChange}
 					>
 						<div className="ant-upload-text">上传</div>
 					</Upload>

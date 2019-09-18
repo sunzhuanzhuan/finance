@@ -44,6 +44,13 @@ export const {
 });
 
 export const {
+	verificationDecreaseGmv,
+	verificationDecreaseGmv_success
+} = createHttpAction('verificationDecreaseGmv', Interface.verificationDecreaseGmv, {
+	method: 'get'
+});
+
+export const {
 	payBackExcel,
 	payBackExcel_success
 } = createHttpAction('payBackExcel', Interface.payBackExcel, {

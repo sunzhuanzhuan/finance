@@ -134,7 +134,6 @@ class AdjustApplyDetail extends React.Component {
 		const { total: allTotal } = allDetailList;
 		const financeColArr = ['order_id', 'status', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'main_account_info', 'policy_id', 'quoted_price', 'discount_rate', 'published_price', 'order_bottom_price', 'commissioned_price', 'history_min_sell_price', 'history_rate', 'min_sell_price', 'quote_type', 'auditor_name', 'pass_time', 'remark'];
 		const detailColArr = costFlag ? financeColArr : financeColArr.filter(item => item !== 'quoted_price' && item !== 'policy_id');
-		const financeWidth = costFlag ? 4080 : 3760;
 		const preFinanceArr = ['prev_id', 'statusPre', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'main_account_info', 'quoted_price', 'discount_rate', 'published_price', 'order_bottom_price', 'commissioned_price', 'pre_min_sell_price', 'preview_quote_type'];
 		const dealPreArr = costFlag ? preFinanceArr : preFinanceArr.filter(item => item !== 'quoted_price');
 		const adjustApplyDetail = flag ? 

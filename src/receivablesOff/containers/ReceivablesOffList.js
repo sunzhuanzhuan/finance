@@ -198,7 +198,6 @@ class ReceivablesOffList extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-	console.log('s;dfjklskdjflksdjf',state);
 	const { receivableOff = {} } = state;
 	const { receivableOffList = {}, receMetaData = {}} = receivableOff;
 	return {

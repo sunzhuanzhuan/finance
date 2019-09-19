@@ -34,7 +34,7 @@ class ReceivablesOfflist extends React.Component {
 
 	handleSearch = (key, searchQuery) => {
 		this.setState({[`searchQuery-${key}`]: searchQuery, loading: true});
-		Object.assign(searchQuery, {key});
+		Object.assign(searchQuery, {key, });
 
 		this.props.getReceAddList(searchQuery).then(() => {
 			this.setState({loading: false});

@@ -177,6 +177,14 @@ var events = new EventEmitter()
 // })
 // window.events = events;
 // events.emit('message', 'hello world')
+/**
+ * @param arr [Array]
+ * return Number
+ */
+const getTotalWidth = (arr = []) => {
+	return arr.reduce((accumulator, item) => accumulator + parseInt(item.width), 0);
+}
+
 export {
 	showLoading,
 	hideLoading,
@@ -187,7 +195,8 @@ export {
 	shallowEqual,
 	changeHistorySearch,
 	changeHistoryLocation,
-	events
+	events,
+	getTotalWidth
 }
 export { calcSum } from './calcSum'
 

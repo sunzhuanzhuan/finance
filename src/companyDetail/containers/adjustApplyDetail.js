@@ -11,6 +11,7 @@ import "./golden.less";
 import { getApplyDetailList } from '../actions/getApplyList';
 import qs from 'qs';
 import difference from 'lodash/difference';
+import { getTotalWidth } from '@/util';
 const { TextArea } = Input;
 const { TabPane } = Tabs;
 
@@ -150,6 +151,7 @@ class AdjustApplyDetail extends React.Component {
 					<span key='name'>{display}</span>
 					<span key='count'>{total}</span>
 				</div>;
+				const scrollWidth = getTotalWidth(adjustApplyDetail)
 				return (
 					<TabPane tab={tab} key={id}>
 						<ApplyTable
@@ -165,7 +167,7 @@ class AdjustApplyDetail extends React.Component {
 							curSelectRows={curSelectRows}
 							handleSelected={this.handleSelected}
 							location={this.props.location}
-							scroll={flag ? { x: financeWidth } : { x: 2620 }}
+							scroll={{ x: scrollWidth }}
 						>
 						</ApplyTable>
 					</TabPane>

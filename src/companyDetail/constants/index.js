@@ -633,7 +633,7 @@ export const addAdjustApplyConfig = (quote_type = [], platformIcon = []) => [
 		title: '账号信息',
 		dataIndex: 'account_id',
 		key: 'account_id',
-		width: 320,
+		width: 230,
 		render: (data = '-', { weibo_name = '-', platform_id, warningClass }) => {
 			const platformInfo = platformIcon.find(item => item.id == platform_id) || {};
 			return <div className={`left_content_td platform_wrapper ${warningClass}`}>
@@ -773,7 +773,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				dataIndex: 'policy_id',
 				key: 'policy_id',
 				align: 'center',
-				width: 100,
+				width: 60,
 				render: (text) => {
 					return text > 0 ? <a target="_blank" href={`/account/policy?id=${text}`}>查看</a> : '-'
 				}
@@ -839,7 +839,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '公司简称',
 				dataIndex: 'company_name',
 				key: 'company_name',
-				width: 160,
+				width: 120,
 				render: (text, record) => {
 					return <div className={`${record.warningClass}`}>
 						<div>{text || '-'}</div>
@@ -850,7 +850,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '所属项目/品牌',
 				dataIndex: 'project_name',
 				key: 'project_name',
-				width: 230,
+				width: 160,
 				render: (text, record) => {
 					const { brand_name } = record;
 					return <div className={`left_content_td ${record.warningClass}`}>
@@ -875,7 +875,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '需求ID/需求名称',
 				dataIndex: 'requirement_id_name',
 				key: 'requirement_id_name',
-				width: 230,
+				width: 180,
 				render: (text, { requirement_id = '-', requirement_name = '-', warningClass }) => {
 					return <div className={`left_content_td ${warningClass}`}>
 						<div>需求ID：{requirement_id}</div>
@@ -887,7 +887,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '账号信息',
 				dataIndex: 'account_id',
 				key: 'account_id',
-				width: 320,
+				width: 180,
 				render: (data = '-', { weibo_name = '-', platform_id, warningClass }) => {
 					const platformInfo = platformIcon.find(item => item.id == platform_id) || {};
 					return <div className={`left_content_td platform_wrapper ${warningClass}`}>
@@ -931,7 +931,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				</Tooltip>,
 				dataIndex: 'identity_name',
 				key: 'identity_name',
-				width: 320,
+				width: 180,
 				render: (data, { order_default_cycle, default_cycle, partner_type_name, warningClass }) => {
 					const defaultCycle = default_cycle ? `${default_cycle}天` : '-';
 					const orderCycle = order_default_cycle ? `${order_default_cycle}天` : '-'
@@ -947,7 +947,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '主账号信息',
 				dataIndex: 'identity_name',
 				key: 'identity_name',
-				width: 320,
+				width: 180,
 				render: (data, { partner_type_name, warningClass }) => {
 					return <div className={warningClass}>
 						<div style={{ marginBottom: 10 }}>主账号：{data}</div>
@@ -978,7 +978,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '折扣比例',
 				dataIndex: 'discount_rate',
 				key: 'discount_rate',
-				width: 100,
+				width: 80,
 				render: (_, record) => {
 					// const discount = record.price && record.price[0] ? record.price[0].discount_rate : 0;
 					// return record.quote_type != '2' ? numeral(discount).format('0.00%') : '-'
@@ -1015,7 +1015,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '折扣比例',
 				dataIndex: 'discount_per',
 				key: 'discount_per',
-				width: 100,
+				width: 70,
 			},
 			'published_price': {
 				title: '刊例价/渠道价',
@@ -1249,7 +1249,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '本次利润率/服务费率',
 				dataIndex: 'quote_type',
 				key: 'quote_type',
-				width: 100,
+				width: 90,
 				render: (_, { previewReadjustType, previewRateVal, warningClass }) => {
 					const rateVal = previewRateVal || previewRateVal == 0 ? numeral(previewRateVal).format('0.00%') : '-'
 					return (
@@ -1263,7 +1263,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '审核时间',
 				dataIndex: 'pass_time',
 				key: 'pass_time',
-				width: 160,
+				width: 100,
 				render: (text) => {
 					const flag = text === '0000-00-00 00:00:00';
 					return !flag ? text : '-';
@@ -1273,7 +1273,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '审核人',
 				dataIndex: 'auditor_name',
 				key: 'auditor_name',
-				width: 160,
+				width: 100,
 				render: text => {
 					return text || '-';
 				}
@@ -1282,7 +1282,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '备注',
 				dataIndex: 'remark',
 				key: 'remark',
-				width: 244,
+				width: 140,
 				render: (_, { remark }) => {
 					if (remark && remark.length > 30) {
 						return <div title={remark}>

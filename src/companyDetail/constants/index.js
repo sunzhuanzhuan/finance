@@ -1303,6 +1303,18 @@ const render = data => {
 	return data || '-';
 }
 
+const publishRender = (data, record) => {
+	const { createdTime } = record;
+	const isOld = moment(createdTime).isAfter('2019-09-18 15:54:49');
+	return isOld && data ? data : '-';
+}
+
+const originalRender = (data, record) => {
+	const { createdTimeOriginal } = record;
+	const isOld = moment(createdTimeOriginal).isAfter('2019-09-18 15:54:49');
+	return isOld && data ? data : '-';
+}
+
 const getPublishedCol = isWechat => {
 	const wxCol = [
 		{
@@ -1329,7 +1341,7 @@ const getPublishedCol = isWechat => {
 					key: 'publicationPrice',
 					width: 50,
 					align: 'center',
-					render
+					render: publishRender
 				},
 				{
 					title: '渠道价',
@@ -1337,7 +1349,7 @@ const getPublishedCol = isWechat => {
 					key: 'channelPrice',
 					width: 50,
 					align: 'center',
-					render
+					render: publishRender
 				},
 				{
 					title: '微播易对外报价',
@@ -1345,7 +1357,7 @@ const getPublishedCol = isWechat => {
 					key: 'quotePrice',
 					width: 100,
 					align: 'center',
-					render
+					render: publishRender
 				},
 			]
 		},
@@ -1359,7 +1371,7 @@ const getPublishedCol = isWechat => {
 					key: 'publicationPriceOriginal',
 					width: 50,
 					align: 'center',
-					render
+					render: originalRender
 				},
 				{
 					title: '渠道价',
@@ -1367,7 +1379,7 @@ const getPublishedCol = isWechat => {
 					key: 'channelPriceOriginal',
 					width: 50,
 					align: 'center',
-					render
+					render: originalRender
 				},
 				{
 					title: '微播易对外报价',
@@ -1375,7 +1387,7 @@ const getPublishedCol = isWechat => {
 					key: 'quotePriceOriginal',
 					width: 100,
 					align: 'center',
-					render
+					render: originalRender
 				},
 			]
 		}
@@ -1394,7 +1406,7 @@ const getPublishedCol = isWechat => {
 			key: 'publicationPrice',
 			width: 50,
 			align: 'center',
-			render
+			render: publishRender
 		},
 		{
 			title: '渠道价',
@@ -1402,7 +1414,7 @@ const getPublishedCol = isWechat => {
 			key: 'channelPrice',
 			width: 50,
 			align: 'center',
-			render
+			render: publishRender
 		},
 		{
 			title: '微播易对外报价',
@@ -1410,7 +1422,7 @@ const getPublishedCol = isWechat => {
 			key: 'quotePrice',
 			width: 100,
 			align: 'center',
-			render
+			render: publishRender
 		},
 	]
 

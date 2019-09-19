@@ -1,5 +1,5 @@
 import React from "react";
-import { Popover, Icon, Tooltip } from 'antd';
+import { Popover, Icon, Tooltip, Table } from 'antd';
 import { Link } from 'react-router-dom';
 import numeral from 'numeral';
 import moment from 'moment';
@@ -633,7 +633,7 @@ export const addAdjustApplyConfig = (quote_type = [], platformIcon = []) => [
 		title: '账号信息',
 		dataIndex: 'account_id',
 		key: 'account_id',
-		width: 320,
+		width: 230,
 		render: (data = '-', { weibo_name = '-', platform_id, warningClass }) => {
 			const platformInfo = platformIcon.find(item => item.id == platform_id) || {};
 			return <div className={`left_content_td platform_wrapper ${warningClass}`}>
@@ -773,7 +773,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				dataIndex: 'policy_id',
 				key: 'policy_id',
 				align: 'center',
-				width: 100,
+				width: 60,
 				render: (text) => {
 					return text > 0 ? <a target="_blank" href={`/account/policy?id=${text}`}>查看</a> : '-'
 				}
@@ -839,7 +839,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '公司简称',
 				dataIndex: 'company_name',
 				key: 'company_name',
-				width: 160,
+				width: 120,
 				render: (text, record) => {
 					return <div className={`${record.warningClass}`}>
 						<div>{text || '-'}</div>
@@ -850,7 +850,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '所属项目/品牌',
 				dataIndex: 'project_name',
 				key: 'project_name',
-				width: 230,
+				width: 160,
 				render: (text, record) => {
 					const { brand_name } = record;
 					return <div className={`left_content_td ${record.warningClass}`}>
@@ -875,7 +875,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '需求ID/需求名称',
 				dataIndex: 'requirement_id_name',
 				key: 'requirement_id_name',
-				width: 230,
+				width: 180,
 				render: (text, { requirement_id = '-', requirement_name = '-', warningClass }) => {
 					return <div className={`left_content_td ${warningClass}`}>
 						<div>需求ID：{requirement_id}</div>
@@ -887,7 +887,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '账号信息',
 				dataIndex: 'account_id',
 				key: 'account_id',
-				width: 320,
+				width: 180,
 				render: (data = '-', { weibo_name = '-', platform_id, warningClass }) => {
 					const platformInfo = platformIcon.find(item => item.id == platform_id) || {};
 					return <div className={`left_content_td platform_wrapper ${warningClass}`}>
@@ -931,7 +931,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				</Tooltip>,
 				dataIndex: 'identity_name',
 				key: 'identity_name',
-				width: 320,
+				width: 180,
 				render: (data, { order_default_cycle, default_cycle, partner_type_name, warningClass }) => {
 					const defaultCycle = default_cycle ? `${default_cycle}天` : '-';
 					const orderCycle = order_default_cycle ? `${order_default_cycle}天` : '-'
@@ -947,7 +947,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '主账号信息',
 				dataIndex: 'identity_name',
 				key: 'identity_name',
-				width: 320,
+				width: 180,
 				render: (data, { partner_type_name, warningClass }) => {
 					return <div className={warningClass}>
 						<div style={{ marginBottom: 10 }}>主账号：{data}</div>
@@ -978,7 +978,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '折扣比例',
 				dataIndex: 'discount_rate',
 				key: 'discount_rate',
-				width: 100,
+				width: 80,
 				render: (_, record) => {
 					// const discount = record.price && record.price[0] ? record.price[0].discount_rate : 0;
 					// return record.quote_type != '2' ? numeral(discount).format('0.00%') : '-'
@@ -1015,7 +1015,34 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '折扣比例',
 				dataIndex: 'discount_per',
 				key: 'discount_per',
-				width: 100,
+				width: 70,
+			},
+			'published_price': {
+				title: '刊例价/渠道价',
+				dataIndex: 'published_price',
+				key: 'published_price',
+				width: 640,
+				render: (_, record) => {
+					const { platform_name, reference_price_doc } = record;
+					
+					return [
+						<div 
+							key='price_info' 
+							className='price_info'
+							style={{width: '100%', textAlign: 'center', border: '1px solid #e8e8e8', borderBottom: 0, padding: '6px 4px', fontWeight: 500, color: 'rgba(0, 0, 0, 0.85)', background: '#fafafa'}}>
+								各价格均为订单创建时刻的价格
+						</div>,
+						<Table
+							rowKey='id'
+							key='price_table'
+							columns={getPublishedCol(platform_name === '微信公众号')}
+							dataSource={reference_price_doc}
+							bordered
+							size="middle"
+							pagination={false}
+						/>
+					]
+				}
 			},
 			'order_bottom_price': {
 				title: '订单底价',
@@ -1222,7 +1249,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '本次利润率/服务费率',
 				dataIndex: 'quote_type',
 				key: 'quote_type',
-				width: 100,
+				width: 90,
 				render: (_, { previewReadjustType, previewRateVal, warningClass }) => {
 					const rateVal = previewRateVal || previewRateVal == 0 ? numeral(previewRateVal).format('0.00%') : '-'
 					return (
@@ -1236,7 +1263,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '审核时间',
 				dataIndex: 'pass_time',
 				key: 'pass_time',
-				width: 160,
+				width: 100,
 				render: (text) => {
 					const flag = text === '0000-00-00 00:00:00';
 					return !flag ? text : '-';
@@ -1246,7 +1273,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '审核人',
 				dataIndex: 'auditor_name',
 				key: 'auditor_name',
-				width: 160,
+				width: 100,
 				render: text => {
 					return text || '-';
 				}
@@ -1255,7 +1282,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '备注',
 				dataIndex: 'remark',
 				key: 'remark',
-				width: 244,
+				width: 140,
 				render: (_, { remark }) => {
 					if (remark && remark.length > 30) {
 						return <div title={remark}>
@@ -1270,4 +1297,134 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 		const array = ary.map(item => configMap[item]);
 		return array;
 	}
+}
+
+const render = data => {
+	return data || '-';
+}
+
+const publishRender = (data, record) => {
+	const { createdTime } = record;
+	const isOld = moment(createdTime).isAfter('2019-09-19 20:00:00');
+	return isOld && data ? data : '-';
+}
+
+const originalRender = (data, record) => {
+	const { createdTimeOriginal } = record;
+	const isOld = moment(createdTimeOriginal).isAfter('2019-09-19 20:00:00');
+	return isOld && data ? data : '-';
+}
+
+const getPublishedCol = isWechat => {
+	const wxCol = [
+		{
+			title: '',
+			key: 'empty',
+			width: 50,
+			children: [
+				{
+					title: '',
+					dataIndex: 'priceName',
+					width: 50,
+					key: 'empty_child',
+					render
+				}
+			]
+		},
+		{
+			title: '发布',
+			key: 'publish',
+			children: [
+				{
+					title: '刊例价',
+					dataIndex: 'publicationPrice',
+					key: 'publicationPrice',
+					width: 50,
+					align: 'center',
+					render: publishRender
+				},
+				{
+					title: '渠道价',
+					dataIndex: 'channelPrice',
+					key: 'channelPrice',
+					width: 50,
+					align: 'center',
+					render: publishRender
+				},
+				{
+					title: '微播易对外报价',
+					dataIndex: 'quotePrice',
+					key: 'quotePrice',
+					width: 100,
+					align: 'center',
+					render
+				},
+			]
+		},
+		{
+			title: '原创',
+			key: 'original',
+			children: [
+				{
+					title: '刊例价',
+					dataIndex: 'publicationPriceOriginal',
+					key: 'publicationPriceOriginal',
+					width: 50,
+					align: 'center',
+					render: originalRender
+				},
+				{
+					title: '渠道价',
+					dataIndex: 'channelPriceOriginal',
+					key: 'channelPriceOriginal',
+					width: 50,
+					align: 'center',
+					render: originalRender
+				},
+				{
+					title: '微播易对外报价',
+					dataIndex: 'quotePriceOriginal',
+					key: 'quotePriceOriginal',
+					width: 100,
+					align: 'center',
+					render
+				},
+			]
+		}
+	];
+	const otherCol = [
+		{
+			title: '',
+			dataIndex: 'priceName',
+			width: 50,
+			key: 'empty_child',
+			render
+		},
+		{
+			title: '刊例价',
+			dataIndex: 'publicationPrice',
+			key: 'publicationPrice',
+			width: 50,
+			align: 'center',
+			render: publishRender
+		},
+		{
+			title: '渠道价',
+			dataIndex: 'channelPrice',
+			key: 'channelPrice',
+			width: 50,
+			align: 'center',
+			render: publishRender
+		},
+		{
+			title: '微播易对外报价',
+			dataIndex: 'quotePrice',
+			key: 'quotePrice',
+			width: 100,
+			align: 'center',
+			render
+		},
+	]
+
+	return isWechat ? wxCol : otherCol;
 }

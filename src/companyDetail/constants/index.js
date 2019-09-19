@@ -1357,7 +1357,7 @@ const getPublishedCol = isWechat => {
 					key: 'quotePrice',
 					width: 100,
 					align: 'center',
-					render: publishRender
+					render
 				},
 			]
 		},
@@ -1387,7 +1387,7 @@ const getPublishedCol = isWechat => {
 					key: 'quotePriceOriginal',
 					width: 100,
 					align: 'center',
-					render: originalRender
+					render
 				},
 			]
 		}
@@ -1422,7 +1422,7 @@ const getPublishedCol = isWechat => {
 			key: 'quotePrice',
 			width: 100,
 			align: 'center',
-			render: publishRender
+			render
 		},
 	]
 

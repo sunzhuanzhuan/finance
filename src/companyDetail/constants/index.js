@@ -1022,76 +1022,9 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				dataIndex: 'published_price',
 				key: 'published_price',
 				width: 640,
-				render: () => {
-					const columns = [
-						{
-							title: '',
-							key: 'empty',
-							width: 50,
-							children: [
-								{
-									title: '',
-									dataIndex: 'price_title',
-									width: 50,
-									key: 'empty_child'
-								}
-							]
-						},
-						{
-							title: '发布',
-							key: 'publish',
-							children: [
-								{
-									title: '刊例价',
-									dataIndex: 'publish_price',
-									key: 'publish_price',
-									width: 50,
-									align: 'center'
-								},
-								{
-									title: '渠道价',
-									dataIndex: 'publish_channel_price',
-									key: 'publish_channel_price',
-									width: 50,
-									align: 'center'
-								},
-								{
-									title: '微播易对外报价',
-									dataIndex: 'publish_weiboyi',
-									key: 'publish_weiboyi',
-									width: 100,
-									align: 'center'
-								},
-							]
-						},
-						{
-							title: '原创',
-							key: 'original',
-							children: [
-								{
-									title: '刊例价',
-									dataIndex: 'original_price',
-									key: 'original_price',
-									width: 50,
-									align: 'center'
-								},
-								{
-									title: '渠道价',
-									dataIndex: 'original_channel',
-									key: 'original_channel',
-									width: 50,
-									align: 'center'
-								},
-								{
-									title: '微播易对外报价',
-									dataIndex: 'original_weiboyi',
-									key: 'original_weiboyi',
-									width: 100,
-									align: 'center'
-								},
-							]
-						}
-					];
+				render: (_, record) => {
+					const { platform_name, reference_price_doc } = record;
+					
 					return [
 						<div 
 							key='price_info' 
@@ -1101,18 +1034,8 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 						</div>,
 						<Table
 							key='price_table'
-							columns={columns}
-							dataSource={[
-								{
-									'price_title': '多一',
-									'publish_price': '刊例价',
-									'publish_channel_price': '渠道价',
-									'publish_weiboyi': '微播易对外报价',
-									'original_price': '刊例价',
-									'original_channel': '渠道价',
-									'original_weiboyi': '微播易对外报价',
-								}
-							]}
+							columns={getPublishedCol(platform_name === '微信公众号')}
+							dataSource={reference_price_doc}
 							bordered
 							size="middle"
 							pagination={false}
@@ -1374,4 +1297,107 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 		const array = ary.map(item => configMap[item]);
 		return array;
 	}
+}
+
+const getPublishedCol = isWechat => {
+	const wxCol = [
+		{
+			title: '',
+			key: 'empty',
+			width: 50,
+			children: [
+				{
+					title: '',
+					dataIndex: 'priceName',
+					width: 50,
+					key: 'empty_child'
+				}
+			]
+		},
+		{
+			title: '发布',
+			key: 'publish',
+			children: [
+				{
+					title: '刊例价',
+					dataIndex: 'publicationPrice',
+					key: 'publicationPrice',
+					width: 50,
+					align: 'center'
+				},
+				{
+					title: '渠道价',
+					dataIndex: 'channelPrice',
+					key: 'channelPrice',
+					width: 50,
+					align: 'center'
+				},
+				{
+					title: '微播易对外报价',
+					dataIndex: 'quotePrice',
+					key: 'quotePrice',
+					width: 100,
+					align: 'center'
+				},
+			]
+		},
+		{
+			title: '原创',
+			key: 'original',
+			children: [
+				{
+					title: '刊例价',
+					dataIndex: 'publicationPriceOriginal',
+					key: 'publicationPriceOriginal',
+					width: 50,
+					align: 'center'
+				},
+				{
+					title: '渠道价',
+					dataIndex: 'channelPriceOriginal',
+					key: 'channelPriceOriginal',
+					width: 50,
+					align: 'center'
+				},
+				{
+					title: '微播易对外报价',
+					dataIndex: 'quotePriceOriginal',
+					key: 'quotePriceOriginal',
+					width: 100,
+					align: 'center'
+				},
+			]
+		}
+	];
+	const otherCol = [
+		{
+			title: '',
+			dataIndex: 'priceName',
+			width: 50,
+			key: 'empty_child'
+		},
+		{
+			title: '刊例价',
+			dataIndex: 'publicationPrice',
+			key: 'publicationPrice',
+			width: 50,
+			align: 'center'
+		},
+		{
+			title: '渠道价',
+			dataIndex: 'channelPrice',
+			key: 'channelPrice',
+			width: 50,
+			align: 'center'
+		},
+		{
+			title: '微播易对外报价',
+			dataIndex: 'quotePrice',
+			key: 'quotePrice',
+			width: 100,
+			align: 'center'
+		},
+	]
+
+	return isWechat ? wxCol : otherCol;
 }

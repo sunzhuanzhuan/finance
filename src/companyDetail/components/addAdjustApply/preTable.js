@@ -32,7 +32,6 @@ class PreTable extends React.Component {
 					isExistWarning = true;
 				}
 			})
-
 			let obj = {
 				['order_id']: item['order_id'],
 				['status']: item['status'],
@@ -55,7 +54,8 @@ class PreTable extends React.Component {
 				['previewRateVal']: previewRateVal,
 				['default_cycle']: item['default_cycle'],
 				['order_default_cycle']: item['order_default_cycle'],
-				['partner_type_name']: item['partner_type_name']
+				['partner_type_name']: item['partner_type_name'],
+				['reference_price_doc']: item['reference_price_doc']
 			};
 			return obj
 		});

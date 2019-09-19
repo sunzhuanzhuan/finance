@@ -1305,13 +1305,13 @@ const render = data => {
 
 const publishRender = (data, record) => {
 	const { createdTime } = record;
-	const isOld = moment(createdTime).isAfter('2019-09-17 19:30:00');
+	const isOld = moment(createdTime).isAfter('2019-09-19 20:00:00');
 	return isOld && data ? data : '-';
 }
 
 const originalRender = (data, record) => {
 	const { createdTimeOriginal } = record;
-	const isOld = moment(createdTimeOriginal).isAfter('2019-09-17 19:30:00');
+	const isOld = moment(createdTimeOriginal).isAfter('2019-09-19 20:00:00');
 	return isOld && data ? data : '-';
 }
 

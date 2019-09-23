@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import './receivableOff.less';
 import { Table, Button, Alert, Tabs, message } from "antd";
 import ReceivableOffQuery from './ReceivableOffQuery';
-import { getTabOptions, getOffAddQueryKeys, getOffQueryItems, getReceAddColIndex, getReceOffCol, getTableId, getOffOptions } from '../constants';
+import { getOffAddQueryKeys, getOffQueryItems, getReceAddColIndex, getReceOffCol, getTableId, getOffOptions } from '../constants';
 import * as receivableOffAction from "../actions/receivableOff";
 import * as goldenActions from "../../companyDetail/actions/goldenApply";
 import { getTotalWidth, downloadByATag } from '@/util';
@@ -20,23 +20,37 @@ class ReceivablesOfflist extends React.Component {
 		super();
 		this.state = {
 			addVisible: false,
-			activeKey: 'yuyueyuyue',
+			activeKey: '2',
 		};
 	}
 
 	componentDidMount() {
+		const search = qs.parse(this.props.location.search.substring(1));
+		const { company_id } = search;
+
 		this.props.getReceMetaData();
+		this.setState({ company_id })
 	}
 
 	componentWillUnmount() {
 		this.props.clearReceList();
 	}
 
-	handleSearch = (key, searchQuery) => {
-		this.setState({[`searchQuery-${key}`]: searchQuery, loading: true});
-		Object.assign(searchQuery, {key, });
+	dealSearchQuery = (query, staticObj) => {
+		Object.assign(query, staticObj);
+		Object.keys(query).forEach(item => {
+			if(query[item] === '')
+				delete query[item]
+		})
+	}
 
-		this.props.getReceAddList(searchQuery).then(() => {
+	handleSearch = (product_line, searchQuery) => {
+		const { company_id } = this.state;
+
+		this.dealSearchQuery(searchQuery, {company_id, product_line})
+		this.setState({[`searchQuery-${product_line}`]: searchQuery, loading: true});
+
+		this.props.getReceAddList({...searchQuery}).then(() => {
 			this.setState({loading: false});
 		}).catch(({ errorMsg }) => {
 			this.setState({ loading: false });
@@ -55,27 +69,29 @@ class ReceivablesOfflist extends React.Component {
 		});
 	}
 
-	getTabPaneComp = () => {
+	getTabPaneComp = (productLine) => {
 		const { receAddListInfo = {} } = this.props;
 		const { loading } = this.state;
 
-		return getTabOptions.map(item => {
-			const { tab, key } = item;
-			const tabInfo = receAddListInfo[`receAddInfo-${key}`] || {};
+		if (!Array.isArray(productLine)) return null;
+
+		return productLine.map(item => {
+			const { display, id } = item;
+			const tabInfo = receAddListInfo[`receAddInfo-${id}`] || {};
 			const { list = [], page = 1, total = 0, page_size: tableSize = 20 } = tabInfo;
 			const totalMsg = `查询结果共${total}个，${total}个符合核销要求，${total - total}不符合：预约订单/派单活动未结案、拓展业务活动未审核通过、应收款金额为0的订单不能进行核销。`;
-			const totalWidth = getTotalWidth(getReceOffCol(getReceAddColIndex[key]));
-			const searchQuery = this.state[`searchQuery-${key}`] || { page: 1, page_size: 20 };
+			const totalWidth = getTotalWidth(getReceOffCol(getReceAddColIndex[id]));
+			const searchQuery = this.state[`searchQuery-${id}`] || { page: 1, page_size: 20 };
 			const pagination = {
 				onChange: (current) => {
 					Object.assign(searchQuery, {page: current});
-					this.setState({[`searchQuery-${key}`]: searchQuery});
-					this.handleSearch(key, searchQuery);
+					this.setState({[`searchQuery-${id}`]: searchQuery});
+					this.handleSearch(id, searchQuery);
 				},
 				onShowSizeChange: (_, pageSize) => {
 					Object.assign(searchQuery, {page_size: pageSize});
-					this.setState({[`searchQuery-${key}`]: searchQuery});
-					this.handleSearch(key, searchQuery);
+					this.setState({[`searchQuery-${id}`]: searchQuery});
+					this.handleSearch(id, searchQuery);
 				},
 				total: parseInt(total),
 				current: parseInt(page),
@@ -84,29 +100,29 @@ class ReceivablesOfflist extends React.Component {
 				showSizeChanger: true,
 				pageSizeOptions: ['20', '50', '100', '200']
 			};
-			const selectedRowKeys = this.state[`selectedRowKeys-${key}`] || [];
+			const selectedRowKeys = this.state[`selectedRowKeys-${id}`] || [];
 			const disabled = !selectedRowKeys.length;
 			const rowSelection = {
 				selectedRowKeys,
 				onChange: (selectedRowKeys, selectedRows) => {
-					this.handleSelectRows(key, selectedRowKeys, selectedRows);
+					this.handleSelectRows(id, selectedRowKeys, selectedRows);
 				},
 				getCheckboxProps: record => ({
 					disabled: record.status != 1
 				}),
 			};
 			const tabTitle = total != undefined ? <div>
-				<span>{tab}</span>
+				<span>{display}</span>
 				<span>{total}</span>
-			</div> : <div>{tab}</div>;
-			const wrapperClass = `moreThanOneTable${key}`;
+			</div> : <div>{display}</div>;
+			const wrapperClass = `moreThanOneTable${id}`;
 			return (
-				<TabPane tab={tabTitle} key={key} className={wrapperClass}>
+				<TabPane tab={tabTitle} key={id} className={wrapperClass}>
 					<ReceivableOffQuery 
 						showExport
-						queryItems={getOffQueryItems(getOffAddQueryKeys[key])}
-						handleSearch={searchQuery => {this.handleSearch(key, searchQuery)}} 
-						handleExport={ () => {this.handleExportList(key)}}
+						queryItems={getOffQueryItems(getOffAddQueryKeys[id])}
+						handleSearch={searchQuery => {this.handleSearch(id, searchQuery)}} 
+						handleExport={ () => {this.handleExportList(id)}}
 						actionKeyMap={{
 							company: this.props.getGoldenCompanyId
 						}}
@@ -132,8 +148,8 @@ class ReceivablesOfflist extends React.Component {
 					>
 						<Table 
 							className='receivable-table'
-							rowKey={getTableId[key]} 
-							columns={getReceOffCol(getReceAddColIndex[key])} 
+							rowKey={getTableId[id]} 
+							columns={getReceOffCol(getReceAddColIndex[id])} 
 							dataSource={list} 
 							bordered 
 							pagination={pagination} 
@@ -195,6 +211,7 @@ class ReceivablesOfflist extends React.Component {
 
 	render() {
 		const { receMetaData = {} } = this.props;
+		const { product_line } = receMetaData;
 		const { activeKey, checkVisible, offVisible } = this.state;
 		const tabColArr = getReceAddColIndex[activeKey] || [];
 		const title = <div>
@@ -214,7 +231,7 @@ class ReceivablesOfflist extends React.Component {
 			{/* <Alert message={comp} type="warning" showIcon /> */}
 			<Tabs className='rece_tabs' activeKey={activeKey} onChange={this.handleChangeTab}>
 				{
-					this.getTabPaneComp()
+					this.getTabPaneComp(product_line)
 				}
 			</Tabs>
 			<ReceOffModal 
@@ -252,7 +269,7 @@ const mapStateToProps = (state) => {
 	return {
 		receAddListInfo,
 		receMetaData: {
-			"prduct_line": [   // 订单类型
+			"product_line": [   // 订单类型
 				{
 					"id": 2,
 					"display": "微闪投"

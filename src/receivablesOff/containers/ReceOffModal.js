@@ -300,7 +300,6 @@ class ReceOffModal extends React.Component {
 	handleChangePic = ({ fileList }) => this.setState({ fileList });
 
 	beforeUpload = file => {
-		console.log('slkdfjlsdjflksdjf', file)
 		// return false;
 	}
 
@@ -387,8 +386,9 @@ class ReceOffModal extends React.Component {
 		}else if(type === 'add') {
 			form.validateFields((errs, values) => {
 				if(errs) return;
-				const { company_id } = values;
-				const src = `/finance/receivableoff/add?${qs.stringify({ keys: { company_id } })}`;
+				const { company_id: { key } } = values;
+
+				const src = `/finance/receivableoff/add?${qs.stringify({ company_id: key })}`;
 				history.push(src);
 			})
 		}
@@ -449,8 +449,8 @@ export default Form.create()(ReceOffModal)
 function ConfirmModal(props) {
 	const { visible, title, fieldsValues = {}, onOk, onCancel, options = {} } = props;
 	const itemKeys = [
-		'can_verification_amount', 'verification_amount', 'check_box_item', 
-		'debt_amount', 'is_decrease_company_gmv', 'is_decrease_sale_gmv', 
+		'can_verification_amount', 'total_verification_amount', 'check_box_item', 
+		'total_debt_amount', 'is_decrease_company_gmv', 'is_decrease_sale_gmv', 
 		'is_record_sale_income'
 	];
 	return (

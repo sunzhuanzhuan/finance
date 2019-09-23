@@ -17,8 +17,8 @@ module.exports = merge(baseConfig, {
 			// 	target: "http://192.168.20.128:8010", 192.168.100.117:30002
 			// 	changeOrigin: true
 			// },
-			"/api/finance/receivables/verification/orderList": {
-				target: "192.168.100.117:30002",
+			"/api/finance/receivables": {
+				target: "http://192.168.100.117:30002",
 				changeOrigin: true
 			},
 			"/api": {

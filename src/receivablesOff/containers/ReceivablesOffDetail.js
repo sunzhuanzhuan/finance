@@ -60,12 +60,15 @@ class ReceivablesOffDetail extends React.Component {
 
 	getTabPaneComp = () => {
 		const { receAddListInfo = {}, receMetaData = {}, location } = this.props;
+		const { product_line } = receMetaData;
 		const { loading } = this.state;
 		const search = qs.parse(location.search.substring(1));
 
-		return getTabOptions.map(item => {
-			const { tab, key } = item;
-			const tabInfo = receAddListInfo[`receDetailInfo-${key}`] || {};
+		if (!Array.isArray(product_line)) return null;
+
+		return product_line.map(item => {
+			const { display, id } = item;
+			const tabInfo = receAddListInfo[`receDetailInfo-${id}`] || {};
 			const { list = [], page, total, page_size: tableSize, statistic = {} } = tabInfo;
 			const { 
 				order_amount = '-', verification_amount_total = '-', debt_amount_total = '-', 
@@ -78,19 +81,19 @@ class ReceivablesOffDetail extends React.Component {
 					<span className='total-margin'>赠送/返点账户抵扣：<span className='total-color'>{gift_amount_total}</span></span>
 					<>小金库抵扣：<span className='total-color'>{warehouse_amount_total}</span></>
 				</div>;
-			const columns = getReceOffCol(getOffDetailCloIndex[key], receMetaData);
+			const columns = getReceOffCol(getOffDetailCloIndex[id], receMetaData);
 			const totalWidth = getTotalWidth(columns);
-			const searchQuery = this.state[`searchQuery-${key}`] || { page: 1, page_size: 20 };
+			const searchQuery = this.state[`searchQuery-${id}`] || { page: 1, page_size: 20 };
 			const pagination = {
 				onChange: (current) => {
 					Object.assign(searchQuery, {page: current});
-					this.setState({[`searchQuery-${key}`]: searchQuery});
-					this.handleSearch(key, searchQuery);
+					this.setState({[`searchQuery-${id}`]: searchQuery});
+					this.handleSearch(id, searchQuery);
 				},
 				onShowSizeChange: (_, pageSize) => {
 					Object.assign(searchQuery, {page_size: pageSize});
-					this.setState({[`searchQuery-${key}`]: searchQuery});
-					this.handleSearch(key, searchQuery);
+					this.setState({[`searchQuery-${id}`]: searchQuery});
+					this.handleSearch(id, searchQuery);
 				},
 				total: parseInt(total),
 				current: parseInt(page),
@@ -100,18 +103,18 @@ class ReceivablesOffDetail extends React.Component {
 				pageSizeOptions: ['20', '50', '100', '200']
 			};
 			const tabTitle = total != undefined ? <div>
-				<span>{tab}</span>
+				<span>{display}</span>
 				<span>{total}</span>
-			</div> : <div>{tab}</div>;
-			const wrapperClass = `moreThanOneTable${key}`;
+			</div> : <div>{display}</div>;
+			const wrapperClass = `moreThanOneTable${id}`;
 			return (
-				<TabPane tab={tabTitle} key={key} className={wrapperClass}>
+				<TabPane tab={tabTitle} key={id} className={wrapperClass}>
 					<ReceivableOffQuery 
 						showExport
 						initialValue={search}
-						queryItems={getOffQueryItems(getOffDetailQueryKeys[key])}
-						handleSearch={searchQuery => {this.handleSearch(key, searchQuery)}} 
-						handleExport={ () => {this.handleExportList(key)}}
+						queryItems={getOffQueryItems(getOffDetailQueryKeys[id])}
+						handleSearch={searchQuery => {this.handleSearch(id, searchQuery)}} 
+						handleExport={ () => {this.handleExportList(id)}}
 						actionKeyMap={{
 							company: this.props.getGoldenCompanyId
 						}}
@@ -125,7 +128,7 @@ class ReceivablesOffDetail extends React.Component {
 					>
 						<Table 
 							className='receivable-table'
-							rowKey={getTableId[key]} 
+							rowKey={getTableId[id]} 
 							columns={columns} 
 							dataSource={list} 
 							bordered 
@@ -162,7 +165,41 @@ const mapStateToProps = (state) => {
 	const { receAddReducer: receAddListInfo, receMetaData } = receivableOff;
 	return {
 		receAddListInfo,
-		receMetaData
+		// receMetaData,
+		receMetaData: {
+			"product_line": [   // 订单类型
+				{
+					"id": 2,
+					"display": "微闪投"
+				},
+				{
+					"id": 3,
+					"display": "预约订单"
+				},
+				{
+					"id": 7,
+					"display": "拓展业务"
+				}
+			],
+			"verification_type": [   // 核销类型
+				{
+					"id": 1,
+					"display": "客户整体折让"
+				},
+				{
+					"id": 2,
+					"display": "订单折让(赔偿)"
+				},
+				{
+					"id": 3,
+					"display": "坏账清理"
+				},
+				{
+					"id": 4,
+					"display": "其他"
+				}
+			]
+		},
 	}
 }
 const mapDispatchToProps = dispatch => (bindActionCreators({...receivableOffAction, ...goldenActions, getReceOffDetailList}, dispatch));

@@ -16,3 +16,11 @@ export const {
 } = createHttpAction('getReceMetaData', Interface.getReceMetaData, {
 	method: 'get'
 });
+
+//销售
+export const {
+	getSalerData,
+	getSalerData_success
+} = createHttpAction('getSalerData', Interface.getSalerData, {
+	method: 'get'
+});

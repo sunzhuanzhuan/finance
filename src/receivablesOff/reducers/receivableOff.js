@@ -1,7 +1,8 @@
 import { handleActions } from 'redux-actions';
 import {
 	getReceivableOffList_success,
-	getReceMetaData_success
+	getReceMetaData_success,
+	getSalerData_success
 } from '../actions/receivableOff';
 
 export const receivableOffList = handleActions({
@@ -15,3 +16,9 @@ export const receMetaData = handleActions({
 		return { ...action.payload.data }
 	}
 }, {})
+
+export const salerData = handleActions({
+	[getSalerData_success]: (state, action) => {
+		return [ ...action.payload.data ]
+	}
+}, [])

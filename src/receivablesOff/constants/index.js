@@ -3,15 +3,15 @@ import { Popconfirm } from 'antd';
 import numeral from 'numeral';
 
 export const getTabOptions = [
-    { tab: '预约', key: 'yuyueyuyue' },
-    { tab: '微闪投', key: 'weishantou' },
-    { tab: '拓展业务', key: 'tuozhanyewu' },
+    { tab: '预约订单', key: 'yuyueyuyue', value: 3 },
+    { tab: '微闪投', key: 'weishantou', value: 2 },
+    { tab: '拓展业务', key: 'tuozhanyewu', value: 7 },
 ];
 
 export const getTableId = {
-    yuyueyuyue: 'order_id',
-    weishantou: 'campaign_id',
-    tuozhanyewu: 'id',
+    3: 'order_id',
+    2: 'campaign_id',
+    7: 'id',
 }
 
 export const getOffListQueryKeys = [
@@ -19,57 +19,57 @@ export const getOffListQueryKeys = [
 ];
 
 export const getOffDetailQueryKeys = {
-    yuyueyuyue: [
+    3: [
         'verification_code', 'company_id', 'sale_id', 'order_id', 'time', 'region', 'project_id', 
         'requirement_id', 'pid', 'type', 'order_complete_time', 'is_decrease_sale_gmv', 
-        'is_decrease_company_gmv', 'is_record_sale_income', 'gift_amount', 
+        'is_decrease_company_gmv', 'is_record_sale_income', 'total_gift_amount', 
         'warehouse_amount', 'invoice_application_id', 'brand_id', 'operate'
     ],
-    weishantou: [
+    2: [
         'verification_code', 'company_id', 'sale_id', 'campaign_id', 'time', 'region', 'project_id', 
         'pid', 'type', 'is_decrease_sale_gmv', 'is_decrease_company_gmv', 
-        'is_record_sale_income', 'active_time', 'gift_amount', 'warehouse_amount', 'invoice_application_id', 
+        'is_record_sale_income', 'active_time', 'total_gift_amount', 'warehouse_amount', 'invoice_application_id', 
         'brand_id', 'operate'
     ],
-    tuozhanyewu: [
+    7: [
         'verification_code', 'company_id', 'sale_id', 'id', 'time', 'region', 'project_id', 'type', 
         'is_decrease_sale_gmv', 'is_decrease_company_gmv', 'is_record_sale_income', 'offtime', 
-        'gift_amount', 'warehouse_amount', 'invoice_application_id', 'brand_id', 'operate' 
+        'total_gift_amount', 'warehouse_amount', 'invoice_application_id', 'brand_id', 'operate' 
     ],
 };
 
 export const getOffAddQueryKeys = {
-    yuyueyuyue: ['order_id', 'invoice_application_id', 'order_complete_time', 'brand_id', 'project_id', 'requirement_id', 'pid', 'account_id', 'operate'],
-    weishantou: ['campaign_id', 'active_time', 'brand_id', 'invoice_application_id', 'project_id', 'pid', 'account_id', 'operate'],
-    tuozhanyewu: ['id', 'invoice_application_id', 'offtime', 'brand_id', 'project_id', 'operate'],
+    3: ['order_id', 'invoice_application_id', 'order_complete_time', 'brand_id', 'project_id', 'requirement_id', 'pid', 'account_id', 'operate'],
+    2: ['campaign_id', 'active_time', 'brand_id', 'invoice_application_id', 'project_id', 'pid', 'account_id', 'operate'],
+    7: ['id', 'invoice_application_id', 'offtime', 'brand_id', 'project_id', 'operate'],
 };
 
 export const getOffQueryItems = queryArr => {
     const allQuery =  [
         {label: '公司简称', key: 'company_id', compType: 'searchSelect', actionKey: 'company', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},
-        {label: '销售', key: 'sale_id', compType: 'searchSelect', actionKey: 'company', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},
+        {label: '销售', key: 'sale_id', compType: 'select', optionKey: 'salerData', idKey: 'user_id', labelKey: 'real_name'},
         {label: '核销编号', key: 'verification_code', compType: 'input'},
-        {label: '核销类型', key: 'type', compType: 'select', optionKey: 'verification_type'},
+        {label: '核销类型', key: 'type', compType: 'select', optionKey: 'verification_type', idKey: 'id', labelKey: 'display'},
         {label: '发票申请单ID', key: 'invoice_application_id', compType: 'input'},
         {label: '订单ID', key: 'order_id', compType: 'input'},
         {label: '活动ID', key: 'campaign_id', compType: 'input'},
         {label: '活动ID', key: 'id', compType: 'input'},
         {label: '核销时间', key: 'time', compType: 'date', submitKey:['created_at_start', 'created_at_end']},
-        {label: '是否计提提成', key: 'is_record_sale_income', compType: 'select', optionKey: 'payment'},
-        {label: '是否扣减公司GMV', key: 'is_decrease_company_gmv', compType: 'select', optionKey: 'GMV'},
-        {label: '是否扣减销售GMV', key: 'is_decrease_sale_gmv', compType: 'select', optionKey: 'GMV'},
+        {label: '是否计提提成', key: 'is_record_sale_income', compType: 'select', optionKey: 'payment', idKey: 'id', labelKey: 'display'},
+        {label: '是否扣减公司GMV', key: 'is_decrease_company_gmv', compType: 'select', optionKey: 'GMV', idKey: 'id', labelKey: 'display'},
+        {label: '是否扣减销售GMV', key: 'is_decrease_sale_gmv', compType: 'select', optionKey: 'GMV', idKey: 'id', labelKey: 'display'},
         {label: '赠送/返点账户抵扣金额', key: 'gift_amount', compType: 'number_range', rangeKey: ['total_gift_amount_min', 'total_gift_amount_max']},
         {label: '小金库抵扣金额', key: 'warehouse_amount', compType: 'number_range', rangeKey: ['total_warehouse_amount_min', 'total_warehouse_amount_max']},
-        {label: '区域', key: 'region', compType: 'select'},
+        {label: '区域', key: 'region', compType: 'select', idKey: 'id', labelKey: 'display'},
         {label: '所属项目', key: 'project_id', compType: 'input'},
         {label: '品牌', key: 'brand_id', compType: 'input'},
         {label: '需求名称', key: 'requirement_id', compType: 'input'},
-        {label: '平台', key: 'pid', compType: 'select'},
+        {label: '平台', key: 'pid', compType: 'select', idKey: 'id', labelKey: 'display'},
         {label: '订单执行完成时间', key: 'order_complete_time', compType: 'date', submitKey:['time_start', 'time_end']},
         {label: '活动结算时间', key: 'active_time', compType: 'date', submitKey:['time_start', 'time_end']},
         {label: '审核时间', key: 'offtime', compType: 'date', submitKey:['time_start', 'time_end']},
         {label: '账号名称', key: 'account_id', compType: 'input'},
-        {compType: 'order_id_type', key: 'order_id_type', optionKey: 'prduct_line'},
+        {compType: 'order_id_type', key: 'order_id_type', optionKey: 'prduct_line', idKey: 'id', labelKey: 'display'},
         {compType: 'operate', key: 'operate'}
     ];
     return queryArr.map(item => allQuery.find(queryItem => queryItem.key === item));
@@ -96,10 +96,10 @@ export const getOffAddFormItems = (arrKey) => {
         {label: '公司简称', key: 'company_name', compType: 'unalterable'},
         {label: '所属销售', key: 'sale_name', compType: 'unalterable'},
         {label: '本次可核销金额', key: 'can_verification_amount', compType: 'unalterable', isNumber: true},
-        {label: '本次核销金额', key: 'verification_amount', compType: 'inputNumber', isNumber: true, required: true, disabled: true, validator: verificationMount},
+        {label: '本次核销金额', key: 'total_verification_amount', compType: 'inputNumber', isNumber: true, required: true, disabled: true, validator: verificationMount},
         {label: '核销类型', key: 'type', compType: 'select', optionKey: 'verification_type', required: true},
         {label: '抵扣账户/金额', key: 'check_box_item', compType: 'check_box_item', required: true, disabled: true, validator: verificationMount},
-        {label: '核销账户金额', key: 'debt_amount', compType: 'unalterable', isNumber: true},
+        {label: '核销账户金额', key: 'total_debt_amount', compType: 'unalterable', isNumber: true},
         {label: '是否扣减公司GMV', key: 'is_decrease_company_gmv', compType: 'radio', optionKey: 'GMV', required: true},
         {label: '是否扣减销售GMV', key: 'is_decrease_sale_gmv', compType: 'radio', optionKey: 'GMV', required: true},
         {label: '是否计提提成', key: 'is_record_sale_income', compType: 'radio', optionKey: 'payment', required: true},
@@ -112,11 +112,11 @@ export const getOffAddFormItems = (arrKey) => {
 export const getOffOptions = {
         GMV: [
             { display: '扣减', id: 1 },
-            { display: '不扣减', id: 0 }
+            { display: '不扣减', id: 2 }
         ],
         payment: [
             { display: '计提', id: 1 },
-            { display: '不计提', id: 0 }
+            { display: '不计提', id: 2 }
         ],
         offCheckOption: [
             {display: '赠送/返点', id: 'gift_amount'}, 
@@ -126,13 +126,13 @@ export const getOffOptions = {
     };
 
 export const getOffListColIndex = [
-    'verification_code', 'company_name', 'sale_name', 'type', 'total_verification_amount', 'debt_amount', 'gift_amount', 'warehouse_amount', 'is_decrease_company_gmv', 'is_decrease_sale_gmv', 'is_record_sale_income', 'created_at', 'operator_name', 'operate',
+    'verification_code', 'company_name', 'sale_name', 'type', 'total_verification_amount', 'total_debt_amount', 'total_gift_amount', 'total_warehouse_amount', 'is_decrease_company_gmv', 'is_decrease_sale_gmv', 'is_record_sale_income', 'created_at', 'operator_name', 'operate',
 ];
 
 export const getOffDetailCloIndex = {
-    yuyueyuyue: ['verification_code', 'type', 'order_id_no_fIxed', 'company_name', 'saler_region', 'project_brand', 'require_id_name', 'account_info', 'invoice_application_id', 'execution_completed_time', 'total_verification_amount', 'debt_amount', 'gift_amount', 'warehouse_amount', 'is_decrease_company_gmv', 'is_record_sale_income', 'is_decrease_sale_gmv', 'operator_name', 'created_at'],
-    weishantou: ['verification_code', 'type', 'campaign_id_no_fIxed', '活动名称', 'company_name', 'saler_region', 'project_brand', 'account_info', 'invoice_application_id', 'settlement_time', 'total_verification_amount', 'debt_amount', 'gift_amount', 'warehouse_amount', 'is_decrease_company_gmv', 'is_record_sale_income', 'is_decrease_sale_gmv', 'operator_name', 'created_at'],
-    tuozhanyewu: ['verification_code', 'type', 'id', 'business_name', 'company_name', 'saler_region', 'project_brand', 'invoice_application_id', 'pass_time', 'total_verification_amount', 'debt_amount', 'gift_amount', 'warehouse_amount', 'is_decrease_company_gmv', 'is_record_sale_income', 'is_decrease_sale_gmv', 'operator_name', 'created_at'],
+    3: ['verification_code', 'type', 'order_id_no_fIxed', 'company_name', 'saler_region', 'project_brand', 'require_id_name', 'account_info', 'invoice_application_id', 'execution_completed_time', 'total_verification_amount', 'total_debt_amount', 'total_gift_amount', 'total_warehouse_amount', 'is_decrease_company_gmv', 'is_record_sale_income', 'is_decrease_sale_gmv', 'operator_name', 'created_at'],
+    2: ['verification_code', 'type', 'campaign_id_no_fIxed', '活动名称', 'company_name', 'saler_region', 'project_brand', 'account_info', 'invoice_application_id', 'settlement_time', 'total_verification_amount', 'total_debt_amount', 'total_gift_amount', 'total_warehouse_amount', 'is_decrease_company_gmv', 'is_record_sale_income', 'is_decrease_sale_gmv', 'operator_name', 'created_at'],
+    7: ['verification_code', 'type', 'id', 'business_name', 'company_name', 'saler_region', 'project_brand', 'invoice_application_id', 'pass_time', 'total_verification_amount', 'total_debt_amount', 'total_gift_amount', 'total_warehouse_amount', 'is_decrease_company_gmv', 'is_record_sale_income', 'is_decrease_sale_gmv', 'operator_name', 'created_at'],
 }
 
 // export const getReceAddColIndex = {
@@ -142,9 +142,9 @@ export const getOffDetailCloIndex = {
 // }
 
 export const getReceAddColIndex = {
-    yuyueyuyue: ['order_id_no_fIxed', 'project_brand', 'require_id_name', 'account_info', 'invoice_application_id', 'execution_completed_time', 'verification_amount', 'total_verification_amount'],
-    weishantou: ['campaign_id_no_fIxed', 'project_brand', 'account_info', 'invoice_application_id', 'settlement_time', 'verification_amount', 'total_verification_amount'],
-    tuozhanyewu: ['id', 'active_name_type', 'project_brand', 'invoice_application_id', 'pass_time', 'verification_amount', 'total_verification_amount'],
+    3: ['order_id_no_fIxed', 'project_brand', 'require_id_name', 'account_info', 'invoice_application_id', 'execution_completed_time', 'verification_amount', 'total_verification_amount'],
+    2: ['campaign_id_no_fIxed', 'project_brand', 'account_info', 'invoice_application_id', 'settlement_time', 'verification_amount', 'total_verification_amount'],
+    7: ['id', 'active_name_type', 'project_brand', 'invoice_application_id', 'pass_time', 'verification_amount', 'total_verification_amount'],
 }
 
 const render = (data = '-') => {
@@ -155,7 +155,7 @@ const render = (data = '-') => {
 
 const isRender = data => {
     return (
-        data !== undefined ? data == 1 ? '是' : '否' : '-'
+        data ? data == 1 ? '是' : '否' : '-'
     )
 }
 
@@ -446,22 +446,22 @@ export const getReceOffCol = ( col, receMetaData = {}, action, activeKey ) => {
         },
         {
             title: '核销账户金额',
-            dataIndex: 'debt_amount',
-            key: 'debt_amount',
+            dataIndex: 'total_debt_amount',
+            key: 'total_debt_amount',
             width: 100,
             render: renderNum
         },
         {
             title: '赠送/返点账户抵扣金额',
-            dataIndex: 'gift_amount',
-            key: 'gift_amount',
+            dataIndex: 'total_gift_amount',
+            key: 'total_gift_amount',
             width: 100,
             render: renderNum
         },
         {
             title: '小金库抵扣金额',
-            dataIndex: 'warehouse_amount',
-            key: 'warehouse_amount',
+            dataIndex: 'total_warehouse_amount',
+            key: 'total_warehouse_amount',
             width: 100,
             render: renderNum
         },

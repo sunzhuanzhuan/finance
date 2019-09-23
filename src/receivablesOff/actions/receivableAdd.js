@@ -31,8 +31,7 @@ export function getReceOffDetailList(params = {}) {
 }
 // 获取添加核销申请各方列表
 export function getReceAddList(params = {}) {
-	const { key } = params;
-	delete params.key;
+	const { product_line } = params;
 
 	return dispatch => {
 		return api.get(`${Interface.getReceAddOffList}?${qs.stringify(params)}`)
@@ -40,14 +39,14 @@ export function getReceAddList(params = {}) {
 			dispatch({
 				type: GET_RECE_ADD_LIST,
 				listData: result.data,
-				key
+				key: product_line
 			})
 		})
 		.catch( () => {
 			dispatch({
 				type: GET_RECE_ADD_LIST,
 				listData: {},
-				key
+				key: product_line
 			})
 		});
 	}
@@ -105,12 +104,12 @@ export default function receAddReducer(state = {}, action) {
 		case CLEAR_RECE_LIST:
 			return { 
 				...state, 
-				'receAddInfo-yuyueyuyue': {}, 
-				'receAddInfo-weishantou': {}, 
-				'receAddInfo-tuozhanyewu': {}, 
-				'receDetailInfo-yuyueyuyue': {}, 
-				'receDetailInfo-weishantou': {}, 
-				'receDetailInfo-tuozhanyewu': {}, 
+				'receAddInfo-3': {}, 
+				'receAddInfo-2': {}, 
+				'receAddInfo-7': {}, 
+				'receDetailInfo-3': {}, 
+				'receDetailInfo-2': {}, 
+				'receDetailInfo-7': {}, 
 				updateKey: +new Date() + Math.random()
 			};
 		case ADD_RECE_OFF_ITEM: 

@@ -11,6 +11,7 @@ import { getTotalWidth, downloadByATag } from '@/util';
 import { Scolltable } from '@/components';
 import { getReceOffDetailList } from '../actions/receivableAdd';
 import qs from 'qs';
+import numeral from 'numeral';
 
 const { TabPane } = Tabs;
 
@@ -19,7 +20,7 @@ class ReceivablesOffDetail extends React.Component {
 		super();
 		this.state = {
 			addVisible: false,
-			activeKey: 'yuyueyuyue',
+			activeKey: '3',
 		};
 	}
 	componentDidMount() {
@@ -39,8 +40,8 @@ class ReceivablesOffDetail extends React.Component {
 	}
 	getAllTabsActions = queryObj => {
 		return getTabOptions.map(item => {
-			const { key } = item;
-			return this.props.getReceOffDetailList(Object.assign(queryObj, {key}));
+			const { value } = item;
+			return this.props.getReceOffDetailList(Object.assign(queryObj, {product_line: value}));
 		})
 	}
 	handleSearch = (key, searchQuery) => {
@@ -55,7 +56,7 @@ class ReceivablesOffDetail extends React.Component {
 	}
 
 	handleExportList = key => {
-		downloadByATag(`/api/receivables/verification/exportVerificationDetail?${qs.stringify(this.state[`searchQuery-${key}`])}`);
+		downloadByATag(`/api/finance/receivables/verification/exportOrdeList?${qs.stringify(this.state[`searchQuery-${key}`])}`);
 	}
 
 	getTabPaneComp = () => {
@@ -69,18 +70,7 @@ class ReceivablesOffDetail extends React.Component {
 		return product_line.map(item => {
 			const { display, id } = item;
 			const tabInfo = receAddListInfo[`receDetailInfo-${id}`] || {};
-			const { list = [], page, total, page_size: tableSize, statistic = {} } = tabInfo;
-			const { 
-				order_amount = '-', verification_amount_total = '-', debt_amount_total = '-', 
-				gift_amount_total = '-', warehouse_amount_total = '-' 
-			} = statistic;
-			const TotalMsg = <div className='total-info-wrapper'>
-					<>订单数：<span className='total-color'>{order_amount}</span></>
-					<span className='total-margin'>总核销金额：<span className='total-color'>{verification_amount_total}</span></span>
-					<>核销账户金额：<span className='total-color'>{debt_amount_total}</span></>
-					<span className='total-margin'>赠送/返点账户抵扣：<span className='total-color'>{gift_amount_total}</span></span>
-					<>小金库抵扣：<span className='total-color'>{warehouse_amount_total}</span></>
-				</div>;
+			const { list = [], page, total, page_size: tableSize, statistics = {} } = tabInfo;
 			const columns = getReceOffCol(getOffDetailCloIndex[id], receMetaData);
 			const totalWidth = getTotalWidth(columns);
 			const searchQuery = this.state[`searchQuery-${id}`] || { page: 1, page_size: 20 };
@@ -116,10 +106,11 @@ class ReceivablesOffDetail extends React.Component {
 						handleSearch={searchQuery => {this.handleSearch(id, searchQuery)}} 
 						handleExport={ () => {this.handleExportList(id)}}
 						actionKeyMap={{
-							company: this.props.getGoldenCompanyId
+							company: this.props.getGoldenCompanyId,
+							project: this.props.getProjectData
 						}}
 					/>
-					{ <Alert className='add-list-total-info' message={TotalMsg} type="warning" showIcon /> }
+					<Alert className='add-list-total-info' message={this.getTotalInfoComp(statistics)} type="warning" showIcon />
 					<Scolltable 
 						isMoreThanOne 
 						wrapperClass={wrapperClass}
@@ -128,7 +119,7 @@ class ReceivablesOffDetail extends React.Component {
 					>
 						<Table 
 							className='receivable-table'
-							rowKey={getTableId[id]} 
+							rowKey={'order_id'} 
 							columns={columns} 
 							dataSource={list} 
 							bordered 
@@ -146,11 +137,66 @@ class ReceivablesOffDetail extends React.Component {
 		this.setState({activeKey});
 	}
 
+	getNumberal = data => {
+		return numeral(data).format('0.00');
+	}
+
+	getTotalInfoComp = statistics => {
+		const { 
+			order_ids_count = 0, verification_amount_total = 0, debt_amount_total = 0, 
+			gift_amount_total = 0, warehouse_amount_total = 0 
+		} = statistics;
+
+		return (
+			<div className='total-info-wrapper'>
+				<>订单数：<span className='total-color'>{order_ids_count}</span></>
+				<span className='total-margin'>总核销金额：<span className='total-color'>{this.getNumberal(verification_amount_total)}</span></span>
+				<>核销账户金额：<span className='total-color'>{this.getNumberal(debt_amount_total)}</span></>
+				<span className='total-margin'>赠送/返点账户抵扣：<span className='total-color'>{this.getNumberal(gift_amount_total)}</span></span>
+				<>小金库抵扣：<span className='total-color'>{this.getNumberal(warehouse_amount_total)}</span></>
+			</div>
+		)
+	}
+
+	getAllTotalInfo = () => {
+		const { receMetaData = {}, receAddListInfo = {} } = this.props;
+		const { product_line } = receMetaData;
+
+		if (!Array.isArray(product_line)) return {};
+
+		let totalInfoObj = {
+			order_ids_count: 0,
+			verification_amount_total: 0,
+			debt_amount_total: 0,
+			gift_amount_total: 0,
+			warehouse_amount_total: 0
+		}
+		product_line.forEach(item => {
+			const { id } = item;
+			const tabInfo = receAddListInfo[`receDetailInfo-${id}`] || {};
+			const { statistics = {} } = tabInfo;
+			const { 
+				order_ids_count: order, verification_amount_total: verifi, debt_amount_total: debt, 
+				gift_amount_total: gift, warehouse_amount_total: warehouse 
+			} = statistics;
+			totalInfoObj = {
+				order_ids_count: totalInfoObj.order_ids_count + (Number(order) || 0),
+				verification_amount_total: totalInfoObj.verification_amount_total + (Number(verifi) || 0),
+				debt_amount_total: totalInfoObj.debt_amount_total + (Number(debt) || 0),
+				gift_amount_total: totalInfoObj.gift_amount_total + (Number(gift) || 0),
+				warehouse_amount_total: totalInfoObj.warehouse_amount_total + (Number(warehouse) || 0)
+			}
+		});
+
+		return totalInfoObj
+	}
+
 	render() {
 		const { activeKey } = this.state;
 
 		return <div className='rece-wrapper rece-detail-wrapper'>
 			<div className='rece-title'>核销订单明细</div>
+			<Alert className='add-list-total-info' message={this.getTotalInfoComp(this.getAllTotalInfo())} type="warning" showIcon />
 			<Tabs className='rece_tabs' activeKey={activeKey} onChange={this.handleChangeTab}>
 				{
 					this.getTabPaneComp()
@@ -165,41 +211,7 @@ const mapStateToProps = (state) => {
 	const { receAddReducer: receAddListInfo, receMetaData } = receivableOff;
 	return {
 		receAddListInfo,
-		// receMetaData,
-		receMetaData: {
-			"product_line": [   // 订单类型
-				{
-					"id": 2,
-					"display": "微闪投"
-				},
-				{
-					"id": 3,
-					"display": "预约订单"
-				},
-				{
-					"id": 7,
-					"display": "拓展业务"
-				}
-			],
-			"verification_type": [   // 核销类型
-				{
-					"id": 1,
-					"display": "客户整体折让"
-				},
-				{
-					"id": 2,
-					"display": "订单折让(赔偿)"
-				},
-				{
-					"id": 3,
-					"display": "坏账清理"
-				},
-				{
-					"id": 4,
-					"display": "其他"
-				}
-			]
-		},
+		receMetaData,
 	}
 }
 const mapDispatchToProps = dispatch => (bindActionCreators({...receivableOffAction, ...goldenActions, getReceOffDetailList}, dispatch));

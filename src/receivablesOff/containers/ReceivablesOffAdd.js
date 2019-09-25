@@ -12,6 +12,7 @@ import { Scolltable } from '@/components';
 import { getReceAddList, clearReceList, addReceOffItem } from '../actions/receivableAdd';
 import ReceOffModal from './ReceOffModal';
 import qs from 'qs';
+import numeral from 'numeral';
 
 const { TabPane } = Tabs;
 
@@ -29,6 +30,10 @@ class ReceivablesOfflist extends React.Component {
 		const { company_id } = search;
 
 		this.props.getReceMetaData();
+		this.props.getProject({ company_id });
+		this.props.getCompanyInfo({ company_id })
+		this.props.getPlatform();
+		this.props.getGoldenToken();
 		this.setState({ company_id })
 	}
 
@@ -59,7 +64,7 @@ class ReceivablesOfflist extends React.Component {
 	}
 
 	handleExportList = key => {
-		downloadByATag(`/api/receivables/verification/exportVerificationOrder?${qs.stringify(this.state[`searchQuery-${key}`])}`);
+		downloadByATag(`/api/finance/receivables/verification/exportList?${qs.stringify(this.state[`searchQuery-${key}`])}`);
 	}
 
 	handleSelectRows = (key, selectedRowKeys, selectedRows) => {
@@ -70,7 +75,7 @@ class ReceivablesOfflist extends React.Component {
 	}
 
 	getTabPaneComp = (productLine) => {
-		const { receAddListInfo = {} } = this.props;
+		const { receAddListInfo = {}, platformList, projectList } = this.props;
 		const { loading } = this.state;
 
 		if (!Array.isArray(productLine)) return null;
@@ -101,14 +106,13 @@ class ReceivablesOfflist extends React.Component {
 				pageSizeOptions: ['20', '50', '100', '200']
 			};
 			const selectedRowKeys = this.state[`selectedRowKeys-${id}`] || [];
-			const disabled = !selectedRowKeys.length;
 			const rowSelection = {
 				selectedRowKeys,
 				onChange: (selectedRowKeys, selectedRows) => {
 					this.handleSelectRows(id, selectedRowKeys, selectedRows);
 				},
 				getCheckboxProps: record => ({
-					disabled: record.status != 1
+					// disabled: record.status != 1
 				}),
 			};
 			const tabTitle = total != undefined ? <div>
@@ -116,30 +120,21 @@ class ReceivablesOfflist extends React.Component {
 				<span>{total}</span>
 			</div> : <div>{display}</div>;
 			const wrapperClass = `moreThanOneTable${id}`;
+			const allItemsInfo = this.getSelectedRowInfo(7, true);
 			return (
 				<TabPane tab={tabTitle} key={id} className={wrapperClass}>
 					<ReceivableOffQuery 
 						showExport
+						queryOptions={{platformList, projectList}}
 						queryItems={getOffQueryItems(getOffAddQueryKeys[id])}
 						handleSearch={searchQuery => {this.handleSearch(id, searchQuery)}} 
 						handleExport={ () => {this.handleExportList(id)}}
 						actionKeyMap={{
-							company: this.props.getGoldenCompanyId
+							company: this.props.getGoldenCompanyId,
+							brand: this.props.getBrandData
 						}}
 					/>
-					{ <Alert className='add-list-total-info' message={totalMsg} type="warning" showIcon /> }
-					<div className='rece-add-seledcted'>
-						已选订单:<span className='red-font' style={{ marginLeft: '10px' }}>{selectedRowKeys.length}</span>个
-						<Button 
-							className='left-gap' type='primary' 
-							disabled={disabled} 
-							onClick={() => {
-								this.setState({ checkVisible: true });
-							}}
-						>
-							查看已选
-						</Button>
-					</div>
+					<Alert className='add-list-total-info' message={totalMsg} type="warning" showIcon />
 					<Scolltable 
 						isMoreThanOne 
 						wrapperClass={wrapperClass}
@@ -148,7 +143,7 @@ class ReceivablesOfflist extends React.Component {
 					>
 						<Table 
 							className='receivable-table'
-							rowKey={getTableId[id]} 
+							rowKey={'order_id'} 
 							columns={getReceOffCol(getReceAddColIndex[id])} 
 							dataSource={list} 
 							bordered 
@@ -159,9 +154,9 @@ class ReceivablesOfflist extends React.Component {
 						/>
 					</Scolltable>
 					<div className='rece-footer'>
-						<Button disabled={disabled} type='primary' onClick={() => {
-							this.setState({ offVisible: true });
-						}}>核销订单</Button>
+						<Button
+							disabled={!(allItemsInfo['total'])} 
+							type='primary' onClick={this.handleOffItems}>核销订单</Button>
 					</div>
 				</TabPane>
 			)
@@ -179,15 +174,43 @@ class ReceivablesOfflist extends React.Component {
 		})
 	}
 
-	handleModalOk = (modalType, values) => {
-		const { activeKey } = this.state;
-		if(modalType === 'preview') {
-			this.setState({
-				[`selectedRowKeys-${activeKey}`]: [], 
-				[`selectedRows-${activeKey}`]: [], 
+	getOrderInfo = isClear => {
+		const { receMetaData = {} } = this.props;
+		const { product_line } = receMetaData;
+		if (!Array.isArray(product_line)) return {};
+		if(isClear) {
+			const allObj = {};
+
+			product_line.forEach(item => {
+				const { id } = item;
+				Object.assign(allObj, {[`selectedRowKeys-${id}`]: [], [`selectedRows-${id}`]: []})
 			})
+			return allObj;
+		}
+
+		return product_line.map(item => {
+			const { id } = item;
+			const order_ids = this.state[`selectedRowKeys-${id}`];
+			if( Array.isArray(order_ids) && order_ids.length )
+				return {
+					product_line: id,
+					order_ids: order_ids.join(',')
+				}
+		}).filter(item => item);
+	}
+
+	handleModalOk = (modalType, values) => {
+		const { company_id } = this.state;
+		if(modalType === 'preview') {
+			this.setState(this.getOrderInfo(true));
 		}else if(modalType === 'offVisible') { 
-			this.props.addReceOffItem(values).then(() => {
+			const submitObj = {...values};
+
+			Object.assign(submitObj, {company_id, order_info: this.getOrderInfo()});
+			delete submitObj.can_verification_amount;
+			delete submitObj.company_name;
+			delete submitObj.sale_name;
+			this.props.addReceOffItem(submitObj).then(() => {
 				const { history } = this.props;
 				this.setState({offVisible: false});
 				history.push('/finance/receivableoff/list');
@@ -209,26 +232,97 @@ class ReceivablesOfflist extends React.Component {
 		})
 	}
 
-	render() {
+	getTotalMoney = (arr = []) => {
+		return arr.reduce((accumulator, item) => accumulator + parseInt(item.receivables_amount), 0);
+	}
+
+	getAllSelectedItems = () => {
 		const { receMetaData = {} } = this.props;
 		const { product_line } = receMetaData;
+		let allArr = [];
+		if (!Array.isArray(product_line)) return [];
+		product_line.forEach(item => {
+			const { id } = item;
+			const lineItems = this.state[`selectedRows-${id}`] || [];
+			allArr = [...allArr, ...lineItems]
+		})
+		return allArr;
+	}
+
+	getNumberal = data => {
+		return numeral(data).format('0.00');
+	}
+
+	getSelectedRowInfo = (key, isAll) => {
+		let allItems = this.state[`selectedRows-${key}`] || [];
+		if(isAll) 
+			allItems = this.getAllSelectedItems();
+
+		if(allItems.length)
+			return {
+				total: allItems.length,
+				amount: this.getNumberal(this.getTotalMoney(allItems)),
+				allItems
+			}
+
+		return { total: 0, amount: '0.00', allItems: [] };
+	}
+
+	getSelectedInfoComp = productLine => {
+		if (!Array.isArray(productLine)) return null;
+
+		return productLine.map(item => {
+			const { display, id } = item;
+			return (
+				<span key={id} style={{marginRight: 20}}>
+					<span>{`${display}：${this.getSelectedRowInfo(id)['total']}个`}</span>
+					<span className='selected-sign'>|</span>
+					<span>{`${this.getSelectedRowInfo(id)['amount']}元`}</span>
+				</span>
+			)
+		})
+	}
+
+	handleOffItems = () => {
+		this.setState({ offVisible: true });
+	}
+
+	render() {
+		const { receMetaData = {}, companyInfo = {}, goldenToken = {} } = this.props;
+		const { product_line } = receMetaData;
+		const { name = '-', owner_admin_real_name = '-', region_team_name = '-' } = companyInfo;
 		const { activeKey, checkVisible, offVisible } = this.state;
-		const tabColArr = getReceAddColIndex[activeKey] || [];
+		const tabColArr = getReceAddColIndex['preview'] || [];
+		const allItemsInfo = this.getSelectedRowInfo(7, true);
+
+		const initialValue = {
+			can_verification_amount: allItemsInfo['amount'],
+			company_name: name,
+			sale_name: owner_admin_real_name,
+		};
+
 		const title = <div>
-			<span>{`新增核销-${'保洁'}`}</span>
-			<span className='total-margin'>{`销售：${'懒猫'}`}</span>
-			<span>{`区域：${'垃圾桶'}`}</span>
-		</div>;
-		const comp = <div>
-			<span>{`预约订单：${0}个|${0}元`}</span>
-			<span className='total-margin'>{`派单活动：${0}个|${0}元`}</span>
-			<span>{`公司拓展业务：${0}个|${0}元`}</span>
-			<span className='total-margin'>{`当前已选可核销金额 ${0.00}元`}</span>
+			<span>{`新增核销-${name}`}</span>
+			<span className='total-margin'>{`销售：${owner_admin_real_name}`}</span>
+			<span>{`区域：${region_team_name}`}</span>
 		</div>;
 
 		return <div className='rece-wrapper rece-add-wrapper'>
 			<div className='rece-title'>{title}</div>
-			{/* <Alert message={comp} type="warning" showIcon /> */}
+			<div className='rece-add-seledcted'>
+				<span className='right-margin'>已选</span>
+				{this.getSelectedInfoComp(product_line)}
+				<span style={{marginRight: 20}}>{`当前已选可核销金额 ${allItemsInfo['amount']}元`}</span>
+				<Button 
+					type='primary' 
+					disabled={!(allItemsInfo['total'])} 
+					onClick={() => {
+						this.setState({ checkVisible: true });
+					}}
+				>
+					{`已选订单：${allItemsInfo['total']}个`}
+				</Button>
+			</div>
 			<Tabs className='rece_tabs' activeKey={activeKey} onChange={this.handleChangeTab}>
 				{
 					this.getTabPaneComp(product_line)
@@ -243,17 +337,20 @@ class ReceivablesOfflist extends React.Component {
 				handleOk={ () => {this.handleModalOk('preview')}}
 				footer={null}
 				columns={getReceOffCol([...tabColArr, 'previewOperate'], receMetaData, this.handleRemoveSelected, activeKey)}
-				dataSource={this.state[`selectedRows-${activeKey}`]}
+				dataSource={allItemsInfo['allItems']}
 			/>
 			<ReceOffModal 
 				type='off'
+				initialValue={initialValue}
 				visible={offVisible}
 				options={Object.assign(getOffOptions, receMetaData)}
 				width={800}
-				title='应收款核销'
+				title='应收款核销' 
+				goldenToken={goldenToken}
 				actionKeyMap={{
 					company: this.props.getGoldenCompanyId,
-					sale: this.props.getGoldenCompanyId
+					sale: this.props.getGoldenCompanyId,
+					account: this.props.getAccountInfo
 				}}
 				handleCancel={this.handleModalCancel} 
 				handleOk={this.handleModalOk}
@@ -263,45 +360,16 @@ class ReceivablesOfflist extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-	const { receivableOff = {} } = state;
-	const { receAddReducer: receAddListInfo, receMetaData } = receivableOff;
-
+	const { receivableOff = {}, companyDetail = {} } = state;
+	const { receAddReducer: receAddListInfo, receMetaData, companyInfo } = receivableOff;
+	const { platformList = [], projectList = [], goldenToken } = companyDetail;
 	return {
 		receAddListInfo,
-		receMetaData: {
-			"product_line": [   // 订单类型
-				{
-					"id": 2,
-					"display": "微闪投"
-				},
-				{
-					"id": 3,
-					"display": "预约订单"
-				},
-				{
-					"id": 7,
-					"display": "拓展业务"
-				}
-			],
-			"verification_type": [   // 核销类型
-				{
-					"id": 1,
-					"display": "客户整体折让"
-				},
-				{
-					"id": 2,
-					"display": "订单折让(赔偿)"
-				},
-				{
-					"id": 3,
-					"display": "坏账清理"
-				},
-				{
-					"id": 4,
-					"display": "其他"
-				}
-			]
-		},
+		receMetaData, 
+		platformList,
+		projectList,
+		companyInfo,
+		goldenToken
 	}
 }
 const mapDispatchToProps = dispatch => (

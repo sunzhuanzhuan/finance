@@ -24,3 +24,44 @@ export const {
 } = createHttpAction('getSalerData', Interface.getSalerData, {
 	method: 'get'
 });
+
+//所属项目 核销订单明细页面
+export const {
+	getProjectData,
+	getProjectData_success
+} = createHttpAction('getProjectData', Interface.getProjectData, {
+	method: 'get'
+});
+
+//品牌列表
+export const {
+	getBrandData,
+	getBrandData_success
+} = createHttpAction('getBrandData', Interface.getBrandData, {
+	method: 'get'
+});
+
+//新增核销 根据厂商ID获取厂商详细信息（销售/区域）
+export const {
+	getCompanyInfo,
+	getCompanyInfo_success
+} = createHttpAction('getCompanyInfo', Interface.getCompanyInfo, {
+	method: 'get'
+});
+
+//新增核销 根据账号名称获取账号id信息
+export const {
+	getAccountInfo,
+	getAccountInfo_success
+} = createHttpAction('getAccountInfo', Interface.getAccountInfo, {
+	method: 'get'
+});
+
+//获取核销详情
+export const {
+	getOffItemInfo,
+	getOffItemInfo_success
+} = createHttpAction('getOffItemInfo', Interface.getOffItemInfo, {
+	method: 'get'
+});
+

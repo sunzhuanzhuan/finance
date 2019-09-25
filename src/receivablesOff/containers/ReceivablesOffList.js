@@ -28,6 +28,7 @@ class ReceivablesOffList extends React.Component {
 	componentDidMount() {
 		this.props.getReceMetaData();
 		this.props.getSalerData();
+		this.props.getGoldenToken();
 		this.handleSearch({
 			page: 1,
 			page_size: 20
@@ -50,19 +51,25 @@ class ReceivablesOffList extends React.Component {
 		})
 	}
 
-	handleTableOperate = (operateType, recordInfo) => {
+	handleTableOperate = (operateType, verification_id) => {
 		switch(operateType) {
 			case 'detail':
 				const { history } = this.props;
 				history.push({
 					pathname: '/finance/receivableoff/detail',
-					search: `?${qs.stringify({verification_id: recordInfo})}`,
+					search: `?${qs.stringify({verification_id})}`,
 				});
 				return;
-			case 'check':
-				return this.setState({checkVisible: true, recordInfo});
-			case 'edit':
-				this.setState({offVisible: true, recordInfo})
+			case 'checkVisible':
+			case 'offVisible':
+				this.setState({loading: true})
+				this.props.getOffItemInfo({verification_id}).then((result = {}) => {
+					const { data = {} } = result;
+					this.setState({loading: false, [operateType]: true, recordInfo: data})
+				}).catch(({errorMsg})=>{
+					this.setState({ loading: false })
+					message.error(errorMsg || '加载失败，请稍后重试');
+				})
 				return;
 			default:
 				return;
@@ -76,25 +83,26 @@ class ReceivablesOffList extends React.Component {
 		})
 	}
 
-	handleModalOk = (modalType, values) => {
-		// const submitObj = {
-		// 	verification_id: '',
-		// 	attach: '',
-		// 	type: '',
-		// 	remark: '',
-		// 	is_record_sale_income: '',
-		// 	is_decrease_company_gmv: '',
-		// 	is_decrease_sale_gmv: '',
-		// };
+	handleModalOk = (modalType, values = {}) => {
+		const { verification_id, attachment, type, remark, is_record_sale_income, is_decrease_company_gmv, is_decrease_sale_gmv } = values;
+		const submitObj = {
+			verification_id,
+			attachment,
+			type,
+			remark,
+			is_record_sale_income,
+			is_decrease_company_gmv,
+			is_decrease_sale_gmv,
+		};
 
-		this.props.editReceOffItem(values).then(() => {});
+		this.props.editReceOffItem(submitObj).then(() => {});
 		this.handleCloseModal(modalType);
 	}
 
 	handleExportList = () => {
 		const { searchQuery = {} } = this.state;
 
-		downloadByATag(`/api/receivables/verification/exportVerification?${qs.stringify(searchQuery)}`);
+		downloadByATag(`/api/finance/receivables/order/export?${qs.stringify(searchQuery)}`);
 	}
 
 	getNumDisplay = data => {
@@ -104,11 +112,11 @@ class ReceivablesOffList extends React.Component {
 	render() {
 		const { 
 			receivableOffList: { total = 0, page = 1, page_size = 20, list = [], statistic = {} }, 
-			receMetaData = {}, salerData = [], history 
+			receMetaData = {}, salerData = [], history, goldenToken 
 		} = this.props;
 		const { 
 			verification_ids_count = '-', order_ids_count = '-', verification_amount_total = '-', 
-			debt_amount_total = '-', gift_amount_total = '-', warehouse_amount_total = '-' 
+			gift_amount_total = '-', warehouse_amount_total = '-' 
 		} = statistic;
 		const { searchQuery, loading, addVisible, offVisible, checkVisible, recordInfo } = this.state;
 		const totalWidth = getTotalWidth(getReceOffCol(getOffListColIndex));
@@ -182,6 +190,7 @@ class ReceivablesOffList extends React.Component {
 				initialValue={recordInfo}
 				width={800}
 				title='应收款核销'
+				goldenToken={goldenToken}
 				actionKeyMap={{
 					company: this.props.getGoldenCompanyId,
 					sale: this.props.getGoldenCompanyId
@@ -210,13 +219,15 @@ class ReceivablesOffList extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-	const { receivableOff = {} } = state;
+	const { receivableOff = {}, companyDetail = {} } = state;
 	const { receivableOffList = {}, receMetaData = {}, salerData = []} = receivableOff;
+	const { goldenToken } = companyDetail;
 
 	return {
 		receivableOffList,
 		receMetaData,
-		salerData
+		salerData,
+		goldenToken
 	}
 }
 const mapDispatchToProps = dispatch => (bindActionCreators({...receivableOffAction, ...goldenActions, editReceOffItem}, dispatch));

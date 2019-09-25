@@ -1,5 +1,6 @@
 import React from 'react'
 import { Modal, Form, Table, Button, Input, Radio, Checkbox, Select, Icon, InputNumber, Upload, message } from "antd";
+import { WBYUploadFile } from 'wbyui';
 import { getOffAddFormItems } from '../constants';
 import { getTotalWidth } from '@/util';
 import { Scolltable } from '@/components';
@@ -17,18 +18,22 @@ class ReceOffModal extends React.Component {
 		super(props);
 		this.state = {
 		};
+		this.attachment = '';
+	}
+	componentDidMount() {
+		this.attachment = '';
 	}
 	static getDerivedStateFromProps(nextProps, prevState) {
 		const { initialValue = {}, visible } = nextProps;
 		const { stateVisible } = prevState;
 		if(stateVisible !== visible) {
-			const { gift_amount, warehouse_amount } = initialValue;
+			const { total_gift_amount, total_warehouse_amount } = initialValue;
 			return {
 				stateVisible: visible,
 				stateInitValue: initialValue,
-				gift_amount: Boolean(gift_amount),
-				warehouse_amount: Boolean(warehouse_amount),
-				no: !gift_amount && !warehouse_amount
+				total_gift_amount: Boolean(total_gift_amount),
+				total_warehouse_amount: Boolean(total_warehouse_amount),
+				no: !total_gift_amount && !total_warehouse_amount
 			}
 		}
 		return null
@@ -36,6 +41,9 @@ class ReceOffModal extends React.Component {
 	getModalContent = () => {
 		const { type, options = {} } = this.props;
 		const { stateInitValue = {} } = this.state;
+		const checkKey = [
+			'company_name', 'sale_name', 'type', 'total_verification_amount', 'check_box_item', 'total_debt_amount', 'is_decrease_company_gmv', 'is_record_sale_income', 'is_decrease_sale_gmv', 'attachment', 'remark'
+		]
 		if(type === 'preview') {
 			return this.getPreviewTableComp();
 		}else if(type === 'off') {
@@ -43,7 +51,7 @@ class ReceOffModal extends React.Component {
 		}else if(type === 'add') {
 			return this.getAddComp();
 		}else if(type === 'check') {
-			return getValueCheckComp(stateInitValue, false, options);
+			return getValueCheckComp(stateInitValue, false, options, checkKey);
 		}
 	}
 	getPreviewTableComp = () => {
@@ -109,7 +117,7 @@ class ReceOffModal extends React.Component {
 		if(checked && value !== 'no') {
 			this.setState({no: false});
 		}else if(checked && value === 'no') {
-			this.setState({gift_amount: false, warehouse_amount: false})
+			this.setState({total_gift_amount: false, total_warehouse_amount: false})
 		}
 		
 		this.setState({[value]: checked}, () => {
@@ -125,8 +133,8 @@ class ReceOffModal extends React.Component {
 			const { display, id } = item;
 			const checkedVal = id !== 'no' ? this.state[id] : 
 				this.state[id] || 
-				(!this.state['gift_amount']) && 
-				(!this.state['warehouse_amount']);
+				(!this.state['total_gift_amount']) && 
+				(!this.state['total_warehouse_amount']);
 			const account = 500.00;
 			const countTips = `${display}余额${account}，最多可抵扣${account}`;
 			const errorMsg = [
@@ -188,16 +196,16 @@ class ReceOffModal extends React.Component {
 		};
 		const isSameMonth = moment(created_at).isSame(moment(), 'year') && 
 			moment(created_at).isSame(moment(), 'month');
+		const addItems = isEdit ? getOffAddFormItems().filter(item => item.key !== 'can_verification_amount') : getOffAddFormItems();
 
 		return (
 			<Form>
 				{
-					getOffAddFormItems().map(item => {
+					addItems.map(item => {
 						const { key, label, compType, optionKey, actionKey, required, disabled, validator } = item;
 						const tips = compType === 'input' || compType === 'inputNumber' ? '请输入' : '请选择';
 						const radioStatic = isEdit && !isSameMonth;
 						const isStatic = compType === 'radio' ? radioStatic : isEdit && disabled;
-						const formItemCls = compType === 'upload' ? 'upload-form-item' : ''
 
 						if(key === 'check_box_item')
 							return (
@@ -206,16 +214,49 @@ class ReceOffModal extends React.Component {
 								</FormItem>
 							)
 						if(compType === 'unalterable')
-								return (
-									<FormItem key={key} label={label} {...formItemLayout} >
-										{this.getUnalterableItem(stateInitValue[key])}
-									</FormItem>
-								)
+							return (
+								<FormItem key={key} label={label} {...formItemLayout} >
+									{this.getUnalterableItem(stateInitValue[key])}
+								</FormItem>
+							)
+						if(compType === 'upload') {
+							const { goldenToken = {} } = this.props;
+							const helpInfo = <div className='upload-infos'>支持最多5张图片上传，仅支持jpg\gif\png图片文件，单个文件不能超过3M</div>
+							return (
+								<FormItem className='upload-form-item' help={helpInfo} key={key} label={label} {...formItemLayout} >
+									{getFieldDecorator(key)(
+										<WBYUploadFile
+											ref={x => this.uploadFile = x}
+											tok={{
+												token: goldenToken.upload_token,
+												upload_url: goldenToken.upload_url
+											}}
+											onChange={this.handleFileChange}
+											showUploadList={{
+												showPreviewIcon: true,
+												showRemoveIcon: true
+											}}
+											onPreview={this.handlePreview}
+											uploadText={'上传'}
+											multiple={true}
+											size={3}
+											len={5}
+											accept={".png,.gif,.jpg"} 
+											listType="picture-card"
+										/>
+									)}
+								</FormItem>
+							)
+						}
+						const getInitialValue = (initialValue) => {
+							if(initialValue || initialValue == 0)
+								return compType === 'select' || compType === 'radio' ? Number(initialValue) : initialValue;
+						}
 						return (
-							<FormItem className={formItemCls} key={key} label={label} {...formItemLayout} >
+							<FormItem key={key} label={label} {...formItemLayout} >
 								{getFieldDecorator(key, 
 								{ 
-									initialValue: stateInitValue[key],
+									initialValue: getInitialValue(stateInitValue[key]),
 									rules: [
 										validator ? {
 											required,
@@ -252,17 +293,17 @@ class ReceOffModal extends React.Component {
 	handleChangeIptNum = () => {
 		const { form } = this.props;
 		const { stateInitValue = {} } = this.state;
-		const offCountObj = form.getFieldsValue(['verification_amount', 'gift_amount', 'warehouse_amount']);
-		const { verification_amount = 0, gift_amount = 0, warehouse_amount = 0 } = offCountObj;
-		const totalDiscount = Number(gift_amount) + Number(warehouse_amount);
-		const debt_amount = numeral(verification_amount - totalDiscount).format('0.00');
-		const isIllegalVal = totalDiscount - verification_amount > 0;
+		const offCountObj = form.getFieldsValue(['total_verification_amount', 'total_gift_amount', 'total_warehouse_amount']);
+		const { total_verification_amount = 0, total_gift_amount = 0, total_warehouse_amount = 0 } = offCountObj;
+		const totalDiscount = Number(total_gift_amount) + Number(total_warehouse_amount);
+		const total_debt_amount = numeral(total_verification_amount - totalDiscount).format('0.00');
+		const isIllegalVal = totalDiscount - total_verification_amount > 0;
 
-		if(isIllegalVal && totalDiscount && verification_amount)
+		if(isIllegalVal && totalDiscount && total_verification_amount)
 			this.getErrorTips('抵扣金额的和不能大于本次核销金额!');
 
-		if(verification_amount)
-			Object.assign(stateInitValue, {debt_amount});
+		if(total_verification_amount)
+			Object.assign(stateInitValue, {total_debt_amount});
 		this.setState({stateInitValue, isIllegalVal});
 	}
 
@@ -297,10 +338,8 @@ class ReceOffModal extends React.Component {
 		});
 	};
 
-	handleChangePic = ({ fileList }) => this.setState({ fileList });
-
-	beforeUpload = file => {
-		// return false;
+	handleFileChange = (fileList) => {
+		this.attachment = (fileList.map(item => item.url)).toString();
 	}
 
 	getFormItem = (key, compType, optionKey, actionKey, disabled, options) => {
@@ -342,25 +381,6 @@ class ReceOffModal extends React.Component {
 				>
 					{this.getRadioItem(options[optionKey])}
 				</RadioGroup>;
-			case 'upload':
-				const { fileList = [] } = this.state;
-				return  <>
-					<Upload 
-						multiple
-						disabled={fileList.length >= 5}
-						action='https://www.mocky.io/v2/5cc8019d300000980a055e76'
-						accept="image/png, image/gif, image/jpg" 
-						listType="picture-card"
-						fileList={fileList}
-						onPreview={this.handlePreview}
-						onChange={this.handleChangePic}
-						beforeUpload={this.beforeUpload}
-						// customRequest={this.handleChange}
-					>
-						<div className="ant-upload-text">上传</div>
-					</Upload>
-					<div className='upload-infos'>支持最多5张图片上传，仅支持jpg\gif\png图片文件，单个文件不能超过3M</div>
-				</>;
 			case 'textarea':
 				return <TextArea autosize={{ minRows: 4, maxRows: 6 }} placeholder="请输入"/>;
 			default:
@@ -374,12 +394,12 @@ class ReceOffModal extends React.Component {
 
 		if(type === 'off') {
 			form.validateFields((errs, fieldsValues) => {
-				// if(errs) return;
+				if(errs) return;
 				const { isIllegalVal } = this.state;
 				if(isIllegalVal) {
 					this.getErrorTips('抵扣金额的和不能大于本次核销金额!');
 				}else {
-					Object.assign(stateInitValue, fieldsValues);
+					Object.assign(stateInitValue, fieldsValues, {attachment: this.attachment});
 					this.setState({stateInitValue, previewVisible: true});
 				}
 			})
@@ -407,7 +427,7 @@ class ReceOffModal extends React.Component {
 	}
 
 	render() {
-		const { visible, width, title, footer, handleCancel, options } = this.props;
+		const { visible, width, title, footer, handleCancel, options, isEdit } = this.props;
 		const { previewVisible, stateInitValue, previewPicVisible, previewImage } = this.state;
 		return [
 				<Modal
@@ -424,6 +444,7 @@ class ReceOffModal extends React.Component {
 					{ this.getModalContent() }
 				</Modal>,
 				<ConfirmModal 
+					isEdit
 					key='confirmModal'
 					visible={previewVisible} 
 					title='应收核销'
@@ -447,12 +468,13 @@ class ReceOffModal extends React.Component {
 
 export default Form.create()(ReceOffModal)
 function ConfirmModal(props) {
-	const { visible, title, fieldsValues = {}, onOk, onCancel, options = {} } = props;
-	const itemKeys = [
+	const { isEdit, visible, title, fieldsValues = {}, onOk, onCancel, options = {} } = props;
+	const allKeys = [
 		'can_verification_amount', 'total_verification_amount', 'check_box_item', 
 		'total_debt_amount', 'is_decrease_company_gmv', 'is_decrease_sale_gmv', 
 		'is_record_sale_income'
 	];
+	const itemKeys = isEdit ? allKeys.filter(item => item !== 'can_verification_amount') : allKeys;
 	return (
 		<Modal
 			wrapClassName='rece-off-confirm-modal'
@@ -485,7 +507,7 @@ function getValueCheckComp(fieldsValues, isConfirm, options, itemKeys) {
 			return <div key={id}>{`${display}：${getNumeral(fieldsValues[id])}`}</div>;
 		});
 	const radioValueMap = {
-		0: '否',
+		2: '否',
 		1: '是',
 	}
 	const allFields = getOffAddFormItems(itemKeys).map(item => {

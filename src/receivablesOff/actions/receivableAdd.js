@@ -8,8 +8,7 @@ const ADD_RECE_OFF_ITEM = 'ADD_RECE_OFF_ITEM';
 const EDIT_RECE_OFF_ITEM = 'EDIT_RECE_OFF_ITEM';
 // 获取核销单详情各方列表
 export function getReceOffDetailList(params = {}) {
-	const { key } = params;
-	delete params.key;
+	const { product_line } = params;
 
 	return dispatch => {
 		return api.get(`${Interface.getReceOffDetailList}?${qs.stringify(params)}`)
@@ -17,14 +16,14 @@ export function getReceOffDetailList(params = {}) {
 			dispatch({
 				type: GET_RECE_DETAIL_LIST,
 				listData: result.data,
-				key
+				key: product_line
 			})
 		})
 		.catch( () => {
 			dispatch({
 				type: GET_RECE_DETAIL_LIST,
 				listData: {},
-				key
+				key: product_line
 			})
 		});
 	}

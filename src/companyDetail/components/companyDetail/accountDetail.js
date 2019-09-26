@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Row, Col, Table } from 'antd';
 import { withRouter } from 'react-router-dom';
 import * as companyDetailAction from '../../actions/companyDetail';
-import { creditTitle, cashTitle, giftTitle, compensationTitle, coffersListFunc, companyAdjustFunc } from '../../constants'
+import { creditTitle, cashTitle, giftTitle, compensationTitle, coffersListFunc, companyAdjustFunc, companyReceivableFunc } from '../../constants'
 import numeral from 'numeral';
 import qs from 'qs';
 
@@ -17,21 +17,23 @@ class AccountDetail extends Component {
 	}
 	componentDidMount() {
 		const company_id = this.props.id;
-		const { getCompanyDetail, getGoldenAccount, getReadjustPriceAccount, getGiftAccount } = this.props.actions;
+		const { getCompanyDetail, getGoldenAccount, getReadjustPriceAccount, getGiftAccount, getReceivableDetail } = this.props.actions;
 		getCompanyDetail({ company_id }).then(() => {
 			getGiftAccount({ company_id });
 		});
 		getGoldenAccount({ company_id });
 		getReadjustPriceAccount({ company_id });
+		getReceivableDetail({ company_id });
 	}
 	render() {
-		const { id, companyDetail, companyDetail: { general = {}, credit = {}, cash = {} }, goldenAccount, readjustPriceAccount, giftAccount } = this.props;
+		const { id, companyDetail, companyDetail: { general = {}, credit = {}, cash = {} }, goldenAccount, readjustPriceAccount, giftAccount, receivableDetail } = this.props;
 		const giftList = giftAccount.filter(item => item.account_type === 2);
 		const compensationList = giftAccount.filter(item => item.account_type === 6);
 		const creditList = [{ ...credit, id: 1 }];
 		const cashList = [{ ...cash, id: 1 }];
 		const coffersListTitle = coffersListFunc(id);
 		const ajustListTitle = companyAdjustFunc(id);
+		const receivableTitle = companyReceivableFunc(id);
 		return <div className='account-detail' >
 			<Row type="flex" justify="start" gutter={16} >
 				<Col><h3>公司简称：{companyDetail.name}</h3></Col>
@@ -61,6 +63,8 @@ class AccountDetail extends Component {
 				<Table columns={compensationTitle} dataSource={compensationList} pagination={false} rowKey='id' bordered />
 				<div className='company-detail-title'><span>小金库</span></div>
 				<Table columns={coffersListTitle} dataSource={goldenAccount} pagination={false} rowKey='id' bordered />
+				<div className='company-detail-title'><span>核销账户</span></div>
+				<Table columns={receivableTitle} dataSource={readjustPriceAccount} pagination={false} rowKey='id' bordered />
 				<div className='company-detail-title'><span>定向调价</span></div>
 				<Table columns={ajustListTitle} dataSource={readjustPriceAccount} pagination={false} rowKey='id' bordered />
 			</fieldset>
@@ -73,7 +77,8 @@ const mapStateToProps = (state) => {
 		companyDetail: state.companyDetail.companyDetail,
 		goldenAccount: state.companyDetail.goldenAccount,
 		readjustPriceAccount: state.companyDetail.readjustPriceAccount,
-		giftAccount: state.companyDetail.giftAccount
+		giftAccount: state.companyDetail.giftAccount,
+		receivableDetail: state.companyDetail.receivableDetail
 	}
 }
 const mapDispatchToProps = dispatch => ({

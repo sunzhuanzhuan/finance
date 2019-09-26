@@ -8,6 +8,7 @@ const CompanyDetail = lazyLoadComponent(() => import('./containers/companyDetail
 const FreezeDetail = lazyLoadComponent(() => import('./containers/freezeDetail'))
 const GoldenDetail = lazyLoadComponent(() => import('./containers/goldenDetail'))
 const AdjustDetail = lazyLoadComponent(() => import('./containers/adjustDetail'))
+const ReceivableDetail = lazyLoadComponent(() => import('./containers/receivableDetail'))
 const AdjustApply = lazyLoadComponent(() => import('./containers/adjustApply'))
 const AddAdjustApply = lazyLoadComponent(() => import('./containers/addAdjustApply'))
 const AdjustApplyDetail = lazyLoadComponent(() => import('./containers/adjustApplyDetail'))
@@ -33,6 +34,7 @@ class Company extends Component {
 				<Route path='/finance/freeze/detail' component={FreezeDetail} />
 				<Route path='/finance/golden/detail' component={GoldenDetail} />
 				<Route path='/finance/golden/adjustDetail' component={AdjustDetail} />
+				<Route path='/finance/golden/receivableDetail' component={ReceivableDetail} />
 				<Route path='/finance/golden/adjustApply' component={AdjustApply} />
 				<Route path='/finance/golden/addAdjustApply' component={AddAdjustApply} />
 				<Route path='/finance/golden/adjustApplyDetail' component={AdjustApplyDetail} />

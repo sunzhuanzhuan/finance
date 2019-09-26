@@ -21,7 +21,7 @@ class ReceivablesOfflist extends React.Component {
 		super();
 		this.state = {
 			addVisible: false,
-			activeKey: '2',
+			activeKey: '3',
 		};
 	}
 

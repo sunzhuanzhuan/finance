@@ -10,7 +10,10 @@ import {
 	getGiftAccount_success,
 	getGoldenAccount_success,
 	getGoldenFlow_success,
-	getFreezeDetail_success
+	getFreezeDetail_success,
+	getReceivableDetail_success,
+	getCompanyReceivableList_success, 
+	getReceivableOption_success,
 } from '../actions/companyDetail';
 
 export const companyData = handleActions({
@@ -75,6 +78,24 @@ export const goldenFlow = handleActions({
 
 export const freezeDetail = handleActions({
 	[getFreezeDetail_success]: (state, action) => {
+		return { ...action.payload.data }
+	}
+}, {})
+
+export const receivableDetail = handleActions({
+	[getReceivableDetail_success]: (state, action) => {
+		return { ...action.payload.data }
+	}
+}, {})
+
+export const receivableList = handleActions({
+	[getCompanyReceivableList_success]: (state, action) => {
+		return { ...action.payload.data }
+	}
+}, {})
+
+export const receivableOption = handleActions({
+	[getReceivableOption_success]: (state, action) => {
 		return { ...action.payload.data }
 	}
 }, {})

@@ -226,6 +226,28 @@ export const companyAdjustFunc = (id) => {
 	]
 }
 
+export const companyReceivableFunc = (id) => {
+	return [
+		{
+			title: <div>总金额（元）<Popover content={'订单进行应收款核销时使用核销账户的总和'} title="" >
+				<Icon type="question-circle-o" />
+			</Popover></div>,
+			dataIndex: 'total_amount',
+			key: 'total_amount',
+			width: 300,
+			render: text => {
+				return text ? numeral(text).format('0.00') : '0.00'
+			}
+		},
+		{
+			title: '核销明细',
+			dataIndex: 'action',
+			key: 'action',
+			render: () => <Link to={`/finance/golden/receivableDetail?company_id=${id}`}>查看详情</Link>
+		}
+	]
+}
+
 export const accountFlowFunc = (handleDetail, content, account_type) => {
 	return [
 		{
@@ -334,6 +356,61 @@ export const goldenFlowConfig = [
 		width: 200,
 	}, {
 		title: '流水明细（元）',
+		dataIndex: 'change_amount',
+		key: 'change_amount',
+		align: 'center',
+		width: 200,
+	}, {
+		title: '类型',
+		dataIndex: 'display',
+		key: 'display',
+		align: 'center',
+		width: 200,
+	}, {
+		title: '余额',
+		dataIndex: 'after_amount',
+		key: 'after_amount',
+		align: 'center',
+		width: 200,
+	}, {
+		title: '操作人',
+		dataIndex: 'real_name',
+		key: 'real_name',
+		align: 'center',
+		width: 200,
+		render: text => {
+			return text ? text : '-'
+		}
+	}, {
+		title: '详情',
+		align: 'center',
+		width: 300,
+		render: (text, record) => {
+			if (record.product_line && (record.product_line === '3' || record.product_line === '7')) {
+				const str = record.product_line === '3' ? '订单ID' : record.product_line === '7' ? '拓展业务ID' : null;
+				return <div>{str}：<a target='_blank' href={record.link}>{record.order_id}</a></div>
+			} else {
+				return record.remark
+			}
+		},
+	}
+]
+
+export const receivableFlowConfig = [
+	{
+		title: '流水号',
+		dataIndex: 'id',
+		key: 'id',
+		align: 'center',
+		width: 200,
+	}, {
+		title: '时间',
+		dataIndex: 'created_at',
+		key: 'created_at',
+		align: 'center',
+		width: 200,
+	}, {
+		title: '金额',
 		dataIndex: 'change_amount',
 		key: 'change_amount',
 		align: 'center',

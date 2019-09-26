@@ -1,5 +1,5 @@
 import React from "react";
-import { Popover, Icon, Tooltip } from 'antd';
+import { Popover, Icon, Tooltip, Table } from 'antd';
 import { Link } from 'react-router-dom';
 import numeral from 'numeral';
 import moment from 'moment';
@@ -10,10 +10,10 @@ const getPriceContent = (item = {}) => {
 		rateTitle,
 		baseRate,
 		titleLable,
-		titlePrice, 
-		bloggerPrice, 
-		bloggerRate, 
-		trilateralPrice, 
+		titlePrice,
+		bloggerPrice,
+		bloggerRate,
+		trilateralPrice,
 		trilateralRate
 	} = item;
 	const isServiceRate = rateTitle == '服务费率';
@@ -28,7 +28,7 @@ const getPriceContent = (item = {}) => {
 	return (
 		<div className='price_comp' key={+new Date() + Math.random()}>
 			<div className='price_title'>
-				<span style={{marginRight: 20}}>{titleLable}<span className='nowrap-span'>：{dealTitlePrice}</span></span>
+				<span style={{ marginRight: 20 }}>{titleLable}<span className='nowrap-span'>：{dealTitlePrice}</span></span>
 				{(isShowRate && !isShowDetail) || (isShowRate && isServiceRate) ? <span className='nowrap-span'>{rateTitle}：{dealBaseRate}</span> : null}
 			</div>
 			{
@@ -36,12 +36,12 @@ const getPriceContent = (item = {}) => {
 					<div key='blogger' className='price_detail'>
 						<span className='price_dote blogger'></span>
 						<span className='price_content'>博主：{dealBloggerPrice}</span>
-						{ isShowRate && !isServiceRate ? <span>{rateTitle}：{dealBlogRate}</span> : null }
+						{isShowRate && !isServiceRate ? <span>{rateTitle}：{dealBlogRate}</span> : null}
 					</div>,
 					<div key='trinity' className='price_detail'>
 						<span className='price_dote trilatreal'></span>
 						<span className='price_content'>三方：{dealTrilPrice}</span>
-						{ isShowRate && !isServiceRate ? <span>{rateTitle}：{dealTrilgRate}</span> : null }
+						{isShowRate && !isServiceRate ? <span>{rateTitle}：{dealTrilgRate}</span> : null}
 					</div>
 				] : null
 			}
@@ -263,7 +263,7 @@ export const accountFlowFunc = (handleDetail, content, account_type) => {
 			key: 'action',
 			aligin: 'center',
 			render: (text, record) => {
-				if ((record.billing_type == 2) || (record.billing_type_display == '其他')) {
+				if ((record.billing_type == 2) || (record.billing_type == 36) || (record.billing_type == 37) || (record.billing_type_display == '其他')) {
 					return <span>-</span>
 				} else {
 					const node = content ? <div>{content.key}：<a target='_blank' href={content.link}>{content.value}</a></div> : '';
@@ -490,9 +490,9 @@ export const adjustApplyListFunc = (audit_type, application_status, quote_type, 
 				const value = application_status.find(item => item.id == text);
 				const className = text == 3 ? 'dealed' : 'undealed';
 				return value ? <div className={className}>
-				<span></span>
-				<div>{value.display}</div>
-			</div> : null
+					<span></span>
+					<div>{value.display}</div>
+				</div> : null
 			}
 		},
 		{
@@ -560,18 +560,18 @@ export const adjustApplyListFunc = (audit_type, application_status, quote_type, 
 			width: 190,
 			render: (text, record) => {
 				return <div>
-					<a onClick={() => {handleJump(record.id, record.company_id);}}>订单详情</a>
+					<a onClick={() => { handleJump(record.id, record.company_id); }}>订单详情</a>
 					{record.status != '3' ?
-						<a style={{marginLeft: 10}} onClick={() => {handleAction('pass', record.id, record.quote_type, record.company_id);}}>
+						<a style={{ marginLeft: 10 }} onClick={() => { handleAction('pass', record.id, record.quote_type, record.company_id); }}>
 							审核通过
 						</a>
-					: null}
+						: null}
 					{record.status != '3' ?
-						<a style={{marginLeft: 10}} onClick={() => {handleAction('reject', record.id);}}>
+						<a style={{ marginLeft: 10 }} onClick={() => { handleAction('reject', record.id); }}>
 							驳回
 						</a>
-					: null}
-					<a style={{marginLeft: 10}} target='_blank' href={`/api/finance/readjust/export?readjust_application_id=${record.id}&audit_type=${audit_type}`}>导出</a>
+						: null}
+					<a style={{ marginLeft: 10 }} target='_blank' href={`/api/finance/readjust/export?readjust_application_id=${record.id}&audit_type=${audit_type}`}>导出</a>
 				</div >
 			}
 		}
@@ -633,14 +633,14 @@ export const addAdjustApplyConfig = (quote_type = [], platformIcon = []) => [
 		title: '账号信息',
 		dataIndex: 'account_id',
 		key: 'account_id',
-		width: 320,
-		render: (data = '-', {weibo_name = '-', platform_id, warningClass}) => {
+		width: 230,
+		render: (data = '-', { weibo_name = '-', platform_id, warningClass }) => {
 			const platformInfo = platformIcon.find(item => item.id == platform_id) || {};
 			return <div className={`left_content_td platform_wrapper ${warningClass}`}>
-			{platformInfo.platformIcon ? <img className='platform-icon-img' src={platformInfo.platformIcon}/> : null}
-			<div>账号名称：{weibo_name}</div>
-			<div>ID：{data}</div>
-		</div>
+				{platformInfo.platformIcon ? <img className='platform-icon-img' src={platformInfo.platformIcon} /> : null}
+				<div>账号名称：{weibo_name}</div>
+				<div>ID：{data}</div>
+			</div>
 		}
 	},
 	{
@@ -773,7 +773,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				dataIndex: 'policy_id',
 				key: 'policy_id',
 				align: 'center',
-				width: 100,
+				width: 60,
 				render: (text) => {
 					return text > 0 ? <a target="_blank" href={`/account/policy?id=${text}`}>查看</a> : '-'
 				}
@@ -787,7 +787,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				render: (text, record) => {
 					const value = rel_order_status.find(item => item.id == text);
 					let className = '';
-					switch(text) {
+					switch (text) {
 						case 1:
 							className = 'normal';
 							break;
@@ -802,9 +802,9 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 							break;
 					}
 					return value ? <div className={`${className} ${record.warningClass}`}>
-					<span></span>
-					<div>{value.display}</div>
-				</div> : null
+						<span></span>
+						<div>{value.display}</div>
+					</div> : null
 				}
 			},
 			'statusPre': {
@@ -815,7 +815,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				render: (text, record) => {
 					const value = rel_order_status.find(item => item.id == text);
 					let className = '';
-					switch(text) {
+					switch (text) {
 						case 1:
 							className = 'normal';
 							break;
@@ -830,16 +830,16 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 							break;
 					}
 					return value ? <div className={`${className} ${record.warningClass}`}>
-					<span></span>
-					<div>{value.display}</div>
-				</div> : null
+						<span></span>
+						<div>{value.display}</div>
+					</div> : null
 				}
 			},
 			'company_name': {
 				title: '公司简称',
 				dataIndex: 'company_name',
 				key: 'company_name',
-				width: 160,
+				width: 120,
 				render: (text, record) => {
 					return <div className={`${record.warningClass}`}>
 						<div>{text || '-'}</div>
@@ -850,7 +850,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '所属项目/品牌',
 				dataIndex: 'project_name',
 				key: 'project_name',
-				width: 230,
+				width: 160,
 				render: (text, record) => {
 					const { brand_name } = record;
 					return <div className={`left_content_td ${record.warningClass}`}>
@@ -875,7 +875,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '需求ID/需求名称',
 				dataIndex: 'requirement_id_name',
 				key: 'requirement_id_name',
-				width: 230,
+				width: 180,
 				render: (text, { requirement_id = '-', requirement_name = '-', warningClass }) => {
 					return <div className={`left_content_td ${warningClass}`}>
 						<div>需求ID：{requirement_id}</div>
@@ -887,14 +887,14 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '账号信息',
 				dataIndex: 'account_id',
 				key: 'account_id',
-				width: 320,
-				render: (data = '-', {weibo_name = '-', platform_id, warningClass}) => {
+				width: 180,
+				render: (data = '-', { weibo_name = '-', platform_id, warningClass }) => {
 					const platformInfo = platformIcon.find(item => item.id == platform_id) || {};
 					return <div className={`left_content_td platform_wrapper ${warningClass}`}>
-					{platformInfo.platformIcon ? <img className='platform-icon-img' src={platformInfo.platformIcon}/> : null}
-					<div>账号名称：{weibo_name}</div>
-					<div>ID：{data}</div>
-				</div>
+						{platformInfo.platformIcon ? <img className='platform-icon-img' src={platformInfo.platformIcon} /> : null}
+						<div>账号名称：{weibo_name}</div>
+						<div>ID：{data}</div>
+					</div>
 				}
 			},
 			'account_id': {
@@ -924,35 +924,35 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 			},
 			'main_account_info': {
 				title: <Tooltip title={<div>
-							<div>固定账期:发起订单调价申请时刻的账期</div>
-							<div>实时账期:当前时刻的账期</div>
-						</div>}>
-						主账号信息<Icon style={{marginLeft: 5}} type="question-circle" />
-					</Tooltip>,
+					<div>固定账期:发起订单调价申请时刻的账期</div>
+					<div>实时账期:当前时刻的账期</div>
+				</div>}>
+					主账号信息<Icon style={{ marginLeft: 5 }} type="question-circle" />
+				</Tooltip>,
 				dataIndex: 'identity_name',
 				key: 'identity_name',
-				width: 320,
-				render: (data, {order_default_cycle, default_cycle, partner_type_name, warningClass}) => {
+				width: 180,
+				render: (data, { order_default_cycle, default_cycle, partner_type_name, warningClass }) => {
 					const defaultCycle = default_cycle ? `${default_cycle}天` : '-';
 					const orderCycle = order_default_cycle ? `${order_default_cycle}天` : '-'
 					return <div className={warningClass}>
-					<div>主账号：{data}</div>
-					<div>实时账期：{defaultCycle}</div>
-					<div>固定账期：{orderCycle}</div>
-					<div>合作方式：{partner_type_name}</div>
-				</div>
+						<div>主账号：{data}</div>
+						<div>实时账期：{defaultCycle}</div>
+						<div>固定账期：{orderCycle}</div>
+						<div>合作方式：{partner_type_name}</div>
+					</div>
 				}
 			},
 			'main_account_info_sale': {
 				title: '主账号信息',
 				dataIndex: 'identity_name',
 				key: 'identity_name',
-				width: 320,
-				render: (data, {partner_type_name, warningClass}) => {
+				width: 180,
+				render: (data, { partner_type_name, warningClass }) => {
 					return <div className={warningClass}>
-					<div style={{marginBottom: 10}}>主账号：{data}</div>
-					<div>合作方式：{partner_type_name}</div>
-				</div>
+						<div style={{ marginBottom: 10 }}>主账号：{data}</div>
+						<div>合作方式：{partner_type_name}</div>
+					</div>
 				}
 			},
 			'main_account_name': {
@@ -978,7 +978,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '折扣比例',
 				dataIndex: 'discount_rate',
 				key: 'discount_rate',
-				width: 100,
+				width: 80,
 				render: (_, record) => {
 					// const discount = record.price && record.price[0] ? record.price[0].discount_rate : 0;
 					// return record.quote_type != '2' ? numeral(discount).format('0.00%') : '-'
@@ -1015,7 +1015,34 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '折扣比例',
 				dataIndex: 'discount_per',
 				key: 'discount_per',
-				width: 100,
+				width: 70,
+			},
+			'published_price': {
+				title: '刊例价/渠道价',
+				dataIndex: 'published_price',
+				key: 'published_price',
+				width: 640,
+				render: (_, record) => {
+					const { platform_name, reference_price_doc } = record;
+					
+					return [
+						<div 
+							key='price_info' 
+							className='price_info'
+							style={{width: '100%', textAlign: 'center', border: '1px solid #e8e8e8', borderBottom: 0, padding: '6px 4px', fontWeight: 500, color: 'rgba(0, 0, 0, 0.85)', background: '#fafafa'}}>
+								各价格均为订单创建时刻的价格
+						</div>,
+						<Table
+							rowKey='id'
+							key='price_table'
+							columns={getPublishedCol(platform_name === '微信公众号')}
+							dataSource={reference_price_doc}
+							bordered
+							size="middle"
+							pagination={false}
+						/>
+					]
+				}
 			},
 			'order_bottom_price': {
 				title: '订单底价',
@@ -1038,7 +1065,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 								rateTitle: item.quote_type == 2 ? '服务费率' : '利润率',
 								titleLable: item.price_label,
 								titlePrice: item.base_price,
-								baseRate: item.quote_type == 2 ? item.service_fees_rate :  item.private_base_profit_rate,
+								baseRate: item.quote_type == 2 ? item.service_fees_rate : item.private_base_profit_rate,
 								bloggerPrice: item.private_base_price,
 								bloggerRate: item.quote_type == 1 ? item.private_base_profit_rate : item.service_fees_rate,
 								trilateralPrice: item.public_base_price,
@@ -1069,7 +1096,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 								rateTitle: item.quote_type == 2 ? '服务费率' : '利润率',
 								titleLable: item.price_label,
 								titlePrice: item.quoted_price,
-								baseRate: item.quote_type == 2 ? item.service_fees_rate :  item.private_profit_rate,
+								baseRate: item.quote_type == 2 ? item.service_fees_rate : item.private_profit_rate,
 								bloggerPrice: item.private_quote_price,
 								bloggerRate: item.quote_type == 1 ? item.private_profit_rate : item.service_fees_rate,
 								trilateralPrice: item.public_quote_price,
@@ -1151,7 +1178,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				dataIndex: 'history_rate',
 				key: 'history_rate',
 				width: 120,
-				render: (_, {history_min_sell_price = {}, quote_type, }) => {
+				render: (_, { history_min_sell_price = {}, quote_type, }) => {
 					const item = history_min_sell_price ? history_min_sell_price.min_sell_price : [];
 					const profitRate = history_min_sell_price.profit_rate || history_min_sell_price.profit_rate == 0 ? numeral(history_min_sell_price.profit_rate).format('0.00%') : '-';
 					const serviceRate = history_min_sell_price.service_rate || history_min_sell_price.service_rate == 0 ? numeral(history_min_sell_price.service_rate).format('0.00%') : '-';
@@ -1168,16 +1195,16 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				render: (text, { readjust_type: readJustType }) => {
 					const value = readjust_type.find(item => item.id == readJustType) || {};
 					const node = text ? text.map(item => {
-							const showObj = {
-								isShowDetail: item.trinity_type == 2,
-								isShowRate: false,
-								titleLable: item.price_label,
-								titlePrice: item.min_sell_price,
-								bloggerPrice: item.private_min_sell_price,
-								trilateralPrice: item.public_min_sell_price,
-							}
-							return getPriceContent(showObj);
-						}) : '-';
+						const showObj = {
+							isShowDetail: item.trinity_type == 2,
+							isShowRate: false,
+							titleLable: item.price_label,
+							titlePrice: item.min_sell_price,
+							bloggerPrice: item.private_min_sell_price,
+							trilateralPrice: item.public_min_sell_price,
+						}
+						return getPriceContent(showObj);
+					}) : '-';
 					// const pro = readjust_type == 2 ? <div key='tips' className='detail_price_info'>导入Excel方式调整</div> : null;
 					const pro = value.display ? <div key='tips' className='detail_price_info'>{value.display}</div> : null;
 
@@ -1211,7 +1238,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				dataIndex: 'quote_type',
 				key: 'quote_type',
 				width: 90,
-				render: (text, {profit_rate, service_rate, min_sell_price, readjust_type}) => {
+				render: (text, { profit_rate, service_rate, min_sell_price, readjust_type }) => {
 					const profitRate = profit_rate || profit_rate == 0 ? numeral(profit_rate).format('0.00%') : '-';
 					const serviceRate = service_rate || service_rate == 0 ? numeral(service_rate).format('0.00%') : '-';
 					const value = text == '1' ? profitRate : text == '2' ? serviceRate : '-';
@@ -1222,12 +1249,12 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '本次利润率/服务费率',
 				dataIndex: 'quote_type',
 				key: 'quote_type',
-				width: 100,
+				width: 90,
 				render: (_, { previewReadjustType, previewRateVal, warningClass }) => {
 					const rateVal = previewRateVal || previewRateVal == 0 ? numeral(previewRateVal).format('0.00%') : '-'
 					return (
 						<div className={warningClass}>
-							{ previewReadjustType == '1' ? rateVal : '-' }
+							{previewReadjustType == '1' ? rateVal : '-'}
 						</div>
 					);
 				}
@@ -1236,7 +1263,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '审核时间',
 				dataIndex: 'pass_time',
 				key: 'pass_time',
-				width: 160,
+				width: 100,
 				render: (text) => {
 					const flag = text === '0000-00-00 00:00:00';
 					return !flag ? text : '-';
@@ -1246,7 +1273,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '审核人',
 				dataIndex: 'auditor_name',
 				key: 'auditor_name',
-				width: 160,
+				width: 100,
 				render: text => {
 					return text || '-';
 				}
@@ -1255,7 +1282,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '备注',
 				dataIndex: 'remark',
 				key: 'remark',
-				width: 244,
+				width: 140,
 				render: (_, { remark }) => {
 					if (remark && remark.length > 30) {
 						return <div title={remark}>
@@ -1270,4 +1297,134 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 		const array = ary.map(item => configMap[item]);
 		return array;
 	}
+}
+
+const render = data => {
+	return data || '-';
+}
+
+const publishRender = (data, record) => {
+	const { createdTime } = record;
+	const isOld = moment(createdTime).isAfter('2019-09-19 20:00:00');
+	return isOld && data ? data : '-';
+}
+
+const originalRender = (data, record) => {
+	const { createdTimeOriginal } = record;
+	const isOld = moment(createdTimeOriginal).isAfter('2019-09-19 20:00:00');
+	return isOld && data ? data : '-';
+}
+
+const getPublishedCol = isWechat => {
+	const wxCol = [
+		{
+			title: '',
+			key: 'empty',
+			width: 50,
+			children: [
+				{
+					title: '',
+					dataIndex: 'priceName',
+					width: 50,
+					key: 'empty_child',
+					render
+				}
+			]
+		},
+		{
+			title: '发布',
+			key: 'publish',
+			children: [
+				{
+					title: '刊例价',
+					dataIndex: 'publicationPrice',
+					key: 'publicationPrice',
+					width: 50,
+					align: 'center',
+					render: publishRender
+				},
+				{
+					title: '渠道价',
+					dataIndex: 'channelPrice',
+					key: 'channelPrice',
+					width: 50,
+					align: 'center',
+					render: publishRender
+				},
+				{
+					title: '微播易对外报价',
+					dataIndex: 'quotePrice',
+					key: 'quotePrice',
+					width: 100,
+					align: 'center',
+					render
+				},
+			]
+		},
+		{
+			title: '原创',
+			key: 'original',
+			children: [
+				{
+					title: '刊例价',
+					dataIndex: 'publicationPriceOriginal',
+					key: 'publicationPriceOriginal',
+					width: 50,
+					align: 'center',
+					render: originalRender
+				},
+				{
+					title: '渠道价',
+					dataIndex: 'channelPriceOriginal',
+					key: 'channelPriceOriginal',
+					width: 50,
+					align: 'center',
+					render: originalRender
+				},
+				{
+					title: '微播易对外报价',
+					dataIndex: 'quotePriceOriginal',
+					key: 'quotePriceOriginal',
+					width: 100,
+					align: 'center',
+					render
+				},
+			]
+		}
+	];
+	const otherCol = [
+		{
+			title: '',
+			dataIndex: 'priceName',
+			width: 50,
+			key: 'empty_child',
+			render
+		},
+		{
+			title: '刊例价',
+			dataIndex: 'publicationPrice',
+			key: 'publicationPrice',
+			width: 50,
+			align: 'center',
+			render: publishRender
+		},
+		{
+			title: '渠道价',
+			dataIndex: 'channelPrice',
+			key: 'channelPrice',
+			width: 50,
+			align: 'center',
+			render: publishRender
+		},
+		{
+			title: '微播易对外报价',
+			dataIndex: 'quotePrice',
+			key: 'quotePrice',
+			width: 100,
+			align: 'center',
+			render
+		},
+	]
+
+	return isWechat ? wxCol : otherCol;
 }

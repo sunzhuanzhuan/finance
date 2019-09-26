@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import * as goldenActions from "../../actions/goldenApply";
 import { Table, message, Alert } from "antd";
 import Scolltable from '@/components/Scolltable';
+import { getTotalWidth } from '@/util';
 
 class PreTable extends React.Component {
 	constructor() {
@@ -32,7 +33,6 @@ class PreTable extends React.Component {
 					isExistWarning = true;
 				}
 			})
-
 			let obj = {
 				['order_id']: item['order_id'],
 				['status']: item['status'],
@@ -55,7 +55,8 @@ class PreTable extends React.Component {
 				['previewRateVal']: previewRateVal,
 				['default_cycle']: item['default_cycle'],
 				['order_default_cycle']: item['order_default_cycle'],
-				['partner_type_name']: item['partner_type_name']
+				['partner_type_name']: item['partner_type_name'],
+				['reference_price_doc']: item['reference_price_doc']
 			};
 			return obj
 		});
@@ -89,10 +90,12 @@ class PreTable extends React.Component {
 			total: parseInt(data.length),
 			showQuickJumper: true,
 		};
+
+		const scrollWidth = getTotalWidth(columns);
 		return (
 			<div>
 				{isExistWarning ? <Alert closable style={{marginBottom: '20px'}} message="请注意标红的订单：订单最低售卖价小于订单底价，建议修改调价类型/利润率/服务费率。" type="warning" showIcon /> : null}
-				<Scolltable isMoreThanOne scrollClassName='.preTable .ant-table-body' widthScroll={3670}>
+				<Scolltable isMoreThanOne scrollClassName='.preTable .ant-table-body' widthScroll={4000}>
 					<Table 
 						rowKey='order_id' 
 						className='preTable'
@@ -100,7 +103,7 @@ class PreTable extends React.Component {
 						dataSource={data} 
 						bordered 
 						pagination={isApplication ? applicationPaginationObj : paginationObj} 
-						scroll={{ x: 3300 }}
+						scroll={{ x: scrollWidth }}
 					/>
 				</Scolltable>
 			</div>

@@ -106,7 +106,7 @@ class ApplyTable extends React.Component {
 				pagination={paginationObj}
 				loading={loading}
 			/></Scolltable> : null}
-			{type === 'write_detail' ? <Scolltable scrollClassName='.ant-table-body' widthScroll={leftWidth == '200' ? 4360 : 4200}><Table className='top-gap detail-table table_style'
+			{type === 'write_detail' ? <Scolltable scrollClassName='.ant-table-body' widthScroll={leftWidth == '200' ? 4980 : 4820}><Table className='top-gap detail-table table_style'
 				rowKey={rowKey}
 				columns={columns}
 				dataSource={dataSource}

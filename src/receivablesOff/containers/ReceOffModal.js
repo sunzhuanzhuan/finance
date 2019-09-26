@@ -351,7 +351,6 @@ class ReceOffModal extends React.Component {
 	};
 
 	handleFileChange = (fileList) => {
-		console.log('lksdgjlskdjglksdgj', fileList)
 		this.attachment = (fileList.map(item => item.url)).toString();
 	}
 

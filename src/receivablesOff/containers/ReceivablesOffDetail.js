@@ -74,8 +74,6 @@ class ReceivablesOffDetail extends React.Component {
 
 		if (!Array.isArray(product_line)) return null;
 
-		console.log('sldkfjlskdfjsldkfj', salerData)
-
 		return product_line.map(item => {
 			const { display, id } = item;
 			const tabInfo = receAddListInfo[`receDetailInfo-${id}`] || {};

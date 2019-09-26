@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import './receivableOff.less';
 import { message, Table, Alert, Tabs } from "antd";
 import ReceivableOffQuery from './ReceivableOffQuery';
-import { getTabOptions, getOffDetailQueryKeys, getOffQueryItems, getOffDetailCloIndex, getReceOffCol, getTableId } from '../constants';
+import { getTabOptions, getOffDetailQueryKeys, getOffQueryItems, getOffDetailCloIndex, getReceOffCol, getOffOptions } from '../constants';
 import * as receivableOffAction from "../actions/receivableOff";
 import * as goldenActions from "../../companyDetail/actions/goldenApply";
 import { getTotalWidth, downloadByATag } from '@/util';
@@ -27,6 +27,7 @@ class ReceivablesOffDetail extends React.Component {
 		const { location } = this.props;
 		const search = qs.parse(location.search.substring(1));
 
+		this.props.getPlatform();
 		this.queryAllTabsData(Object.assign(search, { page: 1, page_size: 20}));
 	}
 	queryAllTabsData = queryObj => {
@@ -44,9 +45,11 @@ class ReceivablesOffDetail extends React.Component {
 			return this.props.getReceOffDetailList(Object.assign(queryObj, {product_line: value}));
 		})
 	}
-	handleSearch = (key, searchQuery) => {
-		this.setState({[`searchQuery-${key}`]: searchQuery});
-		Object.assign(searchQuery, {key});
+	handleSearch = (product_line, searchQuery) => {
+		const { location } = this.props;
+		const search = qs.parse(location.search.substring(1));
+		Object.assign(searchQuery, search, {product_line});
+		this.setState({[`searchQuery-${product_line}`]: searchQuery});
 		this.props.getReceOffDetailList(searchQuery).then(() => {
 			this.setState({loading: false});
 		}).catch(({ errorMsg }) => {
@@ -55,17 +58,23 @@ class ReceivablesOffDetail extends React.Component {
 		});
 	}
 
-	handleExportList = key => {
-		downloadByATag(`/api/finance/receivables/verification/exportOrdeList?${qs.stringify(this.state[`searchQuery-${key}`])}`);
+	handleExportList = product_line => {
+		const { location } = this.props;
+		const search = qs.parse(location.search.substring(1));
+		Object.assign(search, {product_line});
+		const exportQuery = this.state[`searchQuery-${product_line}`] || search;
+		downloadByATag(`/api/finance/receivables/verification/exportOrderList?${qs.stringify(exportQuery)}`);
 	}
 
 	getTabPaneComp = () => {
-		const { receAddListInfo = {}, receMetaData = {}, location } = this.props;
+		const { receAddListInfo = {}, receMetaData = {}, location, salerData = [], platformList = [] } = this.props;
 		const { product_line } = receMetaData;
 		const { loading } = this.state;
 		const search = qs.parse(location.search.substring(1));
 
 		if (!Array.isArray(product_line)) return null;
+
+		console.log('sldkfjlskdfjsldkfj', salerData)
 
 		return product_line.map(item => {
 			const { display, id } = item;
@@ -101,13 +110,15 @@ class ReceivablesOffDetail extends React.Component {
 				<TabPane tab={tabTitle} key={id} className={wrapperClass}>
 					<ReceivableOffQuery 
 						showExport
+						queryOptions={Object.assign(getOffOptions, receMetaData, {salerData, platformList})} 
 						initialValue={search}
 						queryItems={getOffQueryItems(getOffDetailQueryKeys[id])}
 						handleSearch={searchQuery => {this.handleSearch(id, searchQuery)}} 
 						handleExport={ () => {this.handleExportList(id)}}
 						actionKeyMap={{
 							company: this.props.getGoldenCompanyId,
-							project: this.props.getProjectData
+							project: this.props.getProjectData,
+							brand: this.props.getBrandData
 						}}
 					/>
 					<Alert className='add-list-total-info' message={this.getTotalInfoComp(statistics)} type="warning" showIcon />
@@ -207,11 +218,14 @@ class ReceivablesOffDetail extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-	const { receivableOff = {}} = state;
-	const { receAddReducer: receAddListInfo, receMetaData } = receivableOff;
+	const { receivableOff = {}, companyDetail = {} } = state;
+	const { receAddReducer: receAddListInfo, receMetaData, salerData } = receivableOff;
+	const { platformList = [] } = companyDetail;
 	return {
 		receAddListInfo,
 		receMetaData,
+		salerData,
+		platformList
 	}
 }
 const mapDispatchToProps = dispatch => (bindActionCreators({...receivableOffAction, ...goldenActions, getReceOffDetailList}, dispatch));

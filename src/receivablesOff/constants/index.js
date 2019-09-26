@@ -22,19 +22,19 @@ export const getOffDetailQueryKeys = {
     3: [
         'verification_code', 'company_id', 'sale_id', 'order_ids', 'time', 'region_team_id', 'project_id_search', 
         'requirement_id', 'weibo_type', 'type', 'order_complete_time', 'is_decrease_sale_gmv', 
-        'is_decrease_company_gmv', 'is_record_sale_income', 'gift_amount', 
-        'warehouse_amount', 'invoice_application_id', 'brand_id', 'operate'
+        'is_decrease_company_gmv', 'is_record_sale_income', 'single_gift_amount', 
+        'single_warehouse_amount', 'invoice_application_id', 'brand_id', 'operate'
     ],
     2: [
         'verification_code', 'company_id', 'sale_id', 'order_id_active', 'time', 'region_team_id', 'project_id_search', 
         'weibo_type', 'type', 'is_decrease_sale_gmv', 'is_decrease_company_gmv', 
-        'is_record_sale_income', 'active_time', 'gift_amount', 'warehouse_amount', 'invoice_application_id', 
+        'is_record_sale_income', 'active_time', 'single_gift_amount', 'single_warehouse_amount', 'invoice_application_id', 
         'brand_id', 'operate'
     ],
     7: [
         'verification_code', 'company_id', 'sale_id', 'id', 'time', 'region_team_id', 'project_id_search', 'type', 
         'is_decrease_sale_gmv', 'is_decrease_company_gmv', 'is_record_sale_income', 'offtime', 
-        'gift_amount', 'warehouse_amount', 'invoice_application_id', 'brand_id', 'operate' 
+        'single_gift_amount', 'single_warehouse_amount', 'invoice_application_id', 'brand_id', 'operate' 
     ],
 };
 
@@ -59,7 +59,9 @@ export const getOffQueryItems = queryArr => {
         {label: '是否扣减公司GMV', key: 'is_decrease_company_gmv', compType: 'select', optionKey: 'GMV', idKey: 'id', labelKey: 'display'},
         {label: '是否扣减销售GMV', key: 'is_decrease_sale_gmv', compType: 'select', optionKey: 'GMV', idKey: 'id', labelKey: 'display'},
         {label: '赠送/返点账户抵扣金额', key: 'gift_amount', compType: 'number_range', rangeKey: ['total_gift_amount_min', 'total_gift_amount_max']},
+        {label: '赠送/返点账户抵扣金额', upperKey: 'single_gift_amount',  key: 'gift_amount', compType: 'number_range', rangeKey: ['gift_amount_min', 'gift_amount_max']},
         {label: '小金库抵扣金额', key: 'warehouse_amount', compType: 'number_range', rangeKey: ['total_warehouse_amount_min', 'total_warehouse_amount_max']},
+        {label: '小金库抵扣金额', upperKey: 'single_warehouse_amount', key: 'warehouse_amount', compType: 'number_range', rangeKey: ['warehouse_amount_min', 'warehouse_amount_max']},
         {label: '区域', key: 'region_team_id', compType: 'select', idKey: 'id', labelKey: 'display'},
         {label: '所属项目', key: 'project_id', compType: 'select', optionKey: 'projectList', idKey: 'id', labelKey: 'name'},
         {label: '所属项目', upperKey: 'project_id_search', key: 'project_id', compType: 'searchSelect', actionKey: 'project', dataIndex: ['id', 'name'], keyWord: 'name'},

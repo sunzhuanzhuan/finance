@@ -101,8 +101,7 @@ class ReceivablesOffList extends React.Component {
 
 	handleExportList = () => {
 		const { searchQuery = {} } = this.state;
-
-		downloadByATag(`/api/finance/receivables/order/export?${qs.stringify(searchQuery)}`);
+		downloadByATag(`/api/finance/receivables/verification/exportList?${qs.stringify(searchQuery)}`);
 	}
 
 	getNumDisplay = data => {

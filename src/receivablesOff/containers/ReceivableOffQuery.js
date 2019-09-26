@@ -128,7 +128,8 @@ class ReceivableOffQuery extends React.Component {
 		dateItems.forEach(item => {
 			const { key, submitKey = [] } = item;
 			const dateKey = valueKeys.find(valuekey => valuekey === key);
-			if(values[dateKey]) {
+
+			if(values[dateKey] && values[dateKey].length) {
 				submitKey.forEach((submitItem, index) => {
 					values[submitItem] = values[dateKey][index].format('YYYY-MM-DD')
 				})

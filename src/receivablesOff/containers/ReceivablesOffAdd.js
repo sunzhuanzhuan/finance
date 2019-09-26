@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import './receivableOff.less';
 import { Table, Button, Alert, Tabs, message } from "antd";
 import ReceivableOffQuery from './ReceivableOffQuery';
-import { getOffAddQueryKeys, getOffQueryItems, getReceAddColIndex, getReceOffCol, getTableId, getOffOptions } from '../constants';
+import { getOffAddQueryKeys, getOffQueryItems, getReceAddColIndex, getReceOffCol, getOffOptions } from '../constants';
 import * as receivableOffAction from "../actions/receivableOff";
 import * as goldenActions from "../../companyDetail/actions/goldenApply";
 import { getTotalWidth, downloadByATag } from '@/util';
@@ -34,6 +34,8 @@ class ReceivablesOfflist extends React.Component {
 		this.props.getCompanyInfo({ company_id })
 		this.props.getPlatform();
 		this.props.getGoldenToken();
+		this.props.getGiftAmount({ company_id });
+		this.props.getWarehouseAmount({ company_id });
 		this.setState({ company_id })
 	}
 
@@ -44,7 +46,7 @@ class ReceivablesOfflist extends React.Component {
 	dealSearchQuery = (query, staticObj) => {
 		Object.assign(query, staticObj);
 		Object.keys(query).forEach(item => {
-			if(query[item] === '')
+			if(query[item] === '' || query[item] == undefined)
 				delete query[item]
 		})
 	}
@@ -64,7 +66,8 @@ class ReceivablesOfflist extends React.Component {
 	}
 
 	handleExportList = key => {
-		downloadByATag(`/api/finance/receivables/verification/exportList?${qs.stringify(this.state[`searchQuery-${key}`])}`);
+		const searchQuery = this.state[`searchQuery-${key}`] || { page: 1, page_size: 20 };
+		downloadByATag(`/api/finance/receivables/order/export?${qs.stringify(searchQuery)}`);
 	}
 
 	handleSelectRows = (key, selectedRowKeys, selectedRows) => {
@@ -287,13 +290,28 @@ class ReceivablesOfflist extends React.Component {
 		this.setState({ offVisible: true });
 	}
 
+	getDiscountAmount = (giftAmount = {}, warehouseAmount = []) => {
+		const { gift = {} } = giftAmount;
+		const { gift_amount } = gift;
+
+		let whAmount = 0;
+		if(Array.isArray(warehouseAmount) && warehouseAmount.length) {
+			whAmount = warehouseAmount[0]['balance'];
+		}
+		return {
+			total_gift_amount: this.getNumberal(gift_amount) || 0.00,
+			total_warehouse_amount: this.getNumberal(whAmount) || 0.00
+		}
+	}
+
 	render() {
-		const { receMetaData = {}, companyInfo = {}, goldenToken = {} } = this.props;
+		const { receMetaData = {}, companyInfo = {}, goldenToken = {}, giftAmount = {}, warehouseAmount = [] } = this.props;
 		const { product_line } = receMetaData;
 		const { name = '-', owner_admin_real_name = '-', region_team_name = '-' } = companyInfo;
 		const { activeKey, checkVisible, offVisible } = this.state;
 		const tabColArr = getReceAddColIndex['preview'] || [];
 		const allItemsInfo = this.getSelectedRowInfo(7, true);
+		const discountInfo = this.getDiscountAmount(giftAmount, warehouseAmount);
 
 		const initialValue = {
 			can_verification_amount: allItemsInfo['amount'],
@@ -347,6 +365,7 @@ class ReceivablesOfflist extends React.Component {
 				width={800}
 				title='应收款核销' 
 				goldenToken={goldenToken}
+				discountInfo={discountInfo}
 				actionKeyMap={{
 					company: this.props.getGoldenCompanyId,
 					sale: this.props.getGoldenCompanyId,
@@ -361,7 +380,7 @@ class ReceivablesOfflist extends React.Component {
 
 const mapStateToProps = (state) => {
 	const { receivableOff = {}, companyDetail = {} } = state;
-	const { receAddReducer: receAddListInfo, receMetaData, companyInfo } = receivableOff;
+	const { receAddReducer: receAddListInfo, receMetaData, companyInfo, giftAmount, warehouseAmount } = receivableOff;
 	const { platformList = [], projectList = [], goldenToken } = companyDetail;
 	return {
 		receAddListInfo,
@@ -369,7 +388,9 @@ const mapStateToProps = (state) => {
 		platformList,
 		projectList,
 		companyInfo,
-		goldenToken
+		goldenToken,
+		giftAmount, 
+		warehouseAmount
 	}
 }
 const mapDispatchToProps = dispatch => (

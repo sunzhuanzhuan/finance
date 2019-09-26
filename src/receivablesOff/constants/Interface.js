@@ -5,6 +5,8 @@ export default {
 	getBrandData: '/finance/commonApi/getBrandByName',
 	getCompanyInfo: '/finance/commonApi/getCompanyCommonData',
 	getAccountInfo: '/finance/commonApi/getAccountByName',
+	getGiftAmount: '/finance/account/detail',
+	getWarehouseAmount: '/finance/warehouse/getWarehouseList',
 	getReceivableOffList: '/finance/receivables/verification/list',
 	getReceOffDetailList: '/finance/receivables/verification/orderDetailList',
 	getReceAddOffList: '/finance/receivables/order/orderList',

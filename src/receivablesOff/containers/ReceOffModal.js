@@ -126,7 +126,7 @@ class ReceOffModal extends React.Component {
 	}
 
 	getCheckboxItem = (isStatic, validator) => {
-		const { form, options = {} } = this.props;
+		const { form, options = {}, discountInfo = {}, isEdit } = this.props;
 		const { stateInitValue = {} } = this.state;
 		const { getFieldDecorator } = form;
 		return options['offCheckOption'].map(item => {
@@ -135,8 +135,7 @@ class ReceOffModal extends React.Component {
 				this.state[id] || 
 				(!this.state['total_gift_amount']) && 
 				(!this.state['total_warehouse_amount']);
-			const account = 500.00;
-			const countTips = `${display}余额${account}，最多可抵扣${account}`;
+			const countTips = isEdit ? '' : `${display}余额${discountInfo[id]}，最多可抵扣${discountInfo[id]}`;
 			const errorMsg = [
 				`请输入${display}抵扣金额`,
 				`${display}的抵扣金额不能大于${display}的余额`
@@ -160,7 +159,7 @@ class ReceOffModal extends React.Component {
 								rules: [
 									{
 										validator: (rule, value, callback) => {
-											validator(rule, value, callback, account, errorMsg)
+											validator(rule, value, callback, discountInfo[id], errorMsg)
 										}
 									}
 								],
@@ -179,6 +178,17 @@ class ReceOffModal extends React.Component {
 			)
 		})
 		
+	}
+
+	getUploadInitialVal = initialVal => {
+		if(initialVal) {
+			return initialVal.split(',').map(item => {
+				return {
+					url: item,
+					filepath: item.split('.com/')[1]
+				}
+			})
+		}
 	}
 
 	getOffFormComp = () => {
@@ -224,7 +234,9 @@ class ReceOffModal extends React.Component {
 							const helpInfo = <div className='upload-infos'>支持最多5张图片上传，仅支持jpg\gif\png图片文件，单个文件不能超过3M</div>
 							return (
 								<FormItem className='upload-form-item' help={helpInfo} key={key} label={label} {...formItemLayout} >
-									{getFieldDecorator(key)(
+									{getFieldDecorator(key,{
+										initialValue: this.getUploadInitialVal(stateInitValue[key])
+									})(
 										<WBYUploadFile
 											ref={x => this.uploadFile = x}
 											tok={{
@@ -339,6 +351,7 @@ class ReceOffModal extends React.Component {
 	};
 
 	handleFileChange = (fileList) => {
+		console.log('lksdgjlskdjglksdgj', fileList)
 		this.attachment = (fileList.map(item => item.url)).toString();
 	}
 
@@ -396,6 +409,13 @@ class ReceOffModal extends React.Component {
 			form.validateFields((errs, fieldsValues) => {
 				if(errs) return;
 				const { isIllegalVal } = this.state;
+				const { total_gift_amount = 0, total_warehouse_amount = 0 } = fieldsValues;
+				if(!total_gift_amount) {
+					Object.assign(fieldsValues, {total_gift_amount: 0});
+				}
+				if(!total_warehouse_amount) {
+					Object.assign(fieldsValues, {total_warehouse_amount: 0});
+				}
 				if(isIllegalVal) {
 					this.getErrorTips('抵扣金额的和不能大于本次核销金额!');
 				}else {
@@ -493,7 +513,6 @@ function ConfirmModal(props) {
 function getValueCheckComp(fieldsValues, isConfirm, options, itemKeys) {
 	const className = isConfirm ? 'fields-con' : 'flex-fields-con';
 	const checkOption = options['offCheckOption'] || []
-	let isShowDeduct;
 	const getNumeral = value => {
 		return value || value == 0 ? numeral(value).format('0.00') : '-';
 	}
@@ -502,8 +521,6 @@ function getValueCheckComp(fieldsValues, isConfirm, options, itemKeys) {
 		.filter(item => item.id !== 'no')
 		.map(item => {
 			const {id, display} = item;
-			if(fieldsValues[id])
-				isShowDeduct = true;
 			return <div key={id}>{`${display}：${getNumeral(fieldsValues[id])}`}</div>;
 		});
 	const radioValueMap = {
@@ -517,9 +534,34 @@ function getValueCheckComp(fieldsValues, isConfirm, options, itemKeys) {
 			return (
 				<div key={key} className='deduct-wrapper'>
 					<div>{label}：</div>
-					{ isShowDeduct ? <div>{deductItems}</div> : '-' }
+					<div>{deductItems}</div>
 				</div> 
 			)
+		if(compType === 'upload') {
+			const uploadVal = fieldsValues[key] || '';
+			const uploadArr = uploadVal.split(',');
+			if(uploadVal) {
+				return (
+					<div key='upload_wrapper'>
+						<span>{label}：</span>
+						<span>
+							{
+								uploadArr.map((uploadItem, index) => {
+									if( uploadItem.indexOf('http') > -1 )
+										return (
+											<img style={{width: 60, height: 60}} src={uploadItem} key={uploadItem + index}/>
+										)
+									return uploadItem;
+								})
+							}
+						</span>
+					</div>
+				)
+			}else {
+				showValue = '-';
+			}
+			
+		}
 		if(compType === 'radio') {
 			showValue = radioValueMap[fieldsValues[key]] || '-';
 		}else if(compType === 'select') {

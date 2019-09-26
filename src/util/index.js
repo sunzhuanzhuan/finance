@@ -195,6 +195,7 @@ const downloadByATag = (src, fileName = "") => {
 	$a.setAttribute("target", "_blank");
 	$a.setAttribute("download", fileName);
 
+	console.log('sldkfjlsdkjflskdjf', src)
 	var evObj = document.createEvent('MouseEvents');
 	evObj.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
 	$a.dispatchEvent(evObj);

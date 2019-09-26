@@ -65,3 +65,19 @@ export const {
 	method: 'get'
 });
 
+//获取赠送帐户余额
+export const {
+	getGiftAmount,
+	getGiftAmount_success
+} = createHttpAction('getGiftAmount', Interface.getGiftAmount, {
+	method: 'get'
+});
+
+//获取小金库帐户余额
+export const {
+	getWarehouseAmount,
+	getWarehouseAmount_success
+} = createHttpAction('getWarehouseAmount', Interface.getWarehouseAmount, {
+	method: 'get'
+});
+

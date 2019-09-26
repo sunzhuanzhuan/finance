@@ -243,7 +243,11 @@ export const companyReceivableFunc = (id) => {
 			title: '核销明细',
 			dataIndex: 'action',
 			key: 'action',
-			render: () => <Link to={`/finance/golden/receivableDetail?company_id=${id}`}>查看详情</Link>
+			render: (text, record) => {
+				const { total_amount } = record;
+				const totalAmount = total_amount ? numeral(total_amount).format('0.00') : '0.00';
+				return <Link to={`/finance/golden/receivableDetail?company_id=${id}&totalAmount=${totalAmount}`}>查看详情</Link>
+			}
 		}
 	]
 }

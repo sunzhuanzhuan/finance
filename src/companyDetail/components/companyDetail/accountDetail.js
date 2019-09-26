@@ -26,7 +26,7 @@ class AccountDetail extends Component {
 		getReceivableDetail({ company_id });
 	}
 	render() {
-		const { id, companyDetail, companyDetail: { general = {}, credit = {}, cash = {} }, goldenAccount, readjustPriceAccount, giftAccount, receivableDetail } = this.props;
+		const { id, companyDetail, companyDetail: { general = {}, credit = {}, cash = {} }, goldenAccount, readjustPriceAccount, giftAccount, receivableDetail = [] } = this.props;
 		const giftList = giftAccount.filter(item => item.account_type === 2);
 		const compensationList = giftAccount.filter(item => item.account_type === 6);
 		const creditList = [{ ...credit, id: 1 }];
@@ -64,7 +64,7 @@ class AccountDetail extends Component {
 				<div className='company-detail-title'><span>小金库</span></div>
 				<Table columns={coffersListTitle} dataSource={goldenAccount} pagination={false} rowKey='id' bordered />
 				<div className='company-detail-title'><span>核销账户</span></div>
-				<Table columns={receivableTitle} dataSource={readjustPriceAccount} pagination={false} rowKey='id' bordered />
+				<Table columns={receivableTitle} dataSource={receivableDetail} pagination={false} rowKey='id' bordered />
 				<div className='company-detail-title'><span>定向调价</span></div>
 				<Table columns={ajustListTitle} dataSource={readjustPriceAccount} pagination={false} rowKey='id' bordered />
 			</fieldset>

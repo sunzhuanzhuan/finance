@@ -84,9 +84,9 @@ export const freezeDetail = handleActions({
 
 export const receivableDetail = handleActions({
 	[getReceivableDetail_success]: (state, action) => {
-		return { ...action.payload.data }
+		return [...action.payload.data] 
 	}
-}, {})
+}, [])
 
 export const receivableList = handleActions({
 	[getCompanyReceivableList_success]: (state, action) => {

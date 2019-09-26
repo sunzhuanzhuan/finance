@@ -25,6 +25,10 @@ class ReceivableDetail extends Component {
 	}
 	componentDidMount() {
 		const search = qs.parse(this.props.location.search.substring(1));
+		if(search) {
+			this.setState({totalAmount: search.totalAmount});
+			delete search.totalAmount;
+		}
 		const { getCompanyData, getCompanyMetadata, getReceivableOption } = this.props.actions;
 		let obj = {};
 		let keys = search.keys || {};
@@ -59,6 +63,8 @@ class ReceivableDetail extends Component {
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
 				const search = qs.parse(this.props.location.search.substring(1));
+				if(search)
+					delete search.totalAmount;
 				let keys = {}, labels = {};
 				for (let key in values) {
 					if (Object.prototype.toString.call(values[key]) === '[object Object]') {
@@ -82,7 +88,7 @@ class ReceivableDetail extends Component {
 				this.queryData({ company_id: search.company_id, ...params.keys, page: 1, page_size: this.state.pageSize }, () => {
 					this.props.history.replace({
 						pathname: '/finance/golden/receivableDetail',
-						search: `?${qs.stringify(params)}`,
+						search: `?${qs.stringify({...params, totalAmount: this.state.totalAmount})}`,
 					});
 				}).then(() => {
 					hide();
@@ -108,8 +114,10 @@ class ReceivableDetail extends Component {
 	}
 	render() {
 		const search = qs.parse(this.props.location.search.substring(1));
+		if(search)
+			delete search.totalAmount;
 		const { getFieldDecorator } = this.props.form;
-		const { loading, pageSize } = this.state;
+		const { loading, pageSize, totalAmount } = this.state;
 		const { companyData, receivableList: { page, page_size, total, list = [], total_amount, revoke_amount }, companyMetadata: { is_revoke = [], readjust_account_bill_type = [] }, receivableOption = {} } = this.props;
 		const paginationObj = {
 			onChange: (current) => {
@@ -117,7 +125,7 @@ class ReceivableDetail extends Component {
 				this.queryData(obj, () => {
 					this.props.history.replace({
 						pathname: '/finance/golden/receivableDetail',
-						search: `?${qs.stringify(obj)}`,
+						search: `?${qs.stringify({...obj, totalAmount})}`,
 					});
 				});
 			},
@@ -127,7 +135,7 @@ class ReceivableDetail extends Component {
 				this.queryData(obj, () => {
 					this.props.history.replace({
 						pathname: '/finance/golden/receivableDetail',
-						search: `?${qs.stringify(obj)}`,
+						search: `?${qs.stringify({...obj, totalAmount})}`,
 					});
 				});
 			},
@@ -147,7 +155,7 @@ class ReceivableDetail extends Component {
 				<fieldset className='fieldset_css'>
 					<legend>核销账户流水</legend>
 					<Row type="flex" justify="start" gutter={16} className='account-detail' style={{ marginBottom: '10px' }}>
-						<Col>总计： {numeral(total_amount).format('0.00') || '0.00'}元</Col>
+						<Col>总计： {totalAmount || '0.00'}元</Col>
 					</Row>
 					<Form className='adjust-stat'>
 						<FormItem label='类型'>

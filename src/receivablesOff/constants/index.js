@@ -134,7 +134,7 @@ export const getOffListColIndex = [
 
 export const getOffDetailCloIndex = {
     3: ['verification_code', 'type', 'order_id_no_fIxed', 'company_name', 'saler_region', 'project_brand', 'require_id_name', 'account_info', 'invoice_application_id', 'execution_completed_time', 'verification_amount', 'debt_amount', 'gift_amount', 'warehouse_amount', 'is_decrease_company_gmv', 'is_record_sale_income', 'is_decrease_sale_gmv', 'operator_name', 'created_at'],
-    2: ['verification_code', 'type', 'order_id_no_fIxed', '活动名称', 'company_name', 'saler_region', 'project_brand', 'account_info', 'invoice_application_id', 'settlement_time', 'verification_amount', 'debt_amount', 'gift_amount', 'warehouse_amount', 'is_decrease_company_gmv', 'is_record_sale_income', 'is_decrease_sale_gmv', 'operator_name', 'created_at'],
+    2: ['verification_code', 'type', 'order_id_no_fIxed', 'campaign_name', 'company_name', 'saler_region', 'project_brand', 'platform_name', 'invoice_application_id', 'settlement_time', 'verification_amount', 'debt_amount', 'gift_amount', 'warehouse_amount', 'is_decrease_company_gmv', 'is_record_sale_income', 'is_decrease_sale_gmv', 'operator_name', 'created_at'],
     7: ['verification_code', 'type', 'id', 'business_name', 'company_name', 'saler_region', 'project_brand', 'invoice_application_id', 'pass_time', 'verification_amount', 'debt_amount', 'gift_amount', 'warehouse_amount', 'is_decrease_company_gmv', 'is_record_sale_income', 'is_decrease_sale_gmv', 'operator_name', 'created_at'],
 }
 
@@ -196,8 +196,8 @@ export const getReceOffCol = ( col, receMetaData = {}, action, activeKey ) => {
         },
         {
             title: '活动名称',
-            dataIndex: '活动名称',
-            key: '活动名称',
+            dataIndex: 'campaign_name',
+            key: 'campaign_name',
             width: 100,
             render
         },

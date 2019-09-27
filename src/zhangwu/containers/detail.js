@@ -158,25 +158,25 @@ class Detail extends Component {
 					<span className='displayInline'>￥{detail.company?detail.company.real_consumption:''}</span>
 				</div>
 				<span>=</span>
-				<div className='padd60'>
+				<div className='pad32'>
 					<span className='displayInline'>执行价</span>
 					<span className='displayInline'>￥{detail.order?detail.order.total_deal_price:''}</span>
 				</div>
 				
 				<span>-</span>
-				<div className='padd60'>
+				<div className='pad32'>
 					<span className='displayInline'>质检返款</span>
 					<span className='displayInline'>￥{detail.company?detail.company.deducted_deal_price:''}</span>
 				</div>
 				
 				<span>-</span>
-				<div className='padd60'>
+				<div className='pad32'>
 					<span className='displayInline'>使用赠送</span>
 					<span className='displayInline'>￥{detail.company?detail.company.gift_amount:''}</span>
 				</div>
 			
 				<span>-</span>
-				<div className='padd60'>
+				<div className='pad32'>
 					<span className='displayInline'>赔偿</span>
 					<span className='displayInline'>￥{detail.company?detail.company.reparation_amount:''}</span>
 				</div>
@@ -186,15 +186,23 @@ class Detail extends Component {
 					<span className='displayInline'>手工质检返款(结案前)</span>
 					<span className='displayInline'>￥{detail.company?detail.company.before_close_case_manual_qc:''}</span>
 				</div>
-				
+
+				<span>-</span>
+				<div className='pad32'>
+					<span className='displayInline'>手工质检(结案后)</span>
+					<span className='displayInline'>￥{detail.company?detail.company.after_close_case_manual_qc:''}</span>
+				</div>
+
+				<span>-</span>
+				<div className='pad32'>
+					<span className='displayInline'>应收款核销金额</span>
+					<span className='displayInline'>￥{detail.company?detail.company.has_verification_amount:''}</span>
+				</div>
+
 				</Col>
 			</Row>
 			
-			<Row className='colHeight' style={{paddingLeft:'26px'}}>
-			
-				<div>
-					<span span={8}>手工质检(结案后):￥{detail.company?detail.company.after_close_case_manual_qc:''}</span>
-				</div>
+			<Row className='colHeightLow' style={{paddingLeft:'26px'}}>
 				<Col span={6}>应开发票金额:￥{detail.company?detail.company.total_invoice_amount:''}</Col>
 				<Col span={6}>已开发票金额:￥{detail.company?detail.company.already_invoice_amount:''}</Col>
 				<Col span={6}>回款金额:￥{detail.company?detail.company.payback_amount:''}

@@ -42,11 +42,27 @@
         height: 50px;
         line-height: 50px;
     }
-    .colHeight{
-        height: 80px;
+    .colHeight, .colHeightLow{
         border: 1px solid #EDEDED;
         line-height: 38px;
         font-size: 13px;
+    }
+
+    .colHeight {
+        height: 80px;
+    }
+
+    .colHeightLow {
+        height: 38px;
+    }
+    
+    .clearfix:after {
+        content: ".";
+        clear: both;
+        display: block;
+        height: 0;
+        overflow: hidden;
+        visibility: hidden;
     }
     .colHeightTitle{
         height: 80px;

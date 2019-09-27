@@ -17,12 +17,12 @@ module.exports = merge(baseConfig, {
 			// 	target: "http://192.168.20.128:8010", 192.168.100.117:30002
 			// 	changeOrigin: true
 			// },
-			"/api/finance/receivables": {
-				target: "http://192.168.100.117:30002",
-				changeOrigin: true
-			},
+			// "/api/finance/receivables": {
+			// 	target: "http://192.168.100.117:30002",
+			// 	changeOrigin: true
+			// },
 			"/api": {
-				target: "http://nb.tst-weiboyi.com",
+				target: "http://nb.dev-weiboyi.com",
 				changeOrigin: true
 			}
 		},

@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import './receivableOff.less';
 import { Table, Button, Alert, Tabs, message } from "antd";
 import ReceivableOffQuery from './ReceivableOffQuery';
-import { getOffAddQueryKeys, getOffQueryItems, getReceAddColIndex, getReceOffCol, getOffOptions } from '../constants';
+import { getTabOptions, getOffAddQueryKeys, getOffQueryItems, getReceAddColIndex, getReceOffCol, getOffOptions } from '../constants';
 import * as receivableOffAction from "../actions/receivableOff";
 import * as goldenActions from "../../companyDetail/actions/goldenApply";
 import { getTotalWidth, downloadByATag } from '@/util';
@@ -36,7 +36,23 @@ class ReceivablesOfflist extends React.Component {
 		this.props.getGoldenToken();
 		this.props.getGiftAmount({ company_id });
 		this.props.getWarehouseAmount({ company_id });
-		this.setState({ company_id })
+		this.queryAllTabsData(Object.assign(search, { page: 1, page_size: 20}));
+		this.setState({ company_id });
+	}
+	queryAllTabsData = queryObj => {
+		this.setState({ loading: true });
+		Promise.all(this.getAllTabsActions(queryObj)).then(() => {
+			this.setState({ loading: false })
+		}).catch(({ errorMsg }) => {
+			this.setState({ loading: false });
+			message.error(errorMsg || '列表加载失败，请重试！');
+		})
+	}
+	getAllTabsActions = queryObj => {
+		return getTabOptions.map(item => {
+			const { value } = item;
+			return this.props.getReceAddList(Object.assign(queryObj, {product_line: value}));
+		})
 	}
 
 	componentWillUnmount() {
@@ -208,7 +224,7 @@ class ReceivablesOfflist extends React.Component {
 		}).filter(item => item);
 	}
 
-	handleModalOk = (modalType, values) => {
+	handleModalOk = (modalType, values, callback) => {
 		const { company_id } = this.state;
 		if(modalType === 'preview') {
 			this.setState(this.getOrderInfo(true));
@@ -222,9 +238,13 @@ class ReceivablesOfflist extends React.Component {
 			this.props.addReceOffItem(submitObj).then(() => {
 				const { history } = this.props;
 				this.setState({offVisible: false});
+				if(typeof callback === 'function')
+					callback()
 				history.push('/finance/receivableoff/list');
 			})
 			.catch(({errorMsg}) => {
+				if(typeof callback === 'function')
+					callback()
 				message.error(errorMsg || '操作失败');
 			});
 		}

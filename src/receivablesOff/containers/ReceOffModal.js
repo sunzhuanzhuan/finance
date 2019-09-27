@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, Form, Table, Button, Input, Radio, Checkbox, Select, Icon, InputNumber, Upload, message } from "antd";
+import { Modal, Form, Table, Button, Input, Radio, Checkbox, Select, Icon, InputNumber, message, Spin } from "antd";
 import { WBYUploadFile } from 'wbyui';
 import { getOffAddFormItems } from '../constants';
 import { getTotalWidth } from '@/util';
@@ -17,6 +17,7 @@ class ReceOffModal extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			loading: false
 		};
 		this.attachment = '';
 	}
@@ -193,7 +194,7 @@ class ReceOffModal extends React.Component {
 
 	getOffFormComp = () => {
 		const { form, isEdit, options = {} } = this.props;
-		const { stateInitValue = {} } = this.state;
+		const { stateInitValue = {}, loading } = this.state;
 		const { created_at } = stateInitValue;
 		const { getFieldDecorator } = form;
 		const formItemLayout = {
@@ -209,85 +210,87 @@ class ReceOffModal extends React.Component {
 		const addItems = isEdit ? getOffAddFormItems().filter(item => item.key !== 'can_verification_amount') : getOffAddFormItems();
 
 		return (
-			<Form>
-				{
-					addItems.map(item => {
-						const { key, label, compType, optionKey, actionKey, required, disabled, validator } = item;
-						const tips = compType === 'input' || compType === 'inputNumber' ? '请输入' : '请选择';
-						const radioStatic = isEdit && !isSameMonth;
-						const isStatic = compType === 'radio' ? radioStatic : isEdit && disabled;
+			<Spin spinning={loading}>
+				<Form>
+					{
+						addItems.map(item => {
+							const { key, label, compType, optionKey, actionKey, required, disabled, validator } = item;
+							const tips = compType === 'input' || compType === 'inputNumber' ? '请输入' : '请选择';
+							const radioStatic = isEdit && !isSameMonth;
+							const isStatic = compType === 'radio' ? radioStatic : isEdit && disabled;
 
-						if(key === 'check_box_item')
-							return (
-								<FormItem required key={key} label={label} {...formItemLayoutCheck} >
-									{this.getCheckboxItem(isStatic, validator)}
-								</FormItem>
-							)
-						if(compType === 'unalterable')
+							if(key === 'check_box_item')
+								return (
+									<FormItem required key={key} label={label} {...formItemLayoutCheck} >
+										{this.getCheckboxItem(isStatic, validator)}
+									</FormItem>
+								)
+							if(compType === 'unalterable')
+								return (
+									<FormItem key={key} label={label} {...formItemLayout} >
+										{this.getUnalterableItem(stateInitValue[key])}
+									</FormItem>
+								)
+							if(compType === 'upload') {
+								const { goldenToken = {} } = this.props;
+								const helpInfo = <div className='upload-infos'>支持最多5张图片上传，仅支持jpg\gif\png图片文件，单个文件不能超过3M</div>
+								return (
+									<FormItem className='upload-form-item' help={helpInfo} key={key} label={label} {...formItemLayout} >
+										{getFieldDecorator(key,{
+											initialValue: this.getUploadInitialVal(stateInitValue[key])
+										})(
+											<WBYUploadFile
+												ref={x => this.uploadFile = x}
+												tok={{
+													token: goldenToken.upload_token || 'undefined',
+													upload_url: goldenToken.upload_url || 'undefined'
+												}}
+												onChange={this.handleFileChange}
+												showUploadList={{
+													showPreviewIcon: true,
+													showRemoveIcon: true
+												}}
+												onPreview={this.handlePreview}
+												uploadText={'上传'}
+												multiple={true}
+												size={3}
+												len={5}
+												accept={".png,.gif,.jpg"} 
+												listType="picture-card"
+											/>
+										)}
+									</FormItem>
+								)
+							}
+							const getInitialValue = (initialValue) => {
+								if(initialValue || initialValue == 0)
+									return compType === 'select' || compType === 'radio' ? Number(initialValue) : initialValue;
+							}
 							return (
 								<FormItem key={key} label={label} {...formItemLayout} >
-									{this.getUnalterableItem(stateInitValue[key])}
-								</FormItem>
-							)
-						if(compType === 'upload') {
-							const { goldenToken = {} } = this.props;
-							const helpInfo = <div className='upload-infos'>支持最多5张图片上传，仅支持jpg\gif\png图片文件，单个文件不能超过3M</div>
-							return (
-								<FormItem className='upload-form-item' help={helpInfo} key={key} label={label} {...formItemLayout} >
-									{getFieldDecorator(key,{
-										initialValue: this.getUploadInitialVal(stateInitValue[key])
+									{getFieldDecorator(key, 
+									{ 
+										initialValue: getInitialValue(stateInitValue[key]),
+										rules: [
+											validator ? {
+												required,
+												validator: (rule, value, callback) => {
+													validator(rule, value, callback, stateInitValue['can_verification_amount'], ['必输输大于0且小于等于本次可核销金额的值'], true)
+												}
+											} : {
+												required,
+												message: `${tips}${label}`,
+											}
+										],
 									})(
-										<WBYUploadFile
-											ref={x => this.uploadFile = x}
-											tok={{
-												token: goldenToken.upload_token,
-												upload_url: goldenToken.upload_url
-											}}
-											onChange={this.handleFileChange}
-											showUploadList={{
-												showPreviewIcon: true,
-												showRemoveIcon: true
-											}}
-											onPreview={this.handlePreview}
-											uploadText={'上传'}
-											multiple={true}
-											size={3}
-											len={5}
-											accept={".png,.gif,.jpg"} 
-											listType="picture-card"
-										/>
+										this.getFormItem(key, compType, optionKey, actionKey, isStatic, options)
 									)}
 								</FormItem>
 							)
-						}
-						const getInitialValue = (initialValue) => {
-							if(initialValue || initialValue == 0)
-								return compType === 'select' || compType === 'radio' ? Number(initialValue) : initialValue;
-						}
-						return (
-							<FormItem key={key} label={label} {...formItemLayout} >
-								{getFieldDecorator(key, 
-								{ 
-									initialValue: getInitialValue(stateInitValue[key]),
-									rules: [
-										validator ? {
-											required,
-											validator: (rule, value, callback) => {
-												validator(rule, value, callback, stateInitValue['can_verification_amount'], ['必输输大于0且小于等于本次可核销金额的值'], true)
-											}
-										} : {
-											required,
-											message: `${tips}${label}`,
-										}
-									],
-								})(
-									this.getFormItem(key, compType, optionKey, actionKey, isStatic, options)
-								)}
-							</FormItem>
-						)
-					})
-				}
-			</Form>
+						})
+					}
+				</Form>
+			</Spin>
 		)
 	}
 
@@ -435,10 +438,11 @@ class ReceOffModal extends React.Component {
 
 	handleConfirm = () =>{
 		const { stateInitValue } = this.state;
-		this.props.handleOk('offVisible', stateInitValue);
 		this.setState({
-			previewVisible: false
+			previewVisible: false,
+			loading: true
 		});
+		this.props.handleOk('offVisible', stateInitValue, () => {this.setState({loading: false})});
 	}
 
 	handleCancel = () => {
@@ -463,7 +467,7 @@ class ReceOffModal extends React.Component {
 					{ this.getModalContent() }
 				</Modal>,
 				<ConfirmModal 
-					isEdit
+					isEdit={isEdit}
 					key='confirmModal'
 					visible={previewVisible} 
 					title='应收核销'

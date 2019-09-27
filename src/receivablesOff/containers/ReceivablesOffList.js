@@ -57,7 +57,7 @@ class ReceivablesOffList extends React.Component {
 				const { history } = this.props;
 				history.push({
 					pathname: '/finance/receivableoff/detail',
-					search: `?${qs.stringify({verification_id, company_id: 123})}`,
+					search: `?${qs.stringify({verification_id, company_id})}`,
 				});
 				return;
 			case 'checkVisible':

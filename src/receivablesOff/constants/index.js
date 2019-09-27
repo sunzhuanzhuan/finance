@@ -163,6 +163,12 @@ const renderNum = data => {
     return data !== undefined ? numeral(data).format('0.00') : '-'
 }
 
+const linkRender = (data, record) => {
+    const { link } = record;
+
+    return link && data ? <a target='_blank' href={link}>{data}</a> : data || '-';
+}
+
 export const getReceOffCol = ( col, receMetaData = {}, action, activeKey ) => {
     const allCol =  [
         {
@@ -171,14 +177,14 @@ export const getReceOffCol = ( col, receMetaData = {}, action, activeKey ) => {
             key: 'order_id',
             width: 100,
             fixed: 'left',
-            render
+            render: linkRender
         },
         {
             title: '订单ID',
             dataIndex: 'order_id',
             key: 'order_id_no_fIxed',
             width: 100,
-            render
+            render: linkRender
         },
         {
             title: '活动ID',
@@ -186,7 +192,7 @@ export const getReceOffCol = ( col, receMetaData = {}, action, activeKey ) => {
             key: 'campaign_id',
             width: 100,
             fixed: 'left',
-            render
+            render: linkRender
         },
         {
             title: '活动名称',
@@ -207,7 +213,7 @@ export const getReceOffCol = ( col, receMetaData = {}, action, activeKey ) => {
             dataIndex: 'order_id',
             key: 'id',
             width: 100,
-            render
+            render: linkRender
         },
         {
             title: '发票申请单ID',
@@ -556,9 +562,9 @@ export const getReceOffCol = ( col, receMetaData = {}, action, activeKey ) => {
             width: 145,
             fixed: 'right',
             render:(_, record) => {
-                const { verification_id } = record;
+                const { verification_id, company_id } = record;
                 return <>
-                    <a onClick={ () => { action('detail', verification_id)}}>订单详情</a>
+                    <a onClick={ () => { action('detail', verification_id, company_id)}}>订单详情</a>
                     <a onClick={ () => { action('checkVisible', verification_id)}}>查看</a>
                     <a onClick={ () => { action('offVisible', verification_id)}}>编辑</a>
                 </>

@@ -25,9 +25,13 @@ class ReceivablesOffDetail extends React.Component {
 	}
 	componentDidMount() {
 		const { location } = this.props;
-		const search = qs.parse(location.search.substring(1));
+		const search = qs.parse(location.search.substring(1)) || {};
+		const { company_id } = search;
 
+		this.setState({ company_id });
+		delete search.company_id;
 		this.props.getPlatform();
+		this.props.getReceMetaData();
 		this.queryAllTabsData(Object.assign(search, { page: 1, page_size: 20}));
 	}
 	queryAllTabsData = queryObj => {
@@ -68,6 +72,7 @@ class ReceivablesOffDetail extends React.Component {
 
 	getRequirementData = obj => {
 		const { company_id } = this.state;
+		console.log('sldkfjlsdkjflsdkfj', company_id);
 		return this.props.getRequirement({ ...obj, company_id });
 	}
 

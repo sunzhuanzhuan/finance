@@ -77,6 +77,11 @@ class ReceivablesOfflist extends React.Component {
 		});
 	}
 
+	getRequirementData = obj => {
+		const { company_id } = this.state;
+		return this.props.getRequirement({ ...obj, company_id });
+	}
+
 	getTabPaneComp = (productLine) => {
 		const { receAddListInfo = {}, platformList, projectList } = this.props;
 		const { loading } = this.state;
@@ -134,7 +139,8 @@ class ReceivablesOfflist extends React.Component {
 						handleExport={ () => {this.handleExportList(id)}}
 						actionKeyMap={{
 							company: this.props.getGoldenCompanyId,
-							brand: this.props.getBrandData
+							brand: this.props.getBrandData,
+							requirement: this.getRequirementData
 						}}
 					/>
 					<Alert className='add-list-total-info' message={totalMsg} type="warning" showIcon />

@@ -66,7 +66,7 @@ export const getOffQueryItems = queryArr => {
         {label: '所属项目', key: 'project_id', compType: 'select', optionKey: 'projectList', idKey: 'id', labelKey: 'name'},
         {label: '所属项目', upperKey: 'project_id_search', key: 'project_id', compType: 'searchSelect', actionKey: 'project', dataIndex: ['id', 'name'], keyWord: 'name'},
         {label: '品牌', key: 'brand_id', compType: 'searchSelect', actionKey: 'brand', dataIndex: ['id', 'view_name'], keyWord: 'view_name'},
-        {label: '需求名称', key: 'requirement_id', compType: 'input'},
+        {label: '需求名称', key: 'requirement_id', compType: 'searchSelect', actionKey: 'requirement', dataIndex: ['id', 'name'], keyWord: 'requirement_name'},
         {label: '平台', key: 'weibo_type', compType: 'select', optionKey: 'platformList', idKey: 'pid', labelKey: 'platform_name'},
         {label: '订单执行完成时间', key: 'order_complete_time', compType: 'date', submitKey:['time_start', 'time_end']},
         {label: '活动结算时间', key: 'active_time', compType: 'date', submitKey:['time_start', 'time_end']},

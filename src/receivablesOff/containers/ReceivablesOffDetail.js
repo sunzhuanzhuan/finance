@@ -66,6 +66,11 @@ class ReceivablesOffDetail extends React.Component {
 		downloadByATag(`/api/finance/receivables/verification/exportOrderList?${qs.stringify(exportQuery)}`);
 	}
 
+	getRequirementData = obj => {
+		const { company_id } = this.state;
+		return this.props.getRequirement({ ...obj, company_id });
+	}
+
 	getTabPaneComp = () => {
 		const { receAddListInfo = {}, receMetaData = {}, location, salerData = [], platformList = [] } = this.props;
 		const { product_line } = receMetaData;
@@ -116,7 +121,8 @@ class ReceivablesOffDetail extends React.Component {
 						actionKeyMap={{
 							company: this.props.getGoldenCompanyId,
 							project: this.props.getProjectData,
-							brand: this.props.getBrandData
+							brand: this.props.getBrandData,
+							requirement: this.getRequirementData
 						}}
 					/>
 					<Alert className='add-list-total-info' message={this.getTotalInfoComp(statistics)} type="warning" showIcon />

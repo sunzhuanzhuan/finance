@@ -72,7 +72,6 @@ class ReceivablesOffDetail extends React.Component {
 
 	getRequirementData = obj => {
 		const { company_id } = this.state;
-		console.log('sldkfjlsdkjflsdkfj', company_id);
 		return this.props.getRequirement({ ...obj, company_id });
 	}
 

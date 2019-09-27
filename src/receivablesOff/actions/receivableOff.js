@@ -9,6 +9,14 @@ export const {
 	method: 'get'
 });
 
+//修改核销
+export const {
+	editReceOffItem,
+	editReceOffItem_success
+} = createHttpAction('editReceOffItem', Interface.editReceOffItem, {
+	method: 'post'
+});
+
 //核销筛选项
 export const {
 	getReceMetaData,

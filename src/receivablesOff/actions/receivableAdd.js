@@ -5,7 +5,6 @@ const GET_RECE_ADD_LIST = 'GET_RECE_ADD_LIST';
 const GET_RECE_DETAIL_LIST = 'GET_RECE_DETAIL_LIST';
 const CLEAR_RECE_LIST = 'CLEAR_RECE_LIST';
 const ADD_RECE_OFF_ITEM = 'ADD_RECE_OFF_ITEM';
-const EDIT_RECE_OFF_ITEM = 'EDIT_RECE_OFF_ITEM';
 // 获取核销单详情各方列表
 export function getReceOffDetailList(params = {}) {
 	const { product_line } = params;
@@ -74,21 +73,6 @@ export function addReceOffItem(newInfo = {}, key) {
 	}
 }
 
-// 编辑核销
-export function editReceOffItem(newInfo = {}, key) {
-
-	return dispatch => {
-		return api.post(Interface.editReceOffItem, newInfo)
-		.then(() => {
-			dispatch({
-				type: EDIT_RECE_OFF_ITEM,
-				newInfo,
-				key
-			})
-		})
-	}
-}
-
 export default function receAddReducer(state = {}, action) {
 	const { listData, key, type } = action;
     switch (type) {
@@ -112,10 +96,6 @@ export default function receAddReducer(state = {}, action) {
 				updateKey: +new Date() + Math.random()
 			};
 		case ADD_RECE_OFF_ITEM: 
-			return {
-				...state
-			};
-		case EDIT_RECE_OFF_ITEM: 
 			return {
 				...state
 			};

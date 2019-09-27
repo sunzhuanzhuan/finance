@@ -8,7 +8,6 @@ import { getTotalWidth, downloadByATag } from '@/util';
 import { getOffListQueryKeys, getOffQueryItems, getOffOptions, getReceOffCol, getOffListColIndex } from '../constants';
 import * as receivableOffAction from "../actions/receivableOff";
 import * as goldenActions from "../../companyDetail/actions/goldenApply";
-import { editReceOffItem } from '../actions/receivableAdd';
 import qs from 'qs';
 import { Scolltable } from '@/components';
 import ReceOffModal from './ReceOffModal';
@@ -83,7 +82,7 @@ class ReceivablesOffList extends React.Component {
 		})
 	}
 
-	handleModalOk = (modalType, values = {}) => {
+	handleModalOk = (modalType, values = {}, callback) => {
 		const { verification_id, attachment, type, remark, is_record_sale_income, is_decrease_company_gmv, is_decrease_sale_gmv } = values;
 		const submitObj = {
 			verification_id,
@@ -94,9 +93,18 @@ class ReceivablesOffList extends React.Component {
 			is_decrease_company_gmv,
 			is_decrease_sale_gmv,
 		};
+		const { searchQuery } = this.state;
 
-		this.props.editReceOffItem(submitObj).then(() => {});
-		this.handleCloseModal(modalType);
+		this.props.editReceOffItem(submitObj).then(() => {
+			if(typeof callback === 'function')
+				callback()
+			this.handleCloseModal(modalType);
+			this.handleSearch(searchQuery);
+		}).catch(({errorMsg}) => {
+			if(typeof callback === 'function')
+				callback()
+			message.error(errorMsg || '操作失败');
+		});
 	}
 
 	handleExportList = () => {
@@ -229,5 +237,5 @@ const mapStateToProps = (state) => {
 		goldenToken
 	}
 }
-const mapDispatchToProps = dispatch => (bindActionCreators({...receivableOffAction, ...goldenActions, editReceOffItem}, dispatch));
+const mapDispatchToProps = dispatch => (bindActionCreators({...receivableOffAction, ...goldenActions}, dispatch));
 export default connect(mapStateToProps, mapDispatchToProps)(Form.create()(ReceivablesOffList))

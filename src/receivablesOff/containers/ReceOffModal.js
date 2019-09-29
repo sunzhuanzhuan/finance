@@ -2,7 +2,7 @@ import React from 'react'
 import { Modal, Form, Table, Button, Input, Radio, Checkbox, Select, Icon, InputNumber, message, Spin } from "antd";
 import { WBYUploadFile } from 'wbyui';
 import { getOffAddFormItems } from '../constants';
-import { getTotalWidth } from '@/util';
+import { getTotalWidth, shallowEqual } from '@/util';
 import { Scolltable } from '@/components';
 import SearchSelect from '@/components/SearchSelect';
 import qs from 'qs';
@@ -17,21 +17,22 @@ class ReceOffModal extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			loading: false
+			loading: false, 
+			attachment: ''
 		};
-		this.attachment = '';
 	}
 	static getDerivedStateFromProps(nextProps, prevState) {
 		const { initialValue = {}, visible } = nextProps;
 		const { stateVisible } = prevState;
 		if(stateVisible !== visible) {
-			const { total_gift_amount, total_warehouse_amount } = initialValue;
+			const { total_gift_amount, total_warehouse_amount, attachment } = initialValue;
 			return {
 				stateVisible: visible,
 				stateInitValue: initialValue,
 				total_gift_amount: Boolean(total_gift_amount),
 				total_warehouse_amount: Boolean(total_warehouse_amount),
-				no: !total_gift_amount && !total_warehouse_amount
+				no: !total_gift_amount && !total_warehouse_amount,
+				attachment: attachment || ''
 			}
 		}
 		return null
@@ -68,7 +69,7 @@ class ReceOffModal extends React.Component {
 					<Table
 						className='top-gap'
 						bordered
-						rowKey='verification_id'
+						rowKey='order_id'
 						columns={columns}
 						dataSource={dataSource}
 						size="small"
@@ -181,9 +182,11 @@ class ReceOffModal extends React.Component {
 	getUploadInitialVal = initialVal => {
 		if(initialVal) {
 			return initialVal.split(',').map(item => {
+				const valParam = item.split('/') || [];
 				return {
 					url: item,
-					filepath: item.split('.com/')[1]
+					filepath: item.split('.com/')[1],
+					name: valParam[valParam.length - 1]
 				}
 			})
 		}
@@ -351,7 +354,10 @@ class ReceOffModal extends React.Component {
 	};
 
 	handleFileChange = (fileList) => {
-		this.attachment = (fileList.map(item => item.url)).toString();
+		const newFileInfos = (fileList.map(item => item.url)).toString();
+		const { attachment } = this.state;
+		if(!shallowEqual(newFileInfos, attachment))
+			this.setState({attachment: newFileInfos});
 	}
 
 	getFormItem = (key, compType, optionKey, actionKey, disabled, options) => {
@@ -402,7 +408,7 @@ class ReceOffModal extends React.Component {
 
 	handleOk = () => {
 		const { type, form, history } = this.props;
-		const { stateInitValue } = this.state;
+		const { stateInitValue, attachment } = this.state;
 
 		if(type === 'off') {
 			form.validateFields((errs, fieldsValues) => {
@@ -418,7 +424,7 @@ class ReceOffModal extends React.Component {
 				if(isIllegalVal) {
 					this.getErrorTips('抵扣金额的和不能大于本次核销金额!');
 				}else {
-					Object.assign(stateInitValue, fieldsValues, {attachment: this.attachment});
+					Object.assign(stateInitValue, fieldsValues, {attachment});
 					this.setState({stateInitValue, previewVisible: true});
 				}
 			})
@@ -512,6 +518,7 @@ function ConfirmModal(props) {
 
 function getValueCheckComp(fieldsValues, isConfirm, options, itemKeys) {
 	const className = isConfirm ? 'fields-con' : 'flex-fields-con';
+	const discountCls = isConfirm ? '' : 'discount-wrapper';
 	const checkOption = options['offCheckOption'] || []
 	const getNumeral = value => {
 		return value || value == 0 ? numeral(value).format('0.00') : '-';
@@ -521,7 +528,7 @@ function getValueCheckComp(fieldsValues, isConfirm, options, itemKeys) {
 		.filter(item => item.id !== 'no')
 		.map(item => {
 			const {id, display} = item;
-			return <div key={id}>{`${display}：${getNumeral(fieldsValues[id])}`}</div>;
+			return <div key={id} className={discountCls}>{`${display}：${getNumeral(fieldsValues[id])}`}</div>;
 		});
 	const radioValueMap = {
 		2: '否',
@@ -582,8 +589,8 @@ function getValueCheckComp(fieldsValues, isConfirm, options, itemKeys) {
 				{ isConfirm ? <Icon type="info-circle" className='fields-icon' /> : null }
 				<div className={className}>
 					{
-						allFields.map(item => {
-							return <div key={item}>{item}</div>
+						allFields.map((item, index) => {
+							return <div key={item + index}>{item}</div>
 						})
 					}
 				</div>

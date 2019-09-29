@@ -41,7 +41,7 @@ export const getOffDetailQueryKeys = {
 export const getOffAddQueryKeys = {
     3: ['order_ids', 'invoice_application_id', 'order_complete_time', 'brand_id', 'project_id', 'requirement_id', 'weibo_type', 'account_id', 'operate'],
     2: ['order_id_active', 'active_time', 'brand_id', 'invoice_application_id', 'project_id', 'weibo_type', 'operate'],
-    7: ['order_ids', 'invoice_application_id', 'offtime', 'brand_id', 'project_id', 'operate'],
+    7: ['order_id_active', 'invoice_application_id', 'offtime', 'brand_id', 'project_id', 'operate'],
 };
 
 export const getOffQueryItems = queryArr => {
@@ -134,7 +134,7 @@ export const getOffListColIndex = [
 
 export const getOffDetailCloIndex = {
     3: ['verification_code', 'type', 'order_id_no_fIxed', 'company_name', 'saler_region', 'project_brand', 'require_id_name', 'account_info', 'invoice_application_id', 'execution_completed_time', 'verification_amount', 'debt_amount', 'gift_amount', 'warehouse_amount', 'is_decrease_company_gmv', 'is_record_sale_income', 'is_decrease_sale_gmv', 'operator_name', 'created_at'],
-    2: ['verification_code', 'type', 'order_id_no_fIxed', 'campaign_name', 'company_name', 'saler_region', 'project_brand', 'platform_name', 'invoice_application_id', 'settlement_time', 'verification_amount', 'debt_amount', 'gift_amount', 'warehouse_amount', 'is_decrease_company_gmv', 'is_record_sale_income', 'is_decrease_sale_gmv', 'operator_name', 'created_at'],
+    2: ['verification_code', 'type', 'id', 'campaign_name', 'company_name', 'saler_region', 'project_brand', 'platform_name', 'invoice_application_id', 'settlement_time', 'verification_amount', 'debt_amount', 'gift_amount', 'warehouse_amount', 'is_decrease_company_gmv', 'is_record_sale_income', 'is_decrease_sale_gmv', 'operator_name', 'created_at'],
     7: ['verification_code', 'type', 'id', 'business_name', 'company_name', 'saler_region', 'project_brand', 'invoice_application_id', 'pass_time', 'verification_amount', 'debt_amount', 'gift_amount', 'warehouse_amount', 'is_decrease_company_gmv', 'is_record_sale_income', 'is_decrease_sale_gmv', 'operator_name', 'created_at'],
 }
 
@@ -397,7 +397,7 @@ export const getReceOffCol = ( col, receMetaData = {}, action, activeKey ) => {
             render: renderNum
         },
         {
-            title: '应收款金额',
+            title: '本次核销金额',
             dataIndex: 'verification_amount',
             key: 'verification_amount',
             width: 110,

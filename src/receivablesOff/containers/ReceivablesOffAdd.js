@@ -356,7 +356,7 @@ class ReceivablesOfflist extends React.Component {
 			<div className='rece-add-seledcted'>
 				<span className='right-margin'>已选</span>
 				{this.getSelectedInfoComp(product_line)}
-				<span style={{marginRight: 20}}>{`当前已选可核销金额 ${allItemsInfo['amount']}元`}</span>
+				<span style={{marginRight: 20}}>{`当前已选应收款金额：${allItemsInfo['amount']}元`}</span>
 				<Button 
 					type='primary' 
 					disabled={!(allItemsInfo['total'])} 

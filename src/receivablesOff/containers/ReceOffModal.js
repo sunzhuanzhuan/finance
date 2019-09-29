@@ -21,9 +21,6 @@ class ReceOffModal extends React.Component {
 		};
 		this.attachment = '';
 	}
-	componentDidMount() {
-		this.attachment = '';
-	}
 	static getDerivedStateFromProps(nextProps, prevState) {
 		const { initialValue = {}, visible } = nextProps;
 		const { stateVisible } = prevState;

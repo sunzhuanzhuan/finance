@@ -47,6 +47,6 @@ export const giftAmount = handleActions({
 
 export const warehouseAmount = handleActions({
 	[getWarehouseAmount_success]: (state, action) => {
-		return { ...action.payload.data }
+		return [ ...action.payload.data ]
 	}
-}, {})
+}, [])

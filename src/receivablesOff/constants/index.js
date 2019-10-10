@@ -63,7 +63,7 @@ export const getOffQueryItems = queryArr => {
         {label: '小金库抵扣金额', key: 'warehouse_amount', compType: 'number_range', rangeKey: ['total_warehouse_amount_min', 'total_warehouse_amount_max']},
         {label: '小金库抵扣金额', upperKey: 'single_warehouse_amount', key: 'warehouse_amount', compType: 'number_range', rangeKey: ['warehouse_amount_min', 'warehouse_amount_max']},
         {label: '区域', key: 'region_team_id', compType: 'select', idKey: 'id', labelKey: 'display'},
-        {label: '所属项目', key: 'project_id', compType: 'select', optionKey: 'projectList', idKey: 'id', labelKey: 'name'},
+        {label: '所属项目', key: 'project_id', compType: 'select', optionKey: 'projectList', idKey: 'id', labelKey: 'name', showSearch: true},
         {label: '所属项目', upperKey: 'project_id_search', key: 'project_id', compType: 'searchSelect', actionKey: 'project', dataIndex: ['id', 'name'], keyWord: 'name'},
         {label: '品牌', key: 'brand_id', compType: 'searchSelect', actionKey: 'brand', dataIndex: ['id', 'view_name'], keyWord: 'view_name'},
         {label: '需求名称', key: 'requirement_id', compType: 'searchSelect', actionKey: 'requirement', dataIndex: ['id', 'name'], keyWord: 'requirement_name'},

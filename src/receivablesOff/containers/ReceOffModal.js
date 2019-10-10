@@ -454,13 +454,14 @@ class ReceOffModal extends React.Component {
 	}
 
 	render() {
-		const { visible, width, title, footer, handleCancel, options, isEdit } = this.props;
+		const { visible, width, title, footer, handleCancel, options, isEdit, type } = this.props;
 		const { previewVisible, stateInitValue, previewPicVisible, previewImage } = this.state;
 		return [
 				<Modal
 					key='commonModal'
 					wrapClassName='rece-off-modal rece-off-confirm-modal'
 					visible={visible}
+					maskClosable={type !== 'off'}
 					width={width}
 					title={title}
 					footer={footer}

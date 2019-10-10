@@ -57,7 +57,6 @@ class ReceOffModal extends React.Component {
 		const { columns, dataSource, handleOk } = this.props;
 		const totalWidth = getTotalWidth(columns);
 		const wrapperClass = 'rece-off-modal';
-		console.log('lsdkfjldskjflsdkjf', dataSource);
 		return (
 			<div>
 				<Button type="primary" onClick={handleOk}>清空已选</Button>
@@ -75,7 +74,7 @@ class ReceOffModal extends React.Component {
 						dataSource={dataSource}
 						size="small"
 						pagination={false}
-						scroll={{ y: 760, x: totalWidth }}
+						scroll={{ y: 760 }}
 					/>
 				</Scolltable>
 			</div>

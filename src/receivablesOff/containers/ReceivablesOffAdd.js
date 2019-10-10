@@ -346,8 +346,6 @@ class ReceivablesOfflist extends React.Component {
 			sale_name: owner_admin_real_name,
 		};
 
-		console.log('lskdjflsdkjflsdkjf', activeKey);
-
 		const title = <div>
 			<span>{`新增核销-${name}`}</span>
 			<span className='total-margin'>{`销售：${owner_admin_real_name}`}</span>

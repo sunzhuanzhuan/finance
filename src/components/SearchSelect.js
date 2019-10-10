@@ -31,7 +31,6 @@ export default class SearchSelect extends React.PureComponent {
 		const { data, value, loading } = this.state;
 		const { item: [id, name] } = this.props;
 		const options = data.map(d => <Option key={d[id]}>{d[name]}</Option>);
-		console.log('lskdjflsdkjflsdkjf', data);
 		return <Select
 			showSearch
 			allowClear

@@ -63,8 +63,8 @@ class ReceivableOffQuery extends React.Component {
 			if(compType === 'operate') {
 				return (
 					<FormItem key={key} className='operate-wrapper'>
-						{ showExport ? <Button type='primary' onClick={() => {this.handleSearch('export')}}>导出</Button> : null }
 						<Button type='primary' onClick={() => {this.handleSearch('search')}}>查询</Button>
+						{ showExport ? <Button type='primary' onClick={() => {this.handleSearch('export')}}>导出</Button> : null }
 						<Button type='ghost' onClick={() => {this.handleSearch('reset')}}>重置</Button>
 					</FormItem>
 				)

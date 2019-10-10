@@ -149,6 +149,7 @@ class ReceivablesOfflist extends React.Component {
 				<TabPane tab={tabTitle} key={id} className={wrapperClass}>
 					<ReceivableOffQuery 
 						showExport
+						className={wrapperClass}
 						queryOptions={{platformList, projectList}}
 						queryItems={getOffQueryItems(getOffAddQueryKeys[id])}
 						handleSearch={searchQuery => {this.handleSearch(id, searchQuery)}} 

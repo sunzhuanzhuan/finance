@@ -117,6 +117,7 @@ class ReceivablesOffDetail extends React.Component {
 				<TabPane tab={tabTitle} key={id} className={wrapperClass}>
 					<ReceivableOffQuery 
 						showExport
+						className={wrapperClass}
 						queryOptions={Object.assign(getOffOptions, receMetaData, {salerData, platformList})} 
 						initialValue={search}
 						queryItems={getOffQueryItems(getOffDetailQueryKeys[id])}

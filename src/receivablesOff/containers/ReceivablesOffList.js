@@ -148,6 +148,7 @@ class ReceivablesOffList extends React.Component {
 		return <div className='rece-wrapper'>
 			<div className='rece-title'>应收账款核销</div>
 			<ReceivableOffQuery
+				className='rece-wrapper'
 				queryOptions={Object.assign(getOffOptions, receMetaData, {salerData})} 
 				queryItems={getOffQueryItems(getOffListQueryKeys)}
 				handleSearch={this.handleSearch}

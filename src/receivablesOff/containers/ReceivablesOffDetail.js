@@ -2,14 +2,14 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import './receivableOff.less';
-import { message, Table, Alert, Tabs } from "antd";
+import { message, Table, Alert, Tabs, Icon } from "antd";
 import ReceivableOffQuery from './ReceivableOffQuery';
 import { getTabOptions, getOffDetailQueryKeys, getOffQueryItems, getOffDetailCloIndex, getReceOffCol, getOffOptions } from '../constants';
 import * as receivableOffAction from "../actions/receivableOff";
 import * as goldenActions from "../../companyDetail/actions/goldenApply";
 import { getTotalWidth, downloadByATag } from '@/util';
 import { Scolltable } from '@/components';
-import { getReceOffDetailList } from '../actions/receivableAdd';
+import { getReceOffDetailList, clearReceList } from '../actions/receivableAdd';
 import qs from 'qs';
 import numeral from 'numeral';
 
@@ -33,6 +33,9 @@ class ReceivablesOffDetail extends React.Component {
 		this.props.getPlatform();
 		this.props.getReceMetaData();
 		this.queryAllTabsData(Object.assign(search, { page: 1, page_size: 20}));
+	}
+	componentWillUnmount() {
+		this.props.clearReceList();
 	}
 	queryAllTabsData = queryObj => {
 		this.setState({ loading: true });
@@ -211,11 +214,19 @@ class ReceivablesOffDetail extends React.Component {
 		return totalInfoObj
 	}
 
+	handleBack = () => {
+		const { history } = this.props;
+		history.go(-1);
+	}
+
 	render() {
 		const { activeKey } = this.state;
 
 		return <div className='rece-wrapper rece-detail-wrapper'>
-			<div className='rece-title'>核销订单明细</div>
+			<div className='rece-title rece-back-title' onClick={this.handleBack}>
+				<Icon type="arrow-left" />
+				<span className='left-gap'>核销订单明细</span>
+			</div>
 			<Alert className='add-list-total-info' message={this.getTotalInfoComp(this.getAllTotalInfo())} type="warning" showIcon />
 			<Tabs className='rece_tabs' activeKey={activeKey} onChange={this.handleChangeTab}>
 				{
@@ -237,5 +248,5 @@ const mapStateToProps = (state) => {
 		platformList
 	}
 }
-const mapDispatchToProps = dispatch => (bindActionCreators({...receivableOffAction, ...goldenActions, getReceOffDetailList}, dispatch));
+const mapDispatchToProps = dispatch => (bindActionCreators({...receivableOffAction, ...goldenActions, getReceOffDetailList, clearReceList}, dispatch));
 export default connect(mapStateToProps, mapDispatchToProps)(ReceivablesOffDetail)

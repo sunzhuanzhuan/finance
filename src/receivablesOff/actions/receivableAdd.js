@@ -87,9 +87,9 @@ export default function receAddReducer(state = {}, action) {
 		case CLEAR_RECE_LIST:
 			return { 
 				...state, 
-				'receAddInfo-3': {}, 
-				'receAddInfo-2': {}, 
-				'receAddInfo-7': {}, 
+				// 'receAddInfo-3': {}, 
+				// 'receAddInfo-2': {}, 
+				// 'receAddInfo-7': {}, 
 				'receDetailInfo-3': {}, 
 				'receDetailInfo-2': {}, 
 				'receDetailInfo-7': {}, 

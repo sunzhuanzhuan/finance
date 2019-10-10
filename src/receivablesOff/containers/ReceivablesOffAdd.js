@@ -262,7 +262,7 @@ class ReceivablesOfflist extends React.Component {
 	}
 
 	getTotalMoney = (arr = []) => {
-		return arr.reduce((accumulator, item) => accumulator + parseInt(item.receivables_amount), 0);
+		return arr.reduce((accumulator, item) => accumulator + Number(item.receivables_amount), 0);
 	}
 
 	getAllSelectedItems = () => {

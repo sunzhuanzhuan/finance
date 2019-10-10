@@ -47,7 +47,7 @@ export const getOffAddQueryKeys = {
 export const getOffQueryItems = queryArr => {
     const allQuery =  [
         {label: '公司简称', key: 'company_id', compType: 'searchSelect', actionKey: 'company', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},
-        {label: '销售', key: 'sale_id', compType: 'select', optionKey: 'salerData', idKey: 'user_id', labelKey: 'real_name'},
+        {label: '销售', key: 'sale_id', compType: 'select', optionKey: 'salerData', idKey: 'user_id', labelKey: 'real_name', showSearch: true},
         {label: '核销编号', key: 'verification_code', compType: 'input'},
         {label: '核销类型', key: 'type', compType: 'select', optionKey: 'verification_type', idKey: 'id', labelKey: 'display'},
         {label: '发票申请单ID', key: 'invoice_application_id', compType: 'input'},

@@ -166,6 +166,7 @@ class ReceOffModal extends React.Component {
 								<InputNumber 
 									disabled={isStatic} 
 									placeholder="请输入"
+									min={0}
 									precision={2}
 									onBlur={val => {this.handleChangeIptNum(id, val)}}
 								/>

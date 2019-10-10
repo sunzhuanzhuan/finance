@@ -21,7 +21,7 @@ class ReceivableOffQuery extends React.Component {
 		})
 	}
 	getFormItem = item => {
-		const { compType, optionKey, actionKey, dataIndex, keyWord, idKey, labelKey } = item;
+		const { compType, optionKey, actionKey, dataIndex, keyWord, idKey, labelKey, showSearch } = item;
 		const { actionKeyMap = {} } = this.props;
 		switch(compType) {
 			case 'input':
@@ -38,6 +38,7 @@ class ReceivableOffQuery extends React.Component {
 						/>;
 			case 'select':
 				return <Select 
+						showSearch={showSearch}
 						allowClear
 						placeholder="请选择" 
 						className='common_search_width'

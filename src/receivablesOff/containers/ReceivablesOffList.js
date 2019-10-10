@@ -123,7 +123,7 @@ class ReceivablesOffList extends React.Component {
 		} = this.props;
 		const { 
 			verification_ids_count = '-', order_ids_count = '-', verification_amount_total = '-', 
-			gift_amount_total = '-', warehouse_amount_total = '-' 
+			gift_amount_total = '-', debt_amount_total = '-', warehouse_amount_total = '-' 
 		} = statistic;
 		const { searchQuery, loading, addVisible, offVisible, checkVisible, recordInfo } = this.state;
 		const totalWidth = getTotalWidth(getReceOffCol(getOffListColIndex));
@@ -163,10 +163,11 @@ class ReceivablesOffList extends React.Component {
 				<>核销次数：<span className='total-color'>{this.getNumDisplay(verification_ids_count)}</span>个</>
 				<span className='total-margin'>订单数：<span className='total-color'>{this.getNumDisplay(order_ids_count)}</span></span>
 				<>总核销金额：<span className='total-color'>{this.getNumDisplay(verification_amount_total)}</span></>
-				<span className='total-margin'>赠点/返点账户抵扣：<span className='total-color'>{this.getNumDisplay(gift_amount_total)}</span></span>
-				<>小金库抵扣：<span className='total-color'>{this.getNumDisplay(warehouse_amount_total)}</span></>
+				<span className='total-margin'>核销账户金额：<span className='total-color'>{this.getNumDisplay(debt_amount_total)}</span></span>
+				<>赠点/返点账户抵扣：<span className='total-color'>{this.getNumDisplay(gift_amount_total)}</span></>
+				<span className='total-margin'>小金库抵扣：<span className='total-color'>{this.getNumDisplay(warehouse_amount_total)}</span></span>
 			</div>
-			<Scolltable isMoreThanOne scrollClassName='.ant-table-body' widthScroll={totalWidth}>
+			<Scolltable scrollClassName='.ant-table-body' widthScroll={totalWidth}>
 				<Table 
 					className='receivable-table'
 					rowKey='verification_id' 

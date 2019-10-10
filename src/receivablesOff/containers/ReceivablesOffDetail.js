@@ -171,7 +171,7 @@ class ReceivablesOffDetail extends React.Component {
 			<div className='total-info-wrapper'>
 				<>订单数：<span className='total-color'>{order_ids_count}</span></>
 				<span className='total-margin'>总核销金额：<span className='total-color'>{this.getNumberal(verification_amount_total)}</span></span>
-				<>核销账户金额：<span className='total-color'>{this.getNumberal(debt_amount_total)}</span></>
+				<>核销账户抵扣金额：<span className='total-color'>{this.getNumberal(debt_amount_total)}</span></>
 				<span className='total-margin'>赠送/返点账户抵扣：<span className='total-color'>{this.getNumberal(gift_amount_total)}</span></span>
 				<>小金库抵扣：<span className='total-color'>{this.getNumberal(warehouse_amount_total)}</span></>
 			</div>

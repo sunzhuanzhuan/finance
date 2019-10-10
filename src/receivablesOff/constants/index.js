@@ -102,7 +102,7 @@ export const getOffAddFormItems = (arrKey) => {
         {label: '本次核销金额', key: 'total_verification_amount', compType: 'inputNumber', isNumber: true, required: true, disabled: true, validator: verificationMount},
         {label: '核销类型', key: 'type', compType: 'select', optionKey: 'verification_type', required: true},
         {label: '抵扣账户/金额', key: 'check_box_item', compType: 'check_box_item', required: true, disabled: true, validator: verificationMount},
-        {label: '核销账户金额', key: 'total_debt_amount', compType: 'unalterable', isNumber: true},
+        {label: '核销账户抵扣金额', key: 'total_debt_amount', compType: 'unalterable', isNumber: true},
         {label: '是否扣减公司GMV', key: 'is_decrease_company_gmv', compType: 'radio', optionKey: 'GMV', required: true},
         {label: '是否扣减销售GMV', key: 'is_decrease_sale_gmv', compType: 'radio', optionKey: 'GMV', required: true},
         {label: '是否计提提成', key: 'is_record_sale_income', compType: 'radio', optionKey: 'payment', required: true},
@@ -148,7 +148,7 @@ export const getReceAddColIndex = {
     3: ['order_id_no_fIxed', 'project_brand', 'require_id_name', 'account_info', 'invoice_application_id', 'execution_completed_time', 'receivables_amount'],
     2: ['id', 'project_brand', 'platform_name', 'invoice_application_id', 'settlement_time', 'receivables_amount'],
     7: ['id', 'active_name_type', 'project_brand', 'invoice_application_id', 'pass_time', 'receivables_amount'],
-    preview: ['order_id_no_fIxed', 'invoice_application_id', 'company_name', 'project_name', 'requirement_name', 'receivables_amount']
+    preview: ['order_id_no_fIxed', 'invoice_application_id', 'company_name', 'project_name', 'requirement_name', 'receivables_amount', 'previewOperate']
 }
 
 const render = data => {
@@ -472,7 +472,7 @@ export const getReceOffCol = ( col, receMetaData = {}, action, activeKey ) => {
             render: renderNum
         },
         {
-            title: '核销账户金额',
+            title: '核销账户抵扣金额',
             dataIndex: 'total_debt_amount',
             key: 'total_debt_amount',
             width: 100,
@@ -500,7 +500,7 @@ export const getReceOffCol = ( col, receMetaData = {}, action, activeKey ) => {
             render: renderNum
         },
         {
-            title: '核销账户金额',
+            title: '核销账户抵扣金额',
             dataIndex: 'debt_amount',
             key: 'debt_amount',
             width: 100,
@@ -575,9 +575,9 @@ export const getReceOffCol = ( col, receMetaData = {}, action, activeKey ) => {
             dataIndex: 'previewOperate',
             key: 'previewOperate',
             width: 100,
-            fixed: 'right',
             render:(_, record) => {
-                const dataKey = getTableId[activeKey];
+                // const dataKey = getTableId[activeKey];
+                const dataKey = 'order_id';
 
                 return <>
                     <Popconfirm 

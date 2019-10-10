@@ -57,6 +57,7 @@ class ReceOffModal extends React.Component {
 		const { columns, dataSource, handleOk } = this.props;
 		const totalWidth = getTotalWidth(columns);
 		const wrapperClass = 'rece-off-modal';
+		console.log('lsdkfjldskjflsdkjf', dataSource);
 		return (
 			<div>
 				<Button type="primary" onClick={handleOk}>清空已选</Button>

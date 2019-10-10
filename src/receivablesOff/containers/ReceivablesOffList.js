@@ -164,7 +164,7 @@ class ReceivablesOffList extends React.Component {
 				<>核销次数：<span className='total-color'>{this.getNumDisplay(verification_ids_count)}</span>个</>
 				<span className='total-margin'>订单数：<span className='total-color'>{this.getNumDisplay(order_ids_count)}</span></span>
 				<>总核销金额：<span className='total-color'>{this.getNumDisplay(verification_amount_total)}</span></>
-				<span className='total-margin'>核销账户金额：<span className='total-color'>{this.getNumDisplay(debt_amount_total)}</span></span>
+				<span className='total-margin'>核销账户抵扣金额：<span className='total-color'>{this.getNumDisplay(debt_amount_total)}</span></span>
 				<>赠点/返点账户抵扣：<span className='total-color'>{this.getNumDisplay(gift_amount_total)}</span></>
 				<span className='total-margin'>小金库抵扣：<span className='total-color'>{this.getNumDisplay(warehouse_amount_total)}</span></span>
 			</div>

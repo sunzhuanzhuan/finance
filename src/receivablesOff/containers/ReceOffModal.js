@@ -29,9 +29,9 @@ class ReceOffModal extends React.Component {
 			return {
 				stateVisible: visible,
 				stateInitValue: initialValue,
-				total_gift_amount: Boolean(total_gift_amount),
-				total_warehouse_amount: Boolean(total_warehouse_amount),
-				no: !total_gift_amount && !total_warehouse_amount,
+				total_gift_amount: Boolean(Number(total_gift_amount)),
+				total_warehouse_amount: Boolean(Number(total_warehouse_amount)),
+				no: !Number(total_gift_amount) && !Number(total_warehouse_amount),
 				attachment: attachment || ''
 			}
 		}
@@ -526,10 +526,13 @@ function getValueCheckComp(fieldsValues, isConfirm, options, itemKeys) {
 		return value || value == 0 ? numeral(value).format('0.00') : '-';
 	}
 
+	let isDiscount = false;
 	const deductItems = checkOption
 		.filter(item => item.id !== 'no')
 		.map(item => {
 			const {id, display} = item;
+			if(fieldsValues[id])
+				isDiscount = true;
 			return <div key={id} className={discountCls}>{`${display}：${getNumeral(fieldsValues[id])}`}</div>;
 		});
 	const radioValueMap = {
@@ -539,13 +542,23 @@ function getValueCheckComp(fieldsValues, isConfirm, options, itemKeys) {
 	const allFields = getOffAddFormItems(itemKeys).map(item => {
 		const { label, key, compType, isNumber, optionKey } = item;
 		let showValue;
-		if( key === 'check_box_item')
-			return (
-				<div key={key} className='deduct-wrapper'>
-					<div>{label}：</div>
-					<div>{deductItems}</div>
-				</div> 
-			)
+		if( key === 'check_box_item') {
+			if(isDiscount) {
+				return (
+					<div key={key} className='deduct-wrapper'>
+						<div>{label}：</div>
+						<div>{deductItems}</div>
+					</div> 
+				)
+			}else {
+				return (
+					<div key={key} className='deduct-wrapper'>
+						<div>{label}：</div>
+						<div>无抵扣</div>
+					</div> 
+				)
+			}
+		}
 		if(compType === 'upload') {
 			const uploadVal = fieldsValues[key] || '';
 			const uploadArr = uploadVal.split(',');

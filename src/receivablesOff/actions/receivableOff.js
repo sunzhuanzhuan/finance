@@ -88,4 +88,3 @@ export const {
 } = createHttpAction('getWarehouseAmount', Interface.getWarehouseAmount, {
 	method: 'get'
 });
-

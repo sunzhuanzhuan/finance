@@ -86,10 +86,20 @@ class ReceivablesOfflist extends React.Component {
 		downloadByATag(`/api/finance/receivables/order/export?${qs.stringify(searchQuery)}`);
 	}
 
-	handleSelectRows = (key, selectedRowKeys, selectedRows) => {
+	getSelectedRowData = (rowKeys, selectedRows = [], list = []) => {
+		if(Array.isArray(rowKeys) && rowKeys.length) {
+			const allRowData = [...selectedRows, ...list];
+			return rowKeys.map(item => allRowData.find(rowItem => rowItem.order_id == item))
+		}else {
+			return []
+		}
+	}
+
+	handleSelectRows = (key, selectedRowKeys, list) => {
+
 		this.setState({
 			[`selectedRowKeys-${key}`]: selectedRowKeys, 
-			[`selectedRows-${key}`]: selectedRows, 
+			[`selectedRows-${key}`]: this.getSelectedRowData(selectedRowKeys, this.state[`selectedRows-${key}`], list), 
 		});
 	}
 
@@ -132,8 +142,8 @@ class ReceivablesOfflist extends React.Component {
 			const selectedRowKeys = this.state[`selectedRowKeys-${id}`] || [];
 			const rowSelection = {
 				selectedRowKeys,
-				onChange: (selectedRowKeys, selectedRows) => {
-					this.handleSelectRows(id, selectedRowKeys, selectedRows);
+				onChange: (selectedRowKeys) => {
+					this.handleSelectRows(id, selectedRowKeys, list);
 				},
 				getCheckboxProps: record => ({
 					// disabled: record.status != 1
@@ -157,7 +167,8 @@ class ReceivablesOfflist extends React.Component {
 						actionKeyMap={{
 							company: this.props.getGoldenCompanyId,
 							brand: this.props.getBrandData,
-							requirement: this.getRequirementData
+							requirement: this.getRequirementData,
+							account: this.props.getAccountInfo
 						}}
 					/>
 					<Alert className='add-list-total-info' message={totalMsg} type="warning" showIcon />

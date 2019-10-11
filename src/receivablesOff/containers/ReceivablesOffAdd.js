@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import './receivableOff.less';
-import { Table, Button, Alert, Tabs, message } from "antd";
+import { Table, Button, Alert, Tabs, message, Icon } from "antd";
 import ReceivableOffQuery from './ReceivableOffQuery';
 import { getTabOptions, getOffAddQueryKeys, getOffQueryItems, getReceAddColIndex, getReceOffCol, getOffOptions } from '../constants';
 import * as receivableOffAction from "../actions/receivableOff";
@@ -342,6 +342,11 @@ class ReceivablesOfflist extends React.Component {
 		}
 	}
 
+	handleBack = () => {
+		const { history } = this.props;
+		history.go(-1);
+	}
+
 	render() {
 		const { receMetaData = {}, companyInfo = {}, goldenToken = {}, giftAmount = {}, warehouseAmount = [] } = this.props;
 		const { product_line } = receMetaData;
@@ -357,14 +362,15 @@ class ReceivablesOfflist extends React.Component {
 			sale_name: owner_admin_real_name,
 		};
 
-		const title = <div>
-			<span>{`新增核销-${name}`}</span>
+		const title = <div onClick={this.handleBack}>
+			<Icon type="arrow-left" />
+			<span className='left-gap'>{`新增核销-${name}`}</span>
 			<span className='total-margin'>{`销售：${owner_admin_real_name}`}</span>
 			<span>{`区域：${region_team_name}`}</span>
 		</div>;
 
 		return <div className='rece-wrapper rece-add-wrapper'>
-			<div className='rece-title'>{title}</div>
+			<div className='rece-title rece-back-title'>{title}</div>
 			<div className='rece-add-seledcted'>
 				<span className='right-margin'>已选</span>
 				{this.getSelectedInfoComp(product_line)}

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 import { Popconfirm } from 'antd';
 import numeral from 'numeral';
 
@@ -220,7 +221,9 @@ export const getReceOffCol = ( col, receMetaData = {}, action, activeKey ) => {
             dataIndex: 'invoice_application_id',
             key: 'invoice_application_id',
             width: 180,
-            render
+            render: data => {
+                return data || data == 0 ? <Link to={`/finance/invoice/applyDetail?id=${data}`}>{data}</Link> : '-';
+            }
         },
         {
             title: '活动名称/活动类型',

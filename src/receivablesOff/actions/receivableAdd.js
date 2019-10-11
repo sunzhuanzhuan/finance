@@ -79,6 +79,13 @@ export default function receAddReducer(state = {}, action) {
         case GET_RECE_DETAIL_LIST:
 			return { ...state, [`receDetailInfo-${key}`]: listData, updateKey: +new Date() + Math.random()};
 		case GET_RECE_ADD_LIST:
+			const { list = [], receivables = [] } = listData;
+			if(Array.isArray(list) && list.length && Array.isArray(receivables) && receivables.length) {
+				list.forEach(item => {
+					const receCountItem = receivables.find(receItem => receItem.order_id == item.order_id) || {};
+					item.receivables_amount = receCountItem.receivables_amount
+				})
+			}
 			return { 
 				...state, 
 				[`receAddInfo-${key}`]: listData, 

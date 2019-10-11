@@ -50,13 +50,13 @@ class ReceivablesOffList extends React.Component {
 		})
 	}
 
-	handleTableOperate = (operateType, verification_id, company_id) => {
+	handleTableOperate = (operateType, verification_id) => {
 		switch(operateType) {
 			case 'detail':
 				const { history } = this.props;
 				history.push({
 					pathname: '/finance/receivableoff/detail',
-					search: `?${qs.stringify({verification_id, company_id})}`,
+					search: `?${qs.stringify({verification_id})}`,
 				});
 				return;
 			case 'checkVisible':

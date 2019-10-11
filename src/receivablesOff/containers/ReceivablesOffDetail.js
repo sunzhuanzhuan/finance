@@ -26,10 +26,7 @@ class ReceivablesOffDetail extends React.Component {
 	componentDidMount() {
 		const { location } = this.props;
 		const search = qs.parse(location.search.substring(1)) || {};
-		const { company_id } = search;
 
-		this.setState({ company_id });
-		delete search.company_id;
 		this.props.getPlatform();
 		this.props.getReceMetaData();
 		this.queryAllTabsData(Object.assign(search, { page: 1, page_size: 20}));
@@ -71,11 +68,6 @@ class ReceivablesOffDetail extends React.Component {
 		Object.assign(search, {product_line});
 		const exportQuery = this.state[`searchQuery-${product_line}`] || search;
 		downloadByATag(`/api/finance/receivables/verification/exportOrderList?${qs.stringify(exportQuery)}`);
-	}
-
-	getRequirementData = obj => {
-		const { company_id } = this.state;
-		return this.props.getRequirement({ ...obj, company_id });
 	}
 
 	getTabPaneComp = () => {
@@ -130,7 +122,7 @@ class ReceivablesOffDetail extends React.Component {
 							company: this.props.getGoldenCompanyId,
 							project: this.props.getProjectData,
 							brand: this.props.getBrandData,
-							requirement: this.getRequirementData
+							requirement: this.props.getRequirementWithoutId
 						}}
 					/>
 					<Alert className='add-list-total-info' message={this.getTotalInfoComp(statistics)} type="warning" showIcon />

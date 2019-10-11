@@ -88,3 +88,10 @@ export const {
 } = createHttpAction('getWarehouseAmount', Interface.getWarehouseAmount, {
 	method: 'get'
 });
+
+export const {
+	getRequirementWithoutId,
+	getRequirementWithoutId_success
+} = createHttpAction('getRequirementWithoutId', Interface.getRequirementWithoutId, {
+	method: 'get'
+});

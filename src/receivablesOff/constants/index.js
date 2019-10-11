@@ -562,9 +562,9 @@ export const getReceOffCol = ( col, receMetaData = {}, action, activeKey ) => {
             width: 145,
             fixed: 'right',
             render:(_, record) => {
-                const { verification_id, company_id } = record;
+                const { verification_id } = record;
                 return <>
-                    <a onClick={ () => { action('detail', verification_id, company_id)}}>订单详情</a>
+                    <a onClick={ () => { action('detail', verification_id)}}>订单详情</a>
                     <a onClick={ () => { action('checkVisible', verification_id)}}>查看</a>
                     <a onClick={ () => { action('offVisible', verification_id)}}>编辑</a>
                 </>

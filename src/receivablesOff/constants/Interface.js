@@ -13,4 +13,5 @@ export default {
 	addReceOffItem: '/finance/receivables/verification/commit',
 	getOffItemInfo: '/finance/receivables/verification/detail',
 	editReceOffItem: '/finance/receivables/verification/edit',
+	getRequirementWithoutId: '/finance/commonApi/getRequirementInfoByName'
 }

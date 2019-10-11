@@ -47,7 +47,7 @@ class AddInvoiceInfo extends Component {
 					// 	return
 					// }
 					if (sum > receivableCount) {
-						message.warning('发票总金额 大于 发票申请单金额', 1)
+						message.warning('发票总金额 大于 应回款金额', 1)
 						return
 					} else if (sum == 0) {
 						message.warning('发票总金额不能为0', 1)
@@ -64,7 +64,7 @@ class AddInvoiceInfo extends Component {
 					}
 				} else {
 					if (sum != receivableCount) {
-						message.warning('发票总金额 不等于 发票申请单金额', 1)
+						message.warning('发票总金额 不等于 应回款金额', 1)
 						return
 					} else {
 						this.props.actions.postFormVoice(values).then(() => {

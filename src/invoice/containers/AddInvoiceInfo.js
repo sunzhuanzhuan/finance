@@ -25,7 +25,8 @@ class AddInvoiceInfo extends Component {
 	handleSubmit(e) {
 		e.preventDefault();
 		// let canInvoice = this.props.canInvoice - 0
-		let applyAmount = this.props.applyAmount - 0
+		// let applyAmount = this.props.applyAmount - 0;
+		let receivableCount = this.props.receivableCount - 0;
 		let type = this.props.type;
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
@@ -45,7 +46,7 @@ class AddInvoiceInfo extends Component {
 					// 	message.warning('发票总金额 不等于 可开发票金额', 1)
 					// 	return
 					// }
-					if (sum > applyAmount) {
+					if (sum > receivableCount) {
 						message.warning('发票总金额 大于 发票申请单金额', 1)
 						return
 					} else if (sum == 0) {
@@ -62,7 +63,7 @@ class AddInvoiceInfo extends Component {
 						})
 					}
 				} else {
-					if (sum != applyAmount) {
+					if (sum != receivableCount) {
 						message.warning('发票总金额 不等于 发票申请单金额', 1)
 						return
 					} else {

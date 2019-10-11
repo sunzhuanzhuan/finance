@@ -15,7 +15,8 @@ class AssociateInvoice extends Component {
 	state = {
 		tabsShow: false,
 		stepA: false,
-		dialogShow: false
+		dialogShow: false,
+		receivableCount: 0
 	}
 	async componentWillMount() {
 		//let { setInvoiceListSelected, getAssociateInvoiceDetail, location: { query: { id } } } = this.props;
@@ -25,7 +26,7 @@ class AssociateInvoice extends Component {
 		await getAssociateInvoiceDetail(search.id).catch(({ errorMsg }) => {
 			message.warning(errorMsg, 1);
 		});
-		this.setState({ tabsShow: true })
+		this.setState({ tabsShow: true, receivableCount: search.receivable })
 		setInvoiceListSelected([])
 
 	}
@@ -126,6 +127,7 @@ class AssociateInvoice extends Component {
 			},
 			type: 3
 		};
+		const { receivableCount = 0 } = this.state;
 		return (
 			<div className='associate-invoice'>
 				<div id="box" style={{ marginBottom: '62px' }} >
@@ -140,6 +142,8 @@ class AssociateInvoice extends Component {
 							<Col><h4>发票类型：{invoice_type_display || '-'}</h4></Col>
 							<Col><h4>发票申请单金额：</h4></Col>
 							<Col><b className="totalNumL">{amount || 0}</b></Col>
+							<Col><h4>应回款金额：</h4></Col>
+							<Col><b className="totalNumL">{receivableCount}</b></Col>
 						</Row>
 						<Row type="flex" justify="start" gutter={16} style={{ lineHeight: "32px" }} >
 							<Col><h4>备注信息：{comment || '无'}</h4></Col>

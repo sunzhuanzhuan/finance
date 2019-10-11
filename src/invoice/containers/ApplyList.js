@@ -548,7 +548,10 @@ class ApplyList extends Component {
 						{
 							record.type == 1 || record.type == 5 ? 
 							<p>
-								<p>应回款金额:{record.receivables_payback_amount}</p>
+								<p>
+									<span>应回款金额:{record.receivables_payback_amount}</span>
+									<div style={{color: 'red'}}>请按应回款金额开具发票</div>
+								</p>
 								<p>已回款金额:{record.payback_amount}</p>
 								<p>待回款金额:{calcSum(arrWaitMoney).toFixed(2)}</p>
 							</p> : null

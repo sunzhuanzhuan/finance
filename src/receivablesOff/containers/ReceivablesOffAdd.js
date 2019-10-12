@@ -96,7 +96,6 @@ class ReceivablesOfflist extends React.Component {
 	}
 
 	handleSelectRows = (key, selectedRowKeys, list) => {
-
 		this.setState({
 			[`selectedRowKeys-${key}`]: selectedRowKeys, 
 			[`selectedRows-${key}`]: this.getSelectedRowData(selectedRowKeys, this.state[`selectedRows-${key}`], list), 
@@ -263,15 +262,22 @@ class ReceivablesOfflist extends React.Component {
 		}
 	}
 
-	handleRemoveSelected = (id, itemKey) => {
-		const { activeKey } = this.state;
-		const rowKeys = this.state[`selectedRowKeys-${activeKey}`];
-		const rows = this.state[`selectedRows-${activeKey}`];
-
-		this.setState({
-			[`selectedRowKeys-${activeKey}`]: rowKeys.filter(item => item !== id), 
-			[`selectedRows-${activeKey}`]: rows.filter(item => item[itemKey] !== id),
+	handleRemoveSelected = (delId, itemKey) => {
+		const { receMetaData = {} } = this.props;
+		const { product_line } = receMetaData;
+		if (!Array.isArray(product_line)) return;
+		const allObj = {};
+		product_line.forEach(item => {
+			const { id } = item;
+			const rowKeys = this.state[`selectedRowKeys-${id}`] || [];
+			const rows = this.state[`selectedRows-${id}`] || [];
+			const filtRows = {
+				[`selectedRowKeys-${id}`]: rowKeys.filter(item => item !== delId), 
+				[`selectedRows-${id}`]: rows.filter(item => item[itemKey] !== delId)
+			}
+			Object.assign(allObj, filtRows)
 		})
+		this.setState(allObj)
 	}
 
 	getTotalMoney = (arr = []) => {

@@ -29,6 +29,7 @@ class ReceivablesOffDetail extends React.Component {
 
 		this.props.getPlatform();
 		this.props.getReceMetaData();
+		this.props.getSalerData();
 		this.queryAllTabsData(Object.assign(search, { page: 1, page_size: 20}));
 	}
 	componentWillUnmount() {
@@ -210,9 +211,7 @@ class ReceivablesOffDetail extends React.Component {
 		const { activeKey } = this.state;
 
 		return <div className='rece-wrapper rece-detail-wrapper'>
-			<div className='rece-title'>
-				<span className='left-gap'>核销订单明细</span>
-			</div>
+			<div className='rece-title'>核销订单明细</div>
 			<Alert className='add-list-total-info' message={this.getTotalInfoComp(this.getAllTotalInfo())} type="warning" showIcon />
 			<Tabs className='rece_tabs' activeKey={activeKey} onChange={this.handleChangeTab}>
 				{

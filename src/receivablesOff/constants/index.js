@@ -222,7 +222,7 @@ export const getReceOffCol = ( col, receMetaData = {}, action, activeKey ) => {
             key: 'invoice_application_id',
             width: 180,
             render: data => {
-                return data || data == 0 ? <Link to={`/finance/invoice/applyDetail?id=${data}`}>{data}</Link> : '-';
+                return data || data == 0 ? <a target='_blank' href={`/finance/invoice/applyDetail?id=${data}`}>{data}</a> : '-';
             }
         },
         {
@@ -567,7 +567,7 @@ export const getReceOffCol = ( col, receMetaData = {}, action, activeKey ) => {
             render:(_, record) => {
                 const { verification_id } = record;
                 return <>
-                    <a onClick={ () => { action('detail', verification_id)}}>订单详情</a>
+                    <a target='_blank' href={`/finance/receivableoff/detail?verification_id=${verification_id}`}>订单详情</a>
                     <a onClick={ () => { action('checkVisible', verification_id)}}>查看</a>
                     <a onClick={ () => { action('offVisible', verification_id)}}>编辑</a>
                 </>

@@ -206,17 +206,11 @@ class ReceivablesOffDetail extends React.Component {
 		return totalInfoObj
 	}
 
-	handleBack = () => {
-		const { history } = this.props;
-		history.go(-1);
-	}
-
 	render() {
 		const { activeKey } = this.state;
 
 		return <div className='rece-wrapper rece-detail-wrapper'>
-			<div className='rece-title rece-back-title' onClick={this.handleBack}>
-				<Icon type="arrow-left" />
+			<div className='rece-title'>
 				<span className='left-gap'>核销订单明细</span>
 			</div>
 			<Alert className='add-list-total-info' message={this.getTotalInfoComp(this.getAllTotalInfo())} type="warning" showIcon />

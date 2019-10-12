@@ -252,6 +252,7 @@ class ReceivablesOfflist extends React.Component {
 				this.setState({offVisible: false});
 				if(typeof callback === 'function')
 					callback()
+				message.success('核销成功')
 				history.push('/finance/receivableoff/list');
 			})
 			.catch(({errorMsg}) => {

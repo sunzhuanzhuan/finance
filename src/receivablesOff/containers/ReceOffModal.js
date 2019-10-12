@@ -55,28 +55,21 @@ class ReceOffModal extends React.Component {
 	}
 	getPreviewTableComp = () => {
 		const { columns, dataSource, handleOk } = this.props;
-		const totalWidth = getTotalWidth(columns);
-		const wrapperClass = 'rece-off-modal';
+		// const totalWidth = getTotalWidth(columns);
+		// const wrapperClass = 'rece-off-modal';
 		return (
 			<div>
 				<Button type="primary" onClick={handleOk}>清空已选</Button>
-				<Scolltable 
-					isMoreThanOne 
-					wrapperClass={wrapperClass}
-					scrollClassName={`.${wrapperClass} .ant-table-body`}
-					widthScroll={totalWidth * 1.3}
-				>
-					<Table
-						className='top-gap'
-						bordered
-						rowKey='order_id'
-						columns={columns}
-						dataSource={dataSource}
-						size="small"
-						pagination={false}
-						scroll={{ y: 760 }}
-					/>
-				</Scolltable>
+				<Table
+					className='top-gap'
+					bordered
+					rowKey='order_id'
+					columns={columns}
+					dataSource={dataSource}
+					size="small"
+					pagination={false}
+					// scroll={{ y: 760 }}
+				/>
 			</div>
 		)
 	}

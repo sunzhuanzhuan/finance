@@ -578,6 +578,7 @@ export const getReceOffCol = ( col, receMetaData = {}, action, activeKey ) => {
             dataIndex: 'previewOperate',
             key: 'previewOperate',
             width: 100,
+            align: 'center',
             render:(_, record) => {
                 // const dataKey = getTableId[activeKey];
                 const dataKey = 'order_id';

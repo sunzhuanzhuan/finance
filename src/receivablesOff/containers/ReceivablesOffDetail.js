@@ -55,7 +55,7 @@ class ReceivablesOffDetail extends React.Component {
 		const { location } = this.props;
 		const search = qs.parse(location.search.substring(1));
 		Object.assign(searchQuery, search, {product_line});
-		this.setState({[`searchQuery-${product_line}`]: searchQuery});
+		this.setState({[`searchQuery-${product_line}`]: searchQuery, loading: true});
 		this.props.getReceOffDetailList(searchQuery).then(() => {
 			this.setState({loading: false});
 		}).catch(({ errorMsg }) => {

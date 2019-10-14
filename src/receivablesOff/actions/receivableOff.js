@@ -89,9 +89,18 @@ export const {
 	method: 'get'
 });
 
+//获取需求名称（不需要厂商ID）
 export const {
 	getRequirementWithoutId,
 	getRequirementWithoutId_success
 } = createHttpAction('getRequirementWithoutId', Interface.getRequirementWithoutId, {
+	method: 'get'
+});
+
+//获取区域
+export const {
+	getRegionTeamName,
+	getRegionTeamName_success
+} = createHttpAction('getRegionTeamName', Interface.getRegionTeamName, {
 	method: 'get'
 });

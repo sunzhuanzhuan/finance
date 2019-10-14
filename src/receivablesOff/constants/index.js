@@ -63,7 +63,7 @@ export const getOffQueryItems = queryArr => {
         {label: '赠送/返点账户抵扣金额', upperKey: 'single_gift_amount',  key: 'gift_amount', compType: 'number_range', rangeKey: ['gift_amount_min', 'gift_amount_max']},
         {label: '小金库抵扣金额', key: 'warehouse_amount', compType: 'number_range', rangeKey: ['total_warehouse_amount_min', 'total_warehouse_amount_max']},
         {label: '小金库抵扣金额', upperKey: 'single_warehouse_amount', key: 'warehouse_amount', compType: 'number_range', rangeKey: ['warehouse_amount_min', 'warehouse_amount_max']},
-        {label: '区域', key: 'region_team_id', compType: 'select', idKey: 'id', labelKey: 'display'},
+        {label: '区域', key: 'region_team_id', compType: 'select', optionKey: 'regionList', idKey: 'region_team_id', labelKey: 'region_team_name'},
         {label: '所属项目', key: 'project_id', compType: 'select', optionKey: 'projectList', idKey: 'id', labelKey: 'name', showSearch: true},
         {label: '所属项目', upperKey: 'project_id_search', key: 'project_id', compType: 'searchSelect', actionKey: 'project', dataIndex: ['id', 'name'], keyWord: 'name'},
         {label: '品牌', key: 'brand_id', compType: 'searchSelect', actionKey: 'brand', dataIndex: ['id', 'view_name'], keyWord: 'view_name'},

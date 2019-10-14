@@ -6,7 +6,8 @@ import {
 	getCompanyInfo_success,
 	getOffItemInfo_success,
 	getGiftAmount_success,
-	getWarehouseAmount_success
+	getWarehouseAmount_success, 
+	getRegionTeamName_success
 } from '../actions/receivableOff';
 
 export const receivableOffList = handleActions({
@@ -47,6 +48,12 @@ export const giftAmount = handleActions({
 
 export const warehouseAmount = handleActions({
 	[getWarehouseAmount_success]: (state, action) => {
+		return [ ...action.payload.data ]
+	}
+}, [])
+
+export const regionList = handleActions({
+	[getRegionTeamName_success]: (state, action) => {
 		return [ ...action.payload.data ]
 	}
 }, [])

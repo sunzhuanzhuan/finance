@@ -30,6 +30,7 @@ class ReceivablesOffDetail extends React.Component {
 		this.props.getPlatform();
 		this.props.getReceMetaData();
 		this.props.getSalerData();
+		this.props.getRegionTeamName();
 		this.queryAllTabsData(Object.assign(search, { page: 1, page_size: 20}));
 	}
 	componentWillUnmount() {
@@ -72,7 +73,7 @@ class ReceivablesOffDetail extends React.Component {
 	}
 
 	getTabPaneComp = () => {
-		const { receAddListInfo = {}, receMetaData = {}, location, salerData = [], platformList = [] } = this.props;
+		const { receAddListInfo = {}, receMetaData = {}, location, salerData = [], platformList = [], regionList = [] } = this.props;
 		const { product_line } = receMetaData;
 		const { loading } = this.state;
 		const search = qs.parse(location.search.substring(1));
@@ -114,7 +115,7 @@ class ReceivablesOffDetail extends React.Component {
 					<ReceivableOffQuery 
 						showExport
 						className={wrapperClass}
-						queryOptions={Object.assign(getOffOptions, receMetaData, {salerData, platformList})} 
+						queryOptions={Object.assign(getOffOptions, receMetaData, {salerData, platformList, regionList})} 
 						initialValue={search}
 						queryItems={getOffQueryItems(getOffDetailQueryKeys[id])}
 						handleSearch={searchQuery => {this.handleSearch(id, searchQuery)}} 
@@ -224,13 +225,14 @@ class ReceivablesOffDetail extends React.Component {
 
 const mapStateToProps = (state) => {
 	const { receivableOff = {}, companyDetail = {} } = state;
-	const { receAddReducer: receAddListInfo, receMetaData, salerData } = receivableOff;
+	const { receAddReducer: receAddListInfo, receMetaData, salerData, regionList } = receivableOff;
 	const { platformList = [] } = companyDetail;
 	return {
 		receAddListInfo,
 		receMetaData,
 		salerData,
-		platformList
+		platformList,
+		regionList
 	}
 }
 const mapDispatchToProps = dispatch => (bindActionCreators({...receivableOffAction, ...goldenActions, getReceOffDetailList, clearReceList}, dispatch));

@@ -33,7 +33,7 @@ export const getOffDetailQueryKeys = {
         'brand_id', 'operate'
     ],
     7: [
-        'verification_code', 'company_id', 'sale_id', 'id', 'time', 'region_team_id', 'project_id_search', 'type', 
+        'verification_code', 'company_id', 'sale_id', 'order_id_active', 'time', 'region_team_id', 'project_id_search', 'type', 
         'is_decrease_sale_gmv', 'is_decrease_company_gmv', 'is_record_sale_income', 'offtime', 
         'single_gift_amount', 'single_warehouse_amount', 'invoice_application_id', 'brand_id', 'operate' 
     ],

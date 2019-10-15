@@ -230,12 +230,12 @@ class InvoiceApplyDetail extends React.Component {
 				dataIndex: 'amount',
 				key: 'amount',
 				align: 'center',
-				render: (text, { amount, real_amount, payback_amount }) => {
+				render: (text, { amount, real_amount, payback_amount, receivables_payback_amount }) => {
 					return <ul>
 						<li>已开票金额:{real_amount}</li>
 						<li>申请单金额:{amount}</li>
 						<li>已回款金额:{payback_amount}</li>
-						<li>待回款金额:{calcSum([amount, -payback_amount])}</li>
+						<li>待回款金额:{calcSum([receivables_payback_amount, -payback_amount]).toFixed(2)}</li>
 					</ul>
 				}
 			},

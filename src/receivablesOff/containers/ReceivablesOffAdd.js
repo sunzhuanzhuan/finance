@@ -117,7 +117,7 @@ class ReceivablesOfflist extends React.Component {
 			const { display, id } = item;
 			const tabInfo = receAddListInfo[`receAddInfo-${id}`] || {};
 			const { list = [], page = 1, total = 0, page_size: tableSize = 20 } = tabInfo;
-			const totalMsg = `查询结果共${total}个，${total}个符合核销要求，${total - total}不符合：预约订单/派单活动未结案、拓展业务活动未审核通过、应收款金额为0的订单不能进行核销。`;
+			const totalMsg = `符合核销要求的查询结果共${total}个，预约订单/派单活动未结案、拓展业务活动未审核通过、应收款金额为0的订单不符合核销要求。`;
 			const totalWidth = getTotalWidth(getReceOffCol(getReceAddColIndex[id]));
 			const searchQuery = this.state[`searchQuery-${id}`] || { page: 1, page_size: 20 };
 			const pagination = {

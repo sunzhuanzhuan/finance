@@ -390,8 +390,8 @@ export const goldenFlowConfig = [
 		align: 'center',
 		width: 300,
 		render: (text, record) => {
-			if (record.product_line && (record.product_line === '3' || record.product_line === '7')) {
-				const str = record.product_line === '3' ? '订单ID' : record.product_line === '7' ? '拓展业务ID' : null;
+			if (record.product_line && (record.product_line === '3' || record.product_line === '7' || record.product_line === '2')) {
+				const str = record.product_line === '3' ? '订单ID' : record.product_line === '7' ? '拓展业务ID' : record.product_line === '2' ? '微闪投ID' : null;
 				return <div>{str}：<a target='_blank' href={record.link}>{record.order_id}</a></div>
 			} else {
 				return record.remark

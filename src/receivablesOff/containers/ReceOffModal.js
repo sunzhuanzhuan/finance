@@ -250,7 +250,7 @@ class ReceOffModal extends React.Component {
 												multiple={true}
 												size={3}
 												len={5}
-												accept={".png,.gif,.jpg"} 
+												accept={".png,.gif,.jpg,.jpeg"} 
 												listType="picture-card"
 											/>
 										)}

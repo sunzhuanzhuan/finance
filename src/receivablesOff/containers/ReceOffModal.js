@@ -8,6 +8,7 @@ import SearchSelect from '@/components/SearchSelect';
 import qs from 'qs';
 import moment from 'moment';
 import numeral from 'numeral';
+
 const { TextArea } = Input;
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -50,7 +51,7 @@ class ReceOffModal extends React.Component {
 		}else if(type === 'add') {
 			return this.getAddComp();
 		}else if(type === 'check') {
-			return getValueCheckComp(stateInitValue, false, options, checkKey);
+			return getValueCheckComp(stateInitValue, false, options, checkKey, this);
 		}
 	}
 	getPreviewTableComp = () => {
@@ -473,8 +474,7 @@ class ReceOffModal extends React.Component {
 					fieldsValues={stateInitValue} 
 					onOk={this.handleConfirm} 
 					onCancel={this.handleCancel}
-				/>
-				,
+				/>,
 				<Modal 
 					key='previewPicture' 
 					visible={previewPicVisible} 
@@ -511,13 +511,13 @@ function ConfirmModal(props) {
 	)
 }
 
-function getValueCheckComp(fieldsValues, isConfirm, options, itemKeys) {
+function getValueCheckComp(fieldsValues, isConfirm, options, itemKeys, that) {
 	const className = isConfirm ? 'fields-con' : 'flex-fields-con';
 	const discountCls = isConfirm ? '' : 'discount-wrapper';
-	const checkOption = options['offCheckOption'] || []
+	const checkOption = options['offCheckOption'] || [];
 	const getNumeral = value => {
 		return value || value == 0 ? numeral(value).format('0.00') : '-';
-	}
+	};
 
 	let isDiscount = false;
 	const deductItems = checkOption
@@ -555,6 +555,7 @@ function getValueCheckComp(fieldsValues, isConfirm, options, itemKeys) {
 		if(compType === 'upload') {
 			const uploadVal = fieldsValues[key] || '';
 			const uploadArr = uploadVal.split(',');
+			const { previewPicVisible } = that.state;
 			if(uploadVal) {
 				return (
 					<div key='upload_wrapper'>
@@ -564,7 +565,25 @@ function getValueCheckComp(fieldsValues, isConfirm, options, itemKeys) {
 								uploadArr.map((uploadItem, index) => {
 									if( uploadItem.indexOf('http') > -1 )
 										return (
-											<img style={{width: 60, height: 60}} src={uploadItem} key={uploadItem + index}/>
+											<div className='check-preview-pic-box' key={uploadItem + index}>
+												<img
+													style={{width: 60, height: 60}}
+													src={uploadItem} 
+												/>
+												<Icon 
+													className='check-preview-btn'
+													type="eye" 
+													onClick={
+														() => {
+															that.setState({
+																previewPicVisible: !previewPicVisible,
+																previewImage: uploadItem
+															})
+														}
+													}
+												/>
+											</div>
+											
 										)
 									return uploadItem;
 								})

@@ -726,7 +726,6 @@ class ApplyList extends Component {
 								{this.state.isAssociateBtnVisible == '消费' || this.state.isAssociateBtnVisible == '充值' ? <Col><Button><Link to={"/finance/invoice/associateInvoice?id=" + this.state.invoiceApplyId + "&role=" + role + "&receivable=" + this.state.receivableCount}>已开票，关联现有发票</Link></Button></Col> : ''}
 								<Col><Button onClick={this.handleCreatNewInvoice.bind(this)}>未开票，开具新发票</Button></Col>
 							</Row>
-
 						</div>
 					</Modal>
 					<Modal
@@ -745,7 +744,7 @@ class ApplyList extends Component {
 								<span key='apply-amount' className='modal-tip-title'>发票申请单金额：{this.state.applyAmount}元</span>
 								{this.state.type === 5 ? <span>（已开发票金额:{calcSum(acountAry).toFixed(2)}元）</span> : null}
 								{this.state.type === 5 ? <span key='can-invoice-amount' className='modal-tip-title'>可开发票金额：{this.state.canInvoice}元</span> : null}
-								<span key='apply-amount' className='modal-tip-title' style={{marginLeft: 10}}>应回款金额：{this.state.receivableCount}元</span>
+								{this.state.type === 1 || this.state.type === 5 ? <span key='apply-amount' className='modal-tip-title' style={{marginLeft: 10}}>应回款金额：{this.state.receivableCount}元</span> : null}
 							</p>
 							<p className='modal-tip-title'>已填开票金额：<span className='some-red-span'>{this.state.totalSum}元</span></p>
 							<AddInvoiceInfo

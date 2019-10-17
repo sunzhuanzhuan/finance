@@ -26,8 +26,12 @@ class AddInvoiceInfo extends Component {
 		e.preventDefault();
 		// let canInvoice = this.props.canInvoice - 0
 		// let applyAmount = this.props.applyAmount - 0;
-		let receivableCount = this.props.receivableCount - 0;
-		let type = this.props.type;
+		const { type, applyAmount, receivableCount } = this.props;
+
+		const judgeFlag = type == 1 || type == 5;
+		const judgeCount = judgeFlag ? receivableCount - 0 : applyAmount - 0;
+		const judgeTitle = judgeFlag ? '应回款金额' : '发票申请单金额';
+
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
 				values.amount = values.amount.filter(item => !isNaN(item))
@@ -46,8 +50,8 @@ class AddInvoiceInfo extends Component {
 					// 	message.warning('发票总金额 不等于 可开发票金额', 1)
 					// 	return
 					// }
-					if (sum > receivableCount) {
-						message.warning('发票总金额 大于 应回款金额', 1)
+					if (sum > judgeCount) {
+						message.warning(`发票总金额 大于 ${judgeTitle}`, 1)
 						return
 					} else if (sum == 0) {
 						message.warning('发票总金额不能为0', 1)
@@ -63,8 +67,8 @@ class AddInvoiceInfo extends Component {
 						})
 					}
 				} else {
-					if (sum != receivableCount) {
-						message.warning('发票总金额 不等于 应回款金额', 1)
+					if (sum != judgeCount) {
+						message.warning(`发票总金额 不等于 ${judgeTitle}`, 1)
 						return
 					} else {
 						this.props.actions.postFormVoice(values).then(() => {

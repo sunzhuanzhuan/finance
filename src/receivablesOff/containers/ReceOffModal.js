@@ -269,7 +269,7 @@ class ReceOffModal extends React.Component {
 											validator ? {
 												required,
 												validator: (rule, value, callback) => {
-													validator(rule, value, callback, stateInitValue['can_verification_amount'], ['必输输大于0且小于等于本次可核销金额的值'], true)
+													validator(rule, value, callback, stateInitValue['can_verification_amount'], ['请输入>0且<=应收款金额的数值'], true)
 												}
 											} : {
 												required,

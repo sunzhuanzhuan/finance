@@ -82,7 +82,8 @@ class ReceivablesOfflist extends React.Component {
 	}
 
 	handleExportList = key => {
-		const searchQuery = this.state[`searchQuery-${key}`] || { page: 1, page_size: 20 };
+		const { activeKey, company_id } = this.state;
+		const searchQuery = this.state[`searchQuery-${key}`] || { company_id, product_line: activeKey };
 		downloadByATag(`/api/finance/receivables/order/export?${qs.stringify(searchQuery)}`);
 	}
 

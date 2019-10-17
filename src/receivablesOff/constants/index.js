@@ -147,7 +147,7 @@ export const getOffDetailCloIndex = {
 
 export const getReceAddColIndex = {
     3: ['order_id_no_fIxed', 'project_brand', 'require_id_name', 'account_info', 'invoice_application_id', 'execution_completed_time', 'receivables_amount'],
-    2: ['id', 'project_brand', 'platform_name', 'invoice_application_id', 'settlement_time', 'receivables_amount'],
+    2: ['id', 'campaign_name', 'project_brand', 'platform_name', 'invoice_application_id', 'settlement_time', 'receivables_amount'],
     7: ['id', 'active_name_type', 'project_brand', 'invoice_application_id', 'pass_time', 'receivables_amount'],
     preview: ['order_id_no_fIxed', 'invoice_application_id', 'company_name', 'project_name', 'requirement_name', 'receivables_amount', 'previewOperate']
 }
@@ -220,7 +220,7 @@ export const getReceOffCol = ( col, receMetaData = {}, action, activeKey ) => {
             title: '发票申请单ID',
             dataIndex: 'invoice_application_id',
             key: 'invoice_application_id',
-            width: 180,
+            width: 100,
             render: data => {
                 return data || data == 0 ? <a target='_blank' href={`/finance/invoice/applyDetail?id=${data}`}>{data}</a> : '-';
             }
@@ -273,7 +273,7 @@ export const getReceOffCol = ( col, receMetaData = {}, action, activeKey ) => {
             title: '所属项目/品牌',
             dataIndex: 'project_brand',
             key: 'project_brand',
-            width: 180,
+            width: 120,
             render: (_, record) => {
                 const {project_name, brand_name} = record;
                 return (
@@ -285,11 +285,14 @@ export const getReceOffCol = ( col, receMetaData = {}, action, activeKey ) => {
             }
         },
         {
-            title: '需求名称',
+            title: '需求名称/活动名称',
             dataIndex: 'requirement_name',
             key: 'requirement_name',
             width: 180,
-            render
+            render: (data, record) => {
+                const { campaign_name, business_name } = record;
+                return <div>{data || campaign_name || business_name || '-'}</div>
+            }
         },
         {
             title: '需求ID/需求名称',
@@ -326,7 +329,7 @@ export const getReceOffCol = ( col, receMetaData = {}, action, activeKey ) => {
             title: '平台',
             dataIndex: 'platform_name',
             key: 'platform_name',
-            width: 180,
+            width: 100,
             render
         },
         {
@@ -396,7 +399,7 @@ export const getReceOffCol = ( col, receMetaData = {}, action, activeKey ) => {
             title: '应收款金额',
             dataIndex: 'receivables_amount',
             key: 'receivables_amount',
-            width: 110,
+            width: 80,
             render: renderNum
         },
         {
@@ -566,11 +569,11 @@ export const getReceOffCol = ( col, receMetaData = {}, action, activeKey ) => {
             fixed: 'right',
             render:(_, record) => {
                 const { verification_id } = record;
-                return <>
+                return <div className='rece-operate-box'>
                     <a target='_blank' href={`/finance/receivableoff/detail?verification_id=${verification_id}`}>订单详情</a>
                     <a onClick={ () => { action('checkVisible', verification_id)}}>查看</a>
                     <a onClick={ () => { action('offVisible', verification_id)}}>编辑</a>
-                </>
+                </div>
             }
         },
         {

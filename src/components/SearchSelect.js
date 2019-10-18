@@ -29,8 +29,8 @@ export default class SearchSelect extends React.PureComponent {
 	}
 	render() {
 		const { data, value, loading } = this.state;
-		const { item: [id, name] } = this.props;
-		const options = data.map(d => <Option key={d[id]}>{d[name]}</Option>);
+		const { item: [id, name], isNameVal } = this.props;
+		const options = isNameVal ? data.map(d => <Option key={d[id]} value={d[name]}>{d[name]}</Option>) : data.map(d => <Option key={d[id]}>{d[name]}</Option>);
 		return <Select
 			showSearch
 			allowClear

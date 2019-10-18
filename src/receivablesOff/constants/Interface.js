@@ -15,5 +15,6 @@ export default {
 	editReceOffItem: '/finance/receivables/verification/edit',
 	getRequirementWithoutId: '/finance/commonApi/getRequirementInfoByName', 
 	getRegionTeamName: '/finance/commonApi/getRegionTeamName',
-	getBusinessType: '/finance/commonApi/getBusinessType'
+	getBusinessType: '/finance/commonApi/getBusinessType',
+	getCampaignDataByName: '/finance/commonApi/getCampaignDataByName'
 }

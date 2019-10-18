@@ -169,7 +169,8 @@ class ReceivablesOfflist extends React.Component {
 							company: this.props.getGoldenCompanyId,
 							brand: this.props.getBrandData,
 							requirement: this.getRequirementData,
-							account: this.props.getAccountInfo
+							account: this.props.getAccountInfo,
+							campaignName: this.props.getCampaignDataByName
 						}}
 					/>
 					<Alert className='add-list-total-info' message={totalMsg} type="warning" showIcon />

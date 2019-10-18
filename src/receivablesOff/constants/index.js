@@ -56,7 +56,7 @@ export const getOffQueryItems = queryArr => {
         {label: '活动ID', upperKey: 'order_id_active', key: 'order_ids', compType: 'input'},
         {label: '活动ID', key: 'id', compType: 'input'},
         {label: '活动名称', key: 'business_name', compType: 'input'},
-        {label: '活动名称', key: 'campaign_name', compType: 'input'},
+        {label: '活动名称', key: 'campaign_name', compType: 'searchSelect', actionKey: 'campaignName', dataIndex: ['campaign_id', 'campaign_name'], keyWord: 'campaign_name'},
         {label: '活动类型', key: 'type', upperKey: 'business-type', compType: 'select', optionKey: 'businessType', idKey: 'id', labelKey: 'display'},
         {label: '核销时间', key: 'time', compType: 'date', submitKey:['created_at_start', 'created_at_end']},
         {label: '是否计提提成', key: 'is_record_sale_income', compType: 'select', optionKey: 'payment', idKey: 'id', labelKey: 'display'},

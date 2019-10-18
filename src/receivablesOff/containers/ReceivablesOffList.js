@@ -115,8 +115,8 @@ class ReceivablesOffList extends React.Component {
 			receMetaData = {}, salerData = [], history, goldenToken 
 		} = this.props;
 		const { 
-			verification_ids_count = '-', order_ids_count = '-', verification_amount_total = '-', 
-			gift_amount_total = '-', debt_amount_total = '-', warehouse_amount_total = '-' 
+			verification_ids_count = '0', order_ids_count = '0', verification_amount_total = '0', 
+			gift_amount_total = '0', debt_amount_total = '0', warehouse_amount_total = '0' 
 		} = statistic;
 		const { searchQuery, loading, addVisible, offVisible, checkVisible, recordInfo } = this.state;
 		const totalWidth = getTotalWidth(getReceOffCol(getOffListColIndex));

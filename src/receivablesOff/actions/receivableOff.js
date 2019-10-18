@@ -112,3 +112,11 @@ export const {
 } = createHttpAction('getBusinessType', Interface.getBusinessType, {
 	method: 'get'
 });
+
+//根据活动名称搜索活动名称
+export const {
+	getCampaignDataByName,
+	getCampaignDataByName_success
+} = createHttpAction('getCampaignDataByName', Interface.getCampaignDataByName, {
+	method: 'get'
+});

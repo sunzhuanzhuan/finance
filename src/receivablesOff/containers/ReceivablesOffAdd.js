@@ -36,6 +36,7 @@ class ReceivablesOfflist extends React.Component {
 		this.props.getGoldenToken();
 		this.props.getGiftAmount({ company_id });
 		this.props.getWarehouseAmount({ company_id });
+		this.props.getBusinessType();
 		this.queryAllTabsData(Object.assign(search, { page: 1, page_size: 20}));
 		this.setState({ company_id });
 	}
@@ -109,7 +110,7 @@ class ReceivablesOfflist extends React.Component {
 	}
 
 	getTabPaneComp = (productLine) => {
-		const { receAddListInfo = {}, platformList, projectList } = this.props;
+		const { receAddListInfo = {}, platformList, projectList, businessType } = this.props;
 		const { loading } = this.state;
 
 		if (!Array.isArray(productLine)) return null;
@@ -160,7 +161,7 @@ class ReceivablesOfflist extends React.Component {
 					<ReceivableOffQuery 
 						showExport
 						className={wrapperClass}
-						queryOptions={{platformList, projectList}}
+						queryOptions={{platformList, projectList, businessType}}
 						queryItems={getOffQueryItems(getOffAddQueryKeys[id])}
 						handleSearch={searchQuery => {this.handleSearch(id, searchQuery)}} 
 						handleExport={ () => {this.handleExportList(id)}}
@@ -432,8 +433,9 @@ class ReceivablesOfflist extends React.Component {
 
 const mapStateToProps = (state) => {
 	const { receivableOff = {}, companyDetail = {} } = state;
-	const { receAddReducer: receAddListInfo, receMetaData, companyInfo, giftAmount, warehouseAmount } = receivableOff;
+	const { receAddReducer: receAddListInfo, receMetaData, companyInfo, giftAmount, warehouseAmount, businessType } = receivableOff;
 	const { platformList = [], projectList = [], goldenToken } = companyDetail;
+
 	return {
 		receAddListInfo,
 		receMetaData, 
@@ -442,7 +444,8 @@ const mapStateToProps = (state) => {
 		companyInfo,
 		goldenToken,
 		giftAmount, 
-		warehouseAmount
+		warehouseAmount,
+		businessType
 	}
 }
 const mapDispatchToProps = dispatch => (

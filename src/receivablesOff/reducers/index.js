@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux'
-import { receivableOffList, receMetaData, salerData, companyInfo, giftAmount, warehouseAmount, regionList } from './receivableOff'
+import { receivableOffList, receMetaData, salerData, companyInfo, giftAmount, warehouseAmount, regionList, businessType } from './receivableOff'
 import receAddReducer from '../actions/receivableAdd';
 export default combineReducers({
     receivableOffList, 
@@ -9,6 +9,7 @@ export default combineReducers({
     giftAmount, 
     warehouseAmount, 
     regionList, 
+    businessType,
     receAddReducer
 })
 

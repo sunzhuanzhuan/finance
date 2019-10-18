@@ -13,10 +13,10 @@ module.exports = merge(baseConfig, {
 		hot: true,
 		host: 'lg.nip.io',
 		proxy: {
-			// "/api/finance/receivables": {
-			// 	target: "http://192.168.100.117:30002",
-			// 	changeOrigin: true
-			// },
+			"/api/finance/receivables": {
+				target: "http://192.168.100.117:30002",
+				changeOrigin: true
+			},
 			"/api": {
 				target: "http://nb.tst-weiboyi.com",
 				changeOrigin: true

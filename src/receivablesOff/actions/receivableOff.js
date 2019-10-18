@@ -104,3 +104,11 @@ export const {
 } = createHttpAction('getRegionTeamName', Interface.getRegionTeamName, {
 	method: 'get'
 });
+
+//获取活动类型
+export const {
+	getBusinessType,
+	getBusinessType_success
+} = createHttpAction('getBusinessType', Interface.getBusinessType, {
+	method: 'get'
+});

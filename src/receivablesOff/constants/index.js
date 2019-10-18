@@ -41,8 +41,8 @@ export const getOffDetailQueryKeys = {
 
 export const getOffAddQueryKeys = {
     3: ['order_ids', 'invoice_application_id', 'order_complete_time', 'brand_id', 'project_id', 'requirement_id', 'weibo_type', 'account_id', 'operate'],
-    2: ['order_id_active', 'active_time', 'brand_id', 'invoice_application_id', 'project_id', 'weibo_type', 'operate'],
-    7: ['order_id_active', 'invoice_application_id', 'offtime', 'brand_id', 'project_id', 'operate'],
+    2: ['order_id_active', 'campaign_name', 'active_time', 'brand_id', 'invoice_application_id', 'project_id', 'weibo_type', 'operate'],
+    7: ['order_id_active', 'business_name', 'business-type', 'invoice_application_id', 'offtime', 'brand_id', 'project_id', 'operate'],
 };
 
 export const getOffQueryItems = queryArr => {
@@ -55,6 +55,9 @@ export const getOffQueryItems = queryArr => {
         {label: '订单ID', key: 'order_ids', compType: 'input'},
         {label: '活动ID', upperKey: 'order_id_active', key: 'order_ids', compType: 'input'},
         {label: '活动ID', key: 'id', compType: 'input'},
+        {label: '活动名称', key: 'business_name', compType: 'input'},
+        {label: '活动名称', key: 'campaign_name', compType: 'input'},
+        {label: '活动类型', key: 'type', upperKey: 'business-type', compType: 'select', optionKey: 'businessType', idKey: 'id', labelKey: 'display'},
         {label: '核销时间', key: 'time', compType: 'date', submitKey:['created_at_start', 'created_at_end']},
         {label: '是否计提提成', key: 'is_record_sale_income', compType: 'select', optionKey: 'payment', idKey: 'id', labelKey: 'display'},
         {label: '是否扣减公司GMV', key: 'is_decrease_company_gmv', compType: 'select', optionKey: 'GMV', idKey: 'id', labelKey: 'display'},

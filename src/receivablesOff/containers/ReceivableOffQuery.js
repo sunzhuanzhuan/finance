@@ -28,7 +28,6 @@ class ReceivableOffQuery extends React.Component {
 				return <Input placeholder="请输入" className='common_search_width' />;
 			case 'searchSelect':
 				return <SearchSelect
-							isNameVal={keyWord === 'campaign_name'}
 							action={actionKeyMap[actionKey]} 
 							style={{ width: 170 }}
 							placeholder='请选择'

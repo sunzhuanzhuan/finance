@@ -1,5 +1,6 @@
 import React from 'react';
 import { calcSum } from "../../util";
+import numeral from 'numeral';
 
 export const typeConfigMap = {
 	'reservation': {
@@ -122,12 +123,12 @@ export const typeConfigMap = {
 				title: '质检金额',
 				dataIndex: 'qc_amount',
 				align: 'center',
-				render: (num) => num ? num.toFixed(2) : '-'
+				render: (num) => num ? numeral(num).format('0.00') : '-'
 			}, {
 				title: '结算金额',
 				dataIndex: 'settle_amount',
 				align: 'center',
-				render: (num) => num ? num.toFixed(2) : '-'
+				render: (num) => num ? numeral(num).format('0.00') : '-'
 			}, {
 				title: '消费明细',
 				dataIndex: 'spend_detail',

@@ -64,11 +64,17 @@
         overflow: hidden;
         visibility: hidden;
     }
-    .colHeightTitle{
+    .colHeightTitle, .receivableColTitle{
         height: 80px;
         border: 1px solid #EDEDED;
         padding-top: 20px;
         font-size: 13px;
+    }
+    .receivableColTitle {
+        height: unset;
+        .displayInline:nth-child(even) {
+            margin-bottom: 15px;
+        }
     }
     .borderBottomNode{
         border: 1px solid #EDEDED;

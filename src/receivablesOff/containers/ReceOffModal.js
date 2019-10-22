@@ -477,6 +477,7 @@ class ReceOffModal extends React.Component {
 				/>,
 				<Modal 
 					key='previewPicture' 
+					className='previewPicModal'
 					visible={previewPicVisible} 
 					footer={null} 
 					onCancel={this.handleCancel}
@@ -567,7 +568,7 @@ function getValueCheckComp(fieldsValues, isConfirm, options, itemKeys, that) {
 										return (
 											<div className='check-preview-pic-box' key={uploadItem + index}>
 												<img
-													style={{width: 60, height: 60}}
+													style={{width: 50, height: 50}}
 													src={uploadItem} 
 												/>
 												<Icon 
@@ -622,12 +623,6 @@ function getValueCheckComp(fieldsValues, isConfirm, options, itemKeys, that) {
 					}
 				</div>
 			</div>	
-			{
-				isConfirm ? 
-				<div className='fields-tip'>
-					核销后无法撤回，请核对以上信息，谨慎操作，是否确认核销操作？
-				</div> : null
-			}
 		</>
 	)
 }

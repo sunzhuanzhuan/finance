@@ -53,14 +53,29 @@ class AssociateInvoice extends Component {
 	submitStepB = async () => {
 		let { detail: { id = 0 } } = this.props;
 		this.setState({ stepBLoading: true })
-		let data = await createInvoiceAssociation({
+		createInvoiceAssociation({
 			id,
 			invoices: this.totalBox.totalItem
+		}).then((result) => {
+			this.setState({ stepBLoading: false })
+			this.success(result)
+			this.submitStepA(false)
+		}).catch(({errorMsg}) => {
+			this.setState({ stepBLoading: false })
+			this.error(errorMsg)
+			this.submitStepA(false)
 		})
-		this.setState({ stepBLoading: false })
-		this.success(data)
-		this.submitStepA(false)
 	}
+	error = msg => {
+		try {
+			if (typeof message.destroy === 'function') {
+				message.destroy();
+			}
+			message.error(msg || '操作失败！');
+		}catch (error) {
+			console.log(error);
+		}
+	};
 	warning = (message) => {
 		Modal.warning({
 			title: '提示',
@@ -172,7 +187,7 @@ class AssociateInvoice extends Component {
 				{this.state.stepA ? <Modal visible={true}
 					confirmLoading={this.state.stepBLoading}
 					onCancel={() => { this.submitStepA(false) }}
-					width='340'
+					width='340px'
 					bodyStyle={{ paddingBottom: '5px' }}
 					onOk={this.submitStepB}>
 					<div className='modal-tip-q'>

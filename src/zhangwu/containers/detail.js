@@ -214,7 +214,7 @@ class Detail extends Component {
 			
 			<Row className='colHeightLow' style={{paddingLeft:'26px'}}>
 				<Col span={6}>应开发票金额:￥{detail.company?detail.company.total_invoice_amount:''}</Col>
-				<Col span={6}>已开发票金额:￥{detail.company?detail.company.already_invoice_amount:''}</Col>
+				<Col span={6}>已关联发票金额:￥{detail.company?detail.company.already_invoice_amount:''}</Col>
 				<Col span={6}>回款金额:￥{detail.company?detail.company.payback_amount:''}
 				<span className='paybackStatus'>{detail.company?detail.company.is_payback:''}</span>
 				</Col>

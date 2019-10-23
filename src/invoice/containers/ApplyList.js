@@ -542,7 +542,7 @@ class ApplyList extends Component {
 				width: '170px',
 				render: (record) => {
 					let arrWaitMoney = [record.receivables_payback_amount, -record.payback_amount]
-					return <p>
+					return <p className='moneyAmountWrapper'>
 						<p>申请单金额:{record.amount}</p>
 						<p>已开票金额:{record.real_amount}</p>
 						{
@@ -550,7 +550,7 @@ class ApplyList extends Component {
 							<p>
 								<p>
 									<span>应回款金额:{record.receivables_payback_amount}</span>
-									<div style={{color: 'red'}}>请按应回款金额开具发票</div>
+									<div style={{color: 'red', fontSize: '6px'}}>请按应回款金额开具发票</div>
 								</p>
 								<p>已回款金额:{record.payback_amount}</p>
 								<p>待回款金额:{calcSum(arrWaitMoney).toFixed(2)}</p>

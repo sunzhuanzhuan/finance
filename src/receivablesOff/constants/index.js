@@ -118,12 +118,12 @@ export const getOffAddFormItems = (arrKey) => {
 
 export const getOffOptions = {
         GMV: [
-            { display: '扣减', id: 1 },
-            { display: '不扣减', id: 2 }
+            { display: '是', id: 1 },
+            { display: '否', id: 2 }
         ],
         payment: [
-            { display: '计提', id: 1 },
-            { display: '不计提', id: 2 }
+            { display: '是', id: 1 },
+            { display: '否', id: 2 }
         ],
         offCheckOption: [
             {display: '赠送/返点', id: 'total_gift_amount'}, 

@@ -372,8 +372,8 @@ class ReceivablesOfflist extends React.Component {
 			sale_name: owner_admin_real_name,
 		};
 
-		const title = <div onClick={this.handleBack}>
-			<Icon type="arrow-left" />
+		const title = <div>
+			<Icon className='back-icon' type="arrow-left" onClick={this.handleBack}/>
 			<span className='left-gap'>{`新增核销-${name}`}</span>
 			<span className='total-margin'>{`销售：${owner_admin_real_name}`}</span>
 			<span>{`区域：${region_team_name}`}</span>

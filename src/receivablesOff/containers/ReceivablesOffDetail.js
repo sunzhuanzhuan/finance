@@ -7,7 +7,7 @@ import ReceivableOffQuery from './ReceivableOffQuery';
 import { getTabOptions, getOffDetailQueryKeys, getOffQueryItems, getOffDetailCloIndex, getReceOffCol, getOffOptions } from '../constants';
 import * as receivableOffAction from "../actions/receivableOff";
 import * as goldenActions from "../../companyDetail/actions/goldenApply";
-import { getTotalWidth, downloadByATag } from '@/util';
+import { getTotalWidth, downloadByATag, events } from '@/util';
 import { Scolltable } from '@/components';
 import { getReceOffDetailList, clearReceList } from '../actions/receivableAdd';
 import qs from 'qs';
@@ -22,6 +22,10 @@ class ReceivablesOffDetail extends React.Component {
 			addVisible: false,
 			activeKey: '3',
 		};
+		events.on('message', this.collapsedListener); 
+	}
+	collapsedListener = isClosed => {
+		this.setState({leftWidth: isClosed ? 40 : 200});
 	}
 	componentDidMount() {
 		const { location } = this.props;
@@ -32,6 +36,10 @@ class ReceivablesOffDetail extends React.Component {
 		this.props.getSalerData();
 		this.props.getRegionTeamName();
 		this.queryAllTabsData(Object.assign(search, { page: 1, page_size: 20}));
+		const leftSlide = document.getElementsByClassName('ant-layout-sider-trigger')[0];
+		const leftWidth = leftSlide && leftSlide.clientWidth;
+
+		this.setState({leftWidth});
 	}
 	componentWillUnmount() {
 		this.props.clearReceList();
@@ -75,7 +83,7 @@ class ReceivablesOffDetail extends React.Component {
 	getTabPaneComp = () => {
 		const { receAddListInfo = {}, receMetaData = {}, location, salerData = [], platformList = [], regionList = [] } = this.props;
 		const { product_line } = receMetaData;
-		const { loading } = this.state;
+		const { loading, leftWidth } = this.state;
 		const search = qs.parse(location.search.substring(1));
 
 		if (!Array.isArray(product_line)) return null;
@@ -132,7 +140,7 @@ class ReceivablesOffDetail extends React.Component {
 						isMoreThanOne 
 						wrapperClass={wrapperClass}
 						scrollClassName={`.${wrapperClass} .ant-table-body`}  
-						widthScroll={totalWidth}
+						widthScroll={totalWidth + leftWidth}
 					>
 						<Table 
 							className='receivable-table'

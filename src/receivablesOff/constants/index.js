@@ -423,7 +423,7 @@ export const getReceOffCol = ( col, receMetaData = {}, action, activeKey ) => {
             title: '审核时间',
             dataIndex: 'pass_time',
             key: 'pass_time',
-            width: 100,
+            width: 105,
             render
         },
         {
@@ -444,7 +444,7 @@ export const getReceOffCol = ( col, receMetaData = {}, action, activeKey ) => {
             title: '所属销售/区域',
             dataIndex: 'saler_region',
             key: 'saler_region',
-            width: 100,
+            width: 120,
             render: (_, record) => {
                 const {sale_name, region} = record;
                 return (
@@ -554,7 +554,7 @@ export const getReceOffCol = ( col, receMetaData = {}, action, activeKey ) => {
             title: '核销时间',
             dataIndex: 'created_at',
             key: 'created_at',
-            width: 100,
+            width: 107,
             render
         },
         {

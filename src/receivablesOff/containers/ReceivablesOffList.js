@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import './receivableOff.less';
 import { Form, message, Table, Button } from "antd";
 import ReceivableOffQuery from './ReceivableOffQuery';
-import { getTotalWidth, downloadByATag } from '@/util';
+import { getTotalWidth, downloadByATag, events } from '@/util';
 import { getOffListQueryKeys, getOffQueryItems, getOffOptions, getReceOffCol, getOffListColIndex } from '../constants';
 import * as receivableOffAction from "../actions/receivableOff";
 import * as goldenActions from "../../companyDetail/actions/goldenApply";
@@ -23,6 +23,10 @@ class ReceivablesOffList extends React.Component {
 			loading: false,
 			addVisible: false
 		};
+		events.on('message', this.collapsedListener); 
+	}
+	collapsedListener = isClosed => {
+		this.setState({leftWidth: isClosed ? 40 : 200});
 	}
 	componentDidMount() {
 		this.props.getReceMetaData();
@@ -32,6 +36,10 @@ class ReceivablesOffList extends React.Component {
 			page: 1,
 			page_size: 20
 		});
+		const leftSlide = document.getElementsByClassName('ant-layout-sider-trigger')[0];
+		const leftWidth = leftSlide && leftSlide.clientWidth;
+
+		this.setState({leftWidth});
 	}
 	dealSearchQuery = query => {
 		Object.keys(query).forEach(item => {
@@ -118,8 +126,8 @@ class ReceivablesOffList extends React.Component {
 			verification_ids_count = '0', order_ids_count = '0', verification_amount_total = '0', 
 			gift_amount_total = '0', debt_amount_total = '0', warehouse_amount_total = '0' 
 		} = statistic;
-		const { searchQuery, loading, addVisible, offVisible, checkVisible, recordInfo } = this.state;
-		const totalWidth = getTotalWidth(getReceOffCol(getOffListColIndex));
+		const { searchQuery, loading, addVisible, offVisible, checkVisible, recordInfo, leftWidth } = this.state;
+		const totalWidth = getTotalWidth(getReceOffCol(getOffListColIndex).filter(item => !item.fixed));
 		const pagination = {
 			onChange: current => {
 				Object.assign(searchQuery, {page: current});
@@ -161,7 +169,7 @@ class ReceivablesOffList extends React.Component {
 				<>赠点/返点账户抵扣：<span className='total-color'>{this.getNumDisplay(gift_amount_total)}</span></>
 				<span className='total-margin'>小金库抵扣：<span className='total-color'>{this.getNumDisplay(warehouse_amount_total)}</span></span>
 			</div>
-			<Scolltable scrollClassName='.ant-table-body' widthScroll={totalWidth}>
+			<Scolltable scrollClassName='.ant-table-body' widthScroll={totalWidth + leftWidth}>
 				<Table 
 					className='receivable-table'
 					rowKey='verification_id' 

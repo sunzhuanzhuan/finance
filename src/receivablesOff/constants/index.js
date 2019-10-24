@@ -163,6 +163,12 @@ const isRender = data => {
     return data ? data == 1 ? '是' : '否' : '-';
 }
 
+const timeRender = data => {
+    if(!data || !(Array.isArray(data.split(' ')))) return '-';
+    return data.split(' ').map(item => <div key={item}>{item}</div>);
+
+}
+
 const renderNum = data => {
     return data !== undefined ? numeral(data).format('0.00') : '-'
 }
@@ -555,7 +561,7 @@ export const getReceOffCol = ( col, receMetaData = {}, action, activeKey ) => {
             dataIndex: 'created_at',
             key: 'created_at',
             width: 107,
-            render
+            render: timeRender
         },
         {
             title: '核销人员',

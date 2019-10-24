@@ -120,3 +120,27 @@ export const {
 } = createHttpAction('getCampaignDataByName', Interface.getCampaignDataByName, {
 	method: 'get'
 });
+
+//核销列表导出查询
+export const {
+	getReceivableListExportInfo,
+	getReceivableListExportInfo_success
+} = createHttpAction('getReceivableListExportInfo', Interface.getReceivableListExportInfo, {
+	method: 'get'
+});
+
+//核销单明细导出查询
+export const {
+	getReceivableDetailExportInfo,
+	getReceivableDetailExportInfo_success
+} = createHttpAction('getReceivableDetailExportInfo', Interface.getReceivableDetailExportInfo, {
+	method: 'get'
+});
+
+//新增核销列表导出查询
+export const {
+	getReceivableAddListExportInfo,
+	getReceivableAddListExportInfo_success
+} = createHttpAction('getReceivableAddListExportInfo', Interface.getReceivableAddListExportInfo, {
+	method: 'get'
+});

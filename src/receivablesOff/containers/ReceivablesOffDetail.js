@@ -77,7 +77,10 @@ class ReceivablesOffDetail extends React.Component {
 		const search = qs.parse(location.search.substring(1));
 		Object.assign(search, {product_line});
 		const exportQuery = this.state[`searchQuery-${product_line}`] || search;
-		downloadByATag(`/api/finance/receivables/verification/exportOrderList?${qs.stringify(exportQuery)}`);
+
+		this.props.getReceivableDetailExportInfo({...exportQuery, flag: 1}).then(() => {
+			downloadByATag(`/api/finance/receivables/verification/exportOrderList?${qs.stringify(exportQuery)}`);
+		})
 	}
 
 	getTabPaneComp = () => {

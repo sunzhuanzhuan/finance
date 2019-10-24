@@ -85,7 +85,9 @@ class ReceivablesOfflist extends React.Component {
 	handleExportList = key => {
 		const { activeKey, company_id } = this.state;
 		const searchQuery = this.state[`searchQuery-${key}`] || { company_id, product_line: activeKey };
-		downloadByATag(`/api/finance/receivables/order/export?${qs.stringify(searchQuery)}`);
+		this.props.getReceivableAddListExportInfo({...searchQuery, flag: 1}).then(() => {
+			downloadByATag(`/api/finance/receivables/order/export?${qs.stringify(searchQuery)}`);
+		})
 	}
 
 	getSelectedRowData = (rowKeys, selectedRows = [], list = []) => {

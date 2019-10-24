@@ -16,5 +16,8 @@ export default {
 	getRequirementWithoutId: '/finance/commonApi/getRequirementInfoByName', 
 	getRegionTeamName: '/finance/commonApi/getRegionTeamName',
 	getBusinessType: '/finance/commonApi/getBusinessType',
-	getCampaignDataByName: '/finance/commonApi/getCampaignDataByName'
+	getCampaignDataByName: '/finance/commonApi/getCampaignDataByName',
+	getReceivableListExportInfo: '/finance/receivables/verification/exportList',
+	getReceivableDetailExportInfo: '/finance/receivables/verification/exportOrderList',
+	getReceivableAddListExportInfo: '/finance/receivables/order/export',
 }

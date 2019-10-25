@@ -147,7 +147,7 @@ class ReceivablesOffDetail extends React.Component {
 					>
 						<Table 
 							className='receivable-table'
-							rowKey={'order_id'} 
+							// rowKey={'order_id'} 
 							columns={columns} 
 							dataSource={list} 
 							bordered 

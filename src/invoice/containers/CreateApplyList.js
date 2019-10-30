@@ -7,6 +7,7 @@ import { withRouter } from "react-router-dom";
 import qs from "qs";
 import { Form, Input, Button, Radio, Row, Col, Modal, message, AutoComplete, InputNumber } from 'antd';
 import * as invoiceApply from '../actions/invoiceApply'
+import * as actions from '../actions/completeApply';
 //import axios from 'axios'
 import './createdApplyList.less'
 //引入配置文件
@@ -24,6 +25,7 @@ const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 const { TextArea } = Input;
 const imgType = '.jpg,.jpeg,.png,.pdf'
+import { invioceBytype } from '../constants/ProductConfig';
 
 
 function beforeUpload(file) {
@@ -296,6 +298,15 @@ class CreateApplyList extends Component {
 				}, () => {
 					this.handleOk()
 				});
+
+				const { data = {} } = this.props;
+				const isChangeType = values.type != data.type;
+				if(isChangeType && Array.isArray(invioceBytype[data.type]) && invioceBytype[data.type].length) {
+					invioceBytype[data.type].map(item => {
+						this.props.actions.setTableSelectedRowkeys(item, [])
+					})
+				}
+
 			}
 		});
 	}
@@ -1002,7 +1013,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
 	actions: bindActionCreators({
-		...invoiceApply
+		...invoiceApply,
+		...actions
 	}, dispatch)
 })
 export default connect(

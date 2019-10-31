@@ -9,6 +9,7 @@ import * as goldenActions from "../../companyDetail/actions/goldenApply";
 import { getTotalWidth, downloadByATag } from '@/util';
 import { Scolltable } from '@/components';
 import qs from 'qs';
+import { getReceDetailList, clearReceDetailList } from '../actions/receivableList';
 
 const { TabPane } = Tabs;
 
@@ -21,17 +22,40 @@ class ReceivablesDetail extends React.Component {
 			loading: false
 		};
 	}
+	componentDidMount() {
+		const { location } = this.props;
+		const search = qs.parse(location.search.substring(1)) || {};
+
+		this.props.getReceSearchOptions();
+		this.queryAllTabsData(Object.assign(search, { page: 1, page_size: 20}));
+	}
+	componentWillUnmount() {
+		this.props.clearReceDetailList();
+	}
+
+	queryAllTabsData = queryObj => {
+		this.setState({ loading: true });
+		Promise.all(this.getAllTabsActions(queryObj)).then(() => {
+			this.setState({ loading: false })
+		}).catch(({ errorMsg }) => {
+			this.setState({ loading: false });
+			message.error(errorMsg || '列表加载失败，请重试！');
+		})
+	}
+	getAllTabsActions = queryObj => {
+		return getTabOptions.map(item => {
+			const { value } = item;
+			return this.props.getReceDetailList(Object.assign(queryObj, {product_line: value}));
+		})
+	}
 
 	handleSearch = (key, searchQuery) => {
 		this.setState({[`searchQuery-${key}`]: searchQuery, loading: true});
-		if(typeof this.props[key] === 'function') {
-			this.props[key](searchQuery).then(() => {
-				this.setState({ loading: false })
-			}).catch(({ errorMsg }) => {
-				this.setState({ loading: false });
-				message.error(errorMsg || '列表加载失败，请重试！');
-			})
-		}
+		this.props.getReceDetailList(searchQuery).then(() => {
+			this.setState({ loading: false })
+		}).catch(() => {
+			this.setState({ loading: false });
+		})
 	}
 
 	handleExportList = key => {
@@ -39,13 +63,12 @@ class ReceivablesDetail extends React.Component {
 	}
 
 	getTabPaneComp = () => {
-		const { receivable = {}, location } = this.props;
+		const { receSearchOptions = [], location, receListReducer } = this.props;
 		const search = qs.parse(location.search.substring(1));
 		const { loading } = this.state;
-		const { receSearchOptions } = receivable;
 		return getTabOptions.map(item => {
 			const { tab, key } = item;
-			const tabInfo = receivable[key] || {};
+			const tabInfo = receListReducer[`receDetail-${key}`] || {};
 			const { list = [], page, total, page_size: tableSize, statistic = {} } = tabInfo;
 			const { total_receivables_amount = 0 } = statistic;
 			const totalMsg = `应收款金额${total_receivables_amount}`;
@@ -137,10 +160,135 @@ class ReceivablesDetail extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-	const { receivable } = state;
+	const { receivable = {} } = state;
+	const { receSearchOptions = {}, receListReducer = {}  } = receivable;
 	return {
-		receivable
+		receListReducer,
+		receSearchOptions: {
+			"product_line": [
+				{
+					"id": 3,
+					"display": "预约订单"
+				},
+				{
+					"id": 2,
+					"display": "微闪投"
+				},
+				{
+					"id": 7,
+					"display": "公司拓展业务"
+				}
+			],
+			"verification_type": [
+				{
+					"id": 1,
+					"display": "客户整体折让"
+				},
+				{
+					"id": 2,
+					"display": "订单折让（赔偿）"
+				},
+				{
+					"id": 3,
+					"display": "坏账清理"
+				},
+				{
+					"id": 4,
+					"display": "其他"
+				}
+			],
+			"yes_or_no": [
+				{
+					"id": 1,
+					"display": "是"
+				},
+				{
+					"id": 2,
+					"display": "否"
+				}
+			],
+			"debt_bill_type": [
+				{
+					"id": 1,
+					"display": "应收款核销"
+				}
+			],
+			"receivables_aging_range": [
+				{
+					"id": 0,
+					"display": "M0"
+				},
+				{
+					"id": 1,
+					"display": "M1"
+				},
+				{
+					"id": 2,
+					"display": "M2"
+				},
+				{
+					"id": 3,
+					"display": "M3"
+				},
+				{
+					"id": 4,
+					"display": "M4"
+				},
+				{
+					"id": 5,
+					"display": "M5"
+				},
+				{
+					"id": 6,
+					"display": "M6"
+				},
+				{
+					"id": 7,
+					"display": "M7"
+				},
+				{
+					"id": 8,
+					"display": "M8"
+				},
+				{
+					"id": 9,
+					"display": "M9"
+				},
+				{
+					"id": 10,
+					"display": "M10-M12"
+				},
+				{
+					"id": 11,
+					"display": "M12以内"
+				},
+				{
+					"id": 12,
+					"display": "M12以上"
+				},
+				{
+					"id": 13,
+					"display": "1-2年"
+				},
+				{
+					"id": 14,
+					"display": "2-3年"
+				},
+				{
+					"id": 15,
+					"display": "3-4年"
+				},
+				{
+					"id": 16,
+					"display": "4-5年"
+				},
+				{
+					"id": 17,
+					"display": "5年上"
+				}
+			]
+		}
 	}
 }
-const mapDispatchToProps = dispatch => (bindActionCreators({...receivableAction, ...goldenActions}, dispatch));
+const mapDispatchToProps = dispatch => (bindActionCreators({...receivableAction, ...goldenActions, getReceDetailList, clearReceDetailList}, dispatch));
 export default connect(mapStateToProps, mapDispatchToProps)(ReceivablesDetail)

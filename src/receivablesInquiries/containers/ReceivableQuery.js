@@ -4,6 +4,7 @@ import { Form, Input, Button, Select, DatePicker, InputNumber } from "antd";
 import SearchSelect from '@/components/SearchSelect';
 const { Option } = Select;
 const FormItem = Form.Item;
+const { RangePicker } = DatePicker;
 
 class ReceivableQuery extends React.Component {
 	constructor() {
@@ -20,9 +21,9 @@ class ReceivableQuery extends React.Component {
 		if(!queryOptions[key]) return null;
 		
 		return queryOptions[key].map(item => {
-			const { name, value } = item;
-			const dealName = key === 'receivables_aging_range' && isList ? `${name}>0` : name;
-			return <Option key={value} value={value}>{dealName}</Option>
+			const { display, id } = item;
+			const dealName = key === 'receivables_aging_range' && isList ? `${display}>0` : display;
+			return <Option key={id} value={id.toString()}>{dealName}</Option>
 		})
 	}
 	getFormItem = item => {
@@ -52,7 +53,7 @@ class ReceivableQuery extends React.Component {
 					{ this.getSelectOption(optionKey) }
 				</Select>;
 			case 'date':
-				return <DatePicker placeholder="请选择" className='common_search_width' />;
+				return <RangePicker />;
 			case 'inputNumber':
 				return <InputNumber placeholder="请输入" min={0} className='common_search_width' />;
 			default:
@@ -109,6 +110,33 @@ class ReceivableQuery extends React.Component {
 			)
 		})
 	}
+	dealValuesDate = values => {
+		const { queryItems = [] } = this.props;
+		const valueKeys = Object.keys(values);
+
+		const dateItems = queryItems.filter(item => item.compType === 'date');
+		const searchSelectItems = queryItems.filter(item => item.compType === 'searchSelect');
+		dateItems.forEach(item => {
+			const { key, submitKey = [] } = item;
+			const dateKey = valueKeys.find(valuekey => valuekey === key);
+
+			if(values[dateKey] && values[dateKey].length) {
+				submitKey.forEach((submitItem, index) => {
+					values[submitItem] = values[dateKey][index].format('YYYY-MM-DD')
+				})
+				delete values[dateKey];
+			}
+		})
+
+		searchSelectItems.forEach(item => {
+			const { key } = item;
+			const labelKey = valueKeys.find(valuekey => valuekey === key);
+			if(values[labelKey]) {
+				values[labelKey] = values[labelKey]['key']
+			}
+		})
+		return values;
+	}
 	handleSearch = type => {
 		const { form, handleSearch, handleExport } = this.props;
 
@@ -119,8 +147,9 @@ class ReceivableQuery extends React.Component {
 			form.validateFields((errors, values) => {
 				if(errors)
 					return null;
-				Object.assign(values, {page: 1, page_size: 20})
-				handleSearch(values);
+				const dealValues = this.dealValuesDate(values);
+				Object.assign(dealValues, {page: 1, page_size: 20})
+				handleSearch(dealValues);
 			})
 		}else if(type === 'export') {
 			handleExport();

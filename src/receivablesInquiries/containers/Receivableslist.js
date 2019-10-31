@@ -33,9 +33,8 @@ class Receivableslist extends React.Component {
 		this.setState({searchQuery, loading: true});
 		this.props.getReceivableList(searchQuery).then(() => {
 			this.setState({loading: false});
-		}).catch(({ errorMsg }) => {
+		}).catch(() => {
 			this.setState({ loading: false });
-			message.error(errorMsg || '列表加载失败，请重试！');
 		})
 	}
 

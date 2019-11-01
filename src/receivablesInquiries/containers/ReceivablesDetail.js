@@ -31,6 +31,7 @@ class ReceivablesDetail extends React.Component {
 		this.props.getSalerData();
 		this.props.getRegionTeamName();
 		this.props.getReceMetaData();
+		this.props.getExecutorList();
 		this.queryAllTabsData(Object.assign(search, { page: 1, page_size: 20}));
 	}
 	componentWillUnmount() {
@@ -73,7 +74,7 @@ class ReceivablesDetail extends React.Component {
 	}
 
 	getTabPaneComp = () => {
-		const { receMetaData = {}, location, receListReducer = {}, salerData = [], platformList = [], regionList = [] } = this.props;
+		const { receMetaData = {}, location, receListReducer = {}, salerData = [], platformList = [], regionList = [], excutorList = [] } = this.props;
 		const search = qs.parse(location.search.substring(1));
 		const { loading } = this.state;
 		return getTabOptions.map(item => {
@@ -115,7 +116,7 @@ class ReceivablesDetail extends React.Component {
 						className={wrapperClass}
 						initialValue={search}
 						queryItems={getQueryItems(getQueryKeys[key])}
-						queryOptions={Object.assign(receMetaData, {salerData, platformList, regionList})} 
+						queryOptions={Object.assign(receMetaData, {salerData, platformList, regionList, excutorList})} 
 						handleSearch={searchQuery => {this.handleSearch(value, searchQuery)}} 
 						handleExport={() => {this.handleExportList(value)}}
 						actionKeyMap={{
@@ -123,7 +124,7 @@ class ReceivablesDetail extends React.Component {
 							project: this.props.getProjectData,
 							brand: this.props.getBrandData,
 							account: this.props.getAccountInfo,
-							requirement: this.props.getRequirementWithoutId
+							requirement: this.props.getRequirementWithoutId,
 						}}
 					/>
 					{ <Alert className='list-total-info' message={totalMsg} type="warning" showIcon /> }
@@ -176,7 +177,7 @@ class ReceivablesDetail extends React.Component {
 
 const mapStateToProps = (state) => {
 	const { receivable = {}, receivableOff = {}, companyDetail = {} } = state;
-	const { receListReducer = {}  } = receivable;
+	const { receListReducer = {}, excutorList = []  } = receivable;
 	const { receMetaData, salerData, regionList } = receivableOff;
 	const { platformList = [] } = companyDetail;
 	return {
@@ -185,6 +186,7 @@ const mapStateToProps = (state) => {
 		salerData,
 		platformList,
 		regionList,
+		excutorList
 	}
 }
 const mapDispatchToProps = dispatch => (bindActionCreators({...receivableAction, ...goldenActions, ...receivableOffAction, getReceDetailList, clearReceDetailList}, dispatch));

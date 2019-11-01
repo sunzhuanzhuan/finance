@@ -123,7 +123,8 @@ class Receivableslist extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-	const { receivableOff = {} } = state;
+	const { receivableOff = {}, receivable = {} } = state;
+	const { receivableList = {} } = receivable;
 	const { receMetaData, salerData, regionList } = receivableOff;
 
 	return {

@@ -21,7 +21,7 @@ export const getQueryItems = keys => {
         {label: '截止日期', compType: 'date', key: 'time'},
         {label: '回款待分配', compType: 'inputNumber', key: 'wait_allocation_amount'},
         {label: '欠款', compType: 'select', key: 'receivables_aging_range', optionKey: 'receivables_aging_range', idKey: 'id', labelKey: 'display', showSearch: true},
-        {label: '执行人', compType: 'searchSelect', key: 'executor_admin_id', actionKey: 'company', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},
+        {label: '执行人', compType: 'select', key: 'executor_admin_id', optionKey: 'excutorList', idKey: 'owner_admin_id', labelKey: 'real_name', showSearch: true},
         {label: '发票申请单ID', compType: 'input', key: 'invoice_application_id'},
         {label: '订单ID', compType: 'input', key: 'order_ids'},
         {label: '活动ID', compType: 'input', upperKey: 'campaign_id', key: 'order_ids'},

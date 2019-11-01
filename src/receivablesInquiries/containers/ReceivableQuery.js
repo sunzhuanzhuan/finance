@@ -16,18 +16,17 @@ class ReceivableQuery extends React.Component {
 		const { form, initialValue = {} } = this.props;
 		form.setFieldsValue(initialValue);
 	}
-	getSelectOption = key => {
+	getSelectOption = (key, idKey, labelKey) => {
 		const { queryOptions = {}, isList } = this.props;
 		if(!queryOptions[key]) return null;
 		
 		return queryOptions[key].map(item => {
-			const { display, id } = item;
-			const dealName = key === 'receivables_aging_range' && isList ? `${display}>0` : display;
-			return <Option key={id} value={id.toString()}>{dealName}</Option>
+			const dealName = key === 'receivables_aging_range' && isList ? `${item[labelKey]}>0` : item[labelKey];
+			return <Option key={item[idKey]} value={item[idKey].toString()}>{dealName}</Option>
 		})
 	}
 	getFormItem = item => {
-		const { compType, optionKey, actionKey, dataIndex, keyWord } = item;
+		const { compType, optionKey, actionKey, dataIndex, keyWord, idKey, labelKey, showSearch } = item;
 		const { actionKeyMap = {} } = this.props;
 		switch(compType) {
 			case 'input':
@@ -44,13 +43,15 @@ class ReceivableQuery extends React.Component {
 						/>;
 			case 'select':
 				return <Select 
+					showSearch={showSearch}
+					allowClear
 					placeholder="请选择" 
 					className='common_search_width'
 					filterOption={(input, option) => (
 						option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
 					)}
 				>
-					{ this.getSelectOption(optionKey) }
+					{ this.getSelectOption(optionKey, idKey, labelKey) }
 				</Select>;
 			case 'date':
 				return <RangePicker />;
@@ -86,7 +87,7 @@ class ReceivableQuery extends React.Component {
 										option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
 									)}
 								>
-									{ this.getSelectOption('receivables_aging_range') }
+									{ this.getSelectOption('receivables_aging_range', 'id', 'display') }
 								</Select>
 							)}
 						</FormItem>

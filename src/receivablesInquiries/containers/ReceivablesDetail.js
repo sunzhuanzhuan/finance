@@ -5,6 +5,7 @@ import { message, Table, Alert, Tabs } from "antd";
 import ReceivableQuery from './ReceivableQuery';
 import { getTabOptions, getQueryItems, getQueryKeys, getReceivableDetailCol, getColKeys, getTableId } from '../constants';
 import * as receivableAction from "../actions/receivable";
+import * as receivableOffAction from "@/receivablesOff/actions/receivableOff";
 import * as goldenActions from "../../companyDetail/actions/goldenApply";
 import { getTotalWidth, downloadByATag } from '@/util';
 import { Scolltable } from '@/components';
@@ -26,6 +27,9 @@ class ReceivablesDetail extends React.Component {
 		const { location } = this.props;
 		const search = qs.parse(location.search.substring(1)) || {};
 
+		this.props.getPlatform();
+		this.props.getSalerData();
+		this.props.getRegionTeamName();
 		this.props.getReceSearchOptions();
 		this.queryAllTabsData(Object.assign(search, { page: 1, page_size: 20}));
 	}
@@ -37,9 +41,8 @@ class ReceivablesDetail extends React.Component {
 		this.setState({ loading: true });
 		Promise.all(this.getAllTabsActions(queryObj)).then(() => {
 			this.setState({ loading: false })
-		}).catch(({ errorMsg }) => {
+		}).catch(() => {
 			this.setState({ loading: false });
-			message.error(errorMsg || '列表加载失败，请重试！');
 		})
 	}
 	getAllTabsActions = queryObj => {
@@ -50,6 +53,7 @@ class ReceivablesDetail extends React.Component {
 	}
 
 	handleSearch = (key, searchQuery) => {
+		Object.assign(searchQuery, { product_line: key });
 		this.setState({[`searchQuery-${key}`]: searchQuery, loading: true});
 		this.props.getReceDetailList(searchQuery).then(() => {
 			this.setState({ loading: false })
@@ -58,33 +62,39 @@ class ReceivablesDetail extends React.Component {
 		})
 	}
 
-	handleExportList = key => {
-		downloadByATag(`/api/receivables/query/exportCompanyList?${qs.stringify(this.state[`searchQuery-${key}`])}`);
+	handleExportList = product_line => {
+		const { location } = this.props;
+		const search = qs.parse(location.search.substring(1));
+		Object.assign(search, {product_line});
+		const exportQuery = this.state[`searchQuery-${product_line}`] || search;
+		this.props.getReceDetailExportInfo({...exportQuery, flag: 1}).then(() => {
+			downloadByATag(`/api/finance/receivables/query/exportForReceivablesSelect?${qs.stringify(exportQuery)}`);
+		})
 	}
 
 	getTabPaneComp = () => {
-		const { receSearchOptions = [], location, receListReducer } = this.props;
+		const { receSearchOptions = [], location, receListReducer = {}, salerData = [], platformList = [], regionList = [] } = this.props;
 		const search = qs.parse(location.search.substring(1));
 		const { loading } = this.state;
 		return getTabOptions.map(item => {
-			const { tab, key } = item;
-			const tabInfo = receListReducer[`receDetail-${key}`] || {};
+			const { tab, key, value } = item;
+			const tabInfo = receListReducer[`receDetail-${value}`] || {};
 			const { list = [], page, total, page_size: tableSize, statistic = {} } = tabInfo;
 			const { total_receivables_amount = 0 } = statistic;
 			const totalMsg = `应收款金额${total_receivables_amount}`;
 			const columns = getReceivableDetailCol(getColKeys[key]);
 			const totalWidth = getTotalWidth(columns);
-			const searchQuery = this.state[`searchQuery-${key}`] || { page: 1, page_size: 20 };
+			const searchQuery = this.state[`searchQuery-${value}`] || { page: 1, page_size: 20 };
 			const pagination = {
 				onChange: (current) => {
 					Object.assign(searchQuery, {page: current});
-					this.setState({[`searchQuery-${key}`]: searchQuery});
-					this.handleSearch(key, searchQuery);
+					this.setState({[`searchQuery-${value}`]: searchQuery});
+					this.handleSearch(value, searchQuery);
 				},
 				onShowSizeChange: (_, pageSize) => {
 					Object.assign(searchQuery, {page_size: pageSize});
-					this.setState({[`searchQuery-${key}`]: searchQuery});
-					this.handleSearch(key, searchQuery);
+					this.setState({[`searchQuery-${value}`]: searchQuery});
+					this.handleSearch(value, searchQuery);
 				},
 				total: parseInt(total),
 				current: parseInt(page),
@@ -104,11 +114,15 @@ class ReceivablesDetail extends React.Component {
 						showExport
 						initialValue={search}
 						queryItems={getQueryItems(getQueryKeys[key])}
-						queryOptions={receSearchOptions}
-						handleSearch={searchQuery => {this.handleSearch(key, searchQuery)}} 
-						handleExport={() => {this.handleExportList(key)}}
+						queryOptions={Object.assign(receSearchOptions, {salerData, platformList, regionList})} 
+						handleSearch={searchQuery => {this.handleSearch(value, searchQuery)}} 
+						handleExport={() => {this.handleExportList(value)}}
 						actionKeyMap={{
-							company: this.props.getGoldenCompanyId
+							company: this.props.getGoldenCompanyId,
+							project: this.props.getProjectData,
+							brand: this.props.getBrandData,
+							account: this.props.getAccountInfo,
+							requirement: this.props.getRequirementWithoutId
 						}}
 					/>
 					{ <Alert className='list-total-info' message={totalMsg} type="warning" showIcon /> }
@@ -121,7 +135,7 @@ class ReceivablesDetail extends React.Component {
 						<Table 
 							loading={loading}
 							className='receivable-table'
-							rowKey={getTableId[key]} 
+							// rowKey={getTableId[key]} 
 							columns={columns} 
 							dataSource={list} 
 							bordered 
@@ -160,10 +174,16 @@ class ReceivablesDetail extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-	const { receivable = {} } = state;
+	const { receivable = {}, receivableOff = {}, companyDetail = {} } = state;
 	const { receSearchOptions = {}, receListReducer = {}  } = receivable;
+	const { receMetaData, salerData, regionList } = receivableOff;
+	const { platformList = [] } = companyDetail;
 	return {
 		receListReducer,
+		receMetaData,
+		salerData,
+		platformList,
+		regionList,
 		receSearchOptions: {
 			"product_line": [
 				{
@@ -290,5 +310,5 @@ const mapStateToProps = (state) => {
 		}
 	}
 }
-const mapDispatchToProps = dispatch => (bindActionCreators({...receivableAction, ...goldenActions, getReceDetailList, clearReceDetailList}, dispatch));
+const mapDispatchToProps = dispatch => (bindActionCreators({...receivableAction, ...goldenActions, ...receivableOffAction, getReceDetailList, clearReceDetailList}, dispatch));
 export default connect(mapStateToProps, mapDispatchToProps)(ReceivablesDetail)

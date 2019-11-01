@@ -41,7 +41,7 @@ class Receivableslist extends React.Component {
 	handleExport = () => {
 		const { searchQuery } = this.state;
 
-		downloadByATag(`/api/receivables/query/exportCompanyList?${qs.stringify(searchQuery)}`);
+		downloadByATag(`/api/finance/receivables/query/exportCompanyList?${qs.stringify(searchQuery)}`);
 	}
 
 	handleJumpToDetail = receivables_aging_range => {

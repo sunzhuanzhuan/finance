@@ -17,26 +17,18 @@ export const {
 	method: 'get'
 });
 //----------------------------应收款详情------------------------
-// 预约订单应收款查询
+// 应收款列表导出信息查询
 export const {
-	reservationList,
-	reservationList_success
-} = createHttpAction('reservationList', Interface.getReservationList, {
+	getReceListExportInfo,
+	getReceListExportInfo_success
+} = createHttpAction('getReceListExportInfo', Interface.getReceListExportInfo, {
 	method: 'get'
 });
 
-// 微闪投应收款查询
+// 应收款详情导出信息查询
 export const {
-	campaignList,
-	campaignList_success
-} = createHttpAction('campaignList', Interface.getCampaignList, {
-	method: 'get'
-});
-
-// 拓展业务应收款查询
-export const {
-	extendBusinessList,
-	extendBusinessList_success
-} = createHttpAction('extendBusinessList', Interface.getExtendBusinessList, {
+	getReceDetailExportInfo,
+	getReceDetailExportInfo_success
+} = createHttpAction('getReceDetailExportInfo', Interface.getReceDetailExportInfo, {
 	method: 'get'
 });

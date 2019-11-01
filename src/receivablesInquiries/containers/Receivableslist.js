@@ -6,6 +6,7 @@ import { message, Table, Button, Alert } from "antd";
 import ReceivableQuery from './ReceivableQuery';
 import { getQueryItems, getQueryKeys, receivableCol } from '../constants';
 import * as receivableAction from "../actions/receivable";
+import * as receivableOffAction from "@/receivablesOff/actions/receivableOff";
 import * as goldenActions from "../../companyDetail/actions/goldenApply";
 import { Scolltable } from '@/components';
 import { getTotalWidth, downloadByATag } from '@/util';
@@ -23,11 +24,13 @@ class Receivableslist extends React.Component {
 		};
 	}
 	componentDidMount() {
+		this.props.getSalerData();
+		this.props.getRegionTeamName();
+		this.props.getReceMetaData();
 		this.handleSearch({
 			page: 1,
 			page_size: 20
 		});
-		this.props.getReceSearchOptions();
 	}
 	handleSearch = searchQuery => {
 		this.setState({searchQuery, loading: true});
@@ -54,8 +57,10 @@ class Receivableslist extends React.Component {
 	render() {
 		const { 
 			receivableList: { total = {}, list = [], statistic = {}}, 
-			getGoldenCompanyId, receSearchOptions = {} 
+			getGoldenCompanyId,
+			receMetaData = {}, salerData = [], regionList = []
 		} = this.props;
+		const { receivables_aging_range } = receMetaData;
 		const { loading } = this.state;
 		const totalRaw = Object.assign(total, {company_name: '总计'});
 		const { company_num = 0, total_receivables_amount = 0, total_wait_allocation_amount = 0, } = statistic;
@@ -66,7 +71,7 @@ class Receivableslist extends React.Component {
 				<>回款待分配金额：<span className='total-color'>{numeral(total_wait_allocation_amount).format('0.00')}</span></>
 			</div>
 		);
-		const totalWidth = getTotalWidth(receivableCol());
+		const totalWidth = getTotalWidth(receivableCol(receivables_aging_range));
 		const pagination = {
 			// onChange: current => {
 			// 	Object.assign(searchQuery, {page: current});
@@ -90,9 +95,10 @@ class Receivableslist extends React.Component {
 			<div className='rece-title'>应收账款查询</div>
 			<ReceivableQuery 
 				showExport
+				className={'rece-wrapper'}
 				isList
 				queryItems={getQueryItems(getQueryKeys['receivableList'])}
-				queryOptions={receSearchOptions}
+				queryOptions={Object.assign(receMetaData, {salerData, regionList})} 
 				handleSearch={this.handleSearch}
 				handleExport={this.handleExport}
 				actionKeyMap={{
@@ -104,7 +110,7 @@ class Receivableslist extends React.Component {
 				<Table 
 					className='receivable-table'
 					rowKey='company_name' 
-					columns={receivableCol(this.handleJumpToDetail)} 
+					columns={receivableCol(receivables_aging_range, this.handleJumpToDetail)} 
 					dataSource={[totalRaw, ...list]} 
 					bordered 
 					pagination={pagination} 
@@ -117,8 +123,14 @@ class Receivableslist extends React.Component {
 }
 
 const mapStateToProps = (state) => {
+	const { receivableOff = {} } = state;
+	const { receMetaData, salerData, regionList } = receivableOff;
+
 	return {
 		// receivableList: state.receivable.receivableList,
+		receMetaData,
+		salerData,
+		regionList,
 		receivableList: {
 			"total": {
 				"receivables_amount": 1,
@@ -207,8 +219,7 @@ const mapStateToProps = (state) => {
 				"total_wait_allocation_amount": "1000.00"
 			}
 		},
-		receSearchOptions: state.receivable.receSearchOptions,
 	}
 }
-const mapDispatchToProps = dispatch => (bindActionCreators({...receivableAction, ...goldenActions}, dispatch));
+const mapDispatchToProps = dispatch => (bindActionCreators({...receivableAction, ...goldenActions, ...receivableOffAction}, dispatch));
 export default connect(mapStateToProps, mapDispatchToProps)(Receivableslist)

@@ -9,7 +9,7 @@ export default {
 	getWarehouseAmount: '/finance/warehouse/getWarehouseList',
 	getReceivableOffList: '/finance/receivables/verification/list',
 	getReceOffDetailList: '/finance/receivables/verification/orderDetailList',
-	getReceAddOffList: '/finance/receivables/order/orderList',
+	getReceAddOffList: '/finance/receivables/order/orderListForVerification',
 	addReceOffItem: '/finance/receivables/verification/commit',
 	getOffItemInfo: '/finance/receivables/verification/detail',
 	editReceOffItem: '/finance/receivables/verification/edit',
@@ -19,5 +19,5 @@ export default {
 	getCampaignDataByName: '/finance/commonApi/getCampaignDataByName',
 	getReceivableListExportInfo: '/finance/receivables/verification/exportList',
 	getReceivableDetailExportInfo: '/finance/receivables/verification/exportOrderList',
-	getReceivableAddListExportInfo: '/finance/receivables/order/export',
+	getReceivableAddListExportInfo: '/finance/receivables/order/exportForVerification',
 }

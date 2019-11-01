@@ -27,7 +27,7 @@ class ReceivableQuery extends React.Component {
 	}
 	getFormItem = item => {
 		const { compType, optionKey, actionKey, dataIndex, keyWord, idKey, labelKey, showSearch } = item;
-		const { actionKeyMap = {} } = this.props;
+		const { actionKeyMap = {}, className } = this.props;
 		switch(compType) {
 			case 'input':
 				return <Input placeholder="请输入" className='common_search_width' />;
@@ -36,7 +36,7 @@ class ReceivableQuery extends React.Component {
 							action={actionKeyMap[actionKey]} 
 							style={{ width: 170 }}
 							placeholder='请选择'
-							getPopupContainer={() => document.querySelector('.rece-query')}
+							getPopupContainer={() => document.querySelector(`.${className}`)}
 							keyWord={keyWord}
 							dataToList={res => { return res.data }}
 							item={dataIndex}
@@ -138,6 +138,10 @@ class ReceivableQuery extends React.Component {
 		})
 		return values;
 	}
+	getMultipleIds = (idString) => {
+		const trimIdsStr = idString.trim();
+		return trimIdsStr.replace(/\s+/g,",");
+	}
 	handleSearch = type => {
 		const { form, handleSearch, handleExport } = this.props;
 
@@ -149,6 +153,8 @@ class ReceivableQuery extends React.Component {
 				if(errors)
 					return null;
 				const dealValues = this.dealValuesDate(values);
+				if(dealValues.order_ids)
+					dealValues.order_ids = this.getMultipleIds(dealValues.order_ids);
 				Object.assign(dealValues, {page: 1, page_size: 20})
 				handleSearch(dealValues);
 			})

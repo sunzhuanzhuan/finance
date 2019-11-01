@@ -149,10 +149,10 @@ export const getOffDetailCloIndex = {
 // }
 
 export const getReceAddColIndex = {
-    3: ['order_id_no_fIxed', 'project_brand', 'require_id_name', 'account_info', 'invoice_application_id', 'execution_completed_time', 'receivables_amount'],
-    2: ['id', 'campaign_name', 'project_brand', 'platform_name', 'invoice_application_id', 'settlement_time', 'receivables_amount'],
-    7: ['id', 'active_name_type', 'project_brand', 'invoice_application_id', 'pass_time', 'receivables_amount'],
-    preview: ['order_id_no_fIxed', 'invoice_application_id', 'company_name', 'project_name', 'requirement_name', 'receivables_amount', 'previewOperate']
+    3: ['order_id_no_fIxed', 'project_brand', 'require_id_name', 'account_info', 'orders_relation_invoice', 'execution_completed_time', 'receivables_amount'],
+    2: ['id', 'campaign_name', 'project_brand', 'platform_name', 'orders_relation_invoice', 'settlement_time', 'receivables_amount'],
+    7: ['id', 'active_name_type', 'project_brand', 'orders_relation_invoice', 'pass_time', 'receivables_amount'],
+    preview: ['order_id_no_fIxed', 'orders_relation_invoice', 'company_name', 'project_name', 'requirement_name', 'receivables_amount', 'previewOperate']
 }
 
 const render = data => {
@@ -161,6 +161,12 @@ const render = data => {
 
 const isRender = data => {
     return data ? data == 1 ? '是' : '否' : '-';
+}
+
+const invoiceIdRender = data => {
+    if(Array.isArray(data))
+        return data.length ? data.map(item => item || item == 0 ? <div key={item}><a target='_blank' href={`/finance/invoice/applyDetail?id=${item}`}>{item}</a></div> : '-') : '-';
+    return data || data == 0 ? <a target='_blank' href={`/finance/invoice/applyDetail?id=${data}`}>{data}</a> : '-';
 }
 
 const timeRender = data => {
@@ -230,9 +236,14 @@ export const getReceOffCol = ( col, receMetaData = {}, action, activeKey ) => {
             dataIndex: 'invoice_application_id',
             key: 'invoice_application_id',
             width: 100,
-            render: data => {
-                return data || data == 0 ? <a target='_blank' href={`/finance/invoice/applyDetail?id=${data}`}>{data}</a> : '-';
-            }
+            render: invoiceIdRender
+        },
+        {
+            title: '发票申请单ID',
+            dataIndex: 'orders_relation_invoice',
+            key: 'orders_relation_invoice',
+            width: 100,
+            render: invoiceIdRender
         },
         {
             title: '活动名称/活动类型',

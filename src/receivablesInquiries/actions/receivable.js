@@ -9,13 +9,6 @@ export const {
 	method: 'get'
 });
 
-// 应收款查询筛选项
-export const {
-	getReceSearchOptions,
-	getReceSearchOptions_success
-} = createHttpAction('getReceSearchOptions', Interface.getReceSearchOptions, {
-	method: 'get'
-});
 //----------------------------应收款详情------------------------
 // 应收款列表导出信息查询
 export const {

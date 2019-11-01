@@ -17,8 +17,6 @@ export const getQueryItems = keys => {
     const allOpts = [
         {label: '公司简称', compType: 'searchSelect', key: 'company_id', actionKey: 'company', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},
         {label: '销售', key: 'sale_id', compType: 'select', optionKey: 'salerData', idKey: 'user_id', labelKey: 'real_name', showSearch: true},
-        {label: '销售主管', compType: 'searchSelect', key: 'sale_supervisor_name', actionKey: 'company', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},
-        {label: '销售经理', compType: 'searchSelect', key: 'sale_manager_name', actionKey: 'company', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},
         {label: '区域', key: 'region_team_id', compType: 'select', optionKey: 'regionList', idKey: 'region_team_id', labelKey: 'region_team_name'},
         {label: '截止日期', compType: 'date', key: 'time'},
         {label: '回款待分配', compType: 'inputNumber', key: 'wait_allocation_amount'},
@@ -26,7 +24,7 @@ export const getQueryItems = keys => {
         {label: '执行人', compType: 'searchSelect', key: 'executor_admin_id', actionKey: 'company', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},
         {label: '发票申请单ID', compType: 'input', key: 'invoice_application_id'},
         {label: '订单ID', compType: 'input', key: 'order_ids'},
-        {label: '活动ID', compType: 'input', key: 'campaign_id'},
+        {label: '活动ID', compType: 'input', upperKey: 'campaign_id', key: 'order_ids'},
         {label: '品牌', key: 'brand_id', compType: 'searchSelect', actionKey: 'brand', dataIndex: ['id', 'view_name'], keyWord: 'view_name'},
         {label: '所属项目', key: 'project_id', compType: 'searchSelect', actionKey: 'project', dataIndex: ['id', 'name'], keyWord: 'name'},
         {label: '需求名称', key: 'requirement_id', compType: 'searchSelect', actionKey: 'requirement', dataIndex: ['id', 'name'], keyWord: 'requirement_name'},
@@ -38,11 +36,11 @@ export const getQueryItems = keys => {
         {compType: 'rangeAndValue', key: 'range-value', optionKey: 'receivables_aging_range'},
         {compType: 'operate', key: 'operate'}
     ];
-    return keys.map(item => allOpts.find(queryItem => queryItem.key === item));
+    return keys.map(item => allOpts.find(queryItem => queryItem.upperKey === item || queryItem.key === item));
 };
 
 export const getQueryKeys = {
-    receivableList: ['company_id', 'receivables_aging_range', 'region_team_id', 'time', 'sale_manager_name', 'sale_supervisor_name', 'sale_id', 'wait_allocation_amount', 'operate'],
+    receivableList: ['company_id', 'receivables_aging_range', 'region_team_id', 'time', 'sale_id', 'wait_allocation_amount', 'operate'],
     reservationList: ['company_id', 'region_team_id', 'sale_id', 'execution_completed_time', 'range-value', 'project_id', 'requirement_id', 'weibo_type', 'account_id', 'order_ids', 'brand_id', 'executor_admin_id', 'operate'], 
     campaignList: ['company_id', 'region_team_id', 'sale_id', 'campaign_settlement_time', 'range-value', 'project_id', 'weibo_type', 'campaign_id', 'brand_id', 'operate'], 
     extendBusinessList: ['company_id', 'region_team_id', 'sale_id', 'pass_time', 'range-value', 'project_id', 'campaign_id', 'brand_id', 'operate'], 
@@ -68,10 +66,10 @@ const linkRender = (data, record) => {
     return link && data ? <a target='_blank' href={link}>{data}</a> : data || '-';
 }
 
-const arrayListRender = data => {
-    if(Array.isArray(data) && data.length)
-        return data.join(';');
-    return '-';
+const invoiceIdRender = data => {
+    if(Array.isArray(data))
+        return data.length ? data.map(item => item || item == 0 ? <div key={item}><a target='_blank' href={`/finance/invoice/applyDetail?id=${item}`}>{item}</a></div> : '-') : '-';
+    return data || data == 0 ? <a target='_blank' href={`/finance/invoice/applyDetail?id=${data}`}>{data}</a> : '-';
 }
 
 const timeRender = data => {
@@ -166,7 +164,7 @@ export const getReceivableDetailCol = keys => {
             title: '所属项目/品牌',
             dataIndex: 'project_name_brand',
             key: 'project_name_brand',
-            width: 100,
+            width: 120,
             render: (_, record) => {
                 const {project_name, brand_name} = record;
                 return (
@@ -220,7 +218,7 @@ export const getReceivableDetailCol = keys => {
             dataIndex: 'orders_relation_invoice',
             key: 'orders_relation_invoice',
             width: 100,
-            render: arrayListRender
+            render: invoiceIdRender
         },
         {
             title: '订单执行完成时间',
@@ -269,176 +267,70 @@ const mRender = (data, mKey, handleJump) => {
     )
 }
 
-export const receivableCol = handleJump => [
-    {
-        title: '公司简称',
-        dataIndex: 'company_name',
-        key: 'company_name',
-        width: 100,
-        render
-    },
-    {
-        title: '销售/区域',
-        dataIndex: 'sale_name_area',
-        key: 'sale_name_area',
-        width: 100,
-        render: (_, record) => {
-            const {sale_name, salesman_region} = record;
-            return (
-                <>
-                    <div>销售：{render(sale_name)}</div>
-                    <div>区域：{render(salesman_region)}</div>
-                </>
-            )
+export const receivableCol = (agingRangeArr, handleJump) => {
+    const frontArr = [
+        {
+            title: '公司简称',
+            dataIndex: 'company_name',
+            key: 'company_name',
+            width: 100,
+            render
+        },
+        {
+            title: '销售/区域',
+            dataIndex: 'sale_name_area',
+            key: 'sale_name_area',
+            width: 100,
+            render: (_, record) => {
+                const {sale_name, salesman_region} = record;
+                return (
+                    <>
+                        <div>销售：{render(sale_name)}</div>
+                        <div>区域：{render(salesman_region)}</div>
+                    </>
+                )
+            }
+        },
+        {
+            title: '总欠款',
+            dataIndex: 'receivables_amount',
+            key: 'receivables_amount',
+            width: 100,
+            render: renderNum
+        },
+        {
+            title: '回款待分配',
+            dataIndex: 'wait_allocation_amount',
+            key: 'wait_allocation_amount',
+            width: 100,
+            render: renderNum
+        },
+    ];
+    const endArr = [
+        {
+            title: '更新时间',
+            dataIndex: 'modified_at',
+            key: 'modified_at',
+            width: 100,
+            render
         }
-    },
-    {
-        title: '总欠款',
-        dataIndex: 'receivables_amount',
-        key: 'receivables_amount',
-        width: 100,
-        render: renderNum
-    },
-    {
-        title: '回款待分配',
-        dataIndex: 'wait_allocation_amount',
-        key: 'wait_allocation_amount',
-        width: 100,
-        render: renderNum
-    },
-    {
-        title: 'M0',
-        dataIndex: 'M0',
-        key: 'M0',
-        width: 100,
-        render: data => mRender(data, 2, handleJump) 
-    },
-    {
-        title: 'M1',
-        dataIndex: 'M1',
-        key: 'M1',
-        width: 100,
-        render: data => mRender(data, 3, handleJump)
-    },
-    {
-        title: 'M2',
-        dataIndex: 'M2',
-        key: 'M2',
-        width: 100,
-        render: data => mRender(data, 4, handleJump)
-    },
-    {
-        title: 'M3',
-        dataIndex: 'M3',
-        key: 'M3',
-        width: 100,
-        render: data => mRender(data, 5, handleJump)
-    },
-    {
-        title: 'M4',
-        dataIndex: 'M4',
-        key: 'M4',
-        width: 100,
-        render: data => mRender(data, 6, handleJump)
-    },
-    {
-        title: 'M5',
-        dataIndex: 'M5',
-        key: 'M5',
-        width: 100,
-        render: data => mRender(data, 7, handleJump)
-    },
-    {
-        title: 'M6',
-        dataIndex: 'M6',
-        key: 'M6',
-        width: 100,
-        render: data => mRender(data, 8, handleJump)
-    },
-    {
-        title: 'M7',
-        dataIndex: 'M7',
-        key: 'M7',
-        width: 100,
-        render: data => mRender(data, 9, handleJump)
-    },
-    {
-        title: 'M8',
-        dataIndex: 'M8',
-        key: 'M8',
-        width: 100,
-        render: data => mRender(data, 10, handleJump)
-    },
-    {
-        title: 'M9',
-        dataIndex: 'M9',
-        key: 'M9',
-        width: 100,
-        render: data => mRender(data, 11, handleJump)
-    },
-    {
-        title: 'M10-M12',
-        dataIndex: 'M10-M12',
-        key: 'M10-M12',
-        width: 100,
-        render: data => mRender(data, 12, handleJump)
-    },
-    {
-        title: 'M12以内',
-        dataIndex: '-M12',
-        key: '-M12',
-        width: 100,
-        render: data => mRender(data, 13, handleJump)
-    },
-    {
-        title: 'M12以上',
-        dataIndex: 'M12+',
-        key: 'M12+',
-        width: 100,
-        render: data => mRender(data, 14, handleJump)
-    },
+    ];
 
-    {
-        title: '1-2年',
-        dataIndex: 'M12-M24',
-        key: 'M12-M24',
-        width: 100,
-        render: data => mRender(data, 15, handleJump)
-    },
-    {
-        title: '2-3年',
-        dataIndex: 'M24-M36',
-        key: 'M24-M36',
-        width: 100,
-        render: data => mRender(data, 16, handleJump)
-    },
-    {
-        title: '3-4年',
-        dataIndex: 'M36-M48',
-        key: 'M36-M48',
-        width: 100,
-        render: data => mRender(data, 17, handleJump)
-    },
-    {
-        title: '4-5年',
-        dataIndex: 'M48-M60',
-        key: 'M48-M60',
-        width: 100,
-        render: data => mRender(data, 18, handleJump)
-    },
-    {
-        title: '5年以上',
-        dataIndex: 'M60+',
-        key: 'M60+',
-        width: 100,
-        render: data => mRender(data, 19, handleJump)
-    },
+    if(Array.isArray(agingRangeArr) && agingRangeArr.length) {
+        const rangeArea = agingRangeArr.map(item => {
+            const { display, id } = item;
+            return {
+                title: display,
+                dataIndex: display,
+                key: display,
+                width: 100,
+                render: data => mRender(data, id, handleJump) 
+            }
+        });
 
-    {
-        title: '更新时间',
-        dataIndex: 'modified_at',
-        key: 'modified_at',
-        width: 100,
-        render
-    },
-]
+        return [...frontArr, ...rangeArea, ...endArr];
+    }
+
+    return [];
+
+}

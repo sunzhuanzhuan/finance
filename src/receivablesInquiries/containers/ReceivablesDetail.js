@@ -30,7 +30,7 @@ class ReceivablesDetail extends React.Component {
 		this.props.getPlatform();
 		this.props.getSalerData();
 		this.props.getRegionTeamName();
-		this.props.getReceSearchOptions();
+		this.props.getReceMetaData();
 		this.queryAllTabsData(Object.assign(search, { page: 1, page_size: 20}));
 	}
 	componentWillUnmount() {
@@ -73,7 +73,7 @@ class ReceivablesDetail extends React.Component {
 	}
 
 	getTabPaneComp = () => {
-		const { receSearchOptions = [], location, receListReducer = {}, salerData = [], platformList = [], regionList = [] } = this.props;
+		const { receMetaData = {}, location, receListReducer = {}, salerData = [], platformList = [], regionList = [] } = this.props;
 		const search = qs.parse(location.search.substring(1));
 		const { loading } = this.state;
 		return getTabOptions.map(item => {
@@ -112,9 +112,10 @@ class ReceivablesDetail extends React.Component {
 				<TabPane tab={tabTitle} key={key} className={wrapperClass}>
 					<ReceivableQuery 
 						showExport
+						className={wrapperClass}
 						initialValue={search}
 						queryItems={getQueryItems(getQueryKeys[key])}
-						queryOptions={Object.assign(receSearchOptions, {salerData, platformList, regionList})} 
+						queryOptions={Object.assign(receMetaData, {salerData, platformList, regionList})} 
 						handleSearch={searchQuery => {this.handleSearch(value, searchQuery)}} 
 						handleExport={() => {this.handleExportList(value)}}
 						actionKeyMap={{
@@ -175,7 +176,7 @@ class ReceivablesDetail extends React.Component {
 
 const mapStateToProps = (state) => {
 	const { receivable = {}, receivableOff = {}, companyDetail = {} } = state;
-	const { receSearchOptions = {}, receListReducer = {}  } = receivable;
+	const { receListReducer = {}  } = receivable;
 	const { receMetaData, salerData, regionList } = receivableOff;
 	const { platformList = [] } = companyDetail;
 	return {
@@ -184,130 +185,6 @@ const mapStateToProps = (state) => {
 		salerData,
 		platformList,
 		regionList,
-		receSearchOptions: {
-			"product_line": [
-				{
-					"id": 3,
-					"display": "预约订单"
-				},
-				{
-					"id": 2,
-					"display": "微闪投"
-				},
-				{
-					"id": 7,
-					"display": "公司拓展业务"
-				}
-			],
-			"verification_type": [
-				{
-					"id": 1,
-					"display": "客户整体折让"
-				},
-				{
-					"id": 2,
-					"display": "订单折让（赔偿）"
-				},
-				{
-					"id": 3,
-					"display": "坏账清理"
-				},
-				{
-					"id": 4,
-					"display": "其他"
-				}
-			],
-			"yes_or_no": [
-				{
-					"id": 1,
-					"display": "是"
-				},
-				{
-					"id": 2,
-					"display": "否"
-				}
-			],
-			"debt_bill_type": [
-				{
-					"id": 1,
-					"display": "应收款核销"
-				}
-			],
-			"receivables_aging_range": [
-				{
-					"id": 0,
-					"display": "M0"
-				},
-				{
-					"id": 1,
-					"display": "M1"
-				},
-				{
-					"id": 2,
-					"display": "M2"
-				},
-				{
-					"id": 3,
-					"display": "M3"
-				},
-				{
-					"id": 4,
-					"display": "M4"
-				},
-				{
-					"id": 5,
-					"display": "M5"
-				},
-				{
-					"id": 6,
-					"display": "M6"
-				},
-				{
-					"id": 7,
-					"display": "M7"
-				},
-				{
-					"id": 8,
-					"display": "M8"
-				},
-				{
-					"id": 9,
-					"display": "M9"
-				},
-				{
-					"id": 10,
-					"display": "M10-M12"
-				},
-				{
-					"id": 11,
-					"display": "M12以内"
-				},
-				{
-					"id": 12,
-					"display": "M12以上"
-				},
-				{
-					"id": 13,
-					"display": "1-2年"
-				},
-				{
-					"id": 14,
-					"display": "2-3年"
-				},
-				{
-					"id": 15,
-					"display": "3-4年"
-				},
-				{
-					"id": 16,
-					"display": "4-5年"
-				},
-				{
-					"id": 17,
-					"display": "5年上"
-				}
-			]
-		}
 	}
 }
 const mapDispatchToProps = dispatch => (bindActionCreators({...receivableAction, ...goldenActions, ...receivableOffAction, getReceDetailList, clearReceDetailList}, dispatch));

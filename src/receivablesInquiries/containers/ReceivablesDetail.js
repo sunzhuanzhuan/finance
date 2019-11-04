@@ -26,13 +26,22 @@ class ReceivablesDetail extends React.Component {
 	componentDidMount() {
 		const { location } = this.props;
 		const search = qs.parse(location.search.substring(1)) || {};
+		const { receivables_aging_range, company_id = {} } = search;
+		const { key } = company_id;
+		const basicQuery = {
+			initialValus: search,
+			basic: {receivables_aging_range, company_id: key}
+		};
 
 		this.props.getPlatform();
 		this.props.getSalerData();
 		this.props.getRegionTeamName();
 		this.props.getReceMetaData();
 		this.props.getExecutorList();
-		this.queryAllTabsData(Object.assign(search, { page: 1, page_size: 20}));
+		this.setState({ 
+			basicQuery
+		})
+		this.queryAllTabsData({ page: 1, page_size: 20, receivables_aging_range, company_id: key});
 	}
 	componentWillUnmount() {
 		this.props.clearReceDetailList();
@@ -64,10 +73,9 @@ class ReceivablesDetail extends React.Component {
 	}
 
 	handleExportList = product_line => {
-		const { location } = this.props;
-		const search = qs.parse(location.search.substring(1));
-		Object.assign(search, {product_line});
-		const exportQuery = this.state[`searchQuery-${product_line}`] || search;
+		const { basicQuery = {} } = this.state;
+		const { basic } = basicQuery;
+		const exportQuery = this.state[`searchQuery-${product_line}`] || { ...basic, product_line};
 		this.props.getReceDetailExportInfo({...exportQuery, flag: 1}).then(() => {
 			downloadByATag(`/api/finance/receivables/query/exportForReceivablesSelect?${qs.stringify(exportQuery)}`);
 		})

@@ -9,20 +9,28 @@ export const {
 	method: 'get'
 });
 
+// 应收款查询列表导出
+export const {
+	getReceExportInfo,
+	getReceExportInfo_success
+} = createHttpAction('getReceExportInfo', Interface.getReceExportInfo, {
+	method: 'get'
+});
+
+// 应收款查询销售搜索接口
+export const {
+	getReceSaleList,
+	getReceSaleList_success
+} = createHttpAction('getReceSaleList', Interface.getReceSaleList, {
+	method: 'get'
+});
+
 //----------------------------应收款详情------------------------
 // 获取执行人列表
 export const {
 	getExecutorList,
 	getExecutorList_success
 } = createHttpAction('getExecutorList', Interface.getExecutorList, {
-	method: 'get'
-});
-
-// 应收款列表导出信息查询
-export const {
-	getReceListExportInfo,
-	getReceListExportInfo_success
-} = createHttpAction('getReceListExportInfo', Interface.getReceListExportInfo, {
 	method: 'get'
 });
 

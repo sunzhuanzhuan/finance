@@ -14,7 +14,7 @@ module.exports = merge(baseConfig, {
 		host: 'lg.nip.io',
 		proxy: {
 			"/api/finance/receivables": {
-				target: "http://192.168.100.117:30002",
+				target: "http://172.16.120.191:8002",
 				changeOrigin: true
 			},
 			"/api": {

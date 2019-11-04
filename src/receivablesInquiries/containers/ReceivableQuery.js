@@ -2,6 +2,7 @@ import React from 'react'
 import './receivable.less';
 import { Form, Input, Button, Select, DatePicker, InputNumber } from "antd";
 import SearchSelect from '@/components/SearchSelect';
+import moment from 'moment';
 const { Option } = Select;
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
@@ -55,6 +56,8 @@ class ReceivableQuery extends React.Component {
 				</Select>;
 			case 'date':
 				return <RangePicker />;
+			case 'singleDate': 
+				return <DatePicker />
 			case 'inputNumber':
 				return <InputNumber placeholder="请输入" min={0} className='common_search_width' />;
 			default:
@@ -104,7 +107,7 @@ class ReceivableQuery extends React.Component {
 				
 			return (
 				<FormItem key={key} label={label} >
-					{getFieldDecorator(key, { initialValue: undefined })(
+					{getFieldDecorator(key, { initialValue: compType === 'singleDate' ? moment() : undefined })(
 						this.getFormItem(item)
 					)}
 				</FormItem>
@@ -113,29 +116,31 @@ class ReceivableQuery extends React.Component {
 	}
 	dealValuesDate = values => {
 		const { queryItems = [] } = this.props;
-		const valueKeys = Object.keys(values);
+		const dealItems = queryItems.filter(item => 
+			item.compType === 'date' || 
+			item.compType === 'singleDate' || 
+			item.compType === 'searchSelect'
+		);
 
-		const dateItems = queryItems.filter(item => item.compType === 'date');
-		const searchSelectItems = queryItems.filter(item => item.compType === 'searchSelect');
-		dateItems.forEach(item => {
+		dealItems.forEach(item => {
 			const { key, submitKey = [] } = item;
-			const dateKey = valueKeys.find(valuekey => valuekey === key);
-
-			if(values[dateKey] && values[dateKey].length) {
-				submitKey.forEach((submitItem, index) => {
-					values[submitItem] = values[dateKey][index].format('YYYY-MM-DD')
-				})
-				delete values[dateKey];
+			if(item.compType === 'date') {
+				if(values[key] && values[key].length) {
+					submitKey.forEach((submitItem, index) => {
+						values[submitItem] = values[key][index].format('YYYY-MM-DD')
+					})
+					delete values[key];
+				}
+			}else if(item.compType === 'singleDate') {
+				values[key] = values[key].format('YYYY-MM-DD');
+			}else if(item.compType === 'searchSelect') {
+				if(values[key]) {
+					values[key] = values[key]['key'];
+				}
 			}
-		})
+			
+		});
 
-		searchSelectItems.forEach(item => {
-			const { key } = item;
-			const labelKey = valueKeys.find(valuekey => valuekey === key);
-			if(values[labelKey]) {
-				values[labelKey] = values[labelKey]['key']
-			}
-		})
 		return values;
 	}
 	getMultipleIds = (idString) => {
@@ -164,7 +169,6 @@ class ReceivableQuery extends React.Component {
 	}
 	getFormRowComp = () => {
 		const { queryItems = [] } = this.props;
-
 		return this.getFormItemComp(queryItems)
 	}
 

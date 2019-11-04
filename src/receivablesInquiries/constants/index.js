@@ -17,8 +17,9 @@ export const getQueryItems = keys => {
     const allOpts = [
         {label: '公司简称', compType: 'searchSelect', key: 'company_id', actionKey: 'company', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},
         {label: '销售', key: 'sale_id', compType: 'select', optionKey: 'salerData', idKey: 'user_id', labelKey: 'real_name', showSearch: true},
+        {label: '销售', upperKey: 'sale_search_id', key: 'sale_id', compType: 'searchSelect', actionKey: 'saler', dataIndex: ['user_id', 'real_name'], keyWord: 'sale_name'},
         {label: '区域', key: 'region_team_id', compType: 'select', optionKey: 'regionList', idKey: 'region_team_id', labelKey: 'region_team_name'},
-        {label: '截止日期', compType: 'date', key: 'time'},
+        {label: '截止日期', compType: 'singleDate', key: 'time'},
         {label: '回款待分配', compType: 'inputNumber', key: 'wait_allocation_amount'},
         {label: '欠款', compType: 'select', key: 'receivables_aging_range', optionKey: 'receivables_aging_range', idKey: 'id', labelKey: 'display', showSearch: true},
         {label: '执行人', compType: 'select', key: 'executor_admin_id', optionKey: 'excutorList', idKey: 'owner_admin_id', labelKey: 'real_name', showSearch: true},
@@ -32,7 +33,7 @@ export const getQueryItems = keys => {
         {label: '账号名称', key: 'account_id', compType: 'searchSelect', actionKey: 'account', dataIndex: ['account_id', 'weibo_name'], keyWord: 'weibo_name'},
         {label: '订单执行完成时间', key: 'execution_completed_time', compType: 'date', submitKey:['time_start', 'time_end']},
         {label: '活动结算时间', key: 'campaign_settlement_time', compType: 'date', submitKey:['time_start', 'time_end']},
-        {label: '审核时间', compType: 'date', key: 'pass_time'},
+        {label: '审核时间', key: 'pass_time', compType: 'date', submitKey:['time_start', 'time_end']},
         {compType: 'rangeAndValue', key: 'range-value', optionKey: 'receivables_aging_range'},
         {compType: 'operate', key: 'operate'}
     ];
@@ -40,7 +41,7 @@ export const getQueryItems = keys => {
 };
 
 export const getQueryKeys = {
-    receivableList: ['company_id', 'receivables_aging_range', 'region_team_id', 'time', 'sale_id', 'wait_allocation_amount', 'operate'],
+    receivableList: ['company_id', 'receivables_aging_range', 'region_team_id', 'time', 'sale_search_id', 'wait_allocation_amount', 'operate'],
     reservationList: ['company_id', 'region_team_id', 'sale_id', 'execution_completed_time', 'range-value', 'project_id', 'requirement_id', 'weibo_type', 'account_id', 'order_ids', 'brand_id', 'executor_admin_id', 'operate'], 
     campaignList: ['company_id', 'region_team_id', 'sale_id', 'campaign_settlement_time', 'range-value', 'project_id', 'weibo_type', 'campaign_id', 'brand_id', 'operate'], 
     extendBusinessList: ['company_id', 'region_team_id', 'sale_id', 'pass_time', 'range-value', 'project_id', 'campaign_id', 'brand_id', 'operate'], 
@@ -259,11 +260,18 @@ export const getReceivableDetailCol = keys => {
     return keys.map(item => allCols.find(queryItem => queryItem.key === item));
 }
 
-const mRender = (data, mKey, handleJump) => {
-    const className = data ? 'detail_entry_comp' : '';
+const mRender = (data, mKey, record, handleJump) => {
+    const className = data !== undefined ? 'detail_entry_comp' : '';
+    const { isTotalRow, company_id, company_name } = record;
+    const companyInfo = {
+        key: company_id,
+        label: company_name
+    }
     const showData = data !== undefined ? numeral(data).format('0.00') : '-'; 
     return (
-        <div className={className} onClick={() => {handleJump(mKey)}}>{showData}</div>
+        isTotalRow ? 
+        <div className={`${className} totalCount`}>{showData}</div> : 
+        <div className={className} onClick={() => {handleJump(mKey, companyInfo)}}>{showData}</div>
     )
 }
 
@@ -273,36 +281,37 @@ export const receivableCol = (agingRangeArr, handleJump) => {
             title: '公司简称',
             dataIndex: 'company_name',
             key: 'company_name',
-            width: 100,
+            width: 120,
             render
         },
         {
             title: '销售/区域',
             dataIndex: 'sale_name_area',
             key: 'sale_name_area',
-            width: 100,
+            width: 120,
             render: (_, record) => {
-                const {sale_name, salesman_region} = record;
+                const {sale_name, region_team_name, isTotalRow} = record;
                 return (
+                    isTotalRow ? '-' :
                     <>
                         <div>销售：{render(sale_name)}</div>
-                        <div>区域：{render(salesman_region)}</div>
+                        <div>区域：{render(region_team_name)}</div>
                     </>
                 )
             }
         },
         {
             title: '总欠款',
-            dataIndex: 'receivables_amount',
-            key: 'receivables_amount',
-            width: 100,
+            dataIndex: 'total_receivables_amount',
+            key: 'total_receivables_amount',
+            width: 120,
             render: renderNum
         },
         {
             title: '回款待分配',
             dataIndex: 'wait_allocation_amount',
             key: 'wait_allocation_amount',
-            width: 100,
+            width: 120,
             render: renderNum
         },
     ];
@@ -323,14 +332,13 @@ export const receivableCol = (agingRangeArr, handleJump) => {
                 title: display,
                 dataIndex: display,
                 key: display,
-                width: 100,
-                render: data => mRender(data, id, handleJump) 
+                width: 120,
+                render: (data, record) => mRender(data, id, record, handleJump) 
             }
         });
 
         return [...frontArr, ...rangeArea, ...endArr];
     }
 
-    return [];
-
+    return [...frontArr, ...endArr];
 }

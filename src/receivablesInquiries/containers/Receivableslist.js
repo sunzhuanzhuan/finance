@@ -9,28 +9,35 @@ import * as receivableAction from "../actions/receivable";
 import * as receivableOffAction from "@/receivablesOff/actions/receivableOff";
 import * as goldenActions from "../../companyDetail/actions/goldenApply";
 import { Scolltable } from '@/components';
-import { getTotalWidth, downloadByATag } from '@/util';
+import { getTotalWidth, downloadByATag, events } from '@/util';
 import qs from 'qs';
 import numeral from 'numeral';
+import moment from 'moment';
 class Receivableslist extends React.Component {
 	constructor() {
 		super();
 		this.state = {
 			searchQuery: {
-				page: 1,
-				page_size: 20
+				time: moment().format('YYYY-MM-DD')
 			},
-			loading: false
+			loading: false,
+			leftWidth: 40
 		};
+		events.on('message', this.collapsedListener); 
+	}
+	collapsedListener = isClosed => {
+		this.setState({leftWidth: isClosed ? 40 : 200});
 	}
 	componentDidMount() {
+		const { searchQuery } = this.state;
 		this.props.getSalerData();
 		this.props.getRegionTeamName();
 		this.props.getReceMetaData();
-		this.handleSearch({
-			page: 1,
-			page_size: 20
-		});
+		this.handleSearch(searchQuery);
+		const leftSlide = document.getElementsByClassName('ant-layout-sider-trigger')[0];
+		const leftWidth = leftSlide && leftSlide.clientWidth;
+
+		this.setState({leftWidth});
 	}
 	handleSearch = searchQuery => {
 		this.setState({searchQuery, loading: true});
@@ -43,27 +50,27 @@ class Receivableslist extends React.Component {
 
 	handleExport = () => {
 		const { searchQuery } = this.state;
-
-		downloadByATag(`/api/finance/receivables/query/exportCompanyList?${qs.stringify(searchQuery)}`);
+		downloadByATag(`/api/finance/receivables/query/exportCompanyReceivables?${qs.stringify(searchQuery)}`);
 	}
 
-	handleJumpToDetail = receivables_aging_range => {
+	handleJumpToDetail = (receivables_aging_range, company_id) => {
 		this.props.history.push({
 			pathname: '/finance/receivable/detail',
-			search: `?${qs.stringify({receivables_aging_range})}`,
+			search: `?${qs.stringify({receivables_aging_range, company_id})}`,
 		});
 	}
 
 	render() {
 		const { 
-			receivableList: { total = {}, list = [], statistic = {}}, 
+			receivableList: { total = {}, list = [], statistics = {}}, 
 			getGoldenCompanyId,
+			getReceSaleList,
 			receMetaData = {}, salerData = [], regionList = []
 		} = this.props;
 		const { receivables_aging_range } = receMetaData;
-		const { loading } = this.state;
-		const totalRaw = Object.assign(total, {company_name: '总计'});
-		const { company_num = 0, total_receivables_amount = 0, total_wait_allocation_amount = 0, } = statistic;
+		const { loading, leftWidth } = this.state;
+		const totalRaw = Object.assign(total, {company_name: '总计', isTotalRow: true});
+		const { company_num = 0, total_receivables_amount = 0, total_wait_allocation_amount = 0, } = statistics;
 		const TotalMsg = (
 			<div className='total-info-wrapper'>
 				<>公司数量：<span className='total-color'>{company_num}</span></>
@@ -71,21 +78,9 @@ class Receivableslist extends React.Component {
 				<>回款待分配金额：<span className='total-color'>{numeral(total_wait_allocation_amount).format('0.00')}</span></>
 			</div>
 		);
-		const totalWidth = getTotalWidth(receivableCol(receivables_aging_range));
+		const dataSource = list && list.length ? [totalRaw, ...list] : [];
+		const totalWidth = getTotalWidth(receivableCol(receivables_aging_range).filter(item => !item.fixed));
 		const pagination = {
-			// onChange: current => {
-			// 	Object.assign(searchQuery, {page: current});
-			// 	this.setState({searchQuery});
-			// 	this.handleSearch(searchQuery);
-			// },
-			// onShowSizeChange: (_, pageSize) => {
-			// 	Object.assign(searchQuery, {page_size: pageSize});
-			// 	this.setState({searchQuery});
-			// 	this.handleSearch(searchQuery);
-			// },
-			// total: parseInt(total),
-			// current: parseInt(page),
-			// pageSize: parseInt(page_size),
 			defaultPageSize: 20,
 			showQuickJumper: true,
 			showSizeChanger: true,
@@ -102,16 +97,17 @@ class Receivableslist extends React.Component {
 				handleSearch={this.handleSearch}
 				handleExport={this.handleExport}
 				actionKeyMap={{
-					company: getGoldenCompanyId
+					company: getGoldenCompanyId,
+					saler: getReceSaleList,
 				}}
 			/>
 			<Alert className='list-total-info' message={TotalMsg} type="warning" showIcon />
-			<Scolltable scrollClassName='.ant-table-body' widthScroll={totalWidth}>
+			<Scolltable scrollClassName='.ant-table-body' widthScroll={totalWidth + leftWidth}>
 				<Table 
 					className='receivable-table'
 					rowKey='company_name' 
 					columns={receivableCol(receivables_aging_range, this.handleJumpToDetail)} 
-					dataSource={[totalRaw, ...list]} 
+					dataSource={dataSource} 
 					bordered 
 					pagination={pagination} 
 					loading={loading}
@@ -128,98 +124,10 @@ const mapStateToProps = (state) => {
 	const { receMetaData, salerData, regionList } = receivableOff;
 
 	return {
-		// receivableList: state.receivable.receivableList,
+		receivableList,
 		receMetaData,
 		salerData,
 		regionList,
-		receivableList: {
-			"total": {
-				"receivables_amount": 1,
-				"wait_allocation_amount": 4,
-				"M0": 600,
-				"M1": 800,
-				"M2": 800,
-				"M3": 800,
-				"M4": 800,
-				"M5": 800,
-				"M6": 800,
-				"M7": 800,
-				"M8": 800,
-				"M9": 800,
-				"M10-M12": 800,
-				"-M12": 800,
-				"M12-": 800,
-				"M12-M24": 800,
-				"M24-M36": 800,
-				"M36-M48": 800,
-				"M48-M60": 800,
-				"M60-": 800,
-				"modified_at": "2019-08-16 18:50:56"
-			},
-			"list": [
-				{
-					"company_name": "野韭菜",
-					"salesman_region": "华北",
-					"sale_name": "林明",                
-					"sale_supervisor_name": "张吉",
-					"sale_manager_name": "徐涛", 
-					"receivables_amount": 1,
-					"wait_allocation_amount": 4,
-					"M0": 600,
-					"M1": 800,
-					"M2": 800,
-					"M3": 800,
-					"M4": 800,
-					"M5": 800,
-					"M6": 800,
-					"M7": 800,
-					"M8": 800,
-					"M9": 800,
-					"M10-M12": 800,
-					"-M12": 800,
-					"M12-": 800,
-					"M12-M24": 800,
-					"M24-M36": 800,
-					"M36-M48": 800,
-					"M48-M60": 800,
-					"M60-": 800,
-					"modified_at": "2019-08-16 18:50:56"
-				},
-				{
-					"company_name": "野韭菜2",
-					"salesman_region": "华北",
-					"sale_name": "林明",                
-					"sale_supervisor_name": "张吉",
-					"sale_manager_name": "徐涛", 
-					"receivables_amount": 1,
-					"wait_allocation_amount": 4,
-					"M0": 600,
-					"M1": 800,
-					"M2": 800,
-					"M3": 800,
-					"M4": 800,
-					"M5": 800,
-					"M6": 800,
-					"M7": 800,
-					"M8": 800,
-					"M9": 800,
-					"M10-M12": 800,
-					"-M12": 800,
-					"M12-": 800,
-					"M12-M24": 800,
-					"M24-M36": 800,
-					"M36-M48": 800,
-					"M48-M60": 800,
-					"M60-": 800,
-					"modified_at": "2019-08-16 18:50:56"
-				}
-			],
-			"statistic": {
-				"company_num": "4800.00",
-				"total_arrears_amount": "3800.00",
-				"total_wait_allocation_amount": "1000.00"
-			}
-		},
 	}
 }
 const mapDispatchToProps = dispatch => (bindActionCreators({...receivableAction, ...goldenActions, ...receivableOffAction}, dispatch));

@@ -122,27 +122,21 @@ class ReceivableOffQuery extends React.Component {
 	}
 	dealValuesDate = values => {
 		const { queryItems = [] } = this.props;
-		const valueKeys = Object.keys(values);
+		const dealItems = queryItems.filter(item => item.compType === 'date' || item.compType === 'searchSelect');
 
-		const dateItems = queryItems.filter(item => item.compType === 'date');
-		const searchSelectItems = queryItems.filter(item => item.compType === 'searchSelect');
-		dateItems.forEach(item => {
+		dealItems.forEach(item => {
 			const { key, submitKey = [] } = item;
-			const dateKey = valueKeys.find(valuekey => valuekey === key);
-
-			if(values[dateKey] && values[dateKey].length) {
-				submitKey.forEach((submitItem, index) => {
-					values[submitItem] = values[dateKey][index].format('YYYY-MM-DD')
-				})
-				delete values[dateKey];
-			}
-		})
-
-		searchSelectItems.forEach(item => {
-			const { key } = item;
-			const labelKey = valueKeys.find(valuekey => valuekey === key);
-			if(values[labelKey]) {
-				values[labelKey] = values[labelKey]['key']
+			if(item.compType === 'date') {
+				if(values[key] && values[key].length) {
+					submitKey.forEach((submitItem, index) => {
+						values[submitItem] = values[key][index].format('YYYY-MM-DD')
+					})
+					delete values[key];
+				}
+			}else if(item.compType === 'searchSelect') {
+				if(values[key]) {
+					values[key] = values[key]['key']
+				}
 			}
 		})
 		return values;

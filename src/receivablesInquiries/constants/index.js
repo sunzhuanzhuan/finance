@@ -16,7 +16,7 @@ export const getTableId = {
 export const getQueryItems = keys => {
     const allOpts = [
         {label: '公司简称', compType: 'searchSelect', key: 'company_id', actionKey: 'company', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},
-        {label: '销售', key: 'sale_id', compType: 'searchSelect', actionKey: 'saler', dataIndex: ['user_id', 'real_name'], keyWord: 'sale_name'},
+        {label: '销售', key: 'sale_id', compType: 'select', optionKey: 'receSalerList', idKey: 'user_id', labelKey: 'real_name'},
         {label: '区域', key: 'region_team_id', compType: 'select', optionKey: 'regionList', idKey: 'region_team_id', labelKey: 'region_team_name'},
         {label: '截止日期', compType: 'singleDate', key: 'time'},
         {label: '回款待分配>', compType: 'inputNumber', key: 'wait_allocation_amount'},

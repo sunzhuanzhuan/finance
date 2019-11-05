@@ -30,7 +30,7 @@ class Receivableslist extends React.Component {
 	}
 	componentDidMount() {
 		const { searchQuery } = this.state;
-		this.props.getSalerData();
+		this.props.getReceSaleList();
 		this.props.getRegionTeamName();
 		this.props.getReceMetaData();
 		this.handleSearch(searchQuery);
@@ -66,7 +66,7 @@ class Receivableslist extends React.Component {
 			receivableList: { total = {}, list = [], statistics = {}}, 
 			getGoldenCompanyId,
 			getReceSaleList,
-			receMetaData = {}, salerData = [], regionList = [], userLoginInfo = {}
+			receMetaData = {}, receSalerList = [], regionList = [], userLoginInfo = {}
 		} = this.props;
 		const { user_group_id } = userLoginInfo;
 		const { receivables_aging_range } = receMetaData;
@@ -95,7 +95,7 @@ class Receivableslist extends React.Component {
 				className={'rece-wrapper'}
 				isList
 				queryItems={getQueryItems(getReceListQueryKey(user_group_id)) || []}
-				queryOptions={Object.assign(receMetaData, {salerData, regionList})} 
+				queryOptions={Object.assign(receMetaData, {receSalerList, regionList})} 
 				handleSearch={this.handleSearch}
 				handleExport={this.handleExport}
 				actionKeyMap={{
@@ -124,14 +124,14 @@ const mapStateToProps = (state) => {
 	const { receivableOff = {}, receivable = {}, loginReducer = {} } = state;
 	const { userLoginInfo = {} } = loginReducer;
 	const { user_info = {} } = userLoginInfo;
-	const { receivableList = {} } = receivable;
-	const { receMetaData, salerData, regionList } = receivableOff;
+	const { receivableList = {}, receSalerList } = receivable;
+	const { receMetaData, regionList } = receivableOff;
 
 	return {
 		receivableList,
 		receMetaData,
-		salerData,
 		regionList,
+		receSalerList,
 		userLoginInfo: user_info,
 	}
 }

@@ -20,7 +20,7 @@ export const getQueryItems = keys => {
         {label: '销售', upperKey: 'sale_search_id', key: 'sale_id', compType: 'searchSelect', actionKey: 'saler', dataIndex: ['user_id', 'real_name'], keyWord: 'sale_name'},
         {label: '区域', key: 'region_team_id', compType: 'select', optionKey: 'regionList', idKey: 'region_team_id', labelKey: 'region_team_name'},
         {label: '截止日期', compType: 'singleDate', key: 'time'},
-        {label: '回款待分配', compType: 'inputNumber', key: 'wait_allocation_amount'},
+        {label: '回款待分配>', compType: 'inputNumber', key: 'wait_allocation_amount'},
         {label: '欠款', compType: 'select', key: 'receivables_aging_range', optionKey: 'receivables_aging_range', idKey: 'id', labelKey: 'display', showSearch: true},
         {label: '执行人', compType: 'select', key: 'executor_admin_id', optionKey: 'excutorList', idKey: 'owner_admin_id', labelKey: 'real_name', showSearch: true},
         {label: '发票申请单ID', compType: 'input', key: 'invoice_application_id'},
@@ -307,13 +307,15 @@ export const receivableCol = (agingRangeArr, handleJump) => {
             title: '销售/区域',
             dataIndex: 'sale_name_area',
             key: 'sale_name_area',
-            width: 120,
+            width: 150,
             render: (_, record) => {
-                const {sale_name, region_team_name, isTotalRow} = record;
+                const {sale_name, sale_supervisor_name, sale_manager_name, region_team_name, isTotalRow} = record;
                 return (
                     isTotalRow ? '-' :
                     <>
                         <div>销售：{render(sale_name)}</div>
+                        <div>销售主管：{render(sale_supervisor_name)}</div>
+                        <div>销售经理：{render(sale_manager_name)}</div>
                         <div>区域：{render(region_team_name)}</div>
                     </>
                 )

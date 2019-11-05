@@ -20,10 +20,17 @@ class ReceivableQuery extends React.Component {
 	getSelectOption = (key, idKey, labelKey) => {
 		const { queryOptions = {}, isList } = this.props;
 		if(!queryOptions[key]) return null;
+
+		if(key === 'receivables_aging_range' && isList) {
+			const queryArr = [{id: 0, display: '总欠款'}, ...queryOptions[key]];
+			return queryArr.map(item => {
+				const dealName = `${item[labelKey]}>0`;
+				return <Option key={item[idKey]} value={item[idKey].toString()}>{dealName}</Option>
+			})
+		}
 		
 		return queryOptions[key].map(item => {
-			const dealName = key === 'receivables_aging_range' && isList ? `${item[labelKey]}>0` : item[labelKey];
-			return <Option key={item[idKey]} value={item[idKey].toString()}>{dealName}</Option>
+			return <Option key={item[idKey]} value={item[idKey].toString()}>{item[labelKey]}</Option>
 		})
 	}
 	getFormItem = item => {

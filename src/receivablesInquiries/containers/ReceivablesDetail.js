@@ -7,7 +7,7 @@ import { getTabOptions, getQueryItems, getQueryKeys, getReceivableDetailCol, get
 import * as receivableAction from "../actions/receivable";
 import * as receivableOffAction from "@/receivablesOff/actions/receivableOff";
 import * as goldenActions from "../../companyDetail/actions/goldenApply";
-import { getTotalWidth, downloadByATag } from '@/util';
+import { events, getTotalWidth, downloadByATag } from '@/util';
 import { Scolltable } from '@/components';
 import qs from 'qs';
 import { getReceDetailList, clearReceDetailList } from '../actions/receivableList';
@@ -20,8 +20,13 @@ class ReceivablesDetail extends React.Component {
 		this.state = {
 			addVisible: false,
 			activeKey: 'reservationList',
-			loading: false
+			loading: false,
+			leftWidth: 40
 		};
+		events.on('message', this.collapsedListener); 
+	}
+	collapsedListener = isClosed => {
+		this.setState({leftWidth: isClosed ? 40 : 200});
 	}
 	componentDidMount() {
 		const { location } = this.props;
@@ -32,6 +37,8 @@ class ReceivablesDetail extends React.Component {
 			initialValus: search,
 			basic: {receivables_aging_range, company_id: key}
 		};
+		const leftSlide = document.getElementsByClassName('ant-layout-sider-trigger')[0];
+		const leftWidth = leftSlide && leftSlide.clientWidth;
 
 		this.props.getPlatform();
 		this.props.getSalerData();
@@ -39,7 +46,8 @@ class ReceivablesDetail extends React.Component {
 		this.props.getReceMetaData();
 		this.props.getExecutorList();
 		this.setState({ 
-			basicQuery
+			basicQuery,
+			leftWidth
 		})
 		this.queryAllTabsData({ page: 1, page_size: 20, receivables_aging_range, company_id: key});
 	}
@@ -84,7 +92,7 @@ class ReceivablesDetail extends React.Component {
 	getTabPaneComp = () => {
 		const { receMetaData = {}, location, receListReducer = {}, salerData = [], platformList = [], regionList = [], excutorList = [] } = this.props;
 		const search = qs.parse(location.search.substring(1));
-		const { loading } = this.state;
+		const { loading, leftWidth } = this.state;
 		return getTabOptions.map(item => {
 			const { tab, key, value } = item;
 			const tabInfo = receListReducer[`receDetail-${value}`] || {};
@@ -140,7 +148,7 @@ class ReceivablesDetail extends React.Component {
 						isMoreThanOne 
 						wrapperClass={wrapperClass}
 						scrollClassName={`.${wrapperClass} .ant-table-body`}
-						widthScroll={totalWidth}
+						widthScroll={totalWidth + leftWidth}
 					>
 						<Table 
 							loading={loading}
@@ -150,7 +158,7 @@ class ReceivablesDetail extends React.Component {
 							dataSource={list} 
 							bordered 
 							pagination={pagination} 
-							scroll={{ x: totalWidth }}
+							scroll={{ x: totalWidth + 40 }}
 						/>
 					</Scolltable>
 				</TabPane>

@@ -65,8 +65,9 @@ class Receivableslist extends React.Component {
 			receivableList: { total = {}, list = [], statistics = {}}, 
 			getGoldenCompanyId,
 			getReceSaleList,
-			receMetaData = {}, salerData = [], regionList = []
+			receMetaData = {}, salerData = [], regionList = [], userLoginInfo = {}
 		} = this.props;
+		const { user_group_id } = userLoginInfo;
 		const { receivables_aging_range } = receMetaData;
 		const { loading, leftWidth } = this.state;
 		const totalRaw = Object.assign(total, {company_name: '总计', isTotalRow: true});
@@ -92,7 +93,7 @@ class Receivableslist extends React.Component {
 				showExport
 				className={'rece-wrapper'}
 				isList
-				queryItems={getQueryItems(getQueryKeys['receivableList'])}
+				queryItems={getQueryItems(getQueryKeys[user_group_id]) || []}
 				queryOptions={Object.assign(receMetaData, {salerData, regionList})} 
 				handleSearch={this.handleSearch}
 				handleExport={this.handleExport}
@@ -119,7 +120,9 @@ class Receivableslist extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-	const { receivableOff = {}, receivable = {} } = state;
+	const { receivableOff = {}, receivable = {}, loginReducer = {} } = state;
+	const { userLoginInfo = {} } = loginReducer;
+	const { user_info = {} } = userLoginInfo;
 	const { receivableList = {} } = receivable;
 	const { receMetaData, salerData, regionList } = receivableOff;
 
@@ -128,6 +131,7 @@ const mapStateToProps = (state) => {
 		receMetaData,
 		salerData,
 		regionList,
+		userLoginInfo: user_info,
 	}
 }
 const mapDispatchToProps = dispatch => (bindActionCreators({...receivableAction, ...goldenActions, ...receivableOffAction}, dispatch));

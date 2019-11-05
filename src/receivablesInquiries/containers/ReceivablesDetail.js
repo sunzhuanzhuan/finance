@@ -194,7 +194,7 @@ const mapStateToProps = (state) => {
 		salerData,
 		platformList,
 		regionList,
-		excutorList
+		excutorList,
 	}
 }
 const mapDispatchToProps = dispatch => (bindActionCreators({...receivableAction, ...goldenActions, ...receivableOffAction, getReceDetailList, clearReceDetailList}, dispatch));

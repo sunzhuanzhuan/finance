@@ -289,7 +289,7 @@ const mRender = (data, mKey, record, handleJump) => {
     const showData = data !== undefined ? numeral(data).format('0.00') : '-'; 
     return (
         isTotalRow ? 
-        <div className={`${className} totalCount`}>{showData}</div> : 
+        <div className='totalCount'>{showData}</div> : 
         <div className={className} onClick={() => {handleJump(mKey, companyInfo)}}>{showData}</div>
     )
 }

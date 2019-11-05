@@ -80,9 +80,9 @@ class ReceivableQuery extends React.Component {
 			if(compType === 'operate') {
 				return (
 					<FormItem key={key} className='operate-wrapper'>
-						{ showExport ? <Button type='primary' onClick={() => {this.handleSearch('export')}}>导出</Button> : null }
 						<Button type='primary' onClick={() => {this.handleSearch('search')}}>查询</Button>
 						<Button type='ghost' onClick={() => {this.handleSearch('reset')}}>重置</Button>
+						{ showExport ? <Button type='primary' onClick={() => {this.handleSearch('export')}}>导出</Button> : null }
 					</FormItem>
 				)
 			}else if(compType === 'rangeAndValue') {
@@ -91,6 +91,7 @@ class ReceivableQuery extends React.Component {
 						<FormItem className='range-value-item' >
 							{getFieldDecorator('receivables_aging_range', { initialValue: undefined })(
 								<Select 
+									allowClear
 									placeholder="请选择" 
 									className='range-value'
 									filterOption={(input, option) => (

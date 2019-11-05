@@ -1,6 +1,7 @@
 export default {
 	getReceMetaData: '/finance/receivables/verification/searchItem',
-	getSalerData: '/finance/invoice/application/createUserList',
+	// getSalerData: '/finance/invoice/application/createUserList',
+	getSalerData: '/finance/invoice/application/saleList',
 	getProjectData: '/finance/commonApi/getProjectByName',
 	getBrandData: '/finance/commonApi/getBrandByName',
 	getCompanyInfo: '/finance/commonApi/getCompanyCommonData',

@@ -73,12 +73,13 @@
             text-decoration: underline;
         }
     }
-    .totalCount {
-        color: @primary-color;
-    }
 }
 
 .rece-wrapper {
+    .ant-table-tbody > tr > td {
+        word-wrap: break-word;
+        word-break: break-all;
+    }
     .list-total-info {
         width: 100%;
         margin: 16px 0;
@@ -88,3 +89,8 @@
     }
 }
 
+.rece-list-table {
+    .ant-table-fixed-left {
+        width: 509px;
+    }
+}

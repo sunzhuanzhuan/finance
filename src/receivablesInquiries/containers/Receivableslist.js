@@ -54,9 +54,10 @@ class Receivableslist extends React.Component {
 	}
 
 	handleJumpToDetail = (receivables_aging_range, company_id) => {
+		const detailQuery = company_id ? { receivables_aging_range, company_id } : { receivables_aging_range }
 		this.props.history.push({
 			pathname: '/finance/receivable/detail',
-			search: `?${qs.stringify({receivables_aging_range, company_id})}`,
+			search: `?${qs.stringify(detailQuery)}`,
 		});
 	}
 
@@ -80,7 +81,7 @@ class Receivableslist extends React.Component {
 			</div>
 		);
 		const dataSource = list && list.length ? [totalRaw, ...list] : [];
-		const totalWidth = getTotalWidth(receivableCol(receivables_aging_range).filter(item => !item.fixed));
+		const totalWidth = getTotalWidth(receivableCol(receivables_aging_range));
 		const pagination = {
 			defaultPageSize: 20,
 			showQuickJumper: true,
@@ -105,7 +106,7 @@ class Receivableslist extends React.Component {
 			<Alert className='list-total-info' message={TotalMsg} type="warning" showIcon />
 			<Scolltable scrollClassName='.ant-table-body' widthScroll={totalWidth + leftWidth}>
 				<Table 
-					className='receivable-table'
+					className='receivable-table rece-list-table'
 					rowKey='company_name' 
 					columns={receivableCol(receivables_aging_range, this.handleJumpToDetail)} 
 					dataSource={dataSource} 

@@ -16,8 +16,7 @@ export const getTableId = {
 export const getQueryItems = keys => {
     const allOpts = [
         {label: '公司简称', compType: 'searchSelect', key: 'company_id', actionKey: 'company', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},
-        {label: '销售', key: 'sale_id', compType: 'select', optionKey: 'salerData', idKey: 'user_id', labelKey: 'real_name', showSearch: true},
-        {label: '销售', upperKey: 'sale_search_id', key: 'sale_id', compType: 'searchSelect', actionKey: 'saler', dataIndex: ['user_id', 'real_name'], keyWord: 'sale_name'},
+        {label: '销售', key: 'sale_id', compType: 'searchSelect', actionKey: 'saler', dataIndex: ['user_id', 'real_name'], keyWord: 'sale_name'},
         {label: '区域', key: 'region_team_id', compType: 'select', optionKey: 'regionList', idKey: 'region_team_id', labelKey: 'region_team_name'},
         {label: '截止日期', compType: 'singleDate', key: 'time'},
         {label: '回款待分配>', compType: 'inputNumber', key: 'wait_allocation_amount'},
@@ -46,13 +45,13 @@ export const getReceListQueryKey = userGroupId => {
         case '25':
         case '29':
         case '10':
-            return ['company_id', 'receivables_aging_range', 'region_team_id', 'time', 'sale_search_id', 'wait_allocation_amount', 'operate'];
+            return ['company_id', 'receivables_aging_range', 'region_team_id', 'time', 'sale_id', 'wait_allocation_amount', 'operate'];
         case '26':
         case '30':
         case '31':
         case '32':
         case '33':
-            return ['company_id', 'receivables_aging_range', 'time', 'sale_search_id', 'wait_allocation_amount', 'operate'];
+            return ['company_id', 'receivables_aging_range', 'time', 'sale_id', 'wait_allocation_amount', 'operate'];
         case '34':
             return ['company_id', 'receivables_aging_range', 'time', 'wait_allocation_amount', 'operate'];
         default:
@@ -282,14 +281,12 @@ export const getReceivableDetailCol = keys => {
 const mRender = (data, mKey, record, handleJump) => {
     const className = data !== undefined ? 'detail_entry_comp' : '';
     const { isTotalRow, company_id, company_name } = record;
-    const companyInfo = {
+    const companyInfo = isTotalRow ? false : {
         key: company_id,
         label: company_name
     }
     const showData = data !== undefined ? numeral(data).format('0.00') : '-'; 
     return (
-        isTotalRow ? 
-        <div className='totalCount'>{showData}</div> : 
         <div className={className} onClick={() => {handleJump(mKey, companyInfo)}}>{showData}</div>
     )
 }
@@ -301,6 +298,7 @@ export const receivableCol = (agingRangeArr, handleJump) => {
             dataIndex: 'company_name',
             key: 'company_name',
             width: 120,
+            fixed: 'left',
             render
         },
         {
@@ -308,6 +306,7 @@ export const receivableCol = (agingRangeArr, handleJump) => {
             dataIndex: 'sale_name_area',
             key: 'sale_name_area',
             width: 150,
+            fixed: 'left',
             render: (_, record) => {
                 const {sale_name, sale_supervisor_name, sale_manager_name, region_team_name, isTotalRow} = record;
                 return (
@@ -326,6 +325,7 @@ export const receivableCol = (agingRangeArr, handleJump) => {
             dataIndex: 'total_receivables_amount',
             key: 'total_receivables_amount',
             width: 120,
+            fixed: 'left',
             render: renderNum
         },
         {
@@ -333,6 +333,7 @@ export const receivableCol = (agingRangeArr, handleJump) => {
             dataIndex: 'wait_allocation_amount',
             key: 'wait_allocation_amount',
             width: 120,
+            fixed: 'left',
             render: renderNum
         },
     ];
@@ -353,7 +354,7 @@ export const receivableCol = (agingRangeArr, handleJump) => {
                 title: display,
                 dataIndex: display,
                 key: display,
-                width: 120,
+                width: 110,
                 render: (data, record) => mRender(data, id, record, handleJump) 
             }
         });

@@ -40,17 +40,27 @@ export const getQueryItems = keys => {
     return keys.map(item => allOpts.find(queryItem => queryItem.upperKey === item || queryItem.key === item));
 };
 
+export const getReceListQueryKey = userGroupId => {
+    switch(userGroupId) {
+        case '2':
+        case '25':
+        case '29':
+        case '10':
+            return ['company_id', 'receivables_aging_range', 'region_team_id', 'time', 'sale_search_id', 'wait_allocation_amount', 'operate'];
+        case '26':
+        case '30':
+        case '31':
+        case '32':
+        case '33':
+            return ['company_id', 'receivables_aging_range', 'time', 'sale_search_id', 'wait_allocation_amount', 'operate'];
+        case '34':
+            return ['company_id', 'receivables_aging_range', 'time', 'wait_allocation_amount', 'operate'];
+        default:
+            return [];
+    }
+}
+
 export const getQueryKeys = {
-    '2': ['company_id', 'receivables_aging_range', 'region_team_id', 'time', 'sale_search_id', 'wait_allocation_amount', 'operate'],
-    '25': ['company_id', 'receivables_aging_range', 'region_team_id', 'time', 'sale_search_id', 'wait_allocation_amount', 'operate'],
-    '26': ['company_id', 'receivables_aging_range', 'time', 'sale_search_id', 'wait_allocation_amount', 'operate'],
-    '30': ['company_id', 'receivables_aging_range', 'time', 'sale_search_id', 'wait_allocation_amount', 'operate'],
-    '31': ['company_id', 'receivables_aging_range', 'time', 'sale_search_id', 'wait_allocation_amount', 'operate'],
-    '32': ['company_id', 'receivables_aging_range', 'time', 'sale_search_id', 'wait_allocation_amount', 'operate'],
-    '29': ['company_id', 'receivables_aging_range', 'region_team_id', 'time', 'sale_search_id', 'wait_allocation_amount', 'operate'],
-    '33': ['company_id', 'receivables_aging_range', 'time', 'sale_search_id', 'wait_allocation_amount', 'operate'],
-    '34': ['company_id', 'receivables_aging_range', 'time', 'wait_allocation_amount', 'operate'],
-    '10': ['company_id', 'receivables_aging_range', 'region_team_id', 'time', 'sale_search_id', 'wait_allocation_amount', 'operate'],
     reservationList: ['company_id', 'region_team_id', 'sale_id', 'execution_completed_time', 'range-value', 'project_id', 'requirement_id', 'weibo_type', 'account_id', 'order_ids', 'brand_id', 'executor_admin_id', 'operate'], 
     campaignList: ['company_id', 'region_team_id', 'sale_id', 'campaign_settlement_time', 'range-value', 'project_id', 'weibo_type', 'campaign_id', 'brand_id', 'operate'], 
     extendBusinessList: ['company_id', 'region_team_id', 'sale_id', 'pass_time', 'range-value', 'project_id', 'campaign_id', 'brand_id', 'operate'], 

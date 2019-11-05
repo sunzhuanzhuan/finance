@@ -2,9 +2,9 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import './receivable.less';
-import { message, Table, Button, Alert } from "antd";
+import { Table, Alert } from "antd";
 import ReceivableQuery from './ReceivableQuery';
-import { getQueryItems, getQueryKeys, receivableCol } from '../constants';
+import { getQueryItems, getQueryKeys, getReceListQueryKey, receivableCol } from '../constants';
 import * as receivableAction from "../actions/receivable";
 import * as receivableOffAction from "@/receivablesOff/actions/receivableOff";
 import * as goldenActions from "../../companyDetail/actions/goldenApply";
@@ -93,7 +93,7 @@ class Receivableslist extends React.Component {
 				showExport
 				className={'rece-wrapper'}
 				isList
-				queryItems={getQueryItems(getQueryKeys[user_group_id]) || []}
+				queryItems={getQueryItems(getReceListQueryKey(user_group_id)) || []}
 				queryOptions={Object.assign(receMetaData, {salerData, regionList})} 
 				handleSearch={this.handleSearch}
 				handleExport={this.handleExport}

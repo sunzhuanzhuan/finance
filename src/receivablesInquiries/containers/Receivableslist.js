@@ -39,6 +39,7 @@ class Receivableslist extends React.Component {
 
 		this.setState({leftWidth});
 	}
+
 	handleSearch = searchQuery => {
 		this.setState({searchQuery, loading: true});
 		this.props.getReceivableList(searchQuery).then(() => {
@@ -82,12 +83,6 @@ class Receivableslist extends React.Component {
 		);
 		const dataSource = list && list.length ? [totalRaw, ...list] : [];
 		const totalWidth = getTotalWidth(receivableCol(receivables_aging_range));
-		const pagination = {
-			defaultPageSize: 20,
-			showQuickJumper: true,
-			showSizeChanger: true,
-			pageSizeOptions: ['20', '50', '100', '200']
-		};
 		return <div className='rece-wrapper'>
 			<div className='rece-title'>应收账款查询</div>
 			<ReceivableQuery 
@@ -111,7 +106,7 @@ class Receivableslist extends React.Component {
 					columns={receivableCol(receivables_aging_range, this.handleJumpToDetail)} 
 					dataSource={dataSource} 
 					bordered 
-					pagination={pagination} 
+					pagination={false} 
 					loading={loading}
 					scroll={{ x: totalWidth }}
 				/>

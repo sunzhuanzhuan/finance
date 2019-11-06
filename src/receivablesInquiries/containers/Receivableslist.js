@@ -36,8 +36,11 @@ class Receivableslist extends React.Component {
 		this.handleSearch(searchQuery);
 		const leftSlide = document.getElementsByClassName('ant-layout-sider-trigger')[0];
 		const leftWidth = leftSlide && leftSlide.clientWidth;
-
-		this.setState({leftWidth});
+		const table = document.querySelector('.ant-table-thead');
+		const root = document.querySelector('.ant-layout-content');
+		const tableTop = table && table.clientHeight;
+		const rootHeight = root && root.clientHeight;
+		this.setState({leftWidth, tableScroll: rootHeight - tableTop - 30});
 	}
 
 	handleSearch = searchQuery => {
@@ -71,7 +74,7 @@ class Receivableslist extends React.Component {
 		} = this.props;
 		const { user_group_id } = userLoginInfo;
 		const { receivables_aging_range } = receMetaData;
-		const { loading, leftWidth } = this.state;
+		const { loading, leftWidth, tableScroll } = this.state;
 		const totalRaw = Object.assign(total, {company_name: '总计', isTotalRow: true});
 		const { company_num = 0, total_receivables_amount = 0, total_wait_allocation_amount = 0, } = statistics;
 		const TotalMsg = (
@@ -99,6 +102,7 @@ class Receivableslist extends React.Component {
 				}}
 			/>
 			<Alert className='list-total-info' message={TotalMsg} type="warning" showIcon />
+			
 			<Scolltable scrollClassName='.ant-table-body' widthScroll={totalWidth + leftWidth}>
 				<Table 
 					className='receivable-table rece-list-table'
@@ -108,7 +112,7 @@ class Receivableslist extends React.Component {
 					bordered 
 					pagination={false} 
 					loading={loading}
-					scroll={{ x: totalWidth }}
+					scroll={{ x: totalWidth, y: tableScroll }}
 				/>
 			</Scolltable>
 		</div>

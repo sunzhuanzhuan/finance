@@ -92,7 +92,7 @@ class ReceivableQuery extends React.Component {
 							{getFieldDecorator('receivables_aging_range', { initialValue: undefined })(
 								<Select 
 									allowClear
-									placeholder="请选择" 
+									placeholder="请选择账龄" 
 									className='range-value'
 									filterOption={(input, option) => (
 										option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -105,7 +105,7 @@ class ReceivableQuery extends React.Component {
 						<span className='range-value-sign'>{'>'}</span>
 						<FormItem className='range-value-item' >
 							{getFieldDecorator('receivables_amount', { initialValue: undefined })(
-								<InputNumber className='range-value' min={0}/>
+								<InputNumber placeholder="请输入应收款金额"  className='range-value-input' min={0}/>
 							)}
 						</FormItem>
 					</span>

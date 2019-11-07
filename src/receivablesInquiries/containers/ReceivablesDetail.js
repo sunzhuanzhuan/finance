@@ -98,7 +98,7 @@ class ReceivablesDetail extends React.Component {
 			const tabInfo = receListReducer[`receDetail-${value}`] || {};
 			const { list = [], page, total, page_size: tableSize, statistic = {} } = tabInfo;
 			const { total_receivables_amount = 0 } = statistic;
-			const totalMsg = `应收款金额${total_receivables_amount}`;
+			const totalMsg = `应收款金额：${total_receivables_amount}`;
 			const columns = getReceivableDetailCol(getColKeys[key]);
 			const totalWidth = getTotalWidth(columns);
 			const searchQuery = this.state[`searchQuery-${value}`] || { page: 1, page_size: 20 };

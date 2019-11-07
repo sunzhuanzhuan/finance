@@ -109,7 +109,7 @@ export const getReceivableDetailCol = keys => {
             title: '活动ID',
             dataIndex: 'order_id',
             key: 'campaign_id',
-            width: 100,
+            width: 80,
             render: linkRender
         },
         {
@@ -123,20 +123,20 @@ export const getReceivableDetailCol = keys => {
             title: '活动ID',
             dataIndex: 'order_id',
             key: 'business_id',
-            width: 100,
+            width: 80,
             render: linkRender
         },
         {
             title: '活动名称/活动类型',
             dataIndex: 'business_type_name',
             key: 'business_type_name',
-            width: 100,
+            width: 120,
             render: (_, record) => {
-                const {business_name, business_type} = record;
+                const {business_name, display} = record;
                 return (
                     <>
                         <div>活动名称：{render(business_name)}</div>
-                        <div>活动类型：{render(business_type)}</div>
+                        <div>活动类型：{render(display)}</div>
                     </>
                 )
             }
@@ -264,7 +264,7 @@ export const getReceivableDetailCol = keys => {
             title: '账龄',
             dataIndex: 'aging_name',
             key: 'aging_name',
-            width: 100,
+            width: 80,
             render
         },
         {

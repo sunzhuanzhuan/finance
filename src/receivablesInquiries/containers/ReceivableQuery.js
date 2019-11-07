@@ -42,7 +42,7 @@ class ReceivableQuery extends React.Component {
 			case 'searchSelect':
 				return <SearchSelect
 							action={actionKeyMap[actionKey]} 
-							style={{ width: 170 }}
+							style={{ width: 160 }}
 							placeholder='请选择'
 							getPopupContainer={() => document.querySelector(`.${className}`)}
 							keyWord={keyWord}

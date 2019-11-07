@@ -343,7 +343,7 @@ export const receivableCol = (agingRangeArr, handleJump) => {
             dataIndex: 'modified_at',
             key: 'modified_at',
             width: 100,
-            render
+            render: timeRender
         }
     ];
 

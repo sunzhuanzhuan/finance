@@ -21,7 +21,8 @@ class ReceivablesDetail extends React.Component {
 			addVisible: false,
 			activeKey: 'reservationList',
 			loading: false,
-			leftWidth: 40
+			leftWidth: 40, 
+			basicQuery: {}
 		};
 		events.on('message', this.collapsedListener); 
 	}
@@ -92,7 +93,7 @@ class ReceivablesDetail extends React.Component {
 	getTabPaneComp = () => {
 		const { receMetaData = {}, location, receListReducer = {}, platformList = [], regionList = [], receSalerList = [], excutorList = [] } = this.props;
 		const search = qs.parse(location.search.substring(1));
-		const { loading, leftWidth } = this.state;
+		const { loading, leftWidth, basicQuery: {basic = {}} } = this.state;
 		return getTabOptions.map(item => {
 			const { tab, key, value } = item;
 			const tabInfo = receListReducer[`receDetail-${value}`] || {};
@@ -101,7 +102,7 @@ class ReceivablesDetail extends React.Component {
 			const totalMsg = `应收款金额：${total_receivables_amount}`;
 			const columns = getReceivableDetailCol(getColKeys[key]);
 			const totalWidth = getTotalWidth(columns);
-			const searchQuery = this.state[`searchQuery-${value}`] || { page: 1, page_size: 20 };
+			const searchQuery = this.state[`searchQuery-${value}`] || { ...basic, page: 1, page_size: 20 };
 			const pagination = {
 				onChange: (current) => {
 					Object.assign(searchQuery, {page: current});
@@ -109,6 +110,7 @@ class ReceivablesDetail extends React.Component {
 					this.handleSearch(value, searchQuery);
 				},
 				onShowSizeChange: (_, pageSize) => {
+					console.log('sldkfjlsdkfjsdlfkj', searchQuery)
 					Object.assign(searchQuery, {page_size: pageSize});
 					this.setState({[`searchQuery-${value}`]: searchQuery});
 					this.handleSearch(value, searchQuery);

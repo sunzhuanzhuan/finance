@@ -248,7 +248,7 @@ export const getReceivableDetailCol = keys => {
         },
         {
             title: '活动结算时间',
-            dataIndex: 'campaign_settlement_time',
+            dataIndex: 'settlement_time',
             key: 'campaign_settlement_time',
             width: 100,
             render: timeRender

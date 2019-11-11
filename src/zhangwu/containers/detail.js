@@ -229,9 +229,10 @@ class Detail extends Component {
 				<Col span={3} className='marLeft26'>
 					主账号:{detail.account?detail.account.identity_name:''}
 				</Col>
-				<Col span={5}>账号:{detail.account?detail.account.weibo_name:''} </Col>
-				<Col span={4}>媒介经理:{detail.account?detail.account.media_manager_name:''} </Col>
-				<Col span={5}>合作方类型:{detail.account?detail.account.partner_type:''} </Col>
+				<Col span={4}>账号:{detail.account?detail.account.weibo_name:''} </Col>
+				<Col span={3}>平台:{detail.trinity?detail.trinity.platform_name:''} </Col>
+				<Col span={3}>媒介经理:{detail.account?detail.account.media_manager_name:''} </Col>
+				<Col span={4}>合作方类型:{detail.account?detail.account.partner_type:''} </Col>
 				<Col span={5}>付款公司:{detail.account?detail.account.payment_company_name:''} </Col>
 				
 			</Row>
@@ -315,7 +316,6 @@ class Detail extends Component {
 				:null}
 			
 			<Row className='accountTitle borderBottomNode' style={{marginTop:'20px'}}>
-				<Col span={5} className='marLeft26'>平台:{detail.trinity?detail.trinity.platform_name:''} </Col>
 				<Col span={5}>三方下单平台:{detail.trinity?detail.trinity.cooperation_platform_name:''} </Col>
 				<Col span={5}>三方代理:{detail.trinity?detail.trinity.agent_name:''} </Col>
 				<Col span={4}>付款公司:{detail.trinity?detail.trinity.payment_company_name:''} </Col>

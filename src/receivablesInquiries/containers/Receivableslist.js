@@ -39,8 +39,8 @@ class Receivableslist extends React.Component {
 		this.setState({leftWidth});
 	}
 
-	handleSearch = searchQuery => {
-		this.setState({searchQuery, loading: true});
+	handleSearch = (searchQuery, companyLabel) => {
+		this.setState({searchQuery, loading: true, companyLabel});
 		this.props.getReceivableList(searchQuery).then(() => {
 			this.setState({loading: false});
 		}).catch(() => {
@@ -74,8 +74,9 @@ class Receivableslist extends React.Component {
 		} = this.props;
 		const { user_group_id } = userLoginInfo;
 		const { receivables_aging_range } = receMetaData;
-		const { loading, leftWidth } = this.state;
-		const totalRaw = Object.assign(total, {company_name: '总计', isTotalRow: true});
+		const { loading, leftWidth, companyLabel, searchQuery } = this.state;
+		const { company_id } = searchQuery;
+		const totalRaw = Object.assign(total, {company_name: '总计', company_id, company_real_name: companyLabel, isTotalRow: true});
 		const { company_num = 0, total_receivables_amount = 0, total_wait_allocation_amount = 0, } = statistics;
 		const TotalMsg = (
 			<div className='total-info-wrapper'>

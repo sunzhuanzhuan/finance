@@ -280,10 +280,10 @@ export const getReceivableDetailCol = keys => {
 
 const mRender = (data, mKey, record, handleJump) => {
     const className = data !== undefined ? 'detail_entry_comp' : '';
-    const { isTotalRow, company_id, company_name } = record;
-    const companyInfo = isTotalRow ? false : {
+    const { company_id, company_real_name, company_name } = record;
+    const companyInfo = {
         key: company_id,
-        label: company_name
+        label: company_real_name || company_name
     }
     const showData = data !== undefined ? numeral(data).format('0.00') : '-'; 
     return (

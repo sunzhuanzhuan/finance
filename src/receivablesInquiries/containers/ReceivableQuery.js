@@ -47,6 +47,14 @@ class ReceivableQuery extends React.Component {
 							getPopupContainer={() => document.querySelector(`.${className}`)}
 							keyWord={keyWord}
 							dataToList={res => { return res.data }}
+							onChange={ (value) => {
+								if(value) {
+									const { label } = value;
+									this.setState({companyLabel: label})
+								}else {
+									this.setState({companyLabel: ''})
+								}
+							}}
 							item={dataIndex}
 						/>;
 			case 'select':
@@ -157,6 +165,7 @@ class ReceivableQuery extends React.Component {
 	}
 	handleSearch = type => {
 		const { form, handleSearch, handleExport } = this.props;
+		const { companyLabel } = this.state;
 
 		if(type === 'reset') {
 			form.resetFields();
@@ -169,7 +178,7 @@ class ReceivableQuery extends React.Component {
 				if(dealValues.order_ids)
 					dealValues.order_ids = this.getMultipleIds(dealValues.order_ids);
 				Object.assign(dealValues, {page: 1, page_size: 20})
-				handleSearch(dealValues);
+				handleSearch(dealValues, companyLabel);
 			})
 		}else if(type === 'export') {
 			handleExport();

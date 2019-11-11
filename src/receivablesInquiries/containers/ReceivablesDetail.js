@@ -32,7 +32,7 @@ class ReceivablesDetail extends React.Component {
 	componentDidMount() {
 		const { location } = this.props;
 		const search = qs.parse(location.search.substring(1)) || {};
-		const { receivables_aging_range, company_id = {} } = search;
+		const { receivables_aging_range, company_id = {}, region_team_id, sale_id } = search;
 		const { key } = company_id;
 		const basicQuery = {
 			initialValus: search,
@@ -50,7 +50,7 @@ class ReceivablesDetail extends React.Component {
 			basicQuery,
 			leftWidth
 		})
-		this.queryAllTabsData({ page: 1, page_size: 20, receivables_aging_range, company_id: key});
+		this.queryAllTabsData({ page: 1, page_size: 20, receivables_aging_range, company_id: key, region_team_id, sale_id});
 	}
 	componentWillUnmount() {
 		this.props.clearReceDetailList();

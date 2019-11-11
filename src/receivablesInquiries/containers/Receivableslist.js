@@ -54,7 +54,11 @@ class Receivableslist extends React.Component {
 	}
 
 	handleJumpToDetail = (receivables_aging_range, company_id) => {
-		const detailQuery = company_id ? { receivables_aging_range, company_id } : { receivables_aging_range }
+		const { searchQuery } = this.state;
+		const { region_team_id, sale_id } = searchQuery;
+		const detailQuery = {region_team_id, sale_id, receivables_aging_range};
+		if(company_id)
+			Object.assign(detailQuery, {company_id})
 		this.props.history.push({
 			pathname: '/finance/receivable/detail',
 			search: `?${qs.stringify(detailQuery)}`,

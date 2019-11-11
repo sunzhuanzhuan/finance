@@ -154,11 +154,11 @@ export const getReceivableDetailCol = keys => {
             key: 'sale_name_area',
             width: 100,
             render: (_, record) => {
-                const {sale_name, salesman_region} = record;
+                const {sale_name, region} = record;
                 return (
                     <>
                         <div>销售：{render(sale_name)}</div>
-                        <div>区域：{render(salesman_region)}</div>
+                        <div>区域：{render(region)}</div>
                     </>
                 )
             }

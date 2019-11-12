@@ -36,7 +36,7 @@ class ReceivablesDetail extends React.Component {
 		const { key } = company_id;
 		const basicQuery = {
 			initialValus: search,
-			basic: {receivables_aging_range, company_id: key}
+			basic: {receivables_aging_range, company_id: key, region_team_id, sale_id}
 		};
 		const leftSlide = document.getElementsByClassName('ant-layout-sider-trigger')[0];
 		const leftWidth = leftSlide && leftSlide.clientWidth;

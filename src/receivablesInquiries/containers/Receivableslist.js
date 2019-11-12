@@ -53,15 +53,10 @@ class Receivableslist extends React.Component {
 		downloadByATag(`/api/finance/receivables/query/exportCompanyReceivables?${qs.stringify(searchQuery)}`);
 	}
 
-	handleJumpToDetail = (receivables_aging_range, company_id) => {
-		const { searchQuery } = this.state;
-		const { region_team_id, sale_id } = searchQuery;
-		const detailQuery = {region_team_id, sale_id, receivables_aging_range};
-		if(company_id)
-			Object.assign(detailQuery, {company_id})
+	handleJumpToDetail = (queryValues) => {
 		this.props.history.push({
 			pathname: '/finance/receivable/detail',
-			search: `?${qs.stringify(detailQuery)}`,
+			search: `?${qs.stringify(queryValues)}`,
 		});
 	}
 
@@ -75,8 +70,8 @@ class Receivableslist extends React.Component {
 		const { user_group_id } = userLoginInfo;
 		const { receivables_aging_range } = receMetaData;
 		const { loading, leftWidth, companyLabel, searchQuery } = this.state;
-		const { company_id } = searchQuery;
-		const totalRaw = Object.assign(total, {company_name: '总计', company_id, company_real_name: companyLabel, isTotalRow: true});
+		const { company_id, sale_id, region_team_id } = searchQuery;
+		const totalRaw = Object.assign(total, {company_name: '总计', company_id, company_real_name: companyLabel, sale_id, region_team_id, isTotalRow: true});
 		const { company_num = 0, total_receivables_amount = 0, total_wait_allocation_amount = 0, } = statistics;
 		const TotalMsg = (
 			<div className='total-info-wrapper'>

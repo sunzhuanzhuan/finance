@@ -280,14 +280,22 @@ export const getReceivableDetailCol = keys => {
 
 const mRender = (data, mKey, record, handleJump) => {
     const className = data !== undefined ? 'detail_entry_comp' : '';
-    const { company_id, company_real_name, company_name } = record;
-    const companyInfo = {
-        key: company_id,
-        label: company_real_name || company_name
-    }
+    const { company_id, company_real_name, company_name, region_team_id, sale_id } = record;
+    const queryValues = {
+        receivables_aging_range: mKey,
+        region_team_id,
+        sale_id
+    };
+    if(company_id && (company_real_name || company_name))
+        Object.assign(queryValues, 
+            {
+                company_id: {
+                key: company_id,
+                label: company_real_name || company_name
+            }})
     const showData = data !== undefined ? numeral(data).format('0.00') : '-'; 
     return (
-        <div className={className} onClick={() => {handleJump(mKey, companyInfo)}}>{showData}</div>
+        <div className={className} onClick={() => {handleJump(queryValues)}}>{showData}</div>
     )
 }
 

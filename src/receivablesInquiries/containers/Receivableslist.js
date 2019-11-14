@@ -18,6 +18,8 @@ class Receivableslist extends React.Component {
 		super();
 		this.state = {
 			searchQuery: {
+				page: 1,
+				page_size: 19,
 				time: moment().format('YYYY-MM-DD')
 			},
 			loading: false,
@@ -64,7 +66,7 @@ class Receivableslist extends React.Component {
 
 	render() {
 		const { 
-			receivableList: { total = {}, list = [], statistics = {}}, 
+			receivableList: { total_data = {}, total = 0, page = 1, page_size = 20, list = [], statistics = {}}, 
 			getGoldenCompanyId,
 			getReceSaleList,
 			receMetaData = {}, receSalerList = [], regionList = [], userLoginInfo = {}
@@ -73,7 +75,7 @@ class Receivableslist extends React.Component {
 		const { receivables_aging_range } = receMetaData;
 		const { loading, leftWidth, companyLabel, searchQuery } = this.state;
 		const { company_id, sale_id, region_team_id } = searchQuery;
-		const totalRaw = Object.assign(total, {company_name: '总计', company_id, company_real_name: companyLabel, sale_id, region_team_id, isTotalRow: true});
+		const totalRaw = Object.assign(total_data, {company_name: '总计', company_id, company_real_name: companyLabel, sale_id, region_team_id, isTotalRow: true});
 		const { company_num = 0, total_receivables_amount = 0, total_wait_allocation_amount = 0, } = statistics;
 		const TotalMsg = (
 			<div className='total-info-wrapper'>
@@ -84,6 +86,24 @@ class Receivableslist extends React.Component {
 		);
 		const dataSource = list && list.length ? [totalRaw, ...list] : [];
 		const totalWidth = getTotalWidth(receivableCol(receivables_aging_range));
+		const pagination = {
+			onChange: current => {
+				Object.assign(searchQuery, {page: current});
+				this.setState({searchQuery});
+				this.handleSearch(searchQuery);
+			},
+			onShowSizeChange: (_, pageSize) => {
+				Object.assign(searchQuery, {page_size: pageSize - 1, page: 1});
+				this.setState({searchQuery});
+				this.handleSearch(searchQuery);
+			},
+			total: parseInt(total),
+			current: parseInt(page),
+			pageSize: parseInt(page_size) + 1,
+			showQuickJumper: true,
+			showSizeChanger: true,
+			pageSizeOptions: ['20', '50', '100', '200']
+		};
 		return <div className='rece-wrapper'>
 			<div className='rece-title'>应收账款查询</div>
 			<ReceivableQuery 
@@ -105,10 +125,10 @@ class Receivableslist extends React.Component {
 				<Table 
 					className='receivable-table rece-list-table'
 					rowKey='company_name' 
-					columns={receivableCol(receivables_aging_range, this.handleJumpToDetail)} 
+					columns={receivableCol(receivables_aging_range, this.handleJumpToDetail, totalRaw)} 
 					dataSource={dataSource} 
 					bordered 
-					pagination={false} 
+					pagination={pagination} 
 					loading={loading}
 					scroll={{ x: totalWidth }}
 				/>

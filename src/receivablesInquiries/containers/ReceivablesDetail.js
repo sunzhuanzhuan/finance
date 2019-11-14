@@ -110,7 +110,7 @@ class ReceivablesDetail extends React.Component {
 					this.handleSearch(value, searchQuery);
 				},
 				onShowSizeChange: (_, pageSize) => {
-					Object.assign(searchQuery, {page_size: pageSize});
+					Object.assign(searchQuery, {page_size: pageSize, page: 1});
 					this.setState({[`searchQuery-${value}`]: searchQuery});
 					this.handleSearch(value, searchQuery);
 				},

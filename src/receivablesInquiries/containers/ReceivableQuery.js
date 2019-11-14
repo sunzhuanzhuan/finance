@@ -117,7 +117,6 @@ class ReceivableQuery extends React.Component {
 							)}
 						</FormItem>
 					</span>
-					
 				)
 			}
 				
@@ -148,7 +147,7 @@ class ReceivableQuery extends React.Component {
 					delete values[key];
 				}
 			}else if(item.compType === 'singleDate') {
-				values[key] = values[key].format('YYYY-MM-DD');
+				values[key] = values[key] && values[key].format('YYYY-MM-DD');
 			}else if(item.compType === 'searchSelect') {
 				if(values[key]) {
 					values[key] = values[key]['key'];

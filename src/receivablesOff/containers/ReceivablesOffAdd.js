@@ -131,7 +131,7 @@ class ReceivablesOfflist extends React.Component {
 					this.handleSearch(id, searchQuery);
 				},
 				onShowSizeChange: (_, pageSize) => {
-					Object.assign(searchQuery, {page_size: pageSize});
+					Object.assign(searchQuery, {page_size: pageSize, page: 1});
 					this.setState({[`searchQuery-${id}`]: searchQuery});
 					this.handleSearch(id, searchQuery);
 				},

@@ -163,12 +163,13 @@ class ReceivableQuery extends React.Component {
 		return trimIdsStr.replace(/\s+/g,",");
 	}
 	handleSearch = type => {
-		const { form, handleSearch, handleExport } = this.props;
+		const { isList, form, handleSearch, handleExport } = this.props;
 		const { companyLabel } = this.state;
+		const basicQuery = isList ? {page: 1, page_size: 19} : {page: 1, page_size: 20}
 
 		if(type === 'reset') {
 			form.resetFields();
-			handleSearch({page: 1, page_size: 20});
+			handleSearch(basicQuery);
 		}else if(type === 'search') {
 			form.validateFields((errors, values) => {
 				if(errors)
@@ -176,7 +177,7 @@ class ReceivableQuery extends React.Component {
 				const dealValues = this.dealValuesDate(values);
 				if(dealValues.order_ids)
 					dealValues.order_ids = this.getMultipleIds(dealValues.order_ids);
-				Object.assign(dealValues, {page: 1, page_size: 20})
+				Object.assign(dealValues, basicQuery)
 				handleSearch(dealValues, companyLabel);
 			})
 		}else if(type === 'export') {

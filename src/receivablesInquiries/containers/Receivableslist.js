@@ -66,7 +66,7 @@ class Receivableslist extends React.Component {
 
 	render() {
 		const { 
-			receivableList: { total_data = {}, total = 0, page = 1, page_size = 20, list = [], statistics = {}}, 
+			receivableList: { total_data = {}, total = 0, page = 1, page_size = 19, list = [], statistics = {}}, 
 			getGoldenCompanyId,
 			getReceSaleList,
 			receMetaData = {}, receSalerList = [], regionList = [], userLoginInfo = {}

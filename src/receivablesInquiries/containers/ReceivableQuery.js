@@ -74,7 +74,7 @@ class ReceivableQuery extends React.Component {
 			case 'singleDate': 
 				return <DatePicker />
 			case 'inputNumber':
-				return <InputNumber placeholder="请输入" min={0} className='common_search_width' />;
+				return <InputNumber placeholder="请输入" className='common_search_width' />;
 			default:
 				return <Input placeholder="请输入" className='common_search_width' />;
 		}
@@ -113,7 +113,7 @@ class ReceivableQuery extends React.Component {
 						<span className='range-value-sign'>{'>'}</span>
 						<FormItem className='range-value-item' >
 							{getFieldDecorator('receivables_amount', { initialValue: undefined })(
-								<InputNumber placeholder="请输入应收款金额"  className='range-value-input' min={0}/>
+								<InputNumber placeholder="请输入应收款金额"  className='range-value-input'/>
 							)}
 						</FormItem>
 					</span>

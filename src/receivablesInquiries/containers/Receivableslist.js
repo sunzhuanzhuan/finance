@@ -50,7 +50,9 @@ class Receivableslist extends React.Component {
 
 	handleExport = () => {
 		const { searchQuery } = this.state;
-		downloadByATag(`/api/finance/receivables/query/exportCompanyReceivables?${qs.stringify(searchQuery)}`);
+		this.props.getReceExportInfo({...searchQuery, flag: 1}).then(() => {
+			downloadByATag(`/api/finance/receivables/query/exportCompanyReceivables?${qs.stringify(searchQuery)}`);
+		})
 	}
 
 	handleJumpToDetail = (queryValues) => {

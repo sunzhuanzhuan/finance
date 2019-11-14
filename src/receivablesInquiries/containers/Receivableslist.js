@@ -125,7 +125,7 @@ class Receivableslist extends React.Component {
 				<Table 
 					className='receivable-table rece-list-table'
 					rowKey='company_name' 
-					columns={receivableCol(receivables_aging_range, this.handleJumpToDetail, totalRaw)} 
+					columns={receivableCol(receivables_aging_range, this.handleJumpToDetail)} 
 					dataSource={dataSource} 
 					bordered 
 					pagination={pagination} 

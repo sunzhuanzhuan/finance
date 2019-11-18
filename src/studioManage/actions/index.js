@@ -114,3 +114,11 @@ export const {
 } = createHttpAction('getStudioDetailExport', Interface.getStudioDetailExport, {
 	method: 'get'
 });
+
+//获取上上签接口
+export const {
+	postAuthLink,
+	postAuthLink_success
+} = createHttpAction('postAuthLink', Interface.postAuthLink, {
+	method: 'post'
+});

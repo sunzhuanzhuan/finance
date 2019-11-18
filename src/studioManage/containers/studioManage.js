@@ -136,6 +136,24 @@ class StudioManage extends React.Component {
 
 		})
 	}
+	handleCopyLink = (record) => {
+		const { postAuthLink } = this.props.actions;
+		postAuthLink({ user_id: record.id }).then((res) => {
+			const input = document.createElement('input');
+			document.body.appendChild(input);
+			input.setAttribute('value', res.data.authLink);
+			input.select();
+			if (document.execCommand('copy')) {
+				document.execCommand('copy');
+				message.success('操作成功！', 2);
+			}
+			document.body.removeChild(input);
+		}).catch(({ errorMsg }) => {
+			message.error(errorMsg || '复制失败，请重试！');
+		})
+
+
+	}
 	handleSubmit = (values) => {
 		const { getStudioList, postStopStudio } = this.props.actions;
 		const { pageSize, record, filterParams } = this.state;
@@ -168,7 +186,7 @@ class StudioManage extends React.Component {
 		const search = qs.parse(this.props.location.search.substring(1));
 		const { newModalVisible, record, pageSize, filterParams, isClick, pullReady, loading } = this.state;
 		const { studioData: { rows, total, page, page_size }, studioMetadata: { studio_status = [], studio_type = [], studio_supported_platforms = [], source_type = [] }, freezeList, studioCheck, studioNameCheck } = this.props;
-		const studioConfig = studioConfigFunc(this.handleStopStudio, this.handleStartStudio, this.props.history);
+		const studioConfig = studioConfigFunc(this.handleStopStudio, this.handleStartStudio, this.props.history, this.handleCopyLink);
 		const studioListSearch = studioListSearchFunc({ studio_status, studio_type, studio_supported_platforms });
 		const paginationObj = getPagination(this, search, { total, page, page_size });
 		return <div className='studio-manage-container'>

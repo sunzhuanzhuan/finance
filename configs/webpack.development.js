@@ -24,7 +24,12 @@ module.exports = merge(baseConfig, {
 			"/api": {
 				target: "http://nb.tst-weiboyi.com",
 				changeOrigin: true
+			},
+			"/api/studio": {
+				target: "http://yapi.ops.tst-weiboyi.com/mock/237",
+				changeOrigin: true
 			}
+
 		},
 	},
 	module: {

@@ -1,6 +1,6 @@
 import React from "react";
 import numeral from "numeral";
-export const studioConfigFunc = (handleStopStudio, handleStartStudio, history) => [
+export const studioConfigFunc = (handleStopStudio, handleStartStudio, history, handleCopyLink) => [
 	{
 		title: '工作室ID',
 		dataIndex: 'id',
@@ -91,6 +91,19 @@ export const studioConfigFunc = (handleStopStudio, handleStartStudio, history) =
 		}
 	},
 	{
+		title: '电子签章认证状态',
+		dataIndex: 'b1',
+		key: 'b1',
+		align: 'center',
+		width: 140,
+		render: (text, record) => {
+			const isAlipay = record.is_support_alipay === 1;
+			const isBank = record.payment_type_id !== 0;
+			const value = isAlipay && isBank ? '支付宝&银行卡' : isAlipay ? '支付宝' : '银行卡';
+			return value
+		}
+	},
+	{
 		title: '操作',
 		dataIndex: 'action',
 		key: 'action',
@@ -110,7 +123,10 @@ export const studioConfigFunc = (handleStopStudio, handleStartStudio, history) =
 				{record.status === 0 || record.status === 2 ? <a href='javascript:;' className='little-left-gap' onClick={() => {
 					handleStartStudio(record);
 				}}>启用</a> : null}
-				{/* <a href='javascript:;' className='left-gap'>使用详情</a> */}
+
+				<a href='javascript:;' className='left-gap' onClick={() => {
+					handleCopyLink(record)
+				}}>生成认证链接</a>
 			</div>
 		}
 	}

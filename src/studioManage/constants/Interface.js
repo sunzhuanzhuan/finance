@@ -14,4 +14,5 @@ export default {
 	getIdCardList: '/finance/jobRecord/list',
 	postIdCardListExport: '/finance/jobRecord/create',
 	getStudioDetailExport: '/finance/studio/exportStudioAllocation',
+	postAuthLink: '/studio/getAuthLink'
 }

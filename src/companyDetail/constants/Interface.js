@@ -11,6 +11,9 @@ export default {
 	getGoldenAccount: '/finance/warehouse/getWarehouseList',
 	getGoldenFlow: '/finance/warehouse/getWarehouseBillList',
 	getFreezeDetail: 'finance/account/freezeDetail',
+	getReceivableDetail: '/finance/receivables/debt/detail',
+	getCompanyReceivableList: '/finance/receivables/debt/billList',
+	getReceivableOption: '/finance/receivables/verification/searchItem',
 	/* 调价 */
 	getCompanyDetailAuthorizations: '/rbac/getAuthorizations',
 	getGoldenMetadata: '/finance/readjust/metadata',

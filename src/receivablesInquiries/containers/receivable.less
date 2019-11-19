@@ -1,0 +1,106 @@
+.rece-title {
+    height: 28px;
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+    color: #333333;
+    line-height: 28px;
+}
+.rece-query {
+    width: 100%;
+    padding: 10px 30px 0 0;
+    background: #F7F7F7;
+    &:after {
+        content: ".";
+        clear: both;
+        display: block;
+        height: 0;
+        overflow: hidden;
+        visibility: hidden;
+    }
+    .ant-form-item,.ant-form-item-label,.ant-form-item-control-wrapper{
+        display: inline-block;
+        vertical-align: top;
+    }
+    .ant-form-item-label {
+        margin-left: 30px;
+    }
+    .range-value-wrapper {
+        display: inline-block;
+        padding-left: 24px;
+        line-height: 38px;
+        .range-value-item {
+            .range-value {
+                width: 104px;
+            }
+            .range-value-input {
+                width: 150px;
+            }
+        }
+        .range-value-sign {
+            width: 10px;
+            margin: 0 10px;
+        }
+    }
+    
+    .operate-wrapper {
+        float: right;
+        .ant-btn {
+            margin-left: 20px;
+        }
+    }
+    .common_search_width {
+        width: 160px;
+    }
+}
+.total-info-wrapper {
+    padding: 0 10px;
+    .total-color {
+        color: @primary-color;
+    }
+    .total-margin {
+        margin: 0 20px;
+    }
+}
+
+.receivable-table {
+    .ant-table-tbody > tr > td {
+        word-wrap: break-word;
+        word-break: break-all;
+    }
+    .detail_entry_comp {
+        width: fit-content;
+        cursor: pointer;
+        color: @primary-color;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+.rece-wrapper {
+    .ant-table-tbody > tr > td {
+        word-wrap: break-word;
+        word-break: break-all;
+    }
+    .list-total-info {
+        width: 100%;
+        margin: 16px 0;
+    }
+    .scrollbar {
+        border: none;
+    }
+}
+
+.rece-list-table {
+    .ant-table-fixed {
+        width: 511px;
+    }
+    .ant-table-fixed-left {
+        width: 509px;
+    }
+    .ant-table-row:nth-child(1) {
+        background: #fafafa;
+    }
+}

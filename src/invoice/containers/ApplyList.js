@@ -66,7 +66,8 @@ class ApplyList extends Component {
 			type: 1,
 			totalSum: 0,
 			returnLoading: false,
-			limit: 50
+			limit: 50,
+			receivableCount: 0
 		}
 	}
 
@@ -190,7 +191,7 @@ class ApplyList extends Component {
 					/>,
 				iconType: ''
 
-			})
+			});
 		} else if (input_action == 'sale-commit') {
 			this.setState({ passDisable: true })
 			this.props.actions.getCommitReviewCheck(id).then((data) => {
@@ -295,14 +296,15 @@ class ApplyList extends Component {
 		});
 	}
 	//申请单列表 操作项-是否关联发票
-	isAssociate = (type_display, id, company_id, amount, can_invoice, type) => {
+	isAssociate = (type_display, id, company_id, amount, can_invoice, type, receivableCount) => {
 		this.setState({
 			isAssociateVisible: true,
 			isAssociateBtnVisible: type_display,
 			invoiceApplyId: id,
 			applyAmount: amount,
 			canInvoice: can_invoice,
-			type: type
+			type: type,
+			receivableCount
 		}, () => {
 			this.props.actions.getAvailableInvoiceList(this.state.invoiceApplyId, [], 1, this.state.limit).catch(({ errorMsg }) => {
 				message.warning(errorMsg || '请求出错', 1)
@@ -539,12 +541,21 @@ class ApplyList extends Component {
 				title: '金额（元）',
 				width: '170px',
 				render: (record) => {
-					let arrWaitMoney = [record.amount, -record.payback_amount]
-					return <p>
+					let arrWaitMoney = [record.receivables_payback_amount, -record.payback_amount]
+					return <p className='moneyAmountWrapper'>
 						<p>申请单金额:{record.amount}</p>
 						<p>已开票金额:{record.real_amount}</p>
-						{record.type == 1 || record.type == 5 ? <p><p>已回款金额:{record.payback_amount}</p>
-							<p>待回款金额:{calcSum(arrWaitMoney).toFixed(2)}</p></p> : null}
+						{
+							record.type == 1 || record.type == 5 ? 
+							<p>
+								<p>
+									<span>应回款金额:{record.receivables_payback_amount}</span>
+									<div style={{color: 'red', fontSize: '6px'}}>请按应回款金额开具发票</div>
+								</p>
+								<p>已回款金额:{record.payback_amount}</p>
+								<p>待回款金额:{calcSum(arrWaitMoney).toFixed(2)}</p>
+							</p> : null
+						}
 					</p>
 				}
 			},
@@ -674,14 +685,14 @@ class ApplyList extends Component {
 								<div className='button-margin'>									{record.status_display == '已开' ? <Button size='small' type="primary" onClick={this.showConfirm.bind(this, 'deliver', record.id, role, expressCompanyData)}>已寄出</Button> : ''}
 									{record.status_display == '待开' ?
 										<p>
-											<Button size='small' type="primary" onClick={this.isAssociate.bind(this, record.type_display, record.id, record.company_id, record.amount, record.can_invoice, record.type)}>已开</Button>
+											<Button size='small' type="primary" onClick={this.isAssociate.bind(this, record.type_display, record.id, record.company_id, record.amount, record.can_invoice, record.type, record.receivables_payback_amount)}>已开</Button>
 											{record.payback_status == 0 ? <Button size='small' type="primary" onClick={this.showConfirm.bind(this, 'cashier-cancel', record.id)}>取消</Button> : ''}
 										</p> : ''}
 								</div> :
 								<div className='button-margin'>									{record.status_display == '已开' ? <Button size='small' type="primary" onClick={this.showConfirm.bind(this, 'deliver', record.id, role, expressCompanyData)}>已寄出</Button> : ''}
 									{record.status_display == '待开' ?
 										<p>
-											<Button size='small' type="primary" onClick={this.isAssociate.bind(this, record.type_display, record.id, record.company_id, record.amount, record.can_invoice, record.type)}>已开</Button>
+											<Button size='small' type="primary" onClick={this.isAssociate.bind(this, record.type_display, record.id, record.company_id, record.amount, record.can_invoice, record.type, record.receivables_payback_amount)}>已开</Button>
 											<Button size='small' type="primary" onClick={this.showConfirm.bind(this, 'cashier-cancel', record.id)}>取消</Button>
 										</p> : ''}
 								</div> : ''
@@ -712,10 +723,9 @@ class ApplyList extends Component {
 							<p style={{ fontSize: '12px' }}>该公司总消费：{this.state.totalSpendAmount}元，总充值：{this.state.totalRechargeAmount}元，已开票金额（含合同、邮件审批）：{this.state.totalInvoicedAmount}元</p>
 							<p>请确认该发票申请单之前没有开过发票，以免开重，然后再进行下一步操作</p>
 							<Row type="flex" justify="center" gutter={16}>
-								{this.state.isAssociateBtnVisible == '消费' || this.state.isAssociateBtnVisible == '充值' ? <Col><Button><Link to={"/finance/invoice/associateInvoice?id=" + this.state.invoiceApplyId + "&role=" + role}>已开票，关联现有发票</Link></Button></Col> : ''}
+								{this.state.isAssociateBtnVisible == '消费' || this.state.isAssociateBtnVisible == '充值' ? <Col><Button><Link to={"/finance/invoice/associateInvoice?id=" + this.state.invoiceApplyId + "&role=" + role + "&receivable=" + this.state.receivableCount}>已开票，关联现有发票</Link></Button></Col> : ''}
 								<Col><Button onClick={this.handleCreatNewInvoice.bind(this)}>未开票，开具新发票</Button></Col>
 							</Row>
-
 						</div>
 					</Modal>
 					<Modal
@@ -734,6 +744,7 @@ class ApplyList extends Component {
 								<span key='apply-amount' className='modal-tip-title'>发票申请单金额：{this.state.applyAmount}元</span>
 								{this.state.type === 5 ? <span>（已开发票金额:{calcSum(acountAry).toFixed(2)}元）</span> : null}
 								{this.state.type === 5 ? <span key='can-invoice-amount' className='modal-tip-title'>可开发票金额：{this.state.canInvoice}元</span> : null}
+								{this.state.type === 1 || this.state.type === 5 ? <span key='apply-amount' className='modal-tip-title' style={{marginLeft: 10}}>应回款金额：{this.state.receivableCount}元</span> : null}
 							</p>
 							<p className='modal-tip-title'>已填开票金额：<span className='some-red-span'>{this.state.totalSum}元</span></p>
 							<AddInvoiceInfo
@@ -741,6 +752,7 @@ class ApplyList extends Component {
 								handleSelectData={this.handleSelectData.bind(this)}
 								id={this.state.invoiceApplyId}
 								applyAmount={this.state.applyAmount}
+								receivableCount={this.state.receivableCount}
 								canInvoice={this.state.canInvoice}
 								type={this.state.type}
 								handleCreatNewInvoiceOk={this.handleCreatNewInvoiceOk.bind(this)}

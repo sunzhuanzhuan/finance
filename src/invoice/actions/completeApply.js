@@ -49,6 +49,15 @@ export const getOrderList = (_params = { tabType: 'reservation' }) => (dispatch)
 			tabName: _params['tabType'],
 			payload: data || []
 		})
+	}).catch(() => {
+		dispatch({
+			type: Types.COMPLETE_ORDER_LIST,
+			tabName: _params['tabType'],
+			payload: {
+				total: 0,
+				rows: []
+			}
+		})
 	})
 }
 // 设置列表选中项

@@ -53,6 +53,7 @@ export default {
 	qcExcel: '/commission/excel/qc',
 	reparationExcel: '/commission/excel/reparation',
 	manualQcExcel: '/commission/excel/manualQc',
+	verificationDecreaseGmv: '/commission/excel/verificationDecreaseGmv',
 	payBackExcel: '/commission/excel/payBack',
 	longAgingExcel: '/commission/excel/longAging',
 	lessAchievementsExcel: '/commission/excel/lessAchievements',

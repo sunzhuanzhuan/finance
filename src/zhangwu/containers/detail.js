@@ -150,53 +150,71 @@ class Detail extends Component {
 				
 			</Row>
 			
-			<Row className='colHeightTitle' style={{borderBottom:'none'}}>
+			<Row className='colHeightTitle receivableColTitle' style={{borderBottom:'none'}}>
 			
 				<Col span={24}>
-				<div className='pad32'>
-					<span className='displayInline'>订单实收</span>
-					<span className='displayInline'>￥{detail.company?detail.company.real_consumption:''}</span>
-				</div>
-				<span>=</span>
-				<div className='padd60'>
-					<span className='displayInline'>执行价</span>
-					<span className='displayInline'>￥{detail.order?detail.order.total_deal_price:''}</span>
-				</div>
-				
-				<span>-</span>
-				<div className='padd60'>
-					<span className='displayInline'>质检返款</span>
-					<span className='displayInline'>￥{detail.company?detail.company.deducted_deal_price:''}</span>
-				</div>
-				
-				<span>-</span>
-				<div className='padd60'>
-					<span className='displayInline'>使用赠送</span>
-					<span className='displayInline'>￥{detail.company?detail.company.gift_amount:''}</span>
-				</div>
-			
-				<span>-</span>
-				<div className='padd60'>
-					<span className='displayInline'>赔偿</span>
-					<span className='displayInline'>￥{detail.company?detail.company.reparation_amount:''}</span>
-				</div>
-				
-				<span>-</span>
-				<div className='pad32'>
-					<span className='displayInline'>手工质检返款(结案前)</span>
-					<span className='displayInline'>￥{detail.company?detail.company.before_close_case_manual_qc:''}</span>
-				</div>
-				
+					<div className='pad30'>
+						<span className='displayInline'>订单实收</span>
+						<span className='displayInline'>￥{detail.company?detail.company.real_consumption:''}</span>
+					</div>
+					<span>=</span>
+					<div className='pad30'>
+						<span className='displayInline'>使用信用帐户</span>
+						<span className='displayInline'>￥{detail.company?detail.company.credit_amount:''}</span>
+					</div>
+
+					<span>+</span>
+					<div className='pad30'>
+						<span className='displayInline'>使用现金帐户</span>
+						<span className='displayInline'>￥{detail.company?detail.company.cash_amount:''}</span>
+					</div>
+					<div>
+						<div className='pad30'>
+							<span className='displayInline'>执行价</span>
+							<span className='displayInline'>￥{detail.order?detail.order.total_deal_price:''}</span>
+						</div>
+						
+						<div className='pad30'>
+							<span className='displayInline'>质检返款</span>
+							<span className='displayInline'>￥{detail.company?detail.company.deducted_deal_price:''}</span>
+						</div>
+						
+						<div className='pad30'>
+							<span className='displayInline'>使用赠送</span>
+							<span className='displayInline'>￥{detail.company?detail.company.gift_amount:''}</span>
+						</div>
+					
+						<div className='pad30'>
+							<span className='displayInline'>赔偿</span>
+							<span className='displayInline'>￥{detail.company?detail.company.reparation_amount:''}</span>
+						</div>
+						
+						<div className='pad30'>
+							<span className='displayInline'>手工质检返款(结案前)</span>
+							<span className='displayInline'>￥{detail.company?detail.company.before_close_case_manual_qc:''}</span>
+						</div>
+
+						<div className='pad30'>
+							<span className='displayInline'>手工质检(结案后)</span>
+							<span className='displayInline'>￥{detail.company?detail.company.after_close_case_manual_qc:''}</span>
+						</div>
+
+						<div className='pad30'>
+							<span className='displayInline'>应收款核销金额</span>
+							<span className='displayInline'>￥{detail.company?detail.company.has_verification_amount:''}</span>
+						</div>
+
+						<div className='pad30'>
+							<span className='displayInline'>应收款金额</span>
+							<span className='displayInline'>￥{detail.company?detail.company.receivables_amount:''}</span>
+						</div>
+					</div>
 				</Col>
 			</Row>
 			
-			<Row className='colHeight' style={{paddingLeft:'26px'}}>
-			
-				<div>
-					<span span={8}>手工质检(结案后):￥{detail.company?detail.company.after_close_case_manual_qc:''}</span>
-				</div>
+			<Row className='colHeightLow' style={{paddingLeft:'26px'}}>
 				<Col span={6}>应开发票金额:￥{detail.company?detail.company.total_invoice_amount:''}</Col>
-				<Col span={6}>已开发票金额:￥{detail.company?detail.company.already_invoice_amount:''}</Col>
+				<Col span={6}>已关联发票金额:￥{detail.company?detail.company.already_invoice_amount:''}</Col>
 				<Col span={6}>回款金额:￥{detail.company?detail.company.payback_amount:''}
 				<span className='paybackStatus'>{detail.company?detail.company.is_payback:''}</span>
 				</Col>
@@ -211,9 +229,10 @@ class Detail extends Component {
 				<Col span={3} className='marLeft26'>
 					主账号:{detail.account?detail.account.identity_name:''}
 				</Col>
-				<Col span={5}>账号:{detail.account?detail.account.weibo_name:''} </Col>
-				<Col span={4}>媒介经理:{detail.account?detail.account.media_manager_name:''} </Col>
-				<Col span={5}>合作方类型:{detail.account?detail.account.partner_type:''} </Col>
+				<Col span={4}>账号:{detail.account?detail.account.weibo_name:''} </Col>
+				<Col span={3}>平台:{detail.account?detail.account.platform_name:''} </Col>
+				<Col span={3}>媒介经理:{detail.account?detail.account.media_manager_name:''} </Col>
+				<Col span={4}>合作方类型:{detail.account?detail.account.partner_type:''} </Col>
 				<Col span={5}>付款公司:{detail.account?detail.account.payment_company_name:''} </Col>
 				
 			</Row>
@@ -297,7 +316,6 @@ class Detail extends Component {
 				:null}
 			
 			<Row className='accountTitle borderBottomNode' style={{marginTop:'20px'}}>
-				<Col span={5} className='marLeft26'>平台:{detail.trinity?detail.trinity.platform_name:''} </Col>
 				<Col span={5}>三方下单平台:{detail.trinity?detail.trinity.cooperation_platform_name:''} </Col>
 				<Col span={5}>三方代理:{detail.trinity?detail.trinity.agent_name:''} </Col>
 				<Col span={4}>付款公司:{detail.trinity?detail.trinity.payment_company_name:''} </Col>

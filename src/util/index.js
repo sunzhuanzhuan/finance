@@ -185,6 +185,20 @@ const getTotalWidth = (arr = []) => {
 	return arr.reduce((accumulator, item) => accumulator + parseInt(item.width), 0);
 }
 
+/**
+ * 下载文件
+ * @param String link 文件链接
+ * */
+const downloadByATag = (src, fileName = "") => {
+	var $a = document.createElement('a');
+	$a.setAttribute("href", src);
+	$a.setAttribute("target", "_blank");
+	$a.setAttribute("download", fileName);
+
+	var evObj = document.createEvent('MouseEvents');
+	evObj.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+	$a.dispatchEvent(evObj);
+}
 export {
 	showLoading,
 	hideLoading,
@@ -196,7 +210,8 @@ export {
 	changeHistorySearch,
 	changeHistoryLocation,
 	events,
-	getTotalWidth
+	getTotalWidth,
+	downloadByATag
 }
 export { calcSum } from './calcSum'
 

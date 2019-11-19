@@ -289,7 +289,7 @@ export const accountFlowFunc = (handleDetail, content, account_type) => {
 			key: 'action',
 			aligin: 'center',
 			render: (text, record) => {
-				if ((record.billing_type == 2) || (record.billing_type == 36) || (record.billing_type == 37) || (record.billing_type_display == '其他')) {
+				if ((record.is_show_detail == 2)) {
 					return <span>-</span>
 				} else {
 					const node = content ? <div>{content.key}：<a target='_blank' href={content.link}>{content.value}</a></div> : '';
@@ -1105,13 +1105,13 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				width: 640,
 				render: (_, record) => {
 					const { platform_name, reference_price_doc } = record;
-					
+
 					return [
-						<div 
-							key='price_info' 
+						<div
+							key='price_info'
 							className='price_info'
-							style={{width: '100%', textAlign: 'center', border: '1px solid #e8e8e8', borderBottom: 0, padding: '6px 4px', fontWeight: 500, color: 'rgba(0, 0, 0, 0.85)', background: '#fafafa'}}>
-								各价格均为订单创建时刻的价格
+							style={{ width: '100%', textAlign: 'center', border: '1px solid #e8e8e8', borderBottom: 0, padding: '6px 4px', fontWeight: 500, color: 'rgba(0, 0, 0, 0.85)', background: '#fafafa' }}>
+							各价格均为订单创建时刻的价格
 						</div>,
 						<Table
 							rowKey='id'

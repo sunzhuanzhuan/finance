@@ -306,6 +306,7 @@ class CreateApplyList extends Component {
 						this.props.actions.setTableSelectedRowkeys(item, [])
 					})
 				}
+
 			}
 		});
 	}

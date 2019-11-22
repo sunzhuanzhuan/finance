@@ -185,9 +185,9 @@ class StudioManage extends React.Component {
 	render() {
 		const search = qs.parse(this.props.location.search.substring(1));
 		const { newModalVisible, record, pageSize, filterParams, isClick, pullReady, loading } = this.state;
-		const { studioData: { rows, total, page, page_size }, studioMetadata: { studio_status = [], studio_type = [], studio_supported_platforms = [], source_type = [] }, freezeList, studioCheck, studioNameCheck } = this.props;
+		const { studioData: { rows, total, page, page_size }, studioMetadata: { studio_status = [], studio_type = [], studio_supported_platforms = [], source_type = [], sign_certify_status = [] }, freezeList, studioCheck, studioNameCheck } = this.props;
 		const studioConfig = studioConfigFunc(this.handleStopStudio, this.handleStartStudio, this.props.history, this.handleCopyLink);
-		const studioListSearch = studioListSearchFunc({ studio_status, studio_type, studio_supported_platforms });
+		const studioListSearch = studioListSearchFunc({ studio_status, studio_type, studio_supported_platforms, sign_certify_status });
 		const paginationObj = getPagination(this, search, { total, page, page_size });
 		return <div className='studio-manage-container'>
 			<fieldset className='fieldset_css'>

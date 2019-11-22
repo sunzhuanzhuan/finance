@@ -92,15 +92,12 @@ export const studioConfigFunc = (handleStopStudio, handleStartStudio, history, h
 	},
 	{
 		title: '电子签章认证状态',
-		dataIndex: 'b1',
-		key: 'b1',
+		dataIndex: 'sign_certify_status',
+		key: 'sign_certify_status',
 		align: 'center',
 		width: 140,
 		render: (text, record) => {
-			const isAlipay = record.is_support_alipay === 1;
-			const isBank = record.payment_type_id !== 0;
-			const value = isAlipay && isBank ? '支付宝&银行卡' : isAlipay ? '支付宝' : '银行卡';
-			return value
+			return record.sign_certify_status == 0 ? '未认证' : record.sign_certify_status == 1 ? '认证通过' : '认证失败'
 		}
 	},
 	{
@@ -124,9 +121,9 @@ export const studioConfigFunc = (handleStopStudio, handleStartStudio, history, h
 					handleStartStudio(record);
 				}}>启用</a> : null}
 
-				<a href='javascript:;' className='left-gap' onClick={() => {
+				{record.sign_certify_status != 2 ? <a href='javascript:;' className='left-gap' onClick={() => {
 					handleCopyLink(record)
-				}}>生成认证链接</a>
+				}}>生成认证链接</a> : null}
 			</div>
 		}
 	}

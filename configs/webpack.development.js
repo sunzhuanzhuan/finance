@@ -22,11 +22,7 @@ module.exports = merge(baseConfig, {
 			// 	changeOrigin: true
 			// },
 			"/api": {
-				target: "http://nb.tst-weiboyi.com",
-				changeOrigin: true
-			},
-			"/api/esign/studio/getAuthLinkstudio": {
-				target: "http://yapi.ops.tst-weiboyi.com/mock/237",
+				target: "http://nb.dev-weiboyi.com",
 				changeOrigin: true
 			}
 

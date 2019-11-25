@@ -95,7 +95,7 @@ export const studioListSearchFunc = ({ studio_status, studio_type, studio_suppor
 		},
 		field: {
 			label: '电子签章认证状态',
-			value: 'type',
+			value: 'sign_certify_status',
 		},
 		selectOptionsChildren: sign_certify_status,
 		selectItem: { key: 'display', value: 'id' }

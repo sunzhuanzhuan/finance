@@ -145,13 +145,13 @@ class StudioManage extends React.Component {
 			input.select();
 			if (document.execCommand('copy')) {
 				document.execCommand('copy');
-				message.success('操作成功！', 2);
+				message.success('操作成功！', 2).then(() => {
+					document.body.removeChild(input);
+					console.log('复制成功');
+				});
 			}
-			document.body.removeChild(input);
-		}).catch(({ errorMsg }) => {
-			message.error(errorMsg || '复制失败，请重试！');
-		})
 
+		})
 
 	}
 	handleSubmit = (values) => {

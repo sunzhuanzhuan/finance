@@ -23,8 +23,8 @@ import StudioManage from './studioManage'
 import TrinityPay from './trinityPay'
 import FinanceSetting from './financeSetting'
 import ZhangWu from './zhangwu'
-
-
+import Receivable from './receivablesInquiries'
+import ReceivableOff from './receivablesOff'
 
 numeral.locale('chs')
 moment.locale('zh-cn');
@@ -54,6 +54,8 @@ const routes = () => (
 			<Route path='/finance/trinityPay' component={TrinityPay} />
 			<Route path='/finance/financeSetting' component={FinanceSetting} />
 			<Route path='/finance/zhangwu' component={ZhangWu} />
+			<Route path='/finance/receivable' component={Receivable} />
+			<Route path='/finance/receivableoff' component={ReceivableOff} />
 
 			<Redirect to="/error" />
 		</Switch>

@@ -42,17 +42,39 @@
         height: 50px;
         line-height: 50px;
     }
-    .colHeight{
-        height: 80px;
+    .colHeight, .colHeightLow{
         border: 1px solid #EDEDED;
         line-height: 38px;
         font-size: 13px;
     }
-    .colHeightTitle{
+
+    .colHeight {
+        height: 80px;
+    }
+
+    .colHeightLow {
+        height: 38px;
+    }
+    
+    .clearfix:after {
+        content: ".";
+        clear: both;
+        display: block;
+        height: 0;
+        overflow: hidden;
+        visibility: hidden;
+    }
+    .colHeightTitle, .receivableColTitle{
         height: 80px;
         border: 1px solid #EDEDED;
         padding-top: 20px;
         font-size: 13px;
+    }
+    .receivableColTitle {
+        height: unset;
+        .displayInline:nth-child(even) {
+            margin-bottom: 15px;
+        }
     }
     .borderBottomNode{
         border: 1px solid #EDEDED;
@@ -64,6 +86,10 @@
 }
 .paddLeft26{
     padding-left: 26px;
+}
+.pad30{
+    padding:0 30px;
+    display: inline-block;
 }
 .pad32{
     padding:0 32px;
@@ -98,7 +124,7 @@
     height: 25px;
     display: inline-block;
     font-size: 12px;
-    vertical-align: middle;
+    // vertical-align: middle;
     margin-left: 10px;
     line-height: 25px;
     padding-left: 7px;

@@ -112,7 +112,7 @@ class tableFilter extends Component {
 		const suffix = inputID ? <Icon type="close-circle" style={{ opacity: '.5' }}
 			onClick={() => { this.changeInputID('') }} /> : null;
 		return (
-			<haeder className='table-top-filter' >
+			<header className='table-top-filter' >
 				<Row type="flex" justify="start" gutter={16} style={{ padding: '10px 0' }}>
 					<Col >
 						每页显示：
@@ -211,7 +211,7 @@ class tableFilter extends Component {
 						}}
 					/>
 				</Modal>
-			</haeder >
+			</header >
 		)
 	}
 }

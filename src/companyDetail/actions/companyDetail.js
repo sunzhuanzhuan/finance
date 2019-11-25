@@ -79,3 +79,24 @@ export const {
 } = createHttpAction('getFreezeDetail', Interface.getFreezeDetail, {
 	method: 'get'
 });
+
+export const {
+	getReceivableDetail,
+	getReceivableDetail_success
+} = createHttpAction('getReceivableDetail', Interface.getReceivableDetail, {
+	method: 'get'
+});
+
+export const {
+	getCompanyReceivableList,
+	getCompanyReceivableList_success
+} = createHttpAction('getCompanyReceivableList', Interface.getCompanyReceivableList, {
+	method: 'get'
+});
+
+export const {
+	getReceivableOption,
+	getReceivableOption_success
+} = createHttpAction('getReceivableOption', Interface.getReceivableOption, {
+	method: 'get'
+});

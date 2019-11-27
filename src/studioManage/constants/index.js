@@ -121,7 +121,7 @@ export const studioConfigFunc = (handleStopStudio, handleStartStudio, history, h
 					handleStartStudio(record);
 				}}>启用</a> : null}
 
-				{record.sign_certify_status != 2 ? <a href='javascript:;' className='left-gap' onClick={() => {
+				{record.sign_certify_status != 1 ? <a href='javascript:;' className='left-gap' onClick={() => {
 					handleCopyLink(record)
 				}}>生成认证链接</a> : null}
 			</div>

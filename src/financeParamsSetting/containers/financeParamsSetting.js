@@ -60,17 +60,10 @@ class FinanceParamsSetting extends React.Component {
 		});
 	}
 
-	handleShowModal = historyData => {
+	isShowModal = historyData => {
 		this.setState({
-			visible: true,
-			historyData
-		})
-	}
-
-	handleCloseModal = () => {
-		this.setState({
-			visible: false,
-			historyData: null
+			visible: !this.state.visible,
+			historyData: historyData || null
 		})
 	}
 
@@ -114,7 +107,7 @@ class FinanceParamsSetting extends React.Component {
 							<a className='item-val' onClick={() => this.handleEditParamVal(key)}>{`${defaultVal}%`}</a>
 						}
 					</div>
-					<div className='item-right'><a onClick={() => this.handleShowModal(history)}>查看修改历史</a></div>
+					<div className='item-right'><a onClick={() => this.isShowModal(history)}>查看修改历史</a></div>
 				</div>
 			)
 		})
@@ -142,7 +135,7 @@ class FinanceParamsSetting extends React.Component {
 					title='查看修改历史'
 					destroyOnClose
 					footer={null}
-					onCancel={this.handleCloseModal}
+					onCancel={this.isShowModal}
 				>
 					{ this.getModalContent() }
 				</Modal>

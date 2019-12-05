@@ -1,6 +1,6 @@
 import React from "react";
 import numeral from "numeral";
-export const studioConfigFunc = (handleStopStudio, handleStartStudio, history) => [
+export const studioConfigFunc = (handleStopStudio, handleStartStudio, history, handleCopyLink) => [
 	{
 		title: '工作室ID',
 		dataIndex: 'id',
@@ -91,6 +91,16 @@ export const studioConfigFunc = (handleStopStudio, handleStartStudio, history) =
 		}
 	},
 	{
+		title: '电子签章认证状态',
+		dataIndex: 'sign_certify_status',
+		key: 'sign_certify_status',
+		align: 'center',
+		width: 140,
+		render: (text, record) => {
+			return record.sign_certify_status == 0 ? '未认证' : record.sign_certify_status == 1 ? '认证通过' : '认证失败'
+		}
+	},
+	{
 		title: '操作',
 		dataIndex: 'action',
 		key: 'action',
@@ -110,7 +120,10 @@ export const studioConfigFunc = (handleStopStudio, handleStartStudio, history) =
 				{record.status === 0 || record.status === 2 ? <a href='javascript:;' className='little-left-gap' onClick={() => {
 					handleStartStudio(record);
 				}}>启用</a> : null}
-				{/* <a href='javascript:;' className='left-gap'>使用详情</a> */}
+
+				{record.sign_certify_status != 1 ? <a href='javascript:;' className='left-gap' onClick={() => {
+					handleCopyLink(record)
+				}}>生成认证链接</a> : null}
 			</div>
 		}
 	}

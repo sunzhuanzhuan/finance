@@ -1,6 +1,6 @@
 import React from 'react'
 import { isFlashConfig } from './index'
-export const studioListSearchFunc = ({ studio_status, studio_type, studio_supported_platforms }) => [
+export const studioListSearchFunc = ({ studio_status, studio_type, studio_supported_platforms, sign_certify_status }) => [
 	{
 		ctype: 'input',
 		attr: {
@@ -86,6 +86,21 @@ export const studioListSearchFunc = ({ studio_status, studio_type, studio_suppor
 		selectItem: { key: 'display', value: 'id' }
 	},
 	{
+		ctype: 'select',
+		attr: {
+			placeholder: '不限',
+			style: { width: 160 },
+			labelInValue: true,
+			allowClear: true
+		},
+		field: {
+			label: '电子签章认证状态',
+			value: 'sign_certify_status',
+		},
+		selectOptionsChildren: sign_certify_status,
+		selectItem: { key: 'display', value: 'id' }
+	},
+	{
 		ctype: 'rangePicker',
 		attr: {
 			placeholder: ['开始时间', '结束时间'],
@@ -96,7 +111,7 @@ export const studioListSearchFunc = ({ studio_status, studio_type, studio_suppor
 			label: '有效期',
 			value: ['validity_start', 'validity_end'],
 		}
-	}
+	},
 ];
 export const studioDetailSearchFunc = ({ source_status, source_type }) => [
 	{

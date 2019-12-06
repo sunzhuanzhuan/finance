@@ -137,9 +137,9 @@ class AdjustApplyDetail extends React.Component {
 		const preFinanceArr = ['prev_id', 'statusPre', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'main_account_info', 'quoted_price', 'discount_rate', 'published_price', 'order_bottom_price', 'commissioned_price', 'pre_min_sell_price', 'preview_quote_type'];
 		const dealPreArr = costFlag ? preFinanceArr : preFinanceArr.filter(item => item !== 'quoted_price');
 		const adjustApplyDetail = flag ? 
-			adjustApplyDetailFunc(rel_order_status, quote_type, readjust_type, platformIcon)(detailColArr) 
-			: adjustApplyDetailFunc(rel_order_status, quote_type, readjust_type, platformIcon)(['order_id', 'status', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'commissioned_price_sale', 'history_min_sell_price', 'min_sell_price', 'auditor_name', 'pass_time', 'remark']);
-		const adjustApplyPreview = adjustApplyDetailFunc(rel_order_status, quote_type, readjust_type, platformIcon)(dealPreArr);
+			adjustApplyDetailFunc(rel_order_status, quote_type, readjust_type, platformIcon, costFlag)(detailColArr) 
+			: adjustApplyDetailFunc(rel_order_status, quote_type, readjust_type, platformIcon, costFlag)(['order_id', 'status', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'commissioned_price_sale', 'history_min_sell_price', 'min_sell_price', 'auditor_name', 'pass_time', 'remark']);
+		const adjustApplyPreview = adjustApplyDetailFunc(rel_order_status, quote_type, readjust_type, platformIcon, costFlag)(dealPreArr);
 		const dealStatusArr = Array.isArray(rel_order_status) && rel_order_status.length  ? [{id: 'allOptions', display: '全部'}, ...rel_order_status] : [];
 		const getTabPaneComp = () => {
 			return dealStatusArr.map(item => {

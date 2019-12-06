@@ -170,7 +170,7 @@ class AdjustApply extends React.Component {
 		const adjustApplyList = flag ? adjustApplyListFunc(audit_type, application_status, quote_type, this.handleJump, this.handleAction) : adjustApplyFunc(application_status, quote_type, this.handleJump);
 		const preArr = ['prev_id', 'statusPre', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'main_account_info', 'quoted_price', 'discount_rate', 'published_price', 'order_bottom_price', 'commissioned_price', 'pre_min_sell_price', 'preview_quote_type'];
 		const dealPreArr = costFlag ? preArr : preArr.filter(item => item !== 'quoted_price');
-		const adjustApplyPreview = adjustApplyDetailFunc(rel_order_status, quote_type, readjust_type, platformIcon)(dealPreArr);
+		const adjustApplyPreview = adjustApplyDetailFunc(rel_order_status, quote_type, readjust_type, platformIcon, costFlag)(dealPreArr);
 		const dealStatusArr = Array.isArray(application_status) && application_status.length  ? [{id: 'allOptions', display: '全部'}, ...application_status] : [];
 		const getTabPaneComp = () => {
 			return dealStatusArr.map(item => {

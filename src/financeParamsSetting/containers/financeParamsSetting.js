@@ -12,13 +12,17 @@ class FinanceParamsSetting extends React.Component {
 		super();
 		this.state = {};
 	}
+
+	componentDidMount() {
+		this.props.getFinanceParamsVal();
+	}
 	
 	handleEditParamVal = key => {
 		this.setState({ [`${key}-edit`]: true });
 	}
 
-	handleChangeParamVal = (key, value) => {
-		const dealVal = value || value === 0 ? numeral(value / 100).format('0.0000') : null;
+	handleChangeParamVal = (key, value, isPercent) => {
+		const dealVal = isPercent && value !== null ? numeral(value / 100).format('0.0000') : value;
 
 		this.setState({[key]: dealVal});
 	}
@@ -34,19 +38,17 @@ class FinanceParamsSetting extends React.Component {
 		}
 	};
 
-	handleSaveParamVal = (key, label) => {
-		const { financeParamsVal = [], setFinanceParamsVal, getFinanceParamsVal } = this.props;
-		const editItem = financeParamsVal.find(item => item.key === key) || {};
-		if(this.state[key] === null) {
+	handleSaveParamVal = (id, itemKey, label) => {
+		const { setFinanceParamsVal, getFinanceParamsVal } = this.props;
+		if(this.state[itemKey] === null) {
 			this.getErrorTips(`${label}不可为空`);
 			return;
 		}
-		Object.assign(editItem, {key, value: this.state[key]});
 		this.setState({ loading: true });
-		setFinanceParamsVal(editItem).finally(() => {
+		setFinanceParamsVal({id, itemKey, itemValue: this.state[itemKey]}).finally(() => {
 			this.setState({
-				[`${key}-edit`]: false,
-				[key]: null,
+				[`${itemKey}-edit`]: false,
+				[itemKey]: null,
 				loading: false
 			})
 			getFinanceParamsVal();
@@ -60,29 +62,48 @@ class FinanceParamsSetting extends React.Component {
 		});
 	}
 
-	isShowModal = historyData => {
+	isShowModal = (historyLabel, itemKey, isPercent) => {
 		this.setState({
 			visible: !this.state.visible,
-			historyData: historyData || null
+			historyLoading: true,
+			historyLabel, 
+			isPercent
 		})
+
+		if(itemKey) {
+			this.props.getFinanceEditHistory({itemKey}).then(result => {
+				const { data = [] } = result;
+				this.setState({historyData: data, historyLoading: false});
+			}).catch(() => {
+				this.setState({ historyLoading: false });
+			})
+		}else {
+			this.setState({historyData: []})
+		}
 	}
 
 	getModalContent = () => {
-		const { historyData = [] } = this.state;
+		const { historyData = [], historyLoading = false, historyLabel, isPercent } = this.state;
 		return (
-			<Table 
-				rowKey='time' 
-				columns={historyCol} 
-				dataSource={historyData} 
-				bordered 
-			/>
+			<Spin spinning={historyLoading}>
+				<Table 
+					rowKey='modifiedAt' 
+					columns={historyCol(historyLabel, isPercent)} 
+					dataSource={historyData} 
+					bordered 
+				/>
+			</Spin>
 		)
 	}
 
 	getParamsContent = financeParamsVal => {
-		return financeParamsVal.map(itemValueInfo => {
-			const { key, label, value, history } = itemValueInfo;
-			const defaultVal = numeral(value * 100).format('0.00');
+		return financeParams.map(itemLabelInfo => {
+			const { label, key, isPercent } = itemLabelInfo;
+			const itemValueInfo = financeParamsVal.find(item => item.itemKey === key);
+			if(!itemValueInfo)
+				return null;
+			const { id, itemValue, itemKey } = itemValueInfo;
+			const defaultVal = isPercent ? numeral(itemValue * 100).format('0.00') : itemValue;
 			return (
 				<div className='params-item' key={key}>
 					<div className='item-left'>
@@ -98,16 +119,16 @@ class FinanceParamsSetting extends React.Component {
 									precision={2}
 									defaultValue={defaultVal} 
 									// formatter={value => `${value}%`}
-									onChange={iptValue => this.handleChangeParamVal(key, iptValue)}
+									onChange={iptValue => this.handleChangeParamVal(key, iptValue, isPercent)}
 								/>,
-								<Icon key='ok' type="check" onClick={() => this.handleSaveParamVal(key, label)}/>,
+								<Icon key='ok' type="check" onClick={() => this.handleSaveParamVal(id, itemKey, label)}/>,
 								<Icon key='cancel' type="close-square" onClick={() => this.handleCancel(key)} />
 							]
 							:
-							<a className='item-val' onClick={() => this.handleEditParamVal(key)}>{`${defaultVal}%`}</a>
+							<a className='item-val' onClick={() => this.handleEditParamVal(key)}>{isPercent ? `${defaultVal}%` : defaultVal}</a>
 						}
 					</div>
-					<div className='item-right'><a onClick={() => this.isShowModal(history)}>查看修改历史</a></div>
+					<div className='item-right'><a onClick={() => this.isShowModal(label, itemKey, isPercent)}>查看修改历史</a></div>
 				</div>
 			)
 		})
@@ -116,6 +137,7 @@ class FinanceParamsSetting extends React.Component {
 	render() {
 		const { loading = false, visible } = this.state;
 		const { financeParamsVal } = this.props;
+
 		return (
 			<div className='finance-params-wrapper'>
 				<h2>财务参数设置</h2>
@@ -146,109 +168,10 @@ class FinanceParamsSetting extends React.Component {
 
 const mapStateToProps = (state) => {
 	const { financeParamsReducer } = state;
-	const { financeParamsVal } = financeParamsReducer;
+	const { financeParamsVal, financeParamHistory } = financeParamsReducer;
 	return {
-		// financeParamsVal,
-		financeParamsVal: [
-			{ 
-				label: '工作室服务费率',
-				key: 'key1', value: '', 
-				history: [
-					{
-						time: '2019-11-11 20:47',
-						operator: '小明',
-						base: '10%'
-					},
-					{
-						time: '2019-11-12 20:47',
-						operator: '小明',
-						base: '10%'
-					},
-				]
-			},
-			{ 
-				label: '工作室平均回票税率',
-				key: 'key2', value: '2', 
-				history: [
-					{
-						time: '2019-11-11 20:47',
-						operator: '小明',
-						base: '10%'
-					}
-				]
-			},
-			{ 
-				label: '微播易消项税税率',
-				key: 'key3', value: '3', 
-				history: [
-					{
-						time: '2019-11-11 20:47',
-						operator: '小明',
-						base: '10%'
-					},
-					{
-						time: '2019-11-12 20:47',
-						operator: '小明',
-						base: '10%'
-					}
-				]
-			},
-			{ 
-				label: '布谷鸟消项税税率',
-				key: 'key4', value: '4', 
-				history: [
-					{
-						time: '2019-11-11 20:47',
-						operator: '小明',
-						base: '10%'
-					}
-				]
-			},
-			{ 
-				label: '专票6%->专票3% 扣款税率',
-				key: 'key5', value: '5', 
-				history: [
-					{
-						time: '2019-11-11 20:47',
-						operator: '小明',
-						base: '10%'
-					},
-					{
-						time: '2019-11-12 20:47',
-						operator: '小明',
-						base: '10%'
-					}
-					
-				]
-			},
-			{ 
-				label: '专票3%->普票0% 扣款税率',
-				key: 'key6', value: '6', 
-				history: [
-					{
-						time: '2019-11-11 20:47',
-						operator: '小明',
-						base: '10%'
-					}
-				]
-			},
-			{ 
-				label: '普票0%->不回票扣款税率',
-				key: 'key7', value: '7', 
-				history: [
-					{
-						time: '2019-11-11 20:47',
-						operator: '小明',
-						base: '10%'
-					},
-					{
-						time: '2019-11-12 20:47',
-						operator: '小明',
-						base: '10%'
-					},
-				]
-			},
-		],
+		financeParamsVal,
+		financeParamHistory
 	}
 }
 const mapDispatchToProps = dispatch => (bindActionCreators({ ...actions }, dispatch));

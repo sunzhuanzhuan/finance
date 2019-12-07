@@ -5,7 +5,14 @@ export const {
 	getFinanceParamsVal,
 	getFinanceParamsVal_success
 } = createHttpAction('getFinanceParamsVal', Interface.getFinanceParamsVal, {
-	method: 'post'
+	method: 'get'
+});
+
+export const {
+	getFinanceEditHistory,
+	getFinanceEditHistory_success
+} = createHttpAction('getFinanceEditHistory', Interface.getFinanceEditHistory, {
+	method: 'get'
 });
 
 export const {

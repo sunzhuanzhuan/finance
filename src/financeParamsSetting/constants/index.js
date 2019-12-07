@@ -28,7 +28,7 @@ export const historyCol = (title, isPercent) => {
 			key: 'itemValue',
 			align: 'center',
 			render: data => {
-				return isPercent ? numeral(data * 100).format('0.00') : data;
+				return isPercent ? numeral(data * 100).format('0.00') + '%' : data;
 			}
 		}
 	]

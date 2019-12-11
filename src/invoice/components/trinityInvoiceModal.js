@@ -137,10 +137,35 @@ class PreModal extends React.Component {
 	handleSubmit = () => {
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
+				const { SearchItem } = this.props;
+				const { business_account_id, invoice_tax_rate } = values;
+				const agentItemInfo = SearchItem.agent.find(item => item.value === business_account_id) || {};
+				
+				if(agentItemInfo.agentTaxRate != invoice_tax_rate) {
+					this.setState({
+						isShowConfirmModal: true,
+						rateInfo: {
+							agentRate: agentItemInfo.agentTaxRate * 100,
+							nowRate: invoice_tax_rate
+						}
+					});
+				}else {
+					this.submitAction();
+				}
+			}
+		})
+	}
+	handleConfirmCancel = () => {
+		this.setState({isShowConfirmModal: false});
+	}
+	submitAction = () => {
+		this.props.form.validateFields((err, values) => {
+			if (!err) {
 				const hide = message.loading('操作中，请稍候...');
 				const { search, status, onCancel, record } = this.props;
 				const actionName = this.titleMapping(status).actionName;
-				values.invoice_id = status == 'new' ? null : record.invoice_id
+				values.invoice_id = status == 'new' ? null : record.invoice_id;
+				
 				this.props.actions[actionName]({
 					business_account_type: 3,
 					...values,
@@ -149,10 +174,12 @@ class PreModal extends React.Component {
 					message.success('操作成功!');
 					hide();
 					onCancel();
+					this.handleConfirmCancel();
 					this.props.queryAction({ ...search.keys }).catch(({ errorMsg }) => {
 						message.error(errorMsg || '列表刷新失败，请重试！');
 					})
 				}).catch(({ errorMsg }) => {
+					this.handleConfirmCancel();
 					message.error(errorMsg || '操作失败，请重试！');
 				})
 			}
@@ -224,7 +251,7 @@ class PreModal extends React.Component {
 	render() {
 		const { getFieldDecorator } = this.props.form;
 		const { visible, onCancel, status, SearchItem, modType } = this.props;
-		const { isClick, bigMoney, bigMoneyTax } = this.state;
+		const { isClick, bigMoney, bigMoneyTax, isShowConfirmModal, rateInfo = {} } = this.state;
 		const formItemLayout = {
 			labelCol: { span: 6 },
 			wrapperCol: { span: 18 }
@@ -233,7 +260,8 @@ class PreModal extends React.Component {
 			rules: [{ required: true, message: '该项为必填项！' }],
 		}
 		const title = this.titleMapping(status).title;
-		return <Modal
+		return [
+		<Modal
 			wrapClassName='trinityInvoice-modal'
 			key={status}
 			width={500}
@@ -364,7 +392,25 @@ class PreModal extends React.Component {
 					)}
 				</FormItem>
 			</Form>
+		</Modal>,
+		<Modal
+			key='confirmModal'
+			width={500}
+			title={title}
+			visible={isShowConfirmModal}
+			mask={false}
+			maskClosable={false}
+			onCancel={this.handleConfirmCancel}
+			footer={[
+				<Button key="back" onClick={this.handleConfirmCancel}>取消</Button>,
+				<Button key="submit" type="primary" onClick={this.submitAction}>继续</Button>
+			]}
+		>
+			<div>
+				{`当前主账号回票税率为${rateInfo.agentRate}%，录入发票税率为${rateInfo.nowRate}%，请找媒介经理核对发票或博主支付信息是否正确；`}
+			</div>
 		</Modal>
+	]
 	}
 }
 

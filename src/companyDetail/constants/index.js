@@ -822,14 +822,14 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				key: 'order_id',
 				width: 160,
 				render: (text, record) => {
-					const { quote_type: quoteVal, isPATS } = record;
+					const { quote_type: quoteVal, formula_version } = record;
 					const value = quote_type.find(item => item.id == quoteVal) || {};
 
 					return <div className={record.warningClass}>
 						<div>{text}</div>
 						<div>报价类型：{value.display || '-'}</div>
 						{record.plan_manager_id && record.plan_manager_id != '0' && <div style={{ display: 'inline-block', backgroundColor: 'red', color: '#fff', padding: '0 10px', marginTop: '5px' }}>含策划</div>}
-						{/* {isFinance && <div style={{ width: 'fit-content', backgroundColor: 'red', color: '#fff', padding: '0 10px', marginTop: '5px' }}>{isPATS == 1 ? '已价税分离' : '未价税分离' }</div>} */}
+						{isFinance && formula_version && <div style={{ width: 'fit-content', backgroundColor: 'red', color: '#fff', padding: '0 10px', marginTop: '5px' }}>{formula_version == 1 ? '已价税分离' : '未价税分离' }</div>}
 					</div>
 				}
 			},
@@ -840,14 +840,14 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				width: 160,
 				fixed: 'left',
 				render: (text, record) => {
-					const { quote_type: quoteVal, isPATS } = record;
+					const { quote_type: quoteVal, formula_version } = record;
 					const value = quote_type.find(item => item.id == quoteVal) || {};
 
 					return <div className={record.warningClass}>
 						<div>{text}</div>
 						<div>报价类型：{value.display || '-'}</div>
 						{record.plan_manager_id && record.plan_manager_id != '0' && <div style={{ display: 'inline-block', backgroundColor: 'red', color: '#fff', padding: '0 10px', marginTop: '5px' }}>含策划</div>}
-						{/* {isFinance && <div style={{ width: 'fit-content', backgroundColor: 'red', color: '#fff', padding: '0 10px', marginTop: '5px' }}>{isPATS == 1 ? '已价税分离' : '未价税分离' }</div>} */}
+						{isFinance && formula_version && <div style={{ width: 'fit-content', backgroundColor: 'red', color: '#fff', padding: '0 10px', marginTop: '5px' }}>{formula_version == 1 ? '已价税分离' : '未价税分离' }</div>}
 					</div>
 				}
 			},

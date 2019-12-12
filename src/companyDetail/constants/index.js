@@ -842,7 +842,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				render: (text, record) => {
 					const { quote_type: quoteVal, formula_version } = record;
 					const value = quote_type.find(item => item.id == quoteVal) || {};
-
+					
 					return <div className={record.warningClass}>
 						<div>{text}</div>
 						<div>报价类型：{value.display || '-'}</div>

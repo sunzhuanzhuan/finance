@@ -175,12 +175,9 @@ class PreModal extends React.Component {
 					hide();
 					onCancel();
 					this.handleConfirmCancel();
-					this.props.queryAction({ ...search.keys }).catch(({ errorMsg }) => {
-						message.error(errorMsg || '列表刷新失败，请重试！');
-					})
-				}).catch(({ errorMsg }) => {
+					this.props.queryAction({ ...search.keys })
+				}).catch(() => {
 					this.handleConfirmCancel();
-					message.error(errorMsg || '操作失败，请重试！');
 				})
 			}
 		})

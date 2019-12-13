@@ -115,7 +115,7 @@ class FinanceParamsSetting extends React.Component {
 									key='input' 
 									autoFocus
 									min={0}
-									max={999999999}
+									max={isPercent ? 100 : 999999999}
 									precision={2}
 									defaultValue={defaultVal} 
 									// formatter={value => `${value}%`}

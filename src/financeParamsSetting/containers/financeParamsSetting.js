@@ -121,6 +121,7 @@ class FinanceParamsSetting extends React.Component {
 									// formatter={value => `${value}%`}
 									onChange={iptValue => this.handleChangeParamVal(key, iptValue, isPercent)}
 								/>,
+								<span key='sign' className='item-sign'>%</span>,
 								<Icon key='ok' type="check" onClick={() => this.handleSaveParamVal(id, itemKey, label)}/>,
 								<Icon key='cancel' type="close-square" onClick={() => this.handleCancel(key)} />
 							]

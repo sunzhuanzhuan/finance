@@ -11,20 +11,25 @@ class FinanceParamsSetting extends React.Component {
 	constructor() {
 		super();
 		this.state = {};
+		this.errorTips = {
+			1: '输入范围是[0-1]，最多四位小数的数字，举例：如果想设置6.38%，请输入0.0638',
+			2: '只允许输入0-9999999990最多两位小数的数字'
+		}
 	}
 
 	componentDidMount() {
 		this.props.getFinanceParamsVal();
 	}
 	
-	handleEditParamVal = key => {
-		this.setState({ [`${key}-edit`]: true });
+	handleEditParamVal = (key, value) => {
+		this.setState({ 
+			[`${key}-edit`]: true,
+			[key]: value
+		});
 	}
 
-	handleChangeParamVal = (key, value, isPercent) => {
-		const dealVal = isPercent && value !== null ? numeral(value / 100).format('0.0000') : value;
-
-		this.setState({[key]: dealVal});
+	handleChangeParamVal = (key, value) => {
+		this.setState({[key]: value});
 	}
 
 	getErrorTips = msg => {
@@ -38,12 +43,29 @@ class FinanceParamsSetting extends React.Component {
 		}
 	};
 
-	handleSaveParamVal = (id, itemKey, label) => {
+	judgeInputVal = (val, isPercent) => {
+		const percentRegex = /^\d+(\.\d{1,4})?$/;
+		const numRegex = /^\d+(\.\d{1,2})?$/;
+
+		const percentRule = val >= 0 && val <= 100 && percentRegex.test(val);
+		const numRule = val >= 0 && val <= 999999999 && numRegex.test(val);
+
+		return isPercent ? percentRule : numRule;
+	}
+
+	handleSaveParamVal = (id, itemKey, label, isPercent, itemValue) => {
 		const { setFinanceParamsVal, getFinanceParamsVal } = this.props;
-		if(this.state[itemKey] === null) {
-			this.getErrorTips(`${label}不可为空`);
+
+		if(this.state[itemKey] == itemValue) {
+			this.getErrorTips('数据未发生改变');
 			return;
 		}
+		if(!(this.judgeInputVal(this.state[itemKey], isPercent))) {
+			const tips = isPercent ? this.errorTips[1] : this.errorTips[2];
+			this.getErrorTips(tips);
+			return;
+		}
+
 		this.setState({ loading: true });
 		setFinanceParamsVal({id, itemKey, itemValue: this.state[itemKey]}).finally(() => {
 			this.setState({
@@ -103,30 +125,28 @@ class FinanceParamsSetting extends React.Component {
 			if(!itemValueInfo)
 				return null;
 			const { id, itemValue, itemKey } = itemValueInfo;
-			const defaultVal = isPercent ? numeral(itemValue * 100).format('0.00') : itemValue;
+			const defaultVal = isPercent ? itemValue * 100 : itemValue;
+			const wrapperCls = this.state[`${key}-edit`] ? 'params-item params-item-edit' : 'params-item';
 			return (
-				<div className='params-item' key={key}>
+				<div className={wrapperCls} key={key}>
 					<div className='item-left'>
 						<span>{label}</span>
 						{
 							this.state[`${key}-edit`] ? 
 							[
-								<InputNumber 
-									key='input' 
-									autoFocus
-									min={0}
-									max={isPercent ? 100 : 999999999}
-									precision={2}
-									defaultValue={defaultVal} 
-									// formatter={value => `${value}%`}
-									onChange={iptValue => this.handleChangeParamVal(key, iptValue, isPercent)}
-								/>,
-								<span key='sign' className='item-sign'>%</span>,
-								<Icon key='ok' type="check" onClick={() => this.handleSaveParamVal(id, itemKey, label)}/>,
+								<div key='input'>
+									<InputNumber 
+										autoFocus
+										defaultValue={itemValue} 
+										onChange={iptValue => this.handleChangeParamVal(key, iptValue)}
+									/>
+									<div key='tips' className='editTips'>{isPercent ? this.errorTips[1] : this.errorTips[2]}</div>
+								</div>,
+								<Icon key='ok' type="check" onClick={() => this.handleSaveParamVal(id, itemKey, label, isPercent, itemValue)}/>,
 								<Icon key='cancel' type="close-square" onClick={() => this.handleCancel(key)} />
 							]
 							:
-							<a className='item-val' onClick={() => this.handleEditParamVal(key)}>{isPercent ? `${defaultVal}%` : defaultVal}</a>
+							<a className='item-val' onClick={() => this.handleEditParamVal(key, itemValue)}>{isPercent ? `${defaultVal}%` : defaultVal}</a>
 						}
 					</div>
 					<div className='item-right'><a onClick={() => this.isShowModal(label, itemKey, isPercent)}>查看修改历史</a></div>

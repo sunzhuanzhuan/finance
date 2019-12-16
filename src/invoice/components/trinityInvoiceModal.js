@@ -140,13 +140,14 @@ class PreModal extends React.Component {
 				const { SearchItem } = this.props;
 				const { business_account_id, invoice_tax_rate } = values;
 				const agentItemInfo = SearchItem.agent.find(item => item.value === business_account_id) || {};
-				
-				if(agentItemInfo.agentTaxRate != invoice_tax_rate) {
+				const agentTaxVal = agentItemInfo.agentTaxRate * 100;
+				const nowRate = invoice_tax_rate.indexOf('%') > -1 ? Number(invoice_tax_rate.replace('%', '')) : Number(invoice_tax_rate);
+				if(agentTaxVal != nowRate) {
 					this.setState({
 						isShowConfirmModal: true,
 						rateInfo: {
 							agentRate: agentItemInfo.agentTaxRate * 100,
-							nowRate: invoice_tax_rate
+							nowRate
 						}
 					});
 				}else {
@@ -404,7 +405,7 @@ class PreModal extends React.Component {
 			]}
 		>
 			<div>
-				{`当前主账号回票税率为${rateInfo.agentRate}%，录入发票税率为${rateInfo.nowRate}%，请找媒介经理核对发票或博主支付信息是否正确；`}
+				{`当前三方代理商回票税率为${rateInfo.agentRate}%，录入发票税率为${rateInfo.nowRate}%，请找三方专员核对发票或三方代理商支付信息是否正确；`}
 			</div>
 		</Modal>
 	]

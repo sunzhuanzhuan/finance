@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as actions from "../actions";
-import { Modal, Table, InputNumber, Icon, Spin, Empty, message } from 'antd'
+import { Modal, Table, InputNumber, Icon, Spin, Empty, message, Statistic } from 'antd'
 import './financeParamsSetting.less'
 import numeral from 'numeral';
 import { financeParams, historyCol } from '../constants';
@@ -142,12 +142,15 @@ class FinanceParamsSetting extends React.Component {
 									/>
 									<div key='tips' className='editTips'>{isPercent ? this.errorTips[1] : this.errorTips[2]}</div>
 								</div>,
-								isPercent ? null : <span className='item-sign'>元</span>,
+								isPercent ? null : <span className='item-sign' key='sign'>元</span>,
 								<Icon key='ok' type="check" onClick={() => this.handleSaveParamVal(id, itemKey, label, isPercent, itemValue)}/>,
 								<Icon key='cancel' type="close-square" onClick={() => this.handleCancel(key)} />
 							]
 							:
-							<a className='item-val' onClick={() => this.handleEditParamVal(key, itemValue)}>{isPercent ? `${defaultVal}%` : `${defaultVal}元`}</a>
+							[
+								<a key='value' className='item-val' onClick={() => this.handleEditParamVal(key, itemValue)}>{isPercent ? `${defaultVal}%` : <Statistic className='numberStastic' value={defaultVal}/>}</a>,
+								isPercent ? null : <span key='sign'>元</span>,
+							]
 						}
 					</div>
 					<div className='item-right'><a onClick={() => this.isShowModal(label, itemKey, isPercent)}>查看修改历史</a></div>

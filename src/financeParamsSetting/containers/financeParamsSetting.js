@@ -13,7 +13,7 @@ class FinanceParamsSetting extends React.Component {
 		this.state = {};
 		this.errorTips = {
 			1: '输入范围是[0-1]，最多四位小数的数字，举例：如果想设置6.38%，请输入0.0638',
-			2: '只允许输入0-9999999990最多两位小数的数字'
+			2: '只允许输入0-999999999最多两位小数的数字'
 		}
 	}
 
@@ -142,11 +142,12 @@ class FinanceParamsSetting extends React.Component {
 									/>
 									<div key='tips' className='editTips'>{isPercent ? this.errorTips[1] : this.errorTips[2]}</div>
 								</div>,
+								isPercent ? null : <span className='item-sign'>元</span>,
 								<Icon key='ok' type="check" onClick={() => this.handleSaveParamVal(id, itemKey, label, isPercent, itemValue)}/>,
 								<Icon key='cancel' type="close-square" onClick={() => this.handleCancel(key)} />
 							]
 							:
-							<a className='item-val' onClick={() => this.handleEditParamVal(key, itemValue)}>{isPercent ? `${defaultVal}%` : defaultVal}</a>
+							<a className='item-val' onClick={() => this.handleEditParamVal(key, itemValue)}>{isPercent ? `${defaultVal}%` : `${defaultVal}元`}</a>
 						}
 					</div>
 					<div className='item-right'><a onClick={() => this.isShowModal(label, itemKey, isPercent)}>查看修改历史</a></div>

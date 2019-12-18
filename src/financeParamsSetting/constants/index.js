@@ -1,4 +1,5 @@
-import numeral from 'numeral';
+import React from 'react'
+import { Statistic } from 'antd'
 export const financeParams = [
 	{ label: '工作室服务费率', key: 'work_room_service_rate', isPercent: true },
 	{ label: '工作室平均回票税率', key: 'work_room_average_return_rate', isPercent: true },
@@ -28,7 +29,7 @@ export const historyCol = (title, isPercent) => {
 			key: 'itemValue',
 			align: 'center',
 			render: data => {
-				return isPercent ? numeral(data * 100).format('0.00') + '%' : data;
+				return isPercent ? data * 100 + '%' : <Statistic className='numberStastic' value={data}/>;
 			}
 		}
 	]

@@ -4,7 +4,6 @@ import { bindActionCreators } from "redux";
 import * as actions from "../actions";
 import { Modal, Table, InputNumber, Icon, Spin, Empty, message, Statistic } from 'antd'
 import './financeParamsSetting.less'
-import numeral from 'numeral';
 import { financeParams, historyCol } from '../constants';
 
 class FinanceParamsSetting extends React.Component {
@@ -47,7 +46,7 @@ class FinanceParamsSetting extends React.Component {
 		const percentRegex = /^\d+(\.\d{1,4})?$/;
 		const numRegex = /^\d+(\.\d{1,2})?$/;
 
-		const percentRule = val >= 0 && val <= 100 && percentRegex.test(val);
+		const percentRule = val >= 0 && val <= 1 && percentRegex.test(val);
 		const numRule = val >= 0 && val <= 999999999 && numRegex.test(val);
 
 		return isPercent ? percentRule : numRule;
@@ -179,6 +178,7 @@ class FinanceParamsSetting extends React.Component {
 				</Spin>
 				<Modal
 					visible={visible}
+					wrapClassName='financeParamsModal'
 					title='查看修改历史'
 					destroyOnClose
 					footer={null}

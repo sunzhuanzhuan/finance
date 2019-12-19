@@ -142,7 +142,7 @@ class PreModal extends React.Component {
 				const agentItemInfo = SearchItem.agent.find(item => item.value === business_account_id) || {};
 				const agentTaxVal = agentItemInfo.agentTaxRate * 100;
 				const nowRate = invoice_tax_rate.indexOf('%') > -1 ? Number(invoice_tax_rate.replace('%', '')) : Number(invoice_tax_rate);
-				if(agentTaxVal != nowRate) {
+				if(agentTaxVal != nowRate || agentItemInfo.invoiceType != values.invoice_type) {
 					this.setState({
 						isShowConfirmModal: true,
 						rateInfo: {

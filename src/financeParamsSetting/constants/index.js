@@ -29,8 +29,17 @@ export const historyCol = (title, isPercent) => {
 			key: 'itemValue',
 			align: 'center',
 			render: data => {
-				return isPercent ? data * 100 + '%' : <Statistic className='numberStastic' value={data}/>;
+				return isPercent ? `${multipliedByHundred(data)}%` : <Statistic className='numberStastic' value={data}/>;
 			}
 		}
 	]
+}
+
+export const multipliedByHundred = (str) => {
+	let floatVal = parseFloat(str);
+	if (isNaN(floatVal)) {
+		return 0;
+	}
+	floatVal = Math.round(str * 10000) / 100;
+	return floatVal;
 }

@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import * as actions from "../actions";
 import { Modal, Table, InputNumber, Icon, Spin, Empty, message, Statistic } from 'antd'
 import './financeParamsSetting.less'
-import { financeParams, historyCol } from '../constants';
+import { financeParams, historyCol, multipliedByHundred } from '../constants';
 
 class FinanceParamsSetting extends React.Component {
 	constructor() {
@@ -124,7 +124,8 @@ class FinanceParamsSetting extends React.Component {
 			if(!itemValueInfo)
 				return null;
 			const { id, itemValue, itemKey } = itemValueInfo;
-			const defaultVal = isPercent ? itemValue * 100 : itemValue;
+			const defaultVal = isPercent ? multipliedByHundred(itemValue) : itemValue;
+
 			const wrapperCls = this.state[`${key}-edit`] ? 'params-item params-item-edit' : 'params-item';
 			return (
 				<div className={wrapperCls} key={key}>

@@ -146,8 +146,9 @@ class PreModal extends React.Component {
 					this.setState({
 						isShowConfirmModal: true,
 						rateInfo: {
-							agentRate: agentItemInfo.agentTaxRate * 100,
-							nowRate
+							agentTaxVal,
+							agentInvoiceType: agentItemInfo.invoiceType,
+							nowRate,
 						}
 					});
 				}else {
@@ -258,6 +259,15 @@ class PreModal extends React.Component {
 			rules: [{ required: true, message: '该项为必填项！' }],
 		}
 		const title = this.titleMapping(status).title;
+		const getInvoiceText = type => {
+			if(type == 1) {
+				return '专票';
+			}else if(type == 2) {
+				return '普票';
+			}else {
+				return '';
+			}
+		}
 		return [
 		<Modal
 			wrapClassName='trinityInvoice-modal'
@@ -393,7 +403,7 @@ class PreModal extends React.Component {
 		</Modal>,
 		<Modal
 			key='confirmModal'
-			width={500}
+			width={450}
 			title={title}
 			visible={isShowConfirmModal}
 			mask={false}
@@ -405,7 +415,9 @@ class PreModal extends React.Component {
 			]}
 		>
 			<div>
-				{`当前三方代理商回票税率为${rateInfo.agentRate}%，录入发票税率为${rateInfo.nowRate}%，请找三方专员核对发票或三方代理商支付信息是否正确；`}
+				{`当前三方代理商回票为${getInvoiceText(rateInfo.agentInvoiceType)}${rateInfo.agentTaxVal}%，录入发票为专票${rateInfo.nowRate}%，请找三方专员核对`}
+				<b>发票或三方代理商支付信息</b>
+				是否正确
 			</div>
 		</Modal>
 	]

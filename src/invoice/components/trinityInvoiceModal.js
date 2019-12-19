@@ -149,6 +149,7 @@ class PreModal extends React.Component {
 							agentTaxVal,
 							agentInvoiceType: agentItemInfo.invoiceType,
 							nowRate,
+							nowInvoiceType: values.invoice_type
 						}
 					});
 				}else {
@@ -415,7 +416,7 @@ class PreModal extends React.Component {
 			]}
 		>
 			<div>
-				{`当前三方代理商回票为${getInvoiceText(rateInfo.agentInvoiceType)}${rateInfo.agentTaxVal}%，录入发票为专票${rateInfo.nowRate}%，请找三方专员核对`}
+				{`当前三方代理商回票为${getInvoiceText(rateInfo.agentInvoiceType)}${rateInfo.agentTaxVal}%，录入发票为${getInvoiceText(rateInfo.nowInvoiceType)}${rateInfo.nowRate}%，请找三方专员核对`}
 				<b>发票或三方代理商支付信息</b>
 				是否正确
 			</div>

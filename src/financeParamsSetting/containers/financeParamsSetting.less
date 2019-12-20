@@ -1,0 +1,92 @@
+@border-color: #e8e8e8;
+.finance-params-wrapper {
+    .border {
+        border: 1px solid @border-color;
+        margin: 0 0 -1px -1px;
+    }
+    .center-text {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    h2 {
+        padding-bottom: 20px;
+    }
+    .params-content {
+        .border;
+        box-shadow: 0 2px 8px #f0f1f2;
+    }
+    .params-tips {
+        .border;
+        padding: 10px 20px;
+        text-align: right;
+    }
+    .params-item {
+        height: 48px;
+        display: flex;
+        .border;
+    }
+    .params-item-edit{
+        height: 60px;
+        padding: 5px 0 15px 0;
+    }
+    .item-left {
+        .center-text;
+        padding: 10px 0;
+        margin: 0 0 -1px -1px;
+        border-right: 1px solid @border-color;
+        width: 50%;
+        .ant-input-number {
+            width: 110px;
+        }
+        .numberStastic .ant-statistic-content, .numberStastic .ant-statistic-content-value-decimal{
+            font-size: inherit;
+            font-family: inherit;
+            color: @primary-color;
+        }
+        .item-val {
+            margin-right: 3px;
+        }
+        .editTips {
+            position: absolute;
+            margin-left: 10px;
+            color: red;
+            font-size: 10px;
+        }
+        .item-sign {
+            margin-left: 10px;
+        }
+        .item-val {
+            margin-left: 10px;
+            text-decoration: underline;
+        }
+        .ant-input-number {
+            margin-left: 10px;
+        }
+        .anticon-check {
+            font-size: 22px;
+            background: @primary-color;
+            margin-left: 10px;
+            border-radius: 4px;
+            color: #fff;
+        }
+        .anticon-close-square {
+            font-size: 24px;
+            margin-left: 10px;
+            color: #ccc;
+        }
+    }
+    .item-right {
+        .center-text;
+        padding: 10px 0;
+        margin: 0 0 -1px -1px;
+        width: 50%;
+    }
+}
+.financeParamsModal {
+    .numberStastic .ant-statistic-content, .numberStastic .ant-statistic-content-value-decimal{
+        font-size: inherit;
+        font-family: inherit;
+        color: inherit;
+    }
+}

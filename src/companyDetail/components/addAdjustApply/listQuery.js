@@ -208,121 +208,115 @@ class ListQuery extends React.Component {
 		const resetClass = type === 'add' ? 'add-reset-btn' : 'reset-btn';
 		return <div>
 			<Form className='adjust-stat adjust-refactor'>
-				<Row type="flex" justify="start">
-					{/* <FormItem label='每页显示' className='left-gap'>
-						{getFieldDecorator('page_size', { initialValue: 50 })(
-							<Select style={{ width: 60 }}>
-								<Option value={20}>20</Option>
-								<Option value={50}>50</Option>
-								<Option value={100}>100</Option>
-								<Option value={200}>200</Option>
-							</Select>
-						)}
-					</FormItem> */}
-					{type === 'add' ?
-						<FormItem label='公司简称'>
-							{getFieldDecorator('company_id', {
-								rules: [
-									{ required: true, message: '请先输入公司简称!' },
-								]
-							})(
-								<SearchSelect
-									widthSign
-									placeholder='请选择'
-									getPopupContainer={() => document.querySelector('.adjust-stat')}
-									action={this.props.actions.getGoldenCompanyId}
-									keyWord='company_name'
-									dataToList={res => { return res.data }}
-									item={['company_id', 'name']}
-								/>
-							)}
-						</FormItem> : null}
-					<FormItem label='所属项目' className='left-gap'>
-						{getFieldDecorator('project_id')(
-							<Select
-								id='project_id'
-								className='query-multiple-select'
-								style={{ width: 160 }}
-								placeholder="请选择"
-								allowClear
-								showSearch
-								labelInValue
-								getPopupContainer={() => document.getElementById('project_id')}
-								filterOption={(input, option) => (
-									option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-								)}
-								onFocus={() => { this.fetchData('project_id') }}
-								notFoundContent={projectLoading ? <Spin size="small" /> : null}
-							>
-								{
-									projectList.map(({ id, name }) => (<Option key={id} value={id}>{name}</Option>))
-								}
-							</Select>
-						)}
-					</FormItem>
-					<FormItem label='需求名称' className='left-gap'>
-						{getFieldDecorator('requirement_id')(
+				{/* <FormItem label='每页显示' className='left-gap'>
+					{getFieldDecorator('page_size', { initialValue: 50 })(
+						<Select style={{ width: 60 }}>
+							<Option value={20}>20</Option>
+							<Option value={50}>50</Option>
+							<Option value={100}>100</Option>
+							<Option value={200}>200</Option>
+						</Select>
+					)}
+				</FormItem> */}
+				{type === 'add' ?
+					<FormItem label='公司简称'>
+						{getFieldDecorator('company_id', {
+							rules: [
+								{ required: true, message: '请先输入公司简称!' },
+							]
+						})(
 							<SearchSelect
 								widthSign
-								placeholder='请输入'
+								placeholder='请选择'
 								getPopupContainer={() => document.querySelector('.adjust-stat')}
-								action={this.handleFetch}
-								keyWord='requirement_name'
+								action={this.props.actions.getGoldenCompanyId}
+								keyWord='company_name'
 								dataToList={res => { return res.data }}
-								item={['id', 'name']}
+								item={['company_id', 'name']}
 							/>
 						)}
+					</FormItem> : null}
+				<FormItem label='所属项目' className='left-gap'>
+					{getFieldDecorator('project_id')(
+						<Select
+							id='project_id'
+							className='query-multiple-select'
+							style={{ width: 160 }}
+							placeholder="请选择"
+							allowClear
+							showSearch
+							labelInValue
+							getPopupContainer={() => document.getElementById('project_id')}
+							filterOption={(input, option) => (
+								option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+							)}
+							onFocus={() => { this.fetchData('project_id') }}
+							notFoundContent={projectLoading ? <Spin size="small" /> : null}
+						>
+							{
+								projectList.map(({ id, name }) => (<Option key={id} value={id}>{name}</Option>))
+							}
+						</Select>
+					)}
+				</FormItem>
+				<FormItem label='需求名称' className='left-gap'>
+					{getFieldDecorator('requirement_id')(
+						<SearchSelect
+							widthSign
+							placeholder='请输入'
+							getPopupContainer={() => document.querySelector('.adjust-stat')}
+							action={this.handleFetch}
+							keyWord='requirement_name'
+							dataToList={res => { return res.data }}
+							item={['id', 'name']}
+						/>
+					)}
+				</FormItem>
+				<FormItem label='平台' className='left-gap'>
+					{getFieldDecorator('weibo_type')(
+						<Select
+							id='weibo_type'
+							style={{ width: 160 }}
+							placeholder="平台"
+							allowClear
+							showSearch
+							labelInValue
+							getPopupContainer={() => document.getElementById('weibo_type')}
+							filterOption={(input, option) => (
+								option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+							)}
+							onFocus={() => { this.fetchData('weibo_type') }}
+							notFoundContent={weiboLoading ? <Spin size="small" /> : null}
+						>
+							{
+								platformList.map(({ pid, platform_name }) => (<Option key={pid} value={pid}>{platform_name}</Option>))
+							}
+						</Select>
+					)}
+				</FormItem>
+					<FormItem label='订单ID' className={orderClass}>
+						{getFieldDecorator('order_ids')(
+							<Input placeholder='请输入ID号，多个以空格隔开' style={{ width: 380 }} />
+						)}
 					</FormItem>
-					<FormItem label='平台' className='left-gap'>
-						{getFieldDecorator('weibo_type')(
+					{type === 'detail' ? <FormItem label='含策划' className='left-gap plan-manage-item'>
+						{getFieldDecorator('is_plan_manage')(
 							<Select
-								id='weibo_type'
 								style={{ width: 160 }}
-								placeholder="平台"
+								placeholder="是否含策划"
 								allowClear
 								showSearch
 								labelInValue
-								getPopupContainer={() => document.getElementById('weibo_type')}
-								filterOption={(input, option) => (
-									option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-								)}
-								onFocus={() => { this.fetchData('weibo_type') }}
-								notFoundContent={weiboLoading ? <Spin size="small" /> : null}
 							>
-								{
-									platformList.map(({ pid, platform_name }) => (<Option key={pid} value={pid}>{platform_name}</Option>))
-								}
+								<Option value="1">是</Option>
+								<Option value="2">否</Option>
 							</Select>
 						)}
-					</FormItem>
-				</Row>
-				<Row type="flex" justify="space-between">
-					<div>
-						<FormItem label='订单ID' className={orderClass}>
-							{getFieldDecorator('order_ids')(
-								<Input placeholder='请输入ID号，多个以空格隔开' style={{ width: 380 }} />
-							)}
-						</FormItem>
-						{type === 'detail' ? <FormItem label='含策划' className='left-gap plan-manage-item'>
-							{getFieldDecorator('is_plan_manage')(
-								<Select
-									style={{ width: 160 }}
-									placeholder="是否含策划"
-									allowClear
-									showSearch
-									labelInValue
-								>
-									<Option value="1">是</Option>
-									<Option value="2">否</Option>
-								</Select>
-							)}
-						</FormItem> : null}	
-					</div>
-					<FormItem>
-						<Button type='primary' onClick={this.handleSearch}>查询</Button>
-						<Button className={resetClass} onClick={this.handleClear}>重置</Button>
-					</FormItem>
-				</Row>
+					</FormItem> : null}	
+				<FormItem className='adjust_apply_query'>
+					<Button type='primary' onClick={this.handleSearch}>查询</Button>
+					<Button className={resetClass} onClick={this.handleClear}>重置</Button>
+				</FormItem>
 			</Form>
 		</div>
 	}

@@ -56,7 +56,8 @@ class PreTable extends React.Component {
 				['default_cycle']: item['default_cycle'],
 				['order_default_cycle']: item['order_default_cycle'],
 				['partner_type_name']: item['partner_type_name'],
-				['reference_price_doc']: item['reference_price_doc']
+				['reference_price_doc']: item['reference_price_doc'],
+				['formula_version']: item['formula_version']
 			};
 			return obj
 		});

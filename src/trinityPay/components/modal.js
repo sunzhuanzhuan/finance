@@ -124,10 +124,11 @@ class PreModal extends React.Component {
 						valuePropName: 'fileList',
 						getValueFromEvent: e => e.fileList
 					})(
-						<OssUpload
+						<OssUpload.Dragger
 							len={5}
 							listType="picture-card"
 							authToken={token}
+							text=""
 							rule={{
 								bizzCode: 'TRINITY_PROOF_PAYMENT_IMG_UPLOAD',
 								suffix: "bmp,jpg,jpeg,gif,png",
@@ -135,7 +136,8 @@ class PreModal extends React.Component {
 							}}
 							multiple={true}
 						>
-						</OssUpload>
+							拖拽上传或浏览
+						</OssUpload.Dragger>
 					)}
 				</FormItem>}
 			</Form>

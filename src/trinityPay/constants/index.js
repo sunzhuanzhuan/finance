@@ -13,6 +13,13 @@ export const prePayFunc = (handleModal) => [
 		width: 100
 	},
 	{
+		title: '订单ID',
+		dataIndex: 'wby_order_id',
+		key: 'wby_order_id',
+		align: 'center',
+		width: 100
+	},
+	{
 		title: '平台',
 		dataIndex: 'platform_name',
 		key: 'platform_name',
@@ -32,13 +39,12 @@ export const prePayFunc = (handleModal) => [
 		key: 'agent_name',
 		align: 'center',
 		width: 140
-	},
-	{
-		title: '订单ID',
-		dataIndex: 'wby_order_id',
-		key: 'wby_order_id',
+	}, {
+		title: '发票开具方',
+		dataIndex: 'beneficiary_company',
+		key: 'beneficiary_company',
 		align: 'center',
-		width: 100
+		width: 140
 	},
 	{
 		title: '打款金额',
@@ -62,9 +68,16 @@ export const prePayFunc = (handleModal) => [
 		width: 100
 	},
 	{
-		title: '打款单生成日期',
+		title: '打款单生成时间',
 		dataIndex: 'created_at',
 		key: 'created_at',
+		align: 'center',
+		width: 100
+	},
+	{
+		title: '打款撤销时间',
+		dataIndex: 'payment_revoke_time',
+		key: 'payment_revoke_time',
 		align: 'center',
 		width: 100
 	},
@@ -101,7 +114,7 @@ export const prePayFunc = (handleModal) => [
 		key: 'media_user_name',
 		align: 'center',
 		width: 100
-	},
+	}, {},
 	{
 		title: '操作',
 		dataIndex: 'action',
@@ -223,6 +236,15 @@ export const datePayFunc = (handleModal) => [
 		fixed: 'right',
 		width: 200,
 		render: (text, record) => {
+			const params = {
+				payment_slip_id: record.payment_slip_id,
+				settle_type: 2,
+				keys: {
+					labels: '打款单ID',
+					payment_slip_code: record.payment_slip_code
+
+				}
+			}
 			return <div className='prePay-action-container'>
 				{record.payment_status && record.payment_status == 1 && <Button type='primary' size='small' style={{ width: 80 }} onClick={() => {
 					handleModal(record.payment_slip_id, SUCCEED, true);
@@ -234,7 +256,10 @@ export const datePayFunc = (handleModal) => [
 				{record.payment_status && record.payment_status == 2 && <Button type='primary' size='small' style={{ width: 80 }} onClick={() => {
 					handleModal(record.payment_slip_id, REVOCATION, true);
 				}}>打款撤销</Button>}
-				<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/dealorder?payment_slip_id=${record.payment_slip_id}&settle_type=2`} target="_blank">打款明细</Button>
+				<Button type='primary' target="_blank" size='small' style={{ width: 80 }} onClick={() => {
+					//修改了push的方式
+					window.open('/finance/trinityPay/dealorder?' + qs.stringify(params))
+				}}>打款明细</Button>
 				{record.payment_status && record.payment_status != 1 && <Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/modification?type=datePay&payment_slip_id=${record.payment_slip_id}`}>编辑</Button>}
 				<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/detail?type=datePay&payment_slip_id=${record.payment_slip_id}`} target="_blank">查看</Button>
 			</div>
@@ -273,6 +298,12 @@ export const dealOrderCols = [
 		key: 'agent_name',
 		align: 'center',
 		width: 100
+	}, {
+		title: '发票开具方',
+		dataIndex: 'agent_name1',
+		key: 'agent_name1',
+		align: 'center',
+		width: 100
 	},
 	{
 		title: '三方下单平台',
@@ -281,13 +312,7 @@ export const dealOrderCols = [
 		align: 'center',
 		width: 100
 	},
-	{
-		title: '三方平台下单时间',
-		dataIndex: 'ttp_place_order_at',
-		key: 'ttp_place_order_at',
-		align: 'center',
-		width: 100
-	},
+
 	{
 		title: '三方原始成本价',
 		dataIndex: 'public_cost_price',
@@ -329,11 +354,30 @@ export const dealOrderCols = [
 		key: 'payment_status_desc',
 		align: 'center',
 		width: 100
+	}, {
+		title: '打款成功/失败时间',
+		dataIndex: 'agent_name2',
+		key: 'agent_name3',
+		align: 'center',
+		width: 100
+	}, {
+		title: '打款撤销时间',
+		dataIndex: 'agent_name3',
+		key: 'agent_name3',
+		align: 'center',
+		width: 100
 	},
 	{
 		title: '付款公司',
 		dataIndex: 'payment_company_name',
 		key: 'payment_company_name',
+		align: 'center',
+		width: 100
+	},
+	{
+		title: '三方平台下单时间',
+		dataIndex: 'ttp_place_order_at',
+		key: 'ttp_place_order_at',
 		align: 'center',
 		width: 100
 	},
@@ -550,6 +594,12 @@ export const prePayDetailColumns = [
 		}
 	},
 	{
+		title: '打款撤销时间',
+		dataIndex: 'payment_revoke_time',
+		key: 'payment_revoke_time',
+		align: 'center'
+	},
+	{
 		title: '打款撤销备注：',
 		dataIndex: 'payment_revoke_reason',
 		key: 'payment_revoke_reason',
@@ -697,6 +747,12 @@ export const datePayDetailColumns = [
 				})}
 			</div>
 		}
+	},
+	{
+		title: '打款撤销时间',
+		dataIndex: 'payment_revoke_time',
+		key: 'payment_revoke_time',
+		align: 'center'
 	},
 	{
 		title: '打款备注：',

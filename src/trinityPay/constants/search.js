@@ -55,6 +55,82 @@ export const prePaySearchFunc = ({ media_manager = [], payment_company = [], pay
 			placeholder: '不限',
 			style: { width: 160 },
 			labelInValue: true,
+			allowClear: true,
+			notFoundContent: (<div style={{ paddingLeft: '10px' }} > <Spin size="small" /> </div>)
+		},
+		field: {
+			label: '发票开具方',
+			value: 'beneficiary_company',
+		},
+		selectOptionsChildren: platform_name
+	},
+	{
+		ctype: 'input',
+		attr: {
+			placeholder: '不限',
+			style: { width: 160 },
+			labelInValue: true,
+			allowClear: true,
+			notFoundContent: (<div style={{ paddingLeft: '10px' }} > <Spin size="small" /> </div>)
+		},
+		field: {
+			label: '打款单ID',
+			value: 'id',
+		},
+		selectOptionsChildren: platform_name
+	}, {
+		ctype: 'input',
+		attr: {
+			placeholder: '请输入ID号，多个以空格隔开',
+			style: { width: 200 },
+			allowClear: true
+		},
+		field: {
+			label: '订单ID',
+			value: 'wby_order_ids',
+		}
+	}, {
+		ctype: 'rangePicker',
+		attr: {
+			placeholder: ['开始时间', '结束时间'],
+			format: 'YYYY-MM-DD',
+			style: { width: 104 }
+		},
+		field: {
+			label: '打款单生成时间',
+			value: ['public_payment_slip_created_at_started', 'public_payment_slip_created_at_ended'],
+		}
+	},
+	{
+		ctype: 'rangePicker',
+		attr: {
+			placeholder: ['开始时间', '结束时间'],
+			format: 'YYYY-MM-DD',
+			style: { width: 104 }
+		},
+		field: {
+			label: '打款时间',
+			value: ['payment_time_started', 'payment_time_ended'],
+		}
+	},
+	{
+		ctype: 'rangePicker',
+		attr: {
+			placeholder: ['开始时间', '结束时间'],
+			format: 'YYYY-MM-DD',
+			style: { width: 104 }
+		},
+		field: {
+			label: '打款撤销时间',
+			value: ['payment_revoke_time_started', 'payment_revoke_time_ended'],
+		}
+	},
+	{
+		ctype: 'select',
+		attr: {
+			placeholder: '不限',
+			style: { width: 160 },
+			labelInValue: true,
 			allowClear: true
 		},
 		field: {
@@ -77,54 +153,7 @@ export const prePaySearchFunc = ({ media_manager = [], payment_company = [], pay
 		},
 		selectOptionsChildren: payment_company
 	},
-	{
-		ctype: 'input',
-		attr: {
-			placeholder: '请输入',
-			style: { width: 160 },
-			allowClear: true
-		},
-		field: {
-			label: '订单ID',
-			value: 'wby_order_id',
-		}
-	},
-	{
-		ctype: 'rangePicker',
-		attr: {
-			placeholder: ['开始时间', '结束时间'],
-			format: 'YYYY-MM-DD',
-			style: { width: 104 }
-		},
-		field: {
-			label: '打款单生成日期',
-			value: ['public_payment_slip_created_at_started', 'public_payment_slip_created_at_ended'],
-		}
-	},
-	{
-		ctype: 'rangePicker',
-		attr: {
-			placeholder: ['开始时间', '结束时间'],
-			format: 'YYYY-MM-DD',
-			style: { width: 104 }
-		},
-		field: {
-			label: '打款日期',
-			value: ['payment_time_started', 'payment_time_ended'],
-		}
-	},
-	{
-		ctype: 'rangePicker',
-		attr: {
-			placeholder: ['开始时间', '结束时间'],
-			format: 'YYYY-MM-DD',
-			style: { width: 104 }
-		},
-		field: {
-			label: '打款撤销日期',
-			value: ['payment_revoke_time_started', 'payment_revoke_time_ended'],
-		}
-	},
+
 	{
 		ctype: 'select',
 		attr: {
@@ -220,6 +249,46 @@ export const datePaySearchFunc = ({ platform = [], cooperation_platform = [], pa
 			value: 'agent_id',
 		},
 		selectOptionsChildren: platform_name
+	}, {
+		ctype: 'select',
+		attr: {
+			placeholder: '不限',
+			style: { width: 160 },
+			labelInValue: true,
+			allowClear: true,
+			notFoundContent: (<div style={{ paddingLeft: '10px' }} > <Spin size="small" /> </div>)
+		},
+		field: {
+			label: '发票开具方',
+			value: 'beneficiary_company',
+		},
+		selectOptionsChildren: platform_name
+	},
+	{
+		ctype: 'input',
+		attr: {
+			placeholder: '不限',
+			style: { width: 160 },
+			labelInValue: true,
+			allowClear: true,
+			notFoundContent: (<div style={{ paddingLeft: '10px' }} > <Spin size="small" /> </div>)
+		},
+		field: {
+			label: '打款单ID',
+			value: 'id',
+		},
+		selectOptionsChildren: platform_name
+	}, {
+		ctype: 'input',
+		attr: {
+			placeholder: '请输入ID号，多个以空格隔开',
+			style: { width: 200 },
+			allowClear: true
+		},
+		field: {
+			label: '订单ID',
+			value: 'wby_order_ids',
+		}
 	},
 	{
 		ctype: 'select',
@@ -257,7 +326,7 @@ export const datePaySearchFunc = ({ platform = [], cooperation_platform = [], pa
 			style: { width: 104 }
 		},
 		field: {
-			label: '申请日期',
+			label: '打款单生成时间',
 			value: ['public_payment_slip_created_at_started', 'public_payment_slip_created_at_ended'],
 		}
 	},
@@ -269,7 +338,7 @@ export const datePaySearchFunc = ({ platform = [], cooperation_platform = [], pa
 			style: { width: 104 }
 		},
 		field: {
-			label: '打款日期',
+			label: '打款时间',
 			value: ['payment_time_started', 'payment_time_ended'],
 		}
 	},
@@ -281,7 +350,7 @@ export const datePaySearchFunc = ({ platform = [], cooperation_platform = [], pa
 			style: { width: 104 }
 		},
 		field: {
-			label: '打款撤销日期',
+			label: '打款撤销时间',
 			value: ['payment_revoke_time_started', 'payment_revoke_time_ended'],
 		}
 	},
@@ -340,6 +409,31 @@ export const dealOrderSearchFunc = ({ platform = [], cooperation_platform = [], 
 			value: 'cooperation_platform_id',
 		},
 		selectOptionsChildren: cooperation_platform
+	}, {
+		ctype: 'input',
+		attr: {
+			placeholder: '请输入ID号，多个以空格隔开',
+			style: { width: 200 },
+			allowClear: true
+		},
+		field: {
+			label: '订单ID',
+			value: 'wby_order_ids',
+		}
+	}, {
+		ctype: 'input',
+		attr: {
+			placeholder: '不限',
+			style: { width: 160 },
+			labelInValue: true,
+			allowClear: true,
+			notFoundContent: (<div style={{ paddingLeft: '10px' }} > <Spin size="small" /> </div>)
+		},
+		field: {
+			label: '打款单ID',
+			value: 'id',
+		},
+		selectOptionsChildren: platform_name
 	},
 	{
 		ctype: 'select',

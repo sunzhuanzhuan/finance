@@ -75,13 +75,6 @@ export const prePayFunc = (handleModal) => [
 		width: 100
 	},
 	{
-		title: '打款撤销时间',
-		dataIndex: 'payment_revoke_time',
-		key: 'payment_revoke_time',
-		align: 'center',
-		width: 100
-	},
-	{
 		title: '应回发票',
 		dataIndex: 'return_invoice_amount',
 		key: 'return_invoice_amount',
@@ -100,6 +93,13 @@ export const prePayFunc = (handleModal) => [
 		key: 'payment_time',
 		align: 'center',
 		width: 120
+	},
+	{
+		title: '打款撤销时间',
+		dataIndex: 'payment_revoke_time',
+		key: 'payment_revoke_time',
+		align: 'center',
+		width: 100
 	},
 	{
 		title: '主账号',
@@ -177,6 +177,12 @@ export const datePayFunc = (handleModal) => [
 		align: 'center',
 		width: 140
 
+	}, {
+		title: '发票开具方',
+		dataIndex: 'beneficiary_company',
+		key: 'beneficiary_company',
+		align: 'center',
+		width: 140
 	},
 	{
 		title: '打款金额',
@@ -206,6 +212,12 @@ export const datePayFunc = (handleModal) => [
 		key: 'payment_time',
 		align: 'center',
 		width: 120
+	}, {
+		title: '打款撤销时间',
+		dataIndex: 'payment_revoke_time',
+		key: 'payment_revoke_time',
+		align: 'center',
+		width: 100
 	},
 	{
 		title: '打款单生成时间',

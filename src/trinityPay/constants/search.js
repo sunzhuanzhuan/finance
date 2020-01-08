@@ -56,7 +56,6 @@ export const prePaySearchFunc = ({ media_manager = [], payment_company = [], pay
 			style: { width: 160 },
 			labelInValue: true,
 			allowClear: true,
-			notFoundContent: (<div style={{ paddingLeft: '10px' }} > <Spin size="small" /> </div>)
 		},
 		field: {
 			label: '发票开具方',
@@ -67,8 +66,7 @@ export const prePaySearchFunc = ({ media_manager = [], payment_company = [], pay
 	{
 		ctype: 'input',
 		attr: {
-			placeholder: '不限',
-			style: { width: 160 },
+			placeholder: '请输入打款单，多个以空格隔开',
 			labelInValue: true,
 			allowClear: true,
 			notFoundContent: (<div style={{ paddingLeft: '10px' }} > <Spin size="small" /> </div>)
@@ -81,8 +79,7 @@ export const prePaySearchFunc = ({ media_manager = [], payment_company = [], pay
 	}, {
 		ctype: 'input',
 		attr: {
-			placeholder: '请输入ID号，多个以空格隔开',
-			style: { width: 200 },
+			placeholder: '请输入订单，多个以空格隔开',
 			allowClear: true
 		},
 		field: {
@@ -267,8 +264,7 @@ export const datePaySearchFunc = ({ platform = [], cooperation_platform = [], pa
 	{
 		ctype: 'input',
 		attr: {
-			placeholder: '不限',
-			style: { width: 160 },
+			placeholder: '请输入打款单，多个以空格隔开',
 			labelInValue: true,
 			allowClear: true,
 			notFoundContent: (<div style={{ paddingLeft: '10px' }} > <Spin size="small" /> </div>)
@@ -281,7 +277,7 @@ export const datePaySearchFunc = ({ platform = [], cooperation_platform = [], pa
 	}, {
 		ctype: 'input',
 		attr: {
-			placeholder: '请输入ID号，多个以空格隔开',
+			placeholder: '请输入订单，多个以空格隔开',
 			style: { width: 200 },
 			allowClear: true
 		},
@@ -409,31 +405,6 @@ export const dealOrderSearchFunc = ({ platform = [], cooperation_platform = [], 
 			value: 'cooperation_platform_id',
 		},
 		selectOptionsChildren: cooperation_platform
-	}, {
-		ctype: 'input',
-		attr: {
-			placeholder: '请输入ID号，多个以空格隔开',
-			style: { width: 200 },
-			allowClear: true
-		},
-		field: {
-			label: '订单ID',
-			value: 'wby_order_ids',
-		}
-	}, {
-		ctype: 'input',
-		attr: {
-			placeholder: '不限',
-			style: { width: 160 },
-			labelInValue: true,
-			allowClear: true,
-			notFoundContent: (<div style={{ paddingLeft: '10px' }} > <Spin size="small" /> </div>)
-		},
-		field: {
-			label: '打款单ID',
-			value: 'id',
-		},
-		selectOptionsChildren: platform_name
 	},
 	{
 		ctype: 'select',
@@ -454,8 +425,7 @@ export const dealOrderSearchFunc = ({ platform = [], cooperation_platform = [], 
 	{
 		ctype: 'input',
 		attr: {
-			placeholder: '请输入',
-			style: { width: 160 },
+			placeholder: '请输入订单，多个以空格隔开',
 			allowClear: true
 		},
 		field: {
@@ -466,8 +436,7 @@ export const dealOrderSearchFunc = ({ platform = [], cooperation_platform = [], 
 	{
 		ctype: 'input',
 		attr: {
-			placeholder: '请输入',
-			style: { width: 160 },
+			placeholder: '请输入打款单，多个以空格隔开',
 			allowClear: true
 		},
 		field: {
@@ -515,4 +484,4 @@ export const dealOrderSearchFunc = ({ platform = [], cooperation_platform = [], 
 		},
 		selectOptionsChildren: payment_company
 	}
-];
+]

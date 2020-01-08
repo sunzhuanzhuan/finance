@@ -97,7 +97,7 @@ class PrePay extends React.Component {
 				{pullReady && <SearForm data={prePaySearch} getAction={this.queryData} responseLayout={{ xs: 24, sm: 24, md: 10, lg: 8, xxl: 6 }} extraFooter={<Button type='primary' style={{ marginLeft: 20 }} onClick={this.handleExport}>导出</Button>} wrappedComponentRef={form => this.form = form} />}
 			</fieldset>
 			<div className='top-gap'>
-				<Scolltable scrollClassName='.ant-table-body' widthScroll={1800}>
+				<Scolltable scrollClassName='.ant-table-body' widthScroll={2000}>
 					<Table
 						rowKey='payment_slip_id'
 						loading={loading}
@@ -105,7 +105,7 @@ class PrePay extends React.Component {
 						dataSource={list}
 						bordered
 						pagination={paginationObj}
-						scroll={{ x: 1740 }}
+						scroll={{ x: 1800 }}
 					/>
 				</Scolltable>
 			</div>

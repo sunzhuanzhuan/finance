@@ -23,14 +23,14 @@ export const trinityInvoiceFunc = (handleModal, handleCheckModal, handleDelete) 
 		width: 100
 	}, {
 		title: '发票金额',
-		dataIndex: 'invoice_amount1',
-		key: 'invoice_amount1',
+		dataIndex: 'invoice_pure_amount',
+		key: 'invoice_pure_amount',
 		align: 'center',
 		width: 100
 	}, {
 		title: '发票税额',
-		dataIndex: 'invoice_amount2',
-		key: 'invoice_amount2',
+		dataIndex: 'invoice_tax_amount',
+		key: 'invoice_tax_amount',
 		align: 'center',
 		width: 100
 	},
@@ -84,8 +84,8 @@ export const trinityInvoiceFunc = (handleModal, handleCheckModal, handleDelete) 
 		width: 100
 	}, {
 		title: '发票发票录入日期',
-		dataIndex: 'invoice_amount3',
-		key: 'invoice_amount3',
+		dataIndex: 'created_at',
+		key: 'created_at',
 		align: 'center',
 		width: 150
 	},

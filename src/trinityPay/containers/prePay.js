@@ -57,7 +57,6 @@ class PrePay extends React.Component {
 	}
 	queryData = (obj, func) => {
 		this.setState({ loading: true });
-		console.log('lsdkjflsdkjfsdklfj', obj)
 		return this.props.actions.getPrePayData({ ...obj, settle_type: 1 }).then(() => {
 			if (func && Object.prototype.toString.call(func) === '[object Function]') {
 				func();

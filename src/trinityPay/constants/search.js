@@ -50,7 +50,7 @@ export const prePaySearchFunc = ({ media_manager = [], payment_company = [], pay
 		selectOptionsChildren: platform_name
 	},
 	{
-		ctype: 'select',
+		ctype: 'input',
 		attr: {
 			placeholder: '不限',
 			style: { width: 160 },
@@ -60,8 +60,7 @@ export const prePaySearchFunc = ({ media_manager = [], payment_company = [], pay
 		field: {
 			label: '发票开具方',
 			value: 'beneficiary_company',
-		},
-		selectOptionsChildren: platform_name
+		}
 	},
 	{
 		ctype: 'input',
@@ -73,9 +72,8 @@ export const prePaySearchFunc = ({ media_manager = [], payment_company = [], pay
 		},
 		field: {
 			label: '打款单ID',
-			value: 'id',
-		},
-		selectOptionsChildren: platform_name
+			value: 'payment_slip_codes',
+		}
 	}, {
 		ctype: 'input',
 		attr: {
@@ -247,7 +245,7 @@ export const datePaySearchFunc = ({ platform = [], cooperation_platform = [], pa
 		},
 		selectOptionsChildren: platform_name
 	}, {
-		ctype: 'select',
+		ctype: 'input',
 		attr: {
 			placeholder: '不限',
 			style: { width: 160 },
@@ -258,8 +256,7 @@ export const datePaySearchFunc = ({ platform = [], cooperation_platform = [], pa
 		field: {
 			label: '发票开具方',
 			value: 'beneficiary_company',
-		},
-		selectOptionsChildren: platform_name
+		}
 	},
 	{
 		ctype: 'input',
@@ -271,9 +268,8 @@ export const datePaySearchFunc = ({ platform = [], cooperation_platform = [], pa
 		},
 		field: {
 			label: '打款单ID',
-			value: 'id',
-		},
-		selectOptionsChildren: platform_name
+			value: 'payment_slip_codes',
+		}
 	}, {
 		ctype: 'input',
 		attr: {
@@ -430,7 +426,7 @@ export const dealOrderSearchFunc = ({ platform = [], cooperation_platform = [], 
 		},
 		field: {
 			label: '订单ID',
-			value: 'wby_order_id',
+			value: 'wby_order_ids',
 		},
 	},
 	{
@@ -441,7 +437,7 @@ export const dealOrderSearchFunc = ({ platform = [], cooperation_platform = [], 
 		},
 		field: {
 			label: '打款单ID',
-			value: 'payment_slip_code',
+			value: 'payment_slip_codes',
 		},
 	},
 	{

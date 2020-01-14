@@ -312,8 +312,8 @@ export const dealOrderCols = [
 		width: 100
 	}, {
 		title: '发票开具方',
-		dataIndex: 'agent_name1',
-		key: 'agent_name1',
+		dataIndex: 'beneficiary_company',
+		key: 'beneficiary_company',
 		align: 'center',
 		width: 100
 	},

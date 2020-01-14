@@ -32,6 +32,9 @@ class Detail extends Component {
 	componentWillUnmount=()=>{
 		this.props.actions.getResetDetail()
 	}
+	getPaymentIdComp = (payment_id, payment_link) => {
+		return payment_link ? <a target='_blank' href={payment_link}>{payment_id}</a> : <span>{payment_id}</span>
+	}
 	render(){
 		let {detail}=this.props;
 		return<div className='detail'>
@@ -282,7 +285,7 @@ class Detail extends Component {
 			</Row> */}
 				{detail.account && detail.account.payment_list.length>0?detail.account.payment_list.map((item,index)=>{
 					return <div key={index} className='payment'>
-					<span className='pad32'>打款单ID:{item.payment_id}</span>
+					<span className='pad32'>打款单ID:{this.getPaymentIdComp(item.payment_id, item.payment_link)}</span>
 					<span className='padd60'>打款类型:{item.payment_type}</span>
 					<span className='pad32'>应回发票:{item.total_invoice_amount}</span>
 					<span className='padd60'>发票盈余:{item.invoice_surplus}</span>
@@ -303,7 +306,7 @@ class Detail extends Component {
 			</Row>
 			{detail.account?detail.account.after_payment_list.map((item,index)=>{
 					return <div key={index} className='payment'>
-					<span className='pad32'>打款单ID:{item.payment_id}</span>
+					<span className='pad32'>打款单ID:{this.getPaymentIdComp(item.payment_id, item.payment_link)}</span>
 					<span className='padd60'>打款类型:{item.payment_type}</span>
 					
 				
@@ -346,7 +349,7 @@ class Detail extends Component {
 				detail.trinity?detail.trinity.payment_list.map((item,index)=>{
 					return <Row key={index} className='payment'>
 						<div>
-							<span className='pad32'>打款单ID:{item.payment_id}</span>
+							<span className='pad32'>打款单ID:{this.getPaymentIdComp(item.payment_id, item.payment_link)}</span>
 							<span className='padd60'>打款类型:{item.payment_type}</span>
 							<span className='padd60'>回票方式:{item.return_invoice_type} </span>
 						

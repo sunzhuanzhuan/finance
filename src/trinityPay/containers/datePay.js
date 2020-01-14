@@ -33,7 +33,10 @@ class DatePay extends React.Component {
 		}).catch(({ errorMsg }) => {
 			message.error(errorMsg || '下拉项加载失败，请重试！');
 		})
-		this.queryData({ page: 1, page_size: 20, ...search.keys });
+		const query = { page: 1, page_size: 20, ...search.keys };
+		if(search.payment_slip_code)
+			query.payment_slip_code = search.payment_slip_code;
+		this.queryData(query);
 	}
 	handleFetchPlatform = () => {
 		const value = this.form.getFieldValue('cooperation_platform_id');

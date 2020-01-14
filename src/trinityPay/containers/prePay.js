@@ -34,7 +34,10 @@ class PrePay extends React.Component {
 		}).catch(({ errorMsg }) => {
 			message.error(errorMsg || '下拉项加载失败，请重试！');
 		})
-		this.queryData({ page: 1, page_size: 20, ...search.keys });
+		const query = { page: 1, page_size: 20, ...search.keys };
+		if(search.payment_slip_code)
+			query.payment_slip_code = search.payment_slip_code
+		this.queryData(query);
 	}
 	handleFetchAccount = (obj) => {
 		return this.props.actions.getPrimaryAccount({ ...obj })
@@ -54,6 +57,7 @@ class PrePay extends React.Component {
 	}
 	queryData = (obj, func) => {
 		this.setState({ loading: true });
+		console.log('lsdkjflsdkjfsdklfj', obj)
 		return this.props.actions.getPrePayData({ ...obj, settle_type: 1 }).then(() => {
 			if (func && Object.prototype.toString.call(func) === '[object Function]') {
 				func();

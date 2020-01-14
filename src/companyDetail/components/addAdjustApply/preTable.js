@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import { withRouter } from 'react-router-dom';
 import * as goldenActions from "../../actions/goldenApply";
 import { Table, message, Alert } from "antd";
-import Scolltable from '@/components/Scolltable';
+import Scolltable from '@/components';
 import { getTotalWidth } from '@/util';
 
 class PreTable extends React.Component {

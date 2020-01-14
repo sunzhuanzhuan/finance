@@ -10,11 +10,18 @@ class ExtractQuery extends React.Component {
 
 		}
 	}
+	getMultipleValues = value => {
+		return value.split(' ');
+	}
 	handleSearch = (e) => {
 		const { questAction, handlefilterParams } = this.props;
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
-			let params = { ...values };
+			let params = { 
+				...values,
+				'withdraw_id': values['withdraw_id'] ? this.getMultipleValues(values['withdraw_id']) : '',
+				'id': values['id'] ? this.getMultipleValues(values['id']) : '',
+			};
 			Object.keys(params).forEach(item => { !params[item] && params[item] !== 0 ? delete params[item] : null });
 			if (!err) {
 				const hide = message.loading('查询中，请稍候...');
@@ -34,7 +41,7 @@ class ExtractQuery extends React.Component {
 	render() {
 		let { getFieldDecorator } = this.props.form;
 		const formItemLayout = {
-			labelCol: { span: 6 },
+			labelCol: { span: 7 },
 			wrapperCol: { span: 14 },
 		};
 		const strConfig = {
@@ -43,14 +50,28 @@ class ExtractQuery extends React.Component {
 		return <div>
 			<Form className='extractManage-search-form'>
 				<Row>
-					<Col span={6}>
+					<Col span={5}>
+						<FormItem label='提现单号' {...formItemLayout}>
+							{getFieldDecorator('withdraw_id', strConfig)(
+								<Input placeholder="请输入" />
+							)}
+						</FormItem>
+					</Col>
+					<Col span={5}>
+						<FormItem label='订单ID' {...formItemLayout}>
+							{getFieldDecorator('order_id', strConfig)(
+								<Input placeholder="请输入" />
+							)}
+						</FormItem>
+					</Col>
+					<Col span={5}>
 						<FormItem label='主账号名：' {...formItemLayout}>
 							{getFieldDecorator('identity_name', strConfig)(
 								<Input placeholder="请输入" />
 							)}
 						</FormItem>
 					</Col>
-					<Col span={6}>
+					<Col span={5}>
 						<FormItem label='状态：' {...formItemLayout}>
 							{getFieldDecorator('status', { initialValue: '' })(
 								<Select style={{ width: 120 }}>

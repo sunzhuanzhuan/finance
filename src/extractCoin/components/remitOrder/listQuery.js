@@ -10,6 +10,18 @@ class RemitQuery extends React.Component {
 
 		}
 	}
+	getMultipleValues = value => {
+		return value.split(' ');
+	}
+	getStudioOptions = () => {
+		const { studioRows = [] } = this.props;
+		return studioRows.map(item => {
+			const { id, name } = item;
+			return (
+				<Option value={id} key={id}>{name}</Option>
+			)
+		})
+	}
 	handleSearch = (e) => {
 		const { questAction, handlefilterParams, limit_num } = this.props;
 		e.preventDefault();
@@ -18,6 +30,8 @@ class RemitQuery extends React.Component {
 				const hide = message.loading('查询中，请稍候...');
 				let params = {
 					...values,
+					'withdraw_id': values['withdraw_id'] ? this.getMultipleValues(values['withdraw_id']) : '',
+					'id': values['id'] ? this.getMultipleValues(values['id']) : '',
 					'start_time': values['start_time'] ? values['start_time'].format('YYYY-MM-DD') : '',
 					'end_time': values['end_time'] ? values['end_time'].format('YYYY-MM-DD') : ''
 				};
@@ -41,15 +55,9 @@ class RemitQuery extends React.Component {
 			<Form className='remitOrder-search-form'>
 				<Row type="flex" justify="start" gutter={16} style={{ padding: '10px 0' }}>
 					<Col className='left-gap'>
-						<FormItem label='打款状态'>
-							{getFieldDecorator('status', { initialValue: '' })(
-								<Select style={{ width: 120 }} allowClear>
-									<Option value="">不限</Option>
-									<Option value="0">待打款</Option>
-									<Option value="1">待还款</Option>
-									<Option value="2">待结税</Option>
-									<Option value="3">已结算</Option>
-								</Select>
+						<FormItem label='提现单号'>
+							{getFieldDecorator('withdraw_id', { initialValue: '' })(
+								<Input placeholder="请输入" style={{ width: 160 }} allowClear />
 							)}
 						</FormItem>
 					</Col>
@@ -67,6 +75,28 @@ class RemitQuery extends React.Component {
 							)}~
 							{getFieldDecorator('end_time')(
 								<DatePicker format={'YYYY-MM-DD'} placeholder='结束日期' style={{ width: 120 }} />
+							)}
+						</FormItem>
+					</Col>
+					<Col className='left-gap'>
+						<FormItem label='打款状态'>
+							{getFieldDecorator('status', { initialValue: '' })(
+								<Select style={{ width: 120 }} allowClear>
+									<Option value="">不限</Option>
+									<Option value="0">待打款</Option>
+									<Option value="1">待还款</Option>
+									<Option value="2">待结税</Option>
+									<Option value="3">已结算</Option>
+								</Select>
+							)}
+						</FormItem>
+					</Col>
+					<Col className='left-gap'>
+						<FormItem label='工作室'>
+							{getFieldDecorator('studio_id')(
+								<Select style={{ width: 120 }} placeholder='请选择' allowClear>
+									{this.getStudioOptions()}
+								</Select>
 							)}
 						</FormItem>
 					</Col>

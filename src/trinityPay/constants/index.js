@@ -368,14 +368,14 @@ export const dealOrderCols = [
 		width: 100
 	}, {
 		title: '打款成功/失败时间',
-		dataIndex: 'agent_name2',
-		key: 'agent_name3',
+		dataIndex: 'payment_time',
+		key: 'payment_time',
 		align: 'center',
 		width: 100
 	}, {
 		title: '打款撤销时间',
-		dataIndex: 'agent_name3',
-		key: 'agent_name3',
+		dataIndex: 'payment_revoke_time',
+		key: 'payment_revoke_time',
 		align: 'center',
 		width: 100
 	},

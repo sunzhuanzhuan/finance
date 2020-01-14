@@ -29,7 +29,7 @@ class Modification extends React.Component {
 			let obj = {};
 			ary.forEach(item => {
 				if (item === 'payment_screenshot') {
-					obj[item] = payDetail['payment_screenshot'] ? Object.values(qs.parse(payDetail[item])) : [];
+					obj[item] = payDetail['payment_screenshot'] ? Object.values(qs.parse(payDetail[item].replace(/&amp;/g, '&'))) : [];
 				} else obj[item] = payDetail[item];
 			});
 			setTimeout(() => {

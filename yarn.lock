@@ -9297,9 +9297,9 @@ wbyui@^1.1.0:
     redux-actions "^2.4.0"
     wbyui "^1.1.0"
 
-wbyui@^1.4.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/wbyui/-/wbyui-1.4.0.tgz#5c25b77811234b861aa0735f5edfb16ad672e07d"
+wbyui@^1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/wbyui/-/wbyui-1.4.2.tgz#c2cbab66bc5b82e42e6617cb602e7b9efb43e463"
   dependencies:
     axios "^0.18.0"
     babel-runtime "^6.26.0"

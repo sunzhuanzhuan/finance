@@ -20,7 +20,7 @@ class ExtractQuery extends React.Component {
 			let params = { 
 				...values,
 				'withdraw_id': values['withdraw_id'] ? this.getMultipleValues(values['withdraw_id']) : '',
-				'id': values['id'] ? this.getMultipleValues(values['id']) : '',
+				'order_id': values['order_id'] ? this.getMultipleValues(values['order_id']) : '',
 			};
 			Object.keys(params).forEach(item => { !params[item] && params[item] !== 0 ? delete params[item] : null });
 			if (!err) {

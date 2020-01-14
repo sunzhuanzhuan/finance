@@ -14,13 +14,15 @@ class RemitQuery extends React.Component {
 		return value.split(' ');
 	}
 	getStudioOptions = () => {
-		const { studioRows = [] } = this.props;
-		return studioRows.map(item => {
-			const { id, name } = item;
-			return (
-				<Option value={id} key={id}>{name}</Option>
-			)
-		})
+		const { studioRows } = this.props;
+		if(Array.isArray(studioRows) && studioRows.length)
+			return studioRows.map(item => {
+				const { id, name } = item;
+				return (
+					<Option value={id} key={id}>{name}</Option>
+				)
+			})
+		return null;
 	}
 	handleSearch = (e) => {
 		const { questAction, handlefilterParams, limit_num } = this.props;

@@ -168,7 +168,7 @@ class PreModal extends React.Component {
 				const hide = message.loading('操作中，请稍候...');
 				const { search, status, onCancel, record } = this.props;
 				const actionName = this.titleMapping(status).actionName;
-				values.invoice_id = status == 'new' ? null : record.invoice_id;
+				values.invoice_id = (status == 'new' || status == 'copy') ? null : record.invoice_id;
 
 				this.props.actions[actionName]({
 					business_account_type: 3,

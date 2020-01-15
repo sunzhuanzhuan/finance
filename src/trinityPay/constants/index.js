@@ -253,7 +253,7 @@ export const datePayFunc = (handleModal) => [
 				settle_type: 2,
 				keys: {
 					labels: '打款单ID',
-					payment_slip_code: record.payment_slip_code
+					payment_slip_codes: record.payment_slip_code
 
 				}
 			}
@@ -782,9 +782,9 @@ export const datePayDetailColumns = [
 export const modificationColumns = type => {
 	switch (type) {
 		case 'prePay':
-			return ['payment_slip_code', 'settle_type_desc', 'payment_time', 'payee_type_desc', 'settle_type_desc', 'payee_type_desc', 'wby_order_id', 'product_line_type_name', 'ttp_order_id', 'platform_name', 'cooperation_platform_name', 'agent_name', 'requirement_id', 'requirement_name', 'requirement_company_name', 'requirement_sale_manager_name', 'payment_amount', 'payment_type_desc', 'payee_account_name', 'payee_account', 'bank_agency_province', 'bank_agency_city', 'bank', 'bank_agency', 'created_at', 'payment_status_desc', 'payment_time', 'payment_screenshot', 'payment_remark', 'payment_company_name', 'return_invoice_type_desc', 'return_invoice_amount', 'invoice_surplus', 'beneficiary_company', 'main_user_name', 'media_user_name', 'payment_revoke_reason']
+			return ['payment_slip_code', 'settle_type_desc', 'payment_time', 'payee_type_desc', 'settle_type_desc', 'payee_type_desc', 'wby_order_id', 'product_line_type_name', 'ttp_order_id', 'platform_name', 'cooperation_platform_name', 'agent_name', 'requirement_id', 'requirement_name', 'requirement_company_name', 'requirement_sale_manager_name', 'payment_amount', 'payment_type_desc', 'payee_account_name', 'payee_account', 'bank_agency_province', 'bank_agency_city', 'bank', 'bank_agency', 'created_at', 'payment_status_desc', 'payment_time', 'payment_screenshot', 'payment_remark', 'payment_company_name', 'return_invoice_type_desc', 'return_invoice_amount', 'invoice_surplus', 'beneficiary_company', 'main_user_name', 'media_user_name', 'payment_revoke_reason', 'payment_revoke_time']
 		case 'datePay':
-			return ['payment_slip_code', 'settle_id', 'settle_type_desc', 'payment_time', 'payee_type_desc', 'settle_type_desc', 'payee_type_desc', 'settle_id', 'platform_name', 'cooperation_platform_name', 'agent_name', 'payment_amount', 'payment_type_desc', 'payee_account_name', 'payee_account', 'bank_agency_province', 'bank_agency_city', 'bank', 'bank_agency', 'created_at', 'payment_status_desc', 'payment_time', 'payment_screenshot', 'payment_remark', 'payment_company_name', 'return_invoice_type_desc', 'return_invoice_amount', 'invoice_surplus', 'beneficiary_company', 'payment_revoke_reason']
+			return ['payment_slip_code', 'settle_id', 'settle_type_desc', 'payment_time', 'payee_type_desc', 'settle_type_desc', 'payee_type_desc', 'settle_id', 'platform_name', 'cooperation_platform_name', 'agent_name', 'payment_amount', 'payment_type_desc', 'payee_account_name', 'payee_account', 'bank_agency_province', 'bank_agency_city', 'bank', 'bank_agency', 'created_at', 'payment_status_desc', 'payment_time', 'payment_screenshot', 'payment_remark', 'payment_company_name', 'return_invoice_type_desc', 'return_invoice_amount', 'invoice_surplus', 'beneficiary_company', 'payment_revoke_reason', 'payment_revoke_time']
 		default:
 			return [];
 	}

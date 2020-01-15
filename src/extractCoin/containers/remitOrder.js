@@ -35,7 +35,7 @@ class RemitOrderManage extends React.Component {
 	}
 	componentDidMount() {
 		this.requestList();
-		this.props.actions.getFlashStudioList({ status: 1, page: 1, page_size: 100 });
+		this.props.actions.getFlashStudioList({ page: 1, page_size: 1000 });
 	}
 	handlefilterParams = (filterParams) => {
 		this.setState({ filterParams });

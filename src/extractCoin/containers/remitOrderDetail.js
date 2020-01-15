@@ -198,7 +198,11 @@ class RemitOrderDetail extends React.Component {
 			<div className='remitOrder-list'>
 				<Row className='topGap'><Col span={4}>包含订单：</Col></Row>
 			</div>
-			<RemitDetailQuery id={id} pageSize={remitOrderDetailPageSize} questAction={this.props.actions.getPaymentSlipDetail} handlefilterParams={this.handlefilterParams} />
+			<RemitDetailQuery 
+				id={id} pageSize={remitOrderDetailPageSize} 
+				questAction={this.props.actions.getPaymentSlipDetail} 
+				handlefilterParams={this.handlefilterParams}
+			/>
 			<Scolltable scrollClassName='.detail-table-list .ant-table-body' widthScroll={totalWidth + leftWidth}>
 				<Table 
 					className='topGap detail-table-list' 

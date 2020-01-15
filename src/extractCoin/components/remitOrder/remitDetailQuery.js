@@ -1,5 +1,5 @@
 import React from 'react'
-import { Row, Col, Form, Button, message, Input, Icon } from "antd";
+import { Form, Button, message, Input, Icon } from "antd";
 const FormItem = Form.Item;
 
 class RemitDetailQuery extends React.Component {
@@ -41,44 +41,31 @@ class RemitDetailQuery extends React.Component {
 		};
 
 		return <div>
-			<Form className='extractManage-search-form'>
-				<Row>
-					<Col span={5}>
-						<FormItem label='提现单号' {...formItemLayout}>
-							{getFieldDecorator('withdraw_id')(
-								<Input placeholder="请输入" />
-							)}
-						</FormItem>
-					</Col>
-					<Col span={5}>
-						<FormItem label='订单ID' {...formItemLayout}>
-							{getFieldDecorator('order_id')(
-								<Input placeholder="请输入" />
-							)}
-						</FormItem>
-					</Col>
-					<Col span={5}>
-						<FormItem label='主账号名称' {...formItemLayout}>
-							{getFieldDecorator('identity_name')(
-								<Input placeholder="请输入" />
-							)}
-						</FormItem>
-					</Col>
-					<Col span={5}>
-						<FormItem label='收款人名称' {...formItemLayout}>
-							{getFieldDecorator('real_name')(
-								<Input placeholder="请输入" />
-							)}
-						</FormItem>
-					</Col>
-
-					<Col span={4}>
-						<FormItem>
-							<Button type="primary" htmlType="submit" onClick={this.handleSearch}>查询</Button>
-							<a className="reset-filter left-gap" onClick={this.handleClear}><Icon type="retweet" />重置搜索框</a>
-						</FormItem>
-					</Col>
-				</Row>
+			<Form className='remitDetail-search-form'>
+				<FormItem label='提现单号'>
+					{getFieldDecorator('withdraw_id')(
+						<Input style={{width: '200px'}} placeholder="请输入提现单，多个以空格分隔" />
+					)}
+				</FormItem>
+				<FormItem label='订单ID'>
+					{getFieldDecorator('order_id')(
+						<Input style={{width: '200px'}} placeholder="请输入订单，多个以空格分隔" />
+					)}
+				</FormItem>
+				<FormItem label='主账号名称'>
+					{getFieldDecorator('identity_name')(
+						<Input placeholder="请输入" />
+					)}
+				</FormItem>
+				<FormItem label='收款人名称'>
+					{getFieldDecorator('real_name')(
+						<Input placeholder="请输入" />
+					)}
+				</FormItem>
+				<FormItem>
+					<Button type="primary" htmlType="submit" onClick={this.handleSearch}>查询</Button>
+					<a className="reset-filter left-gap" onClick={this.handleClear}><Icon type="retweet" />重置搜索框</a>
+				</FormItem>
 			</Form>
 		</div>
 	}

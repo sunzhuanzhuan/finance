@@ -842,6 +842,13 @@ export const remitDetailOrderConfig = [
 	},
 	{
 		title: '主账号名称',
+		dataIndex: 'identity_name',
+		key: 'identity_name',
+		align: 'center',
+		width: 100,
+	},
+	{
+		title: '收款人名称',
 		dataIndex: 'real_name',
 		key: 'real_name',
 		align: 'center',

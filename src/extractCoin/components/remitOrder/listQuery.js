@@ -59,14 +59,14 @@ class RemitQuery extends React.Component {
 					<Col className='left-gap'>
 						<FormItem label='提现单号'>
 							{getFieldDecorator('withdraw_id', { initialValue: '' })(
-								<Input placeholder="请输入" style={{ width: 160 }} allowClear />
+								<Input placeholder="请输入提现单，多个以空格分隔" style={{ width: 225 }} allowClear />
 							)}
 						</FormItem>
 					</Col>
 					<Col className='left-gap'>
 						<FormItem label='打款单ID'>
 							{getFieldDecorator('id')(
-								<Input placeholder="请输入" style={{ width: 160 }} allowClear />
+								<Input placeholder="请输入打款单，多个以空格分隔" style={{ width: 225 }} allowClear />
 							)}
 						</FormItem>
 					</Col>
@@ -96,7 +96,15 @@ class RemitQuery extends React.Component {
 					<Col className='left-gap'>
 						<FormItem label='工作室'>
 							{getFieldDecorator('studio_id')(
-								<Select style={{ width: 120 }} placeholder='请选择' allowClear>
+								<Select 
+									showSearch
+									style={{ width: 120 }} 
+									placeholder='请选择' 
+									allowClear
+									filterOption={(input, option) => (
+										option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+									)}
+								>
 									{this.getStudioOptions()}
 								</Select>
 							)}

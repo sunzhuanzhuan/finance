@@ -462,6 +462,30 @@ export const dealOrderSearchFunc = ({ platform = [], cooperation_platform = [], 
 			style: { width: 104 }
 		},
 		field: {
+			label: '打款时间',
+			value: ['payment_time_started', 'payment_time_ended'],
+		}
+	},
+	{
+		ctype: 'rangePicker',
+		attr: {
+			placeholder: ['开始时间', '结束时间'],
+			format: 'YYYY-MM-DD',
+			style: { width: 104 }
+		},
+		field: {
+			label: '打款撤销时间',
+			value: ['payment_revoke_time_started', 'payment_revoke_time_ended'],
+		}
+	},
+	{
+		ctype: 'rangePicker',
+		attr: {
+			placeholder: ['开始时间', '结束时间'],
+			format: 'YYYY-MM-DD',
+			style: { width: 104 }
+		},
+		field: {
 			label: '三方平台下单时间',
 			value: ['ttp_place_order_at_started', 'ttp_place_order_at_ended'],
 		}

@@ -55,22 +55,27 @@ class DealOrder extends React.Component {
 		}
 	}
 	handleExport = () => {
-		message.loading('导出中,请稍候...');
 		const { payment_slip_id, settle_type } = qs.parse(this.props.location.search.substring(1));
-		const data = this.form.getFieldsValue();
-		const obj = {};
-		for (let [key, value] of Object.entries(data)) {
-			if (typeof value === 'string') obj[key] = value.trim();
-			if (typeof value === 'object') {
-				if (value.key) obj[key] = value.key;
-				else obj[key] = value.format('YYYY-MM-DD');
+		this.props.actions.getQueryDealCanExport({ flag: 1, settle_type: settle_type }).then(() => {
+			message.loading('导出中,请稍候...');
+			const data = this.form.getFieldsValue();
+			const obj = {};
+			for (let [key, value] of Object.entries(data)) {
+				if (typeof value === 'string') obj[key] = value.trim();
+				if (typeof value === 'object') {
+					if (value.key) obj[key] = value.key;
+					else obj[key] = value.format('YYYY-MM-DD');
+				}
 			}
-		}
-		window.open(`/api/trinity/publicOrderTrade/exportPublicOrderTrade?${qs.stringify({
-			settle_type,
-			payment_slip_id,
-			...obj
-		})}`);
+			window.open(`/api/trinity/publicOrderTrade/exportPublicOrderTrade?${qs.stringify({
+				settle_type,
+				payment_slip_id,
+				...obj
+			})}`);
+		}).catch(({ errorMsg }) => {
+			message.error(errorMsg || '请求出错，请重试！');
+		})
+
 	}
 	render() {
 		const search = qs.parse(this.props.location.search.substring(1));

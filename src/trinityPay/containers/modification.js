@@ -300,7 +300,7 @@ class Modification extends React.Component {
 									multiple={true}
 									disabled={payment_status != 2}
 									showUploadList={{ showPreviewIcon: true, showRemoveIcon: payment_status == 2 ? true : false }}
-								>拖拽上传或浏览
+								>请拖拽图片到虚线框内或点击浏览上传
 								</OssUpload.Dragger>
 							)}
 						</FormItem>

@@ -17,5 +17,6 @@ export default {
 	postTrinityInvoiceDel: '/trinity/publicInvoice/del',
 	postTrinityInvoiceExport: '/trinity/publicInvoice/export',
 	//公共
-	getTrinityInvoiceSearchItem: '/trinity/publicInvoice/searchItem'
+	getTrinityInvoiceSearchItem: '/trinity/publicInvoice/searchItem',
+	getTrinityInvoiceExport: '/trinity/publicInvoice/export'
 }

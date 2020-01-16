@@ -83,7 +83,7 @@ export const trinityInvoiceFunc = (handleModal, handleCheckModal, handleDelete) 
 		align: 'center',
 		width: 100
 	}, {
-		title: '发票发票录入日期',
+		title: '发票录入日期',
 		dataIndex: 'created_at',
 		key: 'created_at',
 		align: 'center',

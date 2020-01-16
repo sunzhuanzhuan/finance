@@ -350,7 +350,7 @@ export const extractDetailFunc = (order_status) => {
 			dataIndex: 'comment',
 			key: 'comment',
 			align: 'center',
-			width: '244px',
+			width: 244,
 			render: (text, { comment }) => {
 				if (comment && comment.length > 30) {
 					return <div title={comment}>
@@ -460,7 +460,7 @@ export const extractNoDetailFunc = (order_status) => {
 			dataIndex: 'comment',
 			key: 'comment',
 			align: 'center',
-			width: '244px',
+			width: 244,
 			render: (text, { comment }) => {
 				if (comment && comment.length > 30) {
 					return <div title={comment}>

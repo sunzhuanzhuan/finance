@@ -114,5 +114,19 @@ export const {
 	method: 'get',
 	ignoreToast: true
 });
-
-
+// 预付款和周期付款添加能不能导出
+export const {
+	getQueryCanExport,
+	getQueryCanExport_success
+} = createHttpAction('getQueryCanExport', Interface.getQueryCanExport, {
+	method: 'get',
+	ignoreToast: true
+});
+// 打款明细添加能不能导出
+export const {
+	getQueryDealCanExport,
+	getQueryDealCanExport_success
+} = createHttpAction('getQueryDealCanExport', Interface.getQueryDealCanExport, {
+	method: 'get',
+	ignoreToast: true
+});

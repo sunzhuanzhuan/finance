@@ -28,16 +28,13 @@ class PrePay extends React.Component {
 		}
 	}
 	componentDidMount() {
-		const search = qs.parse(this.props.location.search.substring(1));
+		// const search = qs.parse(this.props.location.search.substring(1));
 		this.props.actions.getPaySearchItem().then(() => {
 			this.setState({ pullReady: true });
 		}).catch(({ errorMsg }) => {
 			message.error(errorMsg || '下拉项加载失败，请重试！');
 		})
-		const query = { page: 1, page_size: 20, ...search.keys };
-		if(search.payment_slip_code)
-			query.payment_slip_code = search.payment_slip_code
-		this.queryData(query);
+		// this.queryData({ page: 1, page_size: 20, ...search.keys });
 	}
 	handleFetchAccount = (obj) => {
 		return this.props.actions.getPrimaryAccount({ ...obj })

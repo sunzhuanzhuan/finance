@@ -839,6 +839,9 @@ export const remitDetailOrderConfig = [
 		key: 'withdraw_id',
 		align: 'center',
 		width: 100,
+		render: data => {
+			return <Link target='_blank' to={`/finance/extractManage/applyDetail?id=${data}`}>{data}</Link>
+		}
 	},
 	{
 		title: '主账号名称',

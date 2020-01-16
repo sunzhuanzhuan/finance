@@ -235,7 +235,6 @@ class Detail extends Component {
 				<Col span={4}>账号:{detail.account?detail.account.weibo_name:''} </Col>
 				<Col span={3}>平台:{detail.account?detail.account.platform_name:''} </Col>
 				<Col span={3}>媒介经理:{detail.account?detail.account.media_manager_name:''} </Col>
-				<Col span={4}>合作方类型:{detail.account?detail.account.partner_type:''} </Col>
 				<Col span={5}>付款公司:{detail.account?detail.account.payment_company_name:''} </Col>
 				
 			</Row>

@@ -24,7 +24,7 @@ class PreModal extends React.Component {
 	}
 	componentDidMount() {
 		const { status, record } = this.props;
-		if (status === 'modification') {
+		if (status === 'modification' || status === 'copy') {
 			this.pureValue = record.invoice_pure_amount;
 			this.taxValue = record.invoice_tax_amount;
 			this.voiceType = record.invoice_tax_amount;
@@ -50,6 +50,7 @@ class PreModal extends React.Component {
 	titleMapping = (status) => {
 		const Mapping = {
 			'new': { title: '新增发票', actionName: 'postTrinityInvoiceAdd' },
+			'copy': { title: '新增发票', actionName: 'postTrinityInvoiceAdd' },
 			'modification': { title: '编辑', actionName: 'postTrinityInvoiceEdit' },
 		}
 		return Mapping[status]
@@ -142,7 +143,7 @@ class PreModal extends React.Component {
 				const agentItemInfo = SearchItem.agent.find(item => item.value === business_account_id) || {};
 				const agentTaxVal = agentItemInfo.agentTaxRate * 100;
 				const nowRate = invoice_tax_rate.indexOf('%') > -1 ? Number(invoice_tax_rate.replace('%', '')) : Number(invoice_tax_rate);
-				if(agentTaxVal != nowRate || agentItemInfo.invoiceType != values.invoice_type) {
+				if (agentTaxVal != nowRate || agentItemInfo.invoiceType != values.invoice_type) {
 					this.setState({
 						isShowConfirmModal: true,
 						rateInfo: {
@@ -152,14 +153,14 @@ class PreModal extends React.Component {
 							nowInvoiceType: values.invoice_type
 						}
 					});
-				}else {
+				} else {
 					this.submitAction();
 				}
 			}
 		})
 	}
 	handleConfirmCancel = () => {
-		this.setState({isShowConfirmModal: false});
+		this.setState({ isShowConfirmModal: false });
 	}
 	submitAction = () => {
 		this.props.form.validateFields((err, values) => {
@@ -167,8 +168,8 @@ class PreModal extends React.Component {
 				const hide = message.loading('操作中，请稍候...');
 				const { search, status, onCancel, record } = this.props;
 				const actionName = this.titleMapping(status).actionName;
-				values.invoice_id = status == 'new' ? null : record.invoice_id;
-				
+				values.invoice_id = (status == 'new' || status == 'copy') ? null : record.invoice_id;
+
 				this.props.actions[actionName]({
 					business_account_type: 3,
 					...values,
@@ -261,167 +262,167 @@ class PreModal extends React.Component {
 		}
 		const title = this.titleMapping(status).title;
 		const getInvoiceText = type => {
-			if(type == 1) {
+			if (type == 1) {
 				return '专票';
-			}else if(type == 2) {
+			} else if (type == 2) {
 				return '普票';
-			}else {
+			} else {
 				return '';
 			}
 		}
 		return [
-		<Modal
-			wrapClassName='trinityInvoice-modal'
-			key={status}
-			width={500}
-			title={title}
-			visible={visible}
-			maskClosable={false}
-			onCancel={onCancel}
-			footer={[
-				<Button key="back" onClick={onCancel}>返回</Button>,
-				<Button key="submit" type="primary" disabled={isClick} onClick={this.handleSubmit
-				}>确认</Button>
-			]}
-		>
-			<Form>
-				<FormItem label='发票来源' {...formItemLayout}>
-					{getFieldDecorator('invoice_source', { ...options })(
-						<Select placeholder="请选择" style={{ width: 200 }} disabled={modType == 2}
-						>
-							{SearchItem && SearchItem.invoice_source.map((item) =>
-								<Option key={item.value} value={item.value}>{item.name}</Option>)
-							}
-						</Select>
-					)}
-				</FormItem>
-				<FormItem label='发票号' {...formItemLayout}>
-					{getFieldDecorator('invoice_number', {
-						rules: [
-							{
-								required: true,
-								validator: this.handleCheckVoick,
-								max: 50,
-							},
-						],
-					})(
-						<Input placeholder="请输入" style={{ width: 200 }} disabled={modType == 2} />
-					)}
-				</FormItem>
-				<FormItem label='三方代理商' {...formItemLayout}>
-					{getFieldDecorator('business_account_id', { ...options })(
-						<Select placeholder="请选择" style={{ width: 200 }} disabled={modType == 2}
-						>
-							{SearchItem && SearchItem.agent.map((item) =>
-								<Option key={item.value} value={item.value}>{item.name}</Option>)
-							}
-						</Select>
-					)}
-				</FormItem>
-				<FormItem label='发票抬头' {...formItemLayout}>
-					{getFieldDecorator('invoice_title', { ...options })(
-						<Select placeholder="请选择" style={{ width: 200 }} disabled={modType == 2}
-						>
-							{SearchItem && SearchItem.invoice_title.map((item) =>
-								<Option key={item.value} value={item.value}>{item.name}</Option>)
-							}
-						</Select>
-					)}
-				</FormItem>
-				<FormItem label='发票开具方' {...formItemLayout}>
-					{getFieldDecorator('beneficiary_company', {
-						rules: [
-							{
-								required: true,
+			<Modal
+				wrapClassName='trinityInvoice-modal'
+				key={status}
+				width={500}
+				title={title}
+				visible={visible}
+				maskClosable={false}
+				onCancel={onCancel}
+				footer={[
+					<Button key="back" onClick={onCancel}>返回</Button>,
+					<Button key="submit" type="primary" disabled={isClick} onClick={this.handleSubmit
+					}>确认</Button>
+				]}
+			>
+				<Form>
+					<FormItem label='发票来源' {...formItemLayout}>
+						{getFieldDecorator('invoice_source', { ...options })(
+							<Select placeholder="请选择" style={{ width: 200 }} disabled={modType == 2}
+							>
+								{SearchItem && SearchItem.invoice_source.map((item) =>
+									<Option key={item.value} value={item.value}>{item.name}</Option>)
+								}
+							</Select>
+						)}
+					</FormItem>
+					<FormItem label='发票号' {...formItemLayout}>
+						{getFieldDecorator('invoice_number', {
+							rules: [
+								{
+									required: true,
+									validator: this.handleCheckVoick,
+									max: 50,
+								},
+							],
+						})(
+							<Input placeholder="请输入" style={{ width: 200 }} disabled={modType == 2} />
+						)}
+					</FormItem>
+					<FormItem label='三方代理商' {...formItemLayout}>
+						{getFieldDecorator('business_account_id', { ...options })(
+							<Select placeholder="请选择" style={{ width: 200 }} disabled={modType == 2}
+							>
+								{SearchItem && SearchItem.agent.map((item) =>
+									<Option key={item.value} value={item.value}>{item.name}</Option>)
+								}
+							</Select>
+						)}
+					</FormItem>
+					<FormItem label='发票抬头' {...formItemLayout}>
+						{getFieldDecorator('invoice_title', { ...options })(
+							<Select placeholder="请选择" style={{ width: 200 }} disabled={modType == 2}
+							>
+								{SearchItem && SearchItem.invoice_title.map((item) =>
+									<Option key={item.value} value={item.value}>{item.name}</Option>)
+								}
+							</Select>
+						)}
+					</FormItem>
+					<FormItem label='发票开具方' {...formItemLayout}>
+						{getFieldDecorator('beneficiary_company', {
+							rules: [
+								{
+									required: true,
 
-								message: '该项为必填项！'
-							},
-							{ max: 50, message: '最多不超过50个字符', }
-						],
-					})(
-						<Input placeholder="请输入" style={{ width: 200 }} />
-					)}
-				</FormItem>
-				<FormItem label='发票内容' {...formItemLayout}>
-					{getFieldDecorator('invoice_content', {
-						rules: [
-							{
-								required: true,
-								message: '该项为必填项！'
-							},
-							{ max: 50, message: '最多不超过50个字符', }
-						],
-					})(
-						<Input placeholder="请输入" style={{ width: 200 }} disabled={modType == 2} />
-					)}
-				</FormItem>
-				<FormItem label='发票金额' {...formItemLayout}>
-					{getFieldDecorator('invoice_pure_amount', {
-						rules: [{ required: true, message: '该项为必填项！' },
-						{ validator: this.checkMoney }]
-					})(
-						<Input placeholder="请输入" style={{ width: 200 }} suffix={'元'} onChange={this.handlePureChange} onBlur={this.handleTax} disabled={modType == 2} />
-					)}
-					<div style={{ color: 'red' }}>{bigMoney}</div>
-				</FormItem>
-				<FormItem label='发票税额' {...formItemLayout}>
-					{getFieldDecorator('invoice_tax_amount', {
-						rules: [{ required: false },
-						{ validator: this.checkMoneyTax }]
-					})(
-						<Input placeholder="请输入" style={{ width: 200 }} suffix={'元'} onChange={this.handleTaxChange} onBlur={this.handleVoiceType} disabled={modType == 2} />
-					)}
-					<div style={{ color: 'red' }}>{bigMoneyTax}</div>
-				</FormItem>
-				<FormItem label='发票税率' {...formItemLayout}>
-					{getFieldDecorator('invoice_tax_rate')(
-						<Input placeholder="请输入" style={{ width: 200 }} suffix={'%'} disabled={true} />
-					)}
-				</FormItem>
-				<FormItem label='发票类型' {...formItemLayout}>
-					{getFieldDecorator('invoice_type', {
-						initialValue: 2
-					})(
-						<Select placeholder="请选择" style={{ width: 200 }} disabled={true}
-						>
-							{SearchItem && SearchItem.invoice_type.map((item) =>
-								<Option key={item.value} value={item.value}>{item.name}</Option>)
-							}
-						</Select>
-					)}
-				</FormItem>
-				<FormItem label='开票日期' {...formItemLayout}>
-					{getFieldDecorator('invoice_make_out_time', { ...options })(
-						<DatePicker placeholder='请选择' format={format} style={{ width: 200 }} disabled={modType == 2} />
-					)}
-				</FormItem>
-				<FormItem label='备注' {...formItemLayout}>
-					{getFieldDecorator('remark')(
-						<TextArea placeholder='' autosize={{ minRows: 4, maxRows: 6 }} maxLength={255} disabled={modType == 2} />
-					)}
-				</FormItem>
-			</Form>
-		</Modal>,
-		<Modal
-			key='confirmModal'
-			width={450}
-			title={title}
-			visible={isShowConfirmModal}
-			mask={false}
-			maskClosable={false}
-			onCancel={this.handleConfirmCancel}
-			footer={[
-				<Button key="back" onClick={this.handleConfirmCancel}>取消</Button>,
-				<Button key="submit" type="primary" onClick={this.submitAction}>继续</Button>
-			]}
-		>
-			<div>
-				{`当前三方代理商回票为${getInvoiceText(rateInfo.agentInvoiceType)}${rateInfo.agentTaxVal}%，录入发票为${getInvoiceText(rateInfo.nowInvoiceType)}${rateInfo.nowRate}%，请找三方专员核对`}
-				<b>发票或三方代理商支付信息</b>
-				是否正确
+									message: '该项为必填项！'
+								},
+								{ max: 50, message: '最多不超过50个字符', }
+							],
+						})(
+							<Input placeholder="请输入" style={{ width: 200 }} />
+						)}
+					</FormItem>
+					<FormItem label='发票内容' {...formItemLayout}>
+						{getFieldDecorator('invoice_content', {
+							rules: [
+								{
+									required: true,
+									message: '该项为必填项！'
+								},
+								{ max: 50, message: '最多不超过50个字符', }
+							],
+						})(
+							<Input placeholder="请输入" style={{ width: 200 }} disabled={modType == 2} />
+						)}
+					</FormItem>
+					<FormItem label='发票金额' {...formItemLayout}>
+						{getFieldDecorator('invoice_pure_amount', {
+							rules: [{ required: true, message: '该项为必填项！' },
+							{ validator: this.checkMoney }]
+						})(
+							<Input placeholder="请输入" style={{ width: 200 }} suffix={'元'} onChange={this.handlePureChange} onBlur={this.handleTax} disabled={modType == 2} />
+						)}
+						<div style={{ color: 'red' }}>{bigMoney}</div>
+					</FormItem>
+					<FormItem label='发票税额' {...formItemLayout}>
+						{getFieldDecorator('invoice_tax_amount', {
+							rules: [{ required: false },
+							{ validator: this.checkMoneyTax }]
+						})(
+							<Input placeholder="请输入" style={{ width: 200 }} suffix={'元'} onChange={this.handleTaxChange} onBlur={this.handleVoiceType} disabled={modType == 2} />
+						)}
+						<div style={{ color: 'red' }}>{bigMoneyTax}</div>
+					</FormItem>
+					<FormItem label='发票税率' {...formItemLayout}>
+						{getFieldDecorator('invoice_tax_rate')(
+							<Input placeholder="请输入" style={{ width: 200 }} suffix={'%'} disabled={true} />
+						)}
+					</FormItem>
+					<FormItem label='发票类型' {...formItemLayout}>
+						{getFieldDecorator('invoice_type', {
+							initialValue: 2
+						})(
+							<Select placeholder="请选择" style={{ width: 200 }} disabled={true}
+							>
+								{SearchItem && SearchItem.invoice_type.map((item) =>
+									<Option key={item.value} value={item.value}>{item.name}</Option>)
+								}
+							</Select>
+						)}
+					</FormItem>
+					<FormItem label='开票日期' {...formItemLayout}>
+						{getFieldDecorator('invoice_make_out_time', { ...options })(
+							<DatePicker placeholder='请选择' format={format} style={{ width: 200 }} disabled={modType == 2} />
+						)}
+					</FormItem>
+					<FormItem label='备注' {...formItemLayout}>
+						{getFieldDecorator('remark')(
+							<TextArea placeholder='' autosize={{ minRows: 4, maxRows: 6 }} maxLength={255} disabled={modType == 2} />
+						)}
+					</FormItem>
+				</Form>
+			</Modal>,
+			<Modal
+				key='confirmModal'
+				width={450}
+				title={title}
+				visible={isShowConfirmModal}
+				mask={false}
+				maskClosable={false}
+				onCancel={this.handleConfirmCancel}
+				footer={[
+					<Button key="back" onClick={this.handleConfirmCancel}>取消</Button>,
+					<Button key="submit" type="primary" onClick={this.submitAction}>继续</Button>
+				]}
+			>
+				<div>
+					{`当前三方代理商回票为${getInvoiceText(rateInfo.agentInvoiceType)}${rateInfo.agentTaxVal}%，录入发票为${getInvoiceText(rateInfo.nowInvoiceType)}${rateInfo.nowRate}%，请找三方专员核对`}
+					<b>发票或三方代理商支付信息</b>
+					是否正确
 			</div>
-		</Modal>
-	]
+			</Modal>
+		]
 	}
 }
 

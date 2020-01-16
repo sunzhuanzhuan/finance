@@ -29,7 +29,7 @@ class Modification extends React.Component {
 			let obj = {};
 			ary.forEach(item => {
 				if (item === 'payment_screenshot') {
-					obj[item] = payDetail['payment_screenshot'] ? Object.values(qs.parse(payDetail[item])) : [];
+					obj[item] = payDetail['payment_screenshot'] ? Object.values(qs.parse(payDetail[item].replace(/&amp;/g, '&'))) : [];
 				} else obj[item] = payDetail[item];
 			});
 			setTimeout(() => {
@@ -288,7 +288,7 @@ class Modification extends React.Component {
 								valuePropName: 'fileList',
 								getValueFromEvent: e => e.fileList
 							})(
-								<OssUpload
+								<OssUpload.Dragger
 									len={5}
 									listType="picture-card"
 									authToken={token}
@@ -300,8 +300,8 @@ class Modification extends React.Component {
 									multiple={true}
 									disabled={payment_status != 2}
 									showUploadList={{ showPreviewIcon: true, showRemoveIcon: payment_status == 2 ? true : false }}
-								>
-								</OssUpload>
+								>拖拽上传或浏览
+								</OssUpload.Dragger>
 							)}
 						</FormItem>
 					</Row> : null}
@@ -355,6 +355,7 @@ class Modification extends React.Component {
 							)}
 						</FormItem>
 					</Row>}
+
 					{type == 'prePay' && <Row>
 						<FormItem label='媒介经理' {...formItemLayout}>
 							{getFieldDecorator('media_user_name')(
@@ -362,6 +363,13 @@ class Modification extends React.Component {
 							)}
 						</FormItem>
 					</Row>}
+					<Row>
+						<FormItem label='打款撤销时间' {...formItemLayout}>
+							{getFieldDecorator('payment_revoke_time')(
+								<Input disabled={true} />
+							)}
+						</FormItem>
+					</Row>
 					<Row>
 						<FormItem label='打款撤销备注' {...formItemLayout}>
 							{getFieldDecorator('payment_revoke_reason', {

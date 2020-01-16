@@ -96,14 +96,14 @@ class DatePay extends React.Component {
 				{pullReady && <SearForm data={datePaySearch} getAction={this.queryData} responseLayout={{ xs: 24, sm: 24, md: 10, lg: 8, xxl: 6 }} extraFooter={<Button type='primary' style={{ marginLeft: 20 }} onClick={this.handleExport}>导出</Button>} wrappedComponentRef={form => this.form = form} />}
 			</fieldset>
 			<div className='top-gap'>
-				<Scolltable scrollClassName='.ant-table-body' widthScroll={1700}>
+				<Scolltable scrollClassName='.ant-table-body' widthScroll={2000}>
 					<Table
 						rowKey='payment_slip_id'
 						loading={loading}
 						columns={datePayCols}
 						dataSource={list}
 						bordered
-						scroll={{ x: 1500 }}
+						scroll={{ x: 1700 }}
 						pagination={paginationObj}
 					/>
 				</Scolltable>

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as trinityInvoiceAction from "../actions/trinityInvoice";
 import getPagination from '../../components/pagination'
+import Statistics from '../components/Statistics'
 import SearForm from '../../components/SearchForm'
 import { Table, Modal, message, Button, Form, Icon } from 'antd'
 import { relatedInvoiceSearchFunc } from '../constants/search'
@@ -31,6 +32,9 @@ class RelatedChooseInvoice extends React.Component {
 			message.error(errorMsg || '下拉项加载失败，请重试！');
 		})
 		this.queryData({ ...search.keys });
+		this.props.actions.getRelatedInvoiceData({
+			record_id: search.payment_slip_id
+		})
 	}
 	queryData = (obj, func) => {
 		const search = qs.parse(this.props.location.search.substring(1));
@@ -89,6 +93,7 @@ class RelatedChooseInvoice extends React.Component {
 		})
 	}
 	render() {
+		const { relatedInvoiceData: { statistic } } = this.props;
 		const { getFieldDecorator, getFieldValue, setFieldsValue } = this.props.form;
 		const search = qs.parse(this.props.location.search.substring(1));
 		const { isClick, loading, pullReady, selectedRowKeys, rowsMap } = this.state;
@@ -132,6 +137,8 @@ class RelatedChooseInvoice extends React.Component {
 					<span className="title" style={{ cursor: 'pointer' }}>选择发票</span>
 				</span>
 			</legend>
+			<Statistics title={'统计项'} render={Stat(search, statistic)} />
+			<div style={{ height: '30px' }}></div>
 			{pullReady && <SearForm data={relatedInvoiceSearch} getAction={this.queryData} responseLayout={{ xs: 24, sm: 12, md: 8, lg: 6, xxl: 6 }} />}
 			<div className='top-gap'>
 				<Form>
@@ -161,10 +168,17 @@ const mapStateToProps = (state) => {
 	return {
 		availableInvoiceData: state.invoice.availableInvoiceData,
 		relatedInvoiceSearchItem: state.invoice.relatedInvoiceSearchItem,
+		relatedInvoiceData: state.invoice.relatedInvoiceData,
 	}
 }
 const mapDispatchToProps = dispatch => ({
 	actions: bindActionCreators({ ...trinityInvoiceAction }, dispatch)
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Form.create()(RelatedChooseInvoice))
-
+function Stat(search, statistic) {
+	return <div style={{ padding: '0 10px' }}>
+		<span className='left-gap'>应回发票金额：<span className='red-font little-left-gap'>{statistic && numeral(statistic.return_invoice_amount).format('0,0.00')}</span>元</span>
+		<span className='left-gap'>已关联发票金额：<span className='red-font little-left-gap'>{statistic && numeral(statistic.relation_amount).format('0,0.00')}</span>元</span>
+		<span className='left-gap'>还需发票金额：<span className='red-font little-left-gap'>{statistic && numeral(statistic.invoice_surplus).format('0,0.00')}</span>元</span>
+	</div>
+}

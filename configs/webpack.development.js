@@ -18,7 +18,7 @@ module.exports = merge(baseConfig, {
 			// 	changeOrigin: true
 			// },
 			"/api": {
-				target: "http://nb.dev-weiboyi.com",
+				target: "http://nb.tst-weiboyi.com",
 				changeOrigin: true
 			}
 

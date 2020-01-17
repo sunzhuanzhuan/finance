@@ -134,9 +134,10 @@ class PreModal extends React.Component {
 								suffix: "bmp,jpg,jpeg,gif,png",
 								max: 5
 							}}
+							tipContent='请上传.bmp, .jpg, .jpeg, .gif, .png格式; 5M以内的文件, 最多上传5张'
 							multiple={true}
 						>
-							拖拽上传或浏览
+							请拖拽图片到虚线框内或点击浏览上传
 						</OssUpload.Dragger>
 					)}
 				</FormItem>}

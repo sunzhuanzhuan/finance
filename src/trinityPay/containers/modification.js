@@ -297,6 +297,7 @@ class Modification extends React.Component {
 										suffix: "bmp,jpg,jpeg,gif,png",
 										max: 5
 									}}
+									tipContent='请上传.bmp, .jpg, .jpeg, .gif, .png格式; 5M以内的文件, 最多上传5张'
 									multiple={true}
 									disabled={payment_status != 2}
 									showUploadList={{ showPreviewIcon: true, showRemoveIcon: payment_status == 2 ? true : false }}

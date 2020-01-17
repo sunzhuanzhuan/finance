@@ -65,17 +65,17 @@ class DatePay extends React.Component {
 		this.setState({ id, status, modalVisible: boolean });
 	}
 	handleExport = () => {
-		this.props.actions.getQueryCanExport({ flag: 1, settle_type: 2 }).then(() => {
-			message.loading('导出中,请稍候...', 3);
-			const data = this.form.getFieldsValue();
-			const obj = {};
-			for (let [key, value] of Object.entries(data)) {
-				if (typeof value === 'string') obj[key] = value.trim();
-				if (typeof value === 'object') {
-					if (value.key) obj[key] = value.key;
-					else obj[key] = value.format('YYYY-MM-DD');
-				}
+		const data = this.form.getFieldsValue();
+		const obj = {};
+		for (let [key, value] of Object.entries(data)) {
+			if (typeof value === 'string') obj[key] = value.trim();
+			if (typeof value === 'object') {
+				if (value.key) obj[key] = value.key;
+				else obj[key] = value.format('YYYY-MM-DD');
 			}
+		}
+		this.props.actions.getQueryCanExport({ flag: 1, settle_type: 2, ...obj }).then(() => {
+			message.loading('导出中,请稍候...', 3);
 			window.open(`/api/trinity/publicPaymentSlip/exportPublicPaymentSlip?${qs.stringify({
 				settle_type: 2,
 				...obj

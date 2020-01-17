@@ -72,16 +72,17 @@ class TrinityInvoice extends React.Component {
 		})
 	}
 	handleExport = () => {
-		this.props.actions.getTrinityInvoiceExport({ flag: 1 }).then(() => {
-			const data = this.form.getFieldsValue();
-			const obj = {};
-			for (let [key, value] of Object.entries(data)) {
-				if (typeof value === 'string') obj[key] = value.trim();
-				if (typeof value === 'object') {
-					if (value.key) obj[key] = value.key;
-					else obj[key] = value.format('YYYY-MM-DD');
-				}
+		const data = this.form.getFieldsValue();
+		const obj = {};
+		for (let [key, value] of Object.entries(data)) {
+			if (typeof value === 'string') obj[key] = value.trim();
+			if (typeof value === 'object') {
+				if (value.key) obj[key] = value.key;
+				else obj[key] = value.format('YYYY-MM-DD');
 			}
+		}
+		this.props.actions.getTrinityInvoiceExport({ flag: 1, ...obj }).then(() => {
+			message.loading('导出中,请稍候...');
 			window.open(`/api/trinity/publicInvoice/export?${qs.stringify({
 				...obj
 			})}`);

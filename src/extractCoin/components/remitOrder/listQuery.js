@@ -11,7 +11,12 @@ class RemitQuery extends React.Component {
 		}
 	}
 	getMultipleValues = value => {
-		return value.split(' ');
+		if(value) {
+			const dealVal = value.replace(/(^\s*)|(\s*$)/g, " ");
+			const arr = dealVal ? dealVal.split(' ').filter(item => item) : []
+			return arr;
+		}
+		return value;
 	}
 	getStudioOptions = () => {
 		const { studioRows } = this.props;

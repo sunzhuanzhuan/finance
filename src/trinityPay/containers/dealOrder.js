@@ -65,7 +65,7 @@ class DealOrder extends React.Component {
 				else obj[key] = value.format('YYYY-MM-DD');
 			}
 		}
-		this.props.actions.getQueryDealCanExport({ flag: 1, settle_type: settle_type, payment_slip_id, ...obj }).then(() => {
+		this.props.actions.getQueryDealCanExport({ flag: 1, settle_type: settle_type, ...obj }).then(() => {
 			message.loading('导出中,请稍候...');
 			window.open(`/api/trinity/publicOrderTrade/exportPublicOrderTrade?${qs.stringify({
 				settle_type,

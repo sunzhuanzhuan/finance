@@ -80,4 +80,11 @@ export const {
 	method: 'post',
 	ignoreToast: true
 });
-
+// 
+export const {
+	getTrinityInvoiceExport,
+	getTrinityInvoiceExport_success
+} = createHttpAction('getTrinityInvoiceExport', Interface.getTrinityInvoiceExport, {
+	method: 'get',
+	ignoreToast: true
+});

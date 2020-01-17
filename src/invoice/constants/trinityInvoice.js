@@ -104,7 +104,7 @@ export const trinityInvoiceFunc = (handleModal, handleCheckModal, handleDelete) 
 				</div>}
 				<div className='little-top-gap'>
 					<Button type='primary' size='small' style={{ width: 80 }} o onClick={() => {
-						handleModal('copy', true, record, record.invoice_status)
+						handleModal('copy', true, record, 1)
 					}}>复制</Button>
 				</div>
 				<div className='little-top-gap'>

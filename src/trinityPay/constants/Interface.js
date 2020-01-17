@@ -18,4 +18,7 @@ export default {
 	getDealOrderData: '/trinity/publicOrderTrade/list',
 	getDealOrderSearchItem: '/trinity/publicPaymentSlip/searchItem',
 	getDealOrderExport: '/trinity/publicPaymentSlip/exportPublicPaymentSlip',
+	// 
+	getQueryCanExport: '/trinity/publicPaymentSlip/exportPublicPaymentSlip',
+	getQueryDealCanExport: '/trinity/publicOrderTrade/exportPublicOrderTrade'
 }

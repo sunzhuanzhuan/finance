@@ -606,7 +606,7 @@ export const prePayDetailColumns = [
 		}
 	},
 	{
-		title: '打款撤销时间',
+		title: '打款撤销时间：',
 		dataIndex: 'payment_revoke_time',
 		key: 'payment_revoke_time',
 		align: 'center'

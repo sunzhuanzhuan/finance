@@ -69,7 +69,6 @@ class DealOrder extends React.Component {
 			message.loading('导出中,请稍候...');
 			window.open(`/api/trinity/publicOrderTrade/exportPublicOrderTrade?${qs.stringify({
 				settle_type,
-				payment_slip_id,
 				...obj
 			})}`);
 		}).catch(({ errorMsg }) => {

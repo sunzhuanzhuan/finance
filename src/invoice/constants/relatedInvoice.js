@@ -39,7 +39,7 @@ export const relatedInvoiceFunc = (handleDel) => [
 
 	},
 	{
-		title: '发票金额',
+		title: '发票总金额',
 		dataIndex: 'invoice_amount',
 		key: 'invoice_amount',
 		align: 'center',
@@ -103,7 +103,7 @@ export const availableInvoiceFunc = (getFieldDecorator, handleSelected, rowsMap,
 		width: 100
 	},
 	{
-		title: '发票金额',
+		title: '发票总金额',
 		dataIndex: 'invoice_amount',
 		key: 'invoice_amount',
 		align: 'center',

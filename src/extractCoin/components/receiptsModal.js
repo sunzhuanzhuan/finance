@@ -65,7 +65,7 @@ class ReceiptsModal extends React.Component {
 		let { current_tab, receiptsLoading } = this.state;
 		let dataSource = check_receipts[current_tab] ? check_receipts[current_tab].data : [];
 		let tabList = tabListConfig(questParams.partner_type);
-		return <Modal key={this.state.newRandomKey} visible={visible} title={'单据导出'} width={800}
+		return <Modal className='receipts-modal-wrapper' key={this.state.newRandomKey} visible={visible} title={'单据导出'} width={800}
 			onCancel={() => {
 				onCancel();
 				this.setState({ newRandomKey: this.getNewRandomKey(), curSelectRowKeys: [] })
@@ -86,7 +86,7 @@ class ReceiptsModal extends React.Component {
 				<Tabs type="card" onChange={this.tabsChange}>
 					{tabList.map(item => {
 						return <TabPane tab={item.title} key={item.key}>
-							<ReceiptsTable columns={receiptsConfig} dataSource={dataSource}
+							<ReceiptsTable columns={receiptsConfig(item.key)} dataSource={dataSource}
 								loading={receiptsLoading}
 								questParams={questParams}
 								current_tab={current_tab}
@@ -94,7 +94,7 @@ class ReceiptsModal extends React.Component {
 						</TabPane>
 					})}
 				</Tabs> :
-				<ReceiptsTable columns={receiptsConfig}
+				<ReceiptsTable columns={receiptsConfig()}
 					dataSource={dataSource}
 					loading={receiptsLoading}
 					questParams={questParams}

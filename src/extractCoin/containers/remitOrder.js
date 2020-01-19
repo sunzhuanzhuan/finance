@@ -35,6 +35,7 @@ class RemitOrderManage extends React.Component {
 	}
 	componentDidMount() {
 		this.requestList();
+		this.props.actions.getFlashStudioList({ page: 1, page_size: 1000 });
 	}
 	handlefilterParams = (filterParams) => {
 		this.setState({ filterParams });
@@ -189,7 +190,8 @@ class RemitOrderManage extends React.Component {
 	render() {
 		let { newVisible, remitOrderLoading, outputVisible, remitOrderPageSize, filterParams, outputLoading, receiptsVisible, questParams, selectedRowKeys, rowsMap, studioVisible } = this.state;
 		console.log('%crowsMap: ', 'color: MidnightBlue; background: Aquamarine; font-size: 20px;', rowsMap);
-		let { remitOrderData: { data = [], total = 20, current_page = 1, payment_slip_status_name }, excel_name_list: { title, excel } } = this.props;
+		let { remitOrderData: { data = [], total = 20, current_page = 1, payment_slip_status_name }, excel_name_list: { title, excel }, flashStudioList = {} } = this.props;
+		const { rows = [] } = flashStudioList;
 		const checked = data.every(item => selectedRowKeys.includes(item.id.toString()));
 		let remitOrderConfig = remitOrderFunc(payment_slip_status_name, this.handleOutputDetail, this.handleReceiptsVisible, this.handleTipVisible);
 		let paginationObj = {
@@ -219,6 +221,7 @@ class RemitOrderManage extends React.Component {
 		return <div className='remitOrder'>
 			<RemitQuery
 				limit_num={remitOrderPageSize}
+				studioRows={rows}
 				questAction={this.props.actions.getPaymentSlipList}
 				handlefilterParams={this.handlefilterParams}
 			></RemitQuery>
@@ -264,6 +267,7 @@ const mapStateToProps = (state) => {
 	return {
 		remitOrderData: state.withdraw.remitOrderData,
 		excel_name_list: state.withdraw.excel_name_list,
+		flashStudioList: state.withdraw.flashStudioList
 	}
 }
 const mapDispatchToProps = dispatch => ({

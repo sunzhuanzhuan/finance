@@ -27,13 +27,14 @@ class DatePay extends React.Component {
 		}
 	}
 	componentDidMount() {
-		const search = qs.parse(this.props.location.search.substring(1));
+		// const search = qs.parse(this.props.location.search.substring(1));
 		this.props.actions.getPaySearchItem().then(() => {
 			this.setState({ pullReady: true });
 		}).catch(({ errorMsg }) => {
 			message.error(errorMsg || '下拉项加载失败，请重试！');
 		})
-		this.queryData({ page: 1, page_size: 20, ...search.keys });
+
+		// this.queryData({ page: 1, page_size: 20, ...search.keys });
 	}
 	handleFetchPlatform = () => {
 		const value = this.form.getFieldValue('cooperation_platform_id');
@@ -64,7 +65,6 @@ class DatePay extends React.Component {
 		this.setState({ id, status, modalVisible: boolean });
 	}
 	handleExport = () => {
-		message.loading('导出中,请稍候...', 3);
 		const data = this.form.getFieldsValue();
 		const obj = {};
 		for (let [key, value] of Object.entries(data)) {
@@ -74,10 +74,16 @@ class DatePay extends React.Component {
 				else obj[key] = value.format('YYYY-MM-DD');
 			}
 		}
-		window.open(`/api/trinity/publicPaymentSlip/exportPublicPaymentSlip?${qs.stringify({
-			settle_type: 2,
-			...obj
-		})}`);
+		this.props.actions.getQueryCanExport({ flag: 1, settle_type: 2, ...obj }).then(() => {
+			message.loading('导出中,请稍候...', 3);
+			window.open(`/api/trinity/publicPaymentSlip/exportPublicPaymentSlip?${qs.stringify({
+				settle_type: 2,
+				...obj
+			})}`);
+		}).catch(({ errorMsg }) => {
+			message.error(errorMsg || '请求出错，请重试！');
+		})
+
 	}
 	render() {
 		const search = qs.parse(this.props.location.search.substring(1));
@@ -93,14 +99,14 @@ class DatePay extends React.Component {
 				{pullReady && <SearForm data={datePaySearch} getAction={this.queryData} responseLayout={{ xs: 24, sm: 24, md: 10, lg: 8, xxl: 6 }} extraFooter={<Button type='primary' style={{ marginLeft: 20 }} onClick={this.handleExport}>导出</Button>} wrappedComponentRef={form => this.form = form} />}
 			</fieldset>
 			<div className='top-gap'>
-				<Scolltable scrollClassName='.ant-table-body' widthScroll={1700}>
+				<Scolltable scrollClassName='.ant-table-body' widthScroll={2000}>
 					<Table
 						rowKey='payment_slip_id'
 						loading={loading}
 						columns={datePayCols}
 						dataSource={list}
 						bordered
-						scroll={{ x: 1500 }}
+						scroll={{ x: 1700 }}
 						pagination={paginationObj}
 					/>
 				</Scolltable>

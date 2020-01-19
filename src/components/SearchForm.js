@@ -47,7 +47,8 @@ class SearchForm extends React.PureComponent {
 		for (const key in timeKeys) {
 			keys[key] ? obj[key] = moment(keys[key], timeKeys[key]) : null;
 		}
-		setFieldsValue({ ...keys, ...obj });
+		setFieldsValue({ payment_slip_codes: search.payment_slip_code, ...keys, ...obj });
+		this.handleSearch();
 		this.setState({ timeKeys })
 	}
 	removeNotNeedValue = obj => {
@@ -292,8 +293,9 @@ class SearchForm extends React.PureComponent {
 				return null
 		}
 	}
-	handleSearch = e => {
-		e.preventDefault();
+	handleSearch = (e) => {
+		if(e)
+			e.preventDefault();
 		this.props.form.validateFields((err, values) => {
 			// 表单表单不报错,且props有传递的情况下,才返回表单数据
 			if (!err && this.props.getAction) {
@@ -320,7 +322,7 @@ class SearchForm extends React.PureComponent {
 				};
 				Object.keys(params['keys']).forEach(item => { !params['keys'][item] && params['keys'][item] !== 0 ? delete params['keys'][item] : null });
 				const hide = message.loading('查询中，请稍候...');
-				this.props.getAction({ ...params.keys }).then(() => {
+				this.props.getAction({ page: 1, page_size: 20, ...params.keys }).then(() => {
 					this.props.history.replace({
 						pathname: this.props.location.pathname,
 						search: `?${qs.stringify({ ...search, ...params })}`,

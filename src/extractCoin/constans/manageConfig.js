@@ -350,7 +350,7 @@ export const extractDetailFunc = (order_status) => {
 			dataIndex: 'comment',
 			key: 'comment',
 			align: 'center',
-			width: '244px',
+			width: 244,
 			render: (text, { comment }) => {
 				if (comment && comment.length > 30) {
 					return <div title={comment}>
@@ -460,7 +460,7 @@ export const extractNoDetailFunc = (order_status) => {
 			dataIndex: 'comment',
 			key: 'comment',
 			align: 'center',
-			width: '244px',
+			width: 244,
 			render: (text, { comment }) => {
 				if (comment && comment.length > 30) {
 					return <div title={comment}>
@@ -740,95 +740,236 @@ export const outputRemitConfig = [
 		}
 	}
 ];
-export const receiptsConfig = [
-	{
-		title: '打款方',
-		dataIndex: 'payer',
-		key: 'payer',
-		align: 'center',
-	},
-	{
-		title: '收款方',
-		dataIndex: 'payee',
-		key: 'payee',
-		align: 'center',
-	},
-	{
-		title: '操作',
-		dataIndex: 'action',
-		key: 'action',
-		align: 'center',
-		render: (text, { id, status, status_type, studio_id, user_id }) => {
-			let obj = {
-				id,
-				status: status.toString(),
-				status_type,
-				studio_id,
-				user_id
-			};
-			let params = {
-				id,
-				bill_params: [{ ...objFilter(obj) }]
-			};
-			return <a href={`/finance/remitOrder/paymentOrder?${qs.stringify(params)}`} target='_blank'>预览</a>
+export const receiptsConfig = key => {
+	const mainAccountCol = [
+		{
+			title: '打款方',
+			dataIndex: 'payer',
+			key: 'payer',
+			align: 'center',
+			width: '13%'
+		},
+		{
+			title: '打款银行',
+			dataIndex: 'payer_bank',
+			key: 'payer_bank',
+			align: 'center',
+			width: '13%'
+		},
+		{
+			title: '主账号名称',
+			dataIndex: 'user_name',
+			key: 'user_name',
+			align: 'center',
+			width: '13%'
+		},
+		{
+			title: '开户行',
+			dataIndex: 'payee_bank',
+			key: 'payee_bank',
+			align: 'center',
+			width: '13%'
+		},
+		{
+			title: '卡号',
+			dataIndex: 'payee_bank_card',
+			key: 'payee_bank_card',
+			align: 'center',
+			width: '13%'
+		},
+		{
+			title: '金额',
+			dataIndex: 'payment_amount',
+			key: 'payment_amount',
+			align: 'center',
+			width: '13%'
+		},
+		{
+			title: '收款人名称',
+			dataIndex: 'payee',
+			key: 'payee',
+			align: 'center',
+			width: '13%'
+		},
+	];
+	const otherCol = [
+		{
+			title: '打款方',
+			dataIndex: 'payer',
+			key: 'payer',
+			align: 'center',
+		},
+		{
+			title: '收款方',
+			dataIndex: 'payee',
+			key: 'payee',
+			align: 'center',
+		},	
+	];
+	const common = [
+		{
+			title: '操作',
+			dataIndex: 'action',
+			key: 'action',
+			align: 'center',
+			width: '9%',
+			render: (text, { id, status, status_type, studio_id, user_id }) => {
+				let obj = {
+					id,
+					status: status.toString(),
+					status_type,
+					studio_id,
+					user_id
+				};
+				let params = {
+					id,
+					bill_params: [{ ...objFilter(obj) }]
+				};
+				return <a href={`/finance/remitOrder/paymentOrder?${qs.stringify(params)}`} target='_blank'>预览</a>
+			}
 		}
-	}
-]
+	];
+	return key === 2 ? [...mainAccountCol, ...common] : [...otherCol, ...common];
+}
+
 export const remitDetailOrderConfig = [
 	{
 		title: '提现单号',
 		dataIndex: 'withdraw_id',
 		key: 'withdraw_id',
 		align: 'center',
+		width: 100,
+		render: data => {
+			return <Link target='_blank' to={`/finance/extractManage/applyDetail?id=${data}`}>{data}</Link>
+		}
 	},
 	{
 		title: '主账号名称',
+		dataIndex: 'identity_name',
+		key: 'identity_name',
+		align: 'center',
+		width: 100,
+	},
+	{
+		title: '收款人名称',
 		dataIndex: 'real_name',
 		key: 'real_name',
 		align: 'center',
+		width: 100,
 	},
 	{
 		title: '合作方式',
 		dataIndex: 'partner_type_name',
 		key: 'partner_type_name',
 		align: 'center',
+		width: 100,
 	},
 	{
 		title: '订单ID',
 		dataIndex: 'order_id',
 		key: 'order_id',
 		align: 'center',
+		width: 100,
 	},
 	{
 		title: '订单类型',
 		dataIndex: 'order_type_name',
 		key: 'order_type_name',
 		align: 'center',
+		width: 100,
 	},
 	{
 		title: '订单名称',
 		dataIndex: 'order_name',
 		key: 'order_name',
 		align: 'center',
+		width: 100,
 	},
 	{
-		title: '可提金额',
-		dataIndex: 'payment_amount',
-		key: 'payment_amount',
+		title: '执行完成时间',
+		dataIndex: 'order_end_time',
+		key: 'order_end_time',
 		align: 'center',
+		width: 100,
 	},
 	{
-		title: '税金金额',
-		dataIndex: 'tax_amount',
-		key: 'tax_amount',
+		title: '打款时间',
+		dataIndex: 'payment_time',
+		key: 'payment_time',
 		align: 'center',
+		width: 100,
 	},
 	{
 		title: '截止账期日',
 		dataIndex: 'end_payment_end',
 		key: 'end_payment_end',
 		align: 'center',
-	}
+		width: 100,
+	},
+	{
+		title: '服务时间（天）',
+		dataIndex: 'service_cycle',
+		key: 'service_cycle',
+		align: 'center',
+		width: 110,
+	},
+	{
+		title: '订单金额',
+		dataIndex: 'order_amount',
+		key: 'order_amount',
+		align: 'center',
+		width: 100,
+	},
+	{
+		title: '可提金额',
+		dataIndex: 'payment_amount',
+		key: 'payment_amount',
+		align: 'center',
+		width: 100,
+	},
+	{
+		title: '税金金额',
+		dataIndex: 'tax_amount',
+		key: 'tax_amount',
+		align: 'center',
+		width: 100,
+	},
+	{
+		title: '质检金额',
+		dataIndex: 'qc_write_off',
+		key: 'qc_write_off',
+		align: 'center',
+		width: 100,
+	},
+	{
+		title: '利息',
+		dataIndex: 'service_amount',
+		key: 'service_amount',
+		align: 'center',
+		width: 100,
+	},
+	{
+		title: '手续费',
+		dataIndex: 'service_fee',
+		key: 'service_fee',
+		align: 'center',
+		width: 100,
+	},
+	{
+		title: '其他扣款',
+		dataIndex: 'other_fee',
+		key: 'other_fee',
+		align: 'center',
+		width: 100,
+	},
+	{
+		title: '优惠金额',
+		dataIndex: 'discount_amount',
+		key: 'discount_amount',
+		align: 'center',
+		width: 100,
+	},
+	
 ];
 export const addKeys = (ary) => {
 	ary.forEach((item, index) => {

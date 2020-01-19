@@ -21,6 +21,18 @@ export const trinityInvoiceFunc = (handleModal, handleCheckModal, handleDelete) 
 		key: 'business_account_name',
 		align: 'center',
 		width: 100
+	}, {
+		title: '发票金额',
+		dataIndex: 'invoice_pure_amount',
+		key: 'invoice_pure_amount',
+		align: 'center',
+		width: 100
+	}, {
+		title: '发票税额',
+		dataIndex: 'invoice_tax_amount',
+		key: 'invoice_tax_amount',
+		align: 'center',
+		width: 100
 	},
 	{
 		title: '发票总金额',
@@ -70,6 +82,12 @@ export const trinityInvoiceFunc = (handleModal, handleCheckModal, handleDelete) 
 		key: 'invoice_make_out_time',
 		align: 'center',
 		width: 100
+	}, {
+		title: '发票录入日期',
+		dataIndex: 'created_at',
+		key: 'created_at',
+		align: 'center',
+		width: 150
 	},
 	{
 		title: '操作',
@@ -84,6 +102,11 @@ export const trinityInvoiceFunc = (handleModal, handleCheckModal, handleDelete) 
 						handleModal('modification', true, record, record.invoice_status)
 					}}>编辑</Button>
 				</div>}
+				<div className='little-top-gap'>
+					<Button type='primary' size='small' style={{ width: 80 }} o onClick={() => {
+						handleModal('copy', true, record, 1)
+					}}>复制</Button>
+				</div>
 				<div className='little-top-gap'>
 					<Button type='primary' size='small' style={{ width: 80 }} onClick={() => {
 						handleCheckModal(true, record)

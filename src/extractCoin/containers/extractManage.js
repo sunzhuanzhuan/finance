@@ -7,6 +7,7 @@ import { Table, message } from "antd";
 import "./extractManage.less";
 import { extractDetailFunc, extractNoDetailFunc } from '../constans/manageConfig'
 import Scolltable from "../../components/Scolltable";
+import { getTotalWidth } from '@/util';
 
 class ExtractManage extends React.Component {
 	constructor() {
@@ -43,6 +44,7 @@ class ExtractManage extends React.Component {
 		const extractManageConfig = extractDetailFunc(order_status);
 		const extractManageNoDetailConfig = extractNoDetailFunc(order_status);
 		const columns = this.state.hasDetail ? extractManageConfig : extractManageNoDetailConfig;
+		const totalWidth = getTotalWidth(columns);
 		const paginationObj = {
 			onChange: (current) => {
 				this.setState({ loading: true });
@@ -60,10 +62,10 @@ class ExtractManage extends React.Component {
 				questAction={this.props.actions.getApplyList}
 				handlefilterParams={this.handlefilterParams}
 			></ExtractQuery>
-			<Scolltable scrollClassName='.ant-table-body' widthScroll={1680}>
-				<Table className='topGap'
+			<Scolltable scrollClassName='.ant-table-body' widthScroll={totalWidth}>
+				<Table className='topGap extract-manage-table'
 					rowKey='id'
-					scroll={{ x: 1680 }}
+					scroll={{ x: totalWidth }}
 					columns={columns}
 					dataSource={list}
 					pagination={paginationObj}

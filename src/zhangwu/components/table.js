@@ -7,8 +7,8 @@ import Scolltable from '../../components/Scolltable'
 
 import * as zhangActions from '../actions/index';
 
-
 import { Table } from "antd";
+import { getTotalWidth } from '@/util'
 // import './list.less'
 
 class List extends Component {
@@ -29,13 +29,14 @@ class List extends Component {
 	render() {
 		let { columns, loading, paginationObj, list } = this.props;
 		const search = qs.parse(this.props.location.search.substring(1));
-
+		const totalWidth = getTotalWidth(columns);
 		return <div className='top-gap'>
-			<Scolltable scrollClassName='.ant-table-body' widthScroll={1700}>
+			<Scolltable scrollClassName='.ant-table-body' widthScroll={totalWidth}>
 				<Table
+					className='zhangwu-table'
 					loading={loading}
 					columns={columns}
-					scroll={{ x: 1600 }}
+					scroll={{ x: totalWidth }}
 					dataSource={list}
 					rowKey={(record) => record.account_id}
 					pagination={paginationObj}

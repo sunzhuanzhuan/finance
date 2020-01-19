@@ -10,6 +10,25 @@ class RemitQuery extends React.Component {
 
 		}
 	}
+	getMultipleValues = value => {
+		if(value) {
+			const dealVal = value.replace(/(^\s*)|(\s*$)/g, " ");
+			const arr = dealVal ? dealVal.split(' ').filter(item => item) : []
+			return arr;
+		}
+		return value;
+	}
+	getStudioOptions = () => {
+		const { studioRows } = this.props;
+		if(Array.isArray(studioRows) && studioRows.length)
+			return studioRows.map(item => {
+				const { id, name } = item;
+				return (
+					<Option value={id} key={id}>{name}</Option>
+				)
+			})
+		return null;
+	}
 	handleSearch = (e) => {
 		const { questAction, handlefilterParams, limit_num } = this.props;
 		e.preventDefault();
@@ -18,6 +37,8 @@ class RemitQuery extends React.Component {
 				const hide = message.loading('查询中，请稍候...');
 				let params = {
 					...values,
+					'withdraw_id': values['withdraw_id'] ? this.getMultipleValues(values['withdraw_id']) : '',
+					'id': values['id'] ? this.getMultipleValues(values['id']) : '',
 					'start_time': values['start_time'] ? values['start_time'].format('YYYY-MM-DD') : '',
 					'end_time': values['end_time'] ? values['end_time'].format('YYYY-MM-DD') : ''
 				};
@@ -41,6 +62,30 @@ class RemitQuery extends React.Component {
 			<Form className='remitOrder-search-form'>
 				<Row type="flex" justify="start" gutter={16} style={{ padding: '10px 0' }}>
 					<Col className='left-gap'>
+						<FormItem label='提现单号'>
+							{getFieldDecorator('withdraw_id', { initialValue: '' })(
+								<Input placeholder="请输入提现单，多个以空格分隔" style={{ width: 225 }} allowClear />
+							)}
+						</FormItem>
+					</Col>
+					<Col className='left-gap'>
+						<FormItem label='打款单ID'>
+							{getFieldDecorator('id')(
+								<Input placeholder="请输入打款单，多个以空格分隔" style={{ width: 225 }} allowClear />
+							)}
+						</FormItem>
+					</Col>
+					<Col className='left-gap'>
+						<FormItem label="创建时间">
+							{getFieldDecorator('start_time')(
+								<DatePicker format={'YYYY-MM-DD'} placeholder='开始日期' style={{ width: 120 }} />
+							)}~
+							{getFieldDecorator('end_time')(
+								<DatePicker format={'YYYY-MM-DD'} placeholder='结束日期' style={{ width: 120 }} />
+							)}
+						</FormItem>
+					</Col>
+					<Col className='left-gap'>
 						<FormItem label='打款状态'>
 							{getFieldDecorator('status', { initialValue: '' })(
 								<Select style={{ width: 120 }} allowClear>
@@ -54,19 +99,19 @@ class RemitQuery extends React.Component {
 						</FormItem>
 					</Col>
 					<Col className='left-gap'>
-						<FormItem label='打款单ID'>
-							{getFieldDecorator('id')(
-								<Input placeholder="请输入" style={{ width: 160 }} allowClear />
-							)}
-						</FormItem>
-					</Col>
-					<Col className='left-gap'>
-						<FormItem label="创建时间">
-							{getFieldDecorator('start_time')(
-								<DatePicker format={'YYYY-MM-DD'} placeholder='开始日期' style={{ width: 120 }} />
-							)}~
-							{getFieldDecorator('end_time')(
-								<DatePicker format={'YYYY-MM-DD'} placeholder='结束日期' style={{ width: 120 }} />
+						<FormItem label='工作室'>
+							{getFieldDecorator('studio_id')(
+								<Select 
+									showSearch
+									style={{ width: 120 }} 
+									placeholder='请选择' 
+									allowClear
+									filterOption={(input, option) => (
+										option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+									)}
+								>
+									{this.getStudioOptions()}
+								</Select>
 							)}
 						</FormItem>
 					</Col>

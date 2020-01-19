@@ -8,7 +8,10 @@ import "./remitOrder.less";
 import { Form, Row, Col, Table, Input, Button, Modal, message } from "antd";
 import ReceiptsModal from '../components/receiptsModal'
 import RemitModal from '../components/remitModal'
+import RemitDetailQuery from '../components/remitOrder/remitDetailQuery';
+import { Scolltable } from '@/components';
 import qs from 'qs'
+import { getTotalWidth, events } from '@/util';
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
@@ -23,8 +26,14 @@ class RemitOrderDetail extends React.Component {
 			detailOutputLoading: false,
 			remitOrderDetailPageSize: 10,
 			receiptsVisible: false,
-			questParams: {}
+			questParams: {},
+			filterParams: {},
+			leftWidth: 40, 
 		}
+		events.on('message', this.collapsedListener); 
+	}
+	collapsedListener = isClosed => {
+		this.setState({leftWidth: isClosed ? 40 : 200});
 	}
 	componentDidMount() {
 		this.setState({ recordLoading: true, orderLoading: true });
@@ -118,11 +127,14 @@ class RemitOrderDetail extends React.Component {
 		this.props.actions.clearBillList();
 		this.setState({ receiptsVisible: false });
 	}
+	handlefilterParams = filterParams => {
+		this.setState({ filterParams })
+	}
 	render() {
 		const search = qs.parse(this.props.location.search.substring(1));
 		let { getFieldDecorator } = this.props.form;
-		let { recordLoading, orderLoading, detailOutputVisible, detailOutputLoading, remitOrderDetailPageSize, questParams, receiptsVisible } = this.state;
-		let { remitOrderDetail, remitOrderDetail: { status, list = {}, partner_type, payment_slip_status_name }, detail_for_excel, excel_name_list: { title, excel } } = this.props;
+		let { recordLoading, orderLoading, detailOutputVisible, detailOutputLoading, remitOrderDetailPageSize, questParams, receiptsVisible, filterParams, leftWidth = 0 } = this.state;
+		let { remitOrderDetail, remitOrderDetail: { id, status, list = {}, partner_type, payment_slip_status_name }, detail_for_excel, excel_name_list: { title, excel } } = this.props;
 
 		list.data ? addKeys(list.data) : null;
 		detail_for_excel ? addKeys(detail_for_excel) : null;
@@ -134,13 +146,13 @@ class RemitOrderDetail extends React.Component {
 		let detailPaginationObj = {
 			onChange: (current) => {
 				this.setState({ orderLoading: true });
-				this.props.actions.getPaymentSlipDetail({ id: search.id, page: current, limit_num: remitOrderDetailPageSize }).then(() => {
+				this.props.actions.getPaymentSlipDetail({ id: search.id, page: current, limit_num: remitOrderDetailPageSize, ...filterParams }).then(() => {
 					this.setState({ orderLoading: false });
 				});
 			},
 			onShowSizeChange: (current, pageSize) => {
 				this.setState({ orderLoading: true, remitOrderDetailPageSize: pageSize });
-				this.props.actions.getPaymentSlipDetail({ id: search.id, page: current, limit_num: pageSize }).then(() => {
+				this.props.actions.getPaymentSlipDetail({ id: search.id, page: current, limit_num: pageSize, ...filterParams }).then(() => {
 					this.setState({ orderLoading: false });
 				});
 			},
@@ -151,9 +163,13 @@ class RemitOrderDetail extends React.Component {
 			showSizeChanger: true,
 			pageSizeOptions: ['10', '20', '50', '100', '200']
 		};
+		const totalWidth = getTotalWidth(remitDetailOrderConfig);
 		return <div className='remitOrder'>
 			<div className='remitOrder-list'>
 				<Row>
+					<Col span={4}>
+						打款单ID: {id}
+					</Col>
 					<Col span={4}>
 						打款状态: {payment_slip_status_name ? payment_slip_status_name[remitOrderDetail.status] : null}
 					</Col>
@@ -182,7 +198,22 @@ class RemitOrderDetail extends React.Component {
 			<div className='remitOrder-list'>
 				<Row className='topGap'><Col span={4}>包含订单：</Col></Row>
 			</div>
-			<Table className='topGap' columns={remitDetailOrderConfig} dataSource={list.data} loading={orderLoading} pagination={detailPaginationObj} bordered />
+			<RemitDetailQuery 
+				id={id} pageSize={remitOrderDetailPageSize} 
+				questAction={this.props.actions.getPaymentSlipDetail} 
+				handlefilterParams={this.handlefilterParams}
+			/>
+			<Scolltable scrollClassName='.detail-table-list .ant-table-body' widthScroll={totalWidth + leftWidth}>
+				<Table 
+					className='topGap detail-table-list' 
+					columns={remitDetailOrderConfig} 
+					dataSource={list.data} 
+					loading={orderLoading} 
+					pagination={detailPaginationObj} 
+					bordered 
+					scroll={{ x: totalWidth + 40 }}
+				/>
+			</Scolltable>
 			<Form className='topGap'>
 				{status !== 3 ? <Row>
 					<Col span={24}>

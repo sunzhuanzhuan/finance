@@ -5,7 +5,14 @@ export const financeParams = [
 	{ label: '工作室平均回票税率', key: 'work_room_average_return_rate', isPercent: true },
 	{ label: '微播易销项税税率', key: 'wby_output_tax_rate', isPercent: true },
 	{ label: '布谷鸟销项税税率', key: 'bgn_output_tax_rate', isPercent: true },
-	{ label: '周打款限额', key: 'week_pay_ceiling' },
+	// { label: '周打款限额', key: 'week_pay_ceiling' },
+	{ label: '专票6%->专票3% 扣款税率', key: 'aaaa', isPercent: true },
+	{ label: '专票6%->普票0% 扣款税率', key: 'bbbb', isPercent: true },
+	{ label: '专票6%->不回票 扣款税率', key: 'cccc', isPercent: true },
+	{ label: '专票3%->普票0% 扣款税率', key: 'dddd', isPercent: true },
+	{ label: '专票3%->不回票 扣款税率', key: 'eeee', isPercent: true },
+	{ label: '普票0% ->不回票 扣款税率', key: 'ffff', isPercent: true },
+
 ];
 
 export const historyCol = (title, isPercent) => {
@@ -40,6 +47,6 @@ export const multipliedByHundred = (str) => {
 	if (isNaN(floatVal)) {
 		return 0;
 	}
-	floatVal = Math.round(str * 10000) / 100;
+	// floatVal = Math.round(str * 10000) / 100;
 	return floatVal;
 }

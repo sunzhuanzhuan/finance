@@ -7,6 +7,7 @@ import { WBYDetailTable } from "wbyui"
 import { detailColumns } from '../constants'
 import './studioManage.less'
 import qs from 'qs'
+import { invoiceTypeArr, taxRateArr } from '../constants'
 
 class CheckStudio extends React.Component {
 	constructor() {
@@ -59,6 +60,10 @@ const mapDispatchToProps = dispatch => ({
 });
 export default connect(mapStateToProps, mapDispatchToProps)(CheckStudio)
 
+const getInvoiceLabel = (options, data) => {
+	const item = options.find(item => item.value == data) || {};
+	return item.label || '';
+}
 
 function DetailTable({ data }) {
 	return <table className='detail-table'>
@@ -128,10 +133,21 @@ function DetailTable({ data }) {
 				<td>{data.alipay_card_number}</td>
 			</tr>
 			<tr>
-				<td>税率：</td>
-				<td>{data.invoice_tax_rate}</td>
+				<td>发票类型：</td>
+				<td>{getInvoiceLabel(invoiceTypeArr, data.invoice_type)}</td>
 				<td>发票抬头：</td>
 				<td>{data.invoice_provider}</td>
+			</tr>
+			<tr>
+				{
+					data.invoice_type == '1' ? 
+					[
+						<td key='invoiceLabel'>发票税率：</td>,
+						<td key='invoicevalue'>{getInvoiceLabel(taxRateArr, data.tax_rate)}</td>
+					] : null
+				}
+				<td>服务费率：</td>
+				<td>{data.service_rate}</td>
 			</tr>
 			<tr>
 				<td>操作人：</td>

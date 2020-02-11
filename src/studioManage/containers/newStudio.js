@@ -41,10 +41,14 @@ class NewStudio extends React.Component {
 						monthly_limit: numeral(res.monthly_limit / 100).format('0.00'),
 						is_support_alipay: res.is_support_alipay === 1 ? [1, 2] : [2],
 						invoice_provider: res.invoice_provider,
+						invoice_type: res.invoice_type,
+						tax_rate: res.tax_rate,
+						service_rate: res.service_rate,
 						validity_start: moment(res.validity_start, 'YYYY-MM-DD'),
 						validity_end: moment(res.validity_end, 'YYYY-MM-DD'),
 						remark: res.remark
 					});
+					
 					if (res.is_support_alipay === 1) {
 						window.setTimeout(() => {
 							setFieldsValue({

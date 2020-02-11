@@ -212,6 +212,12 @@ export const applyDetailConfigMap = {
 		key: 'qc_write_off',
 		align: 'center',
 	},
+	'pay_method_change': {
+		title: '支付方式变更调整',
+		dataIndex: 'qc_write_off',
+		key: 'pay_method_change',
+		align: 'center',
+	},
 	'service_amount': {
 		title: '利息',
 		dataIndex: 'service_amount',
@@ -295,6 +301,13 @@ export const extractDetailFunc = (order_status) => {
 		},
 		{
 			title: '质检总额',
+			dataIndex: 'qc_write_off',
+			key: 'qc_write_off',
+			width: 100,
+			align: 'center',
+		},
+		{
+			title: '支付方式变更调整',
 			dataIndex: 'qc_write_off',
 			key: 'qc_write_off',
 			width: 100,

@@ -4,10 +4,11 @@ import { bindActionCreators } from "redux";
 import * as extractActions from "../action/extractManage";
 import { Link } from "react-router-dom";
 import { applyDetailConfigMap, columnsList } from "../constans/manageConfig";
+import Scolltable from "../../components/Scolltable";
 import "./extractManage.less";
 import { Table, Button, Input, Row, Col, Form, Modal, message, DatePicker } from "antd";
 import { timestampToTime } from "../constans/utils";
-import { calcSum } from "../../util";
+import { calcSum, getTotalWidth, events } from "../../util";
 import qs from "qs";
 
 import moment from 'moment';
@@ -28,8 +29,13 @@ class ApplyDetail extends React.Component {
 			readyVisible: false,
 			loading: false,
 			total_withdraw_money: 0,
-			submitDisable: false
+			submitDisable: false,
+			leftWidth: 40
 		}
+		events.on('message', this.collapsedListener); 
+	}
+	collapsedListener = isClosed => {
+		this.setState({leftWidth: isClosed ? 40 : 200});
 	}
 	componentDidMount() {
 		const search = qs.parse(this.props.location.search.substring(1));
@@ -67,7 +73,9 @@ class ApplyDetail extends React.Component {
 			this.setState({ loading: false });
 			message.error(errorMsg || '列表加载出错，请重试');
 		})
-
+		const leftSlide = document.getElementsByClassName('ant-layout-sider-trigger')[0];
+		const leftWidth = leftSlide && leftSlide.clientWidth;
+		this.setState({leftWidth});
 	}
 	getDate = () => {
 		let date = new Date();
@@ -247,7 +255,7 @@ class ApplyDetail extends React.Component {
 	render() {
 		const { getFieldDecorator, getFieldValue } = this.props.form;
 		let { applyDetail, applyDetail: { order_list = [], status, comment }, calculateCost: { total_fee = 0, total_service_fee = 0 } } = this.props;
-		let { rejectVisible, today, total_withdraw_money, loading } = this.state;
+		let { rejectVisible, today, total_withdraw_money, loading, leftWidth } = this.state;
 		let configKeys = status === 2 || status === 3 ?
 			[
 				'id', 'order_id',
@@ -279,6 +287,7 @@ class ApplyDetail extends React.Component {
 				'expect_payment_amount'
 			];
 		let withdrawDetailConfig = columnsList(applyDetailConfigMap, configKeys);
+		const totalWidth = getTotalWidth(withdrawDetailConfig);
 		const commentLayout = {
 			labelCol: { span: 1 },
 			wrapperCol: { span: 23 },
@@ -293,13 +302,17 @@ class ApplyDetail extends React.Component {
 		};
 		return <div className='extractManage'>
 			<ExtractList applyDetail={applyDetail}></ExtractList>
-			<Table className='topGap'
-				rowKey='id'
-				columns={withdrawDetailConfig}
-				dataSource={order_list}
-				pagination={false}
-				loading={loading}
-				bordered></Table>
+			<Scolltable scrollClassName='.ant-table-body' widthScroll={totalWidth + leftWidth}>
+				<Table className='topGap'
+					rowKey='id'
+					columns={withdrawDetailConfig}
+					dataSource={order_list}
+					pagination={false}
+					loading={loading}
+					bordered
+					scroll={{ x: totalWidth }}
+				/>
+			</Scolltable>
 			<Form className='topGap'>
 				<Row>
 					<Col span={24}>

@@ -160,30 +160,35 @@ export const applyDetailConfigMap = {
 		dataIndex: 'id',
 		key: 'id',
 		align: 'center',
+		width: 80
 	},
 	'order_id': {
 		title: '订单号',
 		dataIndex: 'order_id',
 		key: 'order_id',
 		align: 'center',
+		width: 100
 	},
 	'order_type_name': {
 		title: '订单类型',
 		dataIndex: 'order_type_name',
 		key: 'order_type_name',
 		align: 'center',
+		width: 100
 	},
 	'payment_silp_status_name': {
 		title: '订单状态',
 		dataIndex: 'payment_silp_status_name',
 		key: 'payment_silp_status_name',
 		align: 'center',
+		width: 100
 	},
 	'order_end_time': {
 		title: '执行完成时间',
 		dataIndex: 'order_end_time',
 		key: 'order_end_time',
 		align: 'center',
+		width: 140,
 		render: (text, { order_end_time }) => {
 			return timestampToTime(order_end_time);
 		}
@@ -193,72 +198,84 @@ export const applyDetailConfigMap = {
 		dataIndex: 'service_cycle',
 		key: 'service_cycle',
 		align: 'center',
+		width: 120
 	},
 	'expect_service_cycle': {
 		title: '预计服务时间（天）',
 		dataIndex: 'expect_service_cycle',
 		key: 'expect_service_cycle',
 		align: 'center',
+		width: 140
 	},
 	'order_amount': {
 		title: '订单金额',
 		dataIndex: 'order_amount',
 		key: 'order_amount',
 		align: 'center',
+		width: 100
 	},
 	'qc_write_off': {
 		title: '质检金额',
 		dataIndex: 'qc_write_off',
 		key: 'qc_write_off',
 		align: 'center',
+		width: 100
 	},
 	'pay_method_change': {
 		title: '支付方式变更调整',
 		dataIndex: 'qc_write_off',
 		key: 'pay_method_change',
 		align: 'center',
+		width: 140
 	},
 	'service_amount': {
 		title: '利息',
 		dataIndex: 'service_amount',
 		key: 'service_amount',
 		align: 'center',
+		width: 100
 	},
 	'expect_service_amount': {
 		title: '预计利息',
 		dataIndex: 'expect_service_amount',
 		key: 'expect_service_amount',
 		align: 'center',
+		width: 100
 	},
 	'service_fee': {
 		title: '手续费',
 		dataIndex: 'service_fee',
 		key: 'service_fee',
 		align: 'center',
+		width: 100
 	},
 	'other_fee': {
 		title: '其他扣款',
 		dataIndex: 'other_fee',
 		key: 'other_fee',
 		align: 'center',
+		width: 100
 	},
 	'discount_amount': {
 		title: '优惠金额',
 		dataIndex: 'discount_amount',
 		key: 'discount_amount',
 		align: 'center',
+		width: 100
 	},
 	'payment_amount': {
 		title: '可提金额',
 		dataIndex: 'payment_amount',
 		key: 'payment_amount',
 		align: 'center',
+		width: 100
 	},
 	'expect_payment_amount': {
 		title: '预计可提金额',
 		dataIndex: 'expect_payment_amount',
 		key: 'expect_payment_amount',
 		align: 'center',
+		width: 140
 	}
 }
 export const extractDetailFunc = (order_status) => {

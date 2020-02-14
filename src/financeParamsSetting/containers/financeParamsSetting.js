@@ -2,9 +2,9 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as actions from "../actions";
-import { Modal, Table, InputNumber, Icon, Spin, Empty, message, Statistic } from 'antd'
+import { Modal, Table, InputNumber, Input, Icon, Spin, Empty, message, Statistic } from 'antd'
 import './financeParamsSetting.less'
-import { financeParams, historyCol, multipliedByHundred } from '../constants';
+import { financeParams, historyCol, accMul, accDiv } from '../constants';
 
 class FinanceParamsSetting extends React.Component {
 	constructor() {
@@ -43,11 +43,12 @@ class FinanceParamsSetting extends React.Component {
 	};
 
 	judgeInputVal = (val, isPercent) => {
+		const numberVal = Number(val);
 		const percentRegex = /^\d+(\.\d{1,8})?$/;
 		const numRegex = /^\d+(\.\d{1,2})?$/;
 
-		const percentRule = val >= 0 && percentRegex.test(val);
-		const numRule = val >= 0 && val <= 999999999 && numRegex.test(val);
+		const percentRule = numberVal >= 0 && percentRegex.test(numberVal);
+		const numRule = numberVal >= 0 && numberVal <= 999999999 && numRegex.test(numberVal);
 
 		return isPercent ? percentRule : numRule;
 	}
@@ -66,7 +67,8 @@ class FinanceParamsSetting extends React.Component {
 		}
 
 		this.setState({ loading: true });
-		setFinanceParamsVal({id, itemKey, itemValue: this.state[itemKey]}).finally(() => {
+		const dealedVal = isPercent ? accDiv(this.state[itemKey], 100) : this.state[itemKey];
+		setFinanceParamsVal({id, itemKey, itemValue: dealedVal}).finally(() => {
 			this.setState({
 				[`${itemKey}-edit`]: false,
 				[itemKey]: null,
@@ -124,7 +126,7 @@ class FinanceParamsSetting extends React.Component {
 			if(!itemValueInfo)
 				return null;
 			const { id, itemValue, itemKey } = itemValueInfo;
-			const defaultVal = isPercent ? multipliedByHundred(itemValue) : itemValue;
+			const defaultVal = isPercent ? accMul(itemValue, 100) : itemValue;
 
 			const wrapperCls = this.state[`${key}-edit`] ? 'params-item params-item-edit' : 'params-item';
 			return (
@@ -135,10 +137,11 @@ class FinanceParamsSetting extends React.Component {
 							this.state[`${key}-edit`] ? 
 							[
 								<div key='input'>
-									<InputNumber 
+									<Input 
 										autoFocus
-										defaultValue={itemValue} 
-										onChange={iptValue => this.handleChangeParamVal(key, iptValue)}
+										addonAfter='%'
+										defaultValue={defaultVal} 
+										onChange={({target:{value}}) => this.handleChangeParamVal(key, value)}
 									/>
 									<div key='tips' className='editTips'>{isPercent ? this.errorTips[1] : this.errorTips[2]}</div>
 								</div>,

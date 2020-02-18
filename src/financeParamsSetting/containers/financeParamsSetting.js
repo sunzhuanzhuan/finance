@@ -11,7 +11,7 @@ class FinanceParamsSetting extends React.Component {
 		super();
 		this.state = {};
 		this.errorTips = {
-			1: '输入范围是大于0，最多8位小数的数字,举例:如果想设置6.388%,请输入6.388',
+			1: '输入范围是[0-10000]，最多八位小数的数字,举例:如果想设置6.388%,请输入6.388',
 			2: '只允许输入0-999999999最多两位小数的数字'
 		}
 	}
@@ -47,7 +47,7 @@ class FinanceParamsSetting extends React.Component {
 		const percentRegex = /^\d+(\.\d{1,8})?$/;
 		const numRegex = /^\d+(\.\d{1,2})?$/;
 
-		const percentRule = numberVal >= 0 && percentRegex.test(numberVal);
+		const percentRule = numberVal >= 0 && numberVal <= 10000 && percentRegex.test(numberVal);
 		const numRule = numberVal >= 0 && numberVal <= 999999999 && numRegex.test(numberVal);
 
 		return isPercent ? percentRule : numRule;

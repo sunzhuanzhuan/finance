@@ -265,7 +265,7 @@ class ApplyDetail extends React.Component {
 				'service_cycle',
 				'order_amount',
 				'qc_write_off',
-				'pay_method_change',
+				'deduction_amount',
 				'service_amount',
 				'service_fee',
 				'other_fee',
@@ -279,7 +279,7 @@ class ApplyDetail extends React.Component {
 				'expect_service_cycle',
 				'order_amount',
 				'qc_write_off',
-				'pay_method_change',
+				'deduction_amount',
 				'expect_service_amount',
 				'service_fee',
 				'other_fee',
@@ -484,7 +484,7 @@ function ExtractList({ applyDetail }) {
 				质检总额:{applyDetail.qc_write_off}
 			</Col>
 			<Col span={4}>
-				支付方式变更调整:{applyDetail.qc_write_off}
+				支付方式变更调整:{applyDetail.deduction_amount}
 			</Col>
 			<Col span={4}>
 				{applyDetail.status === 3 || applyDetail.status === 2 ? '利息总额:' : '预计利息总额:'}{applyDetail.service_amount}

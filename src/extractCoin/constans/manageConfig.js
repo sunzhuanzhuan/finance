@@ -221,10 +221,10 @@ export const applyDetailConfigMap = {
 		align: 'center',
 		width: 100
 	},
-	'pay_method_change': {
+	'deduction_amount': {
 		title: '支付方式变更调整',
-		dataIndex: 'qc_write_off',
-		key: 'pay_method_change',
+		dataIndex: 'deduction_amount',
+		key: 'deduction_amount',
 		align: 'center',
 		width: 140
 	},
@@ -325,8 +325,8 @@ export const extractDetailFunc = (order_status) => {
 		},
 		{
 			title: '支付方式变更调整',
-			dataIndex: 'qc_write_off',
-			key: 'qc_write_off',
+			dataIndex: 'deduction_amount',
+			key: 'deduction_amount',
 			width: 100,
 			align: 'center',
 		},
@@ -440,6 +440,13 @@ export const extractNoDetailFunc = (order_status) => {
 			title: '质检总额',
 			dataIndex: 'qc_write_off',
 			key: 'qc_write_off',
+			width: 100,
+			align: 'center',
+		},
+		{
+			title: '支付方式变更调整',
+			dataIndex: 'deduction_amount',
+			key: 'deduction_amount',
 			width: 100,
 			align: 'center',
 		},

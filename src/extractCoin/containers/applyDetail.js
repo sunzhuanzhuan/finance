@@ -473,7 +473,7 @@ function ExtractList({ applyDetail }) {
 				主账号:{applyDetail.user_name}
 			</Col>
 			<Col span={4}>
-				主账号类型:{applyDetail.partner_type_name}
+				合作方式:{applyDetail.partner_type_name}
 			</Col>
 		</Row>
 		<Row className='topGap'>

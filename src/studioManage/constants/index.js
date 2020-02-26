@@ -589,24 +589,3 @@ export const postTypeMap = {
 	'create': '1',
 	'modified': '2'
 }
-
-export const invoiceTypeArr = [
-	{
-		label: '专票', 
-		value: '1'
-	},
-	{
-		label: '普票', 
-		value: '2'
-	}
-]
-export const taxRateArr = [
-	{
-		label: '6%', 
-		value: '0.06'
-	},
-	{
-		label: '3%', 
-		value: '0.03'
-	}
-]

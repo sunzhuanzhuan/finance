@@ -148,7 +148,7 @@ class NewStudio extends React.Component {
 		});
 	}
 	render() {
-		const { studioMetadata: { studio_supported_platforms = [], bank = [] } } = this.props;
+		const { studioMetadata: { studio_supported_platforms = [], bank = [], invoice_type = [], tax_rate = [] } } = this.props;
 		const formItemLayout = {
 			labelCol: { span: 6 },
 			wrapperCol: { span: 16 },
@@ -172,6 +172,7 @@ class NewStudio extends React.Component {
 					formItemLayout={formItemLayout}
 					taxLayout={taxLayout}
 					handleOk={this.handleOk}
+					selectOption={invoice_type, tax_rate}
 				></StudioFormBot>
 			</Form>
 		</div>

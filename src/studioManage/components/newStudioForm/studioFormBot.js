@@ -4,7 +4,6 @@ import { Input, Row, Col, Form, Select, Button, DatePicker } from "antd";
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
-import { invoiceTypeArr, taxRateArr } from '../../constants'
 const FormItem = Form.Item;
 const Option = Select.Option;
 const TextArea = Input.TextArea;
@@ -33,7 +32,9 @@ class StudioFormBot extends React.Component {
 		}
 	}
 	getSelectOptions = arr => {
-		return arr.map(item => <Option key={item.value} value={item.value}>{item.label}</Option>)
+		if(!(Array.isArray(arr) && arr.length))
+			return null;
+		return arr.map(item => <Option key={item.id} value={item.id}>{item.display}</Option>)
 	}
 	serviceRateValide = (rule, value, callback) => {
 		const regex = /^\d+(\.\d{1,8})?$/;
@@ -65,8 +66,8 @@ class StudioFormBot extends React.Component {
 	}
 	render() {
 		const { getFieldDecorator, getFieldValue } = this.props.form;
-		const { formItemLayout, taxLayout, handleOk } = this.props;
-		const selectValue = getFieldValue('invoiceType');
+		const { formItemLayout, taxLayout, handleOk, selectOption } = this.props;
+		const selectValue = getFieldValue('invoice_type');
 		return <div>
 			<Row>
 				<FormItem label='发票抬头' {...formItemLayout}>
@@ -105,7 +106,7 @@ class StudioFormBot extends React.Component {
 						{getFieldDecorator('invoice_type', { rules: [{ required: true, message: '请选择发票类型' }] })(
 							<Select placeholder="请选择" style={{ width: 120 }}>
 								{
-									this.getSelectOptions(invoiceTypeArr)
+									this.getSelectOptions(selectOption['invoice_type'])
 								}
 							</Select>
 						)}
@@ -118,7 +119,7 @@ class StudioFormBot extends React.Component {
 						})(
 							<Select placeholder="请选择" style={{ width: 120 }}>
 								{
-									this.getSelectOptions(taxRateArr)
+									this.getSelectOptions(selectOption['tax_rate'])
 								}
 							</Select>
 						)}

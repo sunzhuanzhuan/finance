@@ -221,10 +221,10 @@ export const applyDetailConfigMap = {
 		align: 'center',
 		width: 100
 	},
-	'deduction_amount': {
+	'payment_deduction_amount': {
 		title: '支付方式变更调整',
-		dataIndex: 'deduction_amount',
-		key: 'deduction_amount',
+		dataIndex: 'payment_deduction_amount',
+		key: 'payment_deduction_amount',
 		align: 'center',
 		width: 140
 	},
@@ -325,8 +325,8 @@ export const extractDetailFunc = (order_status) => {
 		},
 		{
 			title: '支付方式变更调整',
-			dataIndex: 'deduction_amount',
-			key: 'deduction_amount',
+			dataIndex: 'payment_deduction_amount',
+			key: 'payment_deduction_amount',
 			width: 100,
 			align: 'center',
 		},
@@ -445,8 +445,8 @@ export const extractNoDetailFunc = (order_status) => {
 		},
 		{
 			title: '支付方式变更调整',
-			dataIndex: 'deduction_amount',
-			key: 'deduction_amount',
+			dataIndex: 'payment_deduction_amount',
+			key: 'payment_deduction_amount',
 			width: 100,
 			align: 'center',
 		},

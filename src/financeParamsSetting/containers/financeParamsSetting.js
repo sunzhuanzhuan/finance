@@ -2,10 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as actions from "../actions";
-import { Modal, Table, InputNumber, Input, Icon, Spin, Empty, message, Statistic } from 'antd'
-import './financeParamsSetting.less'
-import { financeParams, historyCol, accMul, accDiv } from '../constants';
-
+import { Modal, Table, Input, Icon, Spin, Empty, message, Statistic } from 'antd';
+import './financeParamsSetting.less';
+import { financeParams, historyCol } from '../constants';
+import { accMul, accDiv } from '@/util';
 class FinanceParamsSetting extends React.Component {
 	constructor() {
 		super();

@@ -9,7 +9,7 @@ import "./studioManage.less";
 import { postTypeMap } from '../constants'
 import numeral from "numeral";
 import qs from "qs";
-
+import { accMul, accDiv } from '@/util';
 import moment from 'moment';
 
 class NewStudio extends React.Component {
@@ -42,8 +42,8 @@ class NewStudio extends React.Component {
 						is_support_alipay: res.is_support_alipay === 1 ? [1, 2] : [2],
 						invoice_provider: res.invoice_provider,
 						invoice_type: res.invoice_type,
-						tax_rate: res.tax_rate,
-						service_rate: res.service_rate,
+						tax_rate: accMul(res.tax_rate, 100),
+						service_rate: accMul(res.service_rate, 100),
 						validity_start: moment(res.validity_start, 'YYYY-MM-DD'),
 						validity_end: moment(res.validity_end, 'YYYY-MM-DD'),
 						remark: res.remark
@@ -108,6 +108,8 @@ class NewStudio extends React.Component {
 				let validity_end = values['validity_end'] ? values['validity_end'].format('YYYY-MM-DD') : null;
 				let is_support_alipay = values['is_support_alipay'].includes(1) ? 1 : 2;
 				let invoice_tax_rate = values['invoice_tax_rate'] === '0.00' ? numeral(values['tax_value'] / 100).format('0.0000') : values['invoice_tax_rate'];
+				let tax_rate = values['invoice_type'] == 1 ? accDiv(values['tax_rate'], 100) : 0;
+				let service_rate = accDiv(values['service_rate'], 100);
 				// let bank_agency = this.props.studioMetadata.bank.find(item => item.id == values['payment_type_id']).display;
 				let params = {
 					...values,
@@ -115,7 +117,9 @@ class NewStudio extends React.Component {
 					validity_start,
 					validity_end,
 					is_support_alipay,
-					invoice_tax_rate
+					invoice_tax_rate,
+					tax_rate,
+					service_rate
 				};
 				delete params['tax_value'];
 				if (!values['is_support_alipay'].includes(2)) {
@@ -157,6 +161,7 @@ class NewStudio extends React.Component {
 			labelCol: { span: 20 },
 			wrapperCol: { span: 4 },
 		};
+		const selectOption = {invoice_type, tax_rate};
 		return <div className='new-studio-manage'>
 			<Form className='new-studio-form'>
 				<StudioFormTop
@@ -172,7 +177,7 @@ class NewStudio extends React.Component {
 					formItemLayout={formItemLayout}
 					taxLayout={taxLayout}
 					handleOk={this.handleOk}
-					selectOption={invoice_type, tax_rate}
+					selectOption={selectOption}
 				></StudioFormBot>
 			</Form>
 		</div>

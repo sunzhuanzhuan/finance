@@ -199,6 +199,40 @@ const downloadByATag = (src, fileName = "") => {
 	evObj.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
 	$a.dispatchEvent(evObj);
 }
+
+/**
+ * 除法运算
+ * @param {Number} arg1 除数
+ * @param {Number} arg2 被除数
+ */
+const accDiv = (arg1,arg2) => { 
+	let t1=0;
+	let t2=0;
+	let r1;
+	let r2; 
+	if(!arg1)
+		return 0;
+    try{t1=arg1.toString().split(".")[1].length}catch(e){t1}
+    try{t2=arg2.toString().split(".")[1].length}catch(e){t2}
+	r1=Number(arg1.toString().replace(".",""))
+	r2=Number(arg2.toString().replace(".",""))
+	return (r1/r2)*Math.pow(10,t2-t1);
+}
+/**
+ * 乘法运算
+ * @param {Number} arg1
+ * @param {Number} arg2
+ */
+const accMul = (arg1,arg2) => { 
+	if(!arg1)
+		return 0;
+	let m=0;
+	let s1=arg1.toString();
+	let s2=arg2.toString(); 
+    try{m+=s1.split(".")[1].length}catch(e){m} 
+    try{m+=s2.split(".")[1].length}catch(e){m} 
+    return Number(s1.replace(".",""))*Number(s2.replace(".",""))/Math.pow(10,m) 
+} 
 export {
 	showLoading,
 	hideLoading,
@@ -211,7 +245,9 @@ export {
 	changeHistoryLocation,
 	events,
 	getTotalWidth,
-	downloadByATag
+	downloadByATag,
+	accDiv,
+	accMul
 }
 export { calcSum } from './calcSum'
 

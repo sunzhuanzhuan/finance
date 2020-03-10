@@ -7,7 +7,7 @@ import { WBYDetailTable } from "wbyui"
 import { detailColumns } from '../constants'
 import './studioManage.less'
 import qs from 'qs'
-
+import { accMul } from '@/util';
 class CheckStudio extends React.Component {
 	constructor() {
 		super();
@@ -148,11 +148,11 @@ function DetailTable({ data, studioMetadata }) {
 					data.invoice_type == '1' ? 
 					[
 						<td key='invoiceLabel'>发票税率：</td>,
-						<td key='invoicevalue'>{getInvoiceLabel(studioMetadata['tax_rate'], data.tax_rate)}</td>
+						<td key='invoicevalue'>{accMul(data.tax_rate, 100)}%</td>
 					] : null
 				}
 				<td>服务费率：</td>
-				<td>{data.service_rate}</td>
+				<td>{accMul(data.service_rate, 100)}%</td>
 			</tr>
 			<tr>
 				<td>操作人：</td>

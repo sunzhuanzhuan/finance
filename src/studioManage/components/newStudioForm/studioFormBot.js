@@ -92,7 +92,7 @@ class StudioFormBot extends React.Component {
 				<FormItem label="发票税率" {...formItemLayout} >
 					{getFieldDecorator('tax_rate', {
 						rules: [
-							{ required: true, message: '请输入发票税率' },
+							{ required: selectValue == '1', message: '请输入发票税率' },
 							{
 								validator: this.serviceRateValide,
 							}

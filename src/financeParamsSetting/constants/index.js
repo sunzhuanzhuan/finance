@@ -41,7 +41,7 @@ export const historyCol = (title, isPercent) => {
 			key: 'itemValue',
 			align: 'center',
 			render: data => {
-				return isPercent ? `${accMul(data, 100)}%` : <Statistic className='numberStastic' value={data}/>;
+				return isPercent ? `${accMul(data, 100)}%` : <Statistic className='numberStastic' value={parseFloat(data)}/>;
 			}
 		}
 	]

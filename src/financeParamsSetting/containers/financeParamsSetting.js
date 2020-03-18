@@ -28,7 +28,7 @@ class FinanceParamsSetting extends React.Component {
 	}
 
 	handleChangeParamVal = (key, value, isPercent) => {
-		const dealedVal = isPercent ? accDiv(value, 100) : value;
+		const dealedVal = isPercent ? accDiv(value, 100) : parseFloat(value);
 		this.setState({[key]: dealedVal});
 	}
 
@@ -126,7 +126,7 @@ class FinanceParamsSetting extends React.Component {
 			if(!itemValueInfo)
 				return null;
 			const { id, itemValue, itemKey } = itemValueInfo;
-			const defaultVal = isPercent ? accMul(itemValue, 100) : itemValue;
+			const defaultVal = isPercent ? accMul(itemValue, 100) : parseFloat(itemValue);
 
 			const wrapperCls = this.state[`${key}-edit`] ? 'params-item params-item-edit' : 'params-item';
 			return (

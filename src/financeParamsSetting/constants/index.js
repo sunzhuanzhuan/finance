@@ -6,7 +6,7 @@ export const financeParams = [
 	{ label: '工作室平均回票税率', key: 'work_room_average_return_rate', isPercent: true },
 	{ label: '微播易销项税税率', key: 'wby_output_tax_rate', isPercent: true },
 	{ label: '布谷鸟销项税税率', key: 'bgn_output_tax_rate', isPercent: true },
-	// { label: '周打款限额', key: 'week_pay_ceiling' },
+	{ label: '周打款限额', key: 'week_pay_ceiling' },
 	{ label: '专票6%->专票3% 扣款比例', key: 'vat_special_invoice_6_to_3', isPercent: true },
 	{ label: '专票6%->专票1% 扣款比例', key: 'vat_special_invoice_6_to_1', isPercent: true },
 	{ label: '专票6%->普票0% 扣款比例', key: 'vat_special_invoice_6_to_0', isPercent: true },

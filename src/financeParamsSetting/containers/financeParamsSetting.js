@@ -27,8 +27,9 @@ class FinanceParamsSetting extends React.Component {
 		});
 	}
 
-	handleChangeParamVal = (key, value) => {
-		this.setState({[key]: value});
+	handleChangeParamVal = (key, value, isPercent) => {
+		const dealedVal = isPercent ? accDiv(value, 100) : value;
+		this.setState({[key]: dealedVal});
 	}
 
 	getErrorTips = msg => {
@@ -44,7 +45,7 @@ class FinanceParamsSetting extends React.Component {
 
 	judgeInputVal = (val, isPercent) => {
 		const numberVal = Number(val);
-		const percentRegex = /^\d+(\.\d{1,8})?$/;
+		const percentRegex = /^\d+(\.\d{1,10})?$/;
 		const numRegex = /^\d+(\.\d{1,2})?$/;
 
 		const percentRule = numberVal >= 0 && numberVal <= 10000 && percentRegex.test(numberVal);
@@ -67,8 +68,7 @@ class FinanceParamsSetting extends React.Component {
 		}
 
 		this.setState({ loading: true });
-		const dealedVal = isPercent ? accDiv(this.state[itemKey], 100) : this.state[itemKey];
-		setFinanceParamsVal({id, itemKey, itemValue: dealedVal}).finally(() => {
+		setFinanceParamsVal({id, itemKey, itemValue: this.state[itemKey]}).finally(() => {
 			this.setState({
 				[`${itemKey}-edit`]: false,
 				[itemKey]: null,
@@ -141,7 +141,7 @@ class FinanceParamsSetting extends React.Component {
 										autoFocus
 										addonAfter='%'
 										defaultValue={defaultVal} 
-										onChange={({target:{value}}) => this.handleChangeParamVal(key, value)}
+										onChange={({target:{value}}) => this.handleChangeParamVal(key, value, isPercent)}
 									/>
 									<div key='tips' className='editTips'>{isPercent ? this.errorTips[1] : this.errorTips[2]}</div>
 								</div>,

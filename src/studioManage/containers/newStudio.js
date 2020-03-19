@@ -9,7 +9,7 @@ import "./studioManage.less";
 import { postTypeMap } from '../constants'
 import numeral from "numeral";
 import qs from "qs";
-import { accMul, accDiv } from '@/util';
+import { accMul, percentToValue } from '@/util';
 import moment from 'moment';
 
 class NewStudio extends React.Component {
@@ -108,8 +108,8 @@ class NewStudio extends React.Component {
 				let validity_end = values['validity_end'] ? values['validity_end'].format('YYYY-MM-DD') : null;
 				let is_support_alipay = values['is_support_alipay'].includes(1) ? 1 : 2;
 				let invoice_tax_rate = values['invoice_tax_rate'] === '0.00' ? numeral(values['tax_value'] / 100).format('0.0000') : values['invoice_tax_rate'];
-				let tax_rate = values['invoice_type'] == 1 ? accDiv(values['tax_rate'], 100) : 0;
-				let service_rate = accDiv(values['service_rate'], 100);
+				let tax_rate = values['invoice_type'] == 1 ? percentToValue(values['tax_rate'], 100) : 0;
+				let service_rate = percentToValue(values['service_rate'], 100);
 				// let bank_agency = this.props.studioMetadata.bank.find(item => item.id == values['payment_type_id']).display;
 				let params = {
 					...values,

@@ -5,7 +5,7 @@ import * as actions from "../actions";
 import { Modal, Table, Input, Icon, Spin, Empty, message, Statistic } from 'antd';
 import './financeParamsSetting.less';
 import { financeParams, historyCol } from '../constants';
-import { accMul, accDiv } from '@/util';
+import { accMul, percentToValue } from '@/util';
 class FinanceParamsSetting extends React.Component {
 	constructor() {
 		super();
@@ -28,7 +28,7 @@ class FinanceParamsSetting extends React.Component {
 	}
 
 	handleChangeParamVal = (key, value, isPercent) => {
-		const dealedVal = isPercent ? accDiv(value, 100) : parseFloat(value);
+		const dealedVal = isPercent ? percentToValue(value) : parseFloat(value);
 		this.setState({[key]: dealedVal});
 	}
 

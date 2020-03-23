@@ -36,14 +36,14 @@ class AddAdjustApply extends React.Component {
 		this.props.actions.clearAddApplyList();
 		delete search['requirement_label'];
 		const { keys:{company_id} } = search;
-		// const queryObj = { page: 1, ...search.keys, page_size: 200 };
+		const queryObj = { page: 1, ...search.keys, page_size: 200 };
 		if(company_id) {
 			const companyId = company_id.key;
-			// delete search.keys.company_id;
-			// Object.assign(queryObj, {company_id: companyId});
+			delete search.keys.company_id;
+			Object.assign(queryObj, {company_id: companyId});
 			this.setState({companyId});
 		}
-		// this.queryData(queryObj);
+		this.queryData(queryObj);
 	}
 	queryData = (obj, func) => {
 		this.setState({ loading: true });

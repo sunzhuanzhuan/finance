@@ -47,9 +47,9 @@ class FinanceRateSetting extends React.Component {
 
 	handleSaveOperation = (type) => {
 		if(type === 'add') {
-			console.log(type)
+			console.log('financeRateSetting handleSaveOperation type', type)
 		}else if(type === 'edit') {
-			console.log(type)
+			console.log('financeRateSetting handleSaveOperation type', type)
 		}
 	}
 

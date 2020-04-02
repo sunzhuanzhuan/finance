@@ -77,3 +77,30 @@ export const getRateSettingCol = (handleOperate) => {
 		}
 	]
 }
+
+/**
+ * 乘法运算
+ * @param {Number} arg1
+ * @param {Number} arg2
+ */
+export const accMulRate = (arg1,arg2) => { 
+	if(!arg1)
+		return 0;
+	let m=0;
+	let s1=arg1.toString();
+	let s2=arg2.toString(); 
+    try{m+=s1.split(".")[1].length}catch(e){m} 
+    try{m+=s2.split(".")[1].length}catch(e){m} 
+    return Number(s1.replace(".",""))*Number(s2.replace(".",""))/Math.pow(10,m) 
+} 
+/**
+ * 百分比转换为小数
+ * @param {Number} value
+ */
+export const percentToValueRate = (value) => {
+    value = value + '';
+    const pointIndex = value.indexOf('.');
+    if (pointIndex === -1) return (value - 0) / 100;
+    const powIndex = value.length - pointIndex - 1;
+    return (value.replace('.', '') - 0) / Math.pow(10, powIndex + 2);
+}

@@ -78,6 +78,53 @@ export const getRateSettingCol = (handleOperate) => {
 	]
 }
 
+export const getRateDetailCol = () => {
+	return [
+		{
+			title: '账号ID',
+			dataIndex: 'zhnghaoid',
+			key: 'zhnghaoid',
+			align: 'center',
+			width: '10%',
+		},
+		{
+			title: '账号名',
+			dataIndex: 'zhanghaoming',
+			key: 'zhanghaoming',
+			align: 'center',
+			width: '20%',
+		},
+		{
+			title: '平台',
+			dataIndex: 'pingtai',
+			key: 'pingtai',
+			align: 'center',
+			width: '20%',
+		},
+		{
+			title: '主账号',
+			dataIndex: 'zhuzhanghao',
+			key: 'zhuzhanghao',
+			align: 'center',
+			width: '20%',
+		},
+		{
+			title: '资源媒介',
+			dataIndex: 'ziyuanmeijie',
+			key: 'ziyuanmeijie',
+			align: 'center',
+			width: '20%',
+		},
+		{
+			title: '操作',
+			dataIndex: 'operate',
+			key: 'operate',
+			align: 'center',
+			width: '10%',
+		}
+	]
+}
+
 /**
  * 乘法运算
  * @param {Number} arg1

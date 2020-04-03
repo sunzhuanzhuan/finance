@@ -28,7 +28,7 @@ class FinanceRateSetting extends React.Component {
 
 				return;
 			case 'detail': 
-
+					this.props.history.push('/finance/financeRateSetting/detail');
 				return;
 			case 'export': 
 
@@ -84,7 +84,7 @@ class FinanceRateSetting extends React.Component {
 		}
 		return (
 			<div className='finance-rate-wrapper'>
-				<h2>账号特殊利润率设置</h2>
+				<h3>账号特殊利润率设置</h3>
 				<Button type='primary' className='rate-add-btn' onClick={() => this.handleOperate('add')}>新增策略</Button>
 				<Table 
 					rowKey='celueid' 

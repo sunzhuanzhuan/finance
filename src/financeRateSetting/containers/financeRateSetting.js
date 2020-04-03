@@ -70,7 +70,18 @@ class FinanceRateSetting extends React.Component {
 				zhanghaolirunlv: '[13500, 13500] 阴价利润率 30.33%，阳价利润率 30.33%',
 				beizhu: '备注',
 			}
-		]
+		];
+		const initialVal = {
+			celuename: '策略名称',
+			celurRules: [
+				{
+					isIncludeLeft: 1, rangeLeft: 99, 
+					isIncludeRight: 0, rangeRight: 99, 
+					yinProfitRate: 99, yangProfitRate: 99
+				}
+			],
+			celuebeizhu: '策略备注'
+		}
 		return (
 			<div className='finance-rate-wrapper'>
 				<h2>账号特殊利润率设置</h2>
@@ -85,6 +96,7 @@ class FinanceRateSetting extends React.Component {
 				/>
 				<RateModal 
 					type={modalType}
+					initialVal={initialVal}
 					onCancel={this.handleCloseModal}
 					handleSaveOperation={this.handleSaveOperation}
 				/>

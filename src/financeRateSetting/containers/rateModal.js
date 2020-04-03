@@ -16,36 +16,50 @@ class RateModal extends React.Component {
 				yinProfitRate: undefined, yangProfitRate: undefined
 			}
 		];
+		this.state = {}
+	}
 
-		this.state = {
-			allRateList: this.basicRateItem
+	static getDerivedStateFromProps(nextProps, prevState) {
+		const {type} = nextProps;
+		if(type !== prevState.type)
+			return {
+				type
+			}
+		return null;
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+		const { form, initialVal } = prevProps;
+		const { type } = this.state;
+		if(prevState.type !== type) {
+			const celurRules = type === 'add' ? {celurRules: this.basicRateItem} : initialVal;
+			form.setFieldsValue(celurRules);
 		}
 	}
 
 	handleDelRateItem = (index) => {
-		const delRateList = [...this.state.allRateList];
+		const { form } = this.props;
+		const delRateList = [...form.getFieldValue('celurRules')];
 		delRateList.splice(index, 1);
-		this.setState({ allRateList: delRateList });
+		form.setFieldsValue({celurRules: delRateList})
 	}
 
 	handleAddRateItem = () => {
-		const { allRateList } = this.state;
-		this.setState({
-			allRateList: [
-				...allRateList, 
-				...this.basicRateItem
-			]
-		})
+		const { form } = this.props;
+		const currentList = [...form.getFieldValue('celurRules')];
+		const addRateList = [...currentList, ...this.basicRateItem];
+		form.setFieldsValue({celurRules: addRateList})
 	}
 
 	handleChangeRateRangeVal = (value, type, index) => {
-		const allRateList = [...this.state.allRateList];
+		const { form } = this.props;
+		const allRateList = [...form.getFieldValue('celurRules')];
 		const currentItem = allRateList[index];
 		const editItem = {...currentItem};
 		const dealType = type === 'yinProfitRate' || type === 'yangProfitRate' ? 'div' : 'number';
 		editItem[type] = this.getPercentData(value, dealType);
 		allRateList.splice(index, 1, editItem);
-		this.setState({allRateList});
+		form.setFieldsValue({celurRules: allRateList})
 	}
 
 	getPercentData = (data, type) => {
@@ -62,12 +76,15 @@ class RateModal extends React.Component {
 	}
 
 	getPolicyRankComp = () => {
-		const { allRateList = [] } = this.state;
+		const { form } = this.props;
+		const allRateList = form.getFieldValue('celurRules');
+		if(!(Array.isArray(allRateList) && allRateList.length))
+			return null;
 		return allRateList.map((item, index) => {
 			const { isIncludeLeft, rangeLeft, isIncludeRight, rangeRight, yinProfitRate, yangProfitRate } = item;
 			const isShowDelBtn = allRateList.length && index !== 0;
 			return (
-				<div key={+new Date() + Math.random()} className='rate-range-item'>
+				<div key={index} className='rate-range-item'>
 					<Select 
 						placeholder='请选择' className='rate-select' 
 						defaultValue={isIncludeLeft} 
@@ -78,8 +95,8 @@ class RateModal extends React.Component {
 					</Select>
 					<InputNumber 
 						precision={2} placeholder='请输入' 
-						className='rate-ipt' defaultValue={rangeLeft} 
-						onBlur={({target: {value}}) => this.handleChangeRateRangeVal(value, 'rangeLeft', index)} 
+						className='rate-ipt' value={rangeLeft} 
+						onChange={(value) => this.handleChangeRateRangeVal(value, 'rangeLeft', index)} 
 					/>
 					<span>------</span>
 					<Select 
@@ -92,20 +109,20 @@ class RateModal extends React.Component {
 					</Select>
 					<InputNumber 
 						precision={2} placeholder='请输入' 
-						className='rate-ipt' defaultValue={rangeRight} 
-						onBlur={({target: {value}}) => this.handleChangeRateRangeVal(value, 'rangeRight', index)} 
+						className='rate-ipt' value={rangeRight} 
+						onChange={(value) => this.handleChangeRateRangeVal(value, 'rangeRight', index)} 
 					/>
 					<span>则阴价利润率为</span>
 					<InputNumber 
 						precision={2} placeholder='输入数值' 
-						className='rate-ipt' defaultValue={this.getPercentData(yinProfitRate, 'mul')} 
-						onBlur={({target: {value}}) => this.handleChangeRateRangeVal(value, 'yinProfitRate', index)} 
+						className='rate-ipt' value={this.getPercentData(yinProfitRate, 'mul')} 
+						onChange={(value) => this.handleChangeRateRangeVal(value, 'yinProfitRate', index)} 
 					/>
 					<span>%，阳价利润率为</span>
 					<InputNumber 
 						precision={2} placeholder='输入数值' 
-						className='rate-ipt' defaultValue={this.getPercentData(yangProfitRate, 'mul')} 
-						onBlur={({target: {value}}) => this.handleChangeRateRangeVal(value, 'yangProfitRate', index)} 
+						className='rate-ipt' value={this.getPercentData(yangProfitRate, 'mul')} 
+						onChange={(value) => this.handleChangeRateRangeVal(value, 'yangProfitRate', index)} 
 					/>
 					<span>%</span>
 					{
@@ -127,13 +144,11 @@ class RateModal extends React.Component {
 					)}
 				</FormItem>
 				<FormItem label='政策阶梯'>
-					{
-						<div>
-							{ this.getPolicyRankComp() }
-							<a onClick={this.handleAddRateItem}>添加更多</a>
-							<div className='rate-rank-info'>说明：数值设置必须覆盖所有区间即[0, 9999999]元，数值可设置多个区间多个利润率。</div>
-						</div>
-					}
+					<div>
+						{ this.getPolicyRankComp() }
+						<a onClick={this.handleAddRateItem}>添加更多</a>
+						<div className='rate-rank-info'>说明：数值设置必须覆盖所有区间即[0, 9999999]元，数值可设置多个区间多个利润率。</div>
+					</div>
 				</FormItem>
 				<FormItem label='备注'>
 					{getFieldDecorator('celuebeizhu')(
@@ -143,20 +158,13 @@ class RateModal extends React.Component {
 						/>
 					)}
 				</FormItem>
+				<FormItem>
+					{getFieldDecorator('celurRules')(
+						<div></div>
+					)}
+				</FormItem>
 			</Form>
 		)
-	}
-
-	getModalContent = (type) => {
-		switch (type) {
-			case 'add':
-			case 'edit':
-				return this.getRateSettingComp();
-			case 'clear':
-				return (
-					<div>清空列表</div>
-				)
-		}
 	}
 
 	getModalTitle = (type) => {
@@ -183,18 +191,15 @@ class RateModal extends React.Component {
 
 	validateFieldsValues = () => {
 		const { form } = this.props;
-		const { allRateList } = this.state;
 		const fieldsValus = form.getFieldsValue();
+		const { celurRules } = fieldsValus;
 		const validateResult = {
 			error: '',
-			data: {
-				...fieldsValus,
-				allRateList
-			}
+			fieldsValus
 		}
 		const { celuename, celuebeizhu } = fieldsValus;
-		const firstRateItem = allRateList[0];
-		const lastRateItem = allRateList[allRateList.length - 1];
+		const firstRateItem = celurRules[0];
+		const lastRateItem = celurRules[celurRules.length - 1];
 		if(!celuename || (celuename && !(celuename.trim()))) {
 			validateResult.error = '请输入策略名称';
 			return validateResult;
@@ -205,7 +210,7 @@ class RateModal extends React.Component {
 			validateResult.error = '区间设置不符合规则，请重新设置';
 			return validateResult;
 		}
-		allRateList.every((item, index) => {
+		celurRules.every((item, index) => {
 			let isContinue = true;
 			const { isIncludeLeft, rangeLeft, isIncludeRight, rangeRight, yinProfitRate, yangProfitRate } = item;
 			const rangeValues = [isIncludeLeft, rangeLeft, isIncludeRight, rangeRight];
@@ -217,8 +222,8 @@ class RateModal extends React.Component {
 				}
 			})
 
-			if(allRateList.length > 1 && index < allRateList.length - 1) {
-				const nextItem = allRateList[index + 1];
+			if(celurRules.length > 1 && index < celurRules.length - 1) {
+				const nextItem = celurRules[index + 1];
 				const { isIncludeLeft: nextIsIncludeLeft, rangeLeft: nextRangeLeft } = nextItem;
 				if(isIncludeRight == nextIsIncludeLeft || Number(rangeRight) != Number(nextRangeLeft)) {
 					validateResult.error = '区间设置不符合规则，请重新设置';
@@ -261,7 +266,7 @@ class RateModal extends React.Component {
 			this.getErrorTips(validateResult.error);
 			return;
 		}
-		handleSaveOperation(validateResult.data);
+		handleSaveOperation(validateResult.data, type);
 	}
 
 	render() {
@@ -278,7 +283,7 @@ class RateModal extends React.Component {
 				wrapClassName='reate-setting-modal'
 				cancelText=''
 			>
-				{ this.getModalContent(type) }
+				{ this.getRateSettingComp() }
 			</Modal>
 		)
 	}

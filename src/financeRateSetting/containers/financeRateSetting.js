@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as actions from "../actions";
-import { Modal, Table, InputNumber, Icon, Spin, Empty, message, Statistic, Button } from 'antd'
+import { Table, Button } from 'antd'
 import './financeRateSetting.less'
 import { getRateSettingCol } from '../constants';
 import RateModal from './rateModal';

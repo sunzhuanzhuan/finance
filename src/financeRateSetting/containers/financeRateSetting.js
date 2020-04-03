@@ -16,12 +16,13 @@ class FinanceRateSetting extends React.Component {
 		}
 	}
 
-	handleOperate = (type) => {
+	handleOperate = (type, item) => {
 		switch (type) {
 			case 'add': 
 			case 'edit': 
 				this.setState({
 					modalType: type,
+					rateInitialVal: item
 				})
 				return;
 			case 'delete': 
@@ -40,48 +41,53 @@ class FinanceRateSetting extends React.Component {
 	}
 
 	handleCloseModal = () => {
-		this.setState({
-			modalType: null
+		const { operateLoading } = this.state;
+		if(!operateLoading) 
+			this.setState({
+				modalType: null
+			})
+	}
+
+	handleSaveOperation = (type, data) => {
+		const { addFinanceRate, editFinanceRate } = this.props;
+		const operationAction = type === 'add' ? addFinanceRate : editFinanceRate;
+		this.setState({operateLoading: true});
+		operationAction(data).then(() => {
+			this.handleJump({page: 1, page_size: 20});
+			this.setState({operateLoading: false});
+		}).catch(() => {
+			this.setState({operateLoading: false});
 		})
 	}
 
-	handleSaveOperation = (type) => {
-		if(type === 'add') {
-			console.log('financeRateSetting handleSaveOperation type', type)
-		}else if(type === 'edit') {
-			console.log('financeRateSetting handleSaveOperation type', type)
-		}
+	handleJump = query => {
+		const { getFinanceRateList } = this.props;
+		this.setState({ loading: true });
+		getFinanceRateList(query).then(() => {
+			this.setState({loading: false});
+		}).catch(() => {
+			this.setState({loading: false});
+		});
 	}
 
 	render() {
-		const { loading, modalType } = this.state;
+		const { rateListInfo: { total = 0, page = 1, page_size = 20, list = []} } = this.props;
+		const { loading, operateLoading, modalType, rateInitialVal } = this.state;
 		const pagination = {
-			total: parseInt(1),
-			current: parseInt(1),
-			pageSize: parseInt(10),
+			total: parseInt(total),
+			current: parseInt(page),
+			pageSize: parseInt(page_size),
 			showQuickJumper: true,
 			showSizeChanger: true,
-			pageSizeOptions: ['20', '50', '100', '200']
+			pageSizeOptions: ['20', '50', '100', '200'],
+			onChange: current => {
+				this.handleJump({ page: current, page_size });
+			},
+			onShowSizeChange: (_, pageSize) => {
+				this.handleJump({ page, page_size: pageSize });
+			},
 		};
-		const dataSource = [
-			{
-				celueid: '策略ID',
-				celuename: '策略名称',
-				zhanghaolirunlv: '[13500, 13500] 阴价利润率 30.33%，阳价利润率 30.33%',
-				beizhu: '备注',
-			}
-		];
-		const initialVal = {
-			celuename: '策略名称',
-			celurRules: [
-				{
-					isIncludeLeft: 1, rangeLeft: 99, 
-					isIncludeRight: 0, rangeRight: 99, 
-					yinProfitRate: 99, yangProfitRate: 99
-				}
-			],
-			celuebeizhu: '策略备注'
-		}
+
 		return (
 			<div className='finance-rate-wrapper'>
 				<h3>账号特殊利润率设置</h3>
@@ -89,14 +95,15 @@ class FinanceRateSetting extends React.Component {
 				<Table 
 					rowKey='celueid' 
 					columns={getRateSettingCol(this.handleOperate)} 
-					dataSource={dataSource} 
+					dataSource={list} 
 					bordered 
 					pagination={pagination} 
 					loading={loading}
 				/>
 				<RateModal 
+					loading={operateLoading}
 					type={modalType}
-					initialVal={initialVal}
+					initialVal={rateInitialVal}
 					onCancel={this.handleCloseModal}
 					handleSaveOperation={this.handleSaveOperation}
 				/>
@@ -107,11 +114,49 @@ class FinanceRateSetting extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-	const { financeParamsReducer } = state;
-	const { financeParamsVal, financeParamHistory } = financeParamsReducer;
+	const { financeRateReducer } = state;
+	const { rateListInfo } = financeRateReducer;
 	return {
-		financeParamsVal,
-		financeParamHistory
+		// rateListInfo,
+		rateListInfo: {
+			total: 20, 
+			page: 1, page_size: 20, 
+			list: [
+				{
+					celueid: 1234,
+					celuename: '策略名称',
+					celurRules: [
+						{
+							isIncludeLeft: 1, rangeLeft: 0, 
+							isIncludeRight: 1, rangeRight: 10, 
+							yinProfitRate: 0.09, yangProfitRate: 0.09
+						},
+						{
+							isIncludeLeft: 1, rangeLeft: 10, 
+							isIncludeRight: 1, rangeRight: 100, 
+							yinProfitRate: 0.09, yangProfitRate: 0.09
+						},
+						{
+							isIncludeLeft: 1, rangeLeft: 100, 
+							isIncludeRight: 1, rangeRight: 1000, 
+							yinProfitRate: 0.09, yangProfitRate: 0.09
+						},
+						{
+							isIncludeLeft: 1, rangeLeft: 1000, 
+							isIncludeRight: 1, rangeRight: 10000, 
+							yinProfitRate: 0.09, yangProfitRate: 0.09
+						},
+						{
+							isIncludeLeft: 1, rangeLeft: 999.99, 
+							isIncludeRight: 1, rangeRight: 999.99, 
+							yinProfitRate: 0.09, yangProfitRate: 0.09
+						}
+					],
+					celuebeizhu: '策略备注'
+				}
+			]
+		},
+
 	}
 }
 const mapDispatchToProps = dispatch => (bindActionCreators({ ...actions }, dispatch));

@@ -1,24 +1,23 @@
 import Interface from '../constants/Interface'
 import { createHttpAction } from 'redux-action-extend'
 
-// export const {
-// 	getFinanceParamsVal,
-// 	getFinanceParamsVal_success
-// } = createHttpAction('getFinanceParamsVal', Interface.getFinanceParamsVal, {
-// 	method: 'get'
-// });
+export const {
+	getFinanceRateList,
+	getFinanceRateList_success
+} = createHttpAction('getFinanceRateList', Interface.getFinanceRateList, {
+	method: 'get'
+});
 
-// export const {
-// 	getFinanceEditHistory,
-// 	getFinanceEditHistory_success
-// } = createHttpAction('getFinanceEditHistory', Interface.getFinanceEditHistory, {
-// 	method: 'get'
-// });
+export const {
+	addFinanceRate,
+	addFinanceRate_success
+} = createHttpAction('addFinanceRate', Interface.addFinanceRate, {
+	method: 'post'
+});
 
-// export const {
-// 	setFinanceParamsVal,
-// 	setFinanceParamsVal_success
-// } = createHttpAction('setFinanceParamsVal', Interface.setFinanceParamsVal, {
-// 	method: 'post'
-// });
-
+export const {
+	editFinanceRate,
+	editFinanceRate_success
+} = createHttpAction('editFinanceRate', Interface.editFinanceRate, {
+	method: 'post'
+});

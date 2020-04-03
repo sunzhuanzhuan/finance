@@ -7,6 +7,36 @@ function handleDelInfo(name) {
 		okText: '确定'
 	});
 }
+export const getDealRateData = (data, type) => {
+	let floatVal = parseFloat(data);
+	if (isNaN(floatVal))
+		return undefined;
+	if(type === 'mul') {
+		return accMulRate(data, 100);
+	}else if(type === 'div') {
+		return percentToValueRate(data)
+	}else if(type === 'number') {
+		return floatVal;
+	}
+}
+const getRateRangeComp = (rateArr) => {
+	if(Array.isArray(rateArr) && rateArr.length) 
+		return rateArr.map((item, index) => {
+			const { isIncludeLeft, rangeLeft, isIncludeRight, rangeRight, yinProfitRate, yangProfitRate } = item;
+			const leftItem = isIncludeArr.find(item => item.value == isIncludeLeft) || {};
+			const rightItem = isIncludeArr.find(item => item.value == isIncludeRight) || {};
+			const yinVal = getDealRateData(yinProfitRate, 'mul');
+			const yangVal = getDealRateData(yangProfitRate, 'mul');
+			return (
+				<div className='rate-range-text' key={index}>
+					<span className='range-val'>{`${leftItem.leftSign}${Number(rangeLeft)}，${Number(rangeRight)}${rightItem.rightSign}`}</span>
+					{yinVal !== undefined ? <span>{`阴价利润率 ${yinVal}%`}</span> : null}
+					{yinVal !== undefined && yangVal !== undefined ? <span>，</span> : null}
+					{yangVal !== undefined ? <span>{`阳价利润率 ${yangVal}%`}</span> : null}
+				</div>
+			)
+		})
+}
 export const getRateSettingCol = (handleOperate) => {
 	return [
 		{
@@ -25,15 +55,18 @@ export const getRateSettingCol = (handleOperate) => {
 		},
 		{
 			title: '账号利润率',
-			dataIndex: 'zhanghaolirunlv',
-			key: 'zhanghaolirunlv',
+			dataIndex: 'celurRules',
+			key: 'celurRules',
 			align: 'center',
 			width: '37%',
+			render: (data) => {
+				return getRateRangeComp(data)
+			}
 		},
 		{
 			title: '备注',
-			dataIndex: 'beizhu',
-			key: 'beizhu',
+			dataIndex: 'celuebeizhu',
+			key: 'celuebeizhu',
 			align: 'center',
 			width: '13%',
 		},
@@ -48,7 +81,7 @@ export const getRateSettingCol = (handleOperate) => {
 				const { celuename } = record;
 				const isDelete = record.celuename;
 				return [
-					<a key='edit' onClick={() => handleOperate('edit')}>修改</a>,
+					<a key='edit' onClick={() => handleOperate('edit', record)}>修改</a>,
 					isDelete ? 
 						<Popconfirm
 							key='delete'
@@ -77,6 +110,11 @@ export const getRateSettingCol = (handleOperate) => {
 		}
 	]
 }
+
+export const isIncludeArr = [
+	{ value: 0, leftSign: '(', rightSign: ')' },
+	{ value: 1, leftSign: '[', rightSign: ']' },
+];
 
 export const getRateDetailCol = () => {
 	return [

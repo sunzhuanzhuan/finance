@@ -1,7 +1,7 @@
 import React from 'react';
-import { Modal, Form, Input, Select, InputNumber, message } from 'antd';
+import { Modal, Form, Input, Select, InputNumber, message, Spin } from 'antd';
 import './financeRateSetting.less';
-import { accMulRate, percentToValueRate } from '../constants';
+import { isIncludeArr, getDealRateData } from '../constants';
 const FormItem = Form.Item;
 const { TextArea } = Input;
 const { Option } = Select;
@@ -20,16 +20,22 @@ class RateModal extends React.Component {
 	}
 
 	static getDerivedStateFromProps(nextProps, prevState) {
-		const {type} = nextProps;
-		if(type !== prevState.type)
+		const {type, loading} = nextProps;
+		if(type !== prevState.type) {
 			return {
 				type
 			}
-		return null;
+		}else if(loading !== prevState.loading) {
+			return {
+				loading
+			}
+		}else {
+			return null;
+		}	
 	}
 
-	componentDidUpdate(prevProps, prevState) {
-		const { form, initialVal } = prevProps;
+	componentDidUpdate(_, prevState) {
+		const { form, initialVal } = this.props;
 		const { type } = this.state;
 		if(prevState.type !== type) {
 			const celurRules = type === 'add' ? {celurRules: this.basicRateItem} : initialVal;
@@ -57,22 +63,9 @@ class RateModal extends React.Component {
 		const currentItem = allRateList[index];
 		const editItem = {...currentItem};
 		const dealType = type === 'yinProfitRate' || type === 'yangProfitRate' ? 'div' : 'number';
-		editItem[type] = this.getPercentData(value, dealType);
+		editItem[type] = getDealRateData(value, dealType);
 		allRateList.splice(index, 1, editItem);
 		form.setFieldsValue({celurRules: allRateList})
-	}
-
-	getPercentData = (data, type) => {
-		let floatVal = parseFloat(data);
-		if (isNaN(floatVal))
-			return undefined;
-		if(type === 'mul') {
-			return accMulRate(data, 100);
-		}else if(type === 'div') {
-			return percentToValueRate(data)
-		}else if(type === 'number') {
-			return floatVal;
-		}
 	}
 
 	getPolicyRankComp = () => {
@@ -115,13 +108,13 @@ class RateModal extends React.Component {
 					<span>则阴价利润率为</span>
 					<InputNumber 
 						precision={2} placeholder='输入数值' 
-						className='rate-ipt' value={this.getPercentData(yinProfitRate, 'mul')} 
+						className='rate-ipt' value={getDealRateData(yinProfitRate, 'mul')} 
 						onChange={(value) => this.handleChangeRateRangeVal(value, 'yinProfitRate', index)} 
 					/>
 					<span>%，阳价利润率为</span>
 					<InputNumber 
 						precision={2} placeholder='输入数值' 
-						className='rate-ipt' value={this.getPercentData(yangProfitRate, 'mul')} 
+						className='rate-ipt' value={getDealRateData(yangProfitRate, 'mul')} 
 						onChange={(value) => this.handleChangeRateRangeVal(value, 'yangProfitRate', index)} 
 					/>
 					<span>%</span>
@@ -135,35 +128,38 @@ class RateModal extends React.Component {
 
 	getRateSettingComp = () => {
 		const { form } = this.props;
+		const { loading } = this.state;
 		const { getFieldDecorator } = form;
 		return (
-			<Form>
-				<FormItem label='策略名称'>
-					{getFieldDecorator('celuename')(
-						<Input placeholder="请输入" />
-					)}
-				</FormItem>
-				<FormItem label='政策阶梯'>
-					<div>
-						{ this.getPolicyRankComp() }
-						<a onClick={this.handleAddRateItem}>添加更多</a>
-						<div className='rate-rank-info'>说明：数值设置必须覆盖所有区间即[0, 9999999]元，数值可设置多个区间多个利润率。</div>
-					</div>
-				</FormItem>
-				<FormItem label='备注'>
-					{getFieldDecorator('celuebeizhu')(
-						<TextArea
-							className='rate-remark-ipt'
-							placeholder="请输入至少五个字符"
-						/>
-					)}
-				</FormItem>
-				<FormItem>
-					{getFieldDecorator('celurRules')(
-						<div></div>
-					)}
-				</FormItem>
-			</Form>
+			<Spin spinning={Boolean(loading)}>
+				<Form>
+					<FormItem label='策略名称'>
+						{getFieldDecorator('celuename')(
+							<Input placeholder="请输入" />
+						)}
+					</FormItem>
+					<FormItem label='政策阶梯'>
+						<div>
+							{ this.getPolicyRankComp() }
+							<a onClick={this.handleAddRateItem}>添加更多</a>
+							<div className='rate-rank-info'>说明：数值设置必须覆盖所有区间即[0, 9999999]元，数值可设置多个区间多个利润率。</div>
+						</div>
+					</FormItem>
+					<FormItem label='备注'>
+						{getFieldDecorator('celuebeizhu')(
+							<TextArea
+								className='rate-remark-ipt'
+								placeholder="请输入至少五个字符"
+							/>
+						)}
+					</FormItem>
+					<FormItem>
+						{getFieldDecorator('celurRules')(
+							<div></div>
+						)}
+					</FormItem>
+				</Form>
+			</Spin>
 		)
 	}
 
@@ -250,10 +246,6 @@ class RateModal extends React.Component {
 	}
 
 	getRangeText = (isIncludeLeft, rangeLeft, isIncludeRight, rangeRight) => {
-		const isIncludeArr = [
-			{ value: 0, leftSign: '(', rightSign: ')' },
-			{ value: 1, leftSign: '[', rightSign: ']' },
-		];
 		const leftItem = isIncludeArr.find(item => item.value == isIncludeLeft) || {};
 		const rightItem = isIncludeArr.find(item => item.value == isIncludeRight) || {};
 		return `${leftItem.leftSign}${Number(rangeLeft)}-${Number(rangeRight)}${rightItem.rightSign}`
@@ -266,11 +258,11 @@ class RateModal extends React.Component {
 			this.getErrorTips(validateResult.error);
 			return;
 		}
-		handleSaveOperation(validateResult.data, type);
+		handleSaveOperation(type, validateResult.fieldsValus);
 	}
 
 	render() {
-		const { type, onCancel } = this.props;
+		const { type, onCancel, loading } = this.props;
 		return (
 			<Modal
 				width={1080}
@@ -281,7 +273,8 @@ class RateModal extends React.Component {
 				onCancel={onCancel}
 				onOk={() => this.handleSaveRateValues(type)}
 				wrapClassName='reate-setting-modal'
-				cancelText=''
+				okButtonProps={{disabled: loading}}
+				cancelButtonProps={{disabled: loading}}
 			>
 				{ this.getRateSettingComp() }
 			</Modal>

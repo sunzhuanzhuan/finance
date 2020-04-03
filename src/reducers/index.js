@@ -17,6 +17,7 @@ import trinityProfitRate from '../financeSetting/reducers'
 import receivable from '../receivablesInquiries/reducers'
 import receivableOff from '../receivablesOff/reducers'
 import financeParamsReducer from '../financeParamsSetting/reducers';
+import financeRateReducer from '../financeRateSetting/reducers';
 
 export default combineReducers({
 	commonReducers,
@@ -36,5 +37,6 @@ export default combineReducers({
 	trinityProfitRate,
 	receivable, //应收款查询
 	receivableOff, //应收款核销
-	financeParamsReducer
+	financeParamsReducer,
+	financeRateReducer,
 });

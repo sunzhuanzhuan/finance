@@ -7,7 +7,8 @@ class rateDetailModal extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			selectedVisible: false
+			selectedVisible: false,
+			selectedRows: undefined
 		}
 	}
 
@@ -24,20 +25,20 @@ class rateDetailModal extends React.Component {
 
 	}
 
-	handleOperate = (type) => {
+	handleOperate = (type, value) => {
 		switch(type) {
 			case 'showSelected':
 				this.setState({
-					selectedVisible: true
+					selectedVisible: true,
+					selectedRows: value
 				});
 				return;
 			case 'search': 
-				return;
-			case 'reset':
+				const { profitStrategyId } = this.props;
+				const searchVal = {...value, profitStrategyId}
+				this.props.getAccountListToBind(searchVal);
 				return;
 			case 'delAccount':
-				return;
-			case 'clearSelected':
 				return;
 			default:
 				return;
@@ -46,22 +47,34 @@ class rateDetailModal extends React.Component {
 
 	handleCloseSelectedModal = () => {
 		this.setState({
-			selectedVisible: false
+			selectedVisible: false,
+			selectedRows: undefined
 		})
 	}
 
-	handleDelSelected = () => {
+	handleDeselected = (accountId) => {
+		const { selectedRows } = this.state;
+		const deselectedRows = selectedRows.filter(item => item.accountId !== accountId);
+		this.setState({
+			selectedRows: deselectedRows
+		})
+	}
 
+	handleDeselectAll = () => {
+		this.setState({
+			selectedRows: []
+		})
 	}
 
 	getSeledtedComp = () => {
+		const { selectedRows } = this.state;
 		return (
 			<div>
-				<Button className='clear-btn' type='primary' onClick={this.handleClearSelected}>清空已选</Button>
+				<Button className='clear-btn' type='primary' onClick={this.handleDeselectAll}>清空已选</Button>
 				<Table 
-					rowKey='zhnghaoid' 
-					columns={getRateDetailCol()} 
-					dataSource={[]} 
+					rowKey='accountId' 
+					columns={getRateDetailCol('selectedPage', this.handleDeselected)} 
+					dataSource={selectedRows} 
 					bordered 
 					pagination={false} 
 				/>
@@ -71,7 +84,7 @@ class rateDetailModal extends React.Component {
 
 	render() {
 		const { type, onCancel, visible } = this.props;
-		const { selectedVisible } = this.state;
+		const { selectedVisible, selectedRows } = this.state;
 
 		return [
 			<Modal
@@ -87,8 +100,9 @@ class rateDetailModal extends React.Component {
 			>
 				<RateDetailCommon 
 					{...this.props}
-					handleOperate={this.handleOperate}
 					type='addPage'
+					selectedRows={selectedRows}
+					handleOperate={this.handleOperate}
 				/>
 			</Modal>,
 			<Modal

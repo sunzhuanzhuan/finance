@@ -93,7 +93,7 @@ class FinanceRateSetting extends React.Component {
 				<h3>账号特殊利润率设置</h3>
 				<Button type='primary' className='rate-add-btn' onClick={() => this.handleOperate('add')}>新增策略</Button>
 				<Table 
-					rowKey='celueid' 
+					rowKey='profitStrategyId' 
 					columns={getRateSettingCol(this.handleOperate)} 
 					dataSource={list} 
 					bordered 
@@ -123,33 +123,33 @@ const mapStateToProps = (state) => {
 			page: 1, page_size: 20, 
 			list: [
 				{
-					celueid: 1234,
-					celuename: '策略名称',
-					celurRules: [
+					id: 1234,
+					name: '策略名称',
+					detailVOList: [
 						{
-							isIncludeLeft: 1, rangeLeft: 0, 
-							isIncludeRight: 1, rangeRight: 10, 
-							yinProfitRate: 0.09, yangProfitRate: 0.09
+							minInclude: 1, min: 0, 
+							maxInclude: 1, max: 10, 
+							privateProfit: 0.09, publicProfit: 0.09
 						},
 						{
-							isIncludeLeft: 1, rangeLeft: 10, 
-							isIncludeRight: 1, rangeRight: 100, 
-							yinProfitRate: 0.09, yangProfitRate: 0.09
+							minInclude: 1, min: 10, 
+							maxInclude: 1, max: 100, 
+							privateProfit: 0.09, publicProfit: 0.09
 						},
 						{
-							isIncludeLeft: 1, rangeLeft: 100, 
-							isIncludeRight: 1, rangeRight: 1000, 
-							yinProfitRate: 0.09, yangProfitRate: 0.09
+							minInclude: 1, min: 100, 
+							maxInclude: 1, max: 1000, 
+							privateProfit: 0.09, publicProfit: 0.09
 						},
 						{
-							isIncludeLeft: 1, rangeLeft: 1000, 
-							isIncludeRight: 1, rangeRight: 10000, 
-							yinProfitRate: 0.09, yangProfitRate: 0.09
+							minInclude: 1, min: 1000, 
+							maxInclude: 1, max: 10000, 
+							privateProfit: 0.09, publicProfit: 0.09
 						},
 						{
-							isIncludeLeft: 1, rangeLeft: 999.99, 
-							isIncludeRight: 1, rangeRight: 999.99, 
-							yinProfitRate: 0.09, yangProfitRate: 0.09
+							minInclude: 1, min: 999.99, 
+							maxInclude: 1, max: 999.99, 
+							privateProfit: 0.09, publicProfit: 0.09
 						}
 					],
 					celuebeizhu: '策略备注'

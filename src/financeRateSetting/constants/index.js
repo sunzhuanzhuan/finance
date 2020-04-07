@@ -22,14 +22,14 @@ export const getDealRateData = (data, type) => {
 const getRateRangeComp = (rateArr) => {
 	if(Array.isArray(rateArr) && rateArr.length) 
 		return rateArr.map((item, index) => {
-			const { isIncludeLeft, rangeLeft, isIncludeRight, rangeRight, yinProfitRate, yangProfitRate } = item;
-			const leftItem = isIncludeArr.find(item => item.value == isIncludeLeft) || {};
-			const rightItem = isIncludeArr.find(item => item.value == isIncludeRight) || {};
-			const yinVal = getDealRateData(yinProfitRate, 'mul');
-			const yangVal = getDealRateData(yangProfitRate, 'mul');
+			const { minInclude, min, maxInclude, max, privateProfit, publicProfit } = item;
+			const leftItem = isIncludeArr.find(item => item.value == minInclude) || {};
+			const rightItem = isIncludeArr.find(item => item.value == maxInclude) || {};
+			const yinVal = getDealRateData(privateProfit, 'mul');
+			const yangVal = getDealRateData(publicProfit, 'mul');
 			return (
 				<div className='rate-range-text' key={index}>
-					<span className='range-val'>{`${leftItem.leftSign}${Number(rangeLeft)}，${Number(rangeRight)}${rightItem.rightSign}`}</span>
+					<span className='range-val'>{`${leftItem.leftSign}${Number(min)}，${Number(max)}${rightItem.rightSign}`}</span>
 					{yinVal !== undefined ? <span>{`阴价利润率 ${yinVal}%`}</span> : null}
 					{yinVal !== undefined && yangVal !== undefined ? <span>，</span> : null}
 					{yangVal !== undefined ? <span>{`阳价利润率 ${yangVal}%`}</span> : null}
@@ -41,22 +41,22 @@ export const getRateSettingCol = (handleOperate) => {
 	return [
 		{
 			title: '策略ID',
-			dataIndex: 'celueid',
-			key: 'celueid',
+			dataIndex: 'id',
+			key: 'id',
 			align: 'center',
 			width: '10%',
 		},
 		{
 			title: '策略名称',
-			dataIndex: 'celuename',
-			key: 'celuename',
+			dataIndex: 'name',
+			key: 'name',
 			align: 'center',
 			width: '13%',
 		},
 		{
 			title: '账号利润率',
-			dataIndex: 'celurRules',
-			key: 'celurRules',
+			dataIndex: 'detailVOList',
+			key: 'detailVOList',
 			align: 'center',
 			width: '37%',
 			render: (data) => {
@@ -78,14 +78,14 @@ export const getRateSettingCol = (handleOperate) => {
 			className: 'operate-col',
 			width: '27%',
 			render: (_, record) => {
-				const { celuename } = record;
-				const isDelete = record.celuename;
+				const { name } = record;
+				const isDelete = record.name;
 				return [
 					<a key='edit' onClick={() => handleOperate('edit', record)}>修改</a>,
 					isDelete ? 
 						<Popconfirm
 							key='delete'
-							title="是否删除该策略？"
+							title={`该${name}下没有添加相关账号信息 ,确定删除${name}吗？`}
 							onConfirm={() => handleOperate('delete')}
 							okText="确定"
 							cancelText="取消"
@@ -93,7 +93,7 @@ export const getRateSettingCol = (handleOperate) => {
 							<a key='delete'>删除</a>
 						</Popconfirm>
 						: 
-						<a key='delete' onClick={() => handleDelInfo(celuename)}>删除</a>,
+						<a key='delete' onClick={() => handleDelInfo(name)}>删除</a>,
 					<a key='detail' onClick={() => handleOperate('detail')}>查看账号</a>,
 					<a key='export' onClick={() => handleOperate('export')}>导出账号</a>,
 					<Popconfirm
@@ -116,40 +116,40 @@ export const isIncludeArr = [
 	{ value: 1, leftSign: '[', rightSign: ']' },
 ];
 
-export const getRateDetailCol = () => {
-	return [
+export const getRateDetailCol = (type, handleOperate, profitStrategyId, profitStrategyName) => {
+	const allCol = [
 		{
 			title: '账号ID',
-			dataIndex: 'zhnghaoid',
-			key: 'zhnghaoid',
+			dataIndex: 'accountId',
+			key: 'accountId',
 			align: 'center',
 			width: '10%',
 		},
 		{
 			title: '账号名',
-			dataIndex: 'zhanghaoming',
-			key: 'zhanghaoming',
+			dataIndex: 'snsName',
+			key: 'snsName',
 			align: 'center',
 			width: '20%',
 		},
 		{
 			title: '平台',
-			dataIndex: 'pingtai',
-			key: 'pingtai',
+			dataIndex: 'platformName',
+			key: 'platformName',
 			align: 'center',
 			width: '20%',
 		},
 		{
 			title: '主账号',
-			dataIndex: 'zhuzhanghao',
-			key: 'zhuzhanghao',
+			dataIndex: 'identityName',
+			key: 'identityName',
 			align: 'center',
 			width: '20%',
 		},
 		{
 			title: '资源媒介',
-			dataIndex: 'ziyuanmeijie',
-			key: 'ziyuanmeijie',
+			dataIndex: 'ownerAdminName',
+			key: 'ownerAdminName',
 			align: 'center',
 			width: '20%',
 		},
@@ -159,8 +159,25 @@ export const getRateDetailCol = () => {
 			key: 'operate',
 			align: 'center',
 			width: '10%',
+			render: (_, record) => {
+				const { accountId, snsName } = record;
+				profitStrategyId, profitStrategyName
+				return type === 'detailPage' ? 
+					<Popconfirm
+						placement="topRight"
+						title={`确定要删除${profitStrategyId} ${profitStrategyName}下的${accountId} ${snsName}？`}
+						onConfirm={() => handleOperate('delAccount', record.accountId)}
+						okText="确定"
+						cancelText="取消"
+					>
+						<a>删除</a>
+					</Popconfirm>
+					:
+					<a onClick={() => handleOperate(record.accountId)}>删除</a>
+			}
 		}
-	]
+	];
+	return type !== 'addPage' ? allCol : allCol.filter(item => item.key !== 'operate');
 }
 
 /**

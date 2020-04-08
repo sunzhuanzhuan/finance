@@ -13,7 +13,11 @@ class rateDetailCommon extends React.Component {
 		this.state = {
 			loading: false,
 			selectedRowKeys: [],
-			selectedRows: []
+			selectedRows: [],
+			pageInfo: {
+				pageNum: 1,
+				pageSize: 20
+			}
 		}
 	}
 
@@ -24,6 +28,21 @@ class rateDetailCommon extends React.Component {
 				return {
 					selectedRowKeys: selectedRows.map(item => item.accountId),
 					selectedRows
+				}
+			}else {
+				return null
+			}
+		}else if(nextProps.type === 'detailPage') {
+			const { isDeleteAll, loading } = nextProps;
+			if(isDeleteAll && !shallowEqual(isDeleteAll, prevState.isDeleteAll)) {
+				return {
+					selectedRowKeys: [],
+					selectedRows: [],
+					isDeleteAll
+				}
+			}else if(!shallowEqual(loading, prevState.loading)) {
+				return {
+					loading
 				}
 			}else {
 				return null
@@ -66,18 +85,29 @@ class rateDetailCommon extends React.Component {
 		return isOk;
 	}
 
+	handleSearch = (type, pageInfo) => {
+		const { handleOperate, form } = this.props;
+		const searchVal = form.getFieldsValue();
+		const isValOk = this.validateFieldsVal(searchVal);
+		if(isValOk) {
+			handleOperate(type, {...searchVal, ...pageInfo});
+		}else {
+			this.getErrorTips('请输入搜索条件后查询')
+		}
+	}
+
 	onHandle = (type, data) => {
 		const { handleOperate, form } = this.props;
-		const { selectedRows } = this.state;
+		const { selectedRowKeys, selectedRows } = this.state;
 		switch (type) {
 			case 'search':
-				const searchVal = form.getFieldsValue();
-				const isValOk = this.validateFieldsVal(searchVal);
-				if(isValOk) {
-					handleOperate(type, searchVal);
-				}else {
-					this.getErrorTips('请输入搜索条件后查询')
-				}
+				const pageInfo = {pageNum: 1,pageSize: 20};
+				this.handleSearch(type, pageInfo);
+				this.setState({ 
+					pageInfo, 
+					selectedRowKeys: [],
+					selectedRows: [],
+				});
 				return;
 			case 'reset':
 				form.resetFields();
@@ -92,7 +122,13 @@ class rateDetailCommon extends React.Component {
 				handleOperate(type, selectedRows);
 				return;
 			case 'delAccount': 
-				
+				const selectedKeysDel = selectedRowKeys.filter(item => item !== data);
+				const selectedRowsDel = selectedRows.filter(item => item.accountId !== data);
+				this.setState({
+					selectedRowKeys: selectedKeysDel,
+					selectedRows: selectedRowsDel
+				})
+				handleOperate(type, selectedKeysDel);
 				return;
 			case 'delMulAccount':
 				handleOperate(type, selectedRows);
@@ -123,7 +159,7 @@ class rateDetailCommon extends React.Component {
 
 	render() {
 		const { form, type, profitStrategyId, profitStrategyName, unBindAccountListInfo = {}, profitStrategyAccountInfo = {} } = this.props;
-		const { selectedRowKeys } = this.state;
+		const { selectedRowKeys, pageInfo } = this.state;
 		const isDetail = type === 'detailPage';
 		// const rootData = isDetail ? profitStrategyAccountInfo : unBindAccountListInfo;
 		const rootData = {
@@ -176,7 +212,17 @@ class rateDetailCommon extends React.Component {
 			pageSize: parseInt(pageSize),
 			showQuickJumper: true,
 			showSizeChanger: true,
-			pageSizeOptions: ['20', '50', '100', '200']
+			pageSizeOptions: ['20', '50', '100', '200'],
+			onChange: pageNum => {
+				const curInfo = {...pageInfo, pageNum};
+				this.handleSearch('search', curInfo);
+				this.setState(curInfo);
+			},
+			onShowSizeChange: (_, pageSize) => {
+				const curInfo = {pageNum: 1, pageSize};
+				this.handleSearch('search', curInfo);
+				this.setState(curInfo);
+			},
 		};
 		const rowSelection = {
 			selectedRowKeys,
@@ -196,7 +242,7 @@ class rateDetailCommon extends React.Component {
 							className="site-page-header"
 							onBack={() => this.props.history.goBack()}
 							title="账号详情"
-							subTitle="This is a subtitle"
+							subTitle={`${profitStrategyId}${profitStrategyName}`}
 						/> : null
 				}
 				<Alert className='total-information' message={this.getTotalMsg(accountCount, mcnCount)} type="info" showIcon />

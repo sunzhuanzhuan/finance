@@ -2,8 +2,9 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as actions from "../actions";
-import { Table, Button } from 'antd'
-import './financeRateSetting.less'
+import { Table, Button, Modal } from 'antd';
+import './financeRateSetting.less';
+import qs from "qs";
 import { getRateSettingCol } from '../constants';
 import RateModal from './rateModal';
 
@@ -12,7 +13,34 @@ class FinanceRateSetting extends React.Component {
 		super();
 		this.state = {
 			loading: false,
-			modalType: null
+			modalType: null,
+			pageInfo: {
+				page: { currentPage: 1, pageSize: 20 }
+			}
+		}
+	}
+
+	handleDelInfo = (name, id, isDelete) => {
+		if(isDelete) {
+			Modal.confirm({
+				title: `该${name}下没有添加相关账号信息,确定删除${name}吗？`,
+				okText: '确认',
+				cancelText: '取消',
+				onOk: () => {
+					this.setState({loading: true});
+					this.props.delProfitStrategy({stragegyId: id}).then(() => {
+						const { pageInfo } = this.state;
+						this.handleJump(pageInfo);
+					}).finally(() => {
+						this.setState({loading: false});
+					});
+				}
+			});
+		}else {
+			Modal.warning({
+				title: `请先删除${name}下面添加的账号信息`,
+				okText: '确定'
+			});
 		}
 	}
 
@@ -26,10 +54,18 @@ class FinanceRateSetting extends React.Component {
 				})
 				return;
 			case 'delete': 
+				const { id, name } = item;
 
+				this.props.isProfitStrategyHasAccounts({stragegyId: id}).then(result => {
+					this.handleDelInfo(name, id, result.data);
+				})
+				
 				return;
 			case 'detail': 
-					this.props.history.push('/finance/financeRateSetting/detail');
+				this.props.history.push({
+					pathname: '/finance/financeRateSetting/detail',
+					search: '?' + qs.stringify({ id: item.id })
+				});
 				return;
 			case 'export': 
 
@@ -48,12 +84,12 @@ class FinanceRateSetting extends React.Component {
 			})
 	}
 
-	handleSaveOperation = (type, data) => {
-		const { addFinanceRate, editFinanceRate } = this.props;
-		const operationAction = type === 'add' ? addFinanceRate : editFinanceRate;
+	handleSaveOperation = data => {
+		const { saveFinanceRate } = this.props;
+		const { pageInfo } = this.state;
 		this.setState({operateLoading: true});
-		operationAction(data).then(() => {
-			this.handleJump({page: 1, page_size: 20});
+		saveFinanceRate(data).then(() => {
+			this.handleJump(pageInfo);
 			this.setState({operateLoading: false});
 		}).catch(() => {
 			this.setState({operateLoading: false});
@@ -63,28 +99,34 @@ class FinanceRateSetting extends React.Component {
 	handleJump = query => {
 		const { getFinanceRateList } = this.props;
 		this.setState({ loading: true });
-		getFinanceRateList(query).then(() => {
+		getFinanceRateList(query).finally(() => {
 			this.setState({loading: false});
-		}).catch(() => {
-			this.setState({loading: false});
-		});
+		})
 	}
 
 	render() {
-		const { rateListInfo: { total = 0, page = 1, page_size = 20, list = []} } = this.props;
+		const { rateListInfo: { total = 0, pageNum = 1, pageSize = 20, list = []} } = this.props;
 		const { loading, operateLoading, modalType, rateInitialVal } = this.state;
 		const pagination = {
 			total: parseInt(total),
-			current: parseInt(page),
-			pageSize: parseInt(page_size),
+			current: parseInt(pageNum),
+			pageSize: parseInt(pageSize),
 			showQuickJumper: true,
 			showSizeChanger: true,
 			pageSizeOptions: ['20', '50', '100', '200'],
-			onChange: current => {
-				this.handleJump({ page: current, page_size });
+			onChange: currentPage => {
+				const current = {
+					page: { currentPage, pageSize }
+				}
+				this.handleJump(current);
+				this.setState({pageInfo: current});
 			},
 			onShowSizeChange: (_, pageSize) => {
-				this.handleJump({ page, page_size: pageSize });
+				const current = {
+					page: { currentPage: 1, pageSize }
+				}
+				this.handleJump(current);
+				this.setState({pageInfo: current});
 			},
 		};
 
@@ -93,7 +135,7 @@ class FinanceRateSetting extends React.Component {
 				<h3>账号特殊利润率设置</h3>
 				<Button type='primary' className='rate-add-btn' onClick={() => this.handleOperate('add')}>新增策略</Button>
 				<Table 
-					rowKey='profitStrategyId' 
+					rowKey='id' 
 					columns={getRateSettingCol(this.handleOperate)} 
 					dataSource={list} 
 					bordered 
@@ -107,7 +149,6 @@ class FinanceRateSetting extends React.Component {
 					onCancel={this.handleCloseModal}
 					handleSaveOperation={this.handleSaveOperation}
 				/>
-				
 			</div>
 		)
 	}
@@ -120,7 +161,7 @@ const mapStateToProps = (state) => {
 		// rateListInfo,
 		rateListInfo: {
 			total: 20, 
-			page: 1, page_size: 20, 
+			pageNum: 1, pageSize: 20, 
 			list: [
 				{
 					id: 1234,

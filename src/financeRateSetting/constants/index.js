@@ -1,12 +1,6 @@
 import React from 'react';
-import { Popconfirm, Modal } from 'antd';
+import { Popconfirm } from 'antd';
 
-function handleDelInfo(name) {
-	Modal.warning({
-		title: `请先删除${name}下面添加的账号信息`,
-		okText: '确定'
-	});
-}
 export const getDealRateData = (data, type) => {
 	let floatVal = parseFloat(data);
 	if (isNaN(floatVal))
@@ -79,22 +73,10 @@ export const getRateSettingCol = (handleOperate) => {
 			width: '27%',
 			render: (_, record) => {
 				const { name } = record;
-				const isDelete = record.name;
 				return [
 					<a key='edit' onClick={() => handleOperate('edit', record)}>修改</a>,
-					isDelete ? 
-						<Popconfirm
-							key='delete'
-							title={`该${name}下没有添加相关账号信息 ,确定删除${name}吗？`}
-							onConfirm={() => handleOperate('delete')}
-							okText="确定"
-							cancelText="取消"
-						>
-							<a key='delete'>删除</a>
-						</Popconfirm>
-						: 
-						<a key='delete' onClick={() => handleDelInfo(name)}>删除</a>,
-					<a key='detail' onClick={() => handleOperate('detail')}>查看账号</a>,
+					<a key='delete' onClick={() => handleOperate('delete', record)}>删除</a>,
+					<a key='detail' onClick={() => handleOperate('detail', record)}>查看账号</a>,
 					<a key='export' onClick={() => handleOperate('export')}>导出账号</a>,
 					<Popconfirm
 						key='clear'
@@ -161,7 +143,6 @@ export const getRateDetailCol = (type, handleOperate, profitStrategyId, profitSt
 			width: '10%',
 			render: (_, record) => {
 				const { accountId, snsName } = record;
-				profitStrategyId, profitStrategyName
 				return type === 'detailPage' ? 
 					<Popconfirm
 						placement="topRight"

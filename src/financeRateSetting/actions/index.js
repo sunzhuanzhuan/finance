@@ -11,17 +11,25 @@ export const {
 
 //添加策略
 export const {
-	addFinanceRate,
-	addFinanceRate_success
-} = createHttpAction('addFinanceRate', Interface.addFinanceRate, {
+	saveFinanceRate,
+	saveFinanceRate_success
+} = createHttpAction('saveFinanceRate', Interface.saveFinanceRate, {
 	method: 'post'
 });
 
-//修改策略
+//是否可删除策略（策略下是否有账号）
 export const {
-	editFinanceRate,
-	editFinanceRate_success
-} = createHttpAction('editFinanceRate', Interface.editFinanceRate, {
+	isProfitStrategyHasAccounts,
+	isProfitStrategyHasAccounts_success
+} = createHttpAction('isProfitStrategyHasAccounts', Interface.isProfitStrategyHasAccounts, {
+	method: 'post'
+});
+
+//删除策略
+export const {
+	delProfitStrategy,
+	delProfitStrategy_success
+} = createHttpAction('delProfitStrategy', Interface.delProfitStrategy, {
 	method: 'post'
 });
 
@@ -29,7 +37,7 @@ export const {
 export const {
 	getProfitStrategyAccountList,
 	getProfitStrategyAccountList_success
-} = createHttpAction('getProfitStrategyAccountList', Interface.getProfitStrategyAccountList_success, {
+} = createHttpAction('getProfitStrategyAccountList', Interface.getProfitStrategyAccountList, {
 	method: 'post'
 });
 
@@ -54,5 +62,13 @@ export const {
 	getMainAccountListInfo,
 	getMainAccountListInfo_success
 } = createHttpAction('getMainAccountListInfo', Interface.getMainAccountListInfo, {
+	method: 'post'
+});
+
+//删除策略下账号
+export const {
+	deleteProfitStrategyAccount,
+	deleteProfitStrategyAccount_success
+} = createHttpAction('deleteProfitStrategyAccount', Interface.deleteProfitStrategyAccount, {
 	method: 'post'
 });

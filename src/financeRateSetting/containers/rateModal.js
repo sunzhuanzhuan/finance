@@ -251,14 +251,14 @@ class RateModal extends React.Component {
 		return `${leftItem.leftSign}${Number(min)}-${Number(max)}${rightItem.rightSign}`
 	}
 
-	handleSaveRateValues = type => {
+	handleSaveRateValues = () => {
 		const { handleSaveOperation } = this.props;
 		const validateResult = this.validateFieldsValues();
 		if(validateResult.error) {
 			this.getErrorTips(validateResult.error);
 			return;
 		}
-		handleSaveOperation(type, validateResult.fieldsValus);
+		handleSaveOperation(validateResult.fieldsValus);
 	}
 
 	render() {
@@ -271,7 +271,7 @@ class RateModal extends React.Component {
 				destroyOnClose={true}
 				title={this.getModalTitle(type)}
 				onCancel={onCancel}
-				onOk={() => this.handleSaveRateValues(type)}
+				onOk={this.handleSaveRateValues}
 				wrapClassName='reate-setting-modal'
 				okButtonProps={{disabled: loading}}
 				cancelButtonProps={{disabled: loading}}

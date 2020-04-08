@@ -13,10 +13,11 @@ class rateDetailModal extends React.Component {
 	}
 
 	getModalTitle = () => {
+		const { profitStrategyId, profitStrategyName } = this.props;
 		return (
 			<div>
 				<span>添加账号</span>
-				<span className='modal-sub-title'>001策略a</span>
+				<span className='modal-sub-title'>{`${profitStrategyId}${profitStrategyName}`}</span>
 			</div>
 		)
 	}

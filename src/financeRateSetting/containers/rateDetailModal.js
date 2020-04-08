@@ -26,6 +26,21 @@ class rateDetailModal extends React.Component {
 
 	}
 
+	handleExportExcel = () => {
+
+	}
+
+	getAddWarnComp = () => {
+		Modal.warning({
+			className: 'add-warn-comp',
+			title: <div>
+				<span>当前查询的账号信息有存在别的策略的账号，此列表不做此相关账号信息展示，查看详情请</span>
+				<a onClick={this.handleExportExcel}>下载</a>
+			</div>,
+			okText: '确定'
+		});
+	}
+
 	handleOperate = (type, value) => {
 		switch(type) {
 			case 'showSelected':
@@ -36,7 +51,8 @@ class rateDetailModal extends React.Component {
 				return;
 			case 'search': 
 				const { profitStrategyId } = this.props;
-				const searchVal = {...value, profitStrategyId}
+				const searchVal = {...value, profitStrategyId};
+				// this.getAddWarnComp();
 				this.props.getAccountListToBind(searchVal);
 				return;
 			case 'delAccount':

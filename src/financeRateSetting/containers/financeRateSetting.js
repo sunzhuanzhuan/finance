@@ -55,7 +55,6 @@ class FinanceRateSetting extends React.Component {
 				return;
 			case 'delete': 
 				const { id, name } = item;
-
 				this.props.isProfitStrategyHasAccounts({stragegyId: id}).then(result => {
 					this.handleDelInfo(name, id, result.data);
 				})

@@ -23,7 +23,20 @@ class rateDetailModal extends React.Component {
 	}
 
 	handleSaveRateAccount = ()=> {
-
+		const { selectedRows } = this.state;
+		const { profitStrategyId, onCancel, refreshPage } = this.props;
+		
+		if(Array.isArray(selectedRows) && selectedRows.length) {
+			const submitObj = {
+				profitStrategyId,
+				accountIds: selectedRows.map(item => item.accountId)
+			}
+			this.props.bindProfitStrategyAccount(submitObj).then(() => {
+				this.setState({selectedRows: []});
+				refreshPage()
+				onCancel();
+			})
+		}
 	}
 
 	handleExportExcel = () => {
@@ -43,10 +56,12 @@ class rateDetailModal extends React.Component {
 
 	handleOperate = (type, value) => {
 		switch(type) {
+			case 'selectedChange':
+				this.setState({selectedRows: value});
+			return;
 			case 'showSelected':
 				this.setState({
 					selectedVisible: true,
-					selectedRows: value
 				});
 				return;
 			case 'search': 
@@ -55,8 +70,6 @@ class rateDetailModal extends React.Component {
 				// this.getAddWarnComp();
 				this.props.getAccountListToBind(searchVal);
 				return;
-			case 'delAccount':
-				return;
 			default:
 				return;
 		}
@@ -64,8 +77,7 @@ class rateDetailModal extends React.Component {
 
 	handleCloseSelectedModal = () => {
 		this.setState({
-			selectedVisible: false,
-			selectedRows: undefined
+			selectedVisible: false
 		})
 	}
 

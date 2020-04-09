@@ -7,6 +7,7 @@ import './financeRateSetting.less';
 import qs from "qs";
 import { getRateSettingCol } from '../constants';
 import RateModal from './rateModal';
+import { downloadByATag } from '@/util';
 
 class FinanceRateSetting extends React.Component {
 	constructor() {
@@ -45,6 +46,7 @@ class FinanceRateSetting extends React.Component {
 	}
 
 	handleOperate = (type, item) => {
+		const { id, name } = item;
 		switch (type) {
 			case 'add': 
 			case 'edit': 
@@ -54,22 +56,28 @@ class FinanceRateSetting extends React.Component {
 				})
 				return;
 			case 'delete': 
-				const { id, name } = item;
 				this.props.isProfitStrategyHasAccounts({stragegyId: id}).then(result => {
 					this.handleDelInfo(name, id, result.data);
 				})
-				
 				return;
 			case 'detail': 
 				this.props.history.push({
 					pathname: '/finance/financeRateSetting/detail',
-					search: '?' + qs.stringify({ id: item.id })
+					search: '?' + qs.stringify({ id })
 				});
 				return;
 			case 'export': 
-
+				const exportQuery = {
+					profitStrategyId: id,
+					profitStrategyName: name
+				};
+				downloadByATag(`/api/operator-gateway/profit/v1/exportByStrategyId?${qs.stringify(exportQuery)}`);
 				return;
 			case 'clear': 
+				this.setState({loading: true});
+				this.props.clearProfitStrategyAccount({profitStrategyId: id}).finally(() => {
+					this.setState({loading: false});
+				});
 				return;
 			default: return;
 		}
@@ -132,7 +140,7 @@ class FinanceRateSetting extends React.Component {
 		return (
 			<div className='finance-rate-wrapper'>
 				<h3>账号特殊利润率设置</h3>
-				<Button type='primary' className='rate-add-btn' onClick={() => this.handleOperate('add')}>新增策略</Button>
+				<Button type='primary' className='rate-add-btn' onClick={() => this.handleOperate('add', {})}>新增策略</Button>
 				<Table 
 					rowKey='id' 
 					columns={getRateSettingCol(this.handleOperate)} 
@@ -192,7 +200,24 @@ const mapStateToProps = (state) => {
 							privateProfit: 0.09, publicProfit: 0.09
 						}
 					],
-					celuebeizhu: '策略备注'
+					remark: '策略备注'
+				},
+				{
+					id: 12345,
+					name: '策略名称2',
+					detailVOList: [
+						{
+							minInclude: 1, min: 0, 
+							maxInclude: 1, max: 10, 
+							privateProfit: 0.09, publicProfit: 0.09
+						},
+						{
+							minInclude: 1, min: 10, 
+							maxInclude: 1, max: 100, 
+							privateProfit: 0.09, publicProfit: 0.08
+						},
+					],
+					remark: '策略备注2'
 				}
 			]
 		},

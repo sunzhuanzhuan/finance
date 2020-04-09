@@ -24,9 +24,9 @@ const getRateRangeComp = (rateArr) => {
 			return (
 				<div className='rate-range-text' key={index}>
 					<span className='range-val'>{`${leftItem.leftSign}${Number(min)}，${Number(max)}${rightItem.rightSign}`}</span>
-					{yinVal !== undefined ? <span>{`阴价利润率 ${yinVal}%`}</span> : null}
+					{yinVal !== undefined ? <span>{`利润率 ${yinVal}%`}</span> : null}
 					{yinVal !== undefined && yangVal !== undefined ? <span>，</span> : null}
-					{yangVal !== undefined ? <span>{`阳价利润率 ${yangVal}%`}</span> : null}
+					{yangVal !== undefined ? <span>{`三方平台利润率 ${yangVal}%`}</span> : null}
 				</div>
 			)
 		})
@@ -59,15 +59,15 @@ export const getRateSettingCol = (handleOperate) => {
 		},
 		{
 			title: '备注',
-			dataIndex: 'celuebeizhu',
-			key: 'celuebeizhu',
+			dataIndex: 'remark',
+			key: 'remark',
 			align: 'center',
 			width: '13%',
 		},
 		{
 			title: '操作',
-			dataIndex: 'caozuo',
-			key: 'caozuo',
+			dataIndex: 'operate',
+			key: 'operate',
 			align: 'center',
 			className: 'operate-col',
 			width: '27%',
@@ -77,11 +77,11 @@ export const getRateSettingCol = (handleOperate) => {
 					<a key='edit' onClick={() => handleOperate('edit', record)}>修改</a>,
 					<a key='delete' onClick={() => handleOperate('delete', record)}>删除</a>,
 					<a key='detail' onClick={() => handleOperate('detail', record)}>查看账号</a>,
-					<a key='export' onClick={() => handleOperate('export')}>导出账号</a>,
+					<a key='export' onClick={() => handleOperate('export', record)}>导出账号</a>,
 					<Popconfirm
 						key='clear'
 						title="清空当前策略下的全部账号信息？"
-						onConfirm={() => handleOperate('clear')}
+						onConfirm={() => handleOperate('clear', record)}
 						okText="确定"
 						cancelText="取消"
 					>
@@ -143,11 +143,12 @@ export const getRateDetailCol = (type, handleOperate, profitStrategyId, profitSt
 			width: '10%',
 			render: (_, record) => {
 				const { accountId, snsName } = record;
+				const profitInfo = profitStrategyId && profitStrategyName ? `${profitStrategyId} ${profitStrategyName}` : '该策略';
 				return type === 'detailPage' ? 
 					<Popconfirm
 						placement="topRight"
-						title={`确定要删除${profitStrategyId} ${profitStrategyName}下的${accountId} ${snsName}？`}
-						onConfirm={() => handleOperate('delAccount', record.accountId)}
+						title={`确定要删除${profitInfo}下的${accountId} ${snsName}？`}
+						onConfirm={() => handleOperate('delAccount', accountId)}
 						okText="确定"
 						cancelText="取消"
 					>

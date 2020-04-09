@@ -35,7 +35,8 @@ class FinanceRateDetail extends React.Component {
 		});
 	}
 
-	handleOperate = (type, value) => {
+	handleOperate = (type, baseVal) => {
+		const { selectedRows = [] } = this.state;
 		switch (type) {
 			case 'addAccount':
 				this.setState({
@@ -43,24 +44,33 @@ class FinanceRateDetail extends React.Component {
 				});
 				return;
 			case 'search': 
-				this.handleSearch(value);
-				this.setState({searchQuery: value});
+				this.handleSearch(baseVal);
+				this.setState({searchQuery: baseVal});
+				return;
+			case 'selectedChange':
+				this.setState({selectedRows: baseVal});
 				return;
 			case 'delMulAccount':
-				if(Array.isArray(value) && value.length)
+				if(Array.isArray(selectedRows) && selectedRows.length)
 					this.setState({
 						deleteMulVisible: true,
-						isDeleteAll: false,
-						selectedRows: value
 					})
 				return;
 			case 'delAccount': 
+				const { profitStrategyId } = this.props;
+				const { searchQuery } = this.state;
+				const delObj = {
+					profitStrategyId,
+					accountIds: [baseVal]
+				};
 				this.setState({loading: true});
-				this.props.deleteProfitStrategyAccount().then(() => {
-					this.handleSearch(value);
+				this.props.deleteProfitStrategyAccount(delObj).then(() => {
+					const deledSelectedRows = selectedRows.filter(item => item.accountId !== baseVal);
+					this.setState({selectedRows: deledSelectedRows});
+					this.handleSearch(searchQuery);
 				}).finally(() => {
 					this.setState({loading: false});
-				})
+				});
 				return;
 			default:
 				return;
@@ -74,9 +84,20 @@ class FinanceRateDetail extends React.Component {
 	}
 	
 	handleMulDelAccount = () => {
-		const { selectedRows = [] } = this.state; 
-		this.setState({selectedRows: [], isDeleteAll: true});
-		this.handleCancelModal('deleteMulVisible');
+		const { selectedRows = [], searchQuery } = this.state; 
+		const { profitStrategyId } = this.props;
+		const delObj = {
+			profitStrategyId,
+			accountIds: selectedRows.map(item => item.accountId)
+		};
+		this.setState({loading: true});
+		this.props.deleteProfitStrategyAccount(delObj).then(() => {
+			this.setState({selectedRows: []});
+			this.handleSearch(searchQuery);
+			this.handleCancelModal('deleteMulVisible');
+		}).finally(() => {
+			this.setState({loading: false});
+		});
 	}
 
 	getAccountListInfo = () => {
@@ -86,31 +107,25 @@ class FinanceRateDetail extends React.Component {
 		return selectedRows.length > 2 ? `${showText.join('，')}，...等${selectedRows.length}个账号吗？` : `${showText.join('，')}吗？`;
 	}
 
-	getDelMulComp = () => {
-		const profitStrategyId = '策略id';
-		const profitStrategyName = '策略名称';
+	getDelMulComp = (profitStrategyId = '', profitStrategyName = '') => {
+		const profitInfo = profitStrategyId && profitStrategyName ? `${profitStrategyId} ${profitStrategyName}` : '该策略';
 		return (
 			<div>
-				<span>{`确定删除${profitStrategyId} ${profitStrategyName}下的`}</span>
+				<span>{`确定删除${profitInfo}下的`}</span>
 				<span>{this.getAccountListInfo()}</span>
 			</div>
 		)
 	}
 
+	refreshPage = () => {
+		const { searchQuery } = this.props;
+		this.handleSearch(searchQuery);
+	}
+
 
 	render() {
-		// const { profitStrategyAccountInfo = {} } = this.props;
-		const profitStrategyAccountInfo = {
-			aggregation: {
-				accountCount: 10,
-				mcnCount: 20,
-				profitStrategyId: 1233333,
-				profitStrategyName: '策略名称'
-			}
-		}
-		const { aggregation = {} } = profitStrategyAccountInfo;
-		const { profitStrategyId, profitStrategyName } = aggregation;
-		const { loading, visible, deleteMulVisible, selectedRows, isDeleteAll } = this.state;
+		const { profitStrategyId = '', profitStrategyName = '' } = this.props;
+		const { loading, visible, deleteMulVisible, selectedRows } = this.state;
 
 		return (
 			<div>
@@ -118,7 +133,6 @@ class FinanceRateDetail extends React.Component {
 					{...this.props}
 					loading={loading}
 					type='detailPage'
-					isDeleteAll={isDeleteAll}
 					selectedRows={selectedRows}
 					profitStrategyId={profitStrategyId}
 					profitStrategyName={profitStrategyName}
@@ -130,6 +144,7 @@ class FinanceRateDetail extends React.Component {
 					profitStrategyId={profitStrategyId}
 					profitStrategyName={profitStrategyName}
 					onCancel={() => this.handleCancelModal('visible')}
+					refreshPage={this.refreshPage}
 				/>
 				<Modal
 					maskClosable={false}
@@ -141,7 +156,7 @@ class FinanceRateDetail extends React.Component {
 					wrapClassName='rate-selected-modal'
 				>
 					{
-						this.getDelMulComp()
+						this.getDelMulComp(profitStrategyId, profitStrategyName)
 					}
 				</Modal>
 			</div>
@@ -152,9 +167,19 @@ class FinanceRateDetail extends React.Component {
 
 const mapStateToProps = (state) => {
 	const { financeParamsReducer } = state;
-	const { profitStrategyAccountInfo } = financeParamsReducer;
+	// const { profitStrategyAccountInfo = {} } = financeParamsReducer;
+	const profitStrategyAccountInfo = {
+		aggregation: {
+			accountCount: 10,
+			mcnCount: 20,
+			profitStrategyId: 1233333,
+			profitStrategyName: '策略名称'
+		}
+	};
+	const { profitStrategyId, profitStrategyName } = profitStrategyAccountInfo;
 	return {
-		profitStrategyAccountInfo
+		// profitStrategyAccountInfo,
+		profitStrategyId, profitStrategyName
 	}
 }
 const mapDispatchToProps = dispatch => (bindActionCreators({ ...actions }, dispatch));

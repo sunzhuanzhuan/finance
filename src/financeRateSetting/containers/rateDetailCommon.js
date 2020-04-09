@@ -22,30 +22,15 @@ class rateDetailCommon extends React.Component {
 	}
 
 	static getDerivedStateFromProps(nextProps, prevState) {
-		if(nextProps.type === 'addPage') {
-			const { selectedRows } = nextProps;
-			if(Array.isArray(selectedRows) && !shallowEqual(selectedRows, prevState.selectedRows)) {
-				return {
-					selectedRowKeys: selectedRows.map(item => item.accountId),
-					selectedRows
-				}
-			}else {
-				return null
+		const { selectedRows, loading } = nextProps;
+		if(Array.isArray(selectedRows) && !shallowEqual(selectedRows, prevState.selectedRows)) {
+			return {
+				selectedRowKeys: selectedRows.map(item => item.accountId),
+				selectedRows
 			}
-		}else if(nextProps.type === 'detailPage') {
-			const { isDeleteAll, loading } = nextProps;
-			if(isDeleteAll && !shallowEqual(isDeleteAll, prevState.isDeleteAll)) {
-				return {
-					selectedRowKeys: [],
-					selectedRows: [],
-					isDeleteAll
-				}
-			}else if(!shallowEqual(loading, prevState.loading)) {
-				return {
-					loading
-				}
-			}else {
-				return null
+		}else if(!shallowEqual(loading, prevState.loading)) {
+			return {
+				loading
 			}
 		}else {
 			return null
@@ -90,6 +75,11 @@ class rateDetailCommon extends React.Component {
 		const searchVal = form.getFieldsValue();
 		const isValOk = this.validateFieldsVal(searchVal);
 		if(isValOk) {
+			this.setState({ 
+				pageInfo, 
+				selectedRowKeys: [],
+				selectedRows: [],
+			});
 			handleOperate(type, {...searchVal, ...pageInfo});
 		}else {
 			this.getErrorTips('请输入搜索条件后查询')
@@ -98,40 +88,32 @@ class rateDetailCommon extends React.Component {
 
 	onHandle = (type, data) => {
 		const { handleOperate, form } = this.props;
-		const { selectedRowKeys, selectedRows } = this.state;
 		switch (type) {
 			case 'search':
 				const pageInfo = {pageNum: 1,pageSize: 20};
 				this.handleSearch(type, pageInfo);
-				this.setState({ 
-					pageInfo, 
-					selectedRowKeys: [],
-					selectedRows: [],
-				});
 				return;
 			case 'reset':
 				form.resetFields();
+				return;
+			case 'selectedChange':
+				handleOperate(type, data);
 				return;
 			case 'clearSelected':
 				this.setState({
 					selectedRowKeys: [],
 					selectedRows: []
-				})
+				});
+				handleOperate('selectedChange', []);
 				return ;
 			case 'showSelected':
-				handleOperate(type, selectedRows);
+				handleOperate(type);
 				return;
 			case 'delAccount': 
-				const selectedKeysDel = selectedRowKeys.filter(item => item !== data);
-				const selectedRowsDel = selectedRows.filter(item => item.accountId !== data);
-				this.setState({
-					selectedRowKeys: selectedKeysDel,
-					selectedRows: selectedRowsDel
-				})
-				handleOperate(type, selectedKeysDel);
+				handleOperate(type, data);
 				return;
 			case 'delMulAccount':
-				handleOperate(type, selectedRows);
+				handleOperate(type);
 				return;
 			case 'addAccount':
 				handleOperate(type);
@@ -230,7 +212,8 @@ class rateDetailCommon extends React.Component {
 				this.setState({
 					selectedRowKeys,
 					selectedRows
-				})
+				});
+				this.onHandle('selectedChange', selectedRows)
 			},
 		};
 

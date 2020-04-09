@@ -9,7 +9,7 @@ export const {
 	method: 'get'
 });
 
-//添加策略
+//添加/编辑策略
 export const {
 	saveFinanceRate,
 	saveFinanceRate_success
@@ -65,10 +65,26 @@ export const {
 	method: 'post'
 });
 
+//策略下绑定账号
+export const {
+	bindProfitStrategyAccount,
+	bindProfitStrategyAccount_success
+} = createHttpAction('bindProfitStrategyAccount', Interface.bindProfitStrategyAccount, {
+	method: 'post'
+});
+
 //删除策略下账号
 export const {
 	deleteProfitStrategyAccount,
 	deleteProfitStrategyAccount_success
 } = createHttpAction('deleteProfitStrategyAccount', Interface.deleteProfitStrategyAccount, {
+	method: 'post'
+});
+
+//清空策略下账号
+export const {
+	clearProfitStrategyAccount,
+	clearProfitStrategyAccount_success
+} = createHttpAction('clearProfitStrategyAccount', Interface.clearProfitStrategyAccount, {
 	method: 'post'
 });

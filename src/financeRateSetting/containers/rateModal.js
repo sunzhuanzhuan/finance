@@ -105,13 +105,13 @@ class RateModal extends React.Component {
 						className='rate-ipt' value={max} 
 						onChange={(value) => this.handleChangeRateRangeVal(value, 'max', index)} 
 					/>
-					<span>则阴价利润率为</span>
+					<span>则利润率为</span>
 					<InputNumber 
 						precision={2} placeholder='输入数值' 
 						className='rate-ipt' value={getDealRateData(privateProfit, 'mul')} 
 						onChange={(value) => this.handleChangeRateRangeVal(value, 'privateProfit', index)} 
 					/>
-					<span>%，阳价利润率为</span>
+					<span>%，三方平台利润率为</span>
 					<InputNumber 
 						precision={2} placeholder='输入数值' 
 						className='rate-ipt' value={getDealRateData(publicProfit, 'mul')} 
@@ -146,7 +146,7 @@ class RateModal extends React.Component {
 						</div>
 					</FormItem>
 					<FormItem label='备注'>
-						{getFieldDecorator('celuebeizhu')(
+						{getFieldDecorator('remark')(
 							<TextArea
 								className='rate-remark-ipt'
 								placeholder="请输入至少五个字符"
@@ -193,7 +193,7 @@ class RateModal extends React.Component {
 			error: '',
 			fieldsValus
 		}
-		const { name, celuebeizhu } = fieldsValus;
+		const { name, remark } = fieldsValus;
 		const firstRateItem = detailVOList[0];
 		const lastRateItem = detailVOList[detailVOList.length - 1];
 		if(!name || (name && !(name.trim()))) {
@@ -229,7 +229,7 @@ class RateModal extends React.Component {
 
 			if(!privateProfit && !publicProfit) {
 				const rangeText = this.getRangeText(minInclude, min, maxInclude, max);
-				validateResult.error = `阴价利润率，阳价利润率不能同时为空，请输入区间${rangeText}利润率`;
+				validateResult.error = `利润率，三方平台利润率不能同时为空，请输入区间${rangeText}利润率`;
 				isContinue = false;
 			}
 
@@ -238,7 +238,7 @@ class RateModal extends React.Component {
 		if(validateResult.error)
 			return validateResult
 
-		if(celuebeizhu && celuebeizhu.length > 255) {
+		if(remark && remark.length > 255) {
 			validateResult.error = '备注最多不超过255个字符';
 		}
 

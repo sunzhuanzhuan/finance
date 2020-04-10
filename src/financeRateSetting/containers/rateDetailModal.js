@@ -2,6 +2,8 @@ import React from 'react';
 import { Modal, Form, Table, Button } from 'antd';
 import RateDetailCommon from './rateDetailCommon';
 import { getRateDetailCol } from '../constants';
+import apiDownload from '@/api/apiDownload';
+import Interface from '../constants/Interface';
 
 class rateDetailModal extends React.Component {
 	constructor() {
@@ -44,11 +46,11 @@ class rateDetailModal extends React.Component {
 		const exportQuery = {...this.state.searchVal};
 		delete exportQuery.pageNum;
 		delete exportQuery.pageSize;
-		// apiDownload({
-		// 	url: Interface.exportBindedAccountList,
-		// 	method: 'POST',
-		// 	data: exportQuery,
-		// }, '账号详情信息.xlsx')
+		apiDownload({
+			url: Interface.exportBindedAccountList,
+			method: 'POST',
+			data: exportQuery,
+		}, '账号详情信息.xlsx')
 	}
 
 	getAddWarnComp = () => {
@@ -75,7 +77,6 @@ class rateDetailModal extends React.Component {
 			case 'search': 
 				const { profitStrategyId } = this.props;
 				const searchVal = {...value, profitStrategyId};
-				this.getAddWarnComp();
 				this.setState({loading: true, searchVal});
 				this.props.getAccountListToBind(searchVal).then((result = {}) => {
 					const { data = {} } = result;

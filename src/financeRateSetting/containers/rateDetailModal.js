@@ -8,7 +8,8 @@ class rateDetailModal extends React.Component {
 		super();
 		this.state = {
 			selectedVisible: false,
-			selectedRows: undefined
+			selectedRows: undefined,
+			loading: false
 		}
 	}
 
@@ -40,7 +41,14 @@ class rateDetailModal extends React.Component {
 	}
 
 	handleExportExcel = () => {
-
+		const exportQuery = {...this.state.searchVal};
+		delete exportQuery.pageNum;
+		delete exportQuery.pageSize;
+		// apiDownload({
+		// 	url: Interface.exportBindedAccountList,
+		// 	method: 'POST',
+		// 	data: exportQuery,
+		// }, '账号详情信息.xlsx')
 	}
 
 	getAddWarnComp = () => {
@@ -67,8 +75,17 @@ class rateDetailModal extends React.Component {
 			case 'search': 
 				const { profitStrategyId } = this.props;
 				const searchVal = {...value, profitStrategyId};
-				// this.getAddWarnComp();
-				this.props.getAccountListToBind(searchVal);
+				this.getAddWarnComp();
+				this.setState({loading: true, searchVal});
+				this.props.getAccountListToBind(searchVal).then((result = {}) => {
+					const { data = {} } = result;
+					const { isExist } = data;
+					if(isExist == 2) {
+						this.getAddWarnComp();
+					}
+				}).finally(() => {
+					this.setState({loading: false})
+				});
 				return;
 			default:
 				return;

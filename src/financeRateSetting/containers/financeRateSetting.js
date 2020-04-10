@@ -93,9 +93,10 @@ class FinanceRateSetting extends React.Component {
 
 	handleSaveOperation = data => {
 		const { saveFinanceRate } = this.props;
-		const { pageInfo } = this.state;
+		const { pageInfo, rateInitialVal = {} } = this.state;
+		const { id } = rateInitialVal;
 		this.setState({operateLoading: true});
-		saveFinanceRate(data).then(() => {
+		saveFinanceRate({...data, id}).then(() => {
 			this.handleJump(pageInfo);
 			this.setState({operateLoading: false});
 		}).catch(() => {

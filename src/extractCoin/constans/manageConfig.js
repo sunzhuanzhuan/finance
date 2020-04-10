@@ -222,7 +222,7 @@ export const applyDetailConfigMap = {
 		width: 100
 	},
 	'payment_deduction_amount': {
-		title: '支付方式变更调整',
+		title: '支付方式变更扣款',
 		dataIndex: 'payment_deduction_amount',
 		key: 'payment_deduction_amount',
 		align: 'center',
@@ -324,7 +324,7 @@ export const extractDetailFunc = (order_status) => {
 			align: 'center',
 		},
 		{
-			title: '支付方式变更调整',
+			title: '支付方式变更扣款',
 			dataIndex: 'payment_deduction_amount',
 			key: 'payment_deduction_amount',
 			width: 100,
@@ -444,7 +444,7 @@ export const extractNoDetailFunc = (order_status) => {
 			align: 'center',
 		},
 		{
-			title: '支付方式变更调整',
+			title: '支付方式变更扣款',
 			dataIndex: 'payment_deduction_amount',
 			key: 'payment_deduction_amount',
 			width: 100,
@@ -977,6 +977,13 @@ export const remitDetailOrderConfig = [
 		key: 'qc_write_off',
 		align: 'center',
 		width: 100,
+	},
+	{
+		title: '支付方式变更扣款',
+		dataIndex: 'payment_deduction_amount',
+		key: 'payment_deduction_amount',
+		align: 'center',
+		width: 120,
 	},
 	{
 		title: '利息',

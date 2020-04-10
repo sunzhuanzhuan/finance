@@ -280,7 +280,7 @@ class Detail extends Component {
 					<span className='displayInline'>￥{detail.account?detail.account.before_payment_add_amount:''}</span>
 				</div>
 				<div className='pad20'>
-					<span className='displayInline'>支付方式变更调整</span>
+					<span className='displayInline'>支付方式变更扣款</span>
 					<span className='displayInline'>￥{detail.account?detail.account.payment_deduction_amount:''}</span>
 				</div>
 				

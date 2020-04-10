@@ -484,7 +484,7 @@ function ExtractList({ applyDetail }) {
 				质检总额:{applyDetail.qc_write_off}
 			</Col>
 			<Col span={4}>
-				支付方式变更调整:{applyDetail.payment_deduction_amount}
+				支付方式变更扣款:{applyDetail.payment_deduction_amount}
 			</Col>
 			<Col span={4}>
 				{applyDetail.status === 3 || applyDetail.status === 2 ? '利息总额:' : '预计利息总额:'}{applyDetail.service_amount}

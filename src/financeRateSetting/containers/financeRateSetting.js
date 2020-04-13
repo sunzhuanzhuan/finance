@@ -21,6 +21,10 @@ class FinanceRateSetting extends React.Component {
 		}
 	}
 
+	componentDidMount() {
+		this.handleJump(this.state.pageInfo);
+	}
+
 	handleDelInfo = (name, id, isDelete) => {
 		if(isDelete) {
 			Modal.confirm({
@@ -99,6 +103,7 @@ class FinanceRateSetting extends React.Component {
 		saveFinanceRate({...data, id}).then(() => {
 			this.handleJump(pageInfo);
 			this.setState({operateLoading: false});
+			this.handleCloseModal();
 		}).catch(() => {
 			this.setState({operateLoading: false});
 		})

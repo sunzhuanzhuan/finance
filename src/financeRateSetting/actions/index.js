@@ -6,7 +6,7 @@ export const {
 	getFinanceRateList,
 	getFinanceRateList_success
 } = createHttpAction('getFinanceRateList', Interface.getFinanceRateList, {
-	method: 'get'
+	method: 'post'
 });
 
 //添加/编辑策略
@@ -38,7 +38,7 @@ export const {
 	getProfitStrategyAccountList,
 	getProfitStrategyAccountList_success
 } = createHttpAction('getProfitStrategyAccountList', Interface.getProfitStrategyAccountList, {
-	method: 'post'
+	method: 'get'
 });
 
 //获取添加账号页面列表 
@@ -54,7 +54,7 @@ export const {
 	getAccountListInfo,
 	getAccountListInfo_success
 } = createHttpAction('getAccountListInfo', Interface.getAccountListInfo, {
-	method: 'post'
+	method: 'get'
 });
 
 //主账号名称查询接口
@@ -62,7 +62,7 @@ export const {
 	getMainAccountListInfo,
 	getMainAccountListInfo_success
 } = createHttpAction('getMainAccountListInfo', Interface.getMainAccountListInfo, {
-	method: 'post'
+	method: 'get'
 });
 
 //策略下绑定账号

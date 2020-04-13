@@ -8,9 +8,9 @@ import {
 
 export const rateListInfo = handleActions({
 	[getFinanceRateList_success]: (_, action) => {
-		return [...action.payload.data]
+		return {...action.payload.data}
 	}
-}, [])
+}, {})
 
 export const unBindAccountListInfo = handleActions({
 	[getAccountListToBind_success]: (_, action) => {

@@ -64,6 +64,11 @@ class rateDetailCommon extends React.Component {
 		const searchKeys = Object.keys(searchVal);
 		let isOk = false;
 		searchKeys.forEach(item => {
+			if (Object.prototype.toString.call(searchVal[item]) === '[object Object]') {
+				if (searchVal[item].label) {
+					searchVal[item] = searchVal[item].label;
+				}
+			}
 			if(searchVal[item])
 				isOk = true;
 		})
@@ -188,7 +193,7 @@ class rateDetailCommon extends React.Component {
 							className="site-page-header"
 							onBack={() => this.props.history.goBack()}
 							title="账号详情"
-							subTitle={`${profitStrategyId}${profitStrategyName}`}
+							subTitle={`${profitStrategyId} ${profitStrategyName}`}
 						/> : null
 				}
 				<Alert className='total-information' message={this.getTotalMsg(accountCount, mcnCount)} type="info" showIcon />
@@ -255,8 +260,8 @@ class rateDetailCommon extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-	const { financeParamsReducer } = state;
-	const { unBindAccountListInfo, profitStrategyAccountInfo } = financeParamsReducer;
+	const { financeRateReducer } = state;
+	const { unBindAccountListInfo, profitStrategyAccountInfo } = financeRateReducer;
 	return {
 		unBindAccountListInfo,
 		profitStrategyAccountInfo

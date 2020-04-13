@@ -125,7 +125,6 @@ class FinanceRateDetail extends React.Component {
 	render() {
 		const { profitStrategyId = '', profitStrategyName = '' } = this.props;
 		const { loading, visible, deleteMulVisible, selectedRows } = this.state;
-
 		return (
 			<div>
 				<RateDetailCommon 
@@ -165,9 +164,10 @@ class FinanceRateDetail extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-	const { financeParamsReducer } = state;
-	const { profitStrategyAccountInfo = {} } = financeParamsReducer;
-	const { profitStrategyId, profitStrategyName } = profitStrategyAccountInfo;
+	const { financeRateReducer } = state;
+	const { profitStrategyAccountInfo = {} } = financeRateReducer;
+	const { strategyInfo = {} } = profitStrategyAccountInfo;
+	const { profitStrategyId, profitStrategyName } = strategyInfo;
 	return {
 		profitStrategyId, profitStrategyName
 	}

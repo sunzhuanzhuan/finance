@@ -11,4 +11,5 @@ export default {
 	deleteProfitStrategyAccount: '/operator-gateway/profit/v1/unbindAccount',
 	clearProfitStrategyAccount: '/operator-gateway/profit/v1/clearAccount',
 	exportBindedAccountList: '/operator-gateway/profit/v1//exportExistProfitStrategyAccount',
+	exportStrategyAccountList: '/operator-gateway/profit/v1/exportByStrategyId',
 }

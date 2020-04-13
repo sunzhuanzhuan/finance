@@ -7,7 +7,8 @@ import './financeRateSetting.less';
 import qs from "qs";
 import { getRateSettingCol } from '../constants';
 import RateModal from './rateModal';
-import { downloadByATag } from '@/util';
+import Interface from '../constants/Interface';
+import apiDownload from '@/api/apiDownload';
 
 class FinanceRateSetting extends React.Component {
 	constructor() {
@@ -26,14 +27,14 @@ class FinanceRateSetting extends React.Component {
 	}
 
 	handleDelInfo = (name, id, isDelete) => {
-		if(isDelete) {
+		if(!isDelete) {
 			Modal.confirm({
 				title: `该${name}下没有添加相关账号信息,确定删除${name}吗？`,
 				okText: '确认',
 				cancelText: '取消',
 				onOk: () => {
 					this.setState({loading: true});
-					this.props.delProfitStrategy({stragegyId: id}).then(() => {
+					this.props.delProfitStrategy({strategyId: id}).then(() => {
 						const { pageInfo } = this.state;
 						this.handleJump(pageInfo);
 					}).finally(() => {
@@ -60,7 +61,7 @@ class FinanceRateSetting extends React.Component {
 				})
 				return;
 			case 'delete': 
-				this.props.isProfitStrategyHasAccounts({stragegyId: id}).then(result => {
+				this.props.isProfitStrategyHasAccounts({strategyId: id}).then(result => {
 					this.handleDelInfo(name, id, result.data);
 				})
 				return;
@@ -75,7 +76,10 @@ class FinanceRateSetting extends React.Component {
 					profitStrategyId: id,
 					profitStrategyName: name
 				};
-				downloadByATag(`/api/operator-gateway/profit/v1/exportByStrategyId?${qs.stringify(exportQuery)}`);
+				apiDownload({
+					url: `${Interface.exportStrategyAccountList}?${qs.stringify(exportQuery)}`,
+					method: 'GET',
+				}, `${name}.xlsx`)
 				return;
 			case 'clear': 
 				this.setState({loading: true});

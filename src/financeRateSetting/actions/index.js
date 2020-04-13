@@ -1,5 +1,6 @@
 import Interface from '../constants/Interface'
 import { createHttpAction } from 'redux-action-extend'
+import { createAction } from 'redux-actions';
 
 //获取策略列表
 export const {
@@ -48,6 +49,8 @@ export const {
 } = createHttpAction('getAccountListToBind', Interface.getAccountListToBind, {
 	method: 'post'
 });
+
+export const clearAccountListToBind = createAction('clearAccountListToBind')
 
 //账号名称查询接口
 export const {

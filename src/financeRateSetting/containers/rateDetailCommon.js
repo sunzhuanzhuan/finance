@@ -23,7 +23,8 @@ class rateDetailCommon extends React.Component {
 
 	static getDerivedStateFromProps(nextProps, prevState) {
 		const { selectedRows, loading } = nextProps;
-		if(Array.isArray(selectedRows) && !shallowEqual(selectedRows, prevState.selectedRows)) {
+
+		if(Array.isArray(selectedRows) && prevState.selectedRows.length && !shallowEqual(selectedRows, prevState.selectedRows)) {
 			return {
 				selectedRowKeys: selectedRows.map(item => item.accountId),
 				selectedRows

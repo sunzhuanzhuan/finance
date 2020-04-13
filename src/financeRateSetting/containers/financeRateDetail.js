@@ -78,6 +78,9 @@ class FinanceRateDetail extends React.Component {
 	}
 
 	handleCancelModal = type => {
+		if(type === 'visible') {
+			this.props.clearAccountListToBind();
+		}
 		this.setState({
 			[type]: false
 		})

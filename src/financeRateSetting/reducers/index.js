@@ -3,6 +3,7 @@ import { handleActions } from 'redux-actions';
 import {
 	getFinanceRateList_success,
 	getAccountListToBind_success,
+	clearAccountListToBind,
 	getProfitStrategyAccountList_success
 } from '../actions';
 
@@ -15,6 +16,9 @@ export const rateListInfo = handleActions({
 export const unBindAccountListInfo = handleActions({
 	[getAccountListToBind_success]: (_, action) => {
 		return {...action.payload.data}
+	}, 
+	[clearAccountListToBind]: () => {
+		return {}
 	}
 }, {});
 

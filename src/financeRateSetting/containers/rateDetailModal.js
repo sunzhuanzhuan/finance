@@ -131,7 +131,7 @@ class rateDetailModal extends React.Component {
 
 	render() {
 		const { type, onCancel, visible } = this.props;
-		const { selectedVisible, selectedRows } = this.state;
+		const { loading, selectedVisible, selectedRows } = this.state;
 
 		return [
 			<Modal
@@ -147,6 +147,7 @@ class rateDetailModal extends React.Component {
 			>
 				<RateDetailCommon 
 					{...this.props}
+					loading={loading}
 					type='addPage'
 					selectedRows={selectedRows}
 					handleOperate={this.handleOperate}

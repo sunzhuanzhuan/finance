@@ -66,7 +66,7 @@ class rateDetailCommon extends React.Component {
 		searchKeys.forEach(item => {
 			if (Object.prototype.toString.call(searchVal[item]) === '[object Object]') {
 				if (searchVal[item].label) {
-					searchVal[item] = searchVal[item].label;
+					searchVal[item] = searchVal[item].key;
 				}
 			}
 			if(searchVal[item])
@@ -204,7 +204,7 @@ class rateDetailCommon extends React.Component {
 						)}
 					</FormItem>
 					<FormItem label='账号名' className='common-label' >
-						{getFieldDecorator('snsName', { initialValue: undefined })(
+						{getFieldDecorator('accountId', { initialValue: undefined })(
 							<SearchSelect
 								action={this.props.getAccountListInfo} 
 								style={{ width: 200 }}
@@ -216,7 +216,7 @@ class rateDetailCommon extends React.Component {
 						)}
 					</FormItem>
 					<FormItem label='主账号' className='common-label' >
-						{getFieldDecorator('identityName', { initialValue: undefined })(
+						{getFieldDecorator('mcnId', { initialValue: undefined })(
 							<SearchSelect
 								action={this.props.getMainAccountListInfo} 
 								style={{ width: 200 }}

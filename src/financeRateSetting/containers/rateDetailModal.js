@@ -20,7 +20,7 @@ class rateDetailModal extends React.Component {
 		return (
 			<div>
 				<span>添加账号</span>
-				<span className='modal-sub-title'>{`${profitStrategyId}${profitStrategyName}`}</span>
+				<span className='modal-sub-title'>{`${profitStrategyId} ${profitStrategyName}`}</span>
 			</div>
 		)
 	}

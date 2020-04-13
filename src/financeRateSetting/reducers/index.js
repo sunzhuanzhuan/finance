@@ -7,19 +7,19 @@ import {
 } from '../actions';
 
 export const rateListInfo = handleActions({
-	[getFinanceRateList_success]: (state, action) => {
+	[getFinanceRateList_success]: (_, action) => {
 		return [...action.payload.data]
 	}
 }, [])
 
 export const unBindAccountListInfo = handleActions({
-	[getAccountListToBind_success]: (state, action) => {
+	[getAccountListToBind_success]: (_, action) => {
 		return {...action.payload.data}
 	}
 }, {});
 
 export const profitStrategyAccountInfo = handleActions({
-	[getProfitStrategyAccountList_success]: (state, action) => {
+	[getProfitStrategyAccountList_success]: (_, action) => {
 		return {...action.payload.data}
 	}
 }, {});

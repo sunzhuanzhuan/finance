@@ -122,7 +122,6 @@ class FinanceRateDetail extends React.Component {
 		this.handleSearch(searchQuery);
 	}
 
-
 	render() {
 		const { profitStrategyId = '', profitStrategyName = '' } = this.props;
 		const { loading, visible, deleteMulVisible, selectedRows } = this.state;
@@ -167,18 +166,9 @@ class FinanceRateDetail extends React.Component {
 
 const mapStateToProps = (state) => {
 	const { financeParamsReducer } = state;
-	// const { profitStrategyAccountInfo = {} } = financeParamsReducer;
-	const profitStrategyAccountInfo = {
-		aggregation: {
-			accountCount: 10,
-			mcnCount: 20,
-			profitStrategyId: 1233333,
-			profitStrategyName: '策略名称'
-		}
-	};
+	const { profitStrategyAccountInfo = {} } = financeParamsReducer;
 	const { profitStrategyId, profitStrategyName } = profitStrategyAccountInfo;
 	return {
-		// profitStrategyAccountInfo,
 		profitStrategyId, profitStrategyName
 	}
 }

@@ -143,44 +143,7 @@ class rateDetailCommon extends React.Component {
 		const { form, type, profitStrategyId, profitStrategyName, unBindAccountListInfo = {}, profitStrategyAccountInfo = {} } = this.props;
 		const { selectedRowKeys, pageInfo } = this.state;
 		const isDetail = type === 'detailPage';
-		// const rootData = isDetail ? profitStrategyAccountInfo : unBindAccountListInfo;
-		const rootData = {
-			page: {
-				pageNum: 1,
-				pageSize: 20,
-				total: 100,
-				list: [
-					{
-						accountId: 1234,
-						mcnId: 23322,
-						snsName: '账号名称',
-						platformName: '平台',
-						identityName: '主账号',
-						ownerAdminName: '资源媒介',
-					},
-					{
-						accountId: 12345,
-						mcnId: 2333522,
-						snsName: '账号名称2',
-						platformName: '平台2',
-						identityName: '主账号2',
-						ownerAdminName: '资源媒介2',
-					},
-					{
-						accountId: 1234445,
-						mcnId: 2333522,
-						snsName: '账号名称2',
-						platformName: '平台2',
-						identityName: '主账号2',
-						ownerAdminName: '资源媒介2',
-					}
-				]
-			},
-			aggregation: {
-				accountCount: 10,
-				mcnCount: 20
-			}
-		}
+		const rootData = isDetail ? profitStrategyAccountInfo : unBindAccountListInfo;
 		const { page = {}, aggregation = {} } = rootData;
 		const { pageNum = 1, pageSize = 20, total = 0, list = [] } = page;
 		const { accountCount = 0, mcnCount = 0 } = aggregation;

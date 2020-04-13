@@ -166,63 +166,7 @@ const mapStateToProps = (state) => {
 	const { financeRateReducer } = state;
 	const { rateListInfo } = financeRateReducer;
 	return {
-		// rateListInfo,
-		rateListInfo: {
-			total: 20, 
-			pageNum: 1, pageSize: 20, 
-			list: [
-				{
-					id: 1234,
-					name: '策略名称',
-					detailVOList: [
-						{
-							minInclude: 1, min: 0, 
-							maxInclude: 1, max: 10, 
-							privateProfit: 0.09, publicProfit: 0.09
-						},
-						{
-							minInclude: 1, min: 10, 
-							maxInclude: 1, max: 100, 
-							privateProfit: 0.09, publicProfit: 0.09
-						},
-						{
-							minInclude: 1, min: 100, 
-							maxInclude: 1, max: 1000, 
-							privateProfit: 0.09, publicProfit: 0.09
-						},
-						{
-							minInclude: 1, min: 1000, 
-							maxInclude: 1, max: 10000, 
-							privateProfit: 0.09, publicProfit: 0.09
-						},
-						{
-							minInclude: 1, min: 999.99, 
-							maxInclude: 1, max: 999.99, 
-							privateProfit: 0.09, publicProfit: 0.09
-						}
-					],
-					remark: '策略备注'
-				},
-				{
-					id: 12345,
-					name: '策略名称2',
-					detailVOList: [
-						{
-							minInclude: 1, min: 0, 
-							maxInclude: 1, max: 10, 
-							privateProfit: 0.09, publicProfit: 0.09
-						},
-						{
-							minInclude: 1, min: 10, 
-							maxInclude: 1, max: 100, 
-							privateProfit: 0.09, publicProfit: 0.08
-						},
-					],
-					remark: '策略备注2'
-				}
-			]
-		},
-
+		rateListInfo,
 	}
 }
 const mapDispatchToProps = dispatch => (bindActionCreators({ ...actions }, dispatch));

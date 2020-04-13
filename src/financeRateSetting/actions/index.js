@@ -22,7 +22,7 @@ export const {
 	isProfitStrategyHasAccounts,
 	isProfitStrategyHasAccounts_success
 } = createHttpAction('isProfitStrategyHasAccounts', Interface.isProfitStrategyHasAccounts, {
-	method: 'post'
+	method: 'get'
 });
 
 //删除策略

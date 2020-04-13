@@ -80,8 +80,9 @@ class rateDetailModal extends React.Component {
 				this.setState({loading: true, searchVal});
 				this.props.getAccountListToBind(searchVal).then((result = {}) => {
 					const { data = {} } = result;
-					const { isExist } = data;
-					if(isExist == 2) {
+					const { isExist, page = {} } = data;
+					const { list = [] } = page;
+					if(isExist == 2 || isExist == 1 && !list.length) {
 						this.getAddWarnComp();
 					}
 				}).finally(() => {

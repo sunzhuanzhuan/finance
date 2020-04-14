@@ -77,8 +77,8 @@ class StudioFormBot extends React.Component {
 			</Row>
 			<Row type='flex' justify='start' gutter={16}>
 				<Col span={6}>
-					<FormItem className='invoice_type_item' label='发票类型' {...taxLayout}>
-						{getFieldDecorator('invoice_type', { rules: [{ required: true, message: '请选择发票类型' }] })(
+					<FormItem className='invoice_type_item' label='回票类型' {...taxLayout}>
+						{getFieldDecorator('invoice_type', { rules: [{ required: true, message: '请选择回票类型' }] })(
 							<Select placeholder="请选择" style={{ width: 216 }}>
 								{
 									this.getSelectOptions(selectOption['invoice_type'])

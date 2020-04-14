@@ -28,8 +28,8 @@ class FinanceParamsSetting extends React.Component {
 	}
 
 	handleChangeParamVal = (key, value, isPercent) => {
-		const dealedVal = isPercent ? percentToValue(value) : parseFloat(value);
-		this.setState({[key]: dealedVal});
+		const dealedVal = isPercent ? percentToValue(value) : value;
+		this.setState({[key]: dealedVal.toFixed(10)});
 	}
 
 	getErrorTips = msg => {
@@ -44,12 +44,11 @@ class FinanceParamsSetting extends React.Component {
 	};
 
 	judgeInputVal = (val, isPercent) => {
-		const numberVal = Number(val);
 		const percentRegex = /^\d+(\.\d{1,10})?$/;
 		const numRegex = /^\d+(\.\d{1,2})?$/;
 
-		const percentRule = numberVal >= 0 && numberVal <= 10000 && percentRegex.test(numberVal);
-		const numRule = numberVal >= 0 && numberVal <= 999999999 && numRegex.test(numberVal);
+		const percentRule = val >= 0 && val <= 10000 && percentRegex.test(val);
+		const numRule = val >= 0 && val <= 999999999 && numRegex.test(val);
 
 		return isPercent ? percentRule : numRule;
 	}

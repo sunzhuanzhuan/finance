@@ -51,7 +51,7 @@ class FinanceParamsSetting extends React.Component {
 		const percentRegex = /^\d+(\.\d{1,10})?$/;
 		const numRegex = /^\d+(\.\d{1,2})?$/;
 
-		const percentRule = val >= 0 && val <= 10000 && percentRegex.test(val);
+		const percentRule = val >= 0 && val <= 100 && percentRegex.test(val);
 		const numRule = val >= 0 && val <= 999999999 && numRegex.test(val);
 
 		return isPercent ? percentRule : numRule;

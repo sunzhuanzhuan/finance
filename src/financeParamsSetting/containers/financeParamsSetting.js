@@ -28,6 +28,10 @@ class FinanceParamsSetting extends React.Component {
 	}
 
 	handleChangeParamVal = (key, value, isPercent) => {
+		if(value === '') {
+			this.setState({[key]: value})
+			return;
+		}
 		const dealedVal = isPercent ? percentToValue(value) : value;
 		this.setState({[key]: dealedVal.toFixed(10)});
 	}

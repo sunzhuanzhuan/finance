@@ -9,7 +9,7 @@ import "./studioManage.less";
 import { postTypeMap } from '../constants'
 import numeral from "numeral";
 import qs from "qs";
-import { accMul, percentToValue } from '@/util';
+import { accMul, percentToValue, scientificToNumber } from '@/util';
 import moment from 'moment';
 
 class NewStudio extends React.Component {
@@ -42,8 +42,8 @@ class NewStudio extends React.Component {
 						is_support_alipay: res.is_support_alipay === 1 ? [1, 2] : [2],
 						invoice_provider: res.invoice_provider,
 						invoice_type: res.invoice_type,
-						tax_rate: accMul(res.tax_rate, 100),
-						service_rate: accMul(res.service_rate, 100),
+						tax_rate: scientificToNumber(accMul(res.tax_rate, 100)),
+						service_rate: scientificToNumber(accMul(res.service_rate, 100)),
 						validity_start: moment(res.validity_start, 'YYYY-MM-DD'),
 						validity_end: moment(res.validity_end, 'YYYY-MM-DD'),
 						remark: res.remark

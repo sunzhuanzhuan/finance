@@ -215,6 +215,28 @@ const accMul = (arg1,arg2) => {
     return Number(s1.replace(".",""))*Number(s2.replace(".",""))/Math.pow(10,m) 
 } 
 /**
+ * 转换科学计数法为数字展示
+ * @param {Number} num 
+ */
+const scientificToNumber = (num) => {
+	if(/\d+\.?\d*e[+-]*\d+/i.test(num)) {
+		var zero = '0',
+		parts = String(num).toLowerCase().split('e'),
+		e = parts.pop(),
+		l = Math.abs(e),
+		sign = e/l,
+		coeff_array = parts[0].split('.');
+		if(sign === -1) {
+			num = zero + '.' + new Array(l).join(zero) + coeff_array.join('');
+		} else {
+			var dec = coeff_array[1];  
+			if(dec) l = l - dec.length;
+			num = coeff_array.join('') + new Array(l+1).join(zero);
+		}
+	}
+	return num;
+}
+/**
  * 百分比转换为小数
  * @param {Number} value
  */
@@ -240,7 +262,8 @@ export {
 	getTotalWidth,
 	downloadByATag,
 	accMul,
-	percentToValue
+	percentToValue,
+	scientificToNumber
 }
 export { calcSum } from './calcSum'
 

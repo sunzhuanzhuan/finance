@@ -64,9 +64,6 @@ class rateDetailCommon extends React.Component {
 	validateFieldsVal = (searchVal) => {
 		const searchKeys = Object.keys(searchVal);
 		const { type } = this.props;
-		if(type === 'detailPage')
-			return true;
-			
 		let isOk = false;
 		searchKeys.forEach(item => {
 			if (Object.prototype.toString.call(searchVal[item]) === '[object Object]') {
@@ -77,7 +74,7 @@ class rateDetailCommon extends React.Component {
 			if(searchVal[item])
 				isOk = true;
 		})
-		return isOk;
+		return isOk || type === 'detailPage';
 	}
 
 	handleSearch = (operateType, pageInfo) => {

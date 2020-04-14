@@ -63,6 +63,10 @@ class rateDetailCommon extends React.Component {
 
 	validateFieldsVal = (searchVal) => {
 		const searchKeys = Object.keys(searchVal);
+		const { type } = this.props;
+		if(type === 'detailPage')
+			return true;
+			
 		let isOk = false;
 		searchKeys.forEach(item => {
 			if (Object.prototype.toString.call(searchVal[item]) === '[object Object]') {
@@ -76,7 +80,7 @@ class rateDetailCommon extends React.Component {
 		return isOk;
 	}
 
-	handleSearch = (type, pageInfo) => {
+	handleSearch = (operateType, pageInfo) => {
 		const { handleOperate, form } = this.props;
 		const searchVal = form.getFieldsValue();
 		const isValOk = this.validateFieldsVal(searchVal);
@@ -86,7 +90,7 @@ class rateDetailCommon extends React.Component {
 				selectedRowKeys: [],
 				selectedRows: [],
 			});
-			handleOperate(type, {...searchVal, ...pageInfo});
+			handleOperate(operateType, {...searchVal, ...pageInfo});
 		}else {
 			this.getErrorTips('请输入搜索条件后查询')
 		}

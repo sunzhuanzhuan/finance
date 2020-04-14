@@ -82,7 +82,7 @@ class rateDetailModal extends React.Component {
 					const { data = {} } = result;
 					const { isExist, page = {} } = data;
 					const { list = [] } = page;
-					if(isExist == 2 || isExist == 1 && !list.length) {
+					if(isExist == 1 && !list.length) {
 						this.getAddWarnComp();
 					}
 				}).finally(() => {

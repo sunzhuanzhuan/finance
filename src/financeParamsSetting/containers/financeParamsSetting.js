@@ -132,11 +132,11 @@ class FinanceParamsSetting extends React.Component {
 			return (
 				<div className={wrapperCls} key={key}>
 					<div className='item-left'>
-						<span>{label}</span>
+						<span className='item-label'>{label}</span>
 						{
 							this.state[`${key}-edit`] ? 
-							[
-								<div key='input'>
+							<div className='item-value'>
+								<div key='input' className='item-input'>
 									<Input 
 										autoFocus
 										addonAfter='%'
@@ -144,16 +144,23 @@ class FinanceParamsSetting extends React.Component {
 										onChange={({target:{value}}) => this.handleChangeParamVal(key, value, isPercent)}
 									/>
 									<div key='tips' className='editTips'>{isPercent ? this.errorTips[1] : this.errorTips[2]}</div>
-								</div>,
-								isPercent ? null : <span className='item-sign' key='sign'>元</span>,
-								<Icon key='ok' type="check" onClick={() => this.handleSaveParamVal(id, itemKey, label, isPercent, itemValue)}/>,
+								</div>
+								{isPercent ? null : <span className='item-sign' key='sign'>元</span>}
+								<Icon key='ok' type="check" onClick={() => this.handleSaveParamVal(id, itemKey, label, isPercent, itemValue)}/>
 								<Icon key='cancel' type="close-square" onClick={() => this.handleCancel(key)} />
-							]
+							</div>
 							:
-							[
-								<a key='value' className='item-val' onClick={() => this.handleEditParamVal(key, itemValue)}>{isPercent ? `${defaultVal}%` : <Statistic className='numberStastic' value={defaultVal}/>}</a>,
-								isPercent ? null : <span key='sign'>元</span>,
-							]
+							<div className='item-value'>
+								<a key='value' className='item-val' onClick={() => this.handleEditParamVal(key, itemValue)}>
+									{
+										isPercent ? 
+											`${defaultVal}%` 
+											: 
+											<Statistic className='numberStastic' value={defaultVal}/>
+									}
+								</a>
+								{isPercent ? null : <span key='sign'>元</span>}
+							</div>	
 						}
 					</div>
 					<div className='item-right'><a onClick={() => this.isShowModal(label, itemKey, isPercent)}>查看修改历史</a></div>

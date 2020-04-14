@@ -36,14 +36,31 @@
         margin: 0 0 -1px -1px;
         border-right: 1px solid @border-color;
         width: 50%;
+        .item-label, .item-value {
+            width: 50%;
+        }
+        .item-label {
+            text-align: right;
+        }
+        .item-value {
+            display: flex;
+            align-items: center;
+            text-align: left;
+            padding-left: 10px;
+        }
+        .item-input {
+            display: inline-block;
+        }
         .ant-input {
             width: 110px;
             margin-left: 10px;
         }
-        .numberStastic .ant-statistic-content, .numberStastic .ant-statistic-content-value-decimal{
-            font-size: inherit;
-            font-family: inherit;
-            color: @primary-color;
+        .numberStastic {
+            .ant-statistic-content, .ant-statistic-content-value-decimal {
+                font-size: inherit;
+                font-family: inherit;
+                color: @primary-color;
+            }
         }
         .item-val {
             margin-right: 3px;
@@ -58,7 +75,7 @@
             margin-left: 10px;
         }
         .item-val {
-            margin-left: 10px;
+            // margin-left: 10px;
             text-decoration: underline;
         }
         .anticon-check {

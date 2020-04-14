@@ -147,7 +147,7 @@ export const getRateDetailCol = (type, handleOperate, profitStrategyId, profitSt
 				return type === 'detailPage' ? 
 					<Popconfirm
 						placement="topRight"
-						title={`确定要删除${profitInfo}下的${accountId} ${snsName}？`}
+						title={`确定要删除${profitInfo}下的${accountId} ${snsName || ''}？`}
 						onConfirm={() => handleOperate('delAccount', accountId)}
 						okText="确定"
 						cancelText="取消"

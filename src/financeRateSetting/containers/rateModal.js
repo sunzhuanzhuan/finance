@@ -138,7 +138,7 @@ class RateModal extends React.Component {
 							<Input placeholder="请输入" />
 						)}
 					</FormItem>
-					<FormItem label='政策阶梯'>
+					<FormItem label='策略阶梯'>
 						<div>
 							{ this.getPolicyRankComp() }
 							<a onClick={this.handleAddRateItem}>添加更多</a>

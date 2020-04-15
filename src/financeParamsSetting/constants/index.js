@@ -1,6 +1,6 @@
 import React from 'react'
 import { Statistic } from 'antd'
-import { accMul } from '@/util'
+import { accMul, scientificToNumber } from '@/util'
 export const financeParams = [
 	{ label: '工作室平均服务费率', key: 'work_room_service_rate', isPercent: true },
 	{ label: '工作室平均发票税率', key: 'work_room_average_return_rate', isPercent: true },
@@ -41,7 +41,7 @@ export const historyCol = (title, isPercent) => {
 			key: 'itemValue',
 			align: 'center',
 			render: data => {
-				return isPercent ? `${accMul(data, 100)}%` : <Statistic className='numberStastic' value={parseFloat(data)}/>;
+				return isPercent ? `${scientificToNumber(accMul(data, 100))}%` : <Statistic className='numberStastic' value={parseFloat(data)}/>;
 			}
 		}
 	]

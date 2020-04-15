@@ -154,6 +154,11 @@ class RateModal extends React.Component {
 						)}
 					</FormItem>
 					<FormItem>
+						{getFieldDecorator('id')(
+							<div></div>
+						)}
+					</FormItem>
+					<FormItem>
 						{getFieldDecorator('detailVOList')(
 							<div></div>
 						)}

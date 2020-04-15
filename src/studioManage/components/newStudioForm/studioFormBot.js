@@ -37,15 +37,11 @@ class StudioFormBot extends React.Component {
 	}
 	serviceRateValide = (rule, value, callback) => {
 		const regex = /^\d+(\.\d{1,8})?$/;
-		const valide = value >= 0 && value <= 10000 && regex.test(value)
-		if (value) {
-			if (valide) {
-				callback();
-				return;
-			}
+		const valide = value >= 0 && value <= 10000 && regex.test(value);
+		if(valide) {
+			callback();
+		}else {
 			callback('输入范围是[0-10000]，最多8位小数的数字,举例:如果想设置6.388%,请输入6.388');
-		} else {
-			callback(' ')
 		}
 	}
 	getDate = () => {

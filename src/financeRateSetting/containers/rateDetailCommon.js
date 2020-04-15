@@ -77,16 +77,20 @@ class rateDetailCommon extends React.Component {
 		return isOk || type === 'detailPage';
 	}
 
-	handleSearch = (operateType, pageInfo) => {
+	handleSearch = (operateType, pageInfo, isPageChange) => {
 		const { handleOperate, form } = this.props;
 		const searchVal = form.getFieldsValue();
 		const isValOk = this.validateFieldsVal(searchVal);
 		if(isValOk) {
 			this.setState({ 
-				pageInfo, 
-				selectedRowKeys: [],
-				selectedRows: [],
+				pageInfo
 			});
+			if(!isPageChange) {
+				this.setState({ 
+					selectedRowKeys: [],
+					selectedRows: [],
+				});
+			}
 			handleOperate(operateType, {...searchVal, ...pageInfo});
 		}else {
 			this.getErrorTips('请输入搜索条件后查询')
@@ -162,28 +166,36 @@ class rateDetailCommon extends React.Component {
 			total: parseInt(total),
 			current: parseInt(pageNum),
 			pageSize: parseInt(pageSize),
+			showTotal:total => {
+				return `共 ${total} 条记录 第 ${pageNum} / ${Math.ceil(total/pageSize)}页`;
+			},
 			showQuickJumper: true,
 			showSizeChanger: true,
 			pageSizeOptions: ['20', '50', '100', '200'],
 			onChange: pageNum => {
 				const curInfo = {...pageInfo, pageNum};
-				this.handleSearch('search', curInfo);
+				this.handleSearch('search', curInfo, true);
 				this.setState(curInfo);
 			},
 			onShowSizeChange: (_, pageSize) => {
 				const curInfo = {pageNum: 1, pageSize};
-				this.handleSearch('search', curInfo);
+				this.handleSearch('search', curInfo, true);
 				this.setState(curInfo);
 			},
 		};
 		const rowSelection = {
 			selectedRowKeys,
 			onChange: (selectedRowKeys, selectedRows) => {
+				
+				const dealSelectedRows = [...this.state.selectedRows, ...selectedRows];
+				const selectedFilter = dealSelectedRows.filter((current, index, arr) => {
+					return arr.findIndex((item) => current.accountId === item.accountId) === index && selectedRowKeys.findIndex(item => item === current.accountId) > -1;
+				});
 				this.setState({
 					selectedRowKeys,
-					selectedRows
+					selectedRows: selectedFilter
 				});
-				this.onHandle('selectedChange', selectedRows)
+				this.onHandle('selectedChange', selectedFilter)
 			},
 		};
 
@@ -248,6 +260,7 @@ class rateDetailCommon extends React.Component {
 				
 				<Alert className='select-total-info' message={this.getTotalMsg(accountCountSelected, mcnCountSelected, true)} type="info" showIcon />
 				<Table 
+					className='rate-detail-commont-table'
 					rowKey='accountId'
 					rowSelection={rowSelection}
 					columns={getRateDetailCol(type, this.onHandle, profitStrategyId, profitStrategyName)} 

@@ -79,7 +79,7 @@ class FinanceRateSetting extends React.Component {
 				apiDownload({
 					url: `${Interface.exportStrategyAccountList}?${qs.stringify(exportQuery)}`,
 					method: 'GET',
-				}, `${name}.xlsx`)
+				}, `${name}账号导出.xlsx`)
 				return;
 			case 'clear': 
 				this.setState({loading: true});

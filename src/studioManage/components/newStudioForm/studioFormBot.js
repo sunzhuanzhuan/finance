@@ -59,6 +59,10 @@ class StudioFormBot extends React.Component {
 		timestamp = timestamp.toString().length === 10 ? timestamp * 1000 : timestamp;
 		return current && current.valueOf() < timestamp;
 	}
+	handleChangeInvoice = value => {
+		const { form } = this.props;
+		form.setFields({tax_rate: 0})
+	}
 	render() {
 		const { getFieldDecorator, getFieldValue } = this.props.form;
 		const { formItemLayout, taxLayout, handleOk, selectOption } = this.props;
@@ -75,7 +79,7 @@ class StudioFormBot extends React.Component {
 				<Col span={6}>
 					<FormItem className='invoice_type_item' label='回票类型' {...taxLayout}>
 						{getFieldDecorator('invoice_type', { rules: [{ required: true, message: '请选择回票类型' }] })(
-							<Select placeholder="请选择" style={{ width: 216 }}>
+							<Select placeholder="请选择" style={{ width: 216 }} onChange={this.handleChangeInvoice}>
 								{
 									this.getSelectOptions(selectOption['invoice_type'])
 								}
@@ -90,7 +94,7 @@ class StudioFormBot extends React.Component {
 						rules: [
 							{ required: selectValue == '1', message: '请输入发票税率' },
 							{
-								validator: this.serviceRateValide,
+								validator: selectValue == '1' ? this.serviceRateValide : null,
 							}
 						],
 					})(

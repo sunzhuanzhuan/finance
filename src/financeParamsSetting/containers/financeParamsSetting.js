@@ -28,12 +28,13 @@ class FinanceParamsSetting extends React.Component {
 	}
 
 	handleChangeParamVal = (key, value, isPercent) => {
-		if(value === '') {
-			this.setState({[key]: value})
+		let floatVal = parseFloat(value);
+		if (isNaN(floatVal)) {
+			this.setState({[key]: undefined});
 			return;
 		}
 		const dealedVal = isPercent ? percentToValue(value) : value;
-		this.setState({[key]: dealedVal.toFixed(10)});
+		this.setState({[key]: scientificToNumber(dealedVal)});
 	}
 
 	getErrorTips = msg => {

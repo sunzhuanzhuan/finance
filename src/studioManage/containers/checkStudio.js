@@ -138,7 +138,7 @@ function DetailTable({ data, studioMetadata }) {
 				<td>{data.alipay_card_number}</td>
 			</tr>
 			<tr>
-				<td>发票类型：</td>
+				<td>回票类型：</td>
 				<td>{getInvoiceLabel(studioMetadata['invoice_type'], data.invoice_type)}</td>
 				<td>发票抬头：</td>
 				<td>{data.invoice_provider}</td>

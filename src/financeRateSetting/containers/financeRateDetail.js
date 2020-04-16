@@ -105,9 +105,9 @@ class FinanceRateDetail extends React.Component {
 
 	getAccountListInfo = () => {
 		const { selectedRows = [] } = this.state;
-		const showArr = selectedRows.slice(0, 2);
+		const showArr = selectedRows.slice(0, 10);
 		const showText = showArr.map(item => `${item.accountId} ${item.snsName || ''}`);
-		return selectedRows.length > 2 ? `${showText.join('，')}，...等${selectedRows.length}个账号吗？` : `${showText.join('，')}吗？`;
+		return selectedRows.length > 10 ? `${showText.join('，')}，...等${selectedRows.length}个账号吗？` : `${showText.join('，')}吗？`;
 	}
 
 	getDelMulComp = (profitStrategyId = '', profitStrategyName = '') => {

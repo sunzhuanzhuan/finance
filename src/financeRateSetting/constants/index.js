@@ -115,6 +115,13 @@ export const getRateDetailCol = (type, handleOperate, profitStrategyId, profitSt
 			key: 'snsName',
 			align: 'center',
 			width: '20%',
+			render: (data, record) => {
+				const { url, platformId, accountId } = record;
+				return [
+					<a key='snsName' href={`/account/manage/update/${platformId}?account_id=${accountId}`} target='_blank'>{data}</a>,
+					<a key='url' href={url} target='_blank' style={{marginLeft: '10px'}}>url</a>
+				]
+			}
 		},
 		{
 			title: '平台',

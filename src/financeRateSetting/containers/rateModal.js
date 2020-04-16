@@ -232,7 +232,7 @@ class RateModal extends React.Component {
 				}
 			}
 
-			if(!privateProfit && !publicProfit) {
+			if(!(privateProfit || privateProfit == 0) && !(publicProfit || publicProfit == 0)) {
 				const rangeText = this.getRangeText(minInclude, min, maxInclude, max);
 				validateResult.error = `利润率，三方平台利润率不能同时为空，请输入区间${rangeText}利润率`;
 				isContinue = false;

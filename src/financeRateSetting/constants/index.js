@@ -23,10 +23,12 @@ const getRateRangeComp = (rateArr) => {
 			const yangVal = getDealRateData(publicProfit, 'mul');
 			return (
 				<div className='rate-range-text' key={index}>
-					<span className='range-val'>{`${leftItem.leftSign}${Number(min)}，${Number(max)}${rightItem.rightSign}`}</span>
-					{yinVal !== undefined ? <span>{`利润率 ${yinVal}%`}</span> : null}
-					{yinVal !== undefined && yangVal !== undefined ? <span>，</span> : null}
-					{yangVal !== undefined ? <span>{`三方平台利润率 ${yangVal}%`}</span> : null}
+					<div className='range-val'>{`${leftItem.leftSign}${Number(min)}，${Number(max)}${rightItem.rightSign}`}</div>
+					<div className='range-rate-val'>
+						{yinVal !== undefined ? <span>{`利润率 ${yinVal}%`}</span> : null}
+						{yinVal !== undefined && yangVal !== undefined ? <span>，</span> : null}
+						{yangVal !== undefined ? <span>{`三方平台利润率 ${yangVal}%`}</span> : null}
+					</div>
 				</div>
 			)
 		})

@@ -169,8 +169,8 @@ class FinanceRateDetail extends React.Component {
 const mapStateToProps = (state) => {
 	const { financeRateReducer } = state;
 	const { profitStrategyAccountInfo = {} } = financeRateReducer;
-	const { strategyInfo = {} } = profitStrategyAccountInfo;
-	const { profitStrategyId, profitStrategyName } = strategyInfo;
+	const { aggregation = {} } = profitStrategyAccountInfo;
+	const { profitStrategyId, profitStrategyName } = aggregation;
 	return {
 		profitStrategyId, profitStrategyName
 	}

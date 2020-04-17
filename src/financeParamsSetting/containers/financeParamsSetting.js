@@ -12,7 +12,8 @@ class FinanceParamsSetting extends React.Component {
 		this.state = {};
 		this.errorTips = {
 			1: '输入范围是[0-10000]，最多八位小数的数字,举例:如果想设置6.388%,请输入6.388',
-			2: '只允许输入0-999999999最多两位小数的数字'
+			2: '只允许输入0-999999999最多两位小数的数字',
+			3: '输入范围是[0-100]，最多八位小数的数字,举例:如果想设置6.388%,请输入6.388',
 		}
 	}
 
@@ -48,25 +49,26 @@ class FinanceParamsSetting extends React.Component {
 		}
 	};
 
-	judgeInputVal = (val, isPercent) => {
+	judgeInputVal = (val, isPercent, isCutRatio) => {
 		const percentRegex = /^\d+(\.\d{1,10})?$/;
 		const numRegex = /^\d+(\.\d{1,2})?$/;
 
 		const percentRule = val >= 0 && val <= 100 && percentRegex.test(val);
+		const cutRatioRule = val >= 0 && val <= 1 && percentRegex.test(val);
 		const numRule = val >= 0 && val <= 999999999 && numRegex.test(val);
 
-		return isPercent ? percentRule : numRule;
+		return isPercent ? isCutRatio ? cutRatioRule : percentRule : numRule;
 	}
 
-	handleSaveParamVal = (id, itemKey, label, isPercent, itemValue) => {
+	handleSaveParamVal = (id, itemKey, label, isPercent, itemValue, isCutRatio) => {
 		const { setFinanceParamsVal, getFinanceParamsVal } = this.props;
 
 		if(this.state[itemKey] == itemValue) {
 			this.getErrorTips('数据未发生改变');
 			return;
 		}
-		if(!(this.judgeInputVal(this.state[itemKey], isPercent))) {
-			const tips = isPercent ? this.errorTips[1] : this.errorTips[2];
+		if(!(this.judgeInputVal(this.state[itemKey], isPercent, isCutRatio))) {
+			const tips = isPercent ? isCutRatio ? this.errorTips[3] : this.errorTips[1] : this.errorTips[2];
 			this.getErrorTips(tips);
 			return;
 		}
@@ -125,7 +127,7 @@ class FinanceParamsSetting extends React.Component {
 
 	getParamsContent = financeParamsVal => {
 		return financeParams.map(itemLabelInfo => {
-			const { label, key, isPercent } = itemLabelInfo;
+			const { label, key, isPercent, isCutRatio } = itemLabelInfo;
 			const itemValueInfo = financeParamsVal.find(item => item.itemKey === key);
 			if(!itemValueInfo)
 				return null;
@@ -146,10 +148,10 @@ class FinanceParamsSetting extends React.Component {
 										defaultValue={defaultVal} 
 										onChange={({target:{value}}) => this.handleChangeParamVal(key, value, isPercent)}
 									/>
-									<div key='tips' className='editTips'>{isPercent ? this.errorTips[1] : this.errorTips[2]}</div>
+									<div key='tips' className='editTips'>{isPercent ? isCutRatio ? this.errorTips[3] : this.errorTips[1] : this.errorTips[2]}</div>
 								</div>
 								{isPercent ? null : <span className='item-sign' key='sign'>元</span>}
-								<Icon key='ok' type="check" onClick={() => this.handleSaveParamVal(id, itemKey, label, isPercent, itemValue)}/>
+								<Icon key='ok' type="check" onClick={() => this.handleSaveParamVal(id, itemKey, label, isPercent, itemValue, isCutRatio)}/>
 								<Icon key='cancel' type="close-square" onClick={() => this.handleCancel(key)} />
 							</div>
 							:

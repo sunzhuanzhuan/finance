@@ -190,6 +190,10 @@ class RateModal extends React.Component {
 		}
 	};
 
+	judgeProfitRange = data =>  {
+		return data && (data < -1 || data > 99.9999);
+	}
+
 	validateFieldsValues = () => {
 		const { form } = this.props;
 		const fieldsValus = form.getFieldsValue();
@@ -235,6 +239,11 @@ class RateModal extends React.Component {
 			if(!(privateProfit || privateProfit == 0) && !(publicProfit || publicProfit == 0)) {
 				const rangeText = this.getRangeText(minInclude, min, maxInclude, max);
 				validateResult.error = `利润率，三方平台利润率不能同时为空，请输入区间${rangeText}利润率`;
+				isContinue = false;
+			}
+
+			if(this.judgeProfitRange(privateProfit) || this.judgeProfitRange(publicProfit)) {
+				validateResult.error = '利润率设置不符合规则,请重新设置';
 				isContinue = false;
 			}
 

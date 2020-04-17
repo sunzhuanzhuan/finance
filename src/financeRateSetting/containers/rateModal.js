@@ -80,7 +80,7 @@ class RateModal extends React.Component {
 				<div key={index} className='rate-range-item'>
 					<Select 
 						placeholder='请选择' className='rate-select' 
-						defaultValue={minInclude} 
+						value={minInclude} 
 						onChange={value => this.handleChangeRateRangeVal(value, 'minInclude', index)}
 					>
 						<Option value={1}>包含</Option>
@@ -94,7 +94,7 @@ class RateModal extends React.Component {
 					<span>------</span>
 					<Select 
 						placeholder='请选择' className='rate-select' 
-						defaultValue={maxInclude} 
+						value={maxInclude} 
 						onChange={value => this.handleChangeRateRangeVal(value, 'maxInclude', index)}
 					>
 						<Option value={1}>包含</Option>
@@ -230,7 +230,7 @@ class RateModal extends React.Component {
 			if(detailVOList.length > 1 && index < detailVOList.length - 1) {
 				const nextItem = detailVOList[index + 1];
 				const { minInclude: nextMinInclude, min: nextRangeMin } = nextItem;
-				if(maxInclude == nextMinInclude || Number(max) != Number(nextRangeMin)) {
+				if(min == max ||maxInclude == nextMinInclude || Number(max) != Number(nextRangeMin)) {
 					validateResult.error = '区间设置不符合规则，请重新设置';
 					isContinue = false;
 				}
@@ -243,7 +243,7 @@ class RateModal extends React.Component {
 			}
 
 			if(this.judgeProfitRange(privateProfit) || this.judgeProfitRange(publicProfit)) {
-				validateResult.error = '利润率设置不符合规则,请重新设置';
+				validateResult.error = '利润率设置不合法,输入范围是[-100.00% - 9999.99%]';
 				isContinue = false;
 			}
 

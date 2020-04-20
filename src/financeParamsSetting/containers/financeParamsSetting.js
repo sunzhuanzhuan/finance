@@ -13,7 +13,7 @@ class FinanceParamsSetting extends React.Component {
 		this.errorTips = {
 			1: '输入范围是[0-10000]，最多八位小数的数字,举例:如果想设置6.388%,请输入6.388',
 			2: '只允许输入0-999999999最多两位小数的数字',
-			3: '输入范围是[0-100]，最多八位小数的数字,举例:如果想设置6.388%,请输入6.388',
+			3: '输入范围是[0-100)，最多八位小数的数字,举例:如果想设置6.388%,请输入6.388',
 		}
 	}
 
@@ -54,7 +54,7 @@ class FinanceParamsSetting extends React.Component {
 		const numRegex = /^\d+(\.\d{1,2})?$/;
 
 		const percentRule = val >= 0 && val <= 100 && percentRegex.test(val);
-		const cutRatioRule = val >= 0 && val <= 1 && percentRegex.test(val);
+		const cutRatioRule = val >= 0 && val < 1 && percentRegex.test(val);
 		const numRule = val >= 0 && val <= 999999999 && numRegex.test(val);
 
 		return isPercent ? isCutRatio ? cutRatioRule : percentRule : numRule;

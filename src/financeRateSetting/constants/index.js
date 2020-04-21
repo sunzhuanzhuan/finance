@@ -54,7 +54,7 @@ export const getRateSettingCol = (handleOperate) => {
 			dataIndex: 'detailVOList',
 			key: 'detailVOList',
 			align: 'center',
-			width: '37%',
+			width: '38%',
 			render: (data) => {
 				return getRateRangeComp(data)
 			}
@@ -64,7 +64,7 @@ export const getRateSettingCol = (handleOperate) => {
 			dataIndex: 'remark',
 			key: 'remark',
 			align: 'center',
-			width: '13%',
+			width: '14%',
 		},
 		{
 			title: '操作',
@@ -72,7 +72,7 @@ export const getRateSettingCol = (handleOperate) => {
 			key: 'operate',
 			align: 'center',
 			className: 'operate-col',
-			width: '27%',
+			width: '25%',
 			render: (_, record) => {
 				const { name } = record;
 				return [
@@ -103,7 +103,7 @@ export const isIncludeArr = [
 export const getRateDetailCol = (type, handleOperate, profitStrategyId, profitStrategyName) => {
 	const allCol = [
 		{
-			title: '账号ID',
+			title: 'accountID',
 			dataIndex: 'accountId',
 			key: 'accountId',
 			align: 'center',

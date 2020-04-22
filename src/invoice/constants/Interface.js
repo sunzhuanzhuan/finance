@@ -18,5 +18,12 @@ export default {
 	postTrinityInvoiceExport: '/trinity/publicInvoice/export',
 	//公共
 	getTrinityInvoiceSearchItem: '/trinity/publicInvoice/searchItem',
-	getTrinityInvoiceExport: '/trinity/publicInvoice/export'
+	getTrinityInvoiceExport: '/trinity/publicInvoice/export',
+
+	getUserInvoiceSearch: '/finance/invoice/balance/userInvoiceSearch',//主账号发票列表
+	getTrinityInvoiceSearch: '/finance/invoice/balance/trinityInvoiceSearch',//三方发票列表
+	exportInvoice: '/finance/invoice/balance/export',//导出查询的发票数据
+	ownerAdminListInvoice: '/finance/invoice/balance/ownerAdminList',//媒介经理联想搜索
+	userIdentityNameList: '/finance/invoice/balance/userIdentityNameList',//主账号联想搜索
+	beneficiaryCompanyList: '/finance/invoice/balance/beneficiaryCompanyList'//发票开具方联想搜索
 }

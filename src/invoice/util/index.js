@@ -89,7 +89,7 @@ export const columnsList = (configMap, configKeys) => {
 export const getTimeToObjByArr = (dateTime, key1, key2, format = 'YYYY-MM-DD HH:mm:ss') => {
 	let obj = {}
 	if (Array.isArray(dateTime)) {
-		obj[key1] = obj.moment(dateTime[0]).format(format);
+		obj[key1] = moment(dateTime[0]).format(format);
 		obj[key2] = moment(dateTime[1]).format(format);
 	}
 	return obj

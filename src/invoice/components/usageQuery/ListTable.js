@@ -3,21 +3,8 @@ import { Table, Alert, Icon } from 'antd'
 
 export default class ListTable extends Component {
 	render() {
-		const { isNoShowColumnsTitle } = this.props
-		const dataSource = [
-			{
-				key: '1',
-				name: '胡彦斌',
-				age: 32,
-				address: '西湖区湖底公园1号',
-			},
-			{
-				key: '2',
-				name: '胡彦祖',
-				age: 42,
-				address: '西湖区湖底公园1号',
-			},
-		];
+		const { isNoShowColumnsTitle, list = {}, scrollX } = this.props
+		const { rows = [], aggregation = {}, pagination = {} } = list
 
 		const columns = [
 			{
@@ -32,8 +19,8 @@ export default class ListTable extends Component {
 			},
 			{
 				title: '主账号',
-				dataIndex: 'user_id',
-				key: 'user_id',
+				dataIndex: 'identity_name',
+				key: 'identity_name',
 			},
 			{
 				title: '三方代理商',
@@ -41,29 +28,27 @@ export default class ListTable extends Component {
 				key: 'business_account_id',
 			},
 			{
-				title: '发票总金额',
+				title: '发票信息',
 				dataIndex: 'name1',
 				key: 'name1',
-			},
-			{
-				title: '发票税率',
-				dataIndex: 'name2',
-				key: 'name2',
-			},
-			{
-				title: '发票类型',
-				dataIndex: 'namedd',
-				key: 'namedd',
+				width: '200px',
+				render: (text, record) => {
+					return <div>
+						<div>发票类型：{record.invoice_type}</div>
+						<div>发票税率：{record.invoice_tax_rate}</div>
+						<div>发票总金额：{record.invoice_amount}元</div>
+					</div>
+				}
 			},
 			{
 				title: '发票状态',
-				dataIndex: 'name3',
-				key: 'name3',
+				dataIndex: 'invoice_status',
+				key: 'invoice_status',
 			},
 			{
 				title: '发票录入时间',
-				dataIndex: 'name',
-				key: 'name',
+				dataIndex: 'invoice_created_time',
+				key: 'invoice_created_time',
 			},
 			{
 				title: '订单ID',
@@ -72,28 +57,28 @@ export default class ListTable extends Component {
 			},
 			{
 				title: '订单应约税率',
-				dataIndex: 'name',
-				key: 'name',
+				dataIndex: 'accept_reservation_tax_rate',
+				key: 'accept_reservation_tax_rate',
 			},
 			{
 				title: '预付金额',
-				dataIndex: 'names12',
-				key: 'name12',
+				dataIndex: 'prepayment_amount',
+				key: 'prepayment_amount',
 			},
 			{
 				title: '扣款金额',
-				dataIndex: 'name13',
-				key: 'name13',
+				dataIndex: 'invoice_deduction_amount',
+				key: 'invoice_deduction_amount',
 			},
 			{
 				title: '打款金额',
-				dataIndex: 'name23',
-				key: 'name23',
+				dataIndex: 'payment_amount',
+				key: 'payment_amount',
 			},
 			{
 				title: '本次使用金额',
-				dataIndex: 'name33',
-				key: 'name33',
+				dataIndex: 'invoice_use_amount',
+				key: 'invoice_use_amount',
 			},
 			{
 				title: '使用时间',
@@ -102,44 +87,47 @@ export default class ListTable extends Component {
 			},
 
 			{
-				title: '打款类型',
+				title: '打款信息',
 				dataIndex: 'namec',
 				key: 'namec',
+				width: '180px',
+				render: (text, record) => {
+					return <div>
+						<div>打款单ID：{record.payment_id}</div>
+						<div>打款类型：{record.payment_type}</div>
+						<div>打款时间：{record.payment_time}</div>
+					</div>
+				}
 			},
 			{
-				title: '打款单ID',
-				dataIndex: 'namea',
-				key: 'namea',
-			}, {
-				title: '打款时间',
-				dataIndex: 'names',
-				key: 'names',
-			}, {
 				title: '媒介经理',
-				dataIndex: 'named',
-				key: 'named',
+				dataIndex: 'owner_admin_name',
+				key: 'owner_admin_name',
 			},
 		].filter(one => !isNoShowColumnsTitle.includes(one.title));
 		return (
 			<div style={{ paddingTop: 20 }}>
-				<Alert style={{ marginBottom: 20 }} message={<div><Icon className='theme-font-color' theme="filled" type="info-circle" />   当前筛选条件下共 <span className='theme-font-color'>x</span> 条
-		发票总金额 <span className='theme-font-color'>xxx</span> 元
-		打款金额 <span className='theme-font-color'>xxx</span> 元
-		扣款金额 <span className='theme-font-color'>xxx</span> 元
-		使用金额 <span className='theme-font-color'>xxx</span> 元
+				<Alert style={{ marginBottom: 20 }} message={<div><Icon className='theme-font-color' theme="filled" type="info-circle" />   当前筛选条件下共 <span className='theme-font-color'>{pagination.total}</span> 条
+		发票总金额 <span className='theme-font-color'>{aggregation.total_invoice_amount}</span> 元
+		打款金额 <span className='theme-font-color'>{aggregation.total_payment_amount}</span> 元
+		扣款金额 <span className='theme-font-color'>{aggregation.total_deduction_amount}</span> 元
+		使用金额 <span className='theme-font-color'>{aggregation.total_invoice_use_amount}</span> 元
 			</div>} type="info" />
 				<Table
-					dataSource={dataSource}
+					dataSource={rows}
 					columns={columns}
+					scroll={{ x: scrollX || 1600 }}
 					pagination={{
-						total: 100,
-						//pageSize,
-						//current: pageNum,
+						total: pagination.total,
+						pageSize: pagination.page_size || 10,
+						current: pagination.page || 1,
 						showSizeChanger: true,
 						showQuickJumper: true,
 						onChange: (currentPage, pageSize) => {
+							this.props.onSearchList({ page: currentPage, page_size: pageSize })
 						},
 						onShowSizeChange: (current, size) => {
+							this.props.onSearchList({ page: 1, page_size: size })
 						}
 					}}
 				/>

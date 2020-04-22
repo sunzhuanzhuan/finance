@@ -3,33 +3,50 @@ import { Form, Input, Col, Button, Row } from 'antd'
 import SearchSelect from '@/base/SearchSelect'
 import SearchForm from './SearchForm'
 import EmSpan from '@/base/EmSpan'
-import { getTimeToObjByArr } from '@/util'
 export class AccountForm extends Component {
 	onSearch = (e) => {
 		e.preventDefault()
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
-				console.log(getTimeToObjByArr(values.invoice_created_time, 'invoice_created_time_start', 'invoice_created_time_end'))
+				this.props.onSearchList(values)
 			}
 		})
 	}
+	onReset = () => {
+		this.props.form.resetFields()
+		this.props.resetSearchParams()
+	}
+	userIdAction = (value) => {
+		return this.props.actions.userIdentityNameList({
+			identity_name: value.name,
+		}).then(({ data }) => ({ data: data }))
+	}
+	ownerAdminActions = (value) => {
+		return this.props.actions.ownerAdminListInvoice({
+			identity_name: value.name,
+		}).then(({ data }) => ({ data: data }))
+	}
 	render() {
-		const { form } = this.props
+		const { form, actions } = this.props
 		const { getFieldDecorator } = form
 		return (
 			<Form className="flex-form-layout" layout="inline" autoComplete="off">
 				<Row>
-					<SearchForm form={form} />
+					<SearchForm form={form} actions={actions} />
 					<Col span={8}>
 						<Form.Item label={<EmSpan length={4}>主账号</EmSpan>}>
-							{getFieldDecorator('owner_admin_id', {
+							{getFieldDecorator('user', {
 								rules: [],
 							})(<SearchSelect
 								placeholder="请输入"
-								action={this.queryMcnByIdentityName}
+								action={this.userIdAction}
 								wordKey='name'
 								filterOption={false}
 								style={{ width: '100%' }}
+								mapResultItemToOption={(one) => ({
+									value: one.user_id,
+									label: one.identity_name
+								})}
 							/>
 							)}
 						</Form.Item>
@@ -43,14 +60,18 @@ export class AccountForm extends Component {
 					</Col>
 					<Col span={8}>
 						<Form.Item label={<EmSpan length={4}>媒介经理</EmSpan>}>
-							{getFieldDecorator('owner_admin_id', {
+							{getFieldDecorator('owner_admin', {
 								rules: [],
 							})(<SearchSelect
 								placeholder="请输入"
-								action={this.queryMcnByIdentityName}
+								action={this.ownerAdminActions}
 								wordKey='name'
 								filterOption={false}
 								style={{ width: '100%' }}
+								mapResultItemToOption={(one) => ({
+									value: one.user_id,
+									label: one.real_name
+								})}
 							/>
 							)}
 						</Form.Item>
@@ -60,7 +81,7 @@ export class AccountForm extends Component {
 						<Form.Item >
 							<div style={{ textAlign: 'right' }}>
 								<Button type='primary' onClick={this.onSearch}>查询</Button>
-								<Button style={{ margin: '0px 10px' }}>重置</Button>
+								<Button style={{ margin: '0px 10px' }} onClick={this.onReset}>重置</Button>
 								<Button type='primary'>导出</Button>
 							</div>
 						</Form.Item>

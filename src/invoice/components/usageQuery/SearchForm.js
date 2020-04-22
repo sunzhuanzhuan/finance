@@ -8,6 +8,14 @@ class SearchForm extends Component {
 		super(props);
 		this.state = {};
 	}
+	beneficiaryCompany = (value) => {
+		const { actions, source_type } = this.props
+		return actions.beneficiaryCompanyList({
+			beneficiary_company: value.name,
+			source_type: source_type
+		}).then(({ data }) => ({ data: data }))
+	}
+
 	render() {
 		const { form } = this.props
 		const { getFieldDecorator } = form
@@ -26,7 +34,7 @@ class SearchForm extends Component {
 							rules: [],
 						})(<SearchSelect
 							placeholder="请输入"
-							action={this.queryMcnByIdentityName}
+							action={this.beneficiaryCompany}
 							wordKey='name'
 							filterOption={false}
 							style={{ width: '100%' }}
@@ -49,8 +57,8 @@ class SearchForm extends Component {
 					<Form.Item label='发票状态' >
 						{getFieldDecorator('invoice_status', {})(
 							<Select allowClear placeholder='不限'>
-								<Select.Option key={1}>专票</Select.Option>
-								<Select.Option key={2}>普票</Select.Option>
+								<Select.Option key={1}>已使用</Select.Option>
+								<Select.Option key={2}>未使用</Select.Option>
 							</Select>
 						)}
 					</Form.Item>
@@ -80,15 +88,16 @@ class SearchForm extends Component {
 					<Form.Item label={<EmSpan length={6}>打款类型</EmSpan>}>
 						{getFieldDecorator('payment_type', {})(
 							<Select allowClear placeholder='不限'>
-								<Select.Option key={1}>专票</Select.Option>
-								<Select.Option key={2}>普票</Select.Option>
+								<Select.Option key={1}>三方预付款</Select.Option>
+								<Select.Option key={2}>三方周期付款</Select.Option>
+								<Select.Option key={3}>提前打款</Select.Option>
 							</Select>
 						)}
 					</Form.Item>
 				</Col>
 				<Col span={8}>
 					<Form.Item label={'打款时间'}>
-						{getFieldDecorator("validTime", {})(
+						{getFieldDecorator("payment_time", {})(
 							<RangePicker style={{ width: '100%' }} />
 						)}
 					</Form.Item>

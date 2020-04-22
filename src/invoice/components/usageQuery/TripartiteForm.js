@@ -3,9 +3,22 @@ import { Form, Input, Select, DatePicker, Row, Col, Button } from 'antd'
 import SearchSelect from '@/base/SearchSelect'
 import SearchForm from './SearchForm'
 export class TripartiteForm extends Component {
+	onSearch = (e) => {
+		e.preventDefault()
+		this.props.form.validateFields((err, values) => {
+			if (!err) {
+				this.props.onSearchList(values)
+			}
+		})
+	}
+	onReset = () => {
+		this.props.form.resetFields()
+		this.props.resetSearchParams()
+	}
 
 	render() {
-		const { form } = this.props
+		const { form, trinityInvoiceSearchItem = {} } = this.props
+		const { agent = [] } = trinityInvoiceSearchItem
 		const { getFieldDecorator } = form
 		return (
 			<Form className="flex-form-layout" layout="inline" autoComplete="off">
@@ -13,23 +26,24 @@ export class TripartiteForm extends Component {
 					<SearchForm form={form} />
 					<Col span={8}>
 						<Form.Item label="三方代理商">
-							{getFieldDecorator('email', {
+							{getFieldDecorator('business_account_id', {
 								rules: [],
-							})(<SearchSelect
-								placeholder="请输入"
-								action={this.queryMcnByIdentityName}
-								wordKey='name'
-								filterOption={false}
-								style={{ width: '100%' }}
-							/>)}
+							})(
+								<Select>
+									{agent.map(one => <Select.Option
+										key={one.values}
+										value={one.value}> {one.name}
+									</Select.Option>)}
+								</Select>
+							)}
 						</Form.Item>
 					</Col>
 					<Col span={8}></Col>
 					<Col span={8}>
 						<Form.Item >
 							<div style={{ textAlign: 'right' }}>
-								<Button type='primary'>查询</Button>
-								<Button style={{ margin: '0px 10px' }}>重置</Button>
+								<Button type='primary' onClick={this.onSearch}>查询</Button>
+								<Button style={{ margin: '0px 10px' }} onClick={this.onReset}>重置</Button>
 								<Button type='primary'>导出</Button>
 							</div>
 						</Form.Item>

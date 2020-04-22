@@ -1,3 +1,18 @@
-@import "~antd/dist/antd.less"; 
-@import "./indexNbTheme.less";   // 用于覆盖上面定义的变量
+@import "~antd/dist/antd.less";
+@import "./indexNbTheme.less"; // 用于覆盖上面定义的变量
 @import './common.less';
+
+.flex-form-layout {
+    .ant-form-item {
+        display: flex;
+        align-items: center;
+
+        .ant-form-item-control-wrapper {
+            flex: 1;
+        }
+
+        .ant-form-item-label {
+            padding: 0 6px;
+        }
+    }
+}

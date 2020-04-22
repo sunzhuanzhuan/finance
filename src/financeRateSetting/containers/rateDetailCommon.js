@@ -212,7 +212,7 @@ class rateDetailCommon extends React.Component {
 				}
 				<Alert className='total-information' message={this.getTotalMsg(accountCount, mcnCount)} type="info" showIcon />
 				<Form className='detail-form clearfix'>
-					<FormItem label='账号ID'>
+					<FormItem label='accountID' className='search-account-id'>
 						{getFieldDecorator('accountStr')(
 							<Input style={{width: 200}} placeholder="请输入" />
 						)}

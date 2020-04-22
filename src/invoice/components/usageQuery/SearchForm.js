@@ -38,6 +38,10 @@ class SearchForm extends Component {
 							wordKey='name'
 							filterOption={false}
 							style={{ width: '100%' }}
+							mapResultItemToOption={(beneficiary_company) => ({
+								value: beneficiary_company,
+								label: beneficiary_company
+							})}
 						/>
 						)}
 					</Form.Item>

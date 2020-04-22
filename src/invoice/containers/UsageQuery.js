@@ -62,12 +62,24 @@ export class UsageQuery extends Component {
 	}
 	//处理数据中的时间参数
 	timeFormat = (params = {}) => {
-		return {
+		let paramsFormat = {
 			...params,
 			...getTimeToObjByArr(params.invoice_created_time, 'invoice_created_time_start', 'invoice_created_time_end'),//发票录入时间
 			...getTimeToObjByArr(params.invoice_use_time, 'invoice_use_time_start', 'invoice_use_time_end'),//发票录入时间
 			...getTimeToObjByArr(params.payment_time, 'payment_time_start', 'payment_time_end'),//发票录入时间
 		}
+		if (paramsFormat.user) {
+			paramsFormat.user_id = params.user.key
+			delete paramsFormat.user
+		}
+		if (paramsFormat.owner_admin) {
+			paramsFormat.owner_admin_id = params.owner_admin.key
+			delete paramsFormat.owner_admin
+		}
+		if (paramsFormat.beneficiary_company) {
+			paramsFormat.beneficiary_company = params.beneficiary_company.key
+		}
+		return paramsFormat
 	}
 
 

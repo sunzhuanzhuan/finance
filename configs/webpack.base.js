@@ -22,38 +22,12 @@ module.exports = {
 				use: ['happypack/loader?id=happy-babel'],
 			},
 			{
-				test: /\.(png|jpg|gif)$/,
+				test: /\.(jpe?g|png|gif|svg)$/i,
 				use: [
-					{
-						loader: 'url-loader',
-						options: {
-							limit: 8192
-						},
-					},
-					{
-						loader: 'image-webpack-loader',
-						options: {
-							mozjpeg: { // 压缩 jpeg 的配置
-								progressive: true,
-								quality: 65
-							},
-							optipng: { // 使用 imagemin-optipng 压缩 png，enable: false 为关闭
-								enabled: false,
-							},
-							pngquant: { // 使用 imagemin-pngquant 压缩 png
-								quality: '65-90',
-								speed: 4
-							},
-							gifsicle: { // 压缩 gif 的配置
-								interlaced: false,
-							},
-							webp: { // 开启 webp，会把 jpg 和 png 图片压缩为 webp 格式
-								quality: 75
-							},
-						},
-					},
-				],
-			},
+					'url-loader?limit=10000',
+					'img-loader'
+				]
+			}
 		],
 	},
 	resolve: {
@@ -73,7 +47,7 @@ module.exports = {
 						beautify: false
 					},
 					compress: {
-						warnings: false,
+						// warnings: false,
 						drop_console: true,
 						collapse_vars: true,
 						reduce_vars: true

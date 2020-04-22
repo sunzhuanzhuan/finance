@@ -1,9 +1,17 @@
 import React, { Component } from 'react'
 import { Table, Alert, Icon } from 'antd'
+const invoiceStatusMap = {
+	1: '已使用',
+	0: '未使用'
+}
+const invoiceTypeMap = {
+	1: '专票',
+	2: '普票'
+}
 
 export default class ListTable extends Component {
 	render() {
-		const { isNoShowColumnsTitle, list = {}, scrollX } = this.props
+		const { isNoShowColumnsTitle, list = {}, scrollX, paymentTypeMap = {} } = this.props
 		const { rows = [], aggregation = {}, pagination = {} } = list
 
 		const columns = [
@@ -24,8 +32,8 @@ export default class ListTable extends Component {
 			},
 			{
 				title: '三方代理商',
-				dataIndex: 'business_account_id',
-				key: 'business_account_id',
+				dataIndex: 'business_account_name',
+				key: 'business_account_name',
 			},
 			{
 				title: '发票信息',
@@ -34,7 +42,7 @@ export default class ListTable extends Component {
 				width: '200px',
 				render: (text, record) => {
 					return <div>
-						<div>发票类型：{record.invoice_type}</div>
+						<div>发票类型：{invoiceTypeMap[record.invoice_type]}</div>
 						<div>发票税率：{record.invoice_tax_rate}</div>
 						<div>发票总金额：{record.invoice_amount}元</div>
 					</div>
@@ -44,6 +52,7 @@ export default class ListTable extends Component {
 				title: '发票状态',
 				dataIndex: 'invoice_status',
 				key: 'invoice_status',
+				render: text => invoiceStatusMap[text]
 			},
 			{
 				title: '发票录入时间',
@@ -94,7 +103,7 @@ export default class ListTable extends Component {
 				render: (text, record) => {
 					return <div>
 						<div>打款单ID：{record.payment_id}</div>
-						<div>打款类型：{record.payment_type}</div>
+						<div>打款类型：{paymentTypeMap[record.payment_type]}</div>
 						<div>打款时间：{record.payment_time}</div>
 					</div>
 				}

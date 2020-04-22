@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import { Form, Input, Select, DatePicker, Row, Col, Button } from 'antd'
-import SearchSelect from '@/base/SearchSelect'
+import { Form, Select, Row, Col, Button } from 'antd'
 import SearchForm from './SearchForm'
 export class TripartiteForm extends Component {
 	onSearch = (e) => {
@@ -25,6 +24,16 @@ export class TripartiteForm extends Component {
 				<Row>
 					<SearchForm form={form} />
 					<Col span={8}>
+						<Form.Item label={'打款类型'}>
+							{getFieldDecorator('payment_type', {})(
+								<Select allowClear placeholder='不限'>
+									<Select.Option key={1}>三方预付款</Select.Option>
+									<Select.Option key={2}>三方周期付款</Select.Option>
+								</Select>
+							)}
+						</Form.Item>
+					</Col>
+					<Col span={8}>
 						<Form.Item label="三方代理商">
 							{getFieldDecorator('business_account_id', {
 								rules: [],
@@ -44,7 +53,7 @@ export class TripartiteForm extends Component {
 							<div style={{ textAlign: 'right' }}>
 								<Button type='primary' onClick={this.onSearch}>查询</Button>
 								<Button style={{ margin: '0px 10px' }} onClick={this.onReset}>重置</Button>
-								<Button type='primary'>导出</Button>
+								<Button type='primary' onClick={() => this.props.exportInvoiceFile(2)}>导出</Button>
 							</div>
 						</Form.Item>
 					</Col>

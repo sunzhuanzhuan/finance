@@ -58,7 +58,7 @@ class SearchForm extends Component {
 						{getFieldDecorator('invoice_status', {})(
 							<Select allowClear placeholder='不限'>
 								<Select.Option key={1}>已使用</Select.Option>
-								<Select.Option key={2}>未使用</Select.Option>
+								<Select.Option key={0}>未使用</Select.Option>
 							</Select>
 						)}
 					</Form.Item>
@@ -84,19 +84,9 @@ class SearchForm extends Component {
 						})(<Input placeholder='请输入' />)}
 					</Form.Item>
 				</Col>
+
 				<Col span={8}>
-					<Form.Item label={<EmSpan length={6}>打款类型</EmSpan>}>
-						{getFieldDecorator('payment_type', {})(
-							<Select allowClear placeholder='不限'>
-								<Select.Option key={1}>三方预付款</Select.Option>
-								<Select.Option key={2}>三方周期付款</Select.Option>
-								<Select.Option key={3}>提前打款</Select.Option>
-							</Select>
-						)}
-					</Form.Item>
-				</Col>
-				<Col span={8}>
-					<Form.Item label={'打款时间'}>
+					<Form.Item label={<EmSpan length={6}>打款时间</EmSpan>}>
 						{getFieldDecorator("payment_time", {})(
 							<RangePicker style={{ width: '100%' }} />
 						)}

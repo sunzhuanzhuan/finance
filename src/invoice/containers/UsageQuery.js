@@ -16,21 +16,26 @@ export class UsageQuery extends Component {
 		super(props);
 		this.state = {
 			isLoading: false,
-			searchParams: defaultSearch
+			searchParams: defaultSearch,
+			tabCheckedKey: 1,
 		};
 		this.resetSearchParams = this.resetSearchParams.bind(this)
 	}
 	componentDidMount = () => {
-		this.changeTabs(1)
+		this.changeTabs(this.state.tabCheckedKey)
 		this.props.actions.getTrinityInvoiceSearchItem()
 	}
 	changeTabs = (key) => {
-		if (key == 1) {
-			this.getUserInvoiceSearchAsync()
-		} else {
-			this.getTrinityInvoiceSearchAsync()
-		}
-		this.resetSearchParams()
+		this.setState({
+			searchParams: defaultSearch,
+			tabCheckedKey: key
+		}, () => {
+			if (key == 1) {
+				this.getUserInvoiceSearchAsync()
+			} else {
+				this.getTrinityInvoiceSearchAsync()
+			}
+		})
 	}
 	resetSearchParams = () => {
 		this.setState({
@@ -51,6 +56,10 @@ export class UsageQuery extends Component {
 		await this.props.actions.getTrinityInvoiceSearch(this.timeFormat(paramsAll))
 		this.setState({ isLoading: false, searchParams: paramsAll })
 	}
+	//导出
+	exportInvoiceFile = (source_type) => {
+		this.props.actions.exportInvoice({ source_type: source_type, ...this.state.searchParams })
+	}
 	//处理数据中的时间参数
 	timeFormat = (params = {}) => {
 		return {
@@ -64,29 +73,44 @@ export class UsageQuery extends Component {
 
 	render() {
 		const { actions, invoiceReducers = {} } = this.props
-		const { isLoading } = this.state
+		const { isLoading, tabCheckedKey, } = this.state
 		const { userInvoiceList, trinityInvoiceList, trinityInvoiceSearchItem } = invoiceReducers
 		const commonSearchProps = {
 			actions,
 			resetSearchParams: this.resetSearchParams,
-			trinityInvoiceSearchItem
+			trinityInvoiceSearchItem,
+			exportInvoiceFile: this.exportInvoiceFile
+		}
+		const paymentTypeMapAccount = {
+			1: '周打款',
+			2: '快易提',
+			3: '提前打款'
+		}
+		const paymentTypeMapTripartite = {
+			1: '三方预付款',
+			2: '三方周期付款',
 		}
 		return (
 			<Spin spinning={isLoading}>
 				<h2>发票使用明细查询</h2>
 				<Tabs defaultActiveKey="1" onChange={this.changeTabs}>
 					<TabPane tab="主账号" key="1">
-						<AccountForm {...commonSearchProps} onSearchList={this.getUserInvoiceSearchAsync} />
-						<ListTable isNoShowColumnsTitle={['三方代理商']} onSearchList={this.getUserInvoiceSearchAsync} list={userInvoiceList} />
+						{tabCheckedKey == 1 ? <AccountForm  {...commonSearchProps} onSearchList={this.getUserInvoiceSearchAsync} /> : null}
+						<ListTable isNoShowColumnsTitle={['三方代理商']}
+							onSearchList={this.getUserInvoiceSearchAsync}
+							list={userInvoiceList}
+							paymentTypeMap={paymentTypeMapAccount}
+						/>
 					</TabPane>
 					<TabPane tab="三方平台" key="2">
-						<TripartiteForm {...commonSearchProps} onSearchList={this.getTrinityInvoiceSearchAsync} />
+						{tabCheckedKey == 2 ? <TripartiteForm  {...commonSearchProps} onSearchList={this.getTrinityInvoiceSearchAsync} /> : null}
 						<ListTable
 							list={trinityInvoiceList}
 							onSearchList={this.getTrinityInvoiceSearchAsync}
 							scrollX={1000}
 							isNoShowColumnsTitle={['订单ID', '主账号', '订单应约税率', '预付金额',
 								'扣款金额', '媒介经理']}
+							paymentTypeMap={paymentTypeMapTripartite}
 						/>
 					</TabPane>
 				</Tabs>

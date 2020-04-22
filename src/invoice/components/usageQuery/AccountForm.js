@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Form, Input, Col, Button, Row } from 'antd'
+import { Form, Input, Col, Button, Row, Select } from 'antd'
 import SearchSelect from '@/base/SearchSelect'
 import SearchForm from './SearchForm'
 import EmSpan from '@/base/EmSpan'
@@ -33,6 +33,17 @@ export class AccountForm extends Component {
 			<Form className="flex-form-layout" layout="inline" autoComplete="off">
 				<Row>
 					<SearchForm form={form} actions={actions} />
+					<Col span={8}>
+						<Form.Item label={'打款类型'}>
+							{getFieldDecorator('payment_type', {})(
+								<Select allowClear placeholder='不限'>
+									<Select.Option key={1}>周打款</Select.Option>
+									<Select.Option key={2}>快易提</Select.Option>
+									<Select.Option key={3}>提前打款</Select.Option>
+								</Select>
+							)}
+						</Form.Item>
+					</Col>
 					<Col span={8}>
 						<Form.Item label={<EmSpan length={4}>主账号</EmSpan>}>
 							{getFieldDecorator('user', {
@@ -82,7 +93,7 @@ export class AccountForm extends Component {
 							<div style={{ textAlign: 'right' }}>
 								<Button type='primary' onClick={this.onSearch}>查询</Button>
 								<Button style={{ margin: '0px 10px' }} onClick={this.onReset}>重置</Button>
-								<Button type='primary'>导出</Button>
+								<Button type='primary' onClick={() => this.props.exportInvoiceFile(1)}>导出</Button>
 							</div>
 						</Form.Item>
 					</Col>

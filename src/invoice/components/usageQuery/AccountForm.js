@@ -3,7 +3,16 @@ import { Form, Input, Col, Button, Row } from 'antd'
 import SearchSelect from '@/base/SearchSelect'
 import SearchForm from './SearchForm'
 import EmSpan from '@/base/EmSpan'
+import { getTimeToObjByArr } from '@/util'
 export class AccountForm extends Component {
+	onSearch = (e) => {
+		e.preventDefault()
+		this.props.form.validateFields((err, values) => {
+			if (!err) {
+				console.log(getTimeToObjByArr(values.invoice_created_time, 'invoice_created_time_start', 'invoice_created_time_end'))
+			}
+		})
+	}
 	render() {
 		const { form } = this.props
 		const { getFieldDecorator } = form
@@ -50,7 +59,7 @@ export class AccountForm extends Component {
 					<Col span={8}>
 						<Form.Item >
 							<div style={{ textAlign: 'right' }}>
-								<Button type='primary'>查询</Button>
+								<Button type='primary' onClick={this.onSearch}>查询</Button>
 								<Button style={{ margin: '0px 10px' }}>重置</Button>
 								<Button type='primary'>导出</Button>
 							</div>

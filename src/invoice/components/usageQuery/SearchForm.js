@@ -57,14 +57,14 @@ class SearchForm extends Component {
 				</Col>
 				<Col span={8}>
 					<Form.Item label="发票录入时间">
-						{getFieldDecorator("validTime", {})(
+						{getFieldDecorator("invoice_created_time", {})(
 							<RangePicker style={{ width: '100%' }} />
 						)}
 					</Form.Item>
 				</Col>
 				<Col span={8}>
 					<Form.Item label={'使用时间'}>
-						{getFieldDecorator("validTime", {})(
+						{getFieldDecorator("invoice_use_time", {})(
 							<RangePicker style={{ width: '100%' }} />
 						)}
 					</Form.Item>

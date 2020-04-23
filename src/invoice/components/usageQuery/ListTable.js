@@ -14,7 +14,7 @@ const getDate = (date) => {
 }
 export default class ListTable extends Component {
 	render() {
-		const { isNoShowColumnsTitle, list = {}, scrollX, paymentTypeMap = {} } = this.props
+		const { isNoShowColumnsTitle, list = {}, paymentTypeMap = {} } = this.props
 		const { rows = [], aggregation = {}, pagination = {} } = list
 
 		const columns = [

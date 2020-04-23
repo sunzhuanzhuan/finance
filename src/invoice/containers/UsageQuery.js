@@ -119,7 +119,6 @@ export class UsageQuery extends Component {
 						<ListTable
 							list={trinityInvoiceList}
 							onSearchList={this.getTrinityInvoiceSearchAsync}
-							scrollX={1000}
 							isNoShowColumnsTitle={['订单信息', '媒介信息']}
 							paymentTypeMap={paymentTypeMapTripartite}
 						/>

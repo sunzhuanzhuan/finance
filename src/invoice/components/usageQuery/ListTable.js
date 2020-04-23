@@ -19,7 +19,7 @@ export default class ListTable extends Component {
 
 		const columns = [
 			{
-				title: '发票号/开具方',
+				title: '发票号/开具方/状态',
 				dataIndex: 'invoice_number',
 				key: 'invoice_number',
 				width: 140,
@@ -27,19 +27,14 @@ export default class ListTable extends Component {
 					return <div>
 						<div>{record.invoice_number}</div>
 						<div>{record.beneficiary_company}</div>
+						<div>
+							{record.invoice_status == 0 && <Badge status="default" />}
+							{record.invoice_status == 1 && <Badge status="processing" />}
+							{invoiceStatusMap[record.invoice_status]}
+						</div>
 					</div>
 				}
 			},
-			// {
-			// 	title: '发票开具方',
-			// 	dataIndex: 'beneficiary_company',
-			// 	key: 'beneficiary_company',
-			// },
-			// {
-			// 	title: '主账号',
-			// 	dataIndex: 'identity_name',
-			// 	key: 'identity_name',
-			// },
 			{
 				title: '三方代理商',
 				dataIndex: 'business_account_name',
@@ -56,19 +51,6 @@ export default class ListTable extends Component {
 						<div>税率：{record.invoice_tax_rate}</div>
 						<div>总金额：{record.invoice_amount}</div>
 					</div>
-				}
-			},
-			{
-				title: '发票状态',
-				dataIndex: 'invoice_status',
-				key: 'invoice_status',
-				width: 80,
-				render: text => {
-					return <span>
-						{text == 0 && <Badge status="default" />}
-						{text == 1 && <Badge status="processing" />}
-						{invoiceStatusMap[text]}
-					</span>
 				}
 			},
 			{
@@ -103,22 +85,11 @@ export default class ListTable extends Component {
 					</div>
 				}
 			},
-			// {
-			// 	title: '订单应约税率',
-			// 	dataIndex: 'accept_reservation_tax_rate',
-			// 	key: 'accept_reservation_tax_rate',
-			// },
-			// {
-			// 	title: '预付金额',
-			// 	dataIndex: 'prepayment_amount',
-			// 	key: 'prepayment_amount',
-			// },
 			{
 				title: '扣款金额',
 				dataIndex: 'invoice_deduction_amount',
 				key: 'invoice_deduction_amount',
 			},
-
 			{
 				title: '打款信息',
 				dataIndex: 'namec',

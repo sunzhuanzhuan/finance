@@ -132,6 +132,7 @@ export default class ListTable extends Component {
 				<Table
 					dataSource={rows}
 					columns={columns}
+					scroll={{ y: 400 }}
 					pagination={{
 						total: pagination.total,
 						pageSize: pagination.page_size || 10,

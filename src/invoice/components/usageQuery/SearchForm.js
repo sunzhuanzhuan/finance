@@ -22,7 +22,7 @@ class SearchForm extends Component {
 		return (
 			<span>
 				<Col span={8}>
-					<Form.Item label={<EmSpan length={4}>发票号</EmSpan>}>
+					<Form.Item label={<EmSpan length={5}>发票号</EmSpan>}>
 						{getFieldDecorator('invoice_number', {
 							rules: [],
 						})(<Input placeholder='请输入' />)}
@@ -58,7 +58,7 @@ class SearchForm extends Component {
 					</Form.Item>
 				</Col>
 				<Col span={8}>
-					<Form.Item label='发票状态' >
+					<Form.Item label={<EmSpan length={5}>发票状态</EmSpan>}>
 						{getFieldDecorator('invoice_status', {})(
 							<Select allowClear placeholder='不限'>
 								<Select.Option key={1}>已关联</Select.Option>
@@ -82,7 +82,7 @@ class SearchForm extends Component {
 					</Form.Item>
 				</Col>
 				<Col span={8}>
-					<Form.Item label="打款单ID">
+					<Form.Item label={<EmSpan length={5}>打款单ID</EmSpan>}>
 						{getFieldDecorator('order_id', {
 							rules: [],
 						})(<Input placeholder='请输入' />)}

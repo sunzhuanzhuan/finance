@@ -45,7 +45,7 @@ export class AccountForm extends Component {
 						</Form.Item>
 					</Col>
 					<Col span={8}>
-						<Form.Item label={<EmSpan length={4}>主账号</EmSpan>}>
+						<Form.Item label={<EmSpan length={5}>主账号</EmSpan>}>
 							{getFieldDecorator('user', {
 								rules: [],
 							})(<SearchSelect

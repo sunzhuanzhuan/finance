@@ -120,8 +120,7 @@ export class UsageQuery extends Component {
 							list={trinityInvoiceList}
 							onSearchList={this.getTrinityInvoiceSearchAsync}
 							scrollX={1000}
-							isNoShowColumnsTitle={['订单ID', '主账号', '订单应约税率', '预付金额',
-								'扣款金额', '媒介经理']}
+							isNoShowColumnsTitle={['订单信息', '媒介信息']}
 							paymentTypeMap={paymentTypeMapTripartite}
 						/>
 					</TabPane>

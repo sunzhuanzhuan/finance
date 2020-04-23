@@ -61,8 +61,8 @@ class SearchForm extends Component {
 					<Form.Item label='发票状态' >
 						{getFieldDecorator('invoice_status', {})(
 							<Select allowClear placeholder='不限'>
-								<Select.Option key={1}>已使用</Select.Option>
-								<Select.Option key={0}>未使用</Select.Option>
+								<Select.Option key={1}>已关联</Select.Option>
+								<Select.Option key={0}>未关联</Select.Option>
 							</Select>
 						)}
 					</Form.Item>
@@ -75,7 +75,7 @@ class SearchForm extends Component {
 					</Form.Item>
 				</Col>
 				<Col span={8}>
-					<Form.Item label={'使用时间'}>
+					<Form.Item label={'关联时间'}>
 						{getFieldDecorator("invoice_use_time", {})(
 							<RangePicker style={{ width: '100%' }} />
 						)}

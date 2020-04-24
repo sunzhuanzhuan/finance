@@ -256,9 +256,9 @@ class Detail extends Component {
 				<div className='pad20'>
 					<span className='displayInline'>订单原价（博主）</span>
 					<span className='displayInline'>￥{
-						detail.account ? 
+						detail.account && detail.order ? 
 							detail.account.is_settle_at_private_price == 1 ? 
-								detail.account.private_income_price : detail.account.private_cost_price : ''
+								detail.order.private_income_price : detail.order.private_cost_price : ''
 						}
 					</span>
 				</div>

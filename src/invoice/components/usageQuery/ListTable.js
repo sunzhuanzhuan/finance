@@ -19,7 +19,7 @@ export default class ListTable extends Component {
 
 		const columns = [
 			{
-				title: '发票号/开具方/状态',
+				title: '发票号/开具方',
 				dataIndex: 'invoice_number',
 				key: 'invoice_number',
 				width: 140,

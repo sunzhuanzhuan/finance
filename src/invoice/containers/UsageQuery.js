@@ -68,6 +68,9 @@ export class UsageQuery extends Component {
 			...getTimeToObjByArr(params.invoice_use_time, 'invoice_use_time_start', 'invoice_use_time_end'),//发票录入时间
 			...getTimeToObjByArr(params.payment_time, 'payment_time_start', 'payment_time_end'),//发票录入时间
 		}
+		delete paramsFormat.invoice_created_time
+		delete paramsFormat.invoice_use_time
+		delete paramsFormat.payment_time
 		if (paramsFormat.user) {
 			paramsFormat.user_id = params.user.key
 			delete paramsFormat.user

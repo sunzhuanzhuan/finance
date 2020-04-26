@@ -7,6 +7,7 @@
 		"axios": "^0.18.0",
 		"babel-polyfill": "^6.26.0",
 		"events": "^3.0.0",
+		"file-saver": "^2.0.2",
 		"history": "^4.7.2",
 		"js-cookie": "^2.2.0",
 		"lazy-load-component": "^1.1.5",

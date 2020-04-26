@@ -1,0 +1,158 @@
+.finance-rate-wrapper {
+    .rate-range-text {
+        text-align: left;
+        display: flex;
+    }
+    .range-val {
+        margin-right: 10px;
+        width: 170px;
+    }
+    .range-rate-val {
+        width: ~'calc(100% - 180px)';
+    }
+    .rate-add-btn {
+        margin: 5px 0 20px 0;
+    }
+    .operate-col {
+        padding: 8px 0;
+        a:not(:last-child) {
+            margin-right: 10px;
+        }
+    }
+}
+
+.reate-setting-modal {
+    .ant-modal-body {
+        padding: 20px;
+    }
+    .ant-form-item {
+        display: flex;
+        justify-content: flex-start;
+        .ant-form-item-label {
+            width: 70px;
+            text-align: left;
+        }
+        .rate-remark-ipt {
+            width: 300px;
+            resize: none;
+            height: 100px;
+        }
+        .rate-select {
+            width: 84px;
+            &:not(:first-child) {
+                margin-left: 5px;
+            }
+        }
+        .rate-ipt {
+            width: 120px;
+            margin: 0 5px;
+        }
+        .rate-delete {
+            margin-left: 10px;
+        }
+        .rate-rank-info {
+            color: red;
+        }
+    }
+}
+
+.finance-rate-detail-wrapper {
+    .rate-detail-commont-table {
+        .ant-table-pagination {
+            width: 100%;
+            text-align: right;
+        }
+        .ant-pagination-total-text {
+            float: left;
+        }
+    }
+    .site-page-header {
+        padding: 0;
+    }
+    .total-information {
+        margin: 15px 0;
+        background: #fff;
+    }
+    .detail-form {
+        &, .ant-form-item {
+            display: flex;
+            justify-content: flex-start;
+        }
+        .ant-form-item {
+            margin-left: 15px;
+            .ant-btn {
+                margin-left: 15px;
+            }
+        }
+    }
+    .operate-box {
+        .ant-btn {
+            margin-right: 15px;
+        }
+    }
+    .total-info-text {
+        margin: 0 10px;
+    }
+    .select-total-info {
+        margin: 15px 0;
+    }
+}
+
+.rate-detail-modal {
+    .ant-modal-body {
+        padding-top: 0;
+    }
+    .ant-modal-header {
+        .modal-sub-title {
+            color: rgba(0, 0, 0, 0.45);
+            font-size: 14px;
+            margin-left: 12px;
+        }
+    }
+    .finance-rate-detail-wrapper {
+        .rate-detail-commont-table {
+            .ant-table-pagination {
+                width: 100%;
+                text-align: right;
+            }
+            .ant-pagination-total-text {
+                float: left;
+            }
+        }
+        .detail-form {
+            display: block;
+        }
+        .detail-form {
+            .ant-form-item {
+                margin: 0;
+                float: left;
+            }
+            .operate-wrapper {
+                float: right;
+                margin-top: 8px;
+            }
+        }
+        .search-account-id .ant-form-item-label {
+            width: 74px;
+        }
+        .common-label .ant-form-item-label {
+            width: 114px;
+        }
+    }
+
+}
+
+.rate-selected-modal {
+    .ant-modal-body {
+        padding-top: 15px;
+    }
+    .clear-btn {
+        margin-bottom: 15px;
+    }
+}
+
+.add-warn-comp {
+    .ant-modal-confirm-title {
+        font-size: 14px;
+    }
+}

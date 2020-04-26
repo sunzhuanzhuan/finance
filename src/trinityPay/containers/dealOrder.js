@@ -43,7 +43,8 @@ class DealOrder extends React.Component {
 		})
 	}
 	handleFetchPlatform = () => {
-		const value = this.form.getFieldValue('cooperation_platform_id').key;
+		const cooperationPlatform = this.form.getFieldValue('cooperation_platform_id');
+		const value = cooperationPlatform && cooperationPlatform.key;
 		if (!value) {
 			message.error('请先选择三方下单平台');
 			return

@@ -64,7 +64,7 @@ class rateDetailModal extends React.Component {
 		});
 	}
 
-	handleOperate = (type, value) => {
+	handleOperate = (type, value, isPageChange) => {
 		switch(type) {
 			case 'selectedChange':
 				this.setState({selectedRows: value});
@@ -84,6 +84,11 @@ class rateDetailModal extends React.Component {
 					const { list = [] } = page;
 					if(isExist == 1 && !list.length) {
 						this.getAddWarnComp();
+					}
+					if(!isPageChange) {
+						this.setState({ 
+							selectedRows: [],
+						});
 					}
 				}).finally(() => {
 					this.setState({loading: false})

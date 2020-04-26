@@ -91,7 +91,7 @@ class rateDetailCommon extends React.Component {
 					selectedRows: [],
 				});
 			}
-			handleOperate(operateType, {...searchVal, ...pageInfo});
+			handleOperate(operateType, {...searchVal, ...pageInfo}, isPageChange);
 		}else {
 			this.getErrorTips('请输入搜索条件后查询')
 		}

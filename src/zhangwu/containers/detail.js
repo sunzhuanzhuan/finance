@@ -36,7 +36,7 @@ class Detail extends Component {
 		return payment_link ? <a target='_blank' href={payment_link}>{payment_id}</a> : <span>{payment_id}</span>
 	}
 	getPaymentDeductionAmount = (data) => {
-		return isNaN(data) ? data : Math.abs(data);
+		return isNaN(data) || !data ? data : Math.abs(data);
 	}
 
 	render(){

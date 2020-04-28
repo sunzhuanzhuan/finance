@@ -35,6 +35,9 @@ class Detail extends Component {
 	getPaymentIdComp = (payment_id, payment_link) => {
 		return payment_link ? <a target='_blank' href={payment_link}>{payment_id}</a> : <span>{payment_id}</span>
 	}
+	getPaymentDeductionAmount = (data) => {
+		return isNaN(data) ? data : Math.abs(data);
+	}
 
 	render(){
 		let {detail}=this.props;
@@ -287,7 +290,7 @@ class Detail extends Component {
 				<span>-</span>
 				<div className='pad20'>
 					<span className='displayInline'>支付方式变更扣款</span>
-					<span className='displayInline'>￥{detail.account?detail.account.payment_deduction_amount:''}</span>
+					<span className='displayInline'>￥{detail.account?this.getPaymentDeductionAmount(detail.account.payment_deduction_amount):''}</span>
 				</div>
 				
 				</Col>

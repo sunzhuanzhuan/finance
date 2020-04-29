@@ -86,7 +86,7 @@ class AddAdjustApply extends React.Component {
 		history.go(-1);
 	}
 	render() {
-		const { loading, tipVisible, checkVisible, curSelectRowKeys, curSelectRows, companyId, isShowList } = this.state;
+		const { loading, tipVisible, checkVisible, curSelectRowKeys, curSelectRows, companyId } = this.state;
 		const { addApplyListReducer = {}, goldenToken, goldenMetadata: { quote_type = [] }, platformIcon = [] } = this.props;
 		const {list = [], page, page_size, total = 0, all_total = 0} = addApplyListReducer['addApplyList'] || {};
 		const readyList = readyCheckFunc(this.handleDelete);

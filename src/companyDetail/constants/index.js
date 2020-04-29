@@ -755,7 +755,7 @@ export const addAdjustApplyConfig = (quote_type = [], platformIcon = []) => [
 						return getPriceItemWithEquities(item);
 					})}
 				</div>
-			return null;
+			return '-';
 		}
 	},
 	{
@@ -813,7 +813,9 @@ export const readyCheckFunc = (handleDelete) => {
 			dataIndex: 'price',
 			key: 'price',
 			align: 'center',
-			render: (text, { price }) => {
+			render: (_, { price }) => {
+				if(!(Array.isArray(price) && price.length))
+					return '-';
 				return <div>
 					{price.map((item) => {
 						return getPriceItemWithEquities(item);
@@ -827,7 +829,7 @@ export const readyCheckFunc = (handleDelete) => {
 			key: 'action',
 			align: 'left',
 			width: 60,
-			render: (text, record) => {
+			render: (_, record) => {
 				return <a href='javascript:;' onClick={() => { handleDelete(record.order_id) }}>删除</a>
 			}
 		}
@@ -1099,6 +1101,8 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				width: 320,
 				render: (_, { price = [], warningClass }) => {
 					// const flag = price && price[0] ? price[0].trinity_type == 2 : false;
+					if(!(Array.isArray(price) && price.length))
+						return '-';
 					return <div className={warningClass}>
 						{price.map(item => {
 							const showObj = {
@@ -1153,11 +1157,13 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				dataIndex: 'order_bottom_price',
 				key: 'order_bottom_price',
 				width: 320,
-				render: (_, { price = [], warningClass }) => {
+				render: (_, { price, warningClass }) => {
 					// quote_type 判断展示利用率或服务费率
 					// public_base_price 阳价 三方 public_base_profit_rate 利用率
 					// private_base_price 阴价 博主 private_base_profit_rate 利用率
 					// trinity_type === 2 显示阴阳价 判断是否展示
+					if(!(Array.isArray(price) && price.length))
+						return '-';
 					return <div className={warningClass}>
 						{price.map(item => {
 							const { created_time } = item;
@@ -1186,10 +1192,12 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				dataIndex: 'price',
 				key: 'price',
 				width: 320,
-				render: (text, { price = [], warningClass }) => {
+				render: (_, { price = [], warningClass }) => {
 					// const flag = price && price[0] ? price[0].trinity_type == 2 : false;
 					// private_quote_price 阴价 利用率  private_profit_rate
 					// public_quote_price 阳价 利用率  public_profit_rate
+					if(!(Array.isArray(price) && price.length))
+						return '-';
 					return <div className={warningClass}>
 						{price.map(item => {
 							const { created_time } = item;
@@ -1222,6 +1230,8 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 					// const flag = price && price[0] ? price[0].trinity_type == 2 : false;
 					// private_quote_price 阴价 利用率  private_profit_rate
 					// public_quote_price 阳价 利用率  public_profit_rate
+					if(!(Array.isArray(price) && price.length))
+						return '-';
 					return <div className={warningClass}>
 						{price.map(item => {
 							const showObj = {
@@ -1244,6 +1254,8 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				key: 'price',
 				width: 260,
 				render: (_, { price = [] }) => {
+					if(!(Array.isArray(price) && price.length))
+						return '-';
 					return <div>
 						{price.map(item => {
 							return getPriceItemWithEquities(item)
@@ -1260,7 +1272,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				render: (text, { history_min_sell_price: { readjust_type: readJustType } }) => {
 					const item = text ? text.min_sell_price : [];
 					const value = readjust_type.find(item => item.id == readJustType) || {};
-					const node = item.length > 0 ? <div>
+					const node = Array.isArray(item) && item.length ? <div>
 						{item.map(item => {
 							const showObj = {
 								isShowDetail: item.trinity_type == 2,
@@ -1302,7 +1314,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				className: 'relative_td',
 				render: (text, { readjust_type: readJustType }) => {
 					const value = readjust_type.find(item => item.id == readJustType) || {};
-					const node = text ? text.map(item => {
+					const node = Array.isArray(text) && text.length ? text.map(item => {
 						const showObj = {
 							isShowDetail: item.trinity_type == 2,
 							isShowRate: false,
@@ -1327,6 +1339,8 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				width: 320,
 				render: (_, { pre_min_sell_price = [], warningClass }) => {
 					// const flag = price && price[0] ? price[0].trinity_type == 2 : false;
+					if(!(Array.isArray(pre_min_sell_price) && pre_min_sell_price.length))
+						return '-';
 					return <div className={warningClass}>
 						{pre_min_sell_price.map(item => {
 							const showObj = {

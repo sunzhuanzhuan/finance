@@ -11,6 +11,7 @@ import "./golden.less";
 import qs from 'qs';
 import difference from 'lodash/difference';
 import { getAddApplyList, clearAddApplyList } from '../actions/getApplyList';
+import { getTotalWidth } from '@/util';
 
 const { info } = Modal;
 
@@ -90,6 +91,8 @@ class AddAdjustApply extends React.Component {
 		const {list = [], page, page_size, total = 0, all_total = 0} = addApplyListReducer['addApplyList'] || {};
 		const readyList = readyCheckFunc(this.handleDelete);
 		const totalMsg = `查询结果共${all_total}个，${total}个符合调价要求，${all_total - total}不符合：A端创建/订单已申请调价且尚未审批/非客户待确认状态订单无法申请调价。`;
+		const applyColumns = addAdjustApplyConfig(quote_type, platformIcon);
+		const scrollWidth = getTotalWidth(applyColumns);
 
 		return <div className='add-adjust-apply'>
 			<h2 className='add_adjust_header' onClick={this.handleBack}>
@@ -116,7 +119,7 @@ class AddAdjustApply extends React.Component {
 			<ApplyTable
 				type={'add'}
 				rowKey={'order_id'}
-				columns={addAdjustApplyConfig(quote_type, platformIcon)}
+				columns={applyColumns}
 				dataSource={list}
 				loading={loading}
 				queryAction={this.queryData}
@@ -127,7 +130,7 @@ class AddAdjustApply extends React.Component {
 				curSelectRows={curSelectRows}
 				handleSelected={this.handleSelected}
 				location={this.props.location}
-				scroll={{ x: 1900 }}
+				scroll={{ x: scrollWidth }}
 			/>
 			<Row className='top-gap' style={{ textAlign: 'center' }}>
 				<Button className='adjust-apply-btn' type='default' onClick={() => {

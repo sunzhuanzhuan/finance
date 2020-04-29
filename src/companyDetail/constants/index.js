@@ -1129,7 +1129,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '刊例价/渠道价',
 				dataIndex: 'published_price',
 				key: 'published_price',
-				width: 640,
+				width: 690,
 				render: (_, record) => {
 					const { platform_id, reference_price_doc } = record;
 
@@ -1444,7 +1444,6 @@ const priceNameRender = (data, record) => {
 		return '-';
 	const equitiesStr = getEquities(record.equities);
 	return data + equitiesStr;
-	
 }
 
 const getPublishedCol = isWechat => {
@@ -1452,12 +1451,11 @@ const getPublishedCol = isWechat => {
 		{
 			title: '',
 			key: 'empty',
-			width: 50,
 			children: [
 				{
 					title: '',
 					dataIndex: 'priceName',
-					width: 50,
+					width: 100,
 					key: 'empty_child',
 					render: priceNameRender
 				}
@@ -1528,7 +1526,7 @@ const getPublishedCol = isWechat => {
 		{
 			title: '',
 			dataIndex: 'priceName',
-			width: 50,
+			width: 100,
 			key: 'empty_child',
 			render: priceNameRender
 		},

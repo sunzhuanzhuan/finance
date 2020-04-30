@@ -88,7 +88,11 @@ class ApplyDetail extends React.Component {
 		return today;
 	}
 	handleReadyVisible = () => {
-		this.setState({ readyVisible: true });
+		let { applyDetail: { order_total_amount, qc_write_off } } = this.props;
+		let { calculateCost: { total_fee, total_service_fee } } = this.props;
+		let array = [order_total_amount, -qc_write_off, -total_fee, -total_service_fee];
+		let value = calcSum(array);
+		this.setState({ readyVisible: true, total_withdraw_money: value });
 	}
 	handleReadyCancel = () => {
 		this.setState({ readyVisible: false });
@@ -404,9 +408,9 @@ class ApplyDetail extends React.Component {
 							<Row style={{ marginTop: '10px' }}>
 								<Col className='modal-icon-item'>订单总额：{applyDetail.order_total_amount || 0.00} 元</Col>
 							</Row>
-							<Row style={{ marginTop: '10px' }}>
+							{/* <Row style={{ marginTop: '10px' }}>
 								<Col className='modal-icon-item'> - 质检总额：{applyDetail.qc_write_off || 0.00} 元</Col>
-							</Row>
+							</Row> */}
 							<Row style={{ marginTop: '10px' }}>
 								<Col className='modal-icon-item'> - 利息总额：{total_fee || 0.00} 元</Col>
 							</Row>

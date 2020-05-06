@@ -58,7 +58,7 @@ export class UsageQuery extends Component {
 	}
 	//导出
 	exportInvoiceFile = (source_type) => {
-		this.props.actions.exportInvoice({ source_type: source_type, ...this.state.searchParams })
+		this.props.actions.exportInvoice(this.timeFormat({ source_type: source_type, ...this.state.searchParams }))
 	}
 	//处理数据中的时间参数
 	timeFormat = (params = {}) => {

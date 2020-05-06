@@ -62,7 +62,7 @@ export class UsageQuery extends Component {
 		apiDownload({
 			url: Interface.exportInvoice + '?' + qs.stringify(this.timeFormat({ source_type: source_type, ...this.state.searchParams })),
 			method: 'GET',
-		}, '发票使用明细.xlsx')
+		}, '发票使用明细.csv')
 	}
 	//处理数据中的时间参数
 	timeFormat = (params = {}) => {

@@ -88,11 +88,7 @@ class ApplyDetail extends React.Component {
 		return today;
 	}
 	handleReadyVisible = () => {
-		let { applyDetail: { order_total_amount, qc_write_off } } = this.props;
-		let { calculateCost: { total_fee, total_service_fee } } = this.props;
-		let array = [order_total_amount, -qc_write_off, -total_fee, -total_service_fee];
-		let value = calcSum(array);
-		this.setState({ readyVisible: true, total_withdraw_money: value });
+		this.setState({ readyVisible: true });
 	}
 	handleReadyCancel = () => {
 		this.setState({ readyVisible: false });
@@ -214,7 +210,7 @@ class ApplyDetail extends React.Component {
 			let { calculateCost: { total_fee, total_service_fee } } = this.props;
 			let other_fee = getFieldValue('other_fee') || 0;
 			let discount_amount = getFieldValue('discount_amount') || 0;
-			let array = [order_total_amount, -qc_write_off, -total_fee, -total_service_fee, -other_fee, +discount_amount];
+			let array = [order_total_amount, -total_fee, -total_service_fee, -other_fee, +discount_amount];
 			this.calcWithdrawTotal(array);
 			hide();
 		}).catch(({ errorMsg }) => {
@@ -239,7 +235,7 @@ class ApplyDetail extends React.Component {
 		let { applyDetail: { order_total_amount, qc_write_off } } = this.props;
 		let { calculateCost: { total_fee, total_service_fee } } = this.props;
 		let discount_amount = getFieldValue('discount_amount') || 0;
-		let array = [order_total_amount, -qc_write_off, -total_fee, -total_service_fee, -value, +discount_amount];
+		let array = [order_total_amount, -total_fee, -total_service_fee, -value, +discount_amount];
 		this.calcWithdrawTotal(array);
 
 	}
@@ -249,7 +245,7 @@ class ApplyDetail extends React.Component {
 		let { applyDetail: { order_total_amount, qc_write_off } } = this.props;
 		let { calculateCost: { total_fee, total_service_fee } } = this.props;
 		let other_fee = getFieldValue('other_fee') || 0;
-		let array = [order_total_amount, -qc_write_off, -total_fee, -total_service_fee, -other_fee, +value];
+		let array = [order_total_amount, -total_fee, -total_service_fee, -other_fee, +value];
 		this.calcWithdrawTotal(array);
 	}
 	calcWithdrawTotal = (ary) => {

@@ -25,12 +25,16 @@ export default class ListTable extends Component {
 				width: 140,
 				render: (text, record) => {
 					return <div>
-						<div>{record.invoice_number}</div>
-						<div >{record.beneficiary_company}</div>
+						<Popover content={record.invoice_number} overlayStyle={{ width: 200 }}>
+							<div className='ellipsis-nowrap'>{record.invoice_number}</div>
+						</Popover>
+						<Popover content={record.beneficiary_company} overlayStyle={{ width: 200 }}>
+							<div className='ellipsis-nowrap'>{record.beneficiary_company}</div>
+						</Popover>
 						<div>
 							{record.invoice_status == 0 && <Badge status="default" />}
-							{record.invoice_status == '已使用' && <Badge status="processing" />}
-							{record.invoice_status}
+							{record.invoice_status == 1 && <Badge status="processing" />}
+							{invoiceStatusMap[record.invoice_status]}
 						</div>
 					</div>
 				}

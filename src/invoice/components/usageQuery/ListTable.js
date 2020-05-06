@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Table, Alert, Icon, Badge } from 'antd'
+import { Table, Alert, Icon, Badge, Popover } from 'antd'
 import moment from 'moment'
 const invoiceStatusMap = {
 	1: '已关联',
@@ -26,11 +26,11 @@ export default class ListTable extends Component {
 				render: (text, record) => {
 					return <div>
 						<div>{record.invoice_number}</div>
-						<div>{record.beneficiary_company}</div>
+						<div >{record.beneficiary_company}</div>
 						<div>
 							{record.invoice_status == 0 && <Badge status="default" />}
-							{record.invoice_status == 1 && <Badge status="processing" />}
-							{invoiceStatusMap[record.invoice_status]}
+							{record.invoice_status == '已使用' && <Badge status="processing" />}
+							{record.invoice_status}
 						</div>
 					</div>
 				}
@@ -61,8 +61,8 @@ export default class ListTable extends Component {
 				align: 'center',
 				render: (text, record) => {
 					return <div>
-						<div>录入：{getDate(text)}</div>
-						{record.invoice_status == 1 && <div>关联：{getDate(record.invoice_use_time)}</div>}
+						<div>录入：{text}</div>
+						{record.invoice_status == 1 && <div>关联：{record.invoice_use_time}</div>}
 					</div>
 				}
 			},
@@ -99,7 +99,7 @@ export default class ListTable extends Component {
 					return <div>
 						<div>ID：{record.payment_id}</div>
 						<div>类型：{paymentTypeMap[record.payment_type]}</div>
-						<div>时间：{getDate(record.payment_time)}</div>
+						<div>时间：{record.payment_time}</div>
 					</div>
 				}
 			},

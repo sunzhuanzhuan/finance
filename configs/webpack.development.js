@@ -13,12 +13,8 @@ module.exports = merge(baseConfig, {
 		hot: true,
 		host: 'lg.nip.io',
 		proxy: {
-			"/api/finance/invoice": {
-				target: "http://yapi.ops.tst-weiboyi.com/mock/257",
-				changeOrigin: true
-			},
 			"/api": {
-				target: "http://nb.tst-weiboyi.com",
+				target: "http://nb.dev-weiboyi.com",
 				changeOrigin: true
 			}
 

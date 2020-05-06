@@ -133,10 +133,11 @@ export default class ListTable extends Component {
 					dataSource={rows}
 					columns={columns}
 					scroll={{ y: 400 }}
+					rowKey={(record, index) => record.invoice_number + index}
 					pagination={{
 						total: pagination.total,
-						pageSize: pagination.page_size || 10,
-						current: pagination.page || 1,
+						pageSize: Number(pagination.page_size || 10),
+						current: Number(pagination.page || 1),
 						showSizeChanger: true,
 						showQuickJumper: true,
 						onChange: (currentPage, pageSize) => {

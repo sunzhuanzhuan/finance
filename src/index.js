@@ -26,6 +26,7 @@ import ZhangWu from './zhangwu'
 import Receivable from './receivablesInquiries'
 import ReceivableOff from './receivablesOff'
 import FinanceParamsSetting from './financeParamsSetting';
+import FinanceRateSetting from './financeRateSetting';
 
 numeral.locale('chs')
 moment.locale('zh-cn');
@@ -58,6 +59,7 @@ const routes = () => (
 			<Route path='/finance/receivable' component={Receivable} />
 			<Route path='/finance/receivableoff' component={ReceivableOff} />
 			<Route path='/finance/financeParamsSetting' component={FinanceParamsSetting} />
+			<Route path='/finance/financeRateSetting' component={FinanceRateSetting} />
 
 			<Redirect to="/error" />
 		</Switch>

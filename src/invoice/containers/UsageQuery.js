@@ -4,11 +4,12 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import * as action from '../actions/usageQuery'
 import * as trinityInvoiceAction from '../actions/trinityInvoice'
-
-
+import apiDownload from '@/api/apiDownload';
+import qs from 'qs'
 import * as commonAction from "@/actions";
 import { TripartiteForm, AccountForm, ListTable } from '../components/usageQuery'
 import { getTimeToObjByArr } from '../util'
+import Interface from '../constants/Interface'
 const { TabPane } = Tabs;
 const defaultSearch = { page: 1, page_size: 10 }
 export class UsageQuery extends Component {
@@ -58,7 +59,10 @@ export class UsageQuery extends Component {
 	}
 	//导出
 	exportInvoiceFile = (source_type) => {
-		this.props.actions.exportInvoice(this.timeFormat({ source_type: source_type, ...this.state.searchParams }))
+		apiDownload({
+			url: Interface.exportInvoice + '?' + qs.stringify(this.timeFormat({ source_type: source_type, ...this.state.searchParams })),
+			method: 'GET',
+		}, '发票使用明细.xlsx')
 	}
 	//处理数据中的时间参数
 	timeFormat = (params = {}) => {

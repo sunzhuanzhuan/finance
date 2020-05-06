@@ -82,6 +82,11 @@ export class UsageQuery extends Component {
 		if (paramsFormat.beneficiary_company) {
 			paramsFormat.beneficiary_company = params.beneficiary_company.key
 		}
+		Object.keys(paramsFormat).forEach(item => {
+			if (!paramsFormat[item] && paramsFormat[item] != 0) {
+				delete paramsFormat[item]
+			}
+		})
 		return paramsFormat
 	}
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Form, Input, Select, DatePicker, Row, Col, Button } from 'antd'
+import { Form, Input, Select, DatePicker, Row, Col, Button, InputNumber } from 'antd'
 import SearchSelect from '@/base/SearchSelect'
 import EmSpan from '@/base/EmSpan'
 const { RangePicker } = DatePicker
@@ -83,9 +83,9 @@ class SearchForm extends Component {
 				</Col>
 				<Col span={8}>
 					<Form.Item label={<EmSpan length={5}>打款单ID</EmSpan>}>
-						{getFieldDecorator('order_id', {
+						{getFieldDecorator('payment_id', {
 							rules: [],
-						})(<Input placeholder='请输入' />)}
+						})(<InputNumber placeholder='请输入' style={{ width: '100%' }} />)}
 					</Form.Item>
 				</Col>
 

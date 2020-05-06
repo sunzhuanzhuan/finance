@@ -25,10 +25,18 @@ export default class ListTable extends Component {
 				width: 140,
 				render: (text, record) => {
 					return <div>
-						<Popover content={record.invoice_number} overlayStyle={{ width: 200 }}>
+						<Popover
+							title='发票号'
+							content={<div style={{ wordBreak: 'break-all' }}>{record.invoice_number}</div>}
+							overlayStyle={{ width: 200 }}
+						>
 							<div className='ellipsis-nowrap'>{record.invoice_number}</div>
 						</Popover>
-						<Popover content={record.beneficiary_company} overlayStyle={{ width: 200 }}>
+						<Popover
+							title='发票开具方'
+							content={<div style={{ wordBreak: 'break-all' }}>{record.beneficiary_company}</div>}
+							overlayStyle={{ width: 200 }}
+						>
 							<div className='ellipsis-nowrap'>{record.beneficiary_company}</div>
 						</Popover>
 						<div>

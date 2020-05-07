@@ -6,9 +6,10 @@ import EmSpan from '@/base/EmSpan'
 export class AccountForm extends Component {
 	onSearch = (e) => {
 		e.preventDefault()
+		const { searchParams } = this.props
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
-				this.props.onSearchList(values, true)
+				this.props.onSearchList({ ...values, page_size: searchParams.page_size, page: 1 }, true)
 			}
 		})
 	}

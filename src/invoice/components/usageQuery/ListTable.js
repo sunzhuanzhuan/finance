@@ -15,7 +15,7 @@ const getDate = (date) => {
 }
 export default class ListTable extends Component {
 	render() {
-		const { isNoShowColumnsTitle, list = {}, sumLoading, paymentTypeMap = {}, aggregation = {} } = this.props
+		const { isNoShowColumnsTitle, list = {}, noDeduction, sumLoading, paymentTypeMap = {}, aggregation = {}, searchParams } = this.props
 		const { rows = [], pagination = {} } = list
 
 		const columns = [
@@ -135,7 +135,7 @@ export default class ListTable extends Component {
 			{ name: '当前筛选条件下共', number: pagination.total, unit: '条' },
 			{ name: '发票总金额 ', number: aggregation.total_invoice_amount },
 			{ name: '打款金额 ', number: aggregation.total_payment_amount },
-			{ name: '扣款金额 ', number: aggregation.total_deduction_amount },
+			{ name: '扣款金额 ', number: aggregation.total_deduction_amount, noShow: noDeduction },
 			{ name: '关联金额 ', number: aggregation.total_invoice_use_amount },
 
 		]
@@ -160,10 +160,10 @@ export default class ListTable extends Component {
 						showSizeChanger: true,
 						showQuickJumper: true,
 						onChange: (currentPage, pageSize) => {
-							this.props.onSearchList({ page: currentPage, page_size: pageSize })
+							this.props.onSearchList({ ...searchParams, page: currentPage, page_size: pageSize })
 						},
 						onShowSizeChange: (current, size) => {
-							this.props.onSearchList({ page: 1, page_size: size })
+							this.props.onSearchList({ ...searchParams, page: 1, page_size: size })
 						}
 					}}
 				/>
@@ -175,7 +175,7 @@ export default class ListTable extends Component {
 
 
 const InfoList = ({ list = [] }) => {
-	return list.map(one => <span key={one.name} style={{ marginLeft: 6 }}>
+	return list.map(one => one.noShow ? null : <span key={one.name} style={{ marginLeft: 6 }}>
 		{one.name}
 		<span className='theme-font-color' style={{ margin: '0px 2px' }}>{one.number}</span>
 		{one.unit}

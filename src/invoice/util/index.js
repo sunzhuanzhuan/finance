@@ -88,7 +88,7 @@ export const columnsList = (configMap, configKeys) => {
 //时间数组处理
 export const getTimeToObjByArr = (dateTime, key1, key2, format = 'YYYY-MM-DD') => {
 	let obj = {}
-	if (Array.isArray(dateTime)) {
+	if (Array.isArray(dateTime) && dateTime.length > 0) {
 		obj[key1] = moment(dateTime[0]).format(format);
 		obj[key2] = moment(dateTime[1]).format(format);
 	}

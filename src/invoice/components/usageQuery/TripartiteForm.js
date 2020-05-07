@@ -4,9 +4,10 @@ import SearchForm from './SearchForm'
 export class TripartiteForm extends Component {
 	onSearch = (e) => {
 		e.preventDefault()
+		const { searchParams } = this.props
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
-				this.props.onSearchList(values, true)
+				this.props.onSearchList({ ...values, page_size: searchParams.page_size, page: 1 }, true)
 			}
 		})
 	}
@@ -16,13 +17,13 @@ export class TripartiteForm extends Component {
 	}
 
 	render() {
-		const { form, trinityInvoiceSearchItem = {} } = this.props
+		const { form, trinityInvoiceSearchItem = {}, actions } = this.props
 		const { agent = [] } = trinityInvoiceSearchItem
 		const { getFieldDecorator } = form
 		return (
 			<Form className="flex-form-layout" layout="inline" autoComplete="off">
 				<Row>
-					<SearchForm form={form} />
+					<SearchForm form={form} actions={actions} />
 					<Col span={8}>
 						<Form.Item label={'打款类型'}>
 							{getFieldDecorator('payment_type', {})(
@@ -38,7 +39,7 @@ export class TripartiteForm extends Component {
 							{getFieldDecorator('business_account_id', {
 								rules: [],
 							})(
-								<Select>
+								<Select placeholder='请选择'>
 									{agent.map(one => <Select.Option
 										key={one.values}
 										value={one.value}> {one.name}

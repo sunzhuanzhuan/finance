@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import { Table, Alert, Icon, Badge, Popover } from 'antd'
+import { Table, Alert, Icon, Badge, Popover, Skeleton } from 'antd'
 import moment from 'moment'
+import './ListTable.less'
 const invoiceStatusMap = {
 	1: '已关联',
 	0: '未关联'
@@ -14,8 +15,8 @@ const getDate = (date) => {
 }
 export default class ListTable extends Component {
 	render() {
-		const { isNoShowColumnsTitle, list = {}, paymentTypeMap = {} } = this.props
-		const { rows = [], aggregation = {}, pagination = {} } = list
+		const { isNoShowColumnsTitle, list = {}, sumLoading, paymentTypeMap = {}, aggregation = {} } = this.props
+		const { rows = [], pagination = {} } = list
 
 		const columns = [
 			{
@@ -137,10 +138,14 @@ export default class ListTable extends Component {
 
 		]
 		return (
-			<div style={{ paddingTop: 20 }}>
-				<Alert style={{ marginBottom: 20 }} message={<div><Icon className='theme-font-color' theme="filled" type="info-circle" />
-					<InfoList list={alertInfoList} />
-				</div>} type="info" />
+			<div style={{ paddingTop: 20 }} className='list-table-usage-box'>
+				<Skeleton loading={sumLoading} active paragraph={false} rows={1} >
+					<Alert style={{ marginBottom: 20 }}
+						message={<div>
+							<Icon className='theme-font-color' theme="filled" type="info-circle" />
+							<InfoList list={alertInfoList} />
+						</div>} type="info" />
+				</Skeleton>
 				<Table
 					dataSource={rows}
 					columns={columns}

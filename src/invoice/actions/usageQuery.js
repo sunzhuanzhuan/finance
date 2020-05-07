@@ -32,4 +32,13 @@ export const {
 	beneficiaryCompanyList,
 	beneficiaryCompanyList_success
 } = createHttpAction('beneficiaryCompanyList', Interface.beneficiaryCompanyList);
-
+//主账号发票列表统计数据
+export const {
+	userInvoiceSearchAgg,
+	userInvoiceSearchAgg_success
+} = createHttpAction('userInvoiceSearchAgg', Interface.userInvoiceSearchAgg);
+//三方发票列表统计数据
+export const {
+	trinityInvoiceSearchAgg,
+	trinityInvoiceSearchAgg_success
+} = createHttpAction('trinityInvoiceSearchAgg', Interface.trinityInvoiceSearchAgg);

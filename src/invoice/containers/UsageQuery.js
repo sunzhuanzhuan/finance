@@ -19,6 +19,7 @@ export class UsageQuery extends Component {
 			isLoading: false,
 			searchParams: defaultSearch,
 			tabCheckedKey: 1,
+			sumLoading: true
 		};
 		this.resetSearchParams = this.resetSearchParams.bind(this)
 	}
@@ -45,10 +46,12 @@ export class UsageQuery extends Component {
 	}
 	//查询主账号列表
 	getUserInvoiceSearchAsync = async (params) => {
-		this.setState({ isLoading: true })
+		this.setState({ isLoading: true, sumLoading: true })
 		const paramsAll = { ...this.state.searchParams, ...params }
 		await this.props.actions.getUserInvoiceSearch(this.timeFormat(paramsAll))
 		this.setState({ isLoading: false, searchParams: paramsAll })
+		await this.props.actions.userInvoiceSearchAgg(this.timeFormat(paramsAll))
+		this.setState({ sumLoading: false })
 	}
 	//查询三方列表
 	getTrinityInvoiceSearchAsync = async (params) => {
@@ -56,6 +59,8 @@ export class UsageQuery extends Component {
 		const paramsAll = { ...this.state.searchParams, ...params }
 		await this.props.actions.getTrinityInvoiceSearch(this.timeFormat(paramsAll))
 		this.setState({ isLoading: false, searchParams: paramsAll })
+		await this.props.actions.trinityInvoiceSearchAgg(this.timeFormat(paramsAll))
+		this.setState({ sumLoading: false })
 	}
 	//导出
 	exportInvoiceFile = (source_type) => {
@@ -97,13 +102,17 @@ export class UsageQuery extends Component {
 
 	render() {
 		const { actions, invoiceReducers = {} } = this.props
-		const { isLoading, tabCheckedKey, } = this.state
-		const { userInvoiceList, trinityInvoiceList, trinityInvoiceSearchItem } = invoiceReducers
+		const { isLoading, tabCheckedKey, sumLoading } = this.state
+		const { userInvoiceList, trinityInvoiceList, trinityInvoiceSearchItem, userInvoiceSum,
+			trinityInvoiceSum
+		} = invoiceReducers
+
 		const commonSearchProps = {
 			actions,
 			resetSearchParams: this.resetSearchParams,
 			trinityInvoiceSearchItem,
-			exportInvoiceFile: this.exportInvoiceFile
+			exportInvoiceFile: this.exportInvoiceFile,
+
 		}
 		const paymentTypeMapAccount = {
 			1: '周打款',
@@ -124,6 +133,8 @@ export class UsageQuery extends Component {
 							onSearchList={this.getUserInvoiceSearchAsync}
 							list={userInvoiceList}
 							paymentTypeMap={paymentTypeMapAccount}
+							aggregation={userInvoiceSum}
+							sumLoading={sumLoading}
 						/>
 					</TabPane>
 					<TabPane tab="三方平台" key="2">
@@ -133,6 +144,7 @@ export class UsageQuery extends Component {
 							onSearchList={this.getTrinityInvoiceSearchAsync}
 							isNoShowColumnsTitle={['订单信息', '媒介信息']}
 							paymentTypeMap={paymentTypeMapTripartite}
+							aggregation={trinityInvoiceSum}
 						/>
 					</TabPane>
 				</Tabs>

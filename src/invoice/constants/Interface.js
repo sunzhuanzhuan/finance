@@ -25,5 +25,7 @@ export default {
 	exportInvoice: '/finance/invoice/balance/export',//导出查询的发票数据
 	ownerAdminListInvoice: '/finance/invoice/balance/ownerAdminList',//媒介经理联想搜索
 	userIdentityNameList: '/finance/invoice/balance/userIdentityNameList',//主账号联想搜索
-	beneficiaryCompanyList: '/finance/invoice/balance/beneficiaryCompanyList'//发票开具方联想搜索
+	beneficiaryCompanyList: '/finance/invoice/balance/beneficiaryCompanyList',//发票开具方联想搜索
+	userInvoiceSearchAgg: '/finance/invoice/balance/userInvoiceSearchAgg',//主账号发票列表统计数据
+	trinityInvoiceSearchAgg: '/finance/invoice/balance/trinityInvoiceSearchAgg',//三方发票列表统计数据
 }

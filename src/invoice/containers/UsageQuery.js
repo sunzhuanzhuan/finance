@@ -33,9 +33,9 @@ export class UsageQuery extends Component {
 			tabCheckedKey: key
 		}, () => {
 			if (key == 1) {
-				this.getUserInvoiceSearchAsync()
+				this.getUserInvoiceSearchAsync({}, true)
 			} else {
-				this.getTrinityInvoiceSearchAsync()
+				this.getTrinityInvoiceSearchAsync({}, true)
 			}
 		})
 	}
@@ -45,22 +45,32 @@ export class UsageQuery extends Component {
 		})
 	}
 	//查询主账号列表
-	getUserInvoiceSearchAsync = async (params) => {
-		this.setState({ isLoading: true, sumLoading: true })
-		const paramsAll = { ...this.state.searchParams, ...params }
-		await this.props.actions.getUserInvoiceSearch(this.timeFormat(paramsAll))
-		this.setState({ isLoading: false, searchParams: paramsAll })
-		await this.props.actions.userInvoiceSearchAgg(this.timeFormat(paramsAll))
-		this.setState({ sumLoading: false })
-	}
-	//查询三方列表
-	getTrinityInvoiceSearchAsync = async (params) => {
+	getUserInvoiceSearchAsync = (params, isNeedSearchSum) => {
 		this.setState({ isLoading: true })
 		const paramsAll = { ...this.state.searchParams, ...params }
-		await this.props.actions.getTrinityInvoiceSearch(this.timeFormat(paramsAll))
-		this.setState({ isLoading: false, searchParams: paramsAll })
-		await this.props.actions.trinityInvoiceSearchAgg(this.timeFormat(paramsAll))
-		this.setState({ sumLoading: false })
+		this.props.actions.getUserInvoiceSearch(this.timeFormat(paramsAll)).then(() => {
+			this.setState({ isLoading: false, searchParams: paramsAll })
+		})
+		if (isNeedSearchSum) {
+			this.setState({ sumLoading: true })
+			this.props.actions.userInvoiceSearchAgg(this.timeFormat(paramsAll)).then(() => {
+				this.setState({ sumLoading: false })
+			})
+		}
+	}
+	//查询三方列表
+	getTrinityInvoiceSearchAsync = (params, isNeedSearchSum) => {
+		this.setState({ isLoading: true })
+		const paramsAll = { ...this.state.searchParams, ...params }
+		this.props.actions.getTrinityInvoiceSearch(this.timeFormat(paramsAll)).then(() => {
+			this.setState({ isLoading: false, searchParams: paramsAll })
+		})
+		if (isNeedSearchSum) {
+			this.setState({ sumLoading: true })
+			this.props.actions.trinityInvoiceSearchAgg(this.timeFormat(paramsAll)).then(() => {
+				this.setState({ sumLoading: false })
+			})
+		}
 	}
 	//导出
 	exportInvoiceFile = (source_type) => {
@@ -142,7 +152,7 @@ export class UsageQuery extends Component {
 						<ListTable
 							list={trinityInvoiceList}
 							onSearchList={this.getTrinityInvoiceSearchAsync}
-							isNoShowColumnsTitle={['订单信息', '媒介信息']}
+							isNoShowColumnsTitle={['订单信息', '媒介信息', '扣款金额']}
 							paymentTypeMap={paymentTypeMapTripartite}
 							aggregation={trinityInvoiceSum}
 						/>

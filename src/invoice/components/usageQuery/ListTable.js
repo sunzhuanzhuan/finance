@@ -83,6 +83,7 @@ export default class ListTable extends Component {
 				title: '关联金额',
 				dataIndex: 'invoice_use_amount',
 				key: 'invoice_use_amount',
+				align: 'center',
 				render: (text, record) => record.invoice_status == 1 ? text : null
 			},
 			{
@@ -101,6 +102,7 @@ export default class ListTable extends Component {
 			{
 				title: '扣款金额',
 				dataIndex: 'invoice_deduction_amount',
+				align: 'center',
 				key: 'invoice_deduction_amount',
 			},
 			{

@@ -8,7 +8,7 @@ export class AccountForm extends Component {
 		e.preventDefault()
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
-				this.props.onSearchList(values)
+				this.props.onSearchList(values, true)
 			}
 		})
 	}

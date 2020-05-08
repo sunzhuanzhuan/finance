@@ -13,7 +13,7 @@ import Interface from '../constants/Interface'
 import moment from 'moment'
 const { TabPane } = Tabs;
 export const defaultUseTime = {
-	invoice_use_time: [moment(), moment().add(-3, 'month')]
+	invoice_use_time: [moment().add(-3, 'month'), moment()]
 }
 const defaultSearch = { page: 1, page_size: 10, ...defaultUseTime }
 

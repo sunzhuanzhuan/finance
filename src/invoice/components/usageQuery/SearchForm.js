@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Form, Input, Select, DatePicker, Row, Col, Button, InputNumber } from 'antd'
+import { Form, Input, Select, DatePicker, Row, Col, Button, } from 'antd'
 import SearchSelect from '@/base/SearchSelect'
 import EmSpan from '@/base/EmSpan'
 import { defaultUseTime } from '../../containers/UsageQuery'
@@ -90,7 +90,7 @@ class SearchForm extends Component {
 					<Form.Item label={<EmSpan length={5}>打款单ID</EmSpan>}>
 						{getFieldDecorator('payment_id', {
 							rules: [],
-						})(<InputNumber placeholder='请输入' style={{ width: '100%' }} />)}
+						})(<Input placeholder='请输入' />)}
 					</Form.Item>
 				</Col>
 

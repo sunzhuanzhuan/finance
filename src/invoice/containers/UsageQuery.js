@@ -10,8 +10,13 @@ import * as commonAction from "@/actions";
 import { TripartiteForm, AccountForm, ListTable } from '../components/usageQuery'
 import { getTimeToObjByArr } from '../util'
 import Interface from '../constants/Interface'
+import moment from 'moment'
 const { TabPane } = Tabs;
-const defaultSearch = { page: 1, page_size: 10 }
+export const defaultUseTime = {
+	invoice_use_time: [moment(), moment().add(-3, 'month')]
+}
+const defaultSearch = { page: 1, page_size: 10, ...defaultUseTime }
+
 export class UsageQuery extends Component {
 	constructor(props) {
 		super(props);

@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import { Form, Input, Select, DatePicker, Row, Col, Button, InputNumber } from 'antd'
 import SearchSelect from '@/base/SearchSelect'
 import EmSpan from '@/base/EmSpan'
+import { defaultUseTime } from '../../containers/UsageQuery'
+console.log("defaultUseTime", defaultUseTime)
+
 const { RangePicker } = DatePicker
 class SearchForm extends Component {
 	constructor(props) {
@@ -76,7 +79,9 @@ class SearchForm extends Component {
 				</Col>
 				<Col span={8}>
 					<Form.Item label={'关联时间'}>
-						{getFieldDecorator("invoice_use_time", {})(
+						{getFieldDecorator("invoice_use_time", {
+							initialValue: defaultUseTime && defaultUseTime.invoice_use_time || []
+						})(
 							<RangePicker style={{ width: '100%' }} />
 						)}
 					</Form.Item>

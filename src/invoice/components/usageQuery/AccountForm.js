@@ -33,7 +33,7 @@ export class AccountForm extends Component {
 		return (
 			<Form className="flex-form-layout" layout="inline" autoComplete="off">
 				<Row>
-					<SearchForm form={form} actions={actions} />
+					<SearchForm form={form} actions={actions} source_type={1} />
 					<Col span={8}>
 						<Form.Item label={'打款类型'}>
 							{getFieldDecorator('payment_type', {})(

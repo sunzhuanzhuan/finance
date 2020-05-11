@@ -24,7 +24,8 @@ export class UsageQuery extends Component {
 			isLoading: false,
 			searchParams: defaultSearch,
 			tabCheckedKey: 1,
-			sumLoading: true
+			sumLoading: true,
+			downLoading: false
 		};
 		this.resetSearchParams = this.resetSearchParams.bind(this)
 	}
@@ -77,10 +78,13 @@ export class UsageQuery extends Component {
 	}
 	//导出
 	exportInvoiceFile = (source_type) => {
+		this.setState({ downLoading: true })
 		apiDownload({
 			url: Interface.exportInvoice + '?' + qs.stringify(this.timeFormat({ source_type: source_type, ...this.state.searchParams })),
 			method: 'GET',
-		}, '发票使用明细.csv')
+		}, '发票使用明细.csv').then(() => {
+			this.setState({ downLoading: false })
+		})
 	}
 	//处理数据中的时间参数
 	timeFormat = (params = {}) => {
@@ -115,7 +119,7 @@ export class UsageQuery extends Component {
 
 	render() {
 		const { actions, invoiceReducers = {} } = this.props
-		const { isLoading, tabCheckedKey, sumLoading, searchParams } = this.state
+		const { isLoading, tabCheckedKey, sumLoading, searchParams, downLoading } = this.state
 		const { userInvoiceList, trinityInvoiceList, trinityInvoiceSearchItem, userInvoiceSum,
 			trinityInvoiceSum
 		} = invoiceReducers
@@ -125,8 +129,8 @@ export class UsageQuery extends Component {
 			resetSearchParams: this.resetSearchParams,
 			trinityInvoiceSearchItem,
 			exportInvoiceFile: this.exportInvoiceFile,
-			searchParams
-
+			searchParams,
+			downLoading
 		}
 		const paymentTypeMapAccount = {
 			1: '周打款',

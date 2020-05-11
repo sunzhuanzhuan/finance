@@ -54,7 +54,7 @@ export class TripartiteForm extends Component {
 							<div style={{ textAlign: 'right' }}>
 								<Button type='primary' onClick={this.onSearch}>查询</Button>
 								<Button style={{ margin: '0px 10px' }} onClick={this.onReset}>重置</Button>
-								<Button type='primary' onClick={() => this.props.exportInvoiceFile(2)}>导出</Button>
+								<Button type='primary' onClick={() => this.props.exportInvoiceFile(2)} loading={this.props.downLoading}>导出</Button>
 							</div>
 						</Form.Item>
 					</Col>

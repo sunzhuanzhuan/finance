@@ -765,11 +765,11 @@ export const tabListConfig = [
 export const exportMap = [
 	{ label: '加价订单对应的客户维护费拓展项目', action: 'bussinessExcel' },
 	{ label: '业绩信息表', action: 'execExcel' },
-	{ label: '赠送金额统计表', action: 'giftExcel' },
-	{ label: '质检扣款统计表', action: 'qcExcel' },
-	{ label: '赔偿统计表', action: 'reparationExcel' },
-	{ label: '手工质检统计表', action: 'manualQcExcel' },
-	{ label: '应收核销扣减GMV', action: 'verificationDecreaseGmv' },
+	// { label: '赠送金额统计表', action: 'giftExcel' },
+	// { label: '质检扣款统计表', action: 'qcExcel' },
+	// { label: '赔偿统计表', action: 'reparationExcel' },
+	// { label: '手工质检统计表', action: 'manualQcExcel' },
+	// { label: '应收核销扣减GMV', action: 'verificationDecreaseGmv' },
 	{ label: '回款信息表', action: 'payBackExcel' },
 	{ label: '长账龄扣款表', action: 'longAgingExcel' },
 	{ label: '上月待扣GMV', action: 'lessAchievementsExcel' }

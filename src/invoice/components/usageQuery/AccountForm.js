@@ -37,7 +37,7 @@ export class AccountForm extends Component {
 					<Col span={8}>
 						<Form.Item label={'打款类型'}>
 							{getFieldDecorator('payment_type', {})(
-								<Select allowClear placeholder='不限'>
+								<Select allowClear={true} placeholder='不限'>
 									<Select.Option key={1}>周打款</Select.Option>
 									<Select.Option key={2}>快易提</Select.Option>
 									<Select.Option key={3}>提前打款</Select.Option>

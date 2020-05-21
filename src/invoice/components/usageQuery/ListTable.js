@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Table, Alert, Icon, Badge, Popover, Skeleton } from 'antd'
 import moment from 'moment'
 import './ListTable.less'
+import MultiClamp from 'react-multi-clamp';
 const invoiceStatusMap = {
 	1: '已使用',
 	0: '未使用'
@@ -23,7 +24,7 @@ export default class ListTable extends Component {
 				title: '发票号/开具方',
 				dataIndex: 'invoice_number',
 				key: 'invoice_number',
-				width: 140,
+				width: 100,
 				render: (text, record) => {
 					return <div>
 						<Popover
@@ -38,7 +39,8 @@ export default class ListTable extends Component {
 							content={<div style={{ wordBreak: 'break-all' }}>{record.beneficiary_company}</div>}
 							overlayStyle={{ width: 200 }}
 						>
-							<div className='ellipsis-nowrap'>{record.beneficiary_company}</div>
+							<MultiClamp ellipsis="..." clamp={2}>{record.beneficiary_company}</MultiClamp>
+							{/* <div className='ellipsis-nowrap'>{record.beneficiary_company}</div> */}
 						</Popover>
 						{/* <div>
 							{record.invoice_status == 0 && <Badge status="default" />}

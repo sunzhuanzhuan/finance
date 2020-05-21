@@ -27,7 +27,7 @@ export class TripartiteForm extends Component {
 					<Col span={8}>
 						<Form.Item label={'打款类型'}>
 							{getFieldDecorator('payment_type', {})(
-								<Select allowClear placeholder='不限'>
+								<Select allowClear={true} placeholder='不限'>
 									<Select.Option key={1}>三方预付款</Select.Option>
 									<Select.Option key={2}>三方周期付款</Select.Option>
 								</Select>
@@ -39,7 +39,7 @@ export class TripartiteForm extends Component {
 							{getFieldDecorator('business_account_id', {
 								rules: [],
 							})(
-								<Select placeholder='请选择'>
+								<Select placeholder='请选择' allowClear={true}>
 									{agent.map(one => <Select.Option
 										key={one.values}
 										value={one.value}> {one.name}

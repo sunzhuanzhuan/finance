@@ -53,7 +53,7 @@ class SearchForm extends Component {
 				<Col span={8}>
 					<Form.Item label="发票类型">
 						{getFieldDecorator('invoice_type', {})(
-							<Select allowClear style={{ width: '100%' }} placeholder='不限'>
+							<Select allowClear={true} style={{ width: '100%' }} placeholder='不限'>
 								<Select.Option key={1}>专票</Select.Option>
 								<Select.Option key={2}>普票</Select.Option>
 							</Select>
@@ -63,7 +63,7 @@ class SearchForm extends Component {
 				<Col span={8}>
 					<Form.Item label={<EmSpan length={5}>发票状态</EmSpan>}>
 						{getFieldDecorator('invoice_status', {})(
-							<Select allowClear placeholder='不限'>
+							<Select allowClear={true} placeholder='不限'>
 								<Select.Option key="1">已关联</Select.Option>
 								<Select.Option key="0">未关联</Select.Option>
 							</Select>

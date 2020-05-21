@@ -3,8 +3,8 @@ import { Table, Alert, Icon, Badge, Popover, Skeleton } from 'antd'
 import moment from 'moment'
 import './ListTable.less'
 const invoiceStatusMap = {
-	1: '已关联',
-	0: '未关联'
+	1: '已使用',
+	0: '未使用'
 }
 const invoiceTypeMap = {
 	1: '专票',
@@ -40,11 +40,11 @@ export default class ListTable extends Component {
 						>
 							<div className='ellipsis-nowrap'>{record.beneficiary_company}</div>
 						</Popover>
-						<div>
+						{/* <div>
 							{record.invoice_status == 0 && <Badge status="default" />}
 							{record.invoice_status == 1 && <Badge status="processing" />}
 							{invoiceStatusMap[record.invoice_status]}
-						</div>
+						</div> */}
 					</div>
 				}
 			},
@@ -67,7 +67,7 @@ export default class ListTable extends Component {
 				}
 			},
 			{
-				title: '发票录入/关联时间',
+				title: '发票录入/使用时间',
 				dataIndex: 'invoice_created_time',
 				key: 'invoice_created_time',
 				width: '200px',
@@ -75,12 +75,12 @@ export default class ListTable extends Component {
 				render: (text, record) => {
 					return <div>
 						<div>录入：{text}</div>
-						{record.invoice_status == 1 && <div>关联：{record.invoice_use_time}</div>}
+						{record.invoice_status == 1 && <div>使用：{record.invoice_use_time}</div>}
 					</div>
 				}
 			},
 			{
-				title: '关联金额',
+				title: '使用金额',
 				dataIndex: 'invoice_use_amount',
 				key: 'invoice_use_amount',
 				align: 'center',
@@ -136,7 +136,7 @@ export default class ListTable extends Component {
 			{ name: '发票总金额 ', number: aggregation.total_invoice_amount },
 			{ name: '打款金额 ', number: aggregation.total_payment_amount },
 			{ name: '扣款金额 ', number: aggregation.total_deduction_amount, noShow: noDeduction },
-			{ name: '关联金额 ', number: aggregation.total_invoice_use_amount },
+			{ name: '使用金额 ', number: aggregation.total_invoice_use_amount },
 
 		]
 		return (

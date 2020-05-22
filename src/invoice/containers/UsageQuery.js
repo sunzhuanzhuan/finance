@@ -148,7 +148,7 @@ export class UsageQuery extends Component {
 					<TabPane tab="主账号" key="1">
 						{tabCheckedKey == 1 ? <AccountForm  {...commonSearchProps} onSearchList={this.getUserInvoiceSearchAsync} /> : null}
 						<ListTable
-							isNoShowColumnsTitle={['三方代理商']}
+							isNoShowColumnsTitle={['三方代理商', '打款金额']}
 							onSearchList={this.getUserInvoiceSearchAsync}
 							list={userInvoiceList}
 							paymentTypeMap={paymentTypeMapAccount}

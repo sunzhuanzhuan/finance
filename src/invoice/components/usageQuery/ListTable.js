@@ -102,6 +102,12 @@ export default class ListTable extends Component {
 				}
 			},
 			{
+				title: '打款金额',
+				dataIndex: 'payment_amount',
+				key: 'payment_amount',
+				align: 'center',
+			},
+			{
 				title: '扣款金额',
 				dataIndex: 'invoice_deduction_amount',
 				align: 'center',

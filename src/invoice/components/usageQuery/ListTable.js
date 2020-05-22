@@ -153,7 +153,7 @@ export default class ListTable extends Component {
 				<Table
 					dataSource={rows}
 					columns={columns}
-					scroll={{ y: 400 }}
+					scroll={{ y: 600 }}
 					rowKey={(record, index) => record.invoice_number + index}
 					pagination={{
 						total: pagination.total,

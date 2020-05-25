@@ -101,12 +101,7 @@ export default class ListTable extends Component {
 					</div>
 				}
 			},
-			{
-				title: '打款金额',
-				dataIndex: 'payment_amount',
-				key: 'payment_amount',
-				align: 'center',
-			},
+
 			{
 				title: '扣款金额',
 				dataIndex: 'invoice_deduction_amount',
@@ -125,6 +120,12 @@ export default class ListTable extends Component {
 						<div>时间：{record.payment_time}</div>
 					</div>
 				}
+			},
+			{
+				title: '打款金额',
+				dataIndex: 'payment_amount',
+				key: 'payment_amount',
+				align: 'center',
 			},
 			{
 				title: '媒介信息',

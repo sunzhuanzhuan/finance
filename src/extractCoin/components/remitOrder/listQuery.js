@@ -70,7 +70,9 @@ class RemitQuery extends React.Component {
 					</Col>
 					<Col className='left-gap'>
 						<FormItem label='打款单ID'>
-							{getFieldDecorator('id')(
+							{getFieldDecorator('id', {
+								initialValue: this.props.queryId
+							})(
 								<Input placeholder="请输入打款单，多个以空格分隔" style={{ width: 225 }} allowClear />
 							)}
 						</FormItem>

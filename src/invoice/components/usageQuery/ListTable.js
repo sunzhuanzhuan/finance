@@ -82,7 +82,7 @@ export default class ListTable extends Component {
 				}
 			},
 			{
-				title: '使用金额',
+				title: noDeduction ? '发票使用金额' : '使用金额 ',
 				dataIndex: 'invoice_use_amount',
 				key: 'invoice_use_amount',
 				align: 'center',
@@ -145,7 +145,7 @@ export default class ListTable extends Component {
 			{ name: '发票总金额 ', number: aggregation.total_invoice_amount },
 			{ name: '打款金额 ', number: aggregation.total_payment_amount },
 			{ name: '扣款金额 ', number: aggregation.total_deduction_amount, noShow: noDeduction },
-			{ name: '使用金额 ', number: aggregation.total_invoice_use_amount },
+			{ name: noDeduction ? '发票使用金额' : '使用金额 ', number: aggregation.total_invoice_use_amount },
 
 		]
 		return (

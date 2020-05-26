@@ -39,8 +39,9 @@ export default class ListTable extends Component {
 							content={<div style={{ wordBreak: 'break-all' }}>{record.beneficiary_company}</div>}
 							overlayStyle={{ width: 200 }}
 						>
-							<MultiClamp ellipsis="..." clamp={2}>{record.beneficiary_company}</MultiClamp>
 							{/* <div className='ellipsis-nowrap'>{record.beneficiary_company}</div> */}
+							<MultiClamp ellipsis="..." clamp={2}>{record.beneficiary_company}</MultiClamp>
+
 						</Popover>
 						{/* <div>
 							{record.invoice_status == 0 && <Badge status="default" />}
@@ -49,6 +50,12 @@ export default class ListTable extends Component {
 						</div> */}
 					</div>
 				}
+			},
+			{
+				title: '主账号',
+				dataIndex: 'identity_name',
+				key: 'identity_name',
+				align: 'center',
 			},
 			{
 				title: '三方代理商',
@@ -82,7 +89,7 @@ export default class ListTable extends Component {
 				}
 			},
 			{
-				title: noDeduction ? '发票使用金额' : '使用金额 ',
+				title: '发票使用金额',
 				dataIndex: 'invoice_use_amount',
 				key: 'invoice_use_amount',
 				align: 'center',
@@ -97,16 +104,9 @@ export default class ListTable extends Component {
 					return <div>
 						<div>ID：{text}</div>
 						<div>应约税率：{record.accept_reservation_tax_rate}</div>
-						<div>打款金额：{record.payment_amount}</div>
+						<div>媒介经理：{record.owner_admin_name}</div>
 					</div>
 				}
-			},
-
-			{
-				title: '扣款金额',
-				dataIndex: 'invoice_deduction_amount',
-				align: 'center',
-				key: 'invoice_deduction_amount',
 			},
 			{
 				title: '打款信息',
@@ -122,22 +122,21 @@ export default class ListTable extends Component {
 				}
 			},
 			{
+				title: '扣款/打款金额',
+				dataIndex: 'invoice_deduction_amount',
+				key: 'invoice_deduction_amount',
+				render: (text, record) => {
+					return <div>
+						<div>扣款：{text}</div>
+						<div>打款：{record.payment_amount}</div>
+					</div>
+				}
+			},
+			{
 				title: '打款金额',
 				dataIndex: 'payment_amount',
 				key: 'payment_amount',
 				align: 'center',
-			},
-			{
-				title: '媒介信息',
-				dataIndex: 'owner_admin_name',
-				key: 'owner_admin_name',
-				width: '150px',
-				render: (text, record) => {
-					return <div>
-						<div>媒介经理：{record.owner_admin_name}</div>
-						<div>主账号：{record.identity_name}</div>
-					</div>
-				}
 			},
 		].filter(one => !isNoShowColumnsTitle.includes(one.title));
 		const alertInfoList = [
@@ -145,7 +144,7 @@ export default class ListTable extends Component {
 			{ name: '发票总金额 ', number: aggregation.total_invoice_amount },
 			{ name: '打款金额 ', number: aggregation.total_payment_amount },
 			{ name: '扣款金额 ', number: aggregation.total_deduction_amount, noShow: noDeduction },
-			{ name: noDeduction ? '发票使用金额' : '使用金额 ', number: aggregation.total_invoice_use_amount },
+			{ name: '发票使用金额', number: aggregation.total_invoice_use_amount },
 
 		]
 		return (

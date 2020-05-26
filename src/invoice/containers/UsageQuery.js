@@ -162,7 +162,7 @@ export class UsageQuery extends Component {
 						<ListTable
 							list={trinityInvoiceList}
 							onSearchList={this.getTrinityInvoiceSearchAsync}
-							isNoShowColumnsTitle={['订单信息', '媒介信息', '扣款金额']}
+							isNoShowColumnsTitle={['订单信息', '主账号', '扣款/打款金额']}
 							paymentTypeMap={paymentTypeMapTripartite}
 							aggregation={trinityInvoiceSum}
 							searchParams={searchParams}

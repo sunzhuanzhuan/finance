@@ -56,12 +56,14 @@ export default class ListTable extends Component {
 				dataIndex: 'identity_name',
 				key: 'identity_name',
 				align: 'center',
+				width: 100,
 			},
 			{
 				title: '三方代理商',
 				dataIndex: 'business_account_name',
 				key: 'business_account_name',
 				align: 'center',
+				width: 150,
 			},
 			{
 				title: '发票信息',
@@ -100,7 +102,7 @@ export default class ListTable extends Component {
 				title: '订单信息',
 				dataIndex: 'order_id',
 				key: 'order_id',
-				width: 150,
+				width: 130,
 				render: (text, record) => {
 					return <div>
 						<div>ID：{text}</div>
@@ -115,7 +117,7 @@ export default class ListTable extends Component {
 				key: 'namec',
 				width: '200px',
 				render: (text, record) => {
-					return <div>
+					return <div >
 						<div>ID：{record.payment_id}</div>
 						<div>类型：{paymentTypeMap[record.payment_type]}</div>
 						<div>时间：{record.payment_time}</div>
@@ -127,7 +129,7 @@ export default class ListTable extends Component {
 				dataIndex: 'invoice_deduction_amount',
 				key: 'invoice_deduction_amount',
 				render: (text, record) => {
-					return <div>
+					return <div style={{ minWidth: 100 }}>
 						<div>扣款：{text}</div>
 						<div>打款：{record.payment_amount}</div>
 					</div>

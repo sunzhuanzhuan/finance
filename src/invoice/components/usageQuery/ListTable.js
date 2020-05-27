@@ -70,7 +70,7 @@ export default class ListTable extends Component {
 				title: '发票信息',
 				dataIndex: 'name1',
 				key: 'name1',
-				width: '180px',
+				width: 180,
 				render: (text, record) => {
 					return <div>
 						<div>类型：{invoiceTypeMap[record.invoice_type]}</div>
@@ -83,7 +83,7 @@ export default class ListTable extends Component {
 				title: '发票录入/使用时间',
 				dataIndex: 'invoice_created_time',
 				key: 'invoice_created_time',
-				width: '200px',
+				width: 200,
 				align: 'center',
 				render: (text, record) => {
 					return <div>
@@ -97,7 +97,6 @@ export default class ListTable extends Component {
 				dataIndex: 'invoice_use_amount',
 				key: 'invoice_use_amount',
 				align: 'center',
-				width: 100,
 				render: (text, record) => record.invoice_status == 1 ? text : null
 			},
 			{
@@ -117,7 +116,7 @@ export default class ListTable extends Component {
 				title: '打款信息',
 				dataIndex: 'namec',
 				key: 'namec',
-				width: '200px',
+				width: 200,
 				render: (text, record) => {
 					return <div >
 						<div>ID：{record.payment_id}</div>
@@ -130,7 +129,7 @@ export default class ListTable extends Component {
 				title: '扣款/打款金额',
 				dataIndex: 'invoice_deduction_amount',
 				key: 'invoice_deduction_amount',
-				width: '100px',
+				width: 100,
 				render: (text, record) => {
 					return <div style={{ minWidth: 100 }}>
 						<div>扣款：{text}</div>
@@ -143,7 +142,7 @@ export default class ListTable extends Component {
 				dataIndex: 'payment_amount',
 				key: 'payment_amount',
 				align: 'center',
-				width: '100px',
+				width: 100,
 			},
 		].filter(one => !isNoShowColumnsTitle.includes(one.title));
 		const alertInfoList = [

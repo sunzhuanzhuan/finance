@@ -96,6 +96,7 @@ export default class ListTable extends Component {
 				dataIndex: 'invoice_use_amount',
 				key: 'invoice_use_amount',
 				align: 'center',
+				width: 130,
 				render: (text, record) => record.invoice_status == 1 ? text : null
 			},
 			{

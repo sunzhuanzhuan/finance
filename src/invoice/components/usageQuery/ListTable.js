@@ -3,6 +3,7 @@ import { Table, Alert, Icon, Badge, Popover, Skeleton } from 'antd'
 import moment from 'moment'
 import './ListTable.less'
 import MultiClamp from 'react-multi-clamp';
+import Scolltable from "../../../components/Scolltable";
 const invoiceStatusMap = {
 	1: '已使用',
 	0: '未使用'
@@ -24,7 +25,7 @@ export default class ListTable extends Component {
 				title: '发票号/开具方',
 				dataIndex: 'invoice_number',
 				key: 'invoice_number',
-				width: 100,
+				width: 140,
 				render: (text, record) => {
 					return <div>
 						<Popover
@@ -56,14 +57,14 @@ export default class ListTable extends Component {
 				dataIndex: 'identity_name',
 				key: 'identity_name',
 				align: 'center',
-				width: 100,
+				width: 120,
 			},
 			{
 				title: '三方代理商',
 				dataIndex: 'business_account_name',
 				key: 'business_account_name',
 				align: 'center',
-				width: 150,
+				width: 180,
 			},
 			{
 				title: '发票信息',
@@ -103,7 +104,7 @@ export default class ListTable extends Component {
 				title: '订单信息',
 				dataIndex: 'order_id',
 				key: 'order_id',
-				width: 130,
+				width: 160,
 				render: (text, record) => {
 					return <div>
 						<div>ID：{text}</div>
@@ -160,25 +161,30 @@ export default class ListTable extends Component {
 							<InfoList list={alertInfoList} />
 						</div>} type="info" />
 				</Skeleton>
-				<Table
-					dataSource={rows}
-					columns={columns}
-					scroll={{ y: 600 }}
-					rowKey={(record, index) => record.invoice_number + index}
-					pagination={{
-						total: pagination.total,
-						pageSize: Number(pagination.page_size || 10),
-						current: Number(pagination.page || 1),
-						showSizeChanger: true,
-						showQuickJumper: true,
-						onChange: (currentPage, pageSize) => {
-							this.props.onSearchList({ ...searchParams, page: currentPage, page_size: pageSize })
-						},
-						onShowSizeChange: (current, size) => {
-							this.props.onSearchList({ ...searchParams, page: 1, page_size: size })
-						}
-					}}
-				/>
+				<Scolltable scrollClassName='.ant-table-body' widthScroll={1500}>
+					<Table
+						dataSource={rows}
+						columns={columns}
+						scroll={{
+							y: 600,
+							x: 1300
+						}}
+						rowKey={(record, index) => record.invoice_number + index}
+						pagination={{
+							total: pagination.total,
+							pageSize: Number(pagination.page_size || 10),
+							current: Number(pagination.page || 1),
+							showSizeChanger: true,
+							showQuickJumper: true,
+							onChange: (currentPage, pageSize) => {
+								this.props.onSearchList({ ...searchParams, page: currentPage, page_size: pageSize })
+							},
+							onShowSizeChange: (current, size) => {
+								this.props.onSearchList({ ...searchParams, page: 1, page_size: size })
+							}
+						}}
+					/>
+				</Scolltable>
 			</div>
 		)
 	}

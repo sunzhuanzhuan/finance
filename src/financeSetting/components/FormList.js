@@ -1,7 +1,7 @@
 import React from 'react'
 import { Form } from 'antd'
 import ValueSection from './valueSection'
-import { scientificToNumber, accMul } from '@/util';
+import { accMul } from '@/util';
 
 class FormList extends React.PureComponent {
 	componentDidMount() {
@@ -16,8 +16,8 @@ class FormList extends React.PureComponent {
 					let obj = { ...item };
 					obj['min'] = (item['min']).toFixed(2);
 					obj['max'] = (item['max']).toFixed(2);
-					obj['rate'] = scientificToNumber(accMul(item['rate'], 100));
-					obj['minRate'] = scientificToNumber(accMul(item['minRate'], 100));
+					obj['rate'] = accMul(item['rate'], 100);
+					obj['minRate'] = accMul(item['minRate'], 100);
 					setFieldsValue({
 						[index]: obj
 					})

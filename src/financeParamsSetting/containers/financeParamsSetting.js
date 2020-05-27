@@ -5,7 +5,7 @@ import * as actions from "../actions";
 import { Modal, Table, Input, Icon, Spin, Empty, message, Statistic } from 'antd';
 import './financeParamsSetting.less';
 import { financeParams, historyCol } from '../constants';
-import { accMul, percentToValue, scientificToNumber } from '@/util';
+import { accMul, percentToValue } from '@/util';
 class FinanceParamsSetting extends React.Component {
 	constructor() {
 		super();
@@ -35,7 +35,7 @@ class FinanceParamsSetting extends React.Component {
 			return;
 		}
 		const dealedVal = isPercent ? percentToValue(value) : value;
-		this.setState({[key]: scientificToNumber(dealedVal)});
+		this.setState({[key]: dealedVal});
 	}
 
 	getErrorTips = msg => {
@@ -132,7 +132,7 @@ class FinanceParamsSetting extends React.Component {
 			if(!itemValueInfo)
 				return null;
 			const { id, itemValue, itemKey } = itemValueInfo;
-			const defaultVal = isPercent ? scientificToNumber(accMul(itemValue, 100)) : parseFloat(itemValue);
+			const defaultVal = isPercent ? accMul(itemValue, 100) : parseFloat(itemValue);
 			const wrapperCls = this.state[`${key}-edit`] ? 'params-item params-item-edit' : 'params-item';
 			return (
 				<div className={wrapperCls} key={key}>

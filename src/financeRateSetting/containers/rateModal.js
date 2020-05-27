@@ -107,13 +107,13 @@ class RateModal extends React.Component {
 					/>
 					<span>则利润率为</span>
 					<InputNumber 
-						precision={2} placeholder='输入数值' 
+						placeholder='输入数值' 
 						className='rate-ipt' value={getDealRateData(privateProfit, 'mul')} 
 						onChange={(value) => this.handleChangeRateRangeVal(value, 'privateProfit', index)} 
 					/>
 					<span>%，三方平台利润率为</span>
 					<InputNumber 
-						precision={2} placeholder='输入数值' 
+						placeholder='输入数值' 
 						className='rate-ipt' value={getDealRateData(publicProfit, 'mul')} 
 						onChange={(value) => this.handleChangeRateRangeVal(value, 'publicProfit', index)} 
 					/>
@@ -142,7 +142,7 @@ class RateModal extends React.Component {
 						<div>
 							{ this.getPolicyRankComp() }
 							<a onClick={this.handleAddRateItem}>添加更多</a>
-							<div className='rate-rank-info'>说明：数值设置必须覆盖所有区间即[0, 9999999]元，数值可设置多个区间多个利润率。</div>
+							<div className='rate-rank-info'>说明：数值设置必须覆盖所有区间[0, 9999999]，数值可设置多个区间多个利润率。</div>
 						</div>
 					</FormItem>
 					<FormItem label='备注'>
@@ -191,7 +191,11 @@ class RateModal extends React.Component {
 	};
 
 	judgeProfitRange = data =>  {
-		return data && (data < -1 || data > 99.9999);
+		const pointReg = /^-?\d+(\.\d{1,10})?$/;
+		const isNumber = !isNaN(data) && isFinite(data);
+		const result = isNumber && pointReg.test(data) && data >= -1 && data <= 99.9999999999;
+
+		return !result;
 	}
 
 	validateFieldsValues = () => {
@@ -243,7 +247,7 @@ class RateModal extends React.Component {
 			}
 
 			if(this.judgeProfitRange(privateProfit) || this.judgeProfitRange(publicProfit)) {
-				validateResult.error = '利润率设置不合法,输入范围是[-100.00% - 9999.99%]';
+				validateResult.error = '利润率设置不合法，输入范围【-100% - 9999.99999999%】';
 				isContinue = false;
 			}
 
@@ -279,7 +283,7 @@ class RateModal extends React.Component {
 		const { type, onCancel, loading } = this.props;
 		return (
 			<Modal
-				width={1080}
+				width={1115}
 				maskClosable={false}
 				visible={Boolean(type)}
 				destroyOnClose={true}

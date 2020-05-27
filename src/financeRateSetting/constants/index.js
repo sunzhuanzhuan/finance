@@ -1,14 +1,16 @@
 import React from 'react';
 import { Popconfirm } from 'antd';
+import { percentToValue, accMul } from '@/util';
 
 export const getDealRateData = (data, type) => {
 	let floatVal = parseFloat(data);
 	if (isNaN(floatVal))
 		return undefined;
 	if(type === 'mul') {
-		return accMulRate(data, 100);
+		console.log('slkdfjlksdfjsldkfj', accMul(data, 100), accMul(data, 100))
+		return accMul(data, 100);
 	}else if(type === 'div') {
-		return percentToValueRate(data)
+		return percentToValue(data);
 	}else if(type === 'number') {
 		return floatVal;
 	}
@@ -169,31 +171,4 @@ export const getRateDetailCol = (type, handleOperate, profitStrategyId, profitSt
 		}
 	];
 	return type !== 'addPage' ? allCol : allCol.filter(item => item.key !== 'operate');
-}
-
-/**
- * 乘法运算
- * @param {Number} arg1
- * @param {Number} arg2
- */
-export const accMulRate = (arg1,arg2) => { 
-	if(!arg1)
-		return 0;
-	let m=0;
-	let s1=arg1.toString();
-	let s2=arg2.toString(); 
-    try{m+=s1.split(".")[1].length}catch(e){m} 
-    try{m+=s2.split(".")[1].length}catch(e){m} 
-    return Number(s1.replace(".",""))*Number(s2.replace(".",""))/Math.pow(10,m) 
-} 
-/**
- * 百分比转换为小数
- * @param {Number} value
- */
-export const percentToValueRate = (value) => {
-    value = value + '';
-    const pointIndex = value.indexOf('.');
-    if (pointIndex === -1) return (value - 0) / 100;
-    const powIndex = value.length - pointIndex - 1;
-    return (value.replace('.', '') - 0) / Math.pow(10, powIndex + 2);
 }

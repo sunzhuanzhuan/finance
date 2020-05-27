@@ -3,7 +3,7 @@ import { Button, message, Modal } from 'antd'
 import FormList from './FormList'
 import { WBYPlatformIcon } from 'wbyui'
 import numeral from 'numeral'
-import { percentToValue, scientificToNumber, accMul } from '@/util'
+import { percentToValue, accMul } from '@/util'
 
 class Item extends React.PureComponent {
 	constructor() {
@@ -95,7 +95,7 @@ class Item extends React.PureComponent {
 						{
 							trinityProfitRates && trinityProfitRates.map((item = {}, index) => 
 								(
-									<li key={index}>{item.min}元至{item.max}元，对外利润率为{scientificToNumber(accMul(item.rate, 100))}%，最低利润率为{scientificToNumber(accMul(item.minRate, 100))}%</li>
+									<li key={index}>{item.min}元至{item.max}元，对外利润率为{accMul(item.rate, 100)}%，最低利润率为{accMul(item.minRate, 100)}%</li>
 								)
 							)
 						}

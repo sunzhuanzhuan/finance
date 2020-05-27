@@ -200,21 +200,6 @@ const downloadByATag = (src, fileName = "") => {
 	$a.dispatchEvent(evObj);
 }
 /**
- * 乘法运算
- * @param {Number} arg1
- * @param {Number} arg2
- */
-const accMul = (arg1,arg2) => { 
-	if(!arg1)
-		return 0;
-	let m=0;
-	let s1=arg1.toString();
-	let s2=arg2.toString(); 
-    try{m+=s1.split(".")[1].length}catch(e){m} 
-    try{m+=s2.split(".")[1].length}catch(e){m} 
-    return Number(s1.replace(".",""))*Number(s2.replace(".",""))/Math.pow(10,m) 
-} 
-/**
  * 转换科学计数法为数字展示
  * @param {Number} num 
  */
@@ -237,6 +222,22 @@ const scientificToNumber = (num) => {
 	return num;
 }
 /**
+ * 乘法运算
+ * @param {Number} arg1
+ * @param {Number} arg2
+ */
+const accMul = (arg1,arg2) => { 
+	if(!arg1)
+		return 0;
+	let m=0;
+	let s1=arg1.toString();
+	let s2=arg2.toString(); 
+    try{m+=s1.split(".")[1].length}catch(e){m} 
+	try{m+=s2.split(".")[1].length}catch(e){m} 
+	const dealVal = Number(s1.replace(".",""))*Number(s2.replace(".",""))/Math.pow(10,m) 
+    return scientificToNumber(dealVal)
+} 
+/**
  * 百分比转换为小数
  * @param {Number} value
  */
@@ -244,8 +245,9 @@ function percentToValue(value) {
     value = value + '';
     const pointIndex = value.indexOf('.');
     if (pointIndex === -1) return (value - 0) / 100;
-    const powIndex = value.length - pointIndex - 1;
-    return (value.replace('.', '') - 0) / Math.pow(10, powIndex + 2);
+	const powIndex = value.length - pointIndex - 1;
+	const dealVal = (value.replace('.', '') - 0) / Math.pow(10, powIndex + 2)
+    return scientificToNumber(dealVal);
 }
 
 export {

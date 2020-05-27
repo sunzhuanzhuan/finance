@@ -20,7 +20,7 @@ class SearchForm extends Component {
 	}
 
 	render() {
-		const { form } = this.props
+		const { form, source_type } = this.props
 		const { getFieldDecorator } = form
 		return (
 			<span>
@@ -75,6 +75,11 @@ class SearchForm extends Component {
 						<RangePicker style={{ width: '260px' }} />
 					)}
 				</Form.Item>
+				{source_type == 1 ? <Form.Item label={'订单ID'}>
+					{getFieldDecorator('order_id', {
+						rules: [],
+					})(<Input placeholder='请输入' />)}
+				</Form.Item> : null}
 				<Form.Item label='打款单ID'>
 					{getFieldDecorator('payment_id', {
 						rules: [],

@@ -58,11 +58,7 @@ export class AccountForm extends Component {
 					/>
 					)}
 				</Form.Item>
-				<Form.Item label={'订单ID'}>
-					{getFieldDecorator('order_id', {
-						rules: [],
-					})(<Input placeholder='请输入' />)}
-				</Form.Item>
+
 				<Form.Item label='媒介经理'>
 					{getFieldDecorator('owner_admin', {
 						rules: [],

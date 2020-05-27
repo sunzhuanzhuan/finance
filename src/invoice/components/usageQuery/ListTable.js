@@ -61,6 +61,7 @@ export default class ListTable extends Component {
 				title: '三方代理商',
 				dataIndex: 'business_account_name',
 				key: 'business_account_name',
+				align: 'center',
 			},
 			{
 				title: '发票信息',

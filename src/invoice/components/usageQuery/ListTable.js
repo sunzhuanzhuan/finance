@@ -154,6 +154,7 @@ export default class ListTable extends Component {
 			{ name: '发票使用金额', number: aggregation.total_invoice_use_amount },
 
 		]
+		const scrollParams = rows.length > 0 ? { scroll: { y: 500 } } : {}
 		return (
 			<div style={{ paddingTop: 20 }} className='list-table-usage-box'>
 				<Skeleton loading={sumLoading} active paragraph={false} rows={1} >
@@ -166,9 +167,7 @@ export default class ListTable extends Component {
 				<Table
 					dataSource={rows}
 					columns={columns}
-					scroll={{
-						y: 600,
-					}}
+					{...scrollParams}
 					rowKey={(record, index) => record.invoice_number + index}
 					pagination={{
 						total: pagination.total,

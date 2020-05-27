@@ -46,7 +46,7 @@ export default class ListTable extends Component {
 						</Popover>
 						{/* <div>
 							{record.invoice_status == 0 && <Badge status="default" />}
-							{record.invoice_status == 1 && <Badge status="processing" />}
+							{record.invoice_status == 1||record.invoice_status==2 && <Badge status="processing" />}
 							{invoiceStatusMap[record.invoice_status]}
 						</div> */}
 					</div>
@@ -88,7 +88,7 @@ export default class ListTable extends Component {
 				render: (text, record) => {
 					return <div>
 						<div>录入：{text}</div>
-						{record.invoice_status == 1 && <div>使用：{record.invoice_use_time}</div>}
+						{(record.invoice_status == 1 || record.invoice_status == 2) ? <div>使用：{record.invoice_use_time}</div> : null}
 					</div>
 				}
 			},
@@ -97,7 +97,7 @@ export default class ListTable extends Component {
 				dataIndex: 'invoice_use_amount',
 				key: 'invoice_use_amount',
 				align: 'center',
-				render: (text, record) => record.invoice_status == 1 ? text : null
+				render: (text, record) => (record.invoice_status == 1 || record.invoice_status == 2) ? text : null
 			},
 			{
 				title: '订单信息',

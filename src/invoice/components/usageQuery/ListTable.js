@@ -57,14 +57,14 @@ export default class ListTable extends Component {
 				dataIndex: 'identity_name',
 				key: 'identity_name',
 				align: 'center',
-				width: 120,
+				width: 100,
 			},
 			{
 				title: '三方代理商',
 				dataIndex: 'business_account_name',
 				key: 'business_account_name',
 				align: 'center',
-				width: 180,
+				width: 140,
 			},
 			{
 				title: '发票信息',
@@ -97,14 +97,14 @@ export default class ListTable extends Component {
 				dataIndex: 'invoice_use_amount',
 				key: 'invoice_use_amount',
 				align: 'center',
-				width: 130,
+				width: 100,
 				render: (text, record) => record.invoice_status == 1 ? text : null
 			},
 			{
 				title: '订单信息',
 				dataIndex: 'order_id',
 				key: 'order_id',
-				width: 160,
+				width: 150,
 				render: (text, record) => {
 					return <div>
 						<div>ID：{text}</div>
@@ -130,6 +130,7 @@ export default class ListTable extends Component {
 				title: '扣款/打款金额',
 				dataIndex: 'invoice_deduction_amount',
 				key: 'invoice_deduction_amount',
+				width: '100px',
 				render: (text, record) => {
 					return <div style={{ minWidth: 100 }}>
 						<div>扣款：{text}</div>
@@ -142,6 +143,7 @@ export default class ListTable extends Component {
 				dataIndex: 'payment_amount',
 				key: 'payment_amount',
 				align: 'center',
+				width: '100px',
 			},
 		].filter(one => !isNoShowColumnsTitle.includes(one.title));
 		const alertInfoList = [
@@ -161,30 +163,27 @@ export default class ListTable extends Component {
 							<InfoList list={alertInfoList} />
 						</div>} type="info" />
 				</Skeleton>
-				<Scolltable scrollClassName='.ant-table-body' widthScroll={1500}>
-					<Table
-						dataSource={rows}
-						columns={columns}
-						scroll={{
-							y: 600,
-							x: 1300
-						}}
-						rowKey={(record, index) => record.invoice_number + index}
-						pagination={{
-							total: pagination.total,
-							pageSize: Number(pagination.page_size || 10),
-							current: Number(pagination.page || 1),
-							showSizeChanger: true,
-							showQuickJumper: true,
-							onChange: (currentPage, pageSize) => {
-								this.props.onSearchList({ ...searchParams, page: currentPage, page_size: pageSize })
-							},
-							onShowSizeChange: (current, size) => {
-								this.props.onSearchList({ ...searchParams, page: 1, page_size: size })
-							}
-						}}
-					/>
-				</Scolltable>
+				<Table
+					dataSource={rows}
+					columns={columns}
+					scroll={{
+						y: 600,
+					}}
+					rowKey={(record, index) => record.invoice_number + index}
+					pagination={{
+						total: pagination.total,
+						pageSize: Number(pagination.page_size || 10),
+						current: Number(pagination.page || 1),
+						showSizeChanger: true,
+						showQuickJumper: true,
+						onChange: (currentPage, pageSize) => {
+							this.props.onSearchList({ ...searchParams, page: currentPage, page_size: pageSize })
+						},
+						onShowSizeChange: (current, size) => {
+							this.props.onSearchList({ ...searchParams, page: 1, page_size: size })
+						}
+					}}
+				/>
 			</div>
 		)
 	}

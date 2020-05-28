@@ -118,12 +118,13 @@ export class UsageQuery extends Component {
 
 
 	render() {
-		const { actions, invoiceReducers = {} } = this.props
+		const { actions, invoiceReducers = {}, authorizationsReducers = {} } = this.props
 		const { isLoading, tabCheckedKey, sumLoading, searchParams, downLoading } = this.state
+		const { authVisibleList = {} } = authorizationsReducers
 		const { userInvoiceList, trinityInvoiceList, trinityInvoiceSearchItem, userInvoiceSum,
 			trinityInvoiceSum
 		} = invoiceReducers
-
+		const isTripartite = authVisibleList[`trinity.invoice.visibility`]
 		const commonSearchProps = {
 			actions,
 			resetSearchParams: this.resetSearchParams,
@@ -157,7 +158,7 @@ export class UsageQuery extends Component {
 							searchParams={searchParams}
 						/>
 					</TabPane>
-					<TabPane tab="三方平台" key="2">
+					{isTripartite ? <TabPane tab="三方平台" key="2">
 						{tabCheckedKey == 2 ? <TripartiteForm  {...commonSearchProps} onSearchList={this.getTrinityInvoiceSearchAsync} /> : null}
 						<ListTable
 							list={trinityInvoiceList}
@@ -168,7 +169,7 @@ export class UsageQuery extends Component {
 							searchParams={searchParams}
 							noDeduction={true}
 						/>
-					</TabPane>
+					</TabPane> : null}
 				</Tabs>
 			</Spin>
 		)

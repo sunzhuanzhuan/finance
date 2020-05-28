@@ -7,7 +7,6 @@ export const getDealRateData = (data, type) => {
 	if (isNaN(floatVal))
 		return undefined;
 	if(type === 'mul') {
-		console.log('slkdfjlksdfjsldkfj', accMul(data, 100), accMul(data, 100))
 		return accMul(data, 100);
 	}else if(type === 'div') {
 		return percentToValue(data);

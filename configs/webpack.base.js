@@ -26,8 +26,8 @@ module.exports = {
 				use: [
 					'url-loader?limit=10000',
 					'img-loader'
-				]
-			}
+				],
+			},
 		],
 	},
 	resolve: {

@@ -97,7 +97,7 @@ class DealOrder extends React.Component {
 				<Table
 					rowKey='id'
 					loading={loading}
-					columns={dealOrderCols}
+					columns={dealOrderCols(IS_SALE_LIMIT_SIGN)}
 					dataSource={list}
 					bordered
 					pagination={paginationObj}

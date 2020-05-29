@@ -298,137 +298,139 @@ export const datePayFunc = (handleModal, isSaleRole) => [
 		}
 	},
 ];
-export const dealOrderCols = [
-	{
-		title: '订单ID',
-		dataIndex: 'wby_order_id',
-		key: 'wby_order_id',
-		align: 'center',
-		width: 100,
-		render: (text, record) => {
-			return <a href={`/finance/zhangwu/detail?order_id=${record.wby_order_id}`}>{text}</a>
-		}
-	},
-	{
-		title: '订单类型',
-		dataIndex: 'product_line_type_desc',
-		key: 'product_line_type_desc',
-		align: 'center',
-		width: 100
-	},
-	{
-		title: '平台',
-		dataIndex: 'platform_name',
-		key: 'platform_name',
-		align: 'center',
-		width: 100
-
-	},
-	{
-		title: '三方代理商',
-		dataIndex: 'agent_name',
-		key: 'agent_name',
-		align: 'center',
-		width: 100
-	}, {
-		title: '发票开具方',
-		dataIndex: 'beneficiary_company',
-		key: 'beneficiary_company',
-		align: 'center',
-		width: 100
-	},
-	{
-		title: '三方下单平台',
-		dataIndex: 'cooperation_platform_name',
-		key: 'cooperation_platform_name',
-		align: 'center',
-		width: 100
-	},
-
-	{
-		title: '三方原始成本价',
-		dataIndex: 'public_cost_price',
-		key: 'public_cost_price',
-		align: 'center',
-		width: 100
-	},
-	{
-		title: '成本调整',
-		dataIndex: 'public_cost_adjustment',
-		key: 'public_cost_adjustment',
-		align: 'center',
-		width: 100
-	},
-	{
-		title: '剩余成本价',
-		dataIndex: 'actual_public_cost_price',
-		key: 'actual_public_cost_price',
-		align: 'center',
-		width: 100
-	},
-	{
-		title: '打款金额',
-		dataIndex: 'payment_amount',
-		key: 'payment_amount',
-		align: 'center',
-		width: 100
-	},
-	{
-		title: '打款单ID',
-		dataIndex: 'payment_slip_code',
-		key: 'payment_slip_code',
-		align: 'center',
-		width: 100
-	},
-	{
-		title: '打款状态',
-		dataIndex: 'payment_status_desc',
-		key: 'payment_status_desc',
-		align: 'center',
-		width: 100
-	}, {
-		title: '打款成功/失败时间',
-		dataIndex: 'payment_time',
-		key: 'payment_time',
-		align: 'center',
-		width: 100
-	}, {
-		title: '打款撤销时间',
-		dataIndex: 'payment_revoke_time',
-		key: 'payment_revoke_time',
-		align: 'center',
-		width: 100
-	},
-	{
-		title: '付款公司',
-		dataIndex: 'payment_company_name',
-		key: 'payment_company_name',
-		align: 'center',
-		width: 100
-	},
-	{
-		title: '三方平台下单时间',
-		dataIndex: 'ttp_place_order_at',
-		key: 'ttp_place_order_at',
-		align: 'center',
-		width: 100
-	},
-	{
-		title: '三方平台订单ID',
-		dataIndex: 'ttp_order_id',
-		key: 'ttp_order_id',
-		align: 'center',
-		render: (text) => {
-			return < Tooltip title={<div style={{ width: '200px' }}>{text}</div>}>
-				<div style={{
-					width: '100px', whiteSpace: 'nowrap', overflow: 'hidden',
-					textOverflow: 'ellipsis'
-				}}>{text}</div>
-			</Tooltip >
-		}
-
-	},
-];
+export const dealOrderCols = isSaleRole => {
+	return [
+		{
+			title: '订单ID',
+			dataIndex: 'wby_order_id',
+			key: 'wby_order_id',
+			align: 'center',
+			width: 100,
+			render: (text, record) => {
+				return isSaleRole ? <div>{text}</div> : <a href={`/finance/zhangwu/detail?order_id=${record.wby_order_id}`}>{text}</a>
+			}
+		},
+		{
+			title: '订单类型',
+			dataIndex: 'product_line_type_desc',
+			key: 'product_line_type_desc',
+			align: 'center',
+			width: 100
+		},
+		{
+			title: '平台',
+			dataIndex: 'platform_name',
+			key: 'platform_name',
+			align: 'center',
+			width: 100
+	
+		},
+		{
+			title: '三方代理商',
+			dataIndex: 'agent_name',
+			key: 'agent_name',
+			align: 'center',
+			width: 100
+		}, {
+			title: '发票开具方',
+			dataIndex: 'beneficiary_company',
+			key: 'beneficiary_company',
+			align: 'center',
+			width: 100
+		},
+		{
+			title: '三方下单平台',
+			dataIndex: 'cooperation_platform_name',
+			key: 'cooperation_platform_name',
+			align: 'center',
+			width: 100
+		},
+	
+		{
+			title: '三方原始成本价',
+			dataIndex: 'public_cost_price',
+			key: 'public_cost_price',
+			align: 'center',
+			width: 100
+		},
+		{
+			title: '成本调整',
+			dataIndex: 'public_cost_adjustment',
+			key: 'public_cost_adjustment',
+			align: 'center',
+			width: 100
+		},
+		{
+			title: '剩余成本价',
+			dataIndex: 'actual_public_cost_price',
+			key: 'actual_public_cost_price',
+			align: 'center',
+			width: 100
+		},
+		{
+			title: '打款金额',
+			dataIndex: 'payment_amount',
+			key: 'payment_amount',
+			align: 'center',
+			width: 100
+		},
+		{
+			title: '打款单ID',
+			dataIndex: 'payment_slip_code',
+			key: 'payment_slip_code',
+			align: 'center',
+			width: 100
+		},
+		{
+			title: '打款状态',
+			dataIndex: 'payment_status_desc',
+			key: 'payment_status_desc',
+			align: 'center',
+			width: 100
+		}, {
+			title: '打款成功/失败时间',
+			dataIndex: 'payment_time',
+			key: 'payment_time',
+			align: 'center',
+			width: 100
+		}, {
+			title: '打款撤销时间',
+			dataIndex: 'payment_revoke_time',
+			key: 'payment_revoke_time',
+			align: 'center',
+			width: 100
+		},
+		{
+			title: '付款公司',
+			dataIndex: 'payment_company_name',
+			key: 'payment_company_name',
+			align: 'center',
+			width: 100
+		},
+		{
+			title: '三方平台下单时间',
+			dataIndex: 'ttp_place_order_at',
+			key: 'ttp_place_order_at',
+			align: 'center',
+			width: 100
+		},
+		{
+			title: '三方平台订单ID',
+			dataIndex: 'ttp_order_id',
+			key: 'ttp_order_id',
+			align: 'center',
+			render: (text) => {
+				return < Tooltip title={<div style={{ width: '200px' }}>{text}</div>}>
+					<div style={{
+						width: '100px', whiteSpace: 'nowrap', overflow: 'hidden',
+						textOverflow: 'ellipsis'
+					}}>{text}</div>
+				</Tooltip >
+			}
+	
+		},
+	]
+};
 
 export const prePayDetailColumns = [
 	{

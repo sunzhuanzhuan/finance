@@ -4,7 +4,7 @@ import qs from 'qs';
 const SUCCEED = 'succeed';
 const DEFEATED = 'defeated';
 const REVOCATION = 'revocation';
-export const prePayFunc = (handleModal) => [
+export const prePayFunc = (handleModal, isSaleRole) => [
 	{
 		title: '打款单ID',
 		dataIndex: 'payment_slip_code',
@@ -123,19 +123,30 @@ export const prePayFunc = (handleModal) => [
 		fixed: 'right',
 		width: 200,
 		render: (text, record) => {
+			const getOperateByRole = () => {
+				if(isSaleRole) {
+					return null;
+				}
+				return [
+					record.payment_status && record.payment_status == 1 && <Button key='SUCCEED' type='primary' size='small' style={{ width: 80 }} onClick={() => {
+						handleModal(record.payment_slip_id, SUCCEED, true);
+					}}>打款成功</Button>,
+					record.payment_status && record.payment_status == 1 && <Button key='DEFEATED' type='primary' size='small' style={{ width: 80 }} onClick={() => {
+						handleModal(record.payment_slip_id, DEFEATED, true);
+					}}>打款失败</Button>,
+					record.payment_status && record.payment_status == 2 && <Button key='RELATED' type='primary' size='small' style={{ width: 80 }} href={`/finance/invoice/relatedInvoice?payment_slip_id=${record.payment_slip_id}&payment_status=pre`}>发票关联</Button>,
+					record.payment_status && record.payment_status == 2 && <Button key='REVOCATION' type='primary' size='small' style={{ width: 80 }} onClick={() => {
+						handleModal(record.payment_slip_id, REVOCATION, true);
+					}}>打款撤销</Button>,
+					record.payment_status && record.payment_status != 1 && <Button key='EDIT' type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/modification?type=prePay&payment_slip_id=${record.payment_slip_id}`}>编辑</Button>
+				]
+			}
 			return <div className='datePay-action-container'>
-				{record.payment_status && record.payment_status == 1 && <Button type='primary' size='small' style={{ width: 80 }} onClick={() => {
-					handleModal(record.payment_slip_id, SUCCEED, true);
-				}}>打款成功</Button>}
-				{record.payment_status && record.payment_status == 1 && <Button type='primary' size='small' style={{ width: 80 }} onClick={() => {
-					handleModal(record.payment_slip_id, DEFEATED, true);
-				}}>打款失败</Button>}
-				{record.payment_status && record.payment_status == 2 && <Button type='primary' size='small' style={{ width: 80 }} href={`/finance/invoice/relatedInvoice?payment_slip_id=${record.payment_slip_id}&payment_status=pre`}>发票关联</Button>}
-				{record.payment_status && record.payment_status == 2 && <Button type='primary' size='small' style={{ width: 80 }} onClick={() => {
-					handleModal(record.payment_slip_id, REVOCATION, true);
-				}}>打款撤销</Button>}
+				{
+					getOperateByRole()
+				}
+
 				<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/zhangwu/detail?order_id=${record.wby_order_id}`} target="_blank">订单详情</Button>
-				{record.payment_status && record.payment_status != 1 && <Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/modification?type=prePay&payment_slip_id=${record.payment_slip_id}`}>编辑</Button>}
 				<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/detail?type=prePay&payment_slip_id=${record.payment_slip_id}`} target="_blank">查看</Button>
 			</div>
 		}

@@ -94,13 +94,23 @@ class PrePay extends React.Component {
 		const { loading, pullReady, modalVisible, id, status, agent } = this.state;
 		const { prePayData: { list = [], page, page_size = 20, total, statistic }, paySearchItem } = this.props;
 		const prePaySearch = prePaySearchFunc(paySearchItem, agent, this.handleFetchPlatform, this.handleFetchAccount);
-		const prePayCols = prePayFunc(this.handleModal);
+		const IS_SALE_LIMIT_SIGN = true;
+		const prePayCols = prePayFunc(this.handleModal, IS_SALE_LIMIT_SIGN);
 		const paginationObj = getPagination(this, search, { total, page, page_size });
+		const getExtraFooter = () => {
+			return IS_SALE_LIMIT_SIGN ? null : <Button type='primary' style={{ marginLeft: 20 }} onClick={this.handleExport}>导出</Button>
+		}
 		return <div className='prePay-container'>
 			<Statistics title={'三方平台预付打款单'} render={Stat(total, statistic)} />
 			<fieldset className='fieldset_css'>
 				<legend>查询</legend>
-				{pullReady && <SearForm data={prePaySearch} getAction={this.queryData} responseLayout={{ xs: 24, sm: 24, md: 10, lg: 8, xxl: 6 }} extraFooter={<Button type='primary' style={{ marginLeft: 20 }} onClick={this.handleExport}>导出</Button>} wrappedComponentRef={form => this.form = form} />}
+				{
+					pullReady && 
+						<SearForm data={prePaySearch} getAction={this.queryData} 
+							responseLayout={{ xs: 24, sm: 24, md: 10, lg: 8, xxl: 6 }} 
+							extraFooter={getExtraFooter()} 
+							wrappedComponentRef={form => this.form = form} />
+				}
 			</fieldset>
 			<div className='top-gap'>
 				<Scolltable scrollClassName='.ant-table-body' widthScroll={2000}>

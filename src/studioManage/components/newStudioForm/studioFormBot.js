@@ -4,11 +4,9 @@ import { Input, Row, Col, Form, Select, Button, DatePicker } from "antd";
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
-
 const FormItem = Form.Item;
 const Option = Select.Option;
 const TextArea = Input.TextArea;
-
 class StudioFormBot extends React.Component {
 	constructor() {
 		super();
@@ -32,6 +30,20 @@ class StudioFormBot extends React.Component {
 			callback(' ')
 		}
 	}
+	getSelectOptions = arr => {
+		if(!(Array.isArray(arr) && arr.length))
+			return null;
+		return arr.map(item => <Option key={item.id} value={item.id}>{item.display}</Option>)
+	}
+	serviceRateValide = (rule, value, callback) => {
+		const regex = /^\d+(\.\d{1,8})?$/;
+		const valide = value >= 0 && value <= 10000 && regex.test(value);
+		if(valide) {
+			callback();
+		}else {
+			callback('输入范围是[0-10000]，最多8位小数的数字,举例:如果想设置6.388%,请输入6.388');
+		}
+	}
 	getDate = () => {
 		let date = new Date();
 		let years = date.getFullYear();
@@ -47,10 +59,14 @@ class StudioFormBot extends React.Component {
 		timestamp = timestamp.toString().length === 10 ? timestamp * 1000 : timestamp;
 		return current && current.valueOf() < timestamp;
 	}
+	handleChangeInvoice = value => {
+		const { form } = this.props;
+		form.setFields({tax_rate: 0})
+	}
 	render() {
 		const { getFieldDecorator, getFieldValue } = this.props.form;
-		const { formItemLayout, taxLayout, handleOk } = this.props;
-		const selectValue = getFieldValue('invoice_tax_rate');
+		const { formItemLayout, taxLayout, handleOk, selectOption } = this.props;
+		const selectValue = getFieldValue('invoice_type');
 		return <div>
 			<Row>
 				<FormItem label='发票抬头' {...formItemLayout}>
@@ -61,27 +77,47 @@ class StudioFormBot extends React.Component {
 			</Row>
 			<Row type='flex' justify='start' gutter={16}>
 				<Col span={6}>
-					<FormItem label='税率' {...taxLayout}>
-						{getFieldDecorator('invoice_tax_rate', { initialValue: '0.06', rules: [{ required: true, message: '请填写自定义税率' }] })(
-							<Select style={{ width: 120 }} disabled>
-								<Option value="0.06">6%</Option>
-								<Option value="0.03">3%</Option>
-								<Option value="0.00">其它</Option>
+					<FormItem className='invoice_type_item' label='回票类型' {...taxLayout}>
+						{getFieldDecorator('invoice_type', { rules: [{ required: true, message: '请选择回票类型' }] })(
+							<Select placeholder="请选择" style={{ width: 216 }} onChange={this.handleChangeInvoice}>
+								{
+									this.getSelectOptions(selectOption['invoice_type'])
+								}
 							</Select>
 						)}
 					</FormItem>
 				</Col>
-				{selectValue && selectValue == '0.00' ? <Col style={{ marginLeft: '20px' }}>
-					<FormItem label=''>
-						{getFieldDecorator('tax_value', {
-							rules: [{ required: true, message: '请填写税率' }, {
-								validator: this.checkCount,
-							}]
-						})(
-							<Input addonAfter={'%'} style={{ width: 120 }} />
-						)}
-					</FormItem>
-				</Col> : null}
+			</Row>
+			<Row>
+				<FormItem label="发票税率" {...formItemLayout} >
+					{getFieldDecorator('tax_rate', {
+						rules: [
+							{ required: selectValue == '1', message: '请输入发票税率' },
+							{
+								validator: selectValue == '1' ? this.serviceRateValide : null,
+							}
+						],
+					})(
+						selectValue == '1' ? 
+							<Input placeholder='会影响公司成本请谨慎填写' addonAfter={'%'} style={{ width: 216 }} /> 
+							: 
+							<span>0%</span>
+					)}
+				</FormItem>
+			</Row>
+			<Row>
+				<FormItem label="服务费率" {...formItemLayout} >
+					{getFieldDecorator('service_rate', {
+						rules: [
+							{ required: true, message: '请输入服务费率' },
+							{
+								validator: this.serviceRateValide,
+							}
+						],
+					})(
+						<Input placeholder='会影响公司成本请谨慎填写' addonAfter={'%'} style={{ width: 216 }} />
+					)}
+				</FormItem>
 			</Row>
 			<Row style={{ marginTop: '10px' }}>
 				<FormItem label="有效期" {...formItemLayout} >

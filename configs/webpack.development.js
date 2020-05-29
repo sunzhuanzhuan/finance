@@ -14,7 +14,7 @@ module.exports = merge(baseConfig, {
 		host: 'lg.nip.io',
 		proxy: {
 			"/api": {
-				target: "http://nb.pre-weiboyi.com",
+				target: "http://nb.dev-weiboyi.com",
 				changeOrigin: true
 			}
 

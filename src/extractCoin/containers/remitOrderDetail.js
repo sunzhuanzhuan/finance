@@ -142,7 +142,8 @@ class RemitOrderDetail extends React.Component {
 			labelCol: { span: 1 },
 			wrapperCol: { span: 23 },
 		};
-		const remitDetailRecordConfig = remitDetailFunc(payment_slip_status_name, search, this.handleDetailOutput, this.handleReceiptsVisible);
+		const IS_SALE_LIMIT_SIGN = true;
+		const remitDetailRecordConfig = remitDetailFunc(payment_slip_status_name, search, this.handleDetailOutput, this.handleReceiptsVisible, IS_SALE_LIMIT_SIGN);
 		let detailPaginationObj = {
 			onChange: (current) => {
 				this.setState({ orderLoading: true });
@@ -164,6 +165,22 @@ class RemitOrderDetail extends React.Component {
 			pageSizeOptions: ['10', '20', '50', '100', '200']
 		};
 		const totalWidth = getTotalWidth(remitDetailOrderConfig);
+		const getCommentComp = () => {
+			if(IS_SALE_LIMIT_SIGN) {
+				return null
+			}
+			return (
+				status !== 3 ? <Row>
+					<Col span={24}>
+						<FormItem label='备注：' {...commentLayout}>
+							{getFieldDecorator('comment')(
+								<TextArea placeholder="请输入" rows={4} maxLength={200} />
+							)}
+						</FormItem>
+					</Col>
+				</Row> : null
+			)
+		}
 		return <div className='remitOrder'>
 			<div className='remitOrder-list'>
 				<Row>
@@ -215,21 +232,15 @@ class RemitOrderDetail extends React.Component {
 				/>
 			</Scolltable>
 			<Form className='topGap'>
-				{status !== 3 ? <Row>
-					<Col span={24}>
-						<FormItem label='备注：' {...commentLayout}>
-							{getFieldDecorator('comment')(
-								<TextArea placeholder="请输入" rows={4} maxLength={200} />
-							)}
-						</FormItem>
-					</Col>
-				</Row> : null}
+				{
+					getCommentComp()
+				}
 				<Row className='topGap'>
 					<Col style={{ textAlign: 'right' }}>
 						<Link to='/finance/remitOrder'>
 							<Button style={{ marginRight: '20px' }} size='large'>返回</Button>
 						</Link>
-						{status === 3 ? null : <Button type="primary" size='large' onClick={this.handleTipVisible}>{status === 0 ? '已打款' : status === 1 ? '已还款' : '已结税'}</Button>}
+						{IS_SALE_LIMIT_SIGN || status === 3 ? null : <Button type="primary" size='large' onClick={this.handleTipVisible}>{status === 0 ? '已打款' : status === 1 ? '已还款' : '已结税'}</Button>}
 					</Col>
 				</Row>
 			</Form>

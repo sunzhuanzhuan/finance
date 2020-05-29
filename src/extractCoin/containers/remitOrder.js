@@ -189,11 +189,11 @@ class RemitOrderManage extends React.Component {
 	}
 	render() {
 		let { newVisible, remitOrderLoading, outputVisible, remitOrderPageSize, filterParams, outputLoading, receiptsVisible, questParams, selectedRowKeys, rowsMap, studioVisible } = this.state;
-		console.log('%crowsMap: ', 'color: MidnightBlue; background: Aquamarine; font-size: 20px;', rowsMap);
 		let { remitOrderData: { data = [], total = 20, current_page = 1, payment_slip_status_name }, excel_name_list: { title, excel }, flashStudioList = {} } = this.props;
 		const { rows = [] } = flashStudioList;
 		const checked = data.every(item => selectedRowKeys.includes(item.id.toString()));
-		let remitOrderConfig = remitOrderFunc(payment_slip_status_name, this.handleOutputDetail, this.handleReceiptsVisible, this.handleTipVisible);
+		const IS_SALE_LIMIT_SIGN = true;
+		let remitOrderConfig = remitOrderFunc(payment_slip_status_name, this.handleOutputDetail, this.handleReceiptsVisible, this.handleTipVisible, IS_SALE_LIMIT_SIGN);
 		let paginationObj = {
 			onChange: (current) => {
 				this.setState({ remitOrderLoading: true, curPage: current });
@@ -225,10 +225,14 @@ class RemitOrderManage extends React.Component {
 				questAction={this.props.actions.getPaymentSlipList}
 				handlefilterParams={this.handlefilterParams}
 			></RemitQuery>
-			<Row className='topGap'>
-				<Button type='primary' onClick={this.newRemitOrder}>新建打款单</Button>
-				<Button className='left-gap' type='primary' onClick={this.handleChangeStudio}>更换工作室</Button>
-			</Row>
+			{
+				!IS_SALE_LIMIT_SIGN ? 
+				<Row className='topGap'>
+					<Button type='primary' onClick={this.newRemitOrder}>新建打款单</Button>
+					<Button className='left-gap' type='primary' onClick={this.handleChangeStudio}>更换工作室</Button>
+				</Row> : null
+			}
+			
 			<Table className='topGap'
 				rowKey={record => { return record.id.toString() }}
 				columns={remitOrderConfig}
@@ -236,9 +240,9 @@ class RemitOrderManage extends React.Component {
 				pagination={paginationObj}
 				loading={remitOrderLoading}
 				bordered
-				rowSelection={rowSelection}
+				rowSelection={!IS_SALE_LIMIT_SIGN ? rowSelection : null}
 				footer={() => {
-					return <Checkbox onChange={this.handleCheckAll} disabled={data.length == 0} checked={data.length > 0 && checked}>全选</Checkbox>
+					return !IS_SALE_LIMIT_SIGN ? <Checkbox onChange={this.handleCheckAll} disabled={data.length == 0} checked={data.length > 0 && checked}>全选</Checkbox> : null
 				}}
 			></Table>
 			{newVisible ? <NewRemitModal visible={newVisible} onCancel={this.closeNewModal}

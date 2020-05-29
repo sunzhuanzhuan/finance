@@ -17,6 +17,7 @@
 		"prop-types": "^15.6.2",
 		"qs": "^6.5.2",
 		"react-loadable": "^5.4.0",
+		"react-multi-clamp": "^2.0.1",
 		"react-redux": "^5.0.7",
 		"react-router": "^4.3.1",
 		"react-router-dom": "^4.3.1",

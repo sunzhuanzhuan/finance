@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 //自动转换数字金额为大小写中文字符,返回大小写中文字符串，最大处理到999兆
 export const moneyToChinese = function changeMoneyToChinese(money) {
 	let cnNums = new Array("零", "一", "二", "三", "四", "五", "六", "七", "八", "九"); //汉字的数字
@@ -82,4 +84,13 @@ export const moneyToChinese = function changeMoneyToChinese(money) {
 //从配置表中找到传入的key，并返回数组
 export const columnsList = (configMap, configKeys) => {
 	return configKeys.map(item => configMap[item])
+}
+//时间数组处理
+export const getTimeToObjByArr = (dateTime, key1, key2, format = 'YYYY-MM-DD') => {
+	let obj = {}
+	if (Array.isArray(dateTime) && dateTime.length > 0) {
+		obj[key1] = moment(dateTime[0]).format(format);
+		obj[key2] = moment(dateTime[1]).format(format);
+	}
+	return obj
 }

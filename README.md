@@ -8,6 +8,11 @@ $ yarn add eslint@4.x babel-eslint@8 -D
 
 # 配置开发环境
 
+### 配置token
+1. 在configs/webpack.development.js查看使用的环境（target: "http://nb.tst-weiboyi.com"）
+2. 复制相应环境下的token到本地环境
+3. 需要输入正确的页面地址才可以看到页面例如：http://lg.nip.io:7000/finance/invoice/usageQuery
+   
 ### 配置host
 1. 修改根目录下，.env.development中的host值。b.nip.io
 2. 修改/etc/hosts 下配置127.0.0.1 b.nip.io

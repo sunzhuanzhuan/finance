@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button, Select, message } from 'antd'
 import FormList from './FormList'
+import { percentToValue } from '@/util';
 
 const Option = Select.Option;
 class NewItem extends React.PureComponent {
@@ -54,11 +55,9 @@ class NewItem extends React.PureComponent {
 			}
 		}
 		params['platformId'] = value;
-		params['trinityProfitRates'] = Object.values(obj).map(item => ({ ...item, rate: this.dealRateValue(item.rate), minRate: this.dealRateValue(item.minRate), validParams: true }));
+		params['trinityProfitRates'] = Object.values(obj).map(item => ({ ...item, rate: percentToValue(item.rate), minRate: percentToValue(item.minRate), validParams: true }));
 		onSubmit('add', params);
 	}
-
-	dealRateValue = (val) => (val / 100).toFixed(4).toString()
 
 	render() {
 		const { onCancel, companyList } = this.props;

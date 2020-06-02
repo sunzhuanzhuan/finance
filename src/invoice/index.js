@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { Route } from 'react-router-dom'
+import { Route, Router } from 'react-router-dom'
 import lazyLoadComponent from '../components/LazyLoadComponent'
 
 // 懒加载路由级组件
@@ -17,6 +17,8 @@ const AssociateInvoice = lazyLoadComponent(() => import('./containers/associateI
 const RelatedInvoice = lazyLoadComponent(() => import('./containers/relatedInvoice'))
 const RelatedChooseInvoice = lazyLoadComponent(() => import('./containers/relatedChooseInvoice'))
 const TrinityInvoice = lazyLoadComponent(() => import('./containers/trinityInvoice'))
+const UsageQuery = lazyLoadComponent(() => import('./containers/UsageQuery'))
+
 class Invoice extends Component {
 	constructor(props) {
 		super(props);
@@ -38,6 +40,7 @@ class Invoice extends Component {
 				<Route path="/finance/invoice/relatedInvoice" component={RelatedInvoice}></Route>
 				<Route path="/finance/invoice/relatedChooseInvoice" component={RelatedChooseInvoice}></Route>
 				<Route path="/finance/invoice/trinityInvoice" component={TrinityInvoice}></Route>
+				<Route path="/finance/invoice/usageQuery" component={UsageQuery}></Route>
 			</div>
 		);
 	}

@@ -190,11 +190,12 @@ class RateModal extends React.Component {
 		}
 	};
 
-	judgeProfitRange = data =>  {
+	isProfitRangeIllegal = data =>  {
 		const pointReg = /^-?\d+(\.\d{1,10})?$/;
 		const isNumber = !isNaN(data) && isFinite(data);
+		if(!isNumber)
+			return true;
 		const result = isNumber && pointReg.test(data) && data >= -1 && data <= 99.9999999999;
-
 		return !result;
 	}
 
@@ -246,7 +247,7 @@ class RateModal extends React.Component {
 				isContinue = false;
 			}
 
-			if(this.judgeProfitRange(privateProfit) || this.judgeProfitRange(publicProfit)) {
+			if(this.isProfitRangeIllegal(privateProfit) || this.isProfitRangeIllegal(publicProfit)) {
 				validateResult.error = '利润率设置不合法，输入范围【-100% - 9999.99999999%】';
 				isContinue = false;
 			}

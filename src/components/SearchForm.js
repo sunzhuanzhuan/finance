@@ -246,6 +246,7 @@ class SearchForm extends React.PureComponent {
 				return (<Col
 					{...ResponseLayout}
 					key={itemIndex}
+					className='special-wrapper'
 				>
 					<FormItem label={field.label}>
 						{getFieldDecorator(field.value[0], field.params ? field.params : {})(

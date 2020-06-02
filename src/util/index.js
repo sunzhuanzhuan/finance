@@ -199,6 +199,55 @@ const downloadByATag = (src, fileName = "") => {
 	evObj.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
 	$a.dispatchEvent(evObj);
 }
+/**
+ * 乘法运算
+ * @param {Number} arg1
+ * @param {Number} arg2
+ */
+const accMul = (arg1,arg2) => { 
+	if(!arg1)
+		return 0;
+	let m=0;
+	let s1=arg1.toString();
+	let s2=arg2.toString(); 
+    try{m+=s1.split(".")[1].length}catch(e){m} 
+    try{m+=s2.split(".")[1].length}catch(e){m} 
+    return Number(s1.replace(".",""))*Number(s2.replace(".",""))/Math.pow(10,m) 
+} 
+/**
+ * 转换科学计数法为数字展示
+ * @param {Number} num 
+ */
+const scientificToNumber = (num) => {
+	if(/\d+\.?\d*e[+-]*\d+/i.test(num)) {
+		var zero = '0',
+		parts = String(num).toLowerCase().split('e'),
+		e = parts.pop(),
+		l = Math.abs(e),
+		sign = e/l,
+		coeff_array = parts[0].split('.');
+		if(sign === -1) {
+			num = zero + '.' + new Array(l).join(zero) + coeff_array.join('');
+		} else {
+			var dec = coeff_array[1];  
+			if(dec) l = l - dec.length;
+			num = coeff_array.join('') + new Array(l+1).join(zero);
+		}
+	}
+	return num;
+}
+/**
+ * 百分比转换为小数
+ * @param {Number} value
+ */
+function percentToValue(value) {
+    value = value + '';
+    const pointIndex = value.indexOf('.');
+    if (pointIndex === -1) return (value - 0) / 100;
+    const powIndex = value.length - pointIndex - 1;
+    return (value.replace('.', '') - 0) / Math.pow(10, powIndex + 2);
+}
+
 export {
 	showLoading,
 	hideLoading,
@@ -211,7 +260,10 @@ export {
 	changeHistoryLocation,
 	events,
 	getTotalWidth,
-	downloadByATag
+	downloadByATag,
+	accMul,
+	percentToValue,
+	scientificToNumber
 }
 export { calcSum } from './calcSum'
 

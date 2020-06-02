@@ -44,7 +44,7 @@ class RemitOrderManage extends React.Component {
 		this.setState({ remitOrderLoading: true });
 		const search = qs.parse(this.props.location.search.substring(1));
 		if (search.id) {
-			this.props.actions.getPaymentSlipList({ page: 1, limit_num: 20, id: search.id }).then(() => {
+			this.props.actions.getPaymentSlipList({ page: 1, limit_num: 20, id: [search.id] }).then(() => {
 				this.setState({ remitOrderLoading: false });
 			});
 		} else {
@@ -218,8 +218,10 @@ class RemitOrderManage extends React.Component {
 			selectedRowKeys,
 			onChange: this.onSelectChange,
 		};
+		const search = qs.parse(this.props.location.search.substring(1));
 		return <div className='remitOrder'>
 			<RemitQuery
+				queryId={search.id}
 				limit_num={remitOrderPageSize}
 				studioRows={rows}
 				questAction={this.props.actions.getPaymentSlipList}

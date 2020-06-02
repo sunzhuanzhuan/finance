@@ -9,7 +9,7 @@ import "./studioManage.less";
 import { postTypeMap } from '../constants'
 import numeral from "numeral";
 import qs from "qs";
-
+import { accMul, percentToValue, scientificToNumber } from '@/util';
 import moment from 'moment';
 
 class NewStudio extends React.Component {
@@ -41,10 +41,14 @@ class NewStudio extends React.Component {
 						monthly_limit: numeral(res.monthly_limit / 100).format('0.00'),
 						is_support_alipay: res.is_support_alipay === 1 ? [1, 2] : [2],
 						invoice_provider: res.invoice_provider,
+						invoice_type: res.invoice_type,
+						tax_rate: scientificToNumber(accMul(res.tax_rate, 100)),
+						service_rate: scientificToNumber(accMul(res.service_rate, 100)),
 						validity_start: moment(res.validity_start, 'YYYY-MM-DD'),
 						validity_end: moment(res.validity_end, 'YYYY-MM-DD'),
 						remark: res.remark
 					});
+					
 					if (res.is_support_alipay === 1) {
 						window.setTimeout(() => {
 							setFieldsValue({
@@ -104,6 +108,8 @@ class NewStudio extends React.Component {
 				let validity_end = values['validity_end'] ? values['validity_end'].format('YYYY-MM-DD') : null;
 				let is_support_alipay = values['is_support_alipay'].includes(1) ? 1 : 2;
 				let invoice_tax_rate = values['invoice_tax_rate'] === '0.00' ? numeral(values['tax_value'] / 100).format('0.0000') : values['invoice_tax_rate'];
+				let tax_rate = values['invoice_type'] == 1 ? percentToValue(values['tax_rate'], 100).toFixed(10) : 0;
+				let service_rate = percentToValue(values['service_rate'], 100).toFixed(10);
 				// let bank_agency = this.props.studioMetadata.bank.find(item => item.id == values['payment_type_id']).display;
 				let params = {
 					...values,
@@ -111,7 +117,9 @@ class NewStudio extends React.Component {
 					validity_start,
 					validity_end,
 					is_support_alipay,
-					invoice_tax_rate
+					invoice_tax_rate,
+					tax_rate,
+					service_rate
 				};
 				delete params['tax_value'];
 				if (!values['is_support_alipay'].includes(2)) {
@@ -144,7 +152,7 @@ class NewStudio extends React.Component {
 		});
 	}
 	render() {
-		const { studioMetadata: { studio_supported_platforms = [], bank = [] } } = this.props;
+		const { studioMetadata: { studio_supported_platforms = [], bank = [], invoice_type = [], tax_rate = [] } } = this.props;
 		const formItemLayout = {
 			labelCol: { span: 6 },
 			wrapperCol: { span: 16 },
@@ -153,6 +161,7 @@ class NewStudio extends React.Component {
 			labelCol: { span: 20 },
 			wrapperCol: { span: 4 },
 		};
+		const selectOption = {invoice_type, tax_rate};
 		return <div className='new-studio-manage'>
 			<Form className='new-studio-form'>
 				<StudioFormTop
@@ -168,6 +177,7 @@ class NewStudio extends React.Component {
 					formItemLayout={formItemLayout}
 					taxLayout={taxLayout}
 					handleOk={this.handleOk}
+					selectOption={selectOption}
 				></StudioFormBot>
 			</Form>
 		</div>

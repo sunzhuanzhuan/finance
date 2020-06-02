@@ -230,7 +230,8 @@ const accMul = (arg1,arg2) => {
 	if(!arg1)
 		return 0;
 	let m=0;
-	let s1=arg1.toString();
+	let baseNum = scientificToNumber(arg1);
+	let s1=baseNum.toString();
 	let s2=arg2.toString(); 
     try{m+=s1.split(".")[1].length}catch(e){m} 
 	try{m+=s2.split(".")[1].length}catch(e){m} 
@@ -239,10 +240,10 @@ const accMul = (arg1,arg2) => {
 } 
 /**
  * 百分比转换为小数
- * @param {Number} value
+ * @param {Number} num
  */
-function percentToValue(value) {
-    value = value + '';
+function percentToValue(num) {
+	const value = scientificToNumber(num) + '';
     const pointIndex = value.indexOf('.');
     if (pointIndex === -1) return (value - 0) / 100;
 	const powIndex = value.length - pointIndex - 1;

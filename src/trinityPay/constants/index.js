@@ -298,7 +298,7 @@ export const datePayFunc = (handleModal, isSaleRole) => [
 		}
 	},
 ];
-export const dealOrderCols = isSaleRole => {
+export const dealOrderCols = () => {
 	return [
 		{
 			title: '订单ID',
@@ -307,7 +307,8 @@ export const dealOrderCols = isSaleRole => {
 			align: 'center',
 			width: 100,
 			render: (text, record) => {
-				return isSaleRole ? <div>{text}</div> : <a href={`/finance/zhangwu/detail?order_id=${record.wby_order_id}`}>{text}</a>
+				const { can_jump_order_detail } = record;
+				return can_jump_order_detail == 1 ? <a href={`/finance/zhangwu/detail?order_id=${record.wby_order_id}`}>{text}</a> : <div>{text}</div>
 			}
 		},
 		{

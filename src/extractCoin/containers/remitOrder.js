@@ -189,10 +189,10 @@ class RemitOrderManage extends React.Component {
 	}
 	render() {
 		let { newVisible, remitOrderLoading, outputVisible, remitOrderPageSize, filterParams, outputLoading, receiptsVisible, questParams, selectedRowKeys, rowsMap, studioVisible } = this.state;
-		let { remitOrderData: { data = [], total = 20, current_page = 1, payment_slip_status_name }, excel_name_list: { title, excel }, flashStudioList = {} } = this.props;
+		let { remitOrderData: { data = [], total = 20, current_page = 1, payment_slip_status_name }, excel_name_list: { title, excel }, flashStudioList = {}, authVisibleList = {} } = this.props;
 		const { rows = [] } = flashStudioList;
 		const checked = data.every(item => selectedRowKeys.includes(item.id.toString()));
-		const IS_SALE_LIMIT_SIGN = true;
+		const IS_SALE_LIMIT_SIGN = authVisibleList['servicefee.sale.can.operate.finance'];
 		let remitOrderConfig = remitOrderFunc(payment_slip_status_name, this.handleOutputDetail, this.handleReceiptsVisible, this.handleTipVisible, IS_SALE_LIMIT_SIGN);
 		let paginationObj = {
 			onChange: (current) => {
@@ -228,11 +228,11 @@ class RemitOrderManage extends React.Component {
 				handlefilterParams={this.handlefilterParams}
 			></RemitQuery>
 			{
-				!IS_SALE_LIMIT_SIGN ? 
+				IS_SALE_LIMIT_SIGN ? null :
 				<Row className='topGap'>
 					<Button type='primary' onClick={this.newRemitOrder}>新建打款单</Button>
 					<Button className='left-gap' type='primary' onClick={this.handleChangeStudio}>更换工作室</Button>
-				</Row> : null
+				</Row>
 			}
 			
 			<Table className='topGap'
@@ -242,9 +242,9 @@ class RemitOrderManage extends React.Component {
 				pagination={paginationObj}
 				loading={remitOrderLoading}
 				bordered
-				rowSelection={!IS_SALE_LIMIT_SIGN ? rowSelection : null}
+				rowSelection={IS_SALE_LIMIT_SIGN ? null : rowSelection }
 				footer={() => {
-					return !IS_SALE_LIMIT_SIGN ? <Checkbox onChange={this.handleCheckAll} disabled={data.length == 0} checked={data.length > 0 && checked}>全选</Checkbox> : null
+					return IS_SALE_LIMIT_SIGN ? null : <Checkbox onChange={this.handleCheckAll} disabled={data.length == 0} checked={data.length > 0 && checked}>全选</Checkbox>
 				}}
 			></Table>
 			{newVisible ? <NewRemitModal visible={newVisible} onCancel={this.closeNewModal}
@@ -270,10 +270,15 @@ class RemitOrderManage extends React.Component {
 	}
 }
 const mapStateToProps = (state) => {
+	console.log('lkjflkjsdflkjsdfljs', state);
+	const { withdraw = {}, authorizationsReducers = {} } = state;
+	const { remitOrderData, excel_name_list, flashStudioList } = withdraw;
+	const { authVisibleList = {} } = authorizationsReducers;
 	return {
-		remitOrderData: state.withdraw.remitOrderData,
-		excel_name_list: state.withdraw.excel_name_list,
-		flashStudioList: state.withdraw.flashStudioList
+		remitOrderData,
+		excel_name_list,
+		flashStudioList,
+		authVisibleList
 	}
 }
 const mapDispatchToProps = dispatch => ({

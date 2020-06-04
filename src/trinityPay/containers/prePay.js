@@ -92,9 +92,9 @@ class PrePay extends React.Component {
 	render() {
 		const search = qs.parse(this.props.location.search.substring(1));
 		const { loading, pullReady, modalVisible, id, status, agent } = this.state;
-		const { prePayData: { list = [], page, page_size = 20, total, statistic }, paySearchItem } = this.props;
+		const { prePayData: { list = [], page, page_size = 20, total, statistic }, paySearchItem, authVisibleList = {} } = this.props;
 		const prePaySearch = prePaySearchFunc(paySearchItem, agent, this.handleFetchPlatform, this.handleFetchAccount);
-		const IS_SALE_LIMIT_SIGN = true;
+		const IS_SALE_LIMIT_SIGN = authVisibleList['servicefee.sale.can.operate.finance'];
 		const prePayCols = prePayFunc(this.handleModal, IS_SALE_LIMIT_SIGN);
 		const paginationObj = getPagination(this, search, { total, page, page_size });
 		const getExtraFooter = () => {
@@ -143,9 +143,13 @@ class PrePay extends React.Component {
 }
 
 const mapStateToProps = (state) => {
+	const { trinityPay = {}, authorizationsReducers = {} } = state;
+	const { prePayData, paySearchItem } = trinityPay;
+	const { authVisibleList = {} } = authorizationsReducers
 	return {
-		prePayData: state.trinityPay.prePayData,
-		paySearchItem: state.trinityPay.paySearchItem,
+		prePayData,
+		paySearchItem,
+		authVisibleList
 	}
 }
 const mapDispatchToProps = dispatch => ({

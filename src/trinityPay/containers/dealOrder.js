@@ -80,10 +80,10 @@ class DealOrder extends React.Component {
 	render() {
 		const search = qs.parse(this.props.location.search.substring(1));
 		const { loading, pullReady, agent } = this.state;
-		const { dealOrderData: { list = [], page, page_size = 20, total, statistic }, paySearchItem } = this.props;
+		const { dealOrderData: { list = [], page, page_size = 20, total, statistic }, paySearchItem, authVisibleList = {} } = this.props;
 		const dealOrderSearch = dealOrderSearchFunc(paySearchItem, agent, this.handleFetchPlatform);
 		const paginationObj = getPagination(this, search, { total, page, page_size });
-		const IS_SALE_LIMIT_SIGN = true;
+		const IS_SALE_LIMIT_SIGN = authVisibleList['servicefee.sale.can.operate.finance'];
 		const getExtraFooter = () => {
 			return IS_SALE_LIMIT_SIGN ? null : <Button type='primary' style={{ marginLeft: 20 }} onClick={this.handleExport}>导出</Button>
 		}
@@ -97,7 +97,7 @@ class DealOrder extends React.Component {
 				<Table
 					rowKey='id'
 					loading={loading}
-					columns={dealOrderCols(IS_SALE_LIMIT_SIGN)}
+					columns={dealOrderCols()}
 					dataSource={list}
 					bordered
 					pagination={paginationObj}
@@ -108,9 +108,14 @@ class DealOrder extends React.Component {
 }
 
 const mapStateToProps = (state) => {
+	const { trinityPay = {}, authorizationsReducers = {} } = state;
+	const { dealOrderData, paySearchItem } = trinityPay;
+	const { authVisibleList = {} } = authorizationsReducers;
+
 	return {
-		dealOrderData: state.trinityPay.dealOrderData,
-		paySearchItem: state.trinityPay.paySearchItem,
+		dealOrderData,
+		paySearchItem,
+		authVisibleList
 	}
 }
 const mapDispatchToProps = dispatch => ({

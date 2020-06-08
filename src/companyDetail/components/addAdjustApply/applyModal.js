@@ -330,11 +330,9 @@ class ApplyModal extends React.Component {
 		this.attachment = (fileList.map(item => item.url)).toString();
 	}
 	checkProfitCount = (rule, value, callback) => {
-		const pointReg = /^-?\d+(\.\d{1,8})?$/;
-		const result = pointReg.test(value) && value >= -30 && value <= 99.99999999;
-
+		const reg = /^((-30|0)(\.0{1,8})?|[0-9]?\d(\.\d{1,8}?)?|-([0-2]?\d)(\.\d{1,8}?)?)$/;
 		if (value) {
-			if (result) {
+			if (reg.test(value.toString())) {
 				callback();
 				return;
 			}
@@ -344,11 +342,9 @@ class ApplyModal extends React.Component {
 		}
 	}
 	checkCount = (_, value, callback) => {
-		const pointReg = /^-?\d+(\.\d{1,8})?$/;
-		const result = pointReg.test(value) && value >= -30 && value <= 100;
-
+		const reg = /^((100|-30|0)(\.0{1,8})?|[0-9]?\d(\.\d{1,8}?)?|-([0-2]?\d)(\.\d{1,8}?)?)$/;
 		if (value) {
-			if (result) {
+			if (reg.test(value.toString())) {
 				callback();
 				return;
 			}

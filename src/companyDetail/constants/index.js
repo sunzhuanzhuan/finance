@@ -1108,19 +1108,19 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				key: 'published_price',
 				width: 640,
 				render: (_, record) => {
-					const { platform_name, reference_price_doc } = record;
-
+					const { platform_id, reference_price_doc, warningClass } = record;
 					return [
 						<div
 							key='price_info'
-							className='price_info'
-							style={{ width: '100%', textAlign: 'center', border: '1px solid #e8e8e8', borderBottom: 0, padding: '6px 4px', fontWeight: 500, color: 'rgba(0, 0, 0, 0.85)', background: '#fafafa' }}>
+							className={`${warningClass} price_info`}
+							style={{ width: '100%', textAlign: 'center', border: '1px solid #e8e8e8', borderBottom: 0, padding: '6px 4px', fontWeight: 500, color: warningClass ? '' : 'rgba(0, 0, 0, 0.85)', background: '#fafafa' }}>
 							各价格均为订单创建时刻的价格
 						</div>,
 						<Table
 							rowKey='id'
 							key='price_table'
-							columns={getPublishedCol(platform_name === '微信公众号')}
+							className={`pre_published_price_${warningClass}`}
+							columns={getPublishedCol(platform_id == '9')}
 							dataSource={reference_price_doc}
 							bordered
 							size="middle"

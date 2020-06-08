@@ -14,9 +14,6 @@ class AdjustApplyInput extends React.Component {
 			fileList: []
 		}
 	}
-	componentDidMount() {
-		this.props.actions.getCompanyDetailAuthorizations()
-	}
 	confirmUpload = (obj, content, finance, sale, data = {}) => {
 		const { postImportApplication } = this.props.actions;
 		const { fileList } = this.state;
@@ -65,15 +62,10 @@ class AdjustApplyInput extends React.Component {
 		}
 	}
 	render() {
-		const { companyDetailAuthorizations = [] } = this.props;
-		let finance;
-		let sale;
-		if(companyDetailAuthorizations.length){
-			finance = companyDetailAuthorizations[0].permissions['readjust.finance.audit'];
-			sale = companyDetailAuthorizations[0].permissions['readjust.sale.audit'];
-		}
+		const { authVisibleList = [] } = this.props;
+		const finance = authVisibleList['readjust.finance.audit'];
+		const sale = authVisibleList['readjust.sale.audit'];
 		const audit_type = finance ? 1 : sale ? 2 : undefined;
-
 		const props = {
 			headers: { "Content-Type": "application/x-www-form-urlencoded" },
 			accept: ".xlsx,.xls",
@@ -116,8 +108,10 @@ class AdjustApplyInput extends React.Component {
 	}
 }
 const mapStateToProps = state => {
+	const { authorizationsReducers = {} } = state;
+	const { authVisibleList = {} } = authorizationsReducers;
 	return {
-		companyDetailAuthorizations: state.companyDetail.companyDetailAuthorizations,
+		authVisibleList
 	}
 };
 const mapDispatchToProps = dispatch => ({

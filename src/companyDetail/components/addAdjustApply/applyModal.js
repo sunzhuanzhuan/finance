@@ -90,12 +90,12 @@ class ApplyModal extends React.Component {
 	}
 	handleApplicationPreview = e => {
 		e.preventDefault();
-		const { readjustId, companyId, companyDetailAuthorizations, curSelectRows = [] } = this.props;
+		const { readjustId, companyId, authVisibleList, curSelectRows = [] } = this.props;
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
 				const hide = message.loading('加载中,请稍候...');
-				const finance = companyDetailAuthorizations[0].permissions['readjust.finance.audit'];
-				const sale = companyDetailAuthorizations[0].permissions['readjust.sale.audit'];
+				const finance = authVisibleList['readjust.finance.audit'];
+				const sale = authVisibleList['readjust.sale.audit'];
 				const audit_type = finance ? 1 : sale ? 2 : undefined;
 				this.queryData({ page: 1, page_size: 50, status: 1, readjust_application_id: readjustId, company_id: companyId }).then(() => {
 					const { applicationDetail: { list = [] } } = this.props;
@@ -138,9 +138,9 @@ class ApplyModal extends React.Component {
 	}
 	handlePreview = e => {
 		const search = qs.parse(this.props.location.search.substring(1));
-		const { curSelectRowKeys, companyDetailAuthorizations = [], curSelectRows = [] } = this.props;
-		const finance = companyDetailAuthorizations[0].permissions['readjust.finance.audit'];
-		const sale = companyDetailAuthorizations[0].permissions['readjust.sale.audit'];
+		const { curSelectRowKeys, authVisibleList = {}, curSelectRows = [] } = this.props;
+		const finance = authVisibleList['readjust.finance.audit'];
+		const sale = authVisibleList['readjust.sale.audit'];
 		const audit_type = finance ? 1 : sale ? 2 : undefined;
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
@@ -182,10 +182,10 @@ class ApplyModal extends React.Component {
 	handleSubmit = (e) => {
 		const attachment = this.attachment;
 		const search = qs.parse(this.props.location.search.substring(1));
-		const { type, onCancel, curSelectRowKeys, curSelectRows, companyDetailAuthorizations = [] } = this.props;
+		const { type, onCancel, curSelectRowKeys, curSelectRows, authVisibleList = {} } = this.props;
 		const { postApplyReadjust, postPassByOrderIds, postPassByReadjust } = this.props.actions;
-		const finance = companyDetailAuthorizations[0].permissions['readjust.finance.audit'];
-		const sale = companyDetailAuthorizations[0].permissions['readjust.sale.audit'];
+		const finance = authVisibleList['readjust.finance.audit'];
+		const sale = authVisibleList['readjust.sale.audit'];
 		const audit_type = finance ? 1 : sale ? 2 : undefined;
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
@@ -554,11 +554,14 @@ class ApplyModal extends React.Component {
 }
 
 const mapStateToProps = (state) => {
+	const { authorizationsReducers = {}, companyDetail = {} } = state;
+	const { authVisibleList = {} } = authorizationsReducers;
+	const { goldenToken, applicationDetail, applicationPreview } = companyDetail;
 	return {
-		companyDetailAuthorizations: state.companyDetail.companyDetailAuthorizations,
-		goldenToken: state.companyDetail.goldenToken,
-		applicationDetail: state.companyDetail.applicationDetail,
-		applicationPreview: state.companyDetail.applicationPreview,
+		goldenToken,
+		applicationDetail,
+		applicationPreview,
+		authVisibleList
 	}
 }
 const mapDispatchToProps = dispatch => ({

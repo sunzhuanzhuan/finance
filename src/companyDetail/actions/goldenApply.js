@@ -2,13 +2,6 @@ import Interface from '../constants/Interface'
 import { createHttpAction } from 'redux-action-extend'
 
 export const {
-	getCompanyDetailAuthorizations,
-	getCompanyDetailAuthorizations_success
-} = createHttpAction('getCompanyDetailAuthorizations', Interface.getCompanyDetailAuthorizations, {
-	method: 'get'
-});
-
-export const {
 	getGoldenMetadata,
 	getGoldenMetadata_success
 } = createHttpAction('getGoldenMetadata', Interface.getGoldenMetadata, {

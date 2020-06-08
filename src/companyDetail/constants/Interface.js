@@ -15,7 +15,6 @@ export default {
 	getCompanyReceivableList: '/finance/receivables/debt/billList',
 	getReceivableOption: '/finance/receivables/verification/searchItem',
 	/* 调价 */
-	getCompanyDetailAuthorizations: '/rbac/getAuthorizations',
 	getGoldenMetadata: '/finance/readjust/metadata',
 	getProject: '/finance/commonApi/getProject',
 	getPlatform: '/finance/readjust/platform',

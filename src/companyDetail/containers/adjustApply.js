@@ -21,9 +21,6 @@ class AdjustApply extends React.Component {
 			page_size: 20,
 			tipVisible: false,
 			loading: false,
-			flag: false,
-			btnFlag: false,
-			costFlag: false,
 			quoteType: '',
 			readjust_application_id: '',
 			activeKey: 'allOptions'
@@ -32,18 +29,8 @@ class AdjustApply extends React.Component {
 	componentDidMount() {
 		const search = qs.parse(this.props.location.search.substring(1));
 		const currentTab = search.keys ? search.keys.status : 'allOptions';
-		const { getCompanyDetailAuthorizations, getGoldenMetadata, getGoldenUserList, getPlatformIcon } = this.props.actions;
+		const { getGoldenMetadata, getGoldenUserList, getPlatformIcon } = this.props.actions;
 		this.setState({ activeKey: currentTab ? currentTab.toString() : 'allOptions' });
-		getCompanyDetailAuthorizations().then(() => {
-			const { companyDetailAuthorizations } = this.props
-			const flag = companyDetailAuthorizations[0].permissions['readjust.finance.operation'];
-			const btnFlag = companyDetailAuthorizations[0].permissions['readjust.sale.operation'];
-			const finance = companyDetailAuthorizations[0].permissions['readjust.finance.audit'];
-			const sale = companyDetailAuthorizations[0].permissions['readjust.sale.audit'];
-			const costFlag = companyDetailAuthorizations[0].permissions['readjust.finance.filter'];
-			const audit_type = finance ? 1 : sale ? 2 : undefined;
-			this.setState({ flag, btnFlag, audit_type, costFlag });
-		})
 		getGoldenMetadata().then(() => {
 
 			this.queryAllStatusData({ page: 1, page_size: this.state.page_size, ...search.keys });
@@ -115,8 +102,7 @@ class AdjustApply extends React.Component {
 	showReject = (readjust_application_id) => {
 		this.setState({ rejectVisible: true, readjust_application_id });
 	}
-	handleReject = (readjust_application_id) => {
-		const { audit_type } = this.state;
+	handleReject = (readjust_application_id, audit_type) => {
 		const search = qs.parse(this.props.location.search.substring(1));
 		const { postRejectByReadjustId } = this.props.actions;
 		const remark = document.querySelector('#reject-remark').value;
@@ -162,15 +148,21 @@ class AdjustApply extends React.Component {
 		this.queryAllStatusData(obj, func, true);
 	}
 	render() {
-		const { loading, tipVisible, page_size, flag, btnFlag, costFlag, quoteType, readjust_application_id, rejectVisible, company_id, addVisible, activeKey, audit_type } = this.state;
-		const { form, goldenMetadata, goldenMetadata: { application_status = [], rel_order_status = [], quote_type = [], readjust_type = [] }, goldenUserList, applicationDetail: { list: detailList = [] }, applyListReducer = {}, platformIcon = [] } = this.props;
+		const { form, goldenMetadata, goldenMetadata: { application_status = [], rel_order_status = [], quote_type = [], readjust_type = [] }, goldenUserList, applicationDetail: { list: detailList = [] }, applyListReducer = {}, platformIconList = [], authVisibleList = {} } = this.props;
+		const { loading, tipVisible, page_size, quoteType, readjust_application_id, rejectVisible, company_id, addVisible, activeKey } = this.state;
+		const flag = authVisibleList['readjust.finance.operation'];
+		const btnFlag = authVisibleList['readjust.sale.operation'];
+		const costFlag = authVisibleList['readjust.finance.filter'];
+		const finance = authVisibleList['readjust.finance.audit'];
+		const sale = authVisibleList['readjust.sale.audit'];
+		const audit_type = finance ? 1 : sale ? 2 : undefined;
 		const { getFieldDecorator } = form;
 		const formItemLayout = { labelCol: { span: 6 }, wrapperCol: { span: 16 }, };
 		const search = qs.parse(this.props.location.search.substring(1));
 		const adjustApplyList = flag ? adjustApplyListFunc(audit_type, application_status, quote_type, this.handleJump, this.handleAction) : adjustApplyFunc(application_status, quote_type, this.handleJump);
 		const preArr = ['prev_id', 'statusPre', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'main_account_info', 'quoted_price', 'discount_rate', 'published_price', 'order_bottom_price', 'commissioned_price', 'pre_min_sell_price', 'preview_quote_type'];
 		const dealPreArr = costFlag ? preArr : preArr.filter(item => item !== 'quoted_price');
-		const adjustApplyPreview = adjustApplyDetailFunc(rel_order_status, quote_type, readjust_type, platformIcon, flag)(dealPreArr);
+		const adjustApplyPreview = adjustApplyDetailFunc(rel_order_status, quote_type, readjust_type, platformIconList, flag)(dealPreArr);
 		const dealStatusArr = Array.isArray(application_status) && application_status.length  ? [{id: 'allOptions', display: '全部'}, ...application_status] : [];
 		const getTabPaneComp = () => {
 			return dealStatusArr.map(item => {
@@ -263,7 +255,7 @@ class AdjustApply extends React.Component {
 			>
 			</ApplyModal> : null}
 			{rejectVisible ? <Modal title='订单调价处理' visible={rejectVisible}
-				onOk={() => { this.handleReject(readjust_application_id) }}
+				onOk={() => { this.handleReject(readjust_application_id, audit_type) }}
 				onCancel={() => { this.setState({ rejectVisible: false }) }}
 				maskClosable={false}
 			>
@@ -302,14 +294,17 @@ class AdjustApply extends React.Component {
 }
 
 const mapStateToProps = (state) => {
+	const { companyDetail = {}, authorizationsReducers = {} } = state;
+	const { goldenMetadata, goldenUserList, applicationList, applicationDetail, applyListReducer, platformIconList} = companyDetail;
+	const { authVisibleList = {} } = authorizationsReducers;
 	return {
-		companyDetailAuthorizations: state.companyDetail.companyDetailAuthorizations,
-		goldenMetadata: state.companyDetail.goldenMetadata,
-		goldenUserList: state.companyDetail.goldenUserList,
-		applicationList: state.companyDetail.applicationList,
-		applicationDetail: state.companyDetail.applicationDetail,
-		applyListReducer: state.companyDetail.applyListReducer,
-		platformIcon: state.companyDetail.platformIconList,
+		goldenMetadata,
+		goldenUserList,
+		applicationList,
+		applicationDetail,
+		applyListReducer,
+		platformIconList,
+		authVisibleList
 	}
 }
 const mapDispatchToProps = dispatch => ({

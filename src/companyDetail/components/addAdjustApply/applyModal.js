@@ -338,7 +338,7 @@ class ApplyModal extends React.Component {
 				callback();
 				return;
 			}
-			callback('请填写-30.00到99.99的值！');
+			callback('请填写-30到99.99999999的值，输入数值的小数位不能超过8位！');
 		} else {
 			callback(' ')
 		}
@@ -350,7 +350,7 @@ class ApplyModal extends React.Component {
 				callback();
 				return;
 			}
-			callback('请填写-30.00到100.00的值！');
+			callback('请填写-30到100的值，输入数值的小数位不能超过8位！');
 		} else {
 			callback(' ')
 		}

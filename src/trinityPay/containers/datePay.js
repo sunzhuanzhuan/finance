@@ -90,7 +90,7 @@ class DatePay extends React.Component {
 		const { loading, pullReady, modalVisible, id, status, agent } = this.state;
 		const { datePayData: { list = [], page, page_size = 20, total, statistic }, paySearchItem, authVisibleList = {} } = this.props;
 		const datePaySearch = datePaySearchFunc(paySearchItem, agent, this.handleFetchPlatform);
-		const IS_SALE_LIMIT_SIGN = authVisibleList['servicefee.sale.can.operate.finance'];
+		const IS_SALE_LIMIT_SIGN = !authVisibleList['servicefee.sale.can.operate.finance'];
 		const datePayCols = datePayFunc(this.handleModal, IS_SALE_LIMIT_SIGN);
 		const paginationObj = getPagination(this, search, { total, page, page_size });
 		const getExtraFooter = () => {

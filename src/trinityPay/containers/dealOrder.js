@@ -83,7 +83,7 @@ class DealOrder extends React.Component {
 		const { dealOrderData: { list = [], page, page_size = 20, total, statistic }, paySearchItem, authVisibleList = {} } = this.props;
 		const dealOrderSearch = dealOrderSearchFunc(paySearchItem, agent, this.handleFetchPlatform);
 		const paginationObj = getPagination(this, search, { total, page, page_size });
-		const IS_SALE_LIMIT_SIGN = authVisibleList['servicefee.sale.can.operate.finance'];
+		const IS_SALE_LIMIT_SIGN = !authVisibleList['servicefee.sale.can.operate.finance'];
 		const getExtraFooter = () => {
 			return IS_SALE_LIMIT_SIGN ? null : <Button type='primary' style={{ marginLeft: 20 }} onClick={this.handleExport}>导出</Button>
 		}

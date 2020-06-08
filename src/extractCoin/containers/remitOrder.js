@@ -192,7 +192,7 @@ class RemitOrderManage extends React.Component {
 		let { remitOrderData: { data = [], total = 20, current_page = 1, payment_slip_status_name }, excel_name_list: { title, excel }, flashStudioList = {}, authVisibleList = {} } = this.props;
 		const { rows = [] } = flashStudioList;
 		const checked = data.every(item => selectedRowKeys.includes(item.id.toString()));
-		const IS_SALE_LIMIT_SIGN = authVisibleList['servicefee.sale.can.operate.finance'];
+		const IS_SALE_LIMIT_SIGN = !authVisibleList['servicefee.sale.can.operate.finance'];
 		let remitOrderConfig = remitOrderFunc(payment_slip_status_name, this.handleOutputDetail, this.handleReceiptsVisible, this.handleTipVisible, IS_SALE_LIMIT_SIGN);
 		let paginationObj = {
 			onChange: (current) => {

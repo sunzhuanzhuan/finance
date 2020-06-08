@@ -95,7 +95,7 @@ class PrePay extends React.Component {
 		const { loading, pullReady, modalVisible, id, status, agent } = this.state;
 		const { prePayData: { list = [], page, page_size = 20, total, statistic }, paySearchItem, authVisibleList = {} } = this.props;
 		const prePaySearch = prePaySearchFunc(paySearchItem, agent, this.handleFetchPlatform, this.handleFetchAccount, this.props.actions.getGoldenCompanyId);
-		const IS_SALE_LIMIT_SIGN = authVisibleList['servicefee.sale.can.operate.finance'];
+		const IS_SALE_LIMIT_SIGN = !authVisibleList['servicefee.sale.can.operate.finance'];
 		const prePayCols = prePayFunc(this.handleModal, IS_SALE_LIMIT_SIGN);
 		const paginationObj = getPagination(this, search, { total, page, page_size });
 		const getExtraFooter = () => {

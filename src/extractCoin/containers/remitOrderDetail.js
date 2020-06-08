@@ -142,7 +142,7 @@ class RemitOrderDetail extends React.Component {
 			labelCol: { span: 1 },
 			wrapperCol: { span: 23 },
 		};
-		const IS_SALE_LIMIT_SIGN = authVisibleList['servicefee.sale.can.operate.finance'];
+		const IS_SALE_LIMIT_SIGN = !authVisibleList['servicefee.sale.can.operate.finance'];
 		const remitDetailRecordConfig = remitDetailFunc(payment_slip_status_name, search, this.handleDetailOutput, this.handleReceiptsVisible, IS_SALE_LIMIT_SIGN);
 		let detailPaginationObj = {
 			onChange: (current) => {

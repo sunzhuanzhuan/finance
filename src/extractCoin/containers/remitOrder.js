@@ -270,7 +270,6 @@ class RemitOrderManage extends React.Component {
 	}
 }
 const mapStateToProps = (state) => {
-	console.log('lkjflkjsdflkjsdfljs', state);
 	const { withdraw = {}, authorizationsReducers = {} } = state;
 	const { remitOrderData, excel_name_list, flashStudioList } = withdraw;
 	const { authVisibleList = {} } = authorizationsReducers;

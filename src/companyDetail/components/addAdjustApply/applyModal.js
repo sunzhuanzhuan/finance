@@ -274,11 +274,19 @@ class ApplyModal extends React.Component {
 			}
 		});
 	}
+	handleInfo = title => {
+		Modal.error({
+			title,
+			onOk: () => {
+				this.setState({isClick: false});
+				this.props.onCancel();
+			}
+		});
+	}
 	handleSubmitConfirm = (action, params, query, data = {}, finance, sale) => {
 		const { queryAction, onCancel, handleClear, type } = this.props;
 		const { msg } = data;
-
-
+	
 		if(msg) {
 			if(finance) {
 				return Modal.confirm({

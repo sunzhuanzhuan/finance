@@ -1255,7 +1255,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				render: (text, { history_min_sell_price: { readjust_type: readJustType } }) => {
 					const item = text ? text.min_sell_price : [];
 					const value = readjust_type.find(item => item.id == readJustType) || {};
-					const node = item.length > 0 ? <div>
+					const node = item.length > 0 ? <div key='priceInfo'>
 						{item.map(item => {
 							const showObj = {
 								isShowDetail: item.trinity_type == 2,

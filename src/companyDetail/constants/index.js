@@ -813,6 +813,7 @@ export const readyCheckFunc = (handleDelete) => {
 		}
 	]
 }
+const orderTagStyle = { display: 'inline-block', fontSize: '10px', width: 'fit-content', backgroundColor: 'red', color: '#fff', padding: '0 2px', marginRight: '2px' };
 export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], readjust_type = [], platformIcon = [], isFinance) => {
 	return ary => {
 		const configMap = {
@@ -822,14 +823,23 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				key: 'order_id',
 				width: 160,
 				render: (text, record) => {
-					const { quote_type: quoteVal, formula_version } = record;
+					const { quote_type: quoteVal, formula_version, trinity_type_name } = record;
 					const value = quote_type.find(item => item.id == quoteVal) || {};
 
 					return <div className={record.warningClass}>
 						<div>{text}</div>
 						<div>报价类型：{value.display || '-'}</div>
-						{record.plan_manager_id && record.plan_manager_id != '0' && <div style={{ display: 'inline-block', fontSize: '10px', backgroundColor: 'red', color: '#fff', padding: '0 2px', marginTop: '5px' }}>含策划</div>}
-						{isFinance && formula_version && <div style={{ display: 'inline-block', fontSize: '10px', width: 'fit-content', backgroundColor: 'red', color: '#fff', padding: '0 2px', marginLeft: '2px' }}>{formula_version == 2 ? '已价税分离' : '未价税分离' }</div>}
+						<div style={{marginTop: '5px'}}>
+							{
+								record.plan_manager_id && record.plan_manager_id != '0' && 
+								<div style={orderTagStyle}>含策划</div>
+							}
+							{
+								isFinance && formula_version && 
+								<div style={orderTagStyle}>{formula_version == 2 ? '已价税分离' : '未价税分离' }</div>
+							}
+							<div style={orderTagStyle}>{trinity_type_name}</div>
+						</div>
 					</div>
 				}
 			},
@@ -840,14 +850,23 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				width: 160,
 				fixed: 'left',
 				render: (text, record) => {
-					const { quote_type: quoteVal, formula_version } = record;
+					const { quote_type: quoteVal, formula_version, trinity_type_name } = record;
 					const value = quote_type.find(item => item.id == quoteVal) || {};
 
 					return <div className={record.warningClass}>
 						<div>{text}</div>
 						<div>报价类型：{value.display || '-'}</div>
-						{record.plan_manager_id && record.plan_manager_id != '0' && <div style={{ display: 'inline-block', fontSize: '10px', backgroundColor: 'red', color: '#fff', padding: '0 2px', marginTop: '5px' }}>含策划</div>}
-						{isFinance && formula_version && <div style={{ display: 'inline-block', fontSize: '10px', width: 'fit-content', backgroundColor: 'red', color: '#fff', padding: '0 2px', marginLeft: '2px' }}>{formula_version == 2 ? '已价税分离' : '未价税分离' }</div>}
+						<div style={{marginTop: '5px'}}>
+							{
+								record.plan_manager_id && record.plan_manager_id != '0' && 
+								<div style={orderTagStyle}>含策划</div>
+							}
+							{
+								isFinance && formula_version && 
+								<div style={orderTagStyle}>{formula_version == 2 ? '已价税分离' : '未价税分离' }</div>
+							}
+							<div style={orderTagStyle}>{trinity_type_name}</div>
+						</div>
 					</div>
 				}
 			},

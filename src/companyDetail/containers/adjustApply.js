@@ -23,7 +23,8 @@ class AdjustApply extends React.Component {
 			loading: false,
 			quoteType: '',
 			readjust_application_id: '',
-			activeKey: 'allOptions'
+			activeKey: 'allOptions', 
+			selectedRowKeys: []
 		};
 	}
 	componentDidMount() {
@@ -81,8 +82,10 @@ class AdjustApply extends React.Component {
 			search: `?${qs.stringify({ readjust_application_id: id, company_id, keys: { readjust_application_id: id, company_id, page_size: 50 } })}`,
 		});
 	}
-	handleExport = (readjust_application_id) => {
-		this.props.actions.getExport({ readjust_application_id })
+	handleExport = () => {
+		// this.props.actions.getExport({ readjust_application_id })
+		const { selectedRowKeys = [] } = this.state;
+		console.log('sldkjflskdjfsldkjf', selectedRowKeys)
 	}
 	handleAction = (type, readjust_application_id, quote_type, company_id) => {
 		if (type === 'pass') {
@@ -149,7 +152,7 @@ class AdjustApply extends React.Component {
 	}
 	render() {
 		const { form, goldenMetadata, goldenMetadata: { application_status = [], rel_order_status = [], quote_type = [], readjust_type = [] }, goldenUserList, applicationDetail: { list: detailList = [] }, applyListReducer = {}, platformIconList = [], authVisibleList = {} } = this.props;
-		const { loading, tipVisible, page_size, quoteType, readjust_application_id, rejectVisible, company_id, addVisible, activeKey } = this.state;
+		const { loading, tipVisible, page_size, quoteType, readjust_application_id, rejectVisible, company_id, addVisible, activeKey, selectedRowKeys = [] } = this.state;
 		const flag = authVisibleList['readjust.finance.operation'];
 		const btnFlag = authVisibleList['readjust.sale.operation'];
 		const costFlag = authVisibleList['readjust.finance.filter'];
@@ -194,6 +197,12 @@ class AdjustApply extends React.Component {
 					showSizeChanger: true,
 					pageSizeOptions: ['20', '50', '100', '200']
 				};
+				const rowSelectionObj = {
+					selectedRowKeys: selectedRowKeys,
+					onChange: (selectedRowKeys) => {
+						this.setState({ selectedRowKeys })
+					},
+				}
 				const tab = <div>
 					<span key='name'>{display}</span>
 					<span key='count'>{total}</span>
@@ -203,6 +212,7 @@ class AdjustApply extends React.Component {
 						<Table
 							className='table_style'
 							rowKey='id'
+							rowSelection={rowSelectionObj}
 							columns={adjustApplyList}
 							dataSource={list}
 							loading={loading}
@@ -226,8 +236,8 @@ class AdjustApply extends React.Component {
 					{goldenMetadata}
 				</AdjustQuery>
 				<div className='addOperateWrapper'>
-				{flag ? <Button type='primary' icon='download' className='right-gap' href='/finance/golden/adjustApplyInput'
-					>导入</Button> : null}
+					<Button disabled={!selectedRowKeys.length} type='primary' className='right-gap' onClick={this.handleExport}>批量导出</Button>
+					{flag ? <Button type='primary' icon='download' className='right-gap' href='/finance/golden/adjustApplyInput'>导入</Button> : null}
 					{btnFlag ? <Button className='right-gap' type="primary" onClick={this.isShowAddModal}
 						// href={`/finance/golden/addAdjustApply?${qs.stringify({ keys: { page_size: 50 } })}`}
 						// target='_blank'

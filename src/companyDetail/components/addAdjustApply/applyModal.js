@@ -265,7 +265,6 @@ class ApplyModal extends React.Component {
 						Object.assign(params, {set_min_sell_price});
 					}
 					Object.keys(params).forEach(item => { !params[item] && params[item] !== 0 ? delete params[item] : null });
-
 					this.handleFunction(postPassByReadjust, params)(result => {
 						const { data } = result;
 						const qurey = { page: 1, page_size: this.props.page_size, ...search.keys };
@@ -278,6 +277,8 @@ class ApplyModal extends React.Component {
 	handleSubmitConfirm = (action, params, query, data = {}, finance, sale) => {
 		const { queryAction, onCancel, handleClear, type } = this.props;
 		const { msg } = data;
+
+
 		if(msg) {
 			if(finance) {
 				return Modal.confirm({

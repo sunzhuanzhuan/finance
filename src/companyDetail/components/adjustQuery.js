@@ -31,9 +31,8 @@ class AdjustQuery extends React.Component {
 		}
 		this.props.form.setFieldsValue({ ...keys, ...obj });
 	}
-	handleSearch = (e) => {
+	handleSearch = type => {
 		const { questAction, pageSize } = this.props;
-		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
 				let keys = {}, labels = {};
@@ -60,6 +59,9 @@ class AdjustQuery extends React.Component {
 						search: `?${qs.stringify(params)}`,
 					})
 				});
+				if(type === 'searchExport') {
+					console.log('sldkjflksdjfsldkfj', params.keys)
+				}
 			}
 		});
 	}
@@ -138,6 +140,7 @@ class AdjustQuery extends React.Component {
 			<FormItem className='left-gap adjust_apply_query'>
 				<Button type="primary" onClick={this.handleSearch}>查询</Button>
 				<Button onClick={this.handleClear}>重置</Button>
+				<Button onClick={() => this.handleSearch('searchExport')}>查询并导出全部</Button>
 			</FormItem>
 		</Form >
 	}

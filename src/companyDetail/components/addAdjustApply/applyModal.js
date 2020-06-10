@@ -285,8 +285,11 @@ class ApplyModal extends React.Component {
 	}
 	handleSubmitConfirm = (action, params, query, data = {}, finance, sale) => {
 		const { queryAction, onCancel, handleClear, type } = this.props;
-		const { msg } = data;
-	
+		const { msg, code } = data;
+		if(code == 1000 && msg) {
+			this.handleInfo(msg);
+			return;
+		}
 		if(msg) {
 			if(finance) {
 				return Modal.confirm({

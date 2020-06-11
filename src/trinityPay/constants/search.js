@@ -1,6 +1,6 @@
 import React from 'react'
 import { Spin } from 'antd'
-export const prePaySearchFunc = ({ media_manager = [], payment_company = [], payment_status = [], platform = [], payment_type = [], cooperation_platform = [] }, platform_name = [], handleFetchPlatform, handleFetchAccount, getGoldenCompanyId) => [
+export const prePaySearchFunc = ({ media_manager = [], payment_company = [], payment_status = [], platform = [], payment_type = [], cooperation_platform = [] }, platform_name = [], handleFetchPlatform, handleFetchAccount, getCompanyByName) => [
 	{
 		ctype: 'select',
 		attr: {
@@ -198,7 +198,7 @@ export const prePaySearchFunc = ({ media_manager = [], payment_company = [], pay
 	{
 		ctype: 'searchSelect',
 		attr: {
-			action: getGoldenCompanyId,
+			action: getCompanyByName,
 			keyWord: 'company_name',
 			dataToList: res => { return res.data },
 			item: ['company_id', 'name'],

@@ -10,6 +10,7 @@ import "./golden.less";
 import qs from 'qs';
 import SearchSelect from '../components/SearchSelect';
 import { getApplyList } from '../actions/getApplyList';
+import apiDownload from '@/api/apiDownload';
 const { TextArea } = Input;
 const { TabPane } = Tabs;
 const FormItem = Form.Item;
@@ -82,10 +83,17 @@ class AdjustApply extends React.Component {
 			search: `?${qs.stringify({ readjust_application_id: id, company_id, keys: { readjust_application_id: id, company_id, page_size: 50 } })}`,
 		});
 	}
-	handleExport = () => {
-		// this.props.actions.getExport({ readjust_application_id })
-		const { selectedRowKeys = [] } = this.state;
-		console.log('sldkjflskdjfsldkjf', selectedRowKeys)
+	handleExport = (queryObj) => {
+		// this.props.actions.getExport(queryObj).then(result => {
+		// 	console.log('sldfkjlsdkfjsldkf', result)
+		// })
+		// apiDownload({
+		// 	url: '/finance/readjust/export?' + qs.stringify(queryObj),
+		// 	method: 'GET',
+		// 	ignoreToast: true,
+		// }, '订单调价导出.xlsx', true).then(result => {
+		// 	console.log('sdlkfjlsdkfjsldfkj', result)
+		// })
 	}
 	handleAction = (type, readjust_application_id, quote_type, company_id) => {
 		if (type === 'pass') {
@@ -228,6 +236,7 @@ class AdjustApply extends React.Component {
 				<legend>订单调价</legend>
 				<AdjustQuery history={this.props.history}
 					questAction={this.handleSearchList}
+					handleExport={this.handleExport}
 					pageSize={page_size}
 					location={this.props.location}
 					userList={goldenUserList}
@@ -236,7 +245,7 @@ class AdjustApply extends React.Component {
 					{goldenMetadata}
 				</AdjustQuery>
 				<div className='addOperateWrapper'>
-					<Button disabled={!selectedRowKeys.length} type='primary' className='right-gap' onClick={this.handleExport}>批量导出</Button>
+					<Button disabled={!selectedRowKeys.length} type='primary' className='right-gap' onClick={() => this.handleExport({readjust_application_id: selectedRowKeys, audit_type})}>批量导出</Button>
 					{flag ? <Button type='primary' icon='download' className='right-gap' href='/finance/golden/adjustApplyInput'>导入</Button> : null}
 					{btnFlag ? <Button className='right-gap' type="primary" onClick={this.isShowAddModal}
 						// href={`/finance/golden/addAdjustApply?${qs.stringify({ keys: { page_size: 50 } })}`}

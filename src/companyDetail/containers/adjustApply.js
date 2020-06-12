@@ -83,17 +83,25 @@ class AdjustApply extends React.Component {
 			search: `?${qs.stringify({ readjust_application_id: id, company_id, keys: { readjust_application_id: id, company_id, page_size: 50 } })}`,
 		});
 	}
+	handleInfo = title => {
+		Modal.info({
+			title,
+		});
+	}
 	handleExport = (queryObj) => {
-		// this.props.actions.getExport(queryObj).then(result => {
-		// 	console.log('sldfkjlsdkfjsldkf', result)
-		// })
-		// apiDownload({
-		// 	url: '/finance/readjust/export?' + qs.stringify(queryObj),
-		// 	method: 'GET',
-		// 	ignoreToast: true,
-		// }, '订单调价导出.xlsx', true).then(result => {
-		// 	console.log('sdlkfjlsdkfjsldfkj', result)
-		// })
+		this.props.actions.getExport({...queryObj, flag: 1}).then((result = {}) => {
+			apiDownload({
+				url: '/finance/readjust/export?' + qs.stringify(queryObj),
+				method: 'GET',
+			}, '订单调价导出.xlsx', true)
+		}).catch(result => {
+			if(result.code === 500) {
+				this.handleInfo(result.errorMsg);
+			}else if(result.code === 996) {
+				message.error(result.errorMsg)
+			}
+		})
+		
 	}
 	handleAction = (type, readjust_application_id, quote_type, company_id) => {
 		if (type === 'pass') {
@@ -108,6 +116,8 @@ class AdjustApply extends React.Component {
 			this.setState({ tipVisible: true, quoteType: quote_type, readjust_application_id, company_id });
 		} else if (type === 'reject') {
 			this.showReject(readjust_application_id);
+		}else if (type === 'export') {
+			this.handleExport(type);
 		}
 	}
 	showReject = (readjust_application_id) => {
@@ -237,6 +247,7 @@ class AdjustApply extends React.Component {
 				<AdjustQuery history={this.props.history}
 					questAction={this.handleSearchList}
 					handleExport={this.handleExport}
+					auditType={audit_type}
 					pageSize={page_size}
 					location={this.props.location}
 					userList={goldenUserList}

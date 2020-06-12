@@ -119,7 +119,8 @@ export const {
 	getExport,
 	getExport_success
 } = createHttpAction('getExport', Interface.getExport, {
-	method: 'get'
+	method: 'get',
+	ignoreToast: true
 });
 
 export const {

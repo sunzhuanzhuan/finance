@@ -652,7 +652,7 @@ export const adjustApplyListFunc = (audit_type, application_status, quote_type, 
 							驳回
 						</a>
 						: null}
-					<a style={{ marginLeft: 10 }} target='_blank' href={`/api/finance/readjust/export?readjust_application_id=${record.id}&audit_type=${audit_type}`}>导出</a>
+					<a style={{ marginLeft: 10 }} onClick={() => { handleAction('export', {readjust_application_id: record.id, audit_type}); }}>导出</a>
 				</div >
 			}
 		}

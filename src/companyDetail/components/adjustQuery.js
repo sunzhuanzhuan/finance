@@ -32,7 +32,7 @@ class AdjustQuery extends React.Component {
 		this.props.form.setFieldsValue({ ...keys, ...obj });
 	}
 	handleSearch = type => {
-		const { questAction, handleExport, pageSize } = this.props;
+		const { questAction, handleExport, pageSize, auditType } = this.props;
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
 				let keys = {}, labels = {};
@@ -60,7 +60,7 @@ class AdjustQuery extends React.Component {
 					})
 				});
 				if(type === 'searchExport') {
-					handleExport({...params.keys, opt: 'all'})
+					handleExport({...params.keys, audit_type: auditType, opt: 'all'})
 				}
 			}
 		});

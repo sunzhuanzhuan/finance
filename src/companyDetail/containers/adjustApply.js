@@ -85,7 +85,7 @@ class AdjustApply extends React.Component {
 	}
 	handleInfo = title => {
 		Modal.info({
-			title,
+			title: <div dangerouslySetInnerHTML={{ __html: title }}></div>,
 		});
 	}
 	handleExport = (queryObj) => {
@@ -95,7 +95,7 @@ class AdjustApply extends React.Component {
 				method: 'GET',
 			}, '订单调价导出.xlsx', true)
 		}).catch(result => {
-			if(result.code === 500) {
+			if(result.code === 997) {
 				this.handleInfo(result.errorMsg);
 			}else if(result.code === 996) {
 				message.error(result.errorMsg)

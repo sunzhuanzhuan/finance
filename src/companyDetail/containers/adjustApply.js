@@ -117,7 +117,7 @@ class AdjustApply extends React.Component {
 		} else if (type === 'reject') {
 			this.showReject(readjust_application_id);
 		}else if (type === 'export') {
-			this.handleExport(type);
+			this.handleExport(readjust_application_id);
 		}
 	}
 	showReject = (readjust_application_id) => {

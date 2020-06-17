@@ -190,13 +190,23 @@ class RateModal extends React.Component {
 		}
 	};
 
-	isProfitRangeIllegal = data =>  {
+	isNumberOk = data => {
 		const pointReg = /^-?\d+(\.\d{1,10})?$/;
 		const isNumber = !isNaN(data) && isFinite(data);
-		if(!isNumber)
-			return true;
 		const result = isNumber && pointReg.test(data) && data >= -1 && data <= 99.9999999999;
-		return !result;
+		return result;
+	}
+
+	isProfitRangeOk = (privateProfit, publicProfit) =>  {
+		const valueArr = [privateProfit, publicProfit];
+		const notEmptyArr = valueArr.filter(item => typeof item !== 'undefined');
+
+		if(notEmptyArr.length) {
+			const judgeValArr = notEmptyArr.filter(item => this.isNumberOk(item));
+			return judgeValArr.length === notEmptyArr.length;
+		}else {
+			return false
+		}
 	}
 
 	validateFieldsValues = () => {
@@ -247,7 +257,7 @@ class RateModal extends React.Component {
 				isContinue = false;
 			}
 
-			if(this.isProfitRangeIllegal(privateProfit) && this.isProfitRangeIllegal(publicProfit)) {
+			if(!this.isProfitRangeOk(privateProfit, publicProfit)) {
 				validateResult.error = '利润率设置不合法，输入范围【-100% - 9999.99999999%】';
 				isContinue = false;
 			}

@@ -640,7 +640,7 @@ export const adjustApplyListFunc = (audit_type, application_status, quote_type, 
 			align: 'center',
 			width: 190,
 			render: (text, record) => {
-				return <div>
+				return <div className='adjust_list_operate_wrapper'>
 					<a onClick={() => { handleJump(record.id, record.company_id); }}>订单详情</a>
 					{record.status != '3' ?
 						<a style={{ marginLeft: 10 }} onClick={() => { handleAction('pass', record.id, record.quote_type, record.company_id); }}>

@@ -8,6 +8,7 @@ import ApplyModal from '../components/addAdjustApply/applyModal'
 import { adjustApplyFunc, adjustApplyListFunc, adjustApplyDetailFunc } from "../constants";
 import "./golden.less";
 import qs from 'qs';
+import moment from 'moment';
 import SearchSelect from '../components/SearchSelect';
 import { getApplyList } from '../actions/getApplyList';
 import apiDownload from '@/api/apiDownload';
@@ -90,10 +91,11 @@ class AdjustApply extends React.Component {
 	}
 	handleExport = (queryObj) => {
 		this.props.actions.getExport({...queryObj, flag: 1}).then((result = {}) => {
+			const timeStamp = moment().format('YYYYMMDDHHmmss');
 			apiDownload({
 				url: '/finance/readjust/export?' + qs.stringify(queryObj),
 				method: 'GET',
-			}, '订单调价导出.xlsx', true)
+			}, `订单调价导出_${timeStamp}.xls`, true)
 		}).catch(result => {
 			if(result.code === 997) {
 				this.handleInfo(result.errorMsg);

@@ -72,7 +72,7 @@ class AdjustQuery extends React.Component {
 		const { getFieldDecorator } = this.props.form;
 		const { userList } = this.props;
 		const { application_status = [], quote_type = [] } = this.props.children;
-		return <Form className='adjust-stat adjust_content'>
+		return <Form className='adjust-stat adjust_content clearfix'>
 			<FormItem label='申请编号' className='left-gap'>
 				{getFieldDecorator('readjust_application_id', { initialValue: '' })(
 					<Input placeholder="请输入" className='common_search_width' />

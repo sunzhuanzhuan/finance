@@ -247,7 +247,7 @@ class RateModal extends React.Component {
 				isContinue = false;
 			}
 
-			if(this.isProfitRangeIllegal(privateProfit) || this.isProfitRangeIllegal(publicProfit)) {
+			if(this.isProfitRangeIllegal(privateProfit) && this.isProfitRangeIllegal(publicProfit)) {
 				validateResult.error = '利润率设置不合法，输入范围【-100% - 9999.99999999%】';
 				isContinue = false;
 			}

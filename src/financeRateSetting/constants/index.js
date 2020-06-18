@@ -49,6 +49,9 @@ export const getRateSettingCol = (handleOperate) => {
 			key: 'name',
 			align: 'center',
 			width: '13%',
+			render: data => {
+				return <div style={{wordBreak: 'break-all'}}>{data}</div>
+			}
 		},
 		{
 			title: '账号利润率',
@@ -66,6 +69,9 @@ export const getRateSettingCol = (handleOperate) => {
 			key: 'remark',
 			align: 'center',
 			width: '14%',
+			render: data => {
+				return <div style={{wordBreak: 'break-all'}}>{data}</div>
+			}
 		},
 		{
 			title: '操作',
@@ -76,11 +82,12 @@ export const getRateSettingCol = (handleOperate) => {
 			width: '25%',
 			render: (_, record) => {
 				const { name } = record;
+				const style={display: 'inline-block'};
 				return [
-					<a key='edit' onClick={() => handleOperate('edit', record)}>修改</a>,
-					<a key='delete' onClick={() => handleOperate('delete', record)}>删除</a>,
-					<a key='detail' onClick={() => handleOperate('detail', record)}>查看账号</a>,
-					<a key='export' onClick={() => handleOperate('export', record)}>导出账号</a>,
+					<a style={style} key='edit' onClick={() => handleOperate('edit', record)}>修改</a>,
+					<a style={style} key='delete' onClick={() => handleOperate('delete', record)}>删除</a>,
+					<a style={style} key='detail' onClick={() => handleOperate('detail', record)}>查看账号</a>,
+					<a style={style} key='export' onClick={() => handleOperate('export', record)}>导出账号</a>,
 					<Popconfirm
 						key='clear'
 						title="清空当前策略下的全部账号信息？"
@@ -88,7 +95,7 @@ export const getRateSettingCol = (handleOperate) => {
 						okText="确定"
 						cancelText="取消"
 					>
-						<a>清空账号</a>
+						<a style={style}>清空账号</a>
 					</Popconfirm>
 				]
 			}

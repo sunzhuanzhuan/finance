@@ -3,6 +3,7 @@ export default {
 	getPrePayData: '/trinity/publicPaymentSlip/list',
 	getPrePayExport: '/trinity/publicPaymentSlip/exportPublicPaymentSlip',
 	getPrimaryAccount: '/trinity/publicPaymentSlip/getUserByName',
+	getCompanyByName: 'finance/commonApi/getCompanyByName',
 	//周期付款
 	getDatePayData: '/trinity/publicPaymentSlip/list',
 	getDatePayExport: '/trinity/publicPaymentSlip/exportPublicPaymentSlip',

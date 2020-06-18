@@ -517,7 +517,7 @@ export const extractNoDetailFunc = (order_status) => {
 		}
 	]
 }
-export const remitOrderFunc = (order_status, handleOutputDetail, handleReceiptsVisible, handleTipVisible) => {
+export const remitOrderFunc = (order_status, handleOutputDetail, handleReceiptsVisible, handleTipVisible, isSaleRole) => {
 	return [
 		{
 			title: '打款单ID',
@@ -592,6 +592,37 @@ export const remitOrderFunc = (order_status, handleOutputDetail, handleReceiptsV
 			render: (text, record) => {
 				let { id, status } = record;
 				let obj = { id, status };
+				const getStatusExportComp = () => {
+					if(isSaleRole) {
+						return null;
+					}
+					return (
+						status === 0 ? 
+							<a href='javascript:;' className='rightGap' 
+							onClick={() => {
+								handleOutputDetail(id, record)
+							}}>导出打款单</a> : 
+							status === 3 ? null : 
+								<a href={`/api/flash/down_excel?${qs.stringify(obj)}`} 
+									target='_blank' className='rightGap'>
+									{
+										status === 1 ? '导出还款单' : '导出结税单'
+									}
+								</a>
+					)
+				}
+				const getStatusResultComp = () => {
+					if(isSaleRole) {
+						return null;
+					}
+					return (
+						status === 3 ? null : 
+							<a href='javascript:;' className='rightGap' onClick={() => {
+								handleTipVisible(status, id)
+							}}>{billingActions[status]}</a>
+					)
+				}
+
 				return <span>
 					{/**
 					 * status 0  待打款状态出现弹窗
@@ -599,17 +630,17 @@ export const remitOrderFunc = (order_status, handleOutputDetail, handleReceiptsV
 					 * status 2	 待结税 文案为导出结税单
 					 * status 3  已结算 无导出单据选项
 					*/}
-					{status === 0 ? <a href='javascript:;' className='rightGap' onClick={() => {
-						handleOutputDetail(id, record)
-					}}>导出打款单</a> : status === 3 ? null : <a href={`/api/flash/down_excel?${qs.stringify(obj)}`} target='_blank' className='rightGap'>{status === 1 ? '导出还款单' : '导出结税单'}</a>}
+					{
+						getStatusExportComp()
+					}
 					<Link to={{
 						pathname: '/finance/remitOrder/detail',
 						search: `?id=${id}`,
 					}} className='rightGap'>查看详情</Link>
 					{/*不同状态对应不同文案及接口，接口处理在handleTipVisible（）中 */}
-					{status === 3 ? null : <a href='javascript:;' className='rightGap' onClick={() => {
-						handleTipVisible(status, id)
-					}}>{billingActions[status]}</a>}
+					{
+						getStatusResultComp()
+					}
 					{status === 3 ? null : <a href='javascript:;' onClick={() => {
 						handleReceiptsVisible(record)
 					}}>查看单据</a>}
@@ -618,8 +649,8 @@ export const remitOrderFunc = (order_status, handleOutputDetail, handleReceiptsV
 		}
 	];
 }
-export const remitDetailFunc = (payment_slip_status_name, search, handleDetailOutput, handleReceiptsVisible) => {
-	return [
+export const remitDetailFunc = (payment_slip_status_name, search, handleDetailOutput, handleReceiptsVisible, isSaleRole) => {
+	const columns = [
 		{
 			title: '打款状态',
 			dataIndex: 'status',
@@ -684,6 +715,7 @@ export const remitDetailFunc = (payment_slip_status_name, search, handleDetailOu
 			align: 'center',
 		}
 	];
+	return isSaleRole ? columns.filter(item => item.key !== 'excel_data') : columns;
 }
 export const newRemitFunc = (user_name) => {
 	return [
@@ -912,13 +944,6 @@ export const remitDetailOrderConfig = [
 		title: '订单类型',
 		dataIndex: 'order_type_name',
 		key: 'order_type_name',
-		align: 'center',
-		width: 100,
-	},
-	{
-		title: '订单名称',
-		dataIndex: 'order_name',
-		key: 'order_name',
 		align: 'center',
 		width: 100,
 	},

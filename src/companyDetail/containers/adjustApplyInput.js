@@ -14,10 +14,20 @@ class AdjustApplyInput extends React.Component {
 			fileList: []
 		}
 	}
+	handleInfo = title => {
+		Modal.error({
+			title,
+			onOk: () => {}
+		});
+	}
 	confirmUpload = (obj, content, finance, sale, data = {}) => {
 		const { postImportApplication } = this.props.actions;
 		const { fileList } = this.state;
-		const { msg } = data;
+		const { msg, code } = data;
+		if(code == 1000 && msg) {
+			this.handleInfo(msg);
+			return;
+		}
 		if(msg) {
 			if(finance) {
 				return Modal.confirm({

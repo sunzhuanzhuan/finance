@@ -125,10 +125,16 @@ class AdjustQuery extends React.Component {
 				)}
 			</FormItem>
 			<FormItem label='报价类型' className='left-gap'>
-				{getFieldDecorator('quote_type', { initialValue: '' })(
+				{getFieldDecorator('quote_type', { initialValue: {key: "", label: "不限"} })(
 					<Select placeholder="不限"
-					allowClear className='common_search_width'>
-						<Option value="">不限</Option>
+						allowClear className='common_search_width'
+						showSearch
+						labelInValue
+						filterOption={(input, option) => (
+							option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+						)}
+					>
+						<Option key='' value="">不限</Option>
 						{
 							quote_type.map(item => 
 								<Option key={item.id} value={item.id}>{item.display}</Option>

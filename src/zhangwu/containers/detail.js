@@ -8,7 +8,7 @@ import qs from 'qs'
 import * as zhangActions from '../actions/index';
 import Query from'../components/query'
 // import { zhangListFunc } from '../constants/column';
-import { Row, Col ,Icon,Spin} from "antd";
+import { Row, Col ,Icon,Spin, message} from "antd";
 import './list.less'
 // import ZhangWuTable from '../components/table'
 import './detail.less'
@@ -19,7 +19,10 @@ class Detail extends Component {
 	}
 	componentWillMount=()=>{
 		const search =qs.parse(this.props.location.search.substring(1));
-		this.props.actions.getAccountDetail(search.order_id)
+		this.props.actions.getAccountDetail(search.order_id).catch(result => {
+			if(result && result.errorMsg)
+				message.error(result.errorMsg)
+		})
 	}
 	handleList=()=>{
 		// console.log(record)

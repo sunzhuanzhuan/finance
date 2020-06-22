@@ -8,6 +8,7 @@ import { WBYUploadFile } from 'wbyui';
 import qs from 'qs';
 import numeral from 'numeral';
 import PreTable from './preTable';
+import { percentToValue } from '@/util';
 const FormItem = Form.Item;
 const { TextArea } = Input;
 const RadioGroup = Radio.Group;
@@ -103,8 +104,8 @@ class ApplyModal extends React.Component {
 					const params = {
 						...values,
 						order_ids,
-						profit_rate: values['profit_rate'] && values['profit_rate'] != 0 ? numeral(values['profit_rate'] / 100).format('0.0000') : 0,
-						service_rate: values['service_rate'] && values['service_rate'] != 0 ? numeral(values['service_rate'] / 100).format('0.0000') : 0,
+						profit_rate: values['profit_rate'] ? percentToValue(values['profit_rate']) : 0,
+						service_rate: values['service_rate'] ? percentToValue(values['service_rate']) : 0,
 						readjust_application_id: readjustId, 
 						audit_type,
 						commit: 2,
@@ -150,8 +151,8 @@ class ApplyModal extends React.Component {
 				const params = {
 					...values,
 					order_ids,
-					profit_rate: values['profit_rate'] && values['profit_rate'] != 0 ? numeral(values['profit_rate'] / 100).format('0.0000') : 0,
-					service_rate: values['service_rate'] && values['service_rate'] != 0 ? numeral(values['service_rate'] / 100).format('0.0000') : 0,
+					profit_rate: values['profit_rate'] ? percentToValue(values['profit_rate']) : 0,
+					service_rate: values['service_rate'] ? percentToValue(values['service_rate']) : 0,
 					readjust_application_id: search.readjust_application_id,
 					audit_type,
 					commit: 2,
@@ -215,8 +216,8 @@ class ApplyModal extends React.Component {
 					const params = {
 						...values,
 						order_ids: curSelectRowKeys.toString(),
-						profit_rate: values['profit_rate'] && values['profit_rate'] != 0 ? numeral(values['profit_rate'] / 100).format('0.0000') : 0,
-						service_rate: values['service_rate'] && values['service_rate'] != 0 ? numeral(values['service_rate'] / 100).format('0.0000') : 0,
+						profit_rate: values['profit_rate'] ? percentToValue(values['profit_rate']) : 0,
+						service_rate: values['service_rate'] ? percentToValue(values['service_rate']) : 0,
 						readjust_application_id: search.readjust_application_id,
 						audit_type,
 						commit: 2,
@@ -245,8 +246,8 @@ class ApplyModal extends React.Component {
 					const params = {
 						...values,
 						min_sell_price: parseInt(values['min_sell_price']) ? parseInt(values['min_sell_price']) : 0,
-						profit_rate: values['profit_rate'] && values['profit_rate'] != 0 ? values['profit_rate'] / 100 : 0,
-						service_rate: values['service_rate'] && values['service_rate'] != 0 ? values['service_rate'] / 100 : 0,
+						profit_rate: values['profit_rate'] ? percentToValue(values['profit_rate']) : 0,
+						service_rate: values['service_rate'] ? percentToValue(values['service_rate']) : 0,
 						readjust_application_id: this.props.readjustId,
 						audit_type,
 						commit: 2,
@@ -341,25 +342,25 @@ class ApplyModal extends React.Component {
 		this.attachment = (fileList.map(item => item.url)).toString();
 	}
 	checkProfitCount = (rule, value, callback) => {
-		const reg = /^((-30|0)(\.0{1,2})?|[0-9]?\d(\.\d\d?)?|-([0-2]?\d)(\.\d\d?)?)$/;
+		const reg = /^((-30|0)(\.0{1,8})?|[0-9]?\d(\.\d{1,8}?)?|-([0-2]?\d)(\.\d{1,8}?)?)$/;
 		if (value) {
 			if (reg.test(value.toString())) {
 				callback();
 				return;
 			}
-			callback('请填写-30.00到99.99的值！');
+			callback('请填写-30到99.99999999的值，输入数值的小数位不能超过8位！');
 		} else {
 			callback(' ')
 		}
 	}
 	checkCount = (_, value, callback) => {
-		const reg = /^((100|-30|0)(\.0{1,2})?|[0-9]?\d(\.\d\d?)?|-([0-2]?\d)(\.\d\d?)?)$/;
+		const reg = /^((100|-30|0)(\.0{1,8})?|[0-9]?\d(\.\d{1,8}?)?|-([0-2]?\d)(\.\d{1,8}?)?)$/;
 		if (value) {
 			if (reg.test(value.toString())) {
 				callback();
 				return;
 			}
-			callback('请填写-30.00到100.00的值！');
+			callback('请填写-30到100的值，输入数值的小数位不能超过8位！');
 		} else {
 			callback(' ')
 		}

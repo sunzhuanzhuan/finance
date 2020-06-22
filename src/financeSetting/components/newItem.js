@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button, Select, message } from 'antd'
 import FormList from './FormList'
+import { percentToValue } from '@/util';
 
 const Option = Select.Option;
 class NewItem extends React.PureComponent {
@@ -40,25 +41,23 @@ class NewItem extends React.PureComponent {
 				message.error('有未填写的利润率输入框', 3);
 				return
 			}
-			if (!(item['rate'] >= -30 && item['rate'] < 100) || !(/^-?(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/.test(item['rate']))) {
-				message.error('利润率须为[-30,100）之间的两位小数', 3);
+			if (!(item['rate'] >= -30 && item['rate'] < 100) || !(/^-?(([1-9][0-9]*)|(([0]\.\d{1,8}|[1-9][0-9]*\.\d{1,8})))$/.test(item['rate']))) {
+				message.error('利润率须为[-30,100）之间的八位小数', 3);
 				return
 			}
 			if (!item['minRate']) {
 				message.error('有未填写的利润率输入框', 3);
 				return
 			}
-			if (!(item['minRate'] >= -30 && item['minRate'] < 100) || !(/^-?(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/.test(item['minRate']))) {
-				message.error('利润率须为[-30,100）之间的两位小数', 3);
+			if (!(item['minRate'] >= -30 && item['minRate'] < 100) || !(/^-?(([1-9][0-9]*)|(([0]\.\d{1,8}|[1-9][0-9]*\.\d{1,8})))$/.test(item['minRate']))) {
+				message.error('利润率须为[-30,100）之间的八位小数', 3);
 				return
 			}
 		}
 		params['platformId'] = value;
-		params['trinityProfitRates'] = Object.values(obj).map(item => ({ ...item, rate: this.dealRateValue(item.rate), minRate: this.dealRateValue(item.minRate), validParams: true }));
+		params['trinityProfitRates'] = Object.values(obj).map(item => ({ ...item, rate: percentToValue(item.rate), minRate: percentToValue(item.minRate), validParams: true }));
 		onSubmit('add', params);
 	}
-
-	dealRateValue = (val) => (val / 100).toFixed(4).toString()
 
 	render() {
 		const { onCancel, companyList } = this.props;

@@ -1,6 +1,5 @@
 import { handleActions } from 'redux-actions';
 import {
-	getCompanyDetailAuthorizations_success,
 	getGoldenMetadata_success,
 	getPlatform_success,
 	getPlatformIcon_success,
@@ -13,12 +12,6 @@ import {
 	postPreviewMinSellPrice_success,
 	getGoldenUserList_success,
 } from '../actions/goldenApply';
-
-export const companyDetailAuthorizations = handleActions({
-	[getCompanyDetailAuthorizations_success]: (state, action) => {
-		return [...action.payload.data]
-	}
-}, [])
 
 export const goldenMetadata = handleActions({
 	[getGoldenMetadata_success]: (state, action) => {

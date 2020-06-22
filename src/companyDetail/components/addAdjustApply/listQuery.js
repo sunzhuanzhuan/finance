@@ -200,12 +200,19 @@ class ListQuery extends React.Component {
 			form.validateFields(['company_id'])
 
 	}
+	getSelectOptions = optionArr => {
+		if(Array.isArray(optionArr) && optionArr.length)
+			return optionArr.map(item => <Option key={item['id']} value={item['id']}>{item['display']}</Option>);
+		return null;
+	}
 	render() {
-		const { form, type = 'add', projectList, platformList, rel_order_status } = this.props;
+		const { form, type = 'add', projectList, platformList, rel_order_status, goldenMetadata = {} } = this.props;
+		const { partner_type = [], trinity_type = [] } = goldenMetadata;
 		const { getFieldDecorator } = form;
 		const { projectLoading, weiboLoading } = this.state;
 		const orderClass = type === 'add' ? 'add-sec-line-margin order-id-item' : 'sec-line-margin order-id-item';
 		const resetClass = type === 'add' ? 'add-reset-btn' : 'reset-btn';
+
 		return <div>
 			<Form className='adjust-stat adjust-refactor'>
 				{/* <FormItem label='每页显示' className='left-gap'>
@@ -294,25 +301,57 @@ class ListQuery extends React.Component {
 						</Select>
 					)}
 				</FormItem>
-					<FormItem label='订单ID' className={orderClass}>
-						{getFieldDecorator('order_ids')(
-							<Input placeholder='请输入ID号，多个以空格隔开' style={{ width: 380 }} />
-						)}
-					</FormItem>
-					{type === 'detail' ? <FormItem label='含策划' className='left-gap plan-manage-item'>
-						{getFieldDecorator('is_plan_manage')(
-							<Select
-								style={{ width: 160 }}
-								placeholder="是否含策划"
-								allowClear
-								showSearch
-								labelInValue
-							>
-								<Option value="1">是</Option>
-								<Option value="2">否</Option>
-							</Select>
-						)}
-					</FormItem> : null}	
+				<FormItem label='订单ID' className={orderClass}>
+					{getFieldDecorator('order_ids')(
+						<Input placeholder='请输入ID号，多个以空格隔开' style={{ width: 380 }} />
+					)}
+				</FormItem>
+				{type === 'detail' ? <FormItem label='含策划' className='left-gap plan-manage-item'>
+					{getFieldDecorator('is_plan_manage')(
+						<Select
+							style={{ width: 160 }}
+							placeholder="是否含策划"
+							allowClear
+							showSearch
+							labelInValue
+						>
+							<Option value="1">是</Option>
+							<Option value="2">否</Option>
+						</Select>
+					)}
+				</FormItem> : null}	
+				{type === 'detail' ? <FormItem label='合作方式' className='left-gap'>
+					{getFieldDecorator('partner_type')(
+						<Select
+							style={{ width: 160 }}
+							placeholder="请选择"
+							allowClear
+							showSearch
+							labelInValue
+							filterOption={(input, option) => (
+								option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+							)}
+						>
+							{ this.getSelectOptions(partner_type) }
+						</Select>
+					)}
+				</FormItem> : null}	
+				{type === 'detail' ? <FormItem label='三方订单类型' className='left-gap'>
+					{getFieldDecorator('trinity_type')(
+						<Select
+							style={{ width: 160 }}
+							placeholder="请选择"
+							allowClear
+							showSearch
+							labelInValue
+							filterOption={(input, option) => (
+								option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+							)}
+						>
+							{ this.getSelectOptions(trinity_type) }
+						</Select>
+					)}
+				</FormItem> : null}	
 				<FormItem className='adjust_apply_query'>
 					<Button type='primary' onClick={this.handleSearch}>查询</Button>
 					<Button className={resetClass} onClick={this.handleClear}>重置</Button>
@@ -323,9 +362,12 @@ class ListQuery extends React.Component {
 }
 
 const mapStateToProps = (state) => {
+	const { companyDetail = {} } = state;
+	const { projectList, platformList, goldenMetadata } = companyDetail;
 	return {
-		projectList: state.companyDetail.projectList,
-		platformList: state.companyDetail.platformList
+		projectList,
+		platformList,
+		goldenMetadata
 	}
 }
 const mapDispatchToProps = dispatch => ({

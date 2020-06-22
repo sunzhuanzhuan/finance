@@ -640,7 +640,7 @@ export const adjustApplyListFunc = (audit_type, application_status, quote_type, 
 			align: 'center',
 			width: 190,
 			render: (text, record) => {
-				return <div>
+				return <div className='adjust_list_operate_wrapper'>
 					<a onClick={() => { handleJump(record.id, record.company_id); }}>订单详情</a>
 					{record.status != '3' ?
 						<a style={{ marginLeft: 10 }} onClick={() => { handleAction('pass', record.id, record.quote_type, record.company_id); }}>
@@ -652,7 +652,7 @@ export const adjustApplyListFunc = (audit_type, application_status, quote_type, 
 							驳回
 						</a>
 						: null}
-					<a style={{ marginLeft: 10 }} target='_blank' href={`/api/finance/readjust/export?readjust_application_id=${record.id}&audit_type=${audit_type}`}>导出</a>
+					<a style={{ marginLeft: 10 }} onClick={() => { handleAction('export', {readjust_application_id: record.id, audit_type}); }}>导出</a>
 				</div >
 			}
 		}
@@ -813,6 +813,7 @@ export const readyCheckFunc = (handleDelete) => {
 		}
 	]
 }
+const orderTagStyle = { display: 'inline-block', fontSize: '10px', width: 'fit-content', backgroundColor: 'red', color: '#fff', padding: '0 2px', marginRight: '2px' };
 export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], readjust_type = [], platformIcon = [], isFinance) => {
 	return ary => {
 		const configMap = {
@@ -822,14 +823,23 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				key: 'order_id',
 				width: 160,
 				render: (text, record) => {
-					const { quote_type: quoteVal, formula_version } = record;
+					const { quote_type: quoteVal, formula_version, trinity_type_name } = record;
 					const value = quote_type.find(item => item.id == quoteVal) || {};
 
 					return <div className={record.warningClass}>
 						<div>{text}</div>
 						<div>报价类型：{value.display || '-'}</div>
-						{record.plan_manager_id && record.plan_manager_id != '0' && <div style={{ display: 'inline-block', fontSize: '10px', backgroundColor: 'red', color: '#fff', padding: '0 2px', marginTop: '5px' }}>含策划</div>}
-						{isFinance && formula_version && <div style={{ display: 'inline-block', fontSize: '10px', width: 'fit-content', backgroundColor: 'red', color: '#fff', padding: '0 2px', marginLeft: '2px' }}>{formula_version == 2 ? '已价税分离' : '未价税分离' }</div>}
+						<div style={{marginTop: '5px'}}>
+							{
+								record.plan_manager_id && record.plan_manager_id != '0' && 
+								<div style={orderTagStyle}>含策划</div>
+							}
+							{
+								isFinance && formula_version && 
+								<div style={orderTagStyle}>{formula_version == 2 ? '已价税分离' : '未价税分离' }</div>
+							}
+							<div style={orderTagStyle}>{trinity_type_name}</div>
+						</div>
 					</div>
 				}
 			},
@@ -840,14 +850,23 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				width: 160,
 				fixed: 'left',
 				render: (text, record) => {
-					const { quote_type: quoteVal, formula_version } = record;
+					const { quote_type: quoteVal, formula_version, trinity_type_name } = record;
 					const value = quote_type.find(item => item.id == quoteVal) || {};
 
 					return <div className={record.warningClass}>
 						<div>{text}</div>
 						<div>报价类型：{value.display || '-'}</div>
-						{record.plan_manager_id && record.plan_manager_id != '0' && <div style={{ display: 'inline-block', fontSize: '10px', backgroundColor: 'red', color: '#fff', padding: '0 2px', marginTop: '5px' }}>含策划</div>}
-						{isFinance && formula_version && <div style={{ display: 'inline-block', fontSize: '10px', width: 'fit-content', backgroundColor: 'red', color: '#fff', padding: '0 2px', marginLeft: '2px' }}>{formula_version == 2 ? '已价税分离' : '未价税分离' }</div>}
+						<div style={{marginTop: '5px'}}>
+							{
+								record.plan_manager_id && record.plan_manager_id != '0' && 
+								<div style={orderTagStyle}>含策划</div>
+							}
+							{
+								isFinance && formula_version && 
+								<div style={orderTagStyle}>{formula_version == 2 ? '已价税分离' : '未价税分离' }</div>
+							}
+							<div style={orderTagStyle}>{trinity_type_name}</div>
+						</div>
 					</div>
 				}
 			},
@@ -1236,7 +1255,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				render: (text, { history_min_sell_price: { readjust_type: readJustType } }) => {
 					const item = text ? text.min_sell_price : [];
 					const value = readjust_type.find(item => item.id == readJustType) || {};
-					const node = item.length > 0 ? <div>
+					const node = item.length > 0 ? <div key='priceInfo'>
 						{item.map(item => {
 							const showObj = {
 								isShowDetail: item.trinity_type == 2,

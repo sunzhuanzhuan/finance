@@ -1,3 +1,11 @@
+.clearfix:after {
+    content: ".";
+    clear: both;
+    display: block;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+}
 .table_style {
     .dealed, .undealed, .normal, .resolve, .reject {
         display: flex;
@@ -49,12 +57,13 @@
     .ant-table-fixed {
         table-layout: fixed;
         width: 373px;
-      }
-    
-      .ant-table-tbody > tr > td {
+    }
+
+    .ant-table-tbody > tr > td {
         word-wrap: break-word;
         word-break: break-all;
-      }
+    }
+
 }
 
 .read-detail-table {
@@ -274,6 +283,10 @@
     .ant-upload-list .ant-upload-list-item .anticon-close{
         font-size: 0px;
     }
+    .ant-upload.ant-upload-drag{
+        height: 100%;
+    }
+    
 }
 
 .adjust-apply {
@@ -305,7 +318,7 @@
             // margin-left: 84px;
             float: right;
             .ant-btn {
-                margin-left: 20px;
+                margin-left: 10px;
             }
         }
     }
@@ -325,6 +338,9 @@
             .dealed, .undealed, .normal, .resolve, .reject {
                 justify-content: center;
             }
+        }
+        .adjust_list_operate_wrapper a {
+            display: inline-block;
         }
     }
 }

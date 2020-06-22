@@ -4,7 +4,7 @@ import qs from 'qs';
 const SUCCEED = 'succeed';
 const DEFEATED = 'defeated';
 const REVOCATION = 'revocation';
-export const prePayFunc = (handleModal) => [
+export const prePayFunc = (handleModal, isSaleRole) => [
 	{
 		title: '打款单ID',
 		dataIndex: 'payment_slip_code',
@@ -123,25 +123,35 @@ export const prePayFunc = (handleModal) => [
 		fixed: 'right',
 		width: 200,
 		render: (text, record) => {
+			const getOperateByRole = () => {
+				if(isSaleRole) {
+					return null;
+				}
+				return [
+					record.payment_status && record.payment_status == 1 && <Button key='SUCCEED' type='primary' size='small' style={{ width: 80 }} onClick={() => {
+						handleModal(record.payment_slip_id, SUCCEED, true);
+					}}>打款成功</Button>,
+					record.payment_status && record.payment_status == 1 && <Button key='DEFEATED' type='primary' size='small' style={{ width: 80 }} onClick={() => {
+						handleModal(record.payment_slip_id, DEFEATED, true);
+					}}>打款失败</Button>,
+					record.payment_status && record.payment_status == 2 && <Button key='RELATED' type='primary' size='small' style={{ width: 80 }} href={`/finance/invoice/relatedInvoice?payment_slip_id=${record.payment_slip_id}&payment_status=pre`}>发票关联</Button>,
+					record.payment_status && record.payment_status == 2 && <Button key='REVOCATION' type='primary' size='small' style={{ width: 80 }} onClick={() => {
+						handleModal(record.payment_slip_id, REVOCATION, true);
+					}}>打款撤销</Button>,
+					record.payment_status && record.payment_status != 1 && <Button key='EDIT' type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/modification?type=prePay&payment_slip_id=${record.payment_slip_id}`}>编辑</Button>
+				]
+			}
 			return <div className='datePay-action-container'>
-				{record.payment_status && record.payment_status == 1 && <Button type='primary' size='small' style={{ width: 80 }} onClick={() => {
-					handleModal(record.payment_slip_id, SUCCEED, true);
-				}}>打款成功</Button>}
-				{record.payment_status && record.payment_status == 1 && <Button type='primary' size='small' style={{ width: 80 }} onClick={() => {
-					handleModal(record.payment_slip_id, DEFEATED, true);
-				}}>打款失败</Button>}
-				{record.payment_status && record.payment_status == 2 && <Button type='primary' size='small' style={{ width: 80 }} href={`/finance/invoice/relatedInvoice?payment_slip_id=${record.payment_slip_id}&payment_status=pre`}>发票关联</Button>}
-				{record.payment_status && record.payment_status == 2 && <Button type='primary' size='small' style={{ width: 80 }} onClick={() => {
-					handleModal(record.payment_slip_id, REVOCATION, true);
-				}}>打款撤销</Button>}
+				{
+					getOperateByRole()
+				}
 				<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/zhangwu/detail?order_id=${record.wby_order_id}`} target="_blank">订单详情</Button>
-				{record.payment_status && record.payment_status != 1 && <Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/modification?type=prePay&payment_slip_id=${record.payment_slip_id}`}>编辑</Button>}
 				<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/detail?type=prePay&payment_slip_id=${record.payment_slip_id}`} target="_blank">查看</Button>
 			</div>
 		}
 	}
 ];
-export const datePayFunc = (handleModal) => [
+export const datePayFunc = (handleModal, isSaleRole) => [
 	{
 		title: '打款单ID',
 		dataIndex: 'payment_slip_code',
@@ -257,158 +267,171 @@ export const datePayFunc = (handleModal) => [
 
 				}
 			}
+			const getOperateByRole = () => {
+				if(isSaleRole) {
+					return null;
+				}
+				return [
+					record.payment_status && record.payment_status == 1 && <Button key='SUCCEED' type='primary' size='small' style={{ width: 80 }} onClick={() => {
+						handleModal(record.payment_slip_id, SUCCEED, true);
+					}}>打款成功</Button>,
+					record.payment_status && record.payment_status == 1 && <Button key='DEFEATED' type='primary' size='small' style={{ width: 80 }} onClick={() => {
+						handleModal(record.payment_slip_id, DEFEATED, true);
+					}}>打款失败</Button>,
+					record.payment_status && record.payment_status == 2 && <Button key='RELATED' type='primary' size='small' style={{ width: 80 }} href={`/finance/invoice/relatedInvoice?payment_slip_id=${record.payment_slip_id}&payment_status=dete`}>发票关联</Button>,
+					record.payment_status && record.payment_status == 2 && <Button key='REVOCATION' type='primary' size='small' style={{ width: 80 }} onClick={() => {
+						handleModal(record.payment_slip_id, REVOCATION, true);
+					}}>打款撤销</Button>,
+					record.payment_status && record.payment_status != 1 && <Button key='EDIT' type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/modification?type=datePay&payment_slip_id=${record.payment_slip_id}`}>编辑</Button>
+				]
+			}
 			return <div className='prePay-action-container'>
-				{record.payment_status && record.payment_status == 1 && <Button type='primary' size='small' style={{ width: 80 }} onClick={() => {
-					handleModal(record.payment_slip_id, SUCCEED, true);
-				}}>打款成功</Button>}
-				{record.payment_status && record.payment_status == 1 && <Button type='primary' size='small' style={{ width: 80 }} onClick={() => {
-					handleModal(record.payment_slip_id, DEFEATED, true);
-				}}>打款失败</Button>}
-				{record.payment_status && record.payment_status == 2 && <Button type='primary' size='small' style={{ width: 80 }} href={`/finance/invoice/relatedInvoice?payment_slip_id=${record.payment_slip_id}&payment_status=dete`}>发票关联</Button>}
-				{record.payment_status && record.payment_status == 2 && <Button type='primary' size='small' style={{ width: 80 }} onClick={() => {
-					handleModal(record.payment_slip_id, REVOCATION, true);
-				}}>打款撤销</Button>}
+				{
+					getOperateByRole()
+				}
 				<Button type='primary' target="_blank" size='small' style={{ width: 80 }} onClick={() => {
 					//修改了push的方式
 					window.open('/finance/trinityPay/dealorder?' + qs.stringify(params))
 				}}>打款明细</Button>
-				{record.payment_status && record.payment_status != 1 && <Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/modification?type=datePay&payment_slip_id=${record.payment_slip_id}`}>编辑</Button>}
 				<Button type='primary' size='small' style={{ width: 80 }} href={`/finance/trinityPay/detail?type=datePay&payment_slip_id=${record.payment_slip_id}`} target="_blank">查看</Button>
 			</div>
 		}
 	},
 ];
-export const dealOrderCols = [
-	{
-		title: '订单ID',
-		dataIndex: 'wby_order_id',
-		key: 'wby_order_id',
-		align: 'center',
-		width: 100,
-		render: (text, record) => {
-			return <a href={`/finance/zhangwu/detail?order_id=${record.wby_order_id}`}>{text}</a>
-		}
-	},
-	{
-		title: '订单类型',
-		dataIndex: 'product_line_type_desc',
-		key: 'product_line_type_desc',
-		align: 'center',
-		width: 100
-	},
-	{
-		title: '平台',
-		dataIndex: 'platform_name',
-		key: 'platform_name',
-		align: 'center',
-		width: 100
-
-	},
-	{
-		title: '三方代理商',
-		dataIndex: 'agent_name',
-		key: 'agent_name',
-		align: 'center',
-		width: 100
-	}, {
-		title: '发票开具方',
-		dataIndex: 'beneficiary_company',
-		key: 'beneficiary_company',
-		align: 'center',
-		width: 100
-	},
-	{
-		title: '三方下单平台',
-		dataIndex: 'cooperation_platform_name',
-		key: 'cooperation_platform_name',
-		align: 'center',
-		width: 100
-	},
-
-	{
-		title: '三方原始成本价',
-		dataIndex: 'public_cost_price',
-		key: 'public_cost_price',
-		align: 'center',
-		width: 100
-	},
-	{
-		title: '成本调整',
-		dataIndex: 'public_cost_adjustment',
-		key: 'public_cost_adjustment',
-		align: 'center',
-		width: 100
-	},
-	{
-		title: '剩余成本价',
-		dataIndex: 'actual_public_cost_price',
-		key: 'actual_public_cost_price',
-		align: 'center',
-		width: 100
-	},
-	{
-		title: '打款金额',
-		dataIndex: 'payment_amount',
-		key: 'payment_amount',
-		align: 'center',
-		width: 100
-	},
-	{
-		title: '打款单ID',
-		dataIndex: 'payment_slip_code',
-		key: 'payment_slip_code',
-		align: 'center',
-		width: 100
-	},
-	{
-		title: '打款状态',
-		dataIndex: 'payment_status_desc',
-		key: 'payment_status_desc',
-		align: 'center',
-		width: 100
-	}, {
-		title: '打款成功/失败时间',
-		dataIndex: 'payment_time',
-		key: 'payment_time',
-		align: 'center',
-		width: 100
-	}, {
-		title: '打款撤销时间',
-		dataIndex: 'payment_revoke_time',
-		key: 'payment_revoke_time',
-		align: 'center',
-		width: 100
-	},
-	{
-		title: '付款公司',
-		dataIndex: 'payment_company_name',
-		key: 'payment_company_name',
-		align: 'center',
-		width: 100
-	},
-	{
-		title: '三方平台下单时间',
-		dataIndex: 'ttp_place_order_at',
-		key: 'ttp_place_order_at',
-		align: 'center',
-		width: 100
-	},
-	{
-		title: '三方平台订单ID',
-		dataIndex: 'ttp_order_id',
-		key: 'ttp_order_id',
-		align: 'center',
-		render: (text) => {
-			return < Tooltip title={<div style={{ width: '200px' }}>{text}</div>}>
-				<div style={{
-					width: '100px', whiteSpace: 'nowrap', overflow: 'hidden',
-					textOverflow: 'ellipsis'
-				}}>{text}</div>
-			</Tooltip >
-		}
-
-	},
-];
+export const dealOrderCols = () => {
+	return [
+		{
+			title: '订单ID',
+			dataIndex: 'wby_order_id',
+			key: 'wby_order_id',
+			align: 'center',
+			width: 100,
+			render: (text, record) => {
+				const { can_jump_order_detail } = record;
+				return can_jump_order_detail == 1 ? <a href={`/finance/zhangwu/detail?order_id=${record.wby_order_id}`}>{text}</a> : <div>{text}</div>
+			}
+		},
+		{
+			title: '订单类型',
+			dataIndex: 'product_line_type_desc',
+			key: 'product_line_type_desc',
+			align: 'center',
+			width: 100
+		},
+		{
+			title: '平台',
+			dataIndex: 'platform_name',
+			key: 'platform_name',
+			align: 'center',
+			width: 100
+	
+		},
+		{
+			title: '三方代理商',
+			dataIndex: 'agent_name',
+			key: 'agent_name',
+			align: 'center',
+			width: 100
+		}, {
+			title: '发票开具方',
+			dataIndex: 'beneficiary_company',
+			key: 'beneficiary_company',
+			align: 'center',
+			width: 100
+		},
+		{
+			title: '三方下单平台',
+			dataIndex: 'cooperation_platform_name',
+			key: 'cooperation_platform_name',
+			align: 'center',
+			width: 100
+		},
+	
+		{
+			title: '三方原始成本价',
+			dataIndex: 'public_cost_price',
+			key: 'public_cost_price',
+			align: 'center',
+			width: 100
+		},
+		{
+			title: '成本调整',
+			dataIndex: 'public_cost_adjustment',
+			key: 'public_cost_adjustment',
+			align: 'center',
+			width: 100
+		},
+		{
+			title: '剩余成本价',
+			dataIndex: 'actual_public_cost_price',
+			key: 'actual_public_cost_price',
+			align: 'center',
+			width: 100
+		},
+		{
+			title: '打款金额',
+			dataIndex: 'payment_amount',
+			key: 'payment_amount',
+			align: 'center',
+			width: 100
+		},
+		{
+			title: '打款单ID',
+			dataIndex: 'payment_slip_code',
+			key: 'payment_slip_code',
+			align: 'center',
+			width: 100
+		},
+		{
+			title: '打款状态',
+			dataIndex: 'payment_status_desc',
+			key: 'payment_status_desc',
+			align: 'center',
+			width: 100
+		}, {
+			title: '打款成功/失败时间',
+			dataIndex: 'payment_time',
+			key: 'payment_time',
+			align: 'center',
+			width: 100
+		}, {
+			title: '打款撤销时间',
+			dataIndex: 'payment_revoke_time',
+			key: 'payment_revoke_time',
+			align: 'center',
+			width: 100
+		},
+		{
+			title: '付款公司',
+			dataIndex: 'payment_company_name',
+			key: 'payment_company_name',
+			align: 'center',
+			width: 100
+		},
+		{
+			title: '三方平台下单时间',
+			dataIndex: 'ttp_place_order_at',
+			key: 'ttp_place_order_at',
+			align: 'center',
+			width: 100
+		},
+		{
+			title: '三方平台订单ID',
+			dataIndex: 'ttp_order_id',
+			key: 'ttp_order_id',
+			align: 'center',
+			render: (text) => {
+				return < Tooltip title={<div style={{ width: '200px' }}>{text}</div>}>
+					<div style={{
+						width: '100px', whiteSpace: 'nowrap', overflow: 'hidden',
+						textOverflow: 'ellipsis'
+					}}>{text}</div>
+				</Tooltip >
+			}
+	
+		},
+	]
+};
 
 export const prePayDetailColumns = [
 	{

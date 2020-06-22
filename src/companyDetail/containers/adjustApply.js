@@ -247,6 +247,7 @@ class AdjustApply extends React.Component {
 		return <div className='adjust-apply'>
 				<legend>订单调价</legend>
 				<AdjustQuery history={this.props.history}
+					flag={flag}
 					questAction={this.handleSearchList}
 					handleExport={this.handleExport}
 					auditType={audit_type}
@@ -258,7 +259,7 @@ class AdjustApply extends React.Component {
 					{goldenMetadata}
 				</AdjustQuery>
 				<div className='addOperateWrapper'>
-					<Button disabled={!selectedRowKeys.length} type='primary' className='right-gap' onClick={() => this.handleExport({readjust_application_id: selectedRowKeys, audit_type})}>批量导出</Button>
+					{flag ? <Button disabled={!selectedRowKeys.length} type='primary' className='right-gap' onClick={() => this.handleExport({readjust_application_id: selectedRowKeys, audit_type})}>批量导出</Button> : null}
 					{flag ? <Button type='primary' icon='download' className='right-gap' href='/finance/golden/adjustApplyInput'>导入</Button> : null}
 					{btnFlag ? <Button className='right-gap' type="primary" onClick={this.isShowAddModal}
 						// href={`/finance/golden/addAdjustApply?${qs.stringify({ keys: { page_size: 50 } })}`}

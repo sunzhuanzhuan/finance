@@ -70,7 +70,7 @@ class AdjustQuery extends React.Component {
 	}
 	render() {
 		const { getFieldDecorator } = this.props.form;
-		const { userList } = this.props;
+		const { userList, flag } = this.props;
 		const { application_status = [], quote_type = [] } = this.props.children;
 		return <Form className='adjust-stat adjust_content clearfix'>
 			<FormItem label='申请编号' className='left-gap'>
@@ -146,7 +146,7 @@ class AdjustQuery extends React.Component {
 			<FormItem className='left-gap adjust_apply_query'>
 				<Button type="primary" onClick={this.handleSearch}>查询</Button>
 				<Button onClick={this.handleClear}>重置</Button>
-				<Button onClick={() => this.handleSearch('searchExport')}>查询并导出全部</Button>
+				{flag ? <Button onClick={() => this.handleSearch('searchExport')}>查询并导出全部</Button> : null}
 			</FormItem>
 		</Form >
 	}

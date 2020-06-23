@@ -2,14 +2,15 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as actions from "../actions";
-import { Table, Button, Modal } from 'antd';
+import { Table, Button, Modal, Form, Input } from 'antd';
+import SearchSelect from '@/components/SearchSelect';
 import './financeRateSetting.less';
 import qs from "qs";
 import { getRateSettingCol } from '../constants';
 import RateModal from './rateModal';
 import Interface from '../constants/Interface';
 import apiDownload from '@/api/apiDownload';
-
+const FormItem = Form.Item;
 class FinanceRateSetting extends React.Component {
 	constructor() {
 		super();
@@ -122,7 +123,8 @@ class FinanceRateSetting extends React.Component {
 	}
 
 	render() {
-		const { rateListInfo: { total = 0, pageNum = 1, pageSize = 20, list = []} } = this.props;
+		const { rateListInfo: { total = 0, pageNum = 1, pageSize = 20, list = []}, form } = this.props;
+		const { getFieldDecorator } = form;
 		const { loading, operateLoading, modalType, rateInitialVal } = this.state;
 		const pagination = {
 			total: parseInt(total),
@@ -150,7 +152,42 @@ class FinanceRateSetting extends React.Component {
 		return (
 			<div className='finance-rate-wrapper'>
 				<h3>账号特殊利润率设置</h3>
-				<Button type='primary' className='rate-add-btn' onClick={() => this.handleOperate('add', {})}>新增策略</Button>
+				<Form className='search-form clearfix'>
+					<FormItem label='策略名称' className='common-label' >
+						{getFieldDecorator('mcnId', { initialValue: undefined })(
+							<SearchSelect
+								action={this.props.getMainAccountListInfo} 
+								style={{ width: 200 }}
+								placeholder='请选择'
+								keyWord='identityName'
+								dataToList={res => { return res.data }}
+								item={['mcnId', 'identityName']}
+							/>
+						)}
+					</FormItem>
+					<FormItem label='accountID' className='search-account-id'>
+						{getFieldDecorator('accountStr')(
+							<Input style={{width: 200}} placeholder="请输入" />
+						)}
+					</FormItem>
+					<FormItem label='账号名' className='common-label' >
+						{getFieldDecorator('accountId', { initialValue: undefined })(
+							<SearchSelect
+								action={this.props.getAccountListInfo} 
+								style={{ width: 200 }}
+								placeholder='请选择'
+								keyWord='snsName'
+								dataToList={res => { return res.data }}
+								item={['accountId', 'snsName']}
+							/>
+						)}
+					</FormItem>
+					<FormItem className='operate-wrapper'>
+						<Button type='primary' className='rate-add-btn' onClick={() => this.handleOperate('add', {})}>新增策略</Button>
+						<Button type='primary' onClick={() => {this.onHandle('search')}}>查询</Button>
+						<Button type='ghost' onClick={() => {this.onHandle('reset')}}>重置</Button>
+					</FormItem>
+				</Form>
 				<Table 
 					rowKey='id' 
 					columns={getRateSettingCol(this.handleOperate)} 
@@ -179,4 +216,4 @@ const mapStateToProps = (state) => {
 	}
 }
 const mapDispatchToProps = dispatch => (bindActionCreators({ ...actions }, dispatch));
-export default connect(mapStateToProps, mapDispatchToProps)(FinanceRateSetting)
+export default connect(mapStateToProps, mapDispatchToProps)(Form.create()(FinanceRateSetting))

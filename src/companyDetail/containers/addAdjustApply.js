@@ -33,7 +33,6 @@ class AddAdjustApply extends React.Component {
 		this.props.actions.getGoldenToken();
 		this.props.actions.getGoldenMetadata();
 		this.props.actions.getPlatformIcon();
-		this.props.actions.getCompanyDetailAuthorizations();
 		this.props.actions.clearAddApplyList();
 		delete search['requirement_label'];
 		const { keys:{company_id} } = search;

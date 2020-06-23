@@ -3,6 +3,7 @@ import { Button, message, Modal } from 'antd'
 import FormList from './FormList'
 import { WBYPlatformIcon } from 'wbyui'
 import numeral from 'numeral'
+import { percentToValue, accMul } from '@/util'
 
 class Item extends React.PureComponent {
 	constructor() {
@@ -34,16 +35,16 @@ class Item extends React.PureComponent {
 				message.error('有未填写的利润率输入框', 3);
 				return
 			}
-			if (!(Number(item['rate']) >= -30 && Number(item['rate']) < 100) || !(/^-?(([0-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/.test(item['rate']))) {
-				message.error('利润率须为[-30,100）之间的两位小数', 3);
+			if (!(Number(item['rate']) >= -30 && Number(item['rate']) < 100) || !(/^-?(([0-9][0-9]*)|(([0]\.\d{1,8}|[1-9][0-9]*\.\d{1,8})))$/.test(item['rate']))) {
+				message.error('利润率须为[-30,100）之间的八位小数', 3);
 				return
 			}
 			if (!item['minRate']) {
 				message.error('有未填写的利润率输入框', 3);
 				return
 			}
-			if (!(Number(item['minRate']) >= -30 && Number(item['minRate']) < 100) || !(/^-?(([0-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/.test(item['minRate']))) {
-				message.error('利润率须为[-30,100）之间的两位小数', 3);
+			if (!(Number(item['minRate']) >= -30 && Number(item['minRate']) < 100) || !(/^-?(([0-9][0-9]*)|(([0]\.\d{1,8}|[1-9][0-9]*\.\d{1,8})))$/.test(item['minRate']))) {
+				message.error('利润率须为[-30,100）之间的八位小数', 3);
 				return
 			}
 		}
@@ -52,12 +53,11 @@ class Item extends React.PureComponent {
 			content: '新订单将按照修改后的利润率计算报价，确定修改该平台的利润率吗？',
 			onOk: () => {
 				params['platformId'] = this.props.data.platformId;
-				params['trinityProfitRates'] = Object.values(obj).map(item => ({ ...item, rate: this.dealRateValue(item.rate), minRate: this.dealRateValue(item.minRate), validParams: true }));
+				params['trinityProfitRates'] = Object.values(obj).map(item => ({ ...item, rate: percentToValue(item.rate), minRate: percentToValue(item.minRate), validParams: true }));
 				onSubmit('modify', params, () => { this.setState({ visible: false }) });
 			}
 		})
 	}
-	dealRateValue = (val) => (val / 100).toFixed(4).toString()
 	render() {
 		const { platformId, platformName, trinityProfitRates } = this.props.data;
 		const { visible } = this.state;
@@ -95,7 +95,7 @@ class Item extends React.PureComponent {
 						{
 							trinityProfitRates && trinityProfitRates.map((item = {}, index) => 
 								(
-									<li key={index}>{item.min}元至{item.max}元，对外利润率为{numeral(item.rate * 100).format('0.00')}%，最低利润率为{numeral(item.minRate * 100).format('0.00')}%</li>
+									<li key={index}>{item.min}元至{item.max}元，对外利润率为{accMul(item.rate, 100)}%，最低利润率为{accMul(item.minRate, 100)}%</li>
 								)
 							)
 						}

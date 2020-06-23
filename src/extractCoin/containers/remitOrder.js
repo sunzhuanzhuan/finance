@@ -44,7 +44,7 @@ class RemitOrderManage extends React.Component {
 		this.setState({ remitOrderLoading: true });
 		const search = qs.parse(this.props.location.search.substring(1));
 		if (search.id) {
-			this.props.actions.getPaymentSlipList({ page: 1, limit_num: 20, id: search.id }).then(() => {
+			this.props.actions.getPaymentSlipList({ page: 1, limit_num: 20, id: [search.id] }).then(() => {
 				this.setState({ remitOrderLoading: false });
 			});
 		} else {
@@ -189,11 +189,11 @@ class RemitOrderManage extends React.Component {
 	}
 	render() {
 		let { newVisible, remitOrderLoading, outputVisible, remitOrderPageSize, filterParams, outputLoading, receiptsVisible, questParams, selectedRowKeys, rowsMap, studioVisible } = this.state;
-		console.log('%crowsMap: ', 'color: MidnightBlue; background: Aquamarine; font-size: 20px;', rowsMap);
-		let { remitOrderData: { data = [], total = 20, current_page = 1, payment_slip_status_name }, excel_name_list: { title, excel }, flashStudioList = {} } = this.props;
+		let { remitOrderData: { data = [], total = 20, current_page = 1, payment_slip_status_name }, excel_name_list: { title, excel }, flashStudioList = {}, authVisibleList = {} } = this.props;
 		const { rows = [] } = flashStudioList;
 		const checked = data.every(item => selectedRowKeys.includes(item.id.toString()));
-		let remitOrderConfig = remitOrderFunc(payment_slip_status_name, this.handleOutputDetail, this.handleReceiptsVisible, this.handleTipVisible);
+		const IS_SALE_LIMIT_SIGN = !authVisibleList['servicefee.sale.can.operate.finance'];
+		let remitOrderConfig = remitOrderFunc(payment_slip_status_name, this.handleOutputDetail, this.handleReceiptsVisible, this.handleTipVisible, IS_SALE_LIMIT_SIGN);
 		let paginationObj = {
 			onChange: (current) => {
 				this.setState({ remitOrderLoading: true, curPage: current });
@@ -218,17 +218,23 @@ class RemitOrderManage extends React.Component {
 			selectedRowKeys,
 			onChange: this.onSelectChange,
 		};
+		const search = qs.parse(this.props.location.search.substring(1));
 		return <div className='remitOrder'>
 			<RemitQuery
+				queryId={search.id}
 				limit_num={remitOrderPageSize}
 				studioRows={rows}
 				questAction={this.props.actions.getPaymentSlipList}
 				handlefilterParams={this.handlefilterParams}
 			></RemitQuery>
-			<Row className='topGap'>
-				<Button type='primary' onClick={this.newRemitOrder}>新建打款单</Button>
-				<Button className='left-gap' type='primary' onClick={this.handleChangeStudio}>更换工作室</Button>
-			</Row>
+			{
+				IS_SALE_LIMIT_SIGN ? null :
+				<Row className='topGap'>
+					<Button type='primary' onClick={this.newRemitOrder}>新建打款单</Button>
+					<Button className='left-gap' type='primary' onClick={this.handleChangeStudio}>更换工作室</Button>
+				</Row>
+			}
+			
 			<Table className='topGap'
 				rowKey={record => { return record.id.toString() }}
 				columns={remitOrderConfig}
@@ -236,9 +242,9 @@ class RemitOrderManage extends React.Component {
 				pagination={paginationObj}
 				loading={remitOrderLoading}
 				bordered
-				rowSelection={rowSelection}
+				rowSelection={IS_SALE_LIMIT_SIGN ? null : rowSelection }
 				footer={() => {
-					return <Checkbox onChange={this.handleCheckAll} disabled={data.length == 0} checked={data.length > 0 && checked}>全选</Checkbox>
+					return IS_SALE_LIMIT_SIGN ? null : <Checkbox onChange={this.handleCheckAll} disabled={data.length == 0} checked={data.length > 0 && checked}>全选</Checkbox>
 				}}
 			></Table>
 			{newVisible ? <NewRemitModal visible={newVisible} onCancel={this.closeNewModal}
@@ -264,10 +270,14 @@ class RemitOrderManage extends React.Component {
 	}
 }
 const mapStateToProps = (state) => {
+	const { withdraw = {}, authorizationsReducers = {} } = state;
+	const { remitOrderData, excel_name_list, flashStudioList } = withdraw;
+	const { authVisibleList = {} } = authorizationsReducers;
 	return {
-		remitOrderData: state.withdraw.remitOrderData,
-		excel_name_list: state.withdraw.excel_name_list,
-		flashStudioList: state.withdraw.flashStudioList
+		remitOrderData,
+		excel_name_list,
+		flashStudioList,
+		authVisibleList
 	}
 }
 const mapDispatchToProps = dispatch => ({

@@ -22,8 +22,6 @@ class AdjustApplyDetail extends React.Component {
 			tipVisible: false,
 			rejectVisible: false,
 			loading: false,
-			flag: false,
-			costFlag: false,
 			curSelectRowKeys: [],
 			curSelectRows: [],
 			rowsMap: {},
@@ -33,13 +31,7 @@ class AdjustApplyDetail extends React.Component {
 	}
 	componentDidMount() {
 		const search = qs.parse(this.props.location.search.substring(1));
-		const { getCompanyDetailAuthorizations, getGoldenMetadata, getPlatformIcon } = this.props.actions;
-		getCompanyDetailAuthorizations().then(() => {
-			const { companyDetailAuthorizations } = this.props
-			const flag = companyDetailAuthorizations[0].permissions['readjust.finance.operation'];
-			const costFlag = companyDetailAuthorizations[0].permissions['readjust.finance.filter'];
-			this.setState({ flag, costFlag });
-		})
+		const { getGoldenMetadata, getPlatformIcon } = this.props.actions;
 		getGoldenMetadata();
 		getPlatformIcon();
 		this.queryAllStatusData({ page: 1, ...search.keys });
@@ -95,12 +87,12 @@ class AdjustApplyDetail extends React.Component {
 	}
 	handleReject = () => {
 		const search = qs.parse(this.props.location.search.substring(1));
-		const { companyDetailAuthorizations } = this.props; 
+		const { authVisibleList = {} } = this.props; 
 		const { postRejectByOrderIds } = this.props.actions;
 		const { curSelectRowKeys } = this.state;
 		const remark = document.querySelector('#reject-remark').value;
-		const finance = companyDetailAuthorizations[0].permissions['readjust.finance.audit'];
-		const sale = companyDetailAuthorizations[0].permissions['readjust.sale.audit'];
+		const finance = authVisibleList['readjust.finance.audit'];
+		const sale = authVisibleList['readjust.sale.audit'];
 		const audit_type = finance ? 1 : sale ? 2 : undefined;
 		const params = {
 			order_ids: curSelectRowKeys.toString(),
@@ -128,8 +120,10 @@ class AdjustApplyDetail extends React.Component {
 		this.setState({activeKey});
 	}
 	render() {
-		const { loading, tipVisible, rejectVisible, flag, costFlag, curSelectRowKeys, curSelectRows, activeKey, applyId } = this.state;
-		const { goldenMetadata: { rel_order_status = [], quote_type = [], readjust_type = [] }, applyListReducer = {}, platformIcon = [] } = this.props;
+		const { goldenMetadata: { rel_order_status = [], quote_type = [], readjust_type = [] }, applyListReducer = {}, platformIconList = [], authVisibleList = {} } = this.props;
+		const { loading, tipVisible, rejectVisible, curSelectRowKeys, curSelectRows, activeKey, applyId } = this.state;
+		const flag = authVisibleList['readjust.finance.operation'];
+		const costFlag = authVisibleList['readjust.finance.filter'];
 		const allDetailList = applyListReducer[`applyDetailListStatusallOptions`] || {};
 		const { total: allTotal } = allDetailList;
 		const financeColArr = ['order_id', 'status', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'main_account_info', 'policy_id', 'quoted_price', 'discount_rate', 'published_price', 'order_bottom_price', 'commissioned_price', 'history_min_sell_price', 'history_rate', 'min_sell_price', 'quote_type', 'auditor_name', 'pass_time', 'remark'];
@@ -137,9 +131,9 @@ class AdjustApplyDetail extends React.Component {
 		const preFinanceArr = ['prev_id', 'statusPre', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'main_account_info', 'quoted_price', 'discount_rate', 'published_price', 'order_bottom_price', 'commissioned_price', 'pre_min_sell_price', 'preview_quote_type'];
 		const dealPreArr = costFlag ? preFinanceArr : preFinanceArr.filter(item => item !== 'quoted_price');
 		const adjustApplyDetail = flag ? 
-			adjustApplyDetailFunc(rel_order_status, quote_type, readjust_type, platformIcon, flag)(detailColArr) 
-			: adjustApplyDetailFunc(rel_order_status, quote_type, readjust_type, platformIcon, flag)(['order_id', 'status', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'commissioned_price_sale', 'history_min_sell_price', 'min_sell_price', 'auditor_name', 'pass_time', 'remark']);
-		const adjustApplyPreview = adjustApplyDetailFunc(rel_order_status, quote_type, readjust_type, platformIcon, flag)(dealPreArr);
+			adjustApplyDetailFunc(rel_order_status, quote_type, readjust_type, platformIconList, flag)(detailColArr) 
+			: adjustApplyDetailFunc(rel_order_status, quote_type, readjust_type, platformIconList, flag)(['order_id', 'status', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'commissioned_price_sale', 'history_min_sell_price', 'min_sell_price', 'auditor_name', 'pass_time', 'remark']);
+		const adjustApplyPreview = adjustApplyDetailFunc(rel_order_status, quote_type, readjust_type, platformIconList, flag)(dealPreArr);
 		const dealStatusArr = Array.isArray(rel_order_status) && rel_order_status.length  ? [{id: 'allOptions', display: '全部'}, ...rel_order_status] : [];
 		const getTabPaneComp = () => {
 			return dealStatusArr.map(item => {
@@ -226,11 +220,14 @@ class AdjustApplyDetail extends React.Component {
 }
 
 const mapStateToProps = (state) => {
+	const { companyDetail = {}, authorizationsReducers = {} } = state;
+	const { goldenMetadata, applyListReducer, platformIconList } = companyDetail;
+	const { authVisibleList = {} } = authorizationsReducers;
 	return {
-		companyDetailAuthorizations: state.companyDetail.companyDetailAuthorizations,
-		goldenMetadata: state.companyDetail.goldenMetadata,
-		applyListReducer: state.companyDetail.applyListReducer,
-		platformIcon: state.companyDetail.platformIconList,
+		goldenMetadata,
+		applyListReducer,
+		platformIconList,
+		authVisibleList
 	}
 }
 const mapDispatchToProps = dispatch => ({

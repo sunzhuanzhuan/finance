@@ -88,15 +88,19 @@ class DatePay extends React.Component {
 	render() {
 		const search = qs.parse(this.props.location.search.substring(1));
 		const { loading, pullReady, modalVisible, id, status, agent } = this.state;
-		const { datePayData: { list = [], page, page_size = 20, total, statistic }, paySearchItem } = this.props;
+		const { datePayData: { list = [], page, page_size = 20, total, statistic }, paySearchItem, authVisibleList = {} } = this.props;
 		const datePaySearch = datePaySearchFunc(paySearchItem, agent, this.handleFetchPlatform);
-		const datePayCols = datePayFunc(this.handleModal);
+		const IS_SALE_LIMIT_SIGN = !authVisibleList['servicefee.sale.can.operate.finance'];
+		const datePayCols = datePayFunc(this.handleModal, IS_SALE_LIMIT_SIGN);
 		const paginationObj = getPagination(this, search, { total, page, page_size });
+		const getExtraFooter = () => {
+			return IS_SALE_LIMIT_SIGN ? null : <Button type='primary' style={{ marginLeft: 20 }} onClick={this.handleExport}>导出</Button>
+		}
 		return <div className='datePay-container'>
 			<Statistics title={'三方平台周期打款单'} render={Stat(total, statistic)} />
 			<fieldset className='fieldset_css'>
 				<legend>查询</legend>
-				{pullReady && <SearForm data={datePaySearch} getAction={this.queryData} responseLayout={{ xs: 24, sm: 24, md: 10, lg: 8, xxl: 6 }} extraFooter={<Button type='primary' style={{ marginLeft: 20 }} onClick={this.handleExport}>导出</Button>} wrappedComponentRef={form => this.form = form} />}
+				{pullReady && <SearForm data={datePaySearch} getAction={this.queryData} responseLayout={{ xs: 24, sm: 24, md: 10, lg: 8, xxl: 6 }} extraFooter={getExtraFooter()} wrappedComponentRef={form => this.form = form} />}
 			</fieldset>
 			<div className='top-gap'>
 				<Scolltable scrollClassName='.ant-table-body' widthScroll={2000}>
@@ -129,9 +133,13 @@ class DatePay extends React.Component {
 }
 
 const mapStateToProps = (state) => {
+	const { trinityPay = {}, authorizationsReducers = {} } = state;
+	const { datePayData, paySearchItem } = trinityPay;
+	const { authVisibleList = {} } = authorizationsReducers;
 	return {
-		datePayData: state.trinityPay.datePayData,
-		paySearchItem: state.trinityPay.paySearchItem,
+		datePayData,
+		paySearchItem,
+		authVisibleList
 	}
 }
 const mapDispatchToProps = dispatch => ({

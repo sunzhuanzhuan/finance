@@ -160,30 +160,35 @@ export const applyDetailConfigMap = {
 		dataIndex: 'id',
 		key: 'id',
 		align: 'center',
+		width: 80
 	},
 	'order_id': {
 		title: '订单号',
 		dataIndex: 'order_id',
 		key: 'order_id',
 		align: 'center',
+		width: 100
 	},
 	'order_type_name': {
 		title: '订单类型',
 		dataIndex: 'order_type_name',
 		key: 'order_type_name',
 		align: 'center',
+		width: 100
 	},
 	'payment_silp_status_name': {
 		title: '订单状态',
 		dataIndex: 'payment_silp_status_name',
 		key: 'payment_silp_status_name',
 		align: 'center',
+		width: 100
 	},
 	'order_end_time': {
 		title: '执行完成时间',
 		dataIndex: 'order_end_time',
 		key: 'order_end_time',
 		align: 'center',
+		width: 140,
 		render: (text, { order_end_time }) => {
 			return timestampToTime(order_end_time);
 		}
@@ -193,66 +198,84 @@ export const applyDetailConfigMap = {
 		dataIndex: 'service_cycle',
 		key: 'service_cycle',
 		align: 'center',
+		width: 120
 	},
 	'expect_service_cycle': {
 		title: '预计服务时间（天）',
 		dataIndex: 'expect_service_cycle',
 		key: 'expect_service_cycle',
 		align: 'center',
+		width: 140
 	},
 	'order_amount': {
 		title: '订单金额',
 		dataIndex: 'order_amount',
 		key: 'order_amount',
 		align: 'center',
+		width: 100
 	},
 	'qc_write_off': {
 		title: '质检金额',
 		dataIndex: 'qc_write_off',
 		key: 'qc_write_off',
 		align: 'center',
+		width: 100
+	},
+	'payment_deduction_amount': {
+		title: '支付方式变更扣款',
+		dataIndex: 'payment_deduction_amount',
+		key: 'payment_deduction_amount',
+		align: 'center',
+		width: 140
 	},
 	'service_amount': {
 		title: '利息',
 		dataIndex: 'service_amount',
 		key: 'service_amount',
 		align: 'center',
+		width: 100
 	},
 	'expect_service_amount': {
 		title: '预计利息',
 		dataIndex: 'expect_service_amount',
 		key: 'expect_service_amount',
 		align: 'center',
+		width: 100
 	},
 	'service_fee': {
 		title: '手续费',
 		dataIndex: 'service_fee',
 		key: 'service_fee',
 		align: 'center',
+		width: 100
 	},
 	'other_fee': {
 		title: '其他扣款',
 		dataIndex: 'other_fee',
 		key: 'other_fee',
 		align: 'center',
+		width: 100
 	},
 	'discount_amount': {
 		title: '优惠金额',
 		dataIndex: 'discount_amount',
 		key: 'discount_amount',
 		align: 'center',
+		width: 100
 	},
 	'payment_amount': {
 		title: '可提金额',
 		dataIndex: 'payment_amount',
 		key: 'payment_amount',
 		align: 'center',
+		width: 100
 	},
 	'expect_payment_amount': {
 		title: '预计可提金额',
 		dataIndex: 'expect_payment_amount',
 		key: 'expect_payment_amount',
 		align: 'center',
+		width: 140
 	}
 }
 export const extractDetailFunc = (order_status) => {
@@ -293,13 +316,20 @@ export const extractDetailFunc = (order_status) => {
 			width: 150,
 			align: 'center',
 		},
-		{
-			title: '质检总额',
-			dataIndex: 'qc_write_off',
-			key: 'qc_write_off',
-			width: 100,
-			align: 'center',
-		},
+		// {
+		// 	title: '质检总额',
+		// 	dataIndex: 'qc_write_off',
+		// 	key: 'qc_write_off',
+		// 	width: 100,
+		// 	align: 'center',
+		// },
+		// {
+		// 	title: '支付方式变更扣款',
+		// 	dataIndex: 'payment_deduction_amount',
+		// 	key: 'payment_deduction_amount',
+		// 	width: 100,
+		// 	align: 'center',
+		// },
 		{
 			title: '利息总额',
 			dataIndex: 'service_amount',
@@ -406,13 +436,20 @@ export const extractNoDetailFunc = (order_status) => {
 			width: 150,
 			align: 'center',
 		},
-		{
-			title: '质检总额',
-			dataIndex: 'qc_write_off',
-			key: 'qc_write_off',
-			width: 100,
-			align: 'center',
-		},
+		// {
+		// 	title: '质检总额',
+		// 	dataIndex: 'qc_write_off',
+		// 	key: 'qc_write_off',
+		// 	width: 100,
+		// 	align: 'center',
+		// },
+		// {
+		// 	title: '支付方式变更扣款',
+		// 	dataIndex: 'payment_deduction_amount',
+		// 	key: 'payment_deduction_amount',
+		// 	width: 100,
+		// 	align: 'center',
+		// },
 		{
 			title: '利息总额',
 			dataIndex: 'service_amount',
@@ -480,7 +517,7 @@ export const extractNoDetailFunc = (order_status) => {
 		}
 	]
 }
-export const remitOrderFunc = (order_status, handleOutputDetail, handleReceiptsVisible, handleTipVisible) => {
+export const remitOrderFunc = (order_status, handleOutputDetail, handleReceiptsVisible, handleTipVisible, isSaleRole) => {
 	return [
 		{
 			title: '打款单ID',
@@ -555,6 +592,37 @@ export const remitOrderFunc = (order_status, handleOutputDetail, handleReceiptsV
 			render: (text, record) => {
 				let { id, status } = record;
 				let obj = { id, status };
+				const getStatusExportComp = () => {
+					if(isSaleRole) {
+						return null;
+					}
+					return (
+						status === 0 ? 
+							<a href='javascript:;' className='rightGap' 
+							onClick={() => {
+								handleOutputDetail(id, record)
+							}}>导出打款单</a> : 
+							status === 3 ? null : 
+								<a href={`/api/flash/down_excel?${qs.stringify(obj)}`} 
+									target='_blank' className='rightGap'>
+									{
+										status === 1 ? '导出还款单' : '导出结税单'
+									}
+								</a>
+					)
+				}
+				const getStatusResultComp = () => {
+					if(isSaleRole) {
+						return null;
+					}
+					return (
+						status === 3 ? null : 
+							<a href='javascript:;' className='rightGap' onClick={() => {
+								handleTipVisible(status, id)
+							}}>{billingActions[status]}</a>
+					)
+				}
+
 				return <span>
 					{/**
 					 * status 0  待打款状态出现弹窗
@@ -562,17 +630,17 @@ export const remitOrderFunc = (order_status, handleOutputDetail, handleReceiptsV
 					 * status 2	 待结税 文案为导出结税单
 					 * status 3  已结算 无导出单据选项
 					*/}
-					{status === 0 ? <a href='javascript:;' className='rightGap' onClick={() => {
-						handleOutputDetail(id, record)
-					}}>导出打款单</a> : status === 3 ? null : <a href={`/api/flash/down_excel?${qs.stringify(obj)}`} target='_blank' className='rightGap'>{status === 1 ? '导出还款单' : '导出结税单'}</a>}
+					{
+						getStatusExportComp()
+					}
 					<Link to={{
 						pathname: '/finance/remitOrder/detail',
 						search: `?id=${id}`,
 					}} className='rightGap'>查看详情</Link>
 					{/*不同状态对应不同文案及接口，接口处理在handleTipVisible（）中 */}
-					{status === 3 ? null : <a href='javascript:;' className='rightGap' onClick={() => {
-						handleTipVisible(status, id)
-					}}>{billingActions[status]}</a>}
+					{
+						getStatusResultComp()
+					}
 					{status === 3 ? null : <a href='javascript:;' onClick={() => {
 						handleReceiptsVisible(record)
 					}}>查看单据</a>}
@@ -581,8 +649,8 @@ export const remitOrderFunc = (order_status, handleOutputDetail, handleReceiptsV
 		}
 	];
 }
-export const remitDetailFunc = (payment_slip_status_name, search, handleDetailOutput, handleReceiptsVisible) => {
-	return [
+export const remitDetailFunc = (payment_slip_status_name, search, handleDetailOutput, handleReceiptsVisible, isSaleRole) => {
+	const columns = [
 		{
 			title: '打款状态',
 			dataIndex: 'status',
@@ -647,6 +715,7 @@ export const remitDetailFunc = (payment_slip_status_name, search, handleDetailOu
 			align: 'center',
 		}
 	];
+	return isSaleRole ? columns.filter(item => item.key !== 'excel_data') : columns;
 }
 export const newRemitFunc = (user_name) => {
 	return [
@@ -879,13 +948,6 @@ export const remitDetailOrderConfig = [
 		width: 100,
 	},
 	{
-		title: '订单名称',
-		dataIndex: 'order_name',
-		key: 'order_name',
-		align: 'center',
-		width: 100,
-	},
-	{
 		title: '执行完成时间',
 		dataIndex: 'order_end_time',
 		key: 'order_end_time',
@@ -934,13 +996,20 @@ export const remitDetailOrderConfig = [
 		align: 'center',
 		width: 100,
 	},
-	{
-		title: '质检金额',
-		dataIndex: 'qc_write_off',
-		key: 'qc_write_off',
-		align: 'center',
-		width: 100,
-	},
+	// {
+	// 	title: '质检金额',
+	// 	dataIndex: 'qc_write_off',
+	// 	key: 'qc_write_off',
+	// 	align: 'center',
+	// 	width: 100,
+	// },
+	// {
+	// 	title: '支付方式变更扣款',
+	// 	dataIndex: 'payment_deduction_amount',
+	// 	key: 'payment_deduction_amount',
+	// 	align: 'center',
+	// 	width: 120,
+	// },
 	{
 		title: '利息',
 		dataIndex: 'service_amount',

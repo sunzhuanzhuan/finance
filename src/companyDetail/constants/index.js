@@ -3,6 +3,8 @@ import { Popover, Icon, Tooltip, Table } from 'antd';
 import { Link } from 'react-router-dom';
 import numeral from 'numeral';
 import moment from 'moment';
+import { accMul } from "@/util";
+
 const getPriceContent = (item = {}) => {
 	const {
 		isShowDetail,
@@ -22,9 +24,9 @@ const getPriceContent = (item = {}) => {
 	const dealBloggerPrice = bloggerPrice || bloggerPrice == 0 ? numeral(bloggerPrice).format('0.00') : '-';
 	const dealTrilPrice = trilateralPrice || trilateralPrice == 0 ? numeral(trilateralPrice).format('0.00') : '-';
 
-	const dealBaseRate = baseRate || baseRate == 0 ? numeral(baseRate).format('0.00%') : '-';
-	const dealBlogRate = bloggerRate || bloggerRate == 0 ? numeral(bloggerRate).format('0.00%') : '-';
-	const dealTrilgRate = trilateralRate || trilateralRate == 0 ? numeral(trilateralRate).format('0.00%') : '-';
+	const dealBaseRate = baseRate || baseRate == 0 ? `${accMul(baseRate, 100)}%` : '-';
+	const dealBlogRate = bloggerRate || bloggerRate == 0 ? `${accMul(bloggerRate, 100)}%` : '-';
+	const dealTrilgRate = trilateralRate || trilateralRate == 0 ? `${accMul(trilateralRate, 100)}%` : '-';
 
 	const equitiesStr = getEquities(equities);
 	return (
@@ -658,7 +660,7 @@ export const adjustApplyListFunc = (audit_type, application_status, quote_type, 
 			align: 'center',
 			width: 190,
 			render: (text, record) => {
-				return <div>
+				return <div className='adjust_list_operate_wrapper'>
 					<a onClick={() => { handleJump(record.id, record.company_id); }}>订单详情</a>
 					{record.status != '3' ?
 						<a style={{ marginLeft: 10 }} onClick={() => { handleAction('pass', record.id, record.quote_type, record.company_id); }}>
@@ -670,7 +672,7 @@ export const adjustApplyListFunc = (audit_type, application_status, quote_type, 
 							驳回
 						</a>
 						: null}
-					<a style={{ marginLeft: 10 }} target='_blank' href={`/api/finance/readjust/export?readjust_application_id=${record.id}&audit_type=${audit_type}`}>导出</a>
+					<a style={{ marginLeft: 10 }} onClick={() => { handleAction('export', {readjust_application_id: record.id, audit_type}); }}>导出</a>
 				</div >
 			}
 		}
@@ -835,6 +837,7 @@ export const readyCheckFunc = (handleDelete) => {
 		}
 	]
 }
+const orderTagStyle = { display: 'inline-block', fontSize: '10px', width: 'fit-content', backgroundColor: 'red', color: '#fff', padding: '0 2px', marginRight: '2px' };
 export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], readjust_type = [], platformIcon = [], isFinance) => {
 	return ary => {
 		const configMap = {
@@ -844,14 +847,23 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				key: 'order_id',
 				width: 160,
 				render: (text, record) => {
-					const { quote_type: quoteVal, formula_version } = record;
+					const { quote_type: quoteVal, formula_version, trinity_type_name } = record;
 					const value = quote_type.find(item => item.id == quoteVal) || {};
 
 					return <div className={record.warningClass}>
 						<div>{text}</div>
 						<div>报价类型：{value.display || '-'}</div>
-						{record.plan_manager_id && record.plan_manager_id != '0' && <div style={{ display: 'inline-block', fontSize: '10px', backgroundColor: 'red', color: '#fff', padding: '0 2px', marginTop: '5px' }}>含策划</div>}
-						{isFinance && formula_version && <div style={{ display: 'inline-block', fontSize: '10px', width: 'fit-content', backgroundColor: 'red', color: '#fff', padding: '0 2px', marginLeft: '2px' }}>{formula_version == 2 ? '已价税分离' : '未价税分离' }</div>}
+						<div style={{marginTop: '5px'}}>
+							{
+								record.plan_manager_id && record.plan_manager_id != '0' && 
+								<div style={orderTagStyle}>含策划</div>
+							}
+							{
+								isFinance && formula_version && 
+								<div style={orderTagStyle}>{formula_version == 2 ? '已价税分离' : '未价税分离' }</div>
+							}
+							<div style={orderTagStyle}>{trinity_type_name}</div>
+						</div>
 					</div>
 				}
 			},
@@ -862,14 +874,23 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				width: 160,
 				fixed: 'left',
 				render: (text, record) => {
-					const { quote_type: quoteVal, formula_version } = record;
+					const { quote_type: quoteVal, formula_version, trinity_type_name } = record;
 					const value = quote_type.find(item => item.id == quoteVal) || {};
 
 					return <div className={record.warningClass}>
 						<div>{text}</div>
 						<div>报价类型：{value.display || '-'}</div>
-						{record.plan_manager_id && record.plan_manager_id != '0' && <div style={{ display: 'inline-block', fontSize: '10px', backgroundColor: 'red', color: '#fff', padding: '0 2px', marginTop: '5px' }}>含策划</div>}
-						{isFinance && formula_version && <div style={{ display: 'inline-block', fontSize: '10px', width: 'fit-content', backgroundColor: 'red', color: '#fff', padding: '0 2px', marginLeft: '2px' }}>{formula_version == 2 ? '已价税分离' : '未价税分离' }</div>}
+						<div style={{marginTop: '5px'}}>
+							{
+								record.plan_manager_id && record.plan_manager_id != '0' && 
+								<div style={orderTagStyle}>含策划</div>
+							}
+							{
+								isFinance && formula_version && 
+								<div style={orderTagStyle}>{formula_version == 2 ? '已价税分离' : '未价税分离' }</div>
+							}
+							<div style={orderTagStyle}>{trinity_type_name}</div>
+						</div>
 					</div>
 				}
 			},
@@ -1131,18 +1152,18 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				key: 'published_price',
 				width: 690,
 				render: (_, record) => {
-					const { platform_id, reference_price_doc } = record;
-
+					const { platform_id, reference_price_doc, warningClass } = record;
 					return [
 						<div
 							key='price_info'
-							className='price_info'
-							style={{ width: '100%', textAlign: 'center', border: '1px solid #e8e8e8', borderBottom: 0, padding: '6px 4px', fontWeight: 500, color: 'rgba(0, 0, 0, 0.85)', background: '#fafafa' }}>
+							className={`${warningClass} price_info`}
+							style={{ width: '100%', textAlign: 'center', border: '1px solid #e8e8e8', borderBottom: 0, padding: '6px 4px', fontWeight: 500, color: warningClass ? '' : 'rgba(0, 0, 0, 0.85)', background: '#fafafa' }}>
 							各价格均为订单创建时刻的价格
 						</div>,
 						<Table
 							rowKey='priceName'
 							key='price_table'
+							className={`pre_published_price_${warningClass}`}
 							columns={getPublishedCol(platform_id == '9')}
 							dataSource={reference_price_doc}
 							bordered
@@ -1272,7 +1293,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				render: (text, { history_min_sell_price: { readjust_type: readJustType } }) => {
 					const item = text ? text.min_sell_price : [];
 					const value = readjust_type.find(item => item.id == readJustType) || {};
-					const node = Array.isArray(item) && item.length ? <div>
+					const node = Array.isArray(item) && item.length ? <div key='priceInfo'>
 						{item.map(item => {
 							const showObj = {
 								isShowDetail: item.trinity_type == 2,
@@ -1300,8 +1321,8 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				width: 120,
 				render: (_, { history_min_sell_price = {}, quote_type, }) => {
 					const item = history_min_sell_price ? history_min_sell_price.min_sell_price : [];
-					const profitRate = history_min_sell_price.profit_rate || history_min_sell_price.profit_rate == 0 ? numeral(history_min_sell_price.profit_rate).format('0.00%') : '-';
-					const serviceRate = history_min_sell_price.service_rate || history_min_sell_price.service_rate == 0 ? numeral(history_min_sell_price.service_rate).format('0.00%') : '-';
+					const profitRate = history_min_sell_price.profit_rate || history_min_sell_price.profit_rate == 0 ? `${accMul(history_min_sell_price.profit_rate, 100)}%` : '-';
+					const serviceRate = history_min_sell_price.service_rate || history_min_sell_price.service_rate == 0 ? `${accMul(history_min_sell_price.service_rate, 100)}%` : '-';
 					const value = quote_type === '1' ? profitRate : quote_type === '2' ? serviceRate : '-';
 					return item.length > 0 && history_min_sell_price.readjust_type == '1' ? value : '-';
 				}
@@ -1363,8 +1384,8 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				key: 'quote_type',
 				width: 90,
 				render: (text, { profit_rate, service_rate, min_sell_price, readjust_type }) => {
-					const profitRate = profit_rate || profit_rate == 0 ? numeral(profit_rate).format('0.00%') : '-';
-					const serviceRate = service_rate || service_rate == 0 ? numeral(service_rate).format('0.00%') : '-';
+					const profitRate = profit_rate || profit_rate == 0 ? `${accMul(profit_rate, 100)}%` : '-';
+					const serviceRate = service_rate || service_rate == 0 ? `${accMul(service_rate, 100)}%` : '-';
 					const value = text == '1' ? profitRate : text == '2' ? serviceRate : '-';
 					return min_sell_price && readjust_type == '1' ? value : '-';
 				}
@@ -1375,7 +1396,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				key: 'quote_type',
 				width: 90,
 				render: (_, { previewReadjustType, previewRateVal, warningClass }) => {
-					const rateVal = previewRateVal || previewRateVal == 0 ? numeral(previewRateVal).format('0.00%') : '-'
+					const rateVal = previewRateVal || previewRateVal == 0 ? `${accMul(previewRateVal, 100)}%` : '-'
 					return (
 						<div className={warningClass}>
 							{previewReadjustType == '1' ? rateVal : '-'}

@@ -4,10 +4,11 @@ import { bindActionCreators } from "redux";
 import * as extractActions from "../action/extractManage";
 import { Link } from "react-router-dom";
 import { applyDetailConfigMap, columnsList } from "../constans/manageConfig";
+import Scolltable from "../../components/Scolltable";
 import "./extractManage.less";
 import { Table, Button, Input, Row, Col, Form, Modal, message, DatePicker } from "antd";
 import { timestampToTime } from "../constans/utils";
-import { calcSum } from "../../util";
+import { calcSum, getTotalWidth, events } from "../../util";
 import qs from "qs";
 
 import moment from 'moment';
@@ -28,8 +29,13 @@ class ApplyDetail extends React.Component {
 			readyVisible: false,
 			loading: false,
 			total_withdraw_money: 0,
-			submitDisable: false
+			submitDisable: false,
+			leftWidth: 40
 		}
+		events.on('message', this.collapsedListener); 
+	}
+	collapsedListener = isClosed => {
+		this.setState({leftWidth: isClosed ? 40 : 200});
 	}
 	componentDidMount() {
 		const search = qs.parse(this.props.location.search.substring(1));
@@ -67,7 +73,9 @@ class ApplyDetail extends React.Component {
 			this.setState({ loading: false });
 			message.error(errorMsg || '列表加载出错，请重试');
 		})
-
+		const leftSlide = document.getElementsByClassName('ant-layout-sider-trigger')[0];
+		const leftWidth = leftSlide && leftSlide.clientWidth;
+		this.setState({leftWidth});
 	}
 	getDate = () => {
 		let date = new Date();
@@ -202,7 +210,7 @@ class ApplyDetail extends React.Component {
 			let { calculateCost: { total_fee, total_service_fee } } = this.props;
 			let other_fee = getFieldValue('other_fee') || 0;
 			let discount_amount = getFieldValue('discount_amount') || 0;
-			let array = [order_total_amount, -qc_write_off, -total_fee, -total_service_fee, -other_fee, +discount_amount];
+			let array = [order_total_amount, -total_fee, -total_service_fee, -other_fee, +discount_amount];
 			this.calcWithdrawTotal(array);
 			hide();
 		}).catch(({ errorMsg }) => {
@@ -227,7 +235,7 @@ class ApplyDetail extends React.Component {
 		let { applyDetail: { order_total_amount, qc_write_off } } = this.props;
 		let { calculateCost: { total_fee, total_service_fee } } = this.props;
 		let discount_amount = getFieldValue('discount_amount') || 0;
-		let array = [order_total_amount, -qc_write_off, -total_fee, -total_service_fee, -value, +discount_amount];
+		let array = [order_total_amount, -total_fee, -total_service_fee, -value, +discount_amount];
 		this.calcWithdrawTotal(array);
 
 	}
@@ -237,7 +245,7 @@ class ApplyDetail extends React.Component {
 		let { applyDetail: { order_total_amount, qc_write_off } } = this.props;
 		let { calculateCost: { total_fee, total_service_fee } } = this.props;
 		let other_fee = getFieldValue('other_fee') || 0;
-		let array = [order_total_amount, -qc_write_off, -total_fee, -total_service_fee, -other_fee, +value];
+		let array = [order_total_amount, -total_fee, -total_service_fee, -other_fee, +value];
 		this.calcWithdrawTotal(array);
 	}
 	calcWithdrawTotal = (ary) => {
@@ -247,7 +255,7 @@ class ApplyDetail extends React.Component {
 	render() {
 		const { getFieldDecorator, getFieldValue } = this.props.form;
 		let { applyDetail, applyDetail: { order_list = [], status, comment }, calculateCost: { total_fee = 0, total_service_fee = 0 } } = this.props;
-		let { rejectVisible, today, total_withdraw_money, loading } = this.state;
+		let { rejectVisible, today, total_withdraw_money, loading, leftWidth } = this.state;
 		let configKeys = status === 2 || status === 3 ?
 			[
 				'id', 'order_id',
@@ -256,7 +264,8 @@ class ApplyDetail extends React.Component {
 				'order_end_time',
 				'service_cycle',
 				'order_amount',
-				'qc_write_off',
+				// 'qc_write_off',
+				// 'payment_deduction_amount',
 				'service_amount',
 				'service_fee',
 				'other_fee',
@@ -269,7 +278,8 @@ class ApplyDetail extends React.Component {
 				'order_end_time',
 				'expect_service_cycle',
 				'order_amount',
-				'qc_write_off',
+				// 'qc_write_off',
+				// 'payment_deduction_amount',
 				'expect_service_amount',
 				'service_fee',
 				'other_fee',
@@ -277,6 +287,7 @@ class ApplyDetail extends React.Component {
 				'expect_payment_amount'
 			];
 		let withdrawDetailConfig = columnsList(applyDetailConfigMap, configKeys);
+		const totalWidth = getTotalWidth(withdrawDetailConfig);
 		const commentLayout = {
 			labelCol: { span: 1 },
 			wrapperCol: { span: 23 },
@@ -291,13 +302,17 @@ class ApplyDetail extends React.Component {
 		};
 		return <div className='extractManage'>
 			<ExtractList applyDetail={applyDetail}></ExtractList>
-			<Table className='topGap'
-				rowKey='id'
-				columns={withdrawDetailConfig}
-				dataSource={order_list}
-				pagination={false}
-				loading={loading}
-				bordered></Table>
+			<Scolltable scrollClassName='.ant-table-body' widthScroll={totalWidth + leftWidth}>
+				<Table className='topGap'
+					rowKey='id'
+					columns={withdrawDetailConfig}
+					dataSource={order_list}
+					pagination={false}
+					loading={loading}
+					bordered
+					scroll={{ x: totalWidth }}
+				/>
+			</Scolltable>
 			<Form className='topGap'>
 				<Row>
 					<Col span={24}>
@@ -389,9 +404,9 @@ class ApplyDetail extends React.Component {
 							<Row style={{ marginTop: '10px' }}>
 								<Col className='modal-icon-item'>订单总额：{applyDetail.order_total_amount || 0.00} 元</Col>
 							</Row>
-							<Row style={{ marginTop: '10px' }}>
+							{/* <Row style={{ marginTop: '10px' }}>
 								<Col className='modal-icon-item'> - 质检总额：{applyDetail.qc_write_off || 0.00} 元</Col>
-							</Row>
+							</Row> */}
 							<Row style={{ marginTop: '10px' }}>
 								<Col className='modal-icon-item'> - 利息总额：{total_fee || 0.00} 元</Col>
 							</Row>
@@ -458,16 +473,19 @@ function ExtractList({ applyDetail }) {
 				主账号:{applyDetail.user_name}
 			</Col>
 			<Col span={4}>
-				主账号类型:{applyDetail.partner_type_name}
+				合作方式:{applyDetail.partner_type_name}
 			</Col>
 		</Row>
 		<Row className='topGap'>
 			<Col span={4}>
 				订单总额:{applyDetail.order_total_amount}
 			</Col>
-			<Col span={4}>
+			{/* <Col span={4}>
 				质检总额:{applyDetail.qc_write_off}
 			</Col>
+			<Col span={4}>
+				支付方式变更扣款:{applyDetail.payment_deduction_amount}
+			</Col> */}
 			<Col span={4}>
 				{applyDetail.status === 3 || applyDetail.status === 2 ? '利息总额:' : '预计利息总额:'}{applyDetail.service_amount}
 			</Col>

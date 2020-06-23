@@ -31,9 +31,8 @@ class AdjustQuery extends React.Component {
 		}
 		this.props.form.setFieldsValue({ ...keys, ...obj });
 	}
-	handleSearch = (e) => {
-		const { questAction, pageSize } = this.props;
-		e.preventDefault();
+	handleSearch = type => {
+		const { questAction, handleExport, pageSize, auditType } = this.props;
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
 				let keys = {}, labels = {};
@@ -60,6 +59,9 @@ class AdjustQuery extends React.Component {
 						search: `?${qs.stringify(params)}`,
 					})
 				});
+				if(type === 'searchExport') {
+					handleExport({...params.keys, audit_type: auditType, opt: 'all'})
+				}
 			}
 		});
 	}
@@ -68,9 +70,9 @@ class AdjustQuery extends React.Component {
 	}
 	render() {
 		const { getFieldDecorator } = this.props.form;
-		const { userList } = this.props;
+		const { userList, flag } = this.props;
 		const { application_status = [], quote_type = [] } = this.props.children;
-		return <Form className='adjust-stat adjust_content'>
+		return <Form className='adjust-stat adjust_content clearfix'>
 			<FormItem label='申请编号' className='left-gap'>
 				{getFieldDecorator('readjust_application_id', { initialValue: '' })(
 					<Input placeholder="请输入" className='common_search_width' />
@@ -123,10 +125,16 @@ class AdjustQuery extends React.Component {
 				)}
 			</FormItem>
 			<FormItem label='报价类型' className='left-gap'>
-				{getFieldDecorator('quote_type', { initialValue: '' })(
+				{getFieldDecorator('quote_type', { initialValue: {key: "", label: "不限"} })(
 					<Select placeholder="不限"
-					allowClear className='common_search_width'>
-						<Option value="">不限</Option>
+						allowClear className='common_search_width'
+						showSearch
+						labelInValue
+						filterOption={(input, option) => (
+							option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+						)}
+					>
+						<Option key='' value="">不限</Option>
 						{
 							quote_type.map(item => 
 								<Option key={item.id} value={item.id}>{item.display}</Option>
@@ -138,6 +146,7 @@ class AdjustQuery extends React.Component {
 			<FormItem className='left-gap adjust_apply_query'>
 				<Button type="primary" onClick={this.handleSearch}>查询</Button>
 				<Button onClick={this.handleClear}>重置</Button>
+				{flag ? <Button onClick={() => this.handleSearch('searchExport')}>查询并导出全部</Button> : null}
 			</FormItem>
 		</Form >
 	}

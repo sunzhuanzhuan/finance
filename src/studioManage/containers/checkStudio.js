@@ -7,7 +7,7 @@ import { WBYDetailTable } from "wbyui"
 import { detailColumns } from '../constants'
 import './studioManage.less'
 import qs from 'qs'
-
+import { accMul } from '@/util';
 class CheckStudio extends React.Component {
 	constructor() {
 		super();
@@ -17,6 +17,9 @@ class CheckStudio extends React.Component {
 	}
 	componentDidMount() {
 		const search = qs.parse(this.props.location.search.substring(1));
+		const { getStudioMetadata } = this.props.actions;
+
+		getStudioMetadata();
 		this.queryData({ id: search.id, page: 1, page_size: 20 });
 	}
 	queryData = (obj, func) => {
@@ -34,10 +37,10 @@ class CheckStudio extends React.Component {
 
 	render() {
 		const { loading } = this.state;
-		const { studioCheck } = this.props;
+		const { studioCheck, studioMetadata = [] } = this.props;
 		return <div className='check-studio-container'>
 			<Skeleton loading={loading} active >
-				<DetailTable data={studioCheck} />
+				<DetailTable data={studioCheck} studioMetadata={studioMetadata} />
 			</Skeleton>
 			<div style={{ textAlign: 'center', paddingTop: '20px' }}>
 				<Button type='primary' size='large' onClick={() => {
@@ -52,6 +55,7 @@ class CheckStudio extends React.Component {
 const mapStateToProps = (state) => {
 	return {
 		studioCheck: state.studioManage.studioCheck,
+		studioMetadata: state.studioManage.studioMetadata,
 	}
 }
 const mapDispatchToProps = dispatch => ({
@@ -59,8 +63,14 @@ const mapDispatchToProps = dispatch => ({
 });
 export default connect(mapStateToProps, mapDispatchToProps)(CheckStudio)
 
+const getInvoiceLabel = (options, data) => {
+	if(!(Array.isArray(options) && options.length))
+		return '';
+	const item = options.find(item => item.id == data) || {};
+	return item.display || '';
+}
 
-function DetailTable({ data }) {
+function DetailTable({ data, studioMetadata }) {
 	return <table className='detail-table'>
 		<tbody>
 			<tr>
@@ -128,10 +138,21 @@ function DetailTable({ data }) {
 				<td>{data.alipay_card_number}</td>
 			</tr>
 			<tr>
-				<td>税率：</td>
-				<td>{data.invoice_tax_rate}</td>
+				<td>回票类型：</td>
+				<td>{getInvoiceLabel(studioMetadata['invoice_type'], data.invoice_type)}</td>
 				<td>发票抬头：</td>
 				<td>{data.invoice_provider}</td>
+			</tr>
+			<tr>
+				{
+					data.invoice_type == '1' ? 
+					[
+						<td key='invoiceLabel'>发票税率：</td>,
+						<td key='invoicevalue'>{accMul(data.tax_rate, 100)}%</td>
+					] : null
+				}
+				<td>服务费率：</td>
+				<td>{accMul(data.service_rate, 100)}%</td>
 			</tr>
 			<tr>
 				<td>操作人：</td>

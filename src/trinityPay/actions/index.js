@@ -80,6 +80,14 @@ export const {
 	method: 'get',
 	ignoreToast: true
 });
+
+export const {
+	getCompanyByName
+} = createHttpAction('getCompanyByName', Interface.getCompanyByName, {
+	method: 'get',
+	ignoreToast: true
+});
+
 //周期付款
 export const {
 	getDatePayData,
@@ -105,7 +113,6 @@ export const {
 	method: 'get',
 	ignoreToast: true
 });
-
 
 export const {
 	getDealOrderExport,

@@ -53,6 +53,13 @@ export default class ListTable extends Component {
 				}
 			},
 			{
+				title: '发票代码',
+				dataIndex: 'invoice_code',
+				key: 'invoice_code',
+				align: 'center',
+				width: 100
+			},
+			{
 				title: '主账号',
 				dataIndex: 'identity_name',
 				key: 'identity_name',

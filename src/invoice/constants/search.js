@@ -66,6 +66,18 @@ export const trinityInvoiceSearchFunc = ({ invoice_title, invoice_type, invoice_
 		}
 	},
 	{
+		ctype: 'input',
+		attr: {
+			placeholder: '请输入',
+			style: { width: 160 },
+			allowClear: true
+		},
+		field: {
+			label: '发票代码',
+			value: 'invoice_code',
+		}
+	},
+	{
 		ctype: 'select',
 		attr: {
 			placeholder: '不限',

@@ -45,13 +45,13 @@ class Detail extends Component {
 		const { partner_type } = account;
 		if(partner_type == 1) {
 			return [
-				<Col key='invoice_type_name' span={4}>回票类型:{account?account.invoice_type_name:''} </Col>,
+				<Col key='invoice_type_name' span={3}>回票类型:{account?account.invoice_type_name:''} </Col>,
 				<Col key='tax_rate' span={3}>回票税率:{account?account.tax_rate:''} </Col>	
 			]
 		}else if(partner_type == 4) {
 			return [
 				<Col key='work_room_service_rate' span={4}>工作室平均服务费率:{account?account.work_room_service_rate:''} </Col>,
-				<Col key='work_room_average_return_rate' span={3}>工作室平均发票税率:{account?account.work_room_average_return_rate:''} </Col>	
+				<Col key='work_room_average_return_rate' span={4}>工作室平均发票税率:{account?account.work_room_average_return_rate:''} </Col>	
 			]
 		}else {
 			return null
@@ -305,7 +305,7 @@ class Detail extends Component {
 				
 			</Row>
 			<Row className='accountTitle borderBottomNode'>
-				<Col span={3} className='marLeft26'>
+				<Col span={4} className='marLeft26'>
 					应约时合作方式:{detail.account?detail.account.partner_type_name:''}
 				</Col>
 				{

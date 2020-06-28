@@ -7,6 +7,7 @@ export default {
 	getProfitStrategyAccountList: '/operator-gateway/profit/v1/getAccountByProfitStrategy',
 	getAccountListInfo: '/operator-gateway/account/v1/likeBySnsName',
 	getMainAccountListInfo: '/operator-gateway/mcn/v1/likeMcnByIdentityName',
+	getStrategyNameList: '/operator-gateway/profit/v1/queryListLikeByStrategyName',
 	bindProfitStrategyAccount: '/operator-gateway/profit/v1/bindAccount',
 	deleteProfitStrategyAccount: '/operator-gateway/profit/v1/unbindAccount',
 	clearProfitStrategyAccount: '/operator-gateway/profit/v1/clearAccount',

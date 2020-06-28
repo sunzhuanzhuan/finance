@@ -54,17 +54,22 @@ export const clearAccountListToBind = createAction('clearAccountListToBind')
 
 //账号名称查询接口
 export const {
-	getAccountListInfo,
-	getAccountListInfo_success
+	getAccountListInfo
 } = createHttpAction('getAccountListInfo', Interface.getAccountListInfo, {
 	method: 'get'
 });
 
 //主账号名称查询接口
 export const {
-	getMainAccountListInfo,
-	getMainAccountListInfo_success
+	getMainAccountListInfo
 } = createHttpAction('getMainAccountListInfo', Interface.getMainAccountListInfo, {
+	method: 'get'
+});
+
+//策略名称查询接口
+export const {
+	getStrategyNameList
+} = createHttpAction('getStrategyNameList', Interface.getStrategyNameList, {
 	method: 'get'
 });
 

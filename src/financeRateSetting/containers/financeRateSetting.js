@@ -114,10 +114,15 @@ class FinanceRateSetting extends React.Component {
 		})
 	}
 
-	handleJump = query => {
-		const { getFinanceRateList } = this.props;
+	handleJump = (query = {page: { currentPage: 1, pageSize: 20 }}) => {
+		const { getFinanceRateList, form } = this.props;
+		const searchVal = this.dealSearchVal(form.getFieldsValue());
 		this.setState({ loading: true });
-		getFinanceRateList(query).finally(() => {
+		const queryObj = {
+			...query,
+			...searchVal
+		}
+		getFinanceRateList(queryObj).finally(() => {
 			this.setState({loading: false});
 		})
 	}
@@ -131,18 +136,12 @@ class FinanceRateSetting extends React.Component {
 				}
 			}
 		})
-		return searchVal;
+		return {form: searchVal};
 	}
 
-	handleSearch = (type) => {
+	handleSearch = () => {
 		const { form } = this.props;
-
-		if(type === 'reset') {
-			form.resetFields();
-		}else if(type === 'search') {
-			const searchVal = this.dealSearchVal(form.getFieldsValue());
-			console.log('sdlkfjsldkfjsldkfj', searchVal)
-		}
+		form.resetFields();
 	}
 
 	render() {
@@ -177,24 +176,24 @@ class FinanceRateSetting extends React.Component {
 				<h3>账号特殊利润率设置</h3>
 				<Form className='search-form clearfix'>
 					<FormItem label='策略名称' >
-						{getFieldDecorator('mcnId')(
+						{getFieldDecorator('strategyIds')(
 							<SearchSelect
-								action={this.props.getMainAccountListInfo} 
+								action={this.props.getStrategyNameList} 
 								style={{ width: 220 }}
 								placeholder='请选择'
-								keyWord='identityName'
+								keyWord='strategyName'
 								dataToList={res => { return res.data }}
-								item={['mcnId', 'identityName']}
+								item={['id', 'name']}
 							/>
 						)}
 					</FormItem>
 					<FormItem label='accountID'>
-						{getFieldDecorator('accountStr')(
+						{getFieldDecorator('accountIds')(
 							<Input style={{width: 220}} placeholder="请输入" />
 						)}
 					</FormItem>
 					<FormItem label='账号名' >
-						{getFieldDecorator('accountId')(
+						{getFieldDecorator('accountIdStr')(
 							<SearchSelect
 								action={this.props.getAccountListInfo} 
 								style={{ width: 220 }}
@@ -207,8 +206,8 @@ class FinanceRateSetting extends React.Component {
 					</FormItem>
 					<FormItem className='operate-wrapper'>
 						<Button type='primary' className='rate-add-btn' onClick={() => this.handleOperate('add', {})}>新增策略</Button>
-						<Button type='primary' onClick={() => {this.handleSearch('search')}}>查询</Button>
-						<Button type='ghost' onClick={() => {this.handleSearch('reset')}}>重置</Button>
+						<Button type='primary' onClick={() => {this.handleJump()}}>查询</Button>
+						<Button type='ghost' onClick={() => {this.handleSearch()}}>重置</Button>
 					</FormItem>
 				</Form>
 				<Table 

@@ -149,6 +149,15 @@ export const checkModalCols = [
 		}
 	},
 	{
+		title: '发票代码',
+		dataIndex: 'invoice_code',
+		key: 'invoice_code',
+		align: 'center',
+		render: text => {
+			return text || '-'
+		}
+	},
+	{
 		title: '三方代理商',
 		dataIndex: 'business_account_name',
 		key: 'business_account_name',

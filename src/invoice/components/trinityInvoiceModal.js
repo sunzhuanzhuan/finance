@@ -41,7 +41,8 @@ class PreModal extends React.Component {
 					invoice_make_out_time: moment(record.invoice_make_out_time, format),
 					remark: record.remark,
 					invoice_tax_rate: record.invoice_tax_rate,
-					invoice_type: record.invoice_type
+					invoice_type: record.invoice_type,
+					invoice_code: record.invoice_code
 				})
 				clearTimeout(timer);
 			}, 0);

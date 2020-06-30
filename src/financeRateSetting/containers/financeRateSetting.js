@@ -204,7 +204,7 @@ class FinanceRateSetting extends React.Component {
 							/>
 						)}
 					</FormItem>
-					<FormItem className='operate-wrapper'>
+					<FormItem>
 						<Button type='primary' onClick={() => {this.handleJump()}}>查询</Button>
 						<Button type='ghost' onClick={() => {this.handleSearch()}}>重置</Button>
 					</FormItem>

@@ -16,7 +16,8 @@ const getPriceContent = (item = {}) => {
 		bloggerPrice,
 		bloggerRate,
 		trilateralPrice,
-		trilateralRate
+		trilateralRate,
+		equities
 	} = item;
 	const isServiceRate = rateTitle == '服务费率';
 	const dealTitlePrice = titlePrice || titlePrice == 0 ? numeral(titlePrice).format('0.00') : '-';
@@ -27,10 +28,11 @@ const getPriceContent = (item = {}) => {
 	const dealBlogRate = bloggerRate || bloggerRate == 0 ? `${accMul(bloggerRate, 100)}%` : '-';
 	const dealTrilgRate = trilateralRate || trilateralRate == 0 ? `${accMul(trilateralRate, 100)}%` : '-';
 
+	const equitiesStr = getEquities(equities);
 	return (
 		<div className='price_comp' key={+new Date() + Math.random()}>
 			<div className='price_title'>
-				<span style={{ marginRight: 20 }}>{titleLable}<span className='nowrap-span'>：{dealTitlePrice}</span></span>
+				<span style={{ marginRight: 20 }}>{titleLable}{equitiesStr}<span className='nowrap-span'>：{dealTitlePrice}</span></span>
 				{(isShowRate && !isShowDetail) || (isShowRate && isServiceRate) ? <span className='nowrap-span'>{rateTitle}：{dealBaseRate}</span> : null}
 			</div>
 			{
@@ -48,6 +50,22 @@ const getPriceContent = (item = {}) => {
 				] : null
 			}
 		</div>
+	)
+}
+
+const getEquities = (equities) => {
+	if(Array.isArray(equities) && equities.length) {
+		const equitiesStr = equities.map(item => item.equitiesName).join('+');
+		return `【${equitiesStr}】`;
+	}
+		return ''
+}
+
+const getPriceItemWithEquities = (item) => {
+	const {price_label, quoted_price, equities} = item;
+	const equitiesStr = getEquities(equities);
+	return (
+		<div key={price_label}>{`${price_label}${equitiesStr}:${quoted_price}`}</div>
 	)
 }
 
@@ -732,12 +750,14 @@ export const addAdjustApplyConfig = (quote_type = [], platformIcon = []) => [
 		key: 'price',
 		align: 'center',
 		width: 320,
-		render: (text, { price }) => {
-			return <div>
-				{price.map((item, index) => {
-					return <div key={index}>{`${item.price_label}:${item.quoted_price}`}</div>
-				})}
-			</div>
+		render: (_, { price }) => {
+			if(Array.isArray(price) && price.length)
+				return <div>
+					{price.map((item) => {
+						return getPriceItemWithEquities(item);
+					})}
+				</div>
+			return '-';
 		}
 	},
 	{
@@ -795,10 +815,12 @@ export const readyCheckFunc = (handleDelete) => {
 			dataIndex: 'price',
 			key: 'price',
 			align: 'center',
-			render: (text, { price }) => {
+			render: (_, { price }) => {
+				if(!(Array.isArray(price) && price.length))
+					return '-';
 				return <div>
-					{price.map((item, index) => {
-						return <div key={index}>{`${item.price_label}:${item.quoted_price}`}</div>
+					{price.map((item) => {
+						return getPriceItemWithEquities(item);
 					})}
 				</div>
 			}
@@ -809,7 +831,7 @@ export const readyCheckFunc = (handleDelete) => {
 			key: 'action',
 			align: 'left',
 			width: 60,
-			render: (text, record) => {
+			render: (_, record) => {
 				return <a href='javascript:;' onClick={() => { handleDelete(record.order_id) }}>删除</a>
 			}
 		}
@@ -1100,6 +1122,8 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				width: 320,
 				render: (_, { price = [], warningClass }) => {
 					// const flag = price && price[0] ? price[0].trinity_type == 2 : false;
+					if(!(Array.isArray(price) && price.length))
+						return '-';
 					return <div className={warningClass}>
 						{price.map(item => {
 							const showObj = {
@@ -1108,7 +1132,8 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 								titleLable: item.price_label,
 								titlePrice: item.open_cost_price,
 								bloggerPrice: item.private_open_cost_price,
-								trilateralPrice: item.public_open_cost_price
+								trilateralPrice: item.public_open_cost_price,
+								equities: item.equities
 							}
 							return getPriceContent(showObj)
 						})}
@@ -1125,7 +1150,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				title: '刊例价/渠道价',
 				dataIndex: 'published_price',
 				key: 'published_price',
-				width: 640,
+				width: 690,
 				render: (_, record) => {
 					const { platform_id, reference_price_doc, warningClass } = record;
 					return [
@@ -1136,7 +1161,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 							各价格均为订单创建时刻的价格
 						</div>,
 						<Table
-							rowKey='id'
+							rowKey='priceName'
 							key='price_table'
 							className={`pre_published_price_${warningClass}`}
 							columns={getPublishedCol(platform_id == '9')}
@@ -1153,11 +1178,13 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				dataIndex: 'order_bottom_price',
 				key: 'order_bottom_price',
 				width: 320,
-				render: (_, { price = [], warningClass }) => {
+				render: (_, { price, warningClass }) => {
 					// quote_type 判断展示利用率或服务费率
 					// public_base_price 阳价 三方 public_base_profit_rate 利用率
 					// private_base_price 阴价 博主 private_base_profit_rate 利用率
 					// trinity_type === 2 显示阴阳价 判断是否展示
+					if(!(Array.isArray(price) && price.length))
+						return '-';
 					return <div className={warningClass}>
 						{price.map(item => {
 							const { created_time } = item;
@@ -1173,7 +1200,8 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 								bloggerPrice: item.private_base_price,
 								bloggerRate: item.quote_type == 1 ? item.private_base_profit_rate : item.service_fees_rate,
 								trilateralPrice: item.public_base_price,
-								trilateralRate: item.quote_type == 1 ? item.public_base_profit_rate : item.service_fees_rate
+								trilateralRate: item.quote_type == 1 ? item.public_base_profit_rate : item.service_fees_rate,
+								equities: item.equities
 							}
 							return getPriceContent(showObj)
 						})}
@@ -1185,10 +1213,12 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				dataIndex: 'price',
 				key: 'price',
 				width: 320,
-				render: (text, { price = [], warningClass }) => {
+				render: (_, { price = [], warningClass }) => {
 					// const flag = price && price[0] ? price[0].trinity_type == 2 : false;
 					// private_quote_price 阴价 利用率  private_profit_rate
 					// public_quote_price 阳价 利用率  public_profit_rate
+					if(!(Array.isArray(price) && price.length))
+						return '-';
 					return <div className={warningClass}>
 						{price.map(item => {
 							const { created_time } = item;
@@ -1204,7 +1234,8 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 								bloggerPrice: item.private_quote_price,
 								bloggerRate: item.quote_type == 1 ? item.private_profit_rate : item.service_fees_rate,
 								trilateralPrice: item.public_quote_price,
-								trilateralRate: item.quote_type == 1 ? item.public_profit_rate : item.service_fees_rate
+								trilateralRate: item.quote_type == 1 ? item.public_profit_rate : item.service_fees_rate,
+								equities: item.equities
 							}
 							return getPriceContent(showObj);
 						})}
@@ -1220,6 +1251,8 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 					// const flag = price && price[0] ? price[0].trinity_type == 2 : false;
 					// private_quote_price 阴价 利用率  private_profit_rate
 					// public_quote_price 阳价 利用率  public_profit_rate
+					if(!(Array.isArray(price) && price.length))
+						return '-';
 					return <div className={warningClass}>
 						{price.map(item => {
 							const showObj = {
@@ -1229,6 +1262,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 								titlePrice: item.quoted_price,
 								bloggerPrice: item.private_quote_price,
 								trilateralPrice: item.public_quote_price,
+								equities: item.equities,
 							}
 							return getPriceContent(showObj);
 						})}
@@ -1241,9 +1275,11 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				key: 'price',
 				width: 260,
 				render: (_, { price = [] }) => {
+					if(!(Array.isArray(price) && price.length))
+						return '-';
 					return <div>
 						{price.map(item => {
-							return <div key={+new Date() + Math.random()}>{`${item.price_label}:${item.quoted_price}`}</div>
+							return getPriceItemWithEquities(item)
 						})}
 					</div>
 				}
@@ -1257,7 +1293,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				render: (text, { history_min_sell_price: { readjust_type: readJustType } }) => {
 					const item = text ? text.min_sell_price : [];
 					const value = readjust_type.find(item => item.id == readJustType) || {};
-					const node = item.length > 0 ? <div key='priceInfo'>
+					const node = Array.isArray(item) && item.length ? <div key='priceInfo'>
 						{item.map(item => {
 							const showObj = {
 								isShowDetail: item.trinity_type == 2,
@@ -1266,6 +1302,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 								titlePrice: item.min_sell_price,
 								bloggerPrice: item.private_min_sell_price,
 								trilateralPrice: item.public_min_sell_price,
+								equities: item.equities,
 							}
 							return getPriceContent(showObj);
 						})}
@@ -1298,7 +1335,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				className: 'relative_td',
 				render: (text, { readjust_type: readJustType }) => {
 					const value = readjust_type.find(item => item.id == readJustType) || {};
-					const node = text ? text.map(item => {
+					const node = Array.isArray(text) && text.length ? text.map(item => {
 						const showObj = {
 							isShowDetail: item.trinity_type == 2,
 							isShowRate: false,
@@ -1306,6 +1343,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 							titlePrice: item.min_sell_price,
 							bloggerPrice: item.private_min_sell_price,
 							trilateralPrice: item.public_min_sell_price,
+							equities: item.equities,
 						}
 						return getPriceContent(showObj);
 					}) : '-';
@@ -1322,6 +1360,8 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				width: 320,
 				render: (_, { pre_min_sell_price = [], warningClass }) => {
 					// const flag = price && price[0] ? price[0].trinity_type == 2 : false;
+					if(!(Array.isArray(pre_min_sell_price) && pre_min_sell_price.length))
+						return '-';
 					return <div className={warningClass}>
 						{pre_min_sell_price.map(item => {
 							const showObj = {
@@ -1331,6 +1371,7 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 								titlePrice: item.min_sell_price,
 								bloggerPrice: item.private_min_sell_price,
 								trilateralPrice: item.public_min_sell_price,
+								equities: item.equities,
 							}
 							return getPriceContent(showObj);
 						})}
@@ -1404,19 +1445,26 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 }
 
 const render = data => {
-	return data || '-';
+	return data || data == 0 ? data : '-';
 }
 
 const publishRender = (data, record) => {
 	const { createdTime } = record;
 	const isOld = moment(createdTime).isAfter('2019-09-19 20:00:00');
-	return isOld && data ? data : '-';
+	return isOld && (data || data == 0) ? data : '-';
 }
 
 const originalRender = (data, record) => {
 	const { createdTimeOriginal } = record;
 	const isOld = moment(createdTimeOriginal).isAfter('2019-09-19 20:00:00');
-	return isOld && data ? data : '-';
+	return isOld && (data || data == 0) ? data : '-';
+}
+
+const priceNameRender = (data, record) => {
+	if(!(data || data == 0))
+		return '-';
+	const equitiesStr = getEquities(record.equities);
+	return data + equitiesStr;
 }
 
 const getPublishedCol = isWechat => {
@@ -1424,14 +1472,13 @@ const getPublishedCol = isWechat => {
 		{
 			title: '',
 			key: 'empty',
-			width: 50,
 			children: [
 				{
 					title: '',
 					dataIndex: 'priceName',
-					width: 50,
+					width: 100,
 					key: 'empty_child',
-					render
+					render: priceNameRender
 				}
 			]
 		},
@@ -1500,9 +1547,9 @@ const getPublishedCol = isWechat => {
 		{
 			title: '',
 			dataIndex: 'priceName',
-			width: 50,
+			width: 100,
 			key: 'empty_child',
-			render
+			render: priceNameRender
 		},
 		{
 			title: '刊例价',

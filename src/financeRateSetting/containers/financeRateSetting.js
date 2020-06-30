@@ -205,11 +205,11 @@ class FinanceRateSetting extends React.Component {
 						)}
 					</FormItem>
 					<FormItem className='operate-wrapper'>
-						<Button type='primary' className='rate-add-btn' onClick={() => this.handleOperate('add', {})}>新增策略</Button>
 						<Button type='primary' onClick={() => {this.handleJump()}}>查询</Button>
 						<Button type='ghost' onClick={() => {this.handleSearch()}}>重置</Button>
 					</FormItem>
 				</Form>
+				<Button type='primary' className='rate-add-btn' onClick={() => this.handleOperate('add', {})}>新增策略</Button>
 				<Table 
 					rowKey='id' 
 					columns={getRateSettingCol(this.handleOperate)} 

@@ -30,7 +30,7 @@ class FinanceRateSetting extends React.Component {
 	handleDelInfo = (name, id, isDelete) => {
 		if(!isDelete) {
 			Modal.confirm({
-				title: `该${name}下没有添加相关账号信息,确定删除${name}吗？`,
+				title: <div>确定删除<span className='color_highlight'>{name}</span>吗？</div>,
 				okText: '确认',
 				cancelText: '取消',
 				onOk: () => {
@@ -45,7 +45,7 @@ class FinanceRateSetting extends React.Component {
 			});
 		}else {
 			Modal.warning({
-				title: `请先删除${name}下面添加的账号信息`,
+				title: <div>请先删除<span className='color_highlight'>{name}</span>下面添加的账号信息</div>,
 				okText: '确定'
 			});
 		}

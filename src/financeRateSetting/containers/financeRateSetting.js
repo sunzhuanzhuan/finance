@@ -6,6 +6,7 @@ import { Table, Button, Modal, Form, Input } from 'antd';
 import SearchSelect from '@/components/SearchSelect';
 import './financeRateSetting.less';
 import qs from "qs";
+import moment from 'moment';
 import { getRateSettingCol } from '../constants';
 import RateModal from './rateModal';
 import Interface from '../constants/Interface';
@@ -77,10 +78,11 @@ class FinanceRateSetting extends React.Component {
 					profitStrategyId: id,
 					profitStrategyName: name
 				};
+				const timeStamp = moment().format('YYYYMMDDHHmmss');
 				apiDownload({
 					url: `${Interface.exportStrategyAccountList}?${qs.stringify(exportQuery)}`,
 					method: 'GET',
-				}, `${name}账号导出.xlsx`)
+				}, `${name}账号导出_${timeStamp}.xlsx`)
 				return;
 			case 'clear': 
 				this.setState({loading: true});

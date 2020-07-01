@@ -3,6 +3,7 @@ import { Modal, Form, Table, Button } from 'antd';
 import RateDetailCommon from './rateDetailCommon';
 import { getRateDetailCol } from '../constants';
 import apiDownload from '@/api/apiDownload';
+import moment from 'moment';
 import Interface from '../constants/Interface';
 
 class rateDetailModal extends React.Component {
@@ -46,11 +47,12 @@ class rateDetailModal extends React.Component {
 		const exportQuery = {...this.state.searchVal};
 		delete exportQuery.pageNum;
 		delete exportQuery.pageSize;
+		const timeStamp = moment().format('YYYYMMDDHHmmss');
 		apiDownload({
 			url: Interface.exportBindedAccountList,
 			method: 'POST',
 			data: exportQuery,
-		}, '账号详情信息.xlsx')
+		}, `账号详情信息_${timeStamp}.xlsx`)
 	}
 
 	getAddWarnComp = () => {

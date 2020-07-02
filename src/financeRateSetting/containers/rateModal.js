@@ -64,7 +64,7 @@ class RateModal extends React.Component {
 		const currentItem = allRateList[index];
 		const editItem = {...currentItem};
 		const dealType = type === 'privateProfit' || type === 'publicProfit' ? 'div' : 'number';
-		editItem[type] = getDealRateData(value, dealType);
+		editItem[type] = value == 0 || value == '-' ? value : getDealRateData(value, dealType);
 		allRateList.splice(index, 1, editItem);
 		form.setFieldsValue({detailVOList: allRateList})
 	}
@@ -109,13 +109,13 @@ class RateModal extends React.Component {
 					<span>则利润率为</span>
 					<InputNumber 
 						placeholder='输入数值' 
-						className='rate-ipt' value={getDealRateData(privateProfit, 'mul')} 
+						className='rate-ipt' value={this.getRateVal(privateProfit, 'mul')} 
 						onChange={(value) => this.handleChangeRateRangeVal(value, 'privateProfit', index)} 
 					/>
 					<span>%，三方平台利润率为</span>
 					<InputNumber 
 						placeholder='输入数值' 
-						className='rate-ipt' value={getDealRateData(publicProfit, 'mul')} 
+						className='rate-ipt' value={this.getRateVal(publicProfit, 'mul')} 
 						onChange={(value) => this.handleChangeRateRangeVal(value, 'publicProfit', index)} 
 					/>
 					<span>%</span>
@@ -125,6 +125,10 @@ class RateModal extends React.Component {
 				</div>
 			)
 		})
+	}
+
+	getRateVal = (value, type) => {
+		return value == 0 || value == '-' ? value : getDealRateData(value, type);
 	}
 
 	getRateSettingComp = () => {

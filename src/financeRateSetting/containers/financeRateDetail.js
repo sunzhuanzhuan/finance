@@ -114,7 +114,7 @@ class FinanceRateDetail extends React.Component {
 		const profitInfo = profitStrategyId && profitStrategyName ? `${profitStrategyId} ${profitStrategyName}` : '该策略';
 		return (
 			<div>
-				<span>{`确定删除${profitInfo}下的`}</span>
+				<span>确定删除<span className='color_highlight'>{profitInfo}</span>下的</span>
 				<span>{this.getAccountListInfo()}</span>
 			</div>
 		)

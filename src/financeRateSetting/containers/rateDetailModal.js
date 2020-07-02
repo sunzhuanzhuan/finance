@@ -3,6 +3,7 @@ import { Modal, Form, Table, Button } from 'antd';
 import RateDetailCommon from './rateDetailCommon';
 import { getRateDetailCol } from '../constants';
 import apiDownload from '@/api/apiDownload';
+import moment from 'moment';
 import Interface from '../constants/Interface';
 
 class rateDetailModal extends React.Component {
@@ -46,18 +47,19 @@ class rateDetailModal extends React.Component {
 		const exportQuery = {...this.state.searchVal};
 		delete exportQuery.pageNum;
 		delete exportQuery.pageSize;
+		const timeStamp = moment().format('YYYYMMDDHHmmss');
 		apiDownload({
 			url: Interface.exportBindedAccountList,
 			method: 'POST',
 			data: exportQuery,
-		}, '账号详情信息.xlsx')
+		}, `账号详情信息_${timeStamp}.xlsx`)
 	}
 
 	getAddWarnComp = () => {
 		Modal.warning({
 			className: 'add-warn-comp',
 			title: <div>
-				<span>当前查询的账号信息有存在别的策略的账号，此列表不做此相关账号信息展示，查看详情请</span>
+				<span>当前查询的账号信息有已存在相关策略的账号，此列表不做此相关账号信息展示，查看详情请</span>
 				<a onClick={this.handleExportExcel}>下载</a>
 			</div>,
 			okText: '确定'
@@ -80,9 +82,8 @@ class rateDetailModal extends React.Component {
 				this.setState({loading: true, searchVal});
 				this.props.getAccountListToBind(searchVal).then((result = {}) => {
 					const { data = {} } = result;
-					const { isExist, page = {} } = data;
-					const { list = [] } = page;
-					if(isExist == 1 && !list.length) {
+					const { isExist, isHavingBind } = data;
+					if(!isPageChange && isExist == 1 && isHavingBind == 1) {
 						this.getAddWarnComp();
 					}
 					if(!isPageChange) {

@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal, Form, Input, Select, InputNumber, message, Spin } from 'antd';
 import './financeRateSetting.less';
 import { isIncludeArr, getDealRateData } from '../constants';
+import { scientificToNumber } from '@/util';
 const FormItem = Form.Item;
 const { TextArea } = Input;
 const { Option } = Select;
@@ -63,7 +64,7 @@ class RateModal extends React.Component {
 		const currentItem = allRateList[index];
 		const editItem = {...currentItem};
 		const dealType = type === 'privateProfit' || type === 'publicProfit' ? 'div' : 'number';
-		editItem[type] = getDealRateData(value, dealType);
+		editItem[type] = value == 0 || value == '-' ? value : getDealRateData(value, dealType);
 		allRateList.splice(index, 1, editItem);
 		form.setFieldsValue({detailVOList: allRateList})
 	}
@@ -108,13 +109,13 @@ class RateModal extends React.Component {
 					<span>则利润率为</span>
 					<InputNumber 
 						placeholder='输入数值' 
-						className='rate-ipt' value={getDealRateData(privateProfit, 'mul')} 
+						className='rate-ipt' value={this.getRateVal(privateProfit, 'mul')} 
 						onChange={(value) => this.handleChangeRateRangeVal(value, 'privateProfit', index)} 
 					/>
 					<span>%，三方平台利润率为</span>
 					<InputNumber 
 						placeholder='输入数值' 
-						className='rate-ipt' value={getDealRateData(publicProfit, 'mul')} 
+						className='rate-ipt' value={this.getRateVal(publicProfit, 'mul')} 
 						onChange={(value) => this.handleChangeRateRangeVal(value, 'publicProfit', index)} 
 					/>
 					<span>%</span>
@@ -124,6 +125,10 @@ class RateModal extends React.Component {
 				</div>
 			)
 		})
+	}
+
+	getRateVal = (value, type) => {
+		return value == 0 || value == '-' ? value : getDealRateData(value, type);
 	}
 
 	getRateSettingComp = () => {
@@ -202,7 +207,7 @@ class RateModal extends React.Component {
 		const notEmptyArr = valueArr.filter(item => typeof item !== 'undefined');
 
 		if(notEmptyArr.length) {
-			const judgeValArr = notEmptyArr.filter(item => this.isNumberOk(item));
+			const judgeValArr = notEmptyArr.filter(item => this.isNumberOk(scientificToNumber(item)));
 			return judgeValArr.length === notEmptyArr.length;
 		}else {
 			return false

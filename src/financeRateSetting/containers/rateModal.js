@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal, Form, Input, Select, InputNumber, message, Spin } from 'antd';
 import './financeRateSetting.less';
 import { isIncludeArr, getDealRateData } from '../constants';
+import { scientificToNumber } from '@/util';
 const FormItem = Form.Item;
 const { TextArea } = Input;
 const { Option } = Select;
@@ -202,7 +203,7 @@ class RateModal extends React.Component {
 		const notEmptyArr = valueArr.filter(item => typeof item !== 'undefined');
 
 		if(notEmptyArr.length) {
-			const judgeValArr = notEmptyArr.filter(item => this.isNumberOk(item));
+			const judgeValArr = notEmptyArr.filter(item => this.isNumberOk(scientificToNumber(item)));
 			return judgeValArr.length === notEmptyArr.length;
 		}else {
 			return false

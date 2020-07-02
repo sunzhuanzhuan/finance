@@ -41,6 +41,22 @@ class Detail extends Component {
 	getPaymentDeductionAmount = (data) => {
 		return isNaN(data) || !data ? data : Math.abs(data).toFixed(2);
 	}
+	getCompByPartnerType = (account = {}) => {
+		const { partner_type } = account;
+		if(partner_type == 1) {
+			return [
+				<Col key='invoice_type_name' span={3}>回票类型:{account?account.invoice_type_name:''} </Col>,
+				<Col key='tax_rate' span={3}>回票税率:{account?account.tax_rate:''} </Col>	
+			]
+		}else if(partner_type == 4) {
+			return [
+				<Col key='work_room_service_rate' span={4}>工作室平均服务费率:{account?account.work_room_service_rate:''} </Col>,
+				<Col key='work_room_average_return_rate' span={4}>工作室平均发票税率:{account?account.work_room_average_return_rate:''} </Col>	
+			]
+		}else {
+			return null
+		}
+	}
 
 	render(){
 		let {detail}=this.props;
@@ -72,20 +88,20 @@ class Detail extends Component {
 			<Row >
 				<Col span={12} className='colHeightTitle' style={{borderBottom:'none',borderRight:'none'}}>
 				
-					<div className='pad32'>
+					<div className='padLeft32 inlineBlock'>
 						<span className='displayInline'>账号报价</span>
 						<span className='displayInline coloRed'>
 						￥{detail.order?detail.order.total_account_quote_price:''}
 						</span>
 						
 					</div>
-					<span>=</span>
-					<div className='pad60'>
+					<span className='equalSign'>=</span>
+					<div className='inlineBlock'>
 						<span className='displayInline'>微播易到手价</span>
 						<span className='displayInline'>￥{detail.order?detail.order.private_account_quote_price:''}</span>
 					</div>
-					<span>+</span>
-					<div className='pad60'>
+					<span className='plusSign'>+</span>
+					<div className='inlineBlock'>
 						<span className='displayInline'>三方平台下单价</span>
 						<span className='displayInline'>￥{detail.order?detail.order.public_account_quote_price:''}</span>
 					</div>
@@ -94,19 +110,19 @@ class Detail extends Component {
 				
 				<Col span={12} className='colHeightTitle' style={{borderBottom:'none'}}>
 					
-					<div className='pad32'>
-						<span className='displayInline'>对外报价</span>
-						<span className='displayInline coloRed'>￥{detail.order?detail.order.total_quote_price:''}</span>
+					<div className='padLeft32 inlineBlock'>
+						<span className='displayInline'>订单不含税成本价</span>
+						<span className='displayInline coloRed'>￥{detail.order?detail.order.total_without_tax_cost_price:''}</span>
 					</div>
-					<span>=</span>
-					<div className='pad60'>
-						<span className='displayInline'>对外报价(博主)</span>
-						<span className='displayInline'>￥{detail.order?detail.order.private_quote_price:''}</span>
+					<span className='equalSign'>=</span>
+					<div className='inlineBlock'>
+						<span className='displayInline'>博主不含税成本价</span>
+						<span className='displayInline'>￥{detail.order?detail.order.private_without_tax_cost_price:''}</span>
 					</div>
-					<span>+</span>
-					<div className='pad60'>
-						<span className='displayInline'>对外报价(三方)</span>
-						<span className='displayInline'>￥{detail.order?detail.order.public_quote_price:''}</span>
+					<span className='plusSign'>+</span>
+					<div className='inlineBlock'>
+						<span className='displayInline'>三方不含税成本价</span>
+						<span className='displayInline'>￥{detail.order?detail.order.public_without_tax_cost_price:''}</span>
 					</div>
 					
 				</Col>
@@ -115,34 +131,73 @@ class Detail extends Component {
 			<Row>
 				<Col span={12} className='colHeightTitle'  style={{borderRight:'none'}}>
 				
-				<div className='pad32'>
+				<div className='padLeft32 inlineBlock'>
 					<span className='displayInline'>订单成本价</span>
 					<span className='displayInline coloRed'>￥{detail.order?detail.order.total_cost_price:''}</span>
 				</div>
-				<span>=</span>
-				<div className='pad60'>
+				<span className='equalSign'>=</span>
+				<div className='inlineBlock'>
 					<span className='displayInline'>博主成本价</span>
 					<span className='displayInline'>￥{detail.order?detail.order.private_cost_price:''}</span>
 				</div>
-				<span>+</span>
-				<div className='pad60'>
+				<span className='plusSign'>+</span>
+				<div className='inlineBlock'>
 					<span className='displayInline'>三方成本价</span>
 					<span className='displayInline'>￥{detail.order?detail.order.public_cost_price:''}</span>
 				</div>
 				
 				</Col>
+				<Col span={12} className='colHeightTitle' style={{borderBottom:'none'}}>
+					
+					<div className='padLeft32 inlineBlock'>
+						<span className='displayInline'>对外报价</span>
+						<span className='displayInline coloRed'>￥{detail.order?detail.order.total_quote_price:''}</span>
+					</div>
+					<span className='equalSign'>=</span>
+					<div className='inlineBlock'>
+						<span className='displayInline'>对外报价(博主)</span>
+						<span className='displayInline'>￥{detail.order?detail.order.private_quote_price:''}</span>
+					</div>
+					<span className='plusSign'>+</span>
+					<div className='inlineBlock'>
+						<span className='displayInline'>对外报价(三方)</span>
+						<span className='displayInline'>￥{detail.order?detail.order.public_quote_price:''}</span>
+					</div>
+					
+				</Col>
+			</Row>
+
+			<Row>
+				<Col span={12} className='colHeightTitle'  style={{borderRight:'none'}}>
+				
+				<div className='padLeft32 inlineBlock'>
+					<span className='displayInline'>订单进项税</span>
+					<span className='displayInline coloRed'>￥{detail.order?detail.order.total_input_tax:''}</span>
+				</div>
+				<span className='equalSign'>=</span>
+				<div className='inlineBlock'>
+					<span className='displayInline'>博主进项税</span>
+					<span className='displayInline'>￥{detail.order?detail.order.private_input_tax:''}</span>
+				</div>
+				<span className='plusSign'>+</span>
+				<div className='inlineBlock'>
+					<span className='displayInline'>三方进项税</span>
+					<span className='displayInline'>￥{detail.order?detail.order.public_input_tax:''}</span>
+				</div>
+				
+				</Col>
 				<Col span={12} className='colHeightTitle'>
-					<div className='pad32'>
+					<div className='padLeft32 inlineBlock'>
 						<span className='displayInline'>执行价</span>
 						<span className='displayInline coloRed'>￥{detail.order?detail.order.total_deal_price:''}</span>
 					</div>
-					<span>=</span>
-					<div className='pad60'>
+					<span className='equalSign'>=</span>
+					<div className='inlineBlock'>
 						<span className='displayInline'>执行价(博主)</span>
 						<span className='displayInline'>￥{detail.order?detail.order.private_deal_price:''}</span>
 					</div>
-					<span>+</span>
-					<div className='pad60'>
+					<span className='plusSign'>+</span>
+					<div className='inlineBlock'>
 						<span className='displayInline'>执行价(三方)</span>
 						<span className='displayInline'>￥{detail.order?detail.order.public_deal_price:''}</span>
 					</div>
@@ -249,6 +304,14 @@ class Detail extends Component {
 				<Col span={4}>结算标识:{detail.account?detail.account.is_settle_at_private_price_desc:''} </Col>
 				
 			</Row>
+			<Row className='accountTitle borderBottomNode'>
+				<Col span={4} className='marLeft26'>
+					应约时合作方式:{detail.account?detail.account.partner_type_name:''}
+				</Col>
+				{
+					this.getCompByPartnerType(detail.account)
+				}
+			</Row>
 			
 			<Row className='colHeightTitle' style={{borderBottom:'none'}}>
 				
@@ -334,10 +397,12 @@ class Detail extends Component {
 				:null
 			}
 			<Row className='accountTitle borderBottomNode' style={{marginTop:'20px'}}>
-				<Col span={5}>三方下单平台:{detail.trinity?detail.trinity.cooperation_platform_name:''} </Col>
-				<Col span={5}>三方代理:{detail.trinity?detail.trinity.agent_name:''} </Col>
+				<Col className='marLeft26' span={4}>三方下单平台:{detail.trinity?detail.trinity.cooperation_platform_name:''} </Col>
+				<Col span={4}>三方代理:{detail.trinity?detail.trinity.agent_name:''} </Col>
 				<Col span={4}>付款公司:{detail.trinity?detail.trinity.payment_company_name:''} </Col>
-				<Col span={4}>合作方式:{detail.trinity?detail.trinity.cooperation_type:''} </Col>
+				<Col span={3}>合作方式:{detail.trinity?detail.trinity.cooperation_type:''} </Col>
+				<Col span={4}>应约时回票类型:{detail.trinity?detail.trinity.agent_invoice_type:''} </Col>
+				<Col span={3}>回票税率:{detail.trinity?detail.trinity.agent_tax_rate:''} </Col>
 			</Row>
 			<Row className='colHeightTitle'>
 				<Col span={24}>

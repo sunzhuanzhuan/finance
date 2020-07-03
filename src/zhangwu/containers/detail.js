@@ -8,7 +8,7 @@ import qs from 'qs'
 import * as zhangActions from '../actions/index';
 import Query from'../components/query'
 // import { zhangListFunc } from '../constants/column';
-import { Row, Col ,Icon,Spin, message} from "antd";
+import { Row, Col ,Icon,Spin, message, Tooltip} from "antd";
 import './list.less'
 // import ZhangWuTable from '../components/table'
 import './detail.less'
@@ -297,10 +297,10 @@ class Detail extends Component {
 				<Col span={3} className='marLeft26'>
 					主账号:{detail.account?detail.account.identity_name:''}
 				</Col>
-				<Col span={4}>账号:{detail.account?detail.account.weibo_name:''} </Col>
+				<Col span={3}>账号:{detail.account?detail.account.weibo_name:''} </Col>
 				<Col span={3}>平台:{detail.account?detail.account.platform_name:''} </Col>
 				<Col span={3}>媒介经理:{detail.account?detail.account.media_manager_name:''} </Col>
-				<Col span={5}>付款公司:{detail.account?detail.account.payment_company_name:''} </Col>
+				<Col span={6}>付款公司:{detail.account?detail.account.payment_company_name:''} </Col>
 				<Col span={4}>结算标识:{detail.account?detail.account.is_settle_at_private_price_desc:''} </Col>
 				
 			</Row>
@@ -355,9 +355,29 @@ class Detail extends Component {
 				</div>
 				<span>-</span>
 				<div className='pad20'>
-					<span className='displayInline'>支付方式变更扣款</span>
+					<span className='displayInline'>
+						支付方式变更扣款
+						{
+							detail.account && detail.account.payment_deduction_info ? 
+							<Tooltip placement="top" title={detail.account.payment_deduction_info}>
+								<Icon type="question-circle" style={{marginLeft: '5px'}} />
+							</Tooltip> : null
+						}
+					</span>
 					<span className='displayInline'>￥{detail.account?this.getPaymentDeductionAmount(detail.account.payment_deduction_amount):''}</span>
 				</div>
+				{
+					detail.account && detail.account.is_settle_at_private_price == 1 ?
+					[
+						<span key='signForFee'>-</span>,
+						<div key='roomFee' className='pad20'>
+							<span className='displayInline'>
+								工作室服务费
+							</span>
+							<span className='displayInline'>￥{detail.account?detail.account.tax_to_partner:''}</span>
+						</div>
+					] : null
+				}
 				
 				</Col>
 			</Row>
@@ -399,9 +419,9 @@ class Detail extends Component {
 			<Row className='accountTitle borderBottomNode' style={{marginTop:'20px'}}>
 				<Col className='marLeft26' span={4}>三方下单平台:{detail.trinity?detail.trinity.cooperation_platform_name:''} </Col>
 				<Col span={4}>三方代理:{detail.trinity?detail.trinity.agent_name:''} </Col>
-				<Col span={4}>付款公司:{detail.trinity?detail.trinity.payment_company_name:''} </Col>
+				<Col span={5}>付款公司:{detail.trinity?detail.trinity.payment_company_name:''} </Col>
 				<Col span={3}>合作方式:{detail.trinity?detail.trinity.cooperation_type:''} </Col>
-				<Col span={4}>应约时回票类型:{detail.trinity?detail.trinity.agent_invoice_type:''} </Col>
+				<Col span={3}>应约时回票类型:{detail.trinity?detail.trinity.agent_invoice_type:''} </Col>
 				<Col span={3}>回票税率:{detail.trinity?detail.trinity.agent_tax_rate:''} </Col>
 			</Row>
 			<Row className='colHeightTitle'>

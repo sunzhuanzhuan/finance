@@ -4,7 +4,7 @@ import { percentToValue, accMul } from '@/util';
 
 export const getDealRateData = (data, type) => {
 	let floatVal = parseFloat(data);
-	const sign=data< 0;
+	const sign = data < 0;
 	if (isNaN(floatVal))
 		return undefined;
 	if(type === 'mul') {

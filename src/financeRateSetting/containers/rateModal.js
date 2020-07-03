@@ -207,7 +207,11 @@ class RateModal extends React.Component {
 		const notEmptyArr = valueArr.filter(item => typeof item !== 'undefined');
 
 		if(notEmptyArr.length) {
-			const judgeValArr = notEmptyArr.filter(item => this.isNumberOk(scientificToNumber(item)));
+			const judgeValArr = notEmptyArr.filter(item => {
+				const sign = item < 0;
+				const dataItem = sign ? '-' + scientificToNumber(Math.abs(item)) : scientificToNumber(item);
+				return this.isNumberOk(dataItem)
+			});
 			return judgeValArr.length === notEmptyArr.length;
 		}else {
 			return false

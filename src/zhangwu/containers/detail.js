@@ -367,7 +367,7 @@ class Detail extends Component {
 					<span className='displayInline'>￥{detail.account?this.getPaymentDeductionAmount(detail.account.payment_deduction_amount):''}</span>
 				</div>
 				{
-					detail.account && detail.account.is_settle_at_private_price == 1 ?
+					detail.account && detail.account.is_settle_at_private_price == 1 ? null :
 					[
 						<span key='signForFee'>-</span>,
 						<div key='roomFee' className='pad20'>
@@ -376,7 +376,7 @@ class Detail extends Component {
 							</span>
 							<span className='displayInline'>￥{detail.account?detail.account.tax_to_partner:''}</span>
 						</div>
-					] : null
+					]
 				}
 				
 				</Col>

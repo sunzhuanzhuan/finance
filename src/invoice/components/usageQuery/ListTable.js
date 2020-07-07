@@ -25,7 +25,7 @@ export default class ListTable extends Component {
 				title: '发票号/开具方',
 				dataIndex: 'invoice_number',
 				key: 'invoice_number',
-				width: 140,
+				width: 200,
 				render: (text, record) => {
 					return <div>
 						<Popover
@@ -51,6 +51,13 @@ export default class ListTable extends Component {
 						</div> */}
 					</div>
 				}
+			},
+			{
+				title: '发票代码',
+				dataIndex: 'invoice_code',
+				key: 'invoice_code',
+				align: 'center',
+				width: 80
 			},
 			{
 				title: '主账号',
@@ -153,7 +160,7 @@ export default class ListTable extends Component {
 			{ name: '发票使用金额', number: aggregation.total_invoice_use_amount },
 
 		]
-		const scrollParams = rows.length > 0 ? { scroll: { y: 500 } } : {}
+		const scrollParams = /*rows.length > 0 ? { scroll: { y: 500 } } : */{}
 		return (
 			<div style={{ paddingTop: 20 }} className='list-table-usage-box'>
 				<Skeleton loading={sumLoading} active paragraph={false} rows={1} >

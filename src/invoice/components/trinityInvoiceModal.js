@@ -41,7 +41,8 @@ class PreModal extends React.Component {
 					invoice_make_out_time: moment(record.invoice_make_out_time, format),
 					remark: record.remark,
 					invoice_tax_rate: record.invoice_tax_rate,
-					invoice_type: record.invoice_type
+					invoice_type: record.invoice_type,
+					invoice_code: record.invoice_code
 				})
 				clearTimeout(timer);
 			}, 0);
@@ -249,6 +250,24 @@ class PreModal extends React.Component {
 
 		callback()
 	}
+
+	handleCheckCode = (rule, value, callback) => {
+		const reg = /^[0-9a-zA-Z]*$/g;
+		if (!value) {
+			callback('发票代码不允许为空！')
+			return;
+		}
+		if (!reg.test(value)) {
+			callback('只允许输入字母和数字');
+			return;
+		}
+		if (value.length > 50) {
+			callback('发票代码最多不超过50个字符')
+			return;
+		}
+
+		callback()
+	}
 	render() {
 		const { getFieldDecorator } = this.props.form;
 		const { visible, onCancel, status, SearchItem, modType } = this.props;
@@ -303,6 +322,18 @@ class PreModal extends React.Component {
 									required: true,
 									validator: this.handleCheckVoick,
 									max: 50,
+								},
+							],
+						})(
+							<Input placeholder="请输入" style={{ width: 200 }} disabled={modType == 2} />
+						)}
+					</FormItem>
+					<FormItem label='发票代码' {...formItemLayout}>
+						{getFieldDecorator('invoice_code', {
+							rules: [
+								{
+									required: true,
+									validator: this.handleCheckCode,
 								},
 							],
 						})(

@@ -475,7 +475,7 @@ export const receivableFlowConfig = [
 	}
 ]
 
-export const adjustApplyFunc = (application_status, quote_type, handleJump) => {
+export const adjustApplyFunc = (audit_type, application_status, quote_type, saleExport, handleJump, handleAction) => {
 	return [
 		{
 			title: '申请编号',
@@ -564,9 +564,12 @@ export const adjustApplyFunc = (application_status, quote_type, handleJump) => {
 			align: 'center',
 			width: 140,
 			render: (text, record) => {
-				return <a type='primary' onClick={() => {
-					handleJump(record.id, record.company_id);
-				}}>订单详情</a>
+				return [
+					<a key='detail' type='primary' onClick={() => {
+						handleJump(record.id, record.company_id);
+					}}>订单详情</a>,
+					saleExport ? <a key='export' style={{ marginLeft: 10 }} onClick={() => { handleAction('export', {readjust_application_id: record.id, audit_type}); }}>导出</a> : null
+				]
 			}
 		}
 	]

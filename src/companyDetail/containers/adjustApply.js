@@ -178,7 +178,8 @@ class AdjustApply extends React.Component {
 		const costFlag = authVisibleList['readjust.finance.filter'];
 		const finance = authVisibleList['readjust.finance.audit'];
 		const sale = authVisibleList['readjust.sale.audit'];
-		const audit_type = finance ? 1 : sale ? 2 : undefined;
+		const saleExport = authVisibleList['reasdjust.common.sale.export'];
+		const audit_type = finance ? 1 : sale ? 2 : saleExport ? 3 : undefined;
 		const { getFieldDecorator } = form;
 		const formItemLayout = { labelCol: { span: 6 }, wrapperCol: { span: 16 }, };
 		const search = qs.parse(this.props.location.search.substring(1));

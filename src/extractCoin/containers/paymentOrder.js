@@ -49,7 +49,7 @@ class PaymentOrder extends React.Component {
 	}
 	componentDidMount() {
 		const hide = message.loading('请求数据中，请稍候...');
-		const search = this.props.location.search.substring(1);
+		const search = qs.parse(this.props.location.search.substring(1));
 		this.props.actions.paymentOrderDetail(search).then(() => {
 			hide();
 		}).catch(({ errorMsg }) => {

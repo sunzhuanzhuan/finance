@@ -84,8 +84,8 @@ export const getBillList = (obj) => dispath => {
 export const clearBillList = () => dispath => {
 	dispath({ type: 'CLEAR_BILL_LIST' })
 }
-export const paymentOrderDetail = (str) => dispath => {
-	return api.get('/flash/bill_detail?' + str).then(response => {
+export const paymentOrderDetail = (query) => dispath => {
+	return api.post('/flash/bill_detail', query).then(response => {
 		const { data } = response;
 		dispath({ type: 'PAYMENT_ORDER_DETAIL', payload: data });
 	})

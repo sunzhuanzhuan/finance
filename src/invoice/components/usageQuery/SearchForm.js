@@ -29,6 +29,11 @@ class SearchForm extends Component {
 						rules: [],
 					})(<Input placeholder='请输入' />)}
 				</Form.Item>
+				<Form.Item label='发票代码'>
+					{getFieldDecorator('invoice_code', {
+						rules: [],
+					})(<Input placeholder='请输入' />)}
+				</Form.Item>
 				<Form.Item label='发票开具方'>
 					{getFieldDecorator('beneficiary_company', {
 						rules: [],

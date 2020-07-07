@@ -9,6 +9,13 @@ export const trinityInvoiceFunc = (handleModal, handleCheckModal, handleDelete) 
 		width: 100
 	},
 	{
+		title: '发票代码',
+		dataIndex: 'invoice_code',
+		key: 'invoice_code',
+		align: 'center',
+		width: 100
+	},
+	{
 		title: '发票开具方',
 		dataIndex: 'beneficiary_company',
 		key: 'beneficiary_company',
@@ -136,6 +143,15 @@ export const checkModalCols = [
 		title: '发票号',
 		dataIndex: 'invoice_number',
 		key: 'invoice_number',
+		align: 'center',
+		render: text => {
+			return text || '-'
+		}
+	},
+	{
+		title: '发票代码',
+		dataIndex: 'invoice_code',
+		key: 'invoice_code',
 		align: 'center',
 		render: text => {
 			return text || '-'

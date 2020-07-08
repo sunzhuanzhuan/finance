@@ -29,3 +29,71 @@ export const getInvoiceQueryStatisticsOptions = () => {
 		{ title: '红字金额', key: 'yerf' },
 	]
 }
+
+export const getInvoiceQueryCol = () => {
+	return [
+		{ 
+			title: '发票号',
+			dataIndex: '发票号',
+			key: '发票号',
+			align: 'center',
+			width: 100,
+		},
+		{ 
+			title: '发票状态',
+			dataIndex: '发票状态',
+			key: '发票状态',
+			align: 'center',
+			width: 100,
+		},
+		{ 
+			title: '发票类型',
+			dataIndex: '发票类型',
+			key: '发票类型',
+			align: 'center',
+			width: 100,
+		},
+		{ 
+			title: '开票公司',
+			dataIndex: '开票公司',
+			key: '开票公司',
+			align: 'center',
+			width: 100,
+		},
+		{ 
+			title: '公司简称',
+			dataIndex: '公司简称',
+			key: '公司简称',
+			align: 'center',
+			width: 100,
+		},
+		{ 
+			title: '发票抬头',
+			dataIndex: '发票抬头',
+			key: '发票抬头',
+			align: 'center',
+			width: 100,
+		},
+		{ 
+			title: '发票金额（元）',
+			dataIndex: '发票金额（元）',
+			key: '发票金额（元）',
+			align: 'center',
+			width: 100,
+		},
+		{ 
+			title: '发票内容',
+			dataIndex: '发票内容',
+			key: '发票内容',
+			align: 'center',
+			width: 100,
+		},
+		{ 
+			title: '操作时间',
+			dataIndex: '操作时间',
+			key: '操作时间',
+			align: 'center',
+			width: 80,
+		},
+	]
+}

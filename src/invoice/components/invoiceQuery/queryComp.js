@@ -100,25 +100,17 @@ class QueryComp extends React.Component {
 		})
 		return values;
 	}
-	getMultipleIds = (idString) => {
-		const trimIdsStr = idString.trim();
-		return trimIdsStr.replace(/\s+/g,",");
-	}
 	handleSearch = type => {
 		const { form, handleSearch, handleExport } = this.props;
 
 		if(type === 'reset') {
 			form.resetFields();
-			handleSearch({page: 1, page_size: 20});
+			// handleSearch({page: 1, page_size: 20});
 		}else if(type === 'search') {
 			form.validateFields((errors, values) => {
 				if(errors)
 					return null;
 				const dealValues = this.dealValuesDate(values);
-				if(dealValues.order_ids)
-					dealValues.order_ids = this.getMultipleIds(dealValues.order_ids);
-				if(dealValues.id)
-					dealValues.id = this.getMultipleIds(dealValues.id);
 				Object.assign(dealValues, {page: 1, page_size: 20});
 				handleSearch(dealValues);
 			})
@@ -134,7 +126,7 @@ class QueryComp extends React.Component {
 
 	render() {
 		return (
-			<Form className='invoice_query_wrapper'>
+			<Form className='invoice_query_search'>
 				{this.getFormRowComp()}
 			</Form>
 		)

@@ -28,4 +28,7 @@ export default {
 	beneficiaryCompanyList: '/finance/invoice/balance/beneficiaryCompanyList',//发票开具方联想搜索
 	userInvoiceSearchAgg: '/finance/invoice/balance/userInvoiceSearchAgg',//主账号发票列表统计数据
 	trinityInvoiceSearchAgg: '/finance/invoice/balance/trinityInvoiceSearchAgg',//三方发票列表统计数据
+
+	//发票查询
+	getInvoiceQueryList: '/finance/invoice/balance/userInvoiceSearch',//发票查询列表
 }

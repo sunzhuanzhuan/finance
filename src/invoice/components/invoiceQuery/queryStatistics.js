@@ -10,8 +10,7 @@ class QueryStatistics extends React.Component {
 	}
 
 	getStatisticsNum = value => {
-		console.log('sldkjflskdjflksdjf', value)
-		return <Statistic value={value} />
+		return value || value == 0 ? <Statistic className='statistics_number' value={value}/> : '-'
 	}
 
 	getStatisticsComp= () => {
@@ -22,7 +21,8 @@ class QueryStatistics extends React.Component {
 			const sign = index === 0 || index === arr.length - 1 ? '' : '|'
 			return (
 				<span key={key} className={className}>
-					{`${title}：${this.getStatisticsNum(dataSource[key])}`}
+					{`${title}：`}
+					{this.getStatisticsNum(dataSource[key])}
 					<span className='statistics_sign'>{sign}</span>
 				</span>
 			)

@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux';
 import * as actions from "../actions/applyDetail";
 //antd
-import { Table, Tabs, Modal } from "antd";//Button
+import { Table, Tabs, Modal, Form, Input, Select, DatePicker } from "antd";//Button
 //less
 import './invoiceApplyDetail.less'
 //数据配置
@@ -15,7 +15,10 @@ import '../components/VerticalTable.less'
 import { payback_status_map, invoice_type, invoice_content_type, beneficiary_company, status_display_map } from '../constants'
 
 const TabPane = Tabs.TabPane;
-
+const FormItem = Form.Item;
+const TextArea = Input.TextArea;
+const Option = Select.Option;
+const dataFormat = 'YYYY-MM-DD';
 class InvoiceApplyDetail extends React.Component {
 	constructor() {
 		super();
@@ -87,14 +90,107 @@ class InvoiceApplyDetail extends React.Component {
 			});
 		}
 	}
+	handleInvoiceOperate = (operateType) => {
+		this.setState({ invoiceModalType: operateType });
+		if(!operateType) 
+			return;
+	}
+	handleOk = () => {
+		const { form } = this.props;
+		const { validateFields } = form;
+		validateFields((err, values) => {
+			if(!err) {
+				console.log('sdkjflsjflsdkjf', values);
+			}
+		})
+	}
+	getInvoiceOperateComp = () => {
+		return <div className='invoice_item'>
+			<a className='left-gap' onClick={() => this.handleInvoiceOperate('invalid')}>当月作废</a>
+			<a className='left-gap-10' onClick={() => this.handleInvoiceOperate('red')}>红字发票</a>
+		</div>
+		// return <div className='invoice_item'>
+		// 	<span>当月作废</span>
+		// 	<span>2019-12-29 24:59:59</span>
+		// 	<span>当月作废当月作废当月</span>
+		// </div>
+	}
+	getInvoiceModalContent = (type) => {
+		const { form } = this.props;
+		const { getFieldDecorator } = form;
+		if( type === 'invalid' ) {
+			return (
+				<FormItem>
+					{getFieldDecorator('remark', {
+						rules: [
+							{ required: true, message: '请输入作废原因，最多不超过100个字符' }
+						]
+					})(
+						<TextArea placeholder='必输' autosize={{ minRows: 4, maxRows: 6 }} />
+					)}
+				</FormItem>
+			)
+		}else if( type === 'red' ) {
+			return [
+				<FormItem label='发票号' key='invoiceNO'>
+					{getFieldDecorator('quote_type', {
+						rules: [
+							{ required: true, message: '请选择发票号' }
+						]
+					})(
+						<Select 
+							className='select_commont_width'
+							allowClear
+							showSearch
+							filterOption={(input, option) => (
+								option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+							)}
+						>
+							{
+								[{id: 1233, display: '1233'}].map(item => 
+									<Option key={item.id} value={item.id}>{item.display}</Option>
+								)
+							}
+						</Select>
+					)}
+				</FormItem>,
+				<FormItem label='金额' key='invoiceCount' className='invoice_count_item'>
+					<div>1233</div>
+				</FormItem>,
+				<FormItem label='开票日期' key='invoiceTime'>
+					{getFieldDecorator('end_time', {
+						rules: [
+							{ required: true, message: '请选择开票日期' }
+						]
+					})(
+						<DatePicker className='select_commont_width' format={dataFormat} />
+					)}
+				</FormItem>,
+				<FormItem label='请填写红字发票原因' key='invoiceReason'>
+					{getFieldDecorator('remark', {
+						rules: [
+							{ required: true, message: '请输入红字发票原因，最多不超过100个字符' }
+						]
+					})(
+						<TextArea placeholder='必输' autosize={{ minRows: 3, maxRows: 6 }} />
+					)}
+				</FormItem>
+			]
+		}
+	}
 	render() {
-		let { previewVisible, imgSrc, loading, pageSize, key } = this.state;//tipVisible
+		let { previewVisible, imgSrc, loading, pageSize, key, invoiceModalType } = this.state;//tipVisible
 		let { detailInfo, detailInfo: { type, payback_status }, invoiceRelation, orderInfo, getAssociatedOrders } = this.props;
 		//修改了获取值的方式
 		let { id } = qs.parse(this.props.location.search.substring(1));
 		let companyData = handleCompany(detailInfo);
 		let orderInfoList = orderInfo ? handleKeyColumns(orderInfo) : {};
 		let typeTable = type ? type === 2 ? handleTypeMap('2') : handleTypeMap('1') : [];
+		const modalCls = invoiceModalType === 'red' ? 'invoice_operate_form clear-fix' : '';
+		const titleOption = {
+			'invalid': '请填写当月作废原因',
+			'red': '请填写新的发票号'
+		}
 		const companyColumns = [
 			{
 				title: '公司ID',
@@ -312,9 +408,14 @@ class InvoiceApplyDetail extends React.Component {
 							<p>{status_display}</p>
 							<p> 发票号及对应金额：</p>
 							{invoiceRelation ? invoiceRelation.map((item, index) => {
-								return <p key={index}>
-									<span className='left-gap'>{item.invoice_number}</span>
-									<span className='left-gap'>{item.invoice_amount}</span>
+								return <p key={index} className='invoice_operate_wrapper'>
+									<div className='invoice_item'>
+										<span className='left-gap'>{item.invoice_number}</span>
+										<span className='left-gap'>{item.invoice_amount}</span>
+									</div>
+									{
+										this.getInvoiceOperateComp()
+									}
 								</p>
 							}) : null}
 						</div>
@@ -326,9 +427,14 @@ class InvoiceApplyDetail extends React.Component {
 								</p>
 								<p> 发票号及对应金额：</p>
 								{invoiceRelation ? invoiceRelation.map((item, index) => {
-									return <p key={index}>
-										<span>{item.invoice_number}</span>
-										<span className='left-gap'>{item.invoice_amount}</span>
+									return <p key={index} className='invoice_operate_wrapper'>
+										<div className='invoice_item'>
+											<span className='left-gap'>{item.invoice_number}</span>
+											<span className='left-gap'>{item.invoice_amount}</span>
+										</div>
+										{
+											this.getInvoiceOperateComp()
+										}
 									</p>
 								}) : null}
 							</div>
@@ -451,6 +557,18 @@ class InvoiceApplyDetail extends React.Component {
 							</Button>,
 						]} onCancel={this.handleTipCancel}>
 					</Modal> */}
+					
+					<Modal 
+						width={580}
+						title={titleOption[invoiceModalType]}
+						visible={Boolean(invoiceModalType)} 
+						onCancel={() => this.handleInvoiceOperate()}
+						onOk={this.handleOk}
+					>
+						<Form className={modalCls}>
+							{ this.getInvoiceModalContent(invoiceModalType) }
+						</Form>
+					</Modal>
 				</div>
 			</fieldset>
 		</div >
@@ -465,4 +583,4 @@ export default connect(
 		invoiceRelation: state.invoice.getApplyDetail.invoiceRelation
 	}),
 	actions
-)(InvoiceApplyDetail)
+)(Form.create()(InvoiceApplyDetail))

@@ -60,6 +60,18 @@
                 }
             }
         }
+        .invoice_operate_wrapper {
+            display: flex;
+            .invoice_item {
+                width: 50%;
+                a {
+                    text-decoration: underline;
+                }
+            }
+            .left-gap-10 {
+                margin-left: 10px;
+            }
+        }
     }
     .thum-img-box{
         width:56px;
@@ -89,4 +101,24 @@
     content: '';
     display: block;
     clear: both;
+}
+
+.invoice_operate_form {
+    .ant-form-item {
+        float: left;
+        display: flex;
+        &:nth-child(4) {
+            width: 100%;
+            margin-top: 10px;
+            .ant-form-item-control-wrapper {
+                width: 50%;
+            }
+        }
+    }
+    .select_commont_width {
+        width: 135px;
+    }
+    .invoice_count_item {
+        margin: 0 24px;
+    }
 }

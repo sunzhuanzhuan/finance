@@ -233,7 +233,7 @@ class AdjustApply extends React.Component {
 						<Table
 							className='table_style'
 							rowKey='id'
-							rowSelection={flag ? rowSelectionObj : null}
+							rowSelection={flag || saleExport ? rowSelectionObj : null}
 							columns={adjustApplyList}
 							dataSource={list}
 							loading={loading}

@@ -123,7 +123,11 @@ class InvoiceApplyDetail extends React.Component {
 				<FormItem>
 					{getFieldDecorator('remark', {
 						rules: [
-							{ required: true, message: '请输入作废原因，最多不超过100个字符' }
+							{ 
+								required: true, 
+								max: 100,
+								message: '请输入作废原因，最多不超过100个字符' 
+							}
 						]
 					})(
 						<TextArea placeholder='必输' autosize={{ minRows: 4, maxRows: 6 }} />
@@ -169,7 +173,11 @@ class InvoiceApplyDetail extends React.Component {
 				<FormItem label='请填写红字发票原因' key='invoiceReason'>
 					{getFieldDecorator('remark', {
 						rules: [
-							{ required: true, message: '请输入红字发票原因，最多不超过100个字符' }
+							{ 
+								required: true, 
+								max: 100,
+								message: '请输入红字发票原因，最多不超过100个字符' 
+							}
 						]
 					})(
 						<TextArea placeholder='必输' autosize={{ minRows: 3, maxRows: 6 }} />

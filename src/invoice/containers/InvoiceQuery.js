@@ -33,6 +33,9 @@ export class InvoiceQuery extends Component {
 		const { invoiceQueryList = {} } = this.props;
 		const { selectedRowKeys, loading, searchQuery } = this.state;
 		const { total = 0, page = 1, pageSize = 20, list = [] } = invoiceQueryList
+		const showTotal = (total) => {
+			return `共 ${total} 条数据`;
+		}
 		const paginationObj = {
 			onChange: (page) => {
 				Object.assign(searchQuery, {page});
@@ -43,6 +46,7 @@ export class InvoiceQuery extends Component {
 				this.handleSearch(searchQuery);
 			},
 			total: parseInt(total),
+			showTotal,
 			current: parseInt(page),
 			pageSize: parseInt(pageSize),
 			showQuickJumper: true,

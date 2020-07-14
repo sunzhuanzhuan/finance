@@ -184,6 +184,34 @@ class InvoiceApplyDetail extends React.Component {
 					)}
 				</FormItem>
 			]
+		}else if( type === 'detail') {
+			const columns = [
+				{
+					title: '发票号',
+					dataIndex: 'invoice_num',
+					key: 'invoice_num',
+					align: 'center'
+				},
+				{
+					title: '金额',
+					dataIndex: 'invoice_count',
+					key: 'invoice_count',
+					align: 'center'
+				},
+				{
+					title: '操作人',
+					dataIndex: 'invoice_person',
+					key: 'invoice_person',
+					align: 'center'
+				},
+				{
+					title: '操作时间',
+					dataIndex: 'invoice_time',
+					key: 'invoice_time',
+					align: 'center'
+				}
+			]
+			return <Table columns={columns} dataSource={[]} />
 		}
 	}
 	render() {
@@ -197,7 +225,8 @@ class InvoiceApplyDetail extends React.Component {
 		const modalCls = invoiceModalType === 'red' ? 'invoice_operate_form clear-fix' : '';
 		const titleOption = {
 			'invalid': '请填写当月作废原因',
-			'red': '请填写新的发票号'
+			'red': '请填写新的发票号',
+			'detail': '操作详情'
 		}
 		const companyColumns = [
 			{
@@ -418,7 +447,7 @@ class InvoiceApplyDetail extends React.Component {
 							{invoiceRelation ? invoiceRelation.map((item, index) => {
 								return <p key={index} className='invoice_operate_wrapper'>
 									<div className='invoice_item'>
-										<span className='left-gap'>{item.invoice_number}</span>
+										<span className='left-gap' onClick={() => {this.handleInvoiceOperate('detail')}}>{item.invoice_number}</span>
 										<span className='left-gap'>{item.invoice_amount}</span>
 									</div>
 									{
@@ -437,7 +466,7 @@ class InvoiceApplyDetail extends React.Component {
 								{invoiceRelation ? invoiceRelation.map((item, index) => {
 									return <p key={index} className='invoice_operate_wrapper'>
 										<div className='invoice_item'>
-											<span className='left-gap'>{item.invoice_number}</span>
+											<span className='left-gap' onClick={() => {this.handleInvoiceOperate('detail')}}>{item.invoice_number}</span>
 											<span className='left-gap'>{item.invoice_amount}</span>
 										</div>
 										{

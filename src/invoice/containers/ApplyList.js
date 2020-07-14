@@ -383,9 +383,11 @@ class ApplyList extends Component {
 		obj = this.state.formData
 		obj.page = p.current;
 		obj.page_size = p.pageSize
-		this.setState({ current: p.current })
+		this.setState({ current: p.current, loading: true })
 		this.props.actions.getApplyList(obj).catch(({ errorMsg }) => {
 			message.warning(errorMsg || '请求出错', 1)
+		}).finally(() => {
+			this.setState({ loading: false })
 		})
 	}
 	//显示已选开票金额

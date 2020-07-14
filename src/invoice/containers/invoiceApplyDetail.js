@@ -440,6 +440,10 @@ class InvoiceApplyDetail extends React.Component {
 				key: 'status_display',
 				align: 'center',
 				render: (text, { status_display, express_company_display, waybill_number }) => {
+					const invoiceNumProps = {
+						className: status_display ?  'invoice_num_cls left-gap' : 'left-gap',
+						onClick: status_display ? () => this.handleInvoiceOperate('detail') : null
+					}
 					return status_display === status_display_map['YIKAI'] ?
 						<div className='status-display'>
 							<p>{status_display}</p>
@@ -447,7 +451,7 @@ class InvoiceApplyDetail extends React.Component {
 							{invoiceRelation ? invoiceRelation.map((item, index) => {
 								return <p key={index} className='invoice_operate_wrapper'>
 									<div className='invoice_item'>
-										<span className='left-gap' onClick={() => {this.handleInvoiceOperate('detail')}}>{item.invoice_number}</span>
+										<span {...invoiceNumProps}>{item.invoice_number}</span>
 										<span className='left-gap'>{item.invoice_amount}</span>
 									</div>
 									{
@@ -466,7 +470,7 @@ class InvoiceApplyDetail extends React.Component {
 								{invoiceRelation ? invoiceRelation.map((item, index) => {
 									return <p key={index} className='invoice_operate_wrapper'>
 										<div className='invoice_item'>
-											<span className='left-gap' onClick={() => {this.handleInvoiceOperate('detail')}}>{item.invoice_number}</span>
+											<span {...invoiceNumProps}>{item.invoice_number}</span>
 											<span className='left-gap'>{item.invoice_amount}</span>
 										</div>
 										{

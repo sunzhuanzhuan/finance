@@ -178,11 +178,12 @@ class AdjustApply extends React.Component {
 		const costFlag = authVisibleList['readjust.finance.filter'];
 		const finance = authVisibleList['readjust.finance.audit'];
 		const sale = authVisibleList['readjust.sale.audit'];
-		const audit_type = finance ? 1 : sale ? 2 : undefined;
+		const saleExport = authVisibleList['reasdjust.common.sale.export'];
+		const audit_type = finance ? 1 : sale ? 2 : saleExport ? 3 : undefined;
 		const { getFieldDecorator } = form;
 		const formItemLayout = { labelCol: { span: 6 }, wrapperCol: { span: 16 }, };
 		const search = qs.parse(this.props.location.search.substring(1));
-		const adjustApplyList = flag ? adjustApplyListFunc(audit_type, application_status, quote_type, this.handleJump, this.handleAction) : adjustApplyFunc(application_status, quote_type, this.handleJump);
+		const adjustApplyList = flag ? adjustApplyListFunc(audit_type, application_status, quote_type, this.handleJump, this.handleAction) : adjustApplyFunc(audit_type, application_status, quote_type, saleExport, this.handleJump, this.handleAction);
 		const preArr = ['prev_id', 'statusPre', 'company_name', 'project_name', 'requirement_id_name', 'account_id_name', 'main_account_info', 'quoted_price', 'discount_rate', 'published_price', 'order_bottom_price', 'commissioned_price', 'pre_min_sell_price', 'preview_quote_type'];
 		const dealPreArr = costFlag ? preArr : preArr.filter(item => item !== 'quoted_price');
 		const adjustApplyPreview = adjustApplyDetailFunc(rel_order_status, quote_type, readjust_type, platformIconList, flag)(dealPreArr);
@@ -232,7 +233,7 @@ class AdjustApply extends React.Component {
 						<Table
 							className='table_style'
 							rowKey='id'
-							rowSelection={flag ? rowSelectionObj : null}
+							rowSelection={flag || saleExport ? rowSelectionObj : null}
 							columns={adjustApplyList}
 							dataSource={list}
 							loading={loading}
@@ -248,6 +249,7 @@ class AdjustApply extends React.Component {
 				<legend>订单调价</legend>
 				<AdjustQuery history={this.props.history}
 					flag={flag}
+					saleExport={saleExport}
 					questAction={this.handleSearchList}
 					handleExport={this.handleExport}
 					auditType={audit_type}
@@ -259,7 +261,7 @@ class AdjustApply extends React.Component {
 					{goldenMetadata}
 				</AdjustQuery>
 				<div className='addOperateWrapper'>
-					{flag ? <Button disabled={!selectedRowKeys.length} type='primary' className='right-gap' onClick={() => this.handleExport({readjust_application_id: selectedRowKeys, audit_type})}>批量导出</Button> : null}
+					{flag || saleExport ? <Button disabled={!selectedRowKeys.length} type='primary' className='right-gap' onClick={() => this.handleExport({readjust_application_id: selectedRowKeys, audit_type})}>批量导出</Button> : null}
 					{flag ? <Button type='primary' icon='download' className='right-gap' href='/finance/golden/adjustApplyInput'>导入</Button> : null}
 					{btnFlag ? <Button className='right-gap' type="primary" onClick={this.isShowAddModal}
 						// href={`/finance/golden/addAdjustApply?${qs.stringify({ keys: { page_size: 50 } })}`}

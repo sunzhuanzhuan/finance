@@ -65,7 +65,7 @@ class QueryComp extends React.Component {
 					<FormItem key={key} className='operate-wrapper'>
 						<Button type='primary' onClick={() => {this.handleSearch('search')}}>查询</Button>
 						<Button type='ghost' onClick={() => {this.handleSearch('reset')}}>重置</Button>
-						{ showExport ? <Button type='primary' onClick={() => {this.handleSearch('export')}}>导出</Button> : null }
+						{ showExport ? <Button type='ghost' onClick={() => {this.handleSearch('export')}}>导出</Button> : null }
 					</FormItem>
 				)
 			}

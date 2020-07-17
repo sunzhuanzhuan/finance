@@ -17,7 +17,7 @@ class QueryStatistics extends React.Component {
 		const { dataSource = {} } = this.props;
 		return getInvoiceQueryStatisticsOptions().map((item, index, arr) => {
 			const { title, key } = item;
-			const className = index === 0 ? 'statistics_bold' : '';
+			const className = index === 0 ? 'statistics_bold statistics_normal' : 'statistics_normal';
 			const sign = index === 0 || index === arr.length - 1 ? '' : '|'
 			return (
 				<span key={key} className={className}>

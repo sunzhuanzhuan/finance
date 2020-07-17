@@ -105,15 +105,15 @@ class InvoiceApplyDetail extends React.Component {
 		})
 	}
 	getInvoiceOperateComp = () => {
-		return <div className='invoice_item'>
-			<a className='left-gap' onClick={() => this.handleInvoiceOperate('invalid')}>当月作废</a>
-			<a className='left-gap-10' onClick={() => this.handleInvoiceOperate('red')}>红字发票</a>
-		</div>
 		// return <div className='invoice_item'>
-		// 	<span>当月作废</span>
-		// 	<span>2019-12-29 24:59:59</span>
-		// 	<span>当月作废当月作废当月</span>
+		// 	<a className='left-gap' onClick={() => this.handleInvoiceOperate('invalid')}>当月作废</a>
+		// 	<a className='left-gap-10' onClick={() => this.handleInvoiceOperate('red')}>红字发票</a>
 		// </div>
+		return <div className='invoice_item'>
+			<span>当月作废</span>
+			<span>2019-12-29 24:59:59</span>
+			<span>当月作废当月作废当月</span>
+		</div>
 	}
 	getInvoiceModalContent = (type) => {
 		const { form } = this.props;

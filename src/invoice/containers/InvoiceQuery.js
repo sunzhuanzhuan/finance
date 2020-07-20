@@ -9,6 +9,8 @@ import QueryStatistics from '../components/invoiceQuery/queryStatistics';
 import { getInvoiceQueryOptions, getInvoiceQueryCol } from '../constants/invoiceQuery';
 import { Scolltable } from '@/components';
 import { getTotalWidth, events } from '@/util';
+import qs from 'qs';
+import apiDownload from '@/api/apiDownload';
 
 export class InvoiceQuery extends Component {
 	constructor(props) {
@@ -40,6 +42,13 @@ export class InvoiceQuery extends Component {
 		this.props.actions.getInvoiceQueryList(searchQuery).finally(() => {
 			this.setState({loading: false});
 		});
+	}
+
+	handleExport = (searchQuery) => {
+		apiDownload({
+			url: '/finance/invoice/invoice/export?' + qs.stringify(searchQuery),
+			method: 'GET',
+		}, `发票查询导出.xls`)
 	}
 
 	handleInvoiceOperate = (invoice_id) => {
@@ -104,6 +113,7 @@ export class InvoiceQuery extends Component {
 					queryOptions={invoiceQueryOptions}
 					queryItems={getInvoiceQueryOptions()}
 					handleSearch={this.handleSearch}
+					handleExport={this.handleExport}
 					actionKeyMap={{
 						company: this.props.actions.getInvoiceQueryCompanyId,
 						invoiceTitle: this.props.actions.getInvoiceQueryInvoiceTitle,

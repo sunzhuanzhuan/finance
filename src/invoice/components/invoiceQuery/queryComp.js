@@ -106,16 +106,17 @@ class QueryComp extends React.Component {
 		if(type === 'reset') {
 			form.resetFields();
 			// handleSearch({page: 1, page_size: 20});
-		}else if(type === 'search') {
+		}else if(type === 'search' || type === 'export') {
 			form.validateFields((errors, values) => {
 				if(errors)
 					return null;
 				const dealValues = this.dealValuesDate(values);
-				Object.assign(dealValues, {page: 1, page_size: 20});
-				handleSearch(dealValues);
+				const operateAction = type === 'search' ? handleSearch : type === 'export' ? handleExport : null;
+				if(type === 'search') {
+					Object.assign(dealValues, {page: 1, page_size: 20});
+				}
+				operateAction(dealValues);
 			})
-		}else if(type === 'export') {
-			handleExport()
 		}
 	}
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Popconfirm } from 'antd';
+import { Popconfirm, Popover } from 'antd';
 export const getInvoiceQueryOptions = () => {
 	return [
         {label: '开票日期', key: 'time', compType: 'date', submitKey:['invoice_time_start', 'invoice_time_end']},
@@ -38,6 +38,48 @@ export const getInvoiceQueryCol = (handleAction) => {
 			key: 'invoice_number',
 			align: 'center',
 			width: 100,
+			render: (data, record) => {
+				const { status, is_offline_name, red_invoice_info = {} } = record;
+				const contentArr = [
+					{ label: '发票号：', key: 'invoice_number' },
+					{ label: '金额：', key: 'amount' },
+					{ label: '操作人：', key: 'operation_user' },
+					{ label: '操作时间：', key: 'operation_time' },
+				];
+				const getContent = () => {
+					return (
+						<div className='invoice_popover_content'>
+							{
+								contentArr.map(item => {
+									const { label, key } = item;
+									return (
+										<div key={key}>
+											<span className='popover_title'>{label}</span>
+											<span>{red_invoice_info[key]}</span>
+										</div>
+									)
+								})
+							}
+						</div>
+					)
+				}
+				return (
+					<div>
+						{
+							status === '5' ?
+							<Popover 
+								className='invoice_popover_wrapper'
+								placement="topLeft" title='红字发票' 
+								content={getContent()} trigger="click"
+							>
+								<a>{data}</a>
+							</Popover> :
+							<div>{data}</div>
+						}
+						{ record.is_offline_name && <span className='invoice_is_offline_text'>{is_offline_name}</span> }
+					</div>
+				)
+			}
 		},
 		{ 
 			title: '发票状态',
@@ -58,21 +100,21 @@ export const getInvoiceQueryCol = (handleAction) => {
 			dataIndex: 'beneficiary_company_name',
 			key: 'beneficiary_company_name',
 			align: 'center',
-			width: 120,
+			width: 110,
 		},
 		{ 
 			title: '公司简称',
 			dataIndex: 'company_name',
 			key: 'company_name',
 			align: 'center',
-			width: 120,
+			width: 110,
 		},
 		{ 
 			title: '发票抬头',
 			dataIndex: 'invoice_title',
 			key: 'invoice_title',
 			align: 'center',
-			width: 120,
+			width: 110,
 		},
 		{ 
 			title: '发票金额（元）',
@@ -86,26 +128,26 @@ export const getInvoiceQueryCol = (handleAction) => {
 			dataIndex: 'invoice_content',
 			key: 'invoice_content',
 			align: 'center',
-			width: 120,
+			width: 110,
 		},
 		{ 
 			title: '操作时间',
 			dataIndex: 'invoice_time',
 			key: 'invoice_time',
 			align: 'center',
-			width: 120,
-			render: data => {
-				const getDataArr = dataSource => {
-					if(data) {
-						const dataArr = dataSource.split(' ');
-						if(Array.isArray(dataArr) && dataArr.length) {
-							return dataArr.map((item, index) => <div key={item + index}>{item}</div>)
-						}else {
-							return null
-						}
+			width: 170,
+			render: (_, record) => {
+				const timeOption = [
+					{ title: '开票时间：', key: 'invoice_time' },
+					{ title: '作废时间：', key: 'void_time' },
+					{ title: '红字时间：', key: 'redmark_time' },
+				]
+				return timeOption.map(item => {
+					const { key, title } = item;
+					if(record[key]) {
+						return <div key={title}>{title}{record[key]}</div>
 					}
-				} 
-				return getDataArr(data)
+				})
 			}
 		},
 		{ 
@@ -116,7 +158,7 @@ export const getInvoiceQueryCol = (handleAction) => {
 			width: 100,
 			render: (data) => {
 				if(Array.isArray(data) && data.length) {
-					return data.map(item => <a style={{display: 'inline-block'}} key={item} href={`/finance/invoice/applyDetail?id=${item}`}>{item}</a>)
+					return data.map(item => <a style={{display: 'inline-block'}} target='_blank' key={item} href={`/finance/invoice/applyDetail?id=${item}`}>{item}</a>)
 				}
 				return null
 			}
@@ -125,10 +167,10 @@ export const getInvoiceQueryCol = (handleAction) => {
 			title: '操作',
 			key: 'operate',
 			align: 'center',
-			width: 100,
+			width: 90,
 			render: (_, record) => {
-				const { status, invoice_number } = record;
-				return status === '1' ? 
+				const { status, invoice_number, is_offline } = record;
+				return status === '1' && is_offline !== '1' ? 
 					<Popconfirm
 						placement="topRight"
 						title={`确定要对${invoice_number}发票进行线下处理操作吗？`}

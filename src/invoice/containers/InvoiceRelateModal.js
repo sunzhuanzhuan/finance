@@ -1,28 +1,15 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-//import { Link, browserHistory } from 'react-router'
 import { Link } from 'react-router-dom'
-import qs from 'qs'
-import PropTypes from 'prop-types'
-import { Table, Row, Col, Button, Divider, Modal, DatePicker, Input, Form, Select, message, Popover, Spin } from 'antd';
+import { Row, Col, Button, Modal, Form, message } from 'antd';
 
 import * as applyListAction from '../actions/index'
 import './ApplyList.less';
-
-import Scolltable from "../../components/Scolltable";
 import AddInvoiceInfo from '../containers/AddInvoiceInfo'
-import DeliverContent from '../containers/DeliverContent'
 import { calcSum } from "../../util";
-import { columnsList } from '../util'
 
-const { RangePicker } = DatePicker
-const FormItem = Form.Item
-const Option = Select.Option
-const formatDate = 'YYYY-MM-DD'
-const confirm = Modal.confirm;
-
-class ApplyList extends Component {
+class InvoiceRelateModal extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
@@ -42,7 +29,7 @@ class ApplyList extends Component {
 	}
 	//查询
 	handleSelsetSubmit(e) {
-		this.props.form.validateFields((err, values) => {
+		this.props.form.validateFields((_, values) => {
 			if (e) { e.preventDefault() }
 			let createdAtStart;
 			let createdAtEnd;
@@ -194,12 +181,6 @@ class ApplyList extends Component {
 		)
 	}
 }
-ApplyList.propTypes = {
-	actions: PropTypes.shape({
-
-	}),
-
-}
 const mapStateToProps = (state) => ({
 	role: state.invoice.applyList.role,
 	availableInvoiceList: state.invoice.availableInvoiceList,
@@ -210,8 +191,7 @@ const mapDispatchToProps = (dispatch) => ({
 		...applyListAction
 	}, dispatch)
 })
-const ApplyListForm = Form.create()(ApplyList);
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(ApplyListForm)
+)(Form.create()(InvoiceRelateModal))

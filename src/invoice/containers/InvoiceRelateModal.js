@@ -3,11 +3,11 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { Row, Col, Button, Modal, Form, message } from 'antd';
-
 import * as applyListAction from '../actions/index'
 import './ApplyList.less';
 import AddInvoiceInfo from '../containers/AddInvoiceInfo'
 import { calcSum } from "../../util";
+import { shallowEqual } from '@/util';
 
 class InvoiceRelateModal extends Component {
 	constructor(props) {
@@ -27,6 +27,28 @@ class InvoiceRelateModal extends Component {
 			receivableCount: 0
 		}
 	}
+
+	static getDerivedStateFromProps(nextProps, prevState) {
+		const { relateModalVisible = '' } = nextProps;
+		const { isAssociateVisible = '' } = prevState;
+		if(!shallowEqual(relateModalVisible, isAssociateVisible)) {
+			return {
+				isAssociateVisible: relateModalVisible,
+			}
+		}
+		return null;
+	}
+
+	componentDidUpdate(_, prevState) {
+		const { isAssociateVisible } = this.state;
+		const { isAssociateVisible: prevVisible } = prevState;
+		if(isAssociateVisible && !prevVisible) {
+			const { relateBaseInfo = {} } = this.props;
+			const { type_display, id, company_id, amount, can_invoice, type, receivableCount } = relateBaseInfo;
+			this.isAssociate(type_display, id, company_id, amount, can_invoice, type, receivableCount)
+		}
+	}
+
 	//查询
 	handleSelsetSubmit(e) {
 		this.props.form.validateFields((_, values) => {
@@ -49,12 +71,10 @@ class InvoiceRelateModal extends Component {
 				message.warning(errorMsg || '请求出错', 1)
 			})
 		});
-
 	}
 	//申请单列表 操作项-是否关联发票
 	isAssociate = (type_display, id, company_id, amount, can_invoice, type, receivableCount) => {
 		this.setState({
-			isAssociateVisible: true,
 			isAssociateBtnVisible: type_display,
 			invoiceApplyId: id,
 			applyAmount: amount,
@@ -77,19 +97,13 @@ class InvoiceRelateModal extends Component {
 		});
 
 	}
-	handleAssociateCancel = () => {
-		this.setState({
-			isAssociateVisible: false
-		});
-	}
 
 	//开新发票
 	handleCreatNewInvoice = () => {
+		this.props.isShowRelateModal();
 		this.setState({
 			isAssociateBtnVisible: false,
 			creatNewInvoiceVisible: true,
-			isAssociateVisible: false,
-
 		}, () => {
 			this.handleSelectData()
 		});
@@ -119,6 +133,7 @@ class InvoiceRelateModal extends Component {
 		const {
 			role,
 			availableInvoiceList = [],
+			isShowRelateModal
 		} = this.props;
 		let acountAry = [this.state.applyAmount, -this.state.canInvoice];
 		return (
@@ -126,7 +141,7 @@ class InvoiceRelateModal extends Component {
 				<Modal
 					title="是否已开发票"
 					visible={this.state.isAssociateVisible}
-					onCancel={this.handleAssociateCancel.bind(this)}
+					onCancel={isShowRelateModal}
 					footer={null}
 					width='580px'
 				>
@@ -182,7 +197,6 @@ class InvoiceRelateModal extends Component {
 	}
 }
 const mapStateToProps = (state) => ({
-	role: state.invoice.applyList.role,
 	availableInvoiceList: state.invoice.availableInvoiceList,
 
 })

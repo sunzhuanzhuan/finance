@@ -13,12 +13,14 @@ import qs from "qs";
 import { calcSum } from "../../util";
 import '../components/VerticalTable.less'
 import { payback_status_map, invoice_type, invoice_content_type, beneficiary_company, status_display_map } from '../constants'
+import InvoiceRelateModal from './InvoiceRelateModal';
 
 const TabPane = Tabs.TabPane;
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;
 const Option = Select.Option;
 const dataFormat = 'YYYY-MM-DD';
+
 class InvoiceApplyDetail extends React.Component {
 	constructor() {
 		super();
@@ -35,12 +37,16 @@ class InvoiceApplyDetail extends React.Component {
 	async componentWillMount() {
 		//let queryObj = this.props.location.query;
 		//修改了获取值的方式
+		this.loadData();
+	}
+
+	loadData = () => {
 		let queryObj = qs.parse(this.props.location.search.substring(1))
 		let id = queryObj.id;
 		let { getApplyDetail, getAssociatedOrders, getiInvoiceRelation } = this.props;
 		let { pageSize } = this.state;
 		getiInvoiceRelation(id);
-		await getApplyDetail(id);
+		getApplyDetail(id);
 		let { detailInfo: { type } } = this.props;
 		if (type && type === 2) {
 			getAssociatedOrders(id, '1', 1, pageSize).then(() => {
@@ -56,6 +62,7 @@ class InvoiceApplyDetail extends React.Component {
 			});
 		}
 	}
+
 	handleCancel = () => {
 		let newKey = this.handleRandomKey();
 		this.setState({
@@ -104,41 +111,40 @@ class InvoiceApplyDetail extends React.Component {
 			}
 		})
 	}
-	getInvoiceOperateComp = (record) => {
-		return <div className='invoice_item'>
-			<a className='left-gap' onClick={() => this.handleInvoiceOperate('invalid')}>当月作废</a>
-			<a className='left-gap-10' onClick={() => this.handleInvoiceOperate('red')}>红字发票</a>
-		</div>
-		// const getContent = () => {
-		// 	const contentArr = [
-		// 		{ label: '时间：', key: 'invoice_number' },
-		// 		{ label: '原因：', key: 'amount' },
-		// 	];
-		// 	return (
-		// 		<div className='invoice_popover_content'>
-		// 			{
-		// 				contentArr.map(item => {
-		// 					const { label, key } = item;
-		// 					return (
-		// 						<div key={key}>
-		// 							<span className='popover_title'>{label}</span>
-		// 							<span>{record[key]}</span>
-		// 						</div>
-		// 					)
-		// 				})
-		// 			}
-		// 		</div>
-		// 	)
-		// }
-		// return <div className='invoice_item'>
-		// 	<Popover 
-		// 		className='invoice_popover_wrapper'
-		// 		placement="top" title='红字发票' 
-		// 		content={getContent()} trigger="click"
-		// 	>
-		// 		<span className='invoice_detail_status'>当月作废</span>
-		// 	</Popover>
-		// </div>
+	getPopContent = (option, values) => {
+		return (
+			<div className='invoice_popover_content'>
+				{
+					option.map(item => {
+						const { label, key } = item;
+						return (
+							<div key={key}>
+								<span className='popover_title'>{label}</span>
+								<span>{values[key]}</span>
+							</div>
+						)
+					})
+				}
+			</div>
+		)
+	}
+	getInvoiceOperateComp = (record, INVOICE_FAKE_STATUS) => {
+		if(INVOICE_FAKE_STATUS){
+			return <div className='invoice_item'>
+				<a className='left-gap' onClick={() => this.handleInvoiceOperate('invalid')}>当月作废</a>
+				<a className='left-gap-10' onClick={() => this.handleInvoiceOperate('red')}>红字发票</a>
+			</div>
+		}else {
+			return <div className='invoice_item'>
+				<Popover 
+					className='invoice_popover_wrapper'
+					placement="top" title='红字发票' 
+					content={this.getPopContent()} trigger="click"
+				>
+					<span className='invoice_detail_status'>当月作废</span>
+				</Popover>
+			</div>
+		}
 	}
 	getInvoiceModalContent = (type) => {
 		const { form } = this.props;
@@ -209,39 +215,20 @@ class InvoiceApplyDetail extends React.Component {
 					)}
 				</FormItem>
 			]
-		}else if( type === 'detail') {
-			const columns = [
-				{
-					title: '发票号',
-					dataIndex: 'invoice_num',
-					key: 'invoice_num',
-					align: 'center'
-				},
-				{
-					title: '金额',
-					dataIndex: 'invoice_count',
-					key: 'invoice_count',
-					align: 'center'
-				},
-				{
-					title: '操作人',
-					dataIndex: 'invoice_person',
-					key: 'invoice_person',
-					align: 'center'
-				},
-				{
-					title: '操作时间',
-					dataIndex: 'invoice_time',
-					key: 'invoice_time',
-					align: 'center'
-				}
-			]
-			return <Table columns={columns} dataSource={[]} />
 		}
+	}
+	isShowRelateModal = (type_display, id, company_id, amount, can_invoice, type, receivableCount) => {
+		const relateBaseInfo = {
+			type_display, id, company_id, amount, can_invoice, type, receivableCount
+		}
+		this.setState({ 
+			relateModalVisible: !this.state.relateModalVisible,
+			relateBaseInfo
+		});
 	}
 	render() {
 		let { previewVisible, imgSrc, loading, pageSize, key, invoiceModalType } = this.state;//tipVisible
-		let { detailInfo, detailInfo: { type, payback_status }, invoiceRelation, orderInfo, getAssociatedOrders } = this.props;
+		let { detailInfo, detailInfo: { type, payback_status, role }, invoiceRelation, orderInfo, getAssociatedOrders } = this.props;
 		//修改了获取值的方式
 		let { id } = qs.parse(this.props.location.search.substring(1));
 		let companyData = handleCompany(detailInfo);
@@ -465,47 +452,84 @@ class InvoiceApplyDetail extends React.Component {
 				key: 'status_display',
 				align: 'center',
 				render: (_, record) => {
-					const { status_display, express_company_display, waybill_number } = record;
-					const invoiceNumProps = {
-						className: status_display ?  'invoice_num_cls left-gap' : 'left-gap',
-						onClick: status_display ? () => this.handleInvoiceOperate('detail') : null
+					const getRelateBtn = () => {
+						const { type_display, id, company_id, amount, real_amount, can_invoice, type, receivables_payback_amount } = detailInfo;
+						return (
+							amount !== real_amount ? <a key='relateInvoice' onClick={() => {this.isShowRelateModal(type_display, id, company_id, amount, can_invoice, type, receivables_payback_amount)}}>重新关联发票</a> : null
+						)
 					}
-					return status_display === status_display_map['YIKAI'] ?
-						<div className='status-display'>
-							<p>{status_display}</p>
-							<p> 发票号及对应金额：</p>
-							{invoiceRelation ? invoiceRelation.map((item, index) => {
-								return <p key={index} className='invoice_operate_wrapper'>
-									<div className='invoice_item'>
-										<span {...invoiceNumProps}>{item.invoice_number}</span>
-										<span className='left-gap'>{item.invoice_amount}</span>
-									</div>
-									{
-										this.getInvoiceOperateComp(record)
-									}
-								</p>
-							}) : null}
-						</div>
-						: status_display === status_display_map['YIJI'] ?
-							<div className='status-display'>
-								<p>{status_display}
-									<span>（快递公司：{express_company_display}</span>
-									<span className='left-gap'>快递编号：{waybill_number}）</span>
-								</p>
-								<p> 发票号及对应金额：</p>
-								{invoiceRelation ? invoiceRelation.map((item, index) => {
-									return <p key={index} className='invoice_operate_wrapper'>
-										<div className='invoice_item'>
-											<span {...invoiceNumProps}>{item.invoice_number}</span>
-											<span className='left-gap'>{item.invoice_amount}</span>
-										</div>
+					const getInvoiceNumItems = () => {
+						const { status_display, express_company_display, waybill_number } = record;
+						if(status_display === status_display_map['YIKAI'] || status_display === status_display_map['YIJI']) {
+							const getContent = () => {
+								const contentArr = [
+									{ label: '发票号：', key: 'invoice_number' },
+									{ label: '金额：', key: 'amount' },
+									{ label: '操作人：', key: 'operation_user' },
+									{ label: '操作时间：', key: 'operation_time' },
+								];
+								return (
+									<div className='invoice_popover_content'>
 										{
-											this.getInvoiceOperateComp()
+											contentArr.map(item => {
+												const { label, key } = item;
+												return (
+													<div key={key}>
+														<span className='popover_title'>{label}</span>
+														<span>{record[key]}</span>
+													</div>
+												)
+											})
+										}
+									</div>
+								)
+							}
+							return (
+								<div className='status-display'>
+									<p>
+										{status_display}
+										{
+											status_display === status_display_map['YIJI'] ? 
+											[
+												<span key='express_company_display'>（快递公司：{express_company_display}</span>,
+												<span key='waybill_number' className='left-gap'>快递编号：{waybill_number}）</span>
+											] : null
 										}
 									</p>
-								}) : null}
-							</div>
-							: status_display
+									<p> 发票号及对应金额：</p>
+									{invoiceRelation ? invoiceRelation.map((item, index) => {
+										const { invoice_number, invoice_amount, INVOICE_FAKE_STATUS } = item;
+										return <p key={index} className='invoice_operate_wrapper'>
+											<div className='invoice_item'>
+												{
+													INVOICE_FAKE_STATUS ? 
+													<Popover 
+														className='invoice_popover_wrapper'
+														placement="top" title='红字发票' 
+														content={this.getPopContent()} trigger="click"
+													>
+														<span className='invoice_num_cls left-gap'>{invoice_number}</span>
+													</Popover> :
+													<span className='left-gap'>{invoice_number}</span>
+												}
+												<span className='left-gap'>{invoice_amount}</span>
+											</div>
+											{
+												this.getInvoiceOperateComp(record, INVOICE_FAKE_STATUS)
+											}
+										</p>
+									}) : null}
+									{
+										getRelateBtn()
+									}
+								</div>
+							)
+						}else {
+							return status_display;
+						}
+					}
+					
+					return getInvoiceNumItems()
 				}
 			},
 			{
@@ -636,6 +660,13 @@ class InvoiceApplyDetail extends React.Component {
 							{ this.getInvoiceModalContent(invoiceModalType) }
 						</Form>
 					</Modal>
+					<InvoiceRelateModal
+						role={role}
+						relateModalVisible={this.state.relateModalVisible}
+						relateBaseInfo={this.state.relateBaseInfo}
+						isShowRelateModal={this.isShowRelateModal}
+						refreshData={this.loadData}
+					/>
 				</div>
 			</fieldset>
 		</div >

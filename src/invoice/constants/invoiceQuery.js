@@ -40,13 +40,13 @@ export const getInvoiceQueryCol = (handleAction) => {
 			width: 100,
 			render: (data, record) => {
 				const { status, is_offline_name, red_invoice_info = {} } = record;
-				const contentArr = [
-					{ label: '发票号：', key: 'invoice_number' },
-					{ label: '金额：', key: 'amount' },
-					{ label: '操作人：', key: 'operation_user' },
-					{ label: '操作时间：', key: 'operation_time' },
-				];
 				const getContent = () => {
+					const contentArr = [
+						{ label: '发票号：', key: 'invoice_number' },
+						{ label: '金额：', key: 'amount' },
+						{ label: '操作人：', key: 'operation_user' },
+						{ label: '操作时间：', key: 'operation_time' },
+					];
 					return (
 						<div className='invoice_popover_content'>
 							{
@@ -69,7 +69,7 @@ export const getInvoiceQueryCol = (handleAction) => {
 							status === '5' ?
 							<Popover 
 								className='invoice_popover_wrapper'
-								placement="topLeft" title='红字发票' 
+								placement="top" title='红字发票' 
 								content={getContent()} trigger="click"
 							>
 								<a>{data}</a>

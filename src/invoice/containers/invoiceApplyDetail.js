@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux';
 import * as actions from "../actions/applyDetail";
 //antd
-import { Table, Tabs, Modal, Form, Input, Select, DatePicker } from "antd";//Button
+import { Table, Tabs, Modal, Form, Input, Select, DatePicker, Popover } from "antd";//Button
 //less
 import './invoiceApplyDetail.less'
 //数据配置
@@ -104,16 +104,41 @@ class InvoiceApplyDetail extends React.Component {
 			}
 		})
 	}
-	getInvoiceOperateComp = () => {
-		// return <div className='invoice_item'>
-		// 	<a className='left-gap' onClick={() => this.handleInvoiceOperate('invalid')}>当月作废</a>
-		// 	<a className='left-gap-10' onClick={() => this.handleInvoiceOperate('red')}>红字发票</a>
-		// </div>
+	getInvoiceOperateComp = (record) => {
 		return <div className='invoice_item'>
-			<span>当月作废</span>
-			<span>2019-12-29 24:59:59</span>
-			<span>当月作废当月作废当月</span>
+			<a className='left-gap' onClick={() => this.handleInvoiceOperate('invalid')}>当月作废</a>
+			<a className='left-gap-10' onClick={() => this.handleInvoiceOperate('red')}>红字发票</a>
 		</div>
+		// const getContent = () => {
+		// 	const contentArr = [
+		// 		{ label: '时间：', key: 'invoice_number' },
+		// 		{ label: '原因：', key: 'amount' },
+		// 	];
+		// 	return (
+		// 		<div className='invoice_popover_content'>
+		// 			{
+		// 				contentArr.map(item => {
+		// 					const { label, key } = item;
+		// 					return (
+		// 						<div key={key}>
+		// 							<span className='popover_title'>{label}</span>
+		// 							<span>{record[key]}</span>
+		// 						</div>
+		// 					)
+		// 				})
+		// 			}
+		// 		</div>
+		// 	)
+		// }
+		// return <div className='invoice_item'>
+		// 	<Popover 
+		// 		className='invoice_popover_wrapper'
+		// 		placement="top" title='红字发票' 
+		// 		content={getContent()} trigger="click"
+		// 	>
+		// 		<span className='invoice_detail_status'>当月作废</span>
+		// 	</Popover>
+		// </div>
 	}
 	getInvoiceModalContent = (type) => {
 		const { form } = this.props;
@@ -439,7 +464,8 @@ class InvoiceApplyDetail extends React.Component {
 				dataIndex: 'status_display',
 				key: 'status_display',
 				align: 'center',
-				render: (text, { status_display, express_company_display, waybill_number }) => {
+				render: (_, record) => {
+					const { status_display, express_company_display, waybill_number } = record;
 					const invoiceNumProps = {
 						className: status_display ?  'invoice_num_cls left-gap' : 'left-gap',
 						onClick: status_display ? () => this.handleInvoiceOperate('detail') : null
@@ -455,7 +481,7 @@ class InvoiceApplyDetail extends React.Component {
 										<span className='left-gap'>{item.invoice_amount}</span>
 									</div>
 									{
-										this.getInvoiceOperateComp()
+										this.getInvoiceOperateComp(record)
 									}
 								</p>
 							}) : null}

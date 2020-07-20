@@ -10,6 +10,7 @@ import { getInvoiceQueryOptions, getInvoiceQueryCol } from '../constants/invoice
 import { Scolltable } from '@/components';
 import { getTotalWidth, events } from '@/util';
 import qs from 'qs';
+import moment from 'moment';
 import apiDownload from '@/api/apiDownload';
 
 export class InvoiceQuery extends Component {
@@ -45,10 +46,11 @@ export class InvoiceQuery extends Component {
 	}
 
 	handleExport = (searchQuery) => {
+		const timeStamp = moment().format('YYYYMMDD');
 		apiDownload({
 			url: '/finance/invoice/invoice/export?' + qs.stringify(searchQuery),
 			method: 'GET',
-		}, `发票查询导出.xls`)
+		}, `发票查询列表${timeStamp}.xls`)
 	}
 
 	handleInvoiceOperate = (invoice_id) => {

@@ -30,7 +30,7 @@ export const getInvoiceQueryStatisticsOptions = () => {
 	]
 }
 
-export const getInvoicePopContent = (option, values) => {
+export const getInvoicePopContent = (option, values = {}) => {
 	return (
 		<div className='invoice_popover_content'>
 			{

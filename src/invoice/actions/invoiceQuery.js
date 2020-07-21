@@ -44,8 +44,8 @@ export const {
 
 //发票查询列表线下使用操作
 export const {
-	getInvoiceQueryOffline,
-	getInvoiceQueryOffline_success
-} = createHttpAction('getInvoiceQueryOffline', Interface.getInvoiceQueryOffline, {
+	getInvoiceQueryOperate,
+	getInvoiceQueryOperate_success
+} = createHttpAction('getInvoiceQueryOperate', Interface.getInvoiceQueryOperate, {
 	method: 'post'
 });

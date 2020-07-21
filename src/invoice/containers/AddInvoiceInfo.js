@@ -253,11 +253,11 @@ class AddInvoiceInfo extends Component {
 			);
 		});
 		return (
-			<Form onSubmit={this.handleSubmit.bind(this)} layout="inline" >
+			<Form onSubmit={this.handleSubmit.bind(this)} layout="inline" className='relate_new_invoice_form'>
 				<div className={formItems.length && formItems.length >= 5 ? 'invoice-scroll' : ''} ref={x => {
 					this.scrollChunk = x
 				}}>{formItems}</div>
-				{this.props.canInvoice ? <Button type="dashed" onClick={this.add} style={{ width: '60%' }}>
+				{this.props.canInvoice ? <Button className='add_invoice_btn' type="dashed" onClick={this.add} style={{ width: '60%' }}>
 					<Icon type="plus" /> 添加发票号及金额
                 </Button > : null}
 				<Row style={{ marginTop: '20px' }}>

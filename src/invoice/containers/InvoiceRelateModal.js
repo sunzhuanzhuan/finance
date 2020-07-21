@@ -49,29 +49,6 @@ class InvoiceRelateModal extends Component {
 		}
 	}
 
-	//查询
-	handleSelsetSubmit(e) {
-		this.props.form.validateFields((_, values) => {
-			if (e) { e.preventDefault() }
-			let createdAtStart;
-			let createdAtEnd;
-			if (values['range-picker'] && values['range-picker'].length) {
-				createdAtStart = values['range-picker'][0].format('YYYY-MM-DD')
-				createdAtEnd = values['range-picker'][1].format('YYYY-MM-DD');
-			}
-			values.page = 1;
-			values.page_size = 20
-			let formatValues = {
-				...values,
-				'created_at_start': createdAtStart,
-				'created_at_end': createdAtEnd,
-			}
-			this.props.actions.getApplyList(formatValues).then(() => {
-			}).catch(({ errorMsg }) => {
-				message.warning(errorMsg || '请求出错', 1)
-			})
-		});
-	}
 	//申请单列表 操作项-是否关联发票
 	isAssociate = (type_display, id, company_id, amount, can_invoice, type, receivableCount) => {
 		this.setState({
@@ -173,7 +150,7 @@ class InvoiceRelateModal extends Component {
 							<span key='apply-amount' className='modal-tip-title'>发票申请单金额：{this.state.applyAmount}元</span>
 							{this.state.type === 5 ? <span>（已开发票金额:{calcSum(acountAry).toFixed(2)}元）</span> : null}
 							{this.state.type === 5 ? <span key='can-invoice-amount' className='modal-tip-title'>可开发票金额：{this.state.canInvoice}元</span> : null}
-							{this.state.type === 1 || this.state.type === 5 ? <span key='apply-amount' className='modal-tip-title' style={{marginLeft: 10}}>应回款金额：{this.state.receivableCount}元</span> : null}
+							{this.state.type === 1 || this.state.type === 5 ? <span key='apply-amount-b' className='modal-tip-title' style={{marginLeft: 10}}>应回款金额：{this.state.receivableCount}元</span> : null}
 						</p>
 						<p className='modal-tip-title'>已填开票金额：<span className='some-red-span'>{this.state.totalSum}元</span></p>
 						<AddInvoiceInfo
@@ -185,7 +162,7 @@ class InvoiceRelateModal extends Component {
 							canInvoice={this.state.canInvoice}
 							type={this.state.type}
 							handleCreatNewInvoiceOk={this.handleCreatNewInvoiceOk.bind(this)}
-							handleSelsetSubmit={this.handleSelsetSubmit.bind(this)}
+							handleSelsetSubmit={this.props.refreshData.bind(this)}
 							handleTotalSum={this.handleTotalSum}
 							handleLimit={(limit) => { this.setState({ limit }) }}
 						></AddInvoiceInfo>

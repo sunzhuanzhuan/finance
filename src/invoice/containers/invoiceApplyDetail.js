@@ -1,21 +1,24 @@
-import React from 'react'
+import React from 'react';
 import { connect } from 'react-redux';
 import * as actions from "../actions/applyDetail";
+import { getInvoiceQueryOperate } from '../actions/invoiceQuery';
 //antd
-import { Table, Tabs, Modal, Form, Input, Select, DatePicker, Popover } from "antd";//Button
+import { Table, Tabs, Modal, Form, Input, Select, DatePicker, Popover, Spin } from "antd";//Button
 //less
-import './invoiceApplyDetail.less'
+import './invoiceApplyDetail.less';
 //数据配置
-import { handleCompany, handleKeyColumns, typeMap, handleTypeMap } from '../constants/invoiceListConfig'
+import { handleCompany, handleKeyColumns, typeMap, handleTypeMap } from '../constants/invoiceListConfig';
 //verticalTable
 import { WBYDetailTable } from "wbyui";
 import qs from "qs";
 import { calcSum } from "../../util";
-import '../components/VerticalTable.less'
-import { payback_status_map, invoice_type, invoice_content_type, beneficiary_company, status_display_map } from '../constants'
+import '../components/VerticalTable.less';
+import { payback_status_map, invoice_type, invoice_content_type, beneficiary_company, status_display_map } from '../constants';
 import InvoiceRelateModal from './InvoiceRelateModal';
 import { getInvoicePopContent } from '../constants/invoiceQuery';
-
+import { getAvailableInvoiceList } from '../actions';
+import debounce from 'lodash/debounce';
+import moment from 'moment';
 const TabPane = Tabs.TabPane;
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;
@@ -29,36 +32,60 @@ class InvoiceApplyDetail extends React.Component {
 			previewVisible: false,
 			tipVisible: false,
 			imgSrc: '',
-			loading: true,
+			tableLoading: true,
+			loading: false,
+			confirmLoading: false,
 			newRandomKey: '',
 			pageSize: 50,
 			key: 'reservation'
 		}
+		this.addMore = debounce(this.handleJudge, 1000);
 	}
 	async componentWillMount() {
 		//let queryObj = this.props.location.query;
 		//修改了获取值的方式
 		this.loadData();
 	}
+	handleScroll = (e) => {
+		const node = e.target;
+		const top = node.scrollTop;
+		if (top && (top > node.scrollHeight - node.clientHeight - 5)) {
+			this.addMore(() => {
+				this.setState({ loading: false });
+				node.scrollTop = top;
+			})
+		}
+	}
+	handleJudge = (fn) => {
+		this.setState({ loading: true });
+		const { page, pageSize, invoiceId } = this.state;
+		const id = invoiceId ? invoiceId : [];
+		this.props.getAvailableInvoiceList(this.props.id, id, page, pageSize + 50).then(() => {
+			this.setState({ pageSize: pageSize + 50 }, () => {
+				setTimeout(fn, 0);
+			});
+		})
+	}
 
 	loadData = () => {
 		let queryObj = qs.parse(this.props.location.search.substring(1))
 		let id = queryObj.id;
-		let { getApplyDetail, getAssociatedOrders, getiInvoiceRelation } = this.props;
+		let { getApplyDetail, getAssociatedOrders, getiInvoiceRelation, getAvailableInvoiceList } = this.props;
 		let { pageSize } = this.state;
 		getiInvoiceRelation(id);
 		getApplyDetail(id);
+		getAvailableInvoiceList(id);
 		let { detailInfo: { type } } = this.props;
 		if (type && type === 2) {
 			getAssociatedOrders(id, '1', 1, pageSize).then(() => {
 				this.setState({
-					loading: false
+					tableLoading: false
 				});
 			});
 		} else {
 			getAssociatedOrders(id, '3', 1, pageSize).then(() => {
 				this.setState({
-					loading: false
+					tableLoading: false
 				});
 			});
 		}
@@ -89,34 +116,61 @@ class InvoiceApplyDetail extends React.Component {
 		this.setState({ key });
 		if (!orderInfo[key]) {
 			this.setState({
-				loading: true,
+				tableLoading: true,
 			});
 			getAssociatedOrders(id, typeMap[key], 1, pageSize).then(() => {
 				this.setState({
-					loading: false,
+					tableLoading: false,
 				});
 			});
 		}
 	}
-	handleInvoiceOperate = (operateType) => {
-		this.setState({ invoiceModalType: operateType });
-		if(!operateType) 
-			return;
+	handleInvoiceOperate = (opt_type, invoiceBaseInfo) => {
+		if(invoiceBaseInfo) {
+			Object.assign(invoiceBaseInfo, {opt_type})
+		}
+		this.setState({ invoiceModalType: opt_type, invoiceBaseInfo });
 	}
 	handleOk = () => {
 		const { form } = this.props;
 		const { validateFields } = form;
 		validateFields((err, values) => {
 			if(!err) {
-				console.log('sdkjflsjflsdkjf', values);
+				const { invoiceBaseInfo = {} } = this.state;
+				const { opt_type } = invoiceBaseInfo;
+				let query = {};
+				if(opt_type === 'void') {
+					query = { ...invoiceBaseInfo, ...values };
+				}else if(opt_type === 'red') {
+					values.invoice_time = moment(values.invoice_time).format('YYYY-MM-DD');
+					query = {
+						...invoiceBaseInfo,
+						invoice_relation_id: invoiceBaseInfo.invoice_id,
+						...values,
+					}
+				}
+				delete query.invoice_amount;
+				this.setState({confirmLoading: true});
+				this.props.getInvoiceQueryOperate(query).then(() => {
+					this.handleInvoiceOperate();
+					this.loadData();
+				}).finally(() => {
+					this.setState({confirmLoading: false});
+				})
 			}
 		})
 	}
 	getInvoiceOperateComp = (record = {}, status, role) => {
 		if(status === '2' && role === 'cashier'){
+			const { invoice_id, invoice_application_id, invoice_amount } = record;
+			const invoiceBaseInfo = {
+				invoice_id,
+				invoice_application_id,
+				invoice_amount
+			}
 			return <div className='invoice_item'>
-				<a className='left-gap' onClick={() => this.handleInvoiceOperate('invalid')}>当月作废</a>
-				<a className='left-gap-10' onClick={() => this.handleInvoiceOperate('red')}>红字发票</a>
+				<a className='left-gap' onClick={() => this.handleInvoiceOperate('void', invoiceBaseInfo)}>当月作废</a>
+				<a className='left-gap-10' onClick={() => this.handleInvoiceOperate('red', invoiceBaseInfo)}>红字发票</a>
 			</div>
 		}else if(status === '4' || status === '5') {
 			const timeKey = {
@@ -143,10 +197,10 @@ class InvoiceApplyDetail extends React.Component {
 	getInvoiceModalContent = (type) => {
 		const { form } = this.props;
 		const { getFieldDecorator } = form;
-		if( type === 'invalid' ) {
+		if( type === 'void' ) {
 			return (
 				<FormItem>
-					{getFieldDecorator('remark', {
+					{getFieldDecorator('invalid_reason', {
 						rules: [
 							{ 
 								required: true, 
@@ -160,34 +214,46 @@ class InvoiceApplyDetail extends React.Component {
 				</FormItem>
 			)
 		}else if( type === 'red' ) {
+			const { availableInvoiceList = [] } = this.props;
+			const { invoiceBaseInfo = {} } = this.state;
+			const renderItems = availableInvoiceList ? availableInvoiceList.map((item, index) => {
+				return <Option key={index} value={item.invoice_id}>{item.invoice_number}</Option>
+			}) : [];
+			const getInvoiceCount = () => {
+				const { invoice_amount } = invoiceBaseInfo;
+				return Number(invoice_amount) > 0 ? `-${invoice_amount}` : invoice_amount;
+			}
 			return [
-				<FormItem label='发票号' key='invoiceNO'>
-					{getFieldDecorator('quote_type', {
+				<FormItem label='发票号' key='invoice_id'>
+					{getFieldDecorator('invoice_id', {
 						rules: [
 							{ required: true, message: '请选择发票号' }
 						]
 					})(
-						<Select 
-							className='select_commont_width'
-							allowClear
+						<Select
+							style={{ width: 135 }}
+							placeholder="请选择"
 							showSearch
-							filterOption={(input, option) => (
-								option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+							onPopupScroll={this.handleScroll}
+							dropdownRender={menu => (
+								<div>
+									<Spin tip='加载更多，请稍候...' spinning={this.state.loading}>
+										<div style={this.state.loading ? { visibility: 'hidden' } : {}}>
+											{menu}
+										</div>
+									</Spin>
+								</div>
 							)}
 						>
-							{
-								[{id: 1233, display: '1233'}].map(item => 
-									<Option key={item.id} value={item.id}>{item.display}</Option>
-								)
-							}
+							{renderItems}
 						</Select>
 					)}
 				</FormItem>,
 				<FormItem label='金额' key='invoiceCount' className='invoice_count_item'>
-					<div>1233</div>
+					<div className='color_red'>{getInvoiceCount()}</div>
 				</FormItem>,
-				<FormItem label='开票日期' key='invoiceTime'>
-					{getFieldDecorator('end_time', {
+				<FormItem label='开票日期' key='invoice_time'>
+					{getFieldDecorator('invoice_time', {
 						rules: [
 							{ required: true, message: '请选择开票日期' }
 						]
@@ -195,8 +261,8 @@ class InvoiceApplyDetail extends React.Component {
 						<DatePicker className='select_commont_width' format={dataFormat} />
 					)}
 				</FormItem>,
-				<FormItem label='请填写红字发票原因' key='invoiceReason'>
-					{getFieldDecorator('remark', {
+				<FormItem label='请填写红字发票原因' key='invalid_reason'>
+					{getFieldDecorator('invalid_reason', {
 						rules: [
 							{ 
 								required: true, 
@@ -221,7 +287,7 @@ class InvoiceApplyDetail extends React.Component {
 		});
 	}
 	render() {
-		let { previewVisible, imgSrc, loading, pageSize, key, invoiceModalType } = this.state;//tipVisible
+		let { previewVisible, imgSrc, tableLoading, pageSize, key, invoiceModalType, confirmLoading } = this.state;//tipVisible
 		let { detailInfo, detailInfo: { type, payback_status, role }, invoiceRelation, orderInfo, getAssociatedOrders } = this.props;
 		//修改了获取值的方式
 		let { id } = qs.parse(this.props.location.search.substring(1));
@@ -230,7 +296,7 @@ class InvoiceApplyDetail extends React.Component {
 		let typeTable = type ? type === 2 ? handleTypeMap('2') : handleTypeMap('1') : [];
 		const modalCls = invoiceModalType === 'red' ? 'invoice_operate_form clear-fix' : '';
 		const titleOption = {
-			'invalid': '请填写当月作废原因',
+			'void': '请填写当月作废原因',
 			'red': '请填写新的发票号',
 			'detail': '操作详情'
 		}
@@ -577,15 +643,15 @@ class InvoiceApplyDetail extends React.Component {
 		let paginationObj = orderInfo[key] ? {
 			onChange: (current) => {
 				this.setState({
-					loading: true
+					tableLoading: true
 				});
 				getAssociatedOrders(id, typeMap[key], current, pageSize).then(() => {
 					this.setState({
-						loading: false
+						tableLoading: false
 					});
 				}).catch(() => {
 					this.setState({
-						loading: false
+						tableLoading: false
 					});
 				})
 			},
@@ -609,7 +675,7 @@ class InvoiceApplyDetail extends React.Component {
 						<Tabs defaultActiveKey="reservation" type='card' onChange={this.handleTabsChange}>
 							{typeTable.map((item) => {
 								return <TabPane tab={item.title} key={item.key}>
-									<Table columns={item.columns} dataSource={orderInfoList[item.key]} loading={loading} pagination={paginationObj} />
+									<Table columns={item.columns} dataSource={orderInfoList[item.key]} loading={tableLoading} pagination={paginationObj} />
 								</TabPane>
 							})
 							}
@@ -627,9 +693,10 @@ class InvoiceApplyDetail extends React.Component {
 					</Modal> */}
 					
 					<Modal 
-						width={580}
+						width={600}
 						title={titleOption[invoiceModalType]}
 						visible={Boolean(invoiceModalType)} 
+						confirmLoading={confirmLoading}
 						onCancel={() => this.handleInvoiceOperate()}
 						onOk={this.handleOk}
 					>
@@ -655,7 +722,8 @@ export default connect(
 	state => ({
 		detailInfo: state.invoice.getApplyDetail.detailInfo,
 		orderInfo: state.invoice.getApplyDetail.orderInfo,
+		availableInvoiceList: state.invoice.availableInvoiceList,
 		invoiceRelation: state.invoice.getApplyDetail.invoiceRelation
 	}),
-	actions
+	{...actions, getAvailableInvoiceList, getInvoiceQueryOperate}
 )(Form.create()(InvoiceApplyDetail))

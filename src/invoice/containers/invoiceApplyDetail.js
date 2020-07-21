@@ -14,6 +14,7 @@ import { calcSum } from "../../util";
 import '../components/VerticalTable.less'
 import { payback_status_map, invoice_type, invoice_content_type, beneficiary_company, status_display_map } from '../constants'
 import InvoiceRelateModal from './InvoiceRelateModal';
+import { getInvoicePopContent } from '../constants/invoiceQuery';
 
 const TabPane = Tabs.TabPane;
 const FormItem = Form.Item;
@@ -111,35 +112,22 @@ class InvoiceApplyDetail extends React.Component {
 			}
 		})
 	}
-	getPopContent = (option, values) => {
-		return (
-			<div className='invoice_popover_content'>
-				{
-					option.map(item => {
-						const { label, key } = item;
-						return (
-							<div key={key}>
-								<span className='popover_title'>{label}</span>
-								<span>{values[key]}</span>
-							</div>
-						)
-					})
-				}
-			</div>
-		)
-	}
 	getInvoiceOperateComp = (record, INVOICE_FAKE_STATUS) => {
-		if(INVOICE_FAKE_STATUS){
+		if(!INVOICE_FAKE_STATUS){
 			return <div className='invoice_item'>
 				<a className='left-gap' onClick={() => this.handleInvoiceOperate('invalid')}>当月作废</a>
 				<a className='left-gap-10' onClick={() => this.handleInvoiceOperate('red')}>红字发票</a>
 			</div>
 		}else {
+			const contentArr = [
+				{ label: '时间：', key: 'invoice_number' },
+				{ label: '原因：', key: 'amount' },
+			];
 			return <div className='invoice_item'>
 				<Popover 
-					className='invoice_popover_wrapper'
+					overlayClassName='invoice_popover_wrapper invoice_popover_wrapper_small'
 					placement="top" title='红字发票' 
-					content={this.getPopContent()} trigger="click"
+					content={getInvoicePopContent(contentArr, record)} trigger="click"
 				>
 					<span className='invoice_detail_status'>当月作废</span>
 				</Popover>
@@ -461,29 +449,6 @@ class InvoiceApplyDetail extends React.Component {
 					const getInvoiceNumItems = () => {
 						const { status_display, express_company_display, waybill_number } = record;
 						if(status_display === status_display_map['YIKAI'] || status_display === status_display_map['YIJI']) {
-							const getContent = () => {
-								const contentArr = [
-									{ label: '发票号：', key: 'invoice_number' },
-									{ label: '金额：', key: 'amount' },
-									{ label: '操作人：', key: 'operation_user' },
-									{ label: '操作时间：', key: 'operation_time' },
-								];
-								return (
-									<div className='invoice_popover_content'>
-										{
-											contentArr.map(item => {
-												const { label, key } = item;
-												return (
-													<div key={key}>
-														<span className='popover_title'>{label}</span>
-														<span>{record[key]}</span>
-													</div>
-												)
-											})
-										}
-									</div>
-								)
-							}
 							return (
 								<div className='status-display'>
 									<p>
@@ -498,15 +463,21 @@ class InvoiceApplyDetail extends React.Component {
 									</p>
 									<p> 发票号及对应金额：</p>
 									{invoiceRelation ? invoiceRelation.map((item, index) => {
-										const { invoice_number, invoice_amount, INVOICE_FAKE_STATUS } = item;
+										const { invoice_number, invoice_amount, INVOICE_FAKE_STATUS = 2 } = item;
+										const redInvoiceArr = [
+											{ label: '发票号：', key: 'invoice_number' },
+											{ label: '金额：', key: 'amount' },
+											{ label: '操作人：', key: 'operation_user' },
+											{ label: '操作时间：', key: 'operation_time' },
+										]
 										return <p key={index} className='invoice_operate_wrapper'>
 											<div className='invoice_item'>
 												{
 													INVOICE_FAKE_STATUS ? 
 													<Popover 
-														className='invoice_popover_wrapper'
+														overlayClassName='invoice_popover_wrapper'
 														placement="top" title='红字发票' 
-														content={this.getPopContent()} trigger="click"
+														content={getInvoicePopContent(redInvoiceArr, record)} trigger="click"
 													>
 														<span className='invoice_num_cls left-gap'>{invoice_number}</span>
 													</Popover> :

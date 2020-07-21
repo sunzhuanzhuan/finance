@@ -30,6 +30,24 @@ export const getInvoiceQueryStatisticsOptions = () => {
 	]
 }
 
+export const getInvoicePopContent = (option, values) => {
+	return (
+		<div className='invoice_popover_content'>
+			{
+				option.map(item => {
+					const { label, key } = item;
+					return (
+						<div key={key}>
+							<span className='popover_title'>{label}</span>
+							<span>{values[key]}</span>
+						</div>
+					)
+				})
+			}
+		</div>
+	)
+}
+
 export const getInvoiceQueryCol = (handleAction) => {
 	return [
 		{ 
@@ -40,37 +58,20 @@ export const getInvoiceQueryCol = (handleAction) => {
 			width: 100,
 			render: (data, record) => {
 				const { status, is_offline_name, red_invoice_info = {} } = record;
-				const getContent = () => {
-					const contentArr = [
-						{ label: '发票号：', key: 'invoice_number' },
-						{ label: '金额：', key: 'amount' },
-						{ label: '操作人：', key: 'operation_user' },
-						{ label: '操作时间：', key: 'operation_time' },
-					];
-					return (
-						<div className='invoice_popover_content'>
-							{
-								contentArr.map(item => {
-									const { label, key } = item;
-									return (
-										<div key={key}>
-											<span className='popover_title'>{label}</span>
-											<span>{red_invoice_info[key]}</span>
-										</div>
-									)
-								})
-							}
-						</div>
-					)
-				}
+				const contentArr = [
+					{ label: '发票号：', key: 'invoice_number' },
+					{ label: '金额：', key: 'amount' },
+					{ label: '操作人：', key: 'operation_user' },
+					{ label: '操作时间：', key: 'operation_time' },
+				];
 				return (
 					<div>
 						{
 							status === '5' ?
 							<Popover 
-								className='invoice_popover_wrapper'
+								overlayClassName='invoice_popover_wrapper'
 								placement="top" title='红字发票' 
-								content={getContent()} trigger="click"
+								content={getInvoicePopContent(contentArr, red_invoice_info)} trigger="click"
 							>
 								<a>{data}</a>
 							</Popover> :

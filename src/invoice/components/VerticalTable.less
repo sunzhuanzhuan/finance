@@ -75,6 +75,7 @@
                 background-color: red;
                 color: #fff;
                 padding: 0px 4px;
+                cursor: pointer;
             }
             .left-gap-10 {
                 margin-left: 10px;
@@ -133,8 +134,16 @@
         margin: 0 24px;
     }
 }
-.invoice_popover_content > div .popover_title {
-    display: inline-block;
+.invoice_popover_wrapper {
+    .ant-popover-title {
+        color: red;
+    }
+    .invoice_popover_content .popover_title {
+        display: inline-block;
+        width: 70px;
+        text-align: right;
+    }
+}
+.invoice_popover_wrapper_small .ant-popover-content .invoice_popover_content .popover_title{
     width: 40px;
-    text-align: right;
 }

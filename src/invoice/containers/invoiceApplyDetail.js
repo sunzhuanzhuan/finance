@@ -112,26 +112,32 @@ class InvoiceApplyDetail extends React.Component {
 			}
 		})
 	}
-	getInvoiceOperateComp = (record, INVOICE_FAKE_STATUS) => {
-		if(!INVOICE_FAKE_STATUS){
+	getInvoiceOperateComp = (record = {}, status, role) => {
+		if(status === '2' && role === 'cashier'){
 			return <div className='invoice_item'>
 				<a className='left-gap' onClick={() => this.handleInvoiceOperate('invalid')}>当月作废</a>
 				<a className='left-gap-10' onClick={() => this.handleInvoiceOperate('red')}>红字发票</a>
 			</div>
-		}else {
+		}else if(status === '4' || status === '5') {
+			const timeKey = {
+				'4': 'void_time',
+				'5': 'redmark_time'
+			}
 			const contentArr = [
-				{ label: '时间：', key: 'invoice_number' },
-				{ label: '原因：', key: 'amount' },
+				{ label: '时间：', key: timeKey[status] },
+				{ label: '原因：', key: 'invalid_reason' },
 			];
 			return <div className='invoice_item'>
 				<Popover 
 					overlayClassName='invoice_popover_wrapper invoice_popover_wrapper_small'
-					placement="top" title='红字发票' 
+					placement="top" title={record.status_name} 
 					content={getInvoicePopContent(contentArr, record)} trigger="click"
 				>
-					<span className='invoice_detail_status'>当月作废</span>
+					<span className='invoice_detail_status'>{record.status_name}</span>
 				</Popover>
 			</div>
+		}else {
+			return null
 		}
 	}
 	getInvoiceModalContent = (type) => {
@@ -443,7 +449,7 @@ class InvoiceApplyDetail extends React.Component {
 					const getRelateBtn = () => {
 						const { type_display, id, company_id, amount, real_amount, can_invoice, type, receivables_payback_amount } = detailInfo;
 						return (
-							amount !== real_amount ? <a key='relateInvoice' onClick={() => {this.isShowRelateModal(type_display, id, company_id, amount, can_invoice, type, receivables_payback_amount)}}>重新关联发票</a> : null
+							role === 'cashier' && amount !== real_amount ? <a key='relateInvoice' onClick={() => {this.isShowRelateModal(type_display, id, company_id, amount, can_invoice, type, receivables_payback_amount)}}>重新关联发票</a> : null
 						)
 					}
 					const getInvoiceNumItems = () => {
@@ -463,7 +469,7 @@ class InvoiceApplyDetail extends React.Component {
 									</p>
 									<p> 发票号及对应金额：</p>
 									{invoiceRelation ? invoiceRelation.map((item, index) => {
-										const { invoice_number, invoice_amount, INVOICE_FAKE_STATUS = 2 } = item;
+										const { invoice_number, invoice_amount, status, red_invoice_info } = item;
 										const redInvoiceArr = [
 											{ label: '发票号：', key: 'invoice_number' },
 											{ label: '金额：', key: 'amount' },
@@ -473,11 +479,11 @@ class InvoiceApplyDetail extends React.Component {
 										return <p key={index} className='invoice_operate_wrapper'>
 											<div className='invoice_item'>
 												{
-													INVOICE_FAKE_STATUS ? 
+													status === '5' ? 
 													<Popover 
 														overlayClassName='invoice_popover_wrapper'
 														placement="top" title='红字发票' 
-														content={getInvoicePopContent(redInvoiceArr, record)} trigger="click"
+														content={getInvoicePopContent(redInvoiceArr, red_invoice_info)} trigger="click"
 													>
 														<span className='invoice_num_cls left-gap'>{invoice_number}</span>
 													</Popover> :
@@ -486,7 +492,7 @@ class InvoiceApplyDetail extends React.Component {
 												<span className='left-gap'>{invoice_amount}</span>
 											</div>
 											{
-												this.getInvoiceOperateComp(record, INVOICE_FAKE_STATUS)
+												this.getInvoiceOperateComp(item, status, role)
 											}
 										</p>
 									}) : null}

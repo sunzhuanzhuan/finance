@@ -14,7 +14,7 @@ export const {
 export const {
 	getInvoiceQueryCompanyId,
 	getInvoiceQueryCompanyId_success
-} = createHttpAction('getInvoiceQueryCompanyId', Interface.getGoldenCompanyId, {
+} = createHttpAction('getInvoiceQueryCompanyId', Interface.getInvoiceQueryCompanyId, {
 	method: 'get'
 });
 

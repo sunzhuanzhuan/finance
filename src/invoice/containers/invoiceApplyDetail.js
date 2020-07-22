@@ -572,8 +572,8 @@ class InvoiceApplyDetail extends React.Component {
 										{
 											status_display === status_display_map['YIJI'] ? 
 											[
-												<span key='express_company_display'>（快递公司：{express_company_display}</span>,
-												<span key='waybill_number' className='left-gap'>快递编号：{waybill_number}）</span>
+												<span className='color_red' key='express_company_display'>（快递公司：{express_company_display}</span>,
+												<span key='waybill_number' className='left-gap color_red'>快递编号：{waybill_number}）</span>
 											] : null
 										}
 									</p>
@@ -595,9 +595,9 @@ class InvoiceApplyDetail extends React.Component {
 														placement="top" title='红字发票' 
 														content={getInvoicePopContent(redInvoiceArr, red_invoice_info)} trigger="click"
 													>
-														<span className='invoice_num_cls left-gap'>{invoice_number}</span>
+														<span className='invoice_num_cls left-gap default_color'>{invoice_number}</span>
 													</Popover> :
-													<span className='left-gap'>{invoice_number}</span>
+													<span className='left-gap default_color'>{invoice_number}</span>
 												}
 												<span className='left-gap'>{invoice_amount}</span>
 											</div>

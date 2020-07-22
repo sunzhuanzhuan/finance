@@ -23,6 +23,7 @@ const TabPane = Tabs.TabPane;
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;
 const Option = Select.Option;
+const { confirm } = Modal;
 const dataFormat = 'YYYY-MM-DD';
 
 class InvoiceApplyDetail extends React.Component {
@@ -160,17 +161,53 @@ class InvoiceApplyDetail extends React.Component {
 			}
 		})
 	}
+	showConfirm = (type, invoiceBaseInfo, otherApplicationId) => {
+		const idContent = () => {
+			return otherApplicationId.map(item => [
+				<a className='color_red' key={item} href={`/finance/invoice/applyDetail?id=${item}`} target='_blank'>{item}</a>,
+				<span key={`${item}_sign`}>，</span>
+			])
+		};
+		const textOption = {
+			'void': '作废',
+			'red': '红冲'
+		};
+		const textContent = (<span>{`你还要继续${textOption[type]}吗？`}</span>);
+		confirm({
+			title: '此发票号同时关联其他的发票申请单',
+			content: [idContent(), textContent],
+			okText: '继续',
+			onOk: () => {
+				this.handleInvoiceOperate(type, invoiceBaseInfo)
+			},
+		});
+	}
 	getInvoiceOperateComp = (record = {}, status, role) => {
 		if(status === '2' && role === 'cashier'){
-			const { invoice_id, invoice_application_id, invoice_amount } = record;
+			const { invoice_id, invoice_application_id, invoice_amount, other_application_id = [] } = record;
 			const invoiceBaseInfo = {
 				invoice_id,
 				invoice_application_id,
 				invoice_amount
+			};
+			const getOperateBtn = () => {
+				const invoiceOperateArr = [
+					{ key: 'void', title: '当月作废', className: 'left-gap' },
+					{ key: 'red', title: '红字发票', className: 'left-gap-10' },
+				];
+				const otherBinding = Array.isArray(other_application_id) && other_application_id.length;
+				const operateFunc = otherBinding ? this.showConfirm : this.handleInvoiceOperate;
+				return invoiceOperateArr.map(item => {
+					const { className, key, title } = item;
+					return (
+						<a key={key} className={className} onClick={() => operateFunc(key, invoiceBaseInfo, other_application_id)}>{title}</a>
+					)
+				})
 			}
 			return <div className='invoice_item'>
-				<a className='left-gap' onClick={() => this.handleInvoiceOperate('void', invoiceBaseInfo)}>当月作废</a>
-				<a className='left-gap-10' onClick={() => this.handleInvoiceOperate('red', invoiceBaseInfo)}>红字发票</a>
+				{
+					getOperateBtn()
+				}
 			</div>
 		}else if(status === '4' || status === '5') {
 			const timeKey = {
@@ -277,9 +314,9 @@ class InvoiceApplyDetail extends React.Component {
 			]
 		}
 	}
-	isShowRelateModal = (type_display, id, company_id, amount, can_invoice, type, receivableCount) => {
+	isShowRelateModal = (type_display, id, company_id, amount, can_invoice, type, receivableCount, real_amount) => {
 		const relateBaseInfo = {
-			type_display, id, company_id, amount, can_invoice, type, receivableCount
+			type_display, id, company_id, amount, can_invoice, type, receivableCount, real_amount
 		}
 		this.setState({ 
 			relateModalVisible: !this.state.relateModalVisible,
@@ -435,12 +472,13 @@ class InvoiceApplyDetail extends React.Component {
 				dataIndex: 'amount',
 				key: 'amount',
 				align: 'center',
-				render: (text, { amount, real_amount, payback_amount, receivables_payback_amount }) => {
+				render: (text, { amount, real_amount, payback_amount, receivables_payback_amount, invoice_void_amount }) => {
 					return <ul>
 						<li>已开票金额:{real_amount}</li>
 						<li>申请单金额:{amount}</li>
 						<li>已回款金额:{payback_amount}</li>
 						<li>待回款金额:{calcSum([receivables_payback_amount, -payback_amount]).toFixed(2)}</li>
+						<li>总作废金额:{invoice_void_amount}</li>
 					</ul>
 				}
 			},
@@ -515,7 +553,7 @@ class InvoiceApplyDetail extends React.Component {
 					const getRelateBtn = () => {
 						const { type_display, id, company_id, amount, real_amount, can_invoice, type, receivables_payback_amount } = detailInfo;
 						return (
-							role === 'cashier' && amount !== real_amount ? <a key='relateInvoice' onClick={() => {this.isShowRelateModal(type_display, id, company_id, amount, can_invoice, type, receivables_payback_amount)}}>重新关联发票</a> : null
+							role === 'cashier' && amount !== real_amount ? <a key='relateInvoice' onClick={() => {this.isShowRelateModal(type_display, id, company_id, amount, can_invoice, type, receivables_payback_amount, real_amount)}}>重新关联发票</a> : null
 						)
 					}
 					const getInvoiceNumItems = () => {

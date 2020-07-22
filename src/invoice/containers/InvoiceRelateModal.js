@@ -19,7 +19,9 @@ class InvoiceRelateModal extends Component {
 			totalSpendAmount: '',
 			totalRechargeAmount: '',
 			totalInvoicedAmount: '',
+			totalInvoiceVoidAmount: '',
 			applyAmount: '',
+			realAmount: '',
 			canInvoice: '',
 			type: 1,
 			totalSum: 0,
@@ -44,17 +46,18 @@ class InvoiceRelateModal extends Component {
 		const { isAssociateVisible: prevVisible } = prevState;
 		if(isAssociateVisible && !prevVisible) {
 			const { relateBaseInfo = {} } = this.props;
-			const { type_display, id, company_id, amount, can_invoice, type, receivableCount } = relateBaseInfo;
-			this.isAssociate(type_display, id, company_id, amount, can_invoice, type, receivableCount)
+			const { type_display, id, company_id, amount, can_invoice, type, receivableCount, real_amount } = relateBaseInfo;
+			this.isAssociate(type_display, id, company_id, amount, can_invoice, type, receivableCount, real_amount)
 		}
 	}
 
 	//申请单列表 操作项-是否关联发票
-	isAssociate = (type_display, id, company_id, amount, can_invoice, type, receivableCount) => {
+	isAssociate = (type_display, id, company_id, amount, can_invoice, type, receivableCount, real_amount) => {
 		this.setState({
 			isAssociateBtnVisible: type_display,
 			invoiceApplyId: id,
 			applyAmount: amount,
+			realAmount: real_amount, 
 			canInvoice: can_invoice,
 			type: type,
 			receivableCount
@@ -67,6 +70,7 @@ class InvoiceRelateModal extends Component {
 					totalSpendAmount: data.total_spend_amount,
 					totalRechargeAmount: data.total_recharge_amount,
 					totalInvoicedAmount: data.total_invoiced_amount,
+					totalInvoiceVoidAmount: data.total_invoice_void_amount
 				});
 			}).catch(({ errorMsg }) => {
 				message.warning(errorMsg || '请求出错', 1)
@@ -126,7 +130,7 @@ class InvoiceRelateModal extends Component {
 						{
 							(this.state.totalInvoicedAmount > this.state.totalSpendAmount) || (this.state.totalInvoicedAmount > this.state.totalRechargeAmount) ? <p style={{ fontSize: '12px' }}><span style={{ color: 'red' }}>预警提示：</span>该公司发票已开超，请谨慎操作</p> : null
 						}
-						<p style={{ fontSize: '12px' }}>该公司总消费：{this.state.totalSpendAmount}元，总充值：{this.state.totalRechargeAmount}元，已开票金额（含合同、邮件审批）：{this.state.totalInvoicedAmount}元</p>
+						<p style={{ fontSize: '12px' }}>该公司总消费：{this.state.totalSpendAmount}元，总充值：{this.state.totalRechargeAmount}元，已开票金额（含合同、邮件审批）：{this.state.totalInvoicedAmount}元，总作废金额：{this.state.totalInvoiceVoidAmount}</p>
 						<p>请确认该发票申请单之前没有开过发票，以免开重，然后再进行下一步操作</p>
 						<Row type="flex" justify="center" gutter={16}>
 							{this.state.isAssociateBtnVisible == '消费' || this.state.isAssociateBtnVisible == '充值' ? <Col><Button><Link to={"/finance/invoice/associateInvoice?id=" + this.state.invoiceApplyId + "&role=" + role + "&receivable=" + this.state.receivableCount}>已开票，关联现有发票</Link></Button></Col> : ''}
@@ -148,11 +152,13 @@ class InvoiceRelateModal extends Component {
 					<div>
 						<p>
 							<span key='apply-amount' className='modal-tip-title'>发票申请单金额：{this.state.applyAmount}元</span>
-							{this.state.type === 5 ? <span>（已开发票金额:{calcSum(acountAry).toFixed(2)}元）</span> : null}
-							{this.state.type === 5 ? <span key='can-invoice-amount' className='modal-tip-title'>可开发票金额：{this.state.canInvoice}元</span> : null}
 							{this.state.type === 1 || this.state.type === 5 ? <span key='apply-amount-b' className='modal-tip-title' style={{marginLeft: 10}}>应回款金额：{this.state.receivableCount}元</span> : null}
 						</p>
-						<p className='modal-tip-title'>已填开票金额：<span className='some-red-span'>{this.state.totalSum}元</span></p>
+						<p>
+							<span>已开票金额:{calcSum(acountAry).toFixed(2)}元</span>
+							<span className='modal-tip-title'>本次可开票的金额：{this.state.canInvoice}元</span>
+						</p>
+						{/* <p className='modal-tip-title'>已填开票金额：<span className='some-red-span'>{this.state.totalSum}元</span></p> */}
 						<AddInvoiceInfo
 							availableInvoiceList={availableInvoiceList}
 							handleSelectData={this.handleSelectData.bind(this)}

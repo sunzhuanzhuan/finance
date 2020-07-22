@@ -327,9 +327,9 @@ class ApplyList extends Component {
 
 	}
 
-	isShowRelateModal = (type_display, id, company_id, amount, can_invoice, type, receivableCount) => {
+	isShowRelateModal = (type_display, id, company_id, amount, can_invoice, type, receivableCount, real_amount) => {
 		const relateBaseInfo = {
-			type_display, id, company_id, amount, can_invoice, type, receivableCount
+			type_display, id, company_id, amount, can_invoice, type, receivableCount, real_amount
 		}
 		this.setState({ 
 			relateModalVisible: !this.state.relateModalVisible,
@@ -618,14 +618,14 @@ class ApplyList extends Component {
 								<div className='button-margin'>									{record.status_display == '已开' ? <Button size='small' type="primary" onClick={this.showConfirm.bind(this, 'deliver', record.id, role, expressCompanyData)}>已寄出</Button> : ''}
 									{record.status_display == '待开' ?
 										<p>
-											<Button size='small' type="primary" onClick={this.isShowRelateModal.bind(this, record.type_display, record.id, record.company_id, record.amount, record.can_invoice, record.type, record.receivables_payback_amount)}>已开</Button>
+											<Button size='small' type="primary" onClick={this.isShowRelateModal.bind(this, record.type_display, record.id, record.company_id, record.amount, record.can_invoice, record.type, record.receivables_payback_amount, record.real_amount)}>已开</Button>
 											{record.payback_status == 0 ? <Button size='small' type="primary" onClick={this.showConfirm.bind(this, 'cashier-cancel', record.id)}>取消</Button> : ''}
 										</p> : ''}
 								</div> :
 								<div className='button-margin'>									{record.status_display == '已开' ? <Button size='small' type="primary" onClick={this.showConfirm.bind(this, 'deliver', record.id, role, expressCompanyData)}>已寄出</Button> : ''}
 									{record.status_display == '待开' ?
 										<p>
-											<Button size='small' type="primary" onClick={this.isShowRelateModal.bind(this, record.type_display, record.id, record.company_id, record.amount, record.can_invoice, record.type, record.receivables_payback_amount)}>已开</Button>
+											<Button size='small' type="primary" onClick={this.isShowRelateModal.bind(this, record.type_display, record.id, record.company_id, record.amount, record.can_invoice, record.type, record.receivables_payback_amount, record.real_amount)}>已开</Button>
 											<Button size='small' type="primary" onClick={this.showConfirm.bind(this, 'cashier-cancel', record.id)}>取消</Button>
 										</p> : ''}
 								</div> : ''

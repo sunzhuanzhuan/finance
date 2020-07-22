@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { Row, Col, Button, Modal, Form, message } from 'antd';
+import { Row, Col, Button, Modal, Form, message, Skeleton } from 'antd';
 import * as applyListAction from '../actions/index'
 import './ApplyList.less';
 import AddInvoiceInfo from '../containers/AddInvoiceInfo'
@@ -60,7 +60,8 @@ class InvoiceRelateModal extends Component {
 			realAmount: real_amount, 
 			canInvoice: can_invoice,
 			type: type,
-			receivableCount
+			receivableCount,
+			companyInfoLoading: true
 		}, () => {
 			this.props.actions.getAvailableInvoiceList(this.state.invoiceApplyId, [], 1, this.state.limit).catch(({ errorMsg }) => {
 				message.warning(errorMsg || '请求出错', 1)
@@ -70,9 +71,11 @@ class InvoiceRelateModal extends Component {
 					totalSpendAmount: data.total_spend_amount,
 					totalRechargeAmount: data.total_recharge_amount,
 					totalInvoicedAmount: data.total_invoiced_amount,
-					totalInvoiceVoidAmount: data.total_invoice_void_amount
+					totalInvoiceVoidAmount: data.total_invoice_void_amount,
+					companyInfoLoading: false,
 				});
 			}).catch(({ errorMsg }) => {
+				this.setState({companyInfoLoading: false,})
 				message.warning(errorMsg || '请求出错', 1)
 			})
 		});
@@ -116,7 +119,6 @@ class InvoiceRelateModal extends Component {
 			availableInvoiceList = [],
 			isShowRelateModal
 		} = this.props;
-		let acountAry = [this.state.applyAmount, -this.state.canInvoice];
 		return (
 			<div>
 				<Modal
@@ -126,17 +128,20 @@ class InvoiceRelateModal extends Component {
 					footer={null}
 					width='580px'
 				>
-					<div>
-						{
-							(this.state.totalInvoicedAmount > this.state.totalSpendAmount) || (this.state.totalInvoicedAmount > this.state.totalRechargeAmount) ? <p style={{ fontSize: '12px' }}><span style={{ color: 'red' }}>预警提示：</span>该公司发票已开超，请谨慎操作</p> : null
-						}
-						<p style={{ fontSize: '12px' }}>该公司总消费：{this.state.totalSpendAmount}元，总充值：{this.state.totalRechargeAmount}元，已开票金额（含合同、邮件审批）：{this.state.totalInvoicedAmount}元，总作废金额：{this.state.totalInvoiceVoidAmount}</p>
-						<p>请确认该发票申请单之前没有开过发票，以免开重，然后再进行下一步操作</p>
-						<Row type="flex" justify="center" gutter={16}>
-							{this.state.isAssociateBtnVisible == '消费' || this.state.isAssociateBtnVisible == '充值' ? <Col><Button><Link to={"/finance/invoice/associateInvoice?id=" + this.state.invoiceApplyId + "&role=" + role + "&receivable=" + this.state.receivableCount}>已开票，关联现有发票</Link></Button></Col> : ''}
-							<Col><Button onClick={this.handleCreatNewInvoice.bind(this)}>未开票，开具新发票</Button></Col>
-						</Row>
-					</div>
+					<Skeleton loading={this.state.companyInfoLoading}>
+						<div>
+							{
+								(this.state.totalInvoicedAmount > this.state.totalSpendAmount) || (this.state.totalInvoicedAmount > this.state.totalRechargeAmount) ? <p style={{ fontSize: '12px' }}><span style={{ color: 'red' }}>预警提示：</span>该公司发票已开超，请谨慎操作</p> : null
+							}
+							<p style={{ fontSize: '12px' }}>该公司总消费：{this.state.totalSpendAmount}元，总充值：{this.state.totalRechargeAmount}元，已开票金额（含合同、邮件审批）：{this.state.totalInvoicedAmount}元，总作废金额：{this.state.totalInvoiceVoidAmount}</p>
+							<p>请确认该发票申请单之前没有开过发票，以免开重，然后再进行下一步操作</p>
+							<Row type="flex" justify="center" gutter={16}>
+								{this.state.isAssociateBtnVisible == '消费' || this.state.isAssociateBtnVisible == '充值' ? <Col><Button><Link to={"/finance/invoice/associateInvoice?id=" + this.state.invoiceApplyId + "&role=" + role + "&receivable=" + this.state.receivableCount}>已开票，关联现有发票</Link></Button></Col> : ''}
+								<Col><Button onClick={this.handleCreatNewInvoice.bind(this)}>未开票，开具新发票</Button></Col>
+							</Row>
+						</div>
+					</Skeleton>
+					
 				</Modal>
 				<Modal
 					title='填写发票信息'
@@ -155,7 +160,7 @@ class InvoiceRelateModal extends Component {
 							{this.state.type === 1 || this.state.type === 5 ? <span key='apply-amount-b' className='modal-tip-title' style={{marginLeft: 10}}>应回款金额：{this.state.receivableCount}元</span> : null}
 						</p>
 						<p>
-							<span>已开票金额:{calcSum(acountAry).toFixed(2)}元</span>
+							<span>已开票金额:{this.state.realAmount}元</span>
 							<span className='modal-tip-title'>本次可开票的金额：{this.state.canInvoice}元</span>
 						</p>
 						{/* <p className='modal-tip-title'>已填开票金额：<span className='some-red-span'>{this.state.totalSum}元</span></p> */}

@@ -414,7 +414,7 @@ class ApplyList extends Component {
 						return (
 							<div>
 								<a target='_blank' href={`/finance/invoice/applyDetail?id=${record.id}`} >{text}</a>
-								<Popover content={partMoney} trigger="click">
+								<Popover placement='topLeft' content={partMoney} trigger="click">
 									<span className="highLight" onClick={() => { this.handlePartMoney(record.id) }} >已回款</span>
 								</Popover>
 							</div>
@@ -423,7 +423,7 @@ class ApplyList extends Component {
 						return (
 							<div>
 								<a target='_blank' href={`/finance/invoice/applyDetail?id=${record.id}`} >{text}</a>
-								<Popover content={partMoney} trigger="click">
+								<Popover placement='topLeft' content={partMoney} trigger="click">
 									<span className="highLight" onClick={() => { this.handlePartMoney(record.id) }}>部分回款</span>
 								</Popover>
 							</div>

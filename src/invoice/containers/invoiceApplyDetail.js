@@ -36,6 +36,7 @@ class InvoiceApplyDetail extends React.Component {
 			tableLoading: true,
 			loading: false,
 			confirmLoading: false,
+			detailLoading: false,
 			newRandomKey: '',
 			pageSize: 50,
 			key: 'reservation'
@@ -74,8 +75,13 @@ class InvoiceApplyDetail extends React.Component {
 		let { getApplyDetail, getAssociatedOrders, getiInvoiceRelation, getAvailableInvoiceList } = this.props;
 		let { pageSize } = this.state;
 		getiInvoiceRelation(id);
-		getApplyDetail(id);
 		getAvailableInvoiceList(id);
+		this.setState({ detailLoading: true })
+		getApplyDetail(id).then(() => {
+			this.setState({ detailLoading: false })
+		}).finally(() => {
+			this.setState({ detailLoading: false })
+		});
 		let { detailInfo: { type } } = this.props;
 		if (type && type === 2) {
 			getAssociatedOrders(id, '1', 1, pageSize).then(() => {
@@ -701,9 +707,12 @@ class InvoiceApplyDetail extends React.Component {
 			<fieldset>
 				<legend>发票申请单详情</legend>
 				<div className='detail-content'>
-					<div className='detail-list clearfix'>
-						<WBYDetailTable className='vertical-table' columns={columns} dataSource={detailInfo} columnCount={4}></WBYDetailTable>
-					</div>
+					<Spin spinning={this.state.detailLoading}>
+						<div className='detail-list clearfix'>
+							<WBYDetailTable className='vertical-table' columns={columns} dataSource={detailInfo} columnCount={4}></WBYDetailTable>
+						</div>
+					</Spin>
+					
 					<div className='detail-company clearfix'>
 						<h4>该申请单中包含如下公司简称：</h4>
 						<Table columns={companyColumns} dataSource={companyData} pagination={false} />
@@ -731,7 +740,7 @@ class InvoiceApplyDetail extends React.Component {
 					</Modal> */}
 					
 					<Modal 
-						width={600}
+						width={640}
 						title={titleOption[invoiceModalType]}
 						visible={Boolean(invoiceModalType)} 
 						confirmLoading={confirmLoading}

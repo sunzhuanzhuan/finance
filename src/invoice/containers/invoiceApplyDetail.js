@@ -39,7 +39,8 @@ class InvoiceApplyDetail extends React.Component {
 			detailLoading: false,
 			newRandomKey: '',
 			pageSize: 50,
-			key: 'reservation'
+			key: 'reservation',
+			relateModalVisible: false,
 		}
 		this.addMore = debounce(this.handleJudge, 1000);
 	}
@@ -61,8 +62,10 @@ class InvoiceApplyDetail extends React.Component {
 	handleJudge = (fn) => {
 		this.setState({ loading: true });
 		const { page, pageSize, invoiceId } = this.state;
+		const queryObj = qs.parse(this.props.location.search.substring(1))
+		const applyId = queryObj.id;
 		const id = invoiceId ? invoiceId : [];
-		this.props.getAvailableInvoiceList(this.props.id, id, page, pageSize + 50).then(() => {
+		this.props.getAvailableInvoiceList(applyId, id, page, pageSize + 50).then(() => {
 			this.setState({ pageSize: pageSize + 50 }, () => {
 				setTimeout(fn, 0);
 			});
@@ -230,7 +233,7 @@ class InvoiceApplyDetail extends React.Component {
 					placement="top" title={record.status_name} 
 					content={getInvoicePopContent(contentArr, record)} trigger="click"
 				>
-					<span className='invoice_detail_status'>{record.status_name}</span>
+					<span className='invoice_detail_status left-gap'>{record.status_name}</span>
 				</Popover>
 			</div>
 		}else {
@@ -597,7 +600,7 @@ class InvoiceApplyDetail extends React.Component {
 													>
 														<span className='invoice_num_cls left-gap default_color'>{invoice_number}</span>
 													</Popover> :
-													<span className='left-gap default_color'>{invoice_number}</span>
+													<span className='left-gap'>{invoice_number}</span>
 												}
 												<span className='left-gap'>{invoice_amount}</span>
 											</div>

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import * as actions from "../actions/applyDetail";
 import { getInvoiceQueryOperate } from '../actions/invoiceQuery';
 //antd
-import { Table, Tabs, Modal, Form, Input, Select, DatePicker, Popover, Spin } from "antd";//Button
+import { Table, Tabs, Modal, Form, Input, Select, DatePicker, Popover, Spin, Tooltip } from "antd";//Button
 //less
 import './invoiceApplyDetail.less';
 //数据配置
@@ -223,18 +223,33 @@ class InvoiceApplyDetail extends React.Component {
 				'4': 'void_time',
 				'5': 'redmark_time'
 			}
-			const contentArr = [
-				{ label: '时间：', key: timeKey[status] },
-				{ label: '原因：', key: 'invalid_reason' },
-			];
+			
+			const getInfoText = () => {
+				const contentArr = [
+					{ key: timeKey[status] },
+					{ key: 'invalid_reason' },
+				];
+				return contentArr.map(item => {
+					const { key } = item;
+					const itemVal = record[key];
+					const isShowTooltips = key === 'invalid_reason' && itemVal.length > 10;
+					return (
+						isShowTooltips ? <Tooltip placement="top" title={itemVal}>
+							<div key={key} className='left-gap'>
+								{`${itemVal.substring(0, 10)}...`}
+							</div>
+						</Tooltip> :
+						<div key={key} className='left-gap fix_content_width'>
+							{itemVal}
+						</div>
+					)
+				})
+			}
 			return <div className='invoice_item'>
-				<Popover 
-					overlayClassName='invoice_popover_wrapper invoice_popover_wrapper_small'
-					placement="top" title={record.status_name} 
-					content={getInvoicePopContent(contentArr, record)} trigger="click"
-				>
-					<span className='invoice_detail_status left-gap'>{record.status_name}</span>
-				</Popover>
+				<div className='invoice_detail_status left-gap'>{record.status_name}</div>
+				{
+					getInfoText()
+				}
 			</div>
 		}else {
 			return null

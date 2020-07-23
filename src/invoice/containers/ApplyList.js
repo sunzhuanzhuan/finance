@@ -489,6 +489,7 @@ class ApplyList extends Component {
 								<p>待回款金额:{calcSum(arrWaitMoney).toFixed(2)}</p>
 							</p> : null
 						}
+						<p>总作废金额:{record.invoice_void_amount}</p>
 					</p>
 				}
 			},

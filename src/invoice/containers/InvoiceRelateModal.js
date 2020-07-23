@@ -160,8 +160,8 @@ class InvoiceRelateModal extends Component {
 							{this.state.type === 1 || this.state.type === 5 ? <span key='apply-amount-b' className='modal-tip-title' style={{marginLeft: 10}}>应回款金额：{this.state.receivableCount}元</span> : null}
 						</p>
 						<p>
-							<span>已开票金额:{this.state.realAmount}元</span>
-							<span className='modal-tip-title'>本次可开票的金额：{this.state.canInvoice}元</span>
+							<span className='modal-tip-title'>已开票金额:{this.state.realAmount}元</span>
+							<span>本次可开票的金额：{this.state.canInvoice}元</span>
 						</p>
 						{/* <p className='modal-tip-title'>已填开票金额：<span className='some-red-span'>{this.state.totalSum}元</span></p> */}
 						<AddInvoiceInfo

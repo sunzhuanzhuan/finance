@@ -3,14 +3,14 @@ import { Popconfirm, Popover } from 'antd';
 export const getInvoiceQueryOptions = () => {
 	return [
         {label: '开票日期', key: 'time', compType: 'date', submitKey:['invoice_time_start', 'invoice_time_end']},
-        {label: '发票号', key: 'invoice_number', compType: 'input'},
+        {label: '发票号', key: 'invoice_number', compType: 'input', placeholder: '支持多个输入，以逗号隔开'},
         {label: '发票类型', key: 'invoice_type', compType: 'select', optionKey: 'invoice_type', idKey: 'id', labelKey: 'display', showSearch: true},
 		{label: '发票内容', key: 'invoice_content', compType: 'select', optionKey: 'invoice_content', idKey: 'id', labelKey: 'display', showSearch: true},
 		{label: '发票抬头', key: 'invoice_title', compType: 'searchSelect', actionKey: 'invoiceTitle', dataIndex: ['id', 'invoice_title'], keyWord: 'invoice_title'},
-        {label: '公司简称', key: 'company_id', compType: 'searchSelect', actionKey: 'company', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},
+        {label: '公司简称', key: 'company_id', compType: 'searchSelect', placeholder: '支持多个选择', mode: 'multiple', actionKey: 'company', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},
         {label: '开票公司', key: 'beneficiary_company', compType: 'select', optionKey: 'beneficiary_company', idKey: 'id', labelKey: 'display', showSearch: true},
         {label: '发票状态', key: 'status', compType: 'select', optionKey: 'status', idKey: 'id', labelKey: 'display', showSearch: true},
-        {label: '申请单ID', key: 'invoice_application_id', compType: 'input'},
+        {label: '申请单ID', key: 'invoice_application_id', compType: 'input', placeholder: '支持多个输入，以逗号隔开'},
 		{label: '线上/线下发票', key: 'is_offline', compType: 'select', optionKey: 'is_offline', idKey: 'id', labelKey: 'display', showSearch: true},
         {compType: 'operate', key: 'operate'}
     ]

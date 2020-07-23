@@ -21,16 +21,18 @@ class QueryComp extends React.Component {
 		})
 	}
 	getFormItem = item => {
-		const { compType, optionKey, actionKey, dataIndex, keyWord, idKey, labelKey, showSearch } = item;
+		const { compType, optionKey, actionKey, dataIndex, keyWord, idKey, labelKey, showSearch, mode, placeholder } = item;
+		console.log('sldkfjlsdfjlksdfj', )
 		const { actionKeyMap = {}, className } = this.props;
 		switch(compType) {
 			case 'input':
-				return <Input placeholder="请输入" className='common_search_width' />;
+				return <Input placeholder={placeholder || "请输入"} className='common_input_width' />;
 			case 'searchSelect':
 				return <SearchSelect
+							mode={mode}
 							action={actionKeyMap[actionKey]} 
 							style={{ width: 170 }}
-							placeholder='请选择'
+							placeholder={placeholder || '请选择'}
 							getPopupContainer={() => document.querySelector(`.${className}`)}
 							keyWord={keyWord}
 							dataToList={res => { return res.data }}
@@ -40,7 +42,7 @@ class QueryComp extends React.Component {
 				return <Select 
 						showSearch={showSearch}
 						allowClear
-						placeholder="请选择" 
+						placeholder={placeholder || '请选择'}
 						className='common_search_width'
 						filterOption={(input, option) => (
 							option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -51,7 +53,7 @@ class QueryComp extends React.Component {
 			case 'date':
 				return <RangePicker />;
 			default:
-				return <Input placeholder="请输入" className='common_search_width' />;
+				return <Input placeholder="请输入" className='common_input_width' />;
 		}
 	}
 	getFormItemComp = queryItems => {
@@ -84,7 +86,7 @@ class QueryComp extends React.Component {
 		const dealItems = queryItems.filter(item => item.compType === 'date' || item.compType === 'searchSelect');
 
 		dealItems.forEach(item => {
-			const { key, submitKey = [] } = item;
+			const { key, mode, submitKey = [] } = item;
 			if(item.compType === 'date') {
 				if(values[key] && values[key].length) {
 					submitKey.forEach((submitItem, index) => {
@@ -94,7 +96,7 @@ class QueryComp extends React.Component {
 				}
 			}else if(item.compType === 'searchSelect') {
 				if(values[key]) {
-					values[key] = values[key]['key']
+					values[key] = mode === 'multiple' ? values[key].map(selectItem => selectItem['key']).toString() : values[key]['key'];
 				}
 			}
 		})

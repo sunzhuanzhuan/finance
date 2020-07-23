@@ -22,7 +22,6 @@ class QueryComp extends React.Component {
 	}
 	getFormItem = item => {
 		const { compType, optionKey, actionKey, dataIndex, keyWord, idKey, labelKey, showSearch, mode, placeholder } = item;
-		console.log('sldkfjlsdfjlksdfj', )
 		const { actionKeyMap = {}, className } = this.props;
 		switch(compType) {
 			case 'input':
@@ -96,7 +95,9 @@ class QueryComp extends React.Component {
 				}
 			}else if(item.compType === 'searchSelect') {
 				if(values[key]) {
-					values[key] = mode === 'multiple' ? values[key].map(selectItem => selectItem['key']).toString() : values[key]['key'];
+					values[key] = mode === 'multiple' ? 
+						values[key].length ? values[key].map(selectItem => selectItem['key']).toString() : undefined :
+						values[key]['key'];
 				}
 			}
 		})

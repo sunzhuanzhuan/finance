@@ -159,7 +159,13 @@ export const getInvoiceQueryCol = (handleAction) => {
 			width: 100,
 			render: (data) => {
 				if(Array.isArray(data) && data.length) {
-					return data.map(item => <a style={{display: 'inline-block'}} target='_blank' key={item} href={`/finance/invoice/applyDetail?id=${item}`}>{item}</a>)
+					return data.map((item, index) => {
+						const sign = index < data.length - 1;
+						return [
+							<a style={{display: 'inline-block'}} target='_blank' key={item} href={`/finance/invoice/applyDetail?id=${item}`}>{item}</a>,
+							sign ? <span key={`${item}_sign`}>,</span> : null
+						]
+					})
 				}
 				return null
 			}

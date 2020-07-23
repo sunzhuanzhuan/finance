@@ -39,7 +39,7 @@ export class InvoiceQuery extends Component {
 
 	handleSearch = (searchQuery) => {
 		this.setState({loading: true, searchQuery});
-		this.props.actions.getInvoiceQueryStatistics();
+		this.props.actions.getInvoiceQueryStatistics(searchQuery);
 		this.props.actions.getInvoiceQueryList(searchQuery).finally(() => {
 			this.setState({loading: false});
 		});

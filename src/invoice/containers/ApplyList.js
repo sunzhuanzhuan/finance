@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import qs from 'qs'
 import PropTypes from 'prop-types'
 import { Table, Row, Col, Button, Divider, Modal, DatePicker, Input, Form, Select, message, Popover, Spin } from 'antd';
-
+import moment from 'moment'
 import * as applyListAction from '../actions/index'
 import './ApplyList.less';
 
@@ -13,6 +13,7 @@ import DeliverContent from '../containers/DeliverContent'
 import { calcSum } from "../../util";
 import { columnsList } from '../util'
 import InvoiceRelateModal from './InvoiceRelateModal'
+import apiDownload from '@/api/apiDownload'
 
 const { RangePicker } = DatePicker
 const FormItem = Form.Item
@@ -87,8 +88,8 @@ class ApplyList extends Component {
 	}
 	//查询
 	handleSelsetSubmit(e) {
-		this.props.form.validateFields((err, values) => {
-			if (e) { e.preventDefault() }
+		this.props.form.validateFields((_, values) => {
+			if (e && e.preventDefault) { e.preventDefault() }
 			let createdAtStart;
 			let createdAtEnd;
 			if (values['range-picker'] && values['range-picker'].length) {
@@ -102,6 +103,37 @@ class ApplyList extends Component {
 				'created_at_start': createdAtStart,
 				'created_at_end': createdAtEnd,
 			}
+			delete formatValues['range-picker'];
+			if(e === 'export') {
+				const startTime = moment(createdAtStart);
+				const endTime = moment(createdAtEnd);
+				const overYear = moment.duration(endTime.diff(startTime)).as('y') > 1;
+				const replaceStart = moment(createdAtStart).subtract(1, 'y').format('YYYY-MM-DD');
+				const replaceEnd = moment().format('YYYY-MM-DD');
+				const startShow = createdAtStart ? createdAtStart : replaceStart;
+				const tips = `从${startShow}开始，最多只能导出1年的数据，是否继续导出？`;
+
+				if(!createdAtStart || overYear) {
+					Modal.confirm({
+						title: (
+							<div>
+								{tips}
+							</div>
+						),
+						okText: '继续',
+						onOk: () => {
+							if(!createdAtStart) {
+								formatValues.created_at_start = replaceStart;
+								formatValues.created_at_end = replaceEnd;
+							}
+							this.downloadFunc(formatValues)
+						},
+					});
+				}else {
+					this.downloadFunc(formatValues)
+				}
+				return;
+			}
 			this.setState({ formData: formatValues, loading: true, current: 1 })
 			this.props.actions.getApplyList(formatValues).then(() => {
 				this.props.actions.getApplyListStat(formatValues).catch(({ errorMsg }) => {
@@ -113,7 +145,13 @@ class ApplyList extends Component {
 				this.setState({ loading: false });
 			})
 		});
-
+	}
+	downloadFunc = (searchQuery) => {
+		const timeStamp = moment().format('YYYYMMDD');
+		apiDownload({
+			url: '/finance/invoice/application/export?' + qs.stringify(searchQuery),
+			method: 'GET',
+		}, `发票申请单列表${timeStamp}.xls`)
 	}
 	//重置
 	handleReset = () => {
@@ -869,6 +907,7 @@ class ApplyList extends Component {
 						<Row type="flex" justify="center" gutter={16} >
 							<Col><Button htmlType="submit" type="primary">查询</Button></Col>
 							<Col><Button onClick={this.handleReset}>重置</Button></Col>
+							<Col><Button type='ghost' onClick={() => {this.handleSelsetSubmit('export')}}>导出</Button> </Col>
 						</Row>
 					</Form>
 					<Divider orientation="left"></Divider>

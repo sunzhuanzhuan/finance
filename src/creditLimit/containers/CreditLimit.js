@@ -34,7 +34,7 @@ const mapStateToProps = (state) => {
 	const { a } = state;
 
 	return {
-		a: 1
+		a: 2323
 	}
 }
 const mapDispatchToProps = dispatch => (

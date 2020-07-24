@@ -670,8 +670,8 @@ class ApplyList extends Component {
 							{role == 'cashier' ? record.type === 1 || record.type === 5 ?
 								<div className='button-margin'>	
 									{record.status_display == '已开' ? <Button size='small' type="primary" onClick={this.showConfirm.bind(this, 'deliver', record.id, role, expressCompanyData)}>已寄出</Button> : ''}
-									{record.status_display == '已开' && (record.can_invoice > 0 || record.real_amount != record.amount) ? <Button size='small' type="primary" onClick={this.isShowRelateModal.bind(this, record.type_display, record.id, record.company_id, record.amount, record.can_invoice, record.type, record.receivables_payback_amount, record.real_amount)}>重新开票</Button> : ''}
-									{record.status_display == '已寄' && (record.can_invoice > 0 || record.real_amount != record.amount) ? <Button size='small' type="primary" onClick={this.isShowRelateModal.bind(this, record.type_display, record.id, record.company_id, record.amount, record.can_invoice, record.type, record.receivables_payback_amount, record.real_amount)}>重新开票</Button> : ''}
+									{record.status_display == '已开' && record.can_invoice > 0 ? <Button size='small' type="primary" onClick={this.isShowRelateModal.bind(this, record.type_display, record.id, record.company_id, record.amount, record.can_invoice, record.type, record.receivables_payback_amount, record.real_amount)}>重新开票</Button> : ''}
+									{record.status_display == '已寄' && record.can_invoice > 0 ? <Button size='small' type="primary" onClick={this.isShowRelateModal.bind(this, record.type_display, record.id, record.company_id, record.amount, record.can_invoice, record.type, record.receivables_payback_amount, record.real_amount)}>重新开票</Button> : ''}
 									{record.status_display == '已寄' && record.is_repost == 1 ? <Button size='small' type="primary" onClick={this.showConfirm.bind(this, 'deliver', record.id, role, expressCompanyData)}>重新邮寄</Button> : ''}
 									{record.status_display == '待开' ?
 										<p>
@@ -681,8 +681,8 @@ class ApplyList extends Component {
 								</div> :
 								<div className='button-margin'>
 									{record.status_display == '已开' ? <Button size='small' type="primary" onClick={this.showConfirm.bind(this, 'deliver', record.id, role, expressCompanyData)}>已寄出</Button> : ''}
-									{record.status_display == '已开' && (record.can_invoice > 0 || record.real_amount != record.amount) ? <Button size='small' type="primary" onClick={this.isShowRelateModal.bind(this, record.type_display, record.id, record.company_id, record.amount, record.can_invoice, record.type, record.receivables_payback_amount, record.real_amount)}>重新开票</Button> : ''}
-									{record.status_display == '已寄' && (record.can_invoice > 0 || record.real_amount != record.amount) ? <Button size='small' type="primary" onClick={this.isShowRelateModal.bind(this, record.type_display, record.id, record.company_id, record.amount, record.can_invoice, record.type, record.receivables_payback_amount, record.real_amount)}>重新开票</Button> : ''}
+									{record.status_display == '已开' && record.can_invoice > 0 ? <Button size='small' type="primary" onClick={this.isShowRelateModal.bind(this, record.type_display, record.id, record.company_id, record.amount, record.can_invoice, record.type, record.receivables_payback_amount, record.real_amount)}>重新开票</Button> : ''}
+									{record.status_display == '已寄' && record.can_invoice > 0 ? <Button size='small' type="primary" onClick={this.isShowRelateModal.bind(this, record.type_display, record.id, record.company_id, record.amount, record.can_invoice, record.type, record.receivables_payback_amount, record.real_amount)}>重新开票</Button> : ''}
 									{record.status_display == '已寄' && record.is_repost == 1 ? <Button size='small' type="primary" onClick={this.showConfirm.bind(this, 'deliver', record.id, role, expressCompanyData)}>重新邮寄</Button> : ''}
 									{record.status_display == '待开' ?
 										<p>

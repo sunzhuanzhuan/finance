@@ -235,18 +235,18 @@ class InvoiceApplyDetail extends React.Component {
 					const isShowTooltips = key === 'invalid_reason' && itemVal.length > 10;
 					return (
 						isShowTooltips ? <Tooltip placement="top" title={itemVal}>
-							<div key={key} className='left-gap inline_block_item'>
+							<div key={key} className='left-gap-10 inline_block_item'>
 								{`${itemVal.substring(0, 10)}...`}
 							</div>
 						</Tooltip> :
-						<div key={key} className='left-gap inline_block_item'>
+						<div key={key} className='left-gap-10 inline_block_item'>
 							{itemVal}
 						</div>
 					)
 				})
 			}
 			return <div className='invoice_item'>
-				<div className='invoice_detail_status left-gap inline_block_item'>{record.status_name}</div>
+				<div className='invoice_detail_status left-gap-10 inline_block_item'>{record.status_name}</div>
 				{
 					getInfoText()
 				}
@@ -577,7 +577,7 @@ class InvoiceApplyDetail extends React.Component {
 					const getRelateBtn = () => {
 						const { type_display, id, company_id, amount, real_amount, can_invoice, type, receivables_payback_amount } = detailInfo;
 						return (
-							role === 'cashier' && amount !== real_amount ? <a key='relateInvoice' onClick={() => {this.isShowRelateModal(type_display, id, company_id, amount, can_invoice, type, receivables_payback_amount, real_amount)}}>重新关联发票</a> : null
+							role === 'cashier' && can_invoice > 0 ? <a key='relateInvoice' onClick={() => {this.isShowRelateModal(type_display, id, company_id, amount, can_invoice, type, receivables_payback_amount, real_amount)}}>重新关联发票</a> : null
 						)
 					}
 					const getInvoiceNumItems = () => {
@@ -591,7 +591,7 @@ class InvoiceApplyDetail extends React.Component {
 											status_display === status_display_map['YIJI'] ? 
 											[
 												<span className='color_red' key='express_company_display'>（快递公司：{express_company_display}</span>,
-												<span key='waybill_number' className='left-gap color_red'>快递编号：{waybill_number}）</span>
+												<span key='waybill_number' className='left-gap-10 color_red'>快递编号：{waybill_number}）</span>
 											] : null
 										}
 									</p>
@@ -613,11 +613,11 @@ class InvoiceApplyDetail extends React.Component {
 														placement="top" title='红字发票' 
 														content={getInvoicePopContent(redInvoiceArr, red_invoice_info)} trigger="click"
 													>
-														<span className='invoice_num_cls left-gap default_color'>{invoice_number}</span>
+														<span className='invoice_num_cls left-gap-10 default_color'>{invoice_number}</span>
 													</Popover> :
-													<span className='left-gap'>{invoice_number}</span>
+													<span className='left-gap-10'>{invoice_number}</span>
 												}
-												<span className='left-gap'>{invoice_amount}</span>
+												<span className='left-gap-10'>{invoice_amount}</span>
 											</div>
 											{
 												this.getInvoiceOperateComp(item, status, role)

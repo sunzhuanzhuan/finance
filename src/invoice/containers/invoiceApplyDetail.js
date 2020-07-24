@@ -235,18 +235,18 @@ class InvoiceApplyDetail extends React.Component {
 					const isShowTooltips = key === 'invalid_reason' && itemVal.length > 10;
 					return (
 						isShowTooltips ? <Tooltip placement="top" title={itemVal}>
-							<div key={key} className='left-gap'>
+							<div key={key} className='left-gap inline_block_item'>
 								{`${itemVal.substring(0, 10)}...`}
 							</div>
 						</Tooltip> :
-						<div key={key} className='left-gap fix_content_width'>
+						<div key={key} className='left-gap inline_block_item'>
 							{itemVal}
 						</div>
 					)
 				})
 			}
 			return <div className='invoice_item'>
-				<div className='invoice_detail_status left-gap'>{record.status_name}</div>
+				<div className='invoice_detail_status left-gap inline_block_item'>{record.status_name}</div>
 				{
 					getInfoText()
 				}

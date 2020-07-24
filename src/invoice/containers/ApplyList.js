@@ -904,7 +904,7 @@ class ApplyList extends Component {
 								</FormItem>
 							</Col>
 						</Row>
-						<Row type="flex" justify="center" gutter={16} >
+						<Row type="flex" justify="center" gutter={16} style={{marginTop: '10px'}}>
 							<Col><Button htmlType="submit" type="primary">查询</Button></Col>
 							<Col><Button onClick={this.handleReset}>重置</Button></Col>
 							<Col><Button type='ghost' onClick={() => {this.handleSelsetSubmit('export')}}>导出</Button> </Col>

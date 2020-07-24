@@ -157,7 +157,7 @@ class InvoiceRelateModal extends Component {
 					<div>
 						<p>
 							<span key='apply-amount' className='modal-tip-title'>发票申请单金额：{this.state.applyAmount}元</span>
-							{this.state.type === 1 || this.state.type === 5 ? <span key='apply-amount-b' className='modal-tip-title' style={{marginLeft: 10}}>应回款金额：{this.state.receivableCount}元</span> : null}
+							{this.state.type === 1 || this.state.type === 5 ? <span key='apply-amount-b'>应回款金额：{this.state.receivableCount}元</span> : null}
 						</p>
 						<p>
 							<span className='modal-tip-title'>已开票金额:{this.state.realAmount}元</span>

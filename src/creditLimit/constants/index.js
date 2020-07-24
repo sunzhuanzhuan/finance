@@ -27,7 +27,7 @@ export const getOffQueryItems = queryArr => {
 }
 
 const tdRender = () => {
-
+    return 'lskdjf';
 }
 
 const tdSubList = {
@@ -147,5 +147,5 @@ export const getCreditCol = ( excludeCol = [] ) => {
         },
     ];
 
-    return allCol.map(item => !(excludeCol.find(colItem => colItem === item.key)));
+    return allCol.map(item => !(excludeCol.includes(item.key)));
 }

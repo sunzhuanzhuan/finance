@@ -16,7 +16,8 @@ class CreditLimit extends React.Component {
 		this.state = {
 			addVisible: false,
 			activeKey: '3',
-			leftWidth: 40
+			leftWidth: 40, 
+			searchQuery: {page: 1, page_size: 20}
 		};
 		events.on('message', this.collapsedListener); 
 	}
@@ -32,19 +33,41 @@ class CreditLimit extends React.Component {
 	}
 
 	render() {
-		const { leftWidth, loading } = this.state;
+		const { creditLimitListInfo = {} } = this.props;
+		const { total, page, page_size, list } = creditLimitListInfo;
+		const { leftWidth, loading, searchQuery } = this.state;
 		const totalWidth = getTotalWidth(getCreditCol());
+		const showTotal = (total) => {
+			return `共 ${total} 条数据`;
+		};
+		const paginationObj = {
+			onChange: (page) => {
+				Object.assign(searchQuery, {page});
+				this.handleSearch(searchQuery);
+			},
+			onShowSizeChange: (_, page_size) => {
+				Object.assign(searchQuery, {page_size, page: 1});
+				this.handleSearch(searchQuery);
+			},
+			total: parseInt(total),
+			showTotal,
+			current: parseInt(page),
+			pageSize: parseInt(page_size),
+			showQuickJumper: true,
+			showSizeChanger: true,
+			pageSizeOptions: ['20', '50', '100', '200']
+		};
 		return (
 			<div className='credit_limit_wrapper'>
 				<Scolltable scrollClassName='.ant-table-body' widthScroll={totalWidth + leftWidth}>
 					<Table
 					className='credit_limit_table'
 					rowKey='id'
-					columns={getCreditCol()}
-					dataSource={[]}
+					columns={[getCreditCol()]}
+					dataSource={list}
 					loading={loading}
 					bordered
-					pagination={null}
+					pagination={paginationObj}
 					scroll={{ x: totalWidth }}
 				/>
 				</Scolltable>
@@ -54,10 +77,17 @@ class CreditLimit extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-	const { a } = state;
-
+	const { creditLimitReducer = {} } = state;
+	const { creditLimitListInfo = {} } = creditLimitReducer;
 	return {
-		a: 2323
+		creditLimitListInfo: {
+			total: 100,
+			page: 1,
+			page_size: 20,
+			list: [
+
+			]
+		}
 	}
 }
 const mapDispatchToProps = dispatch => (

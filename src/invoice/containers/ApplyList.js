@@ -46,7 +46,20 @@ class ApplyList extends Component {
 				{
 					title: '发票号',
 					dataIndex: 'invoice_number',
-					key: 'invoice_number'
+					key: 'invoice_number',
+					render: (data, record = {}) => {
+						const { status, status_name } = record;
+						return (
+							<div>
+								<span>{data}</span>
+								{
+									status === '4' || status === '5' ? 
+									<span style={{marginLeft: '10px', color: 'red'}}>{status_name}</span>
+									: null
+								}
+							</div>
+						)
+					}
 				},
 				{
 					title: '发票金额（元）',

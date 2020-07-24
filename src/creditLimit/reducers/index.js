@@ -1,15 +1,17 @@
 import { handleActions } from 'redux-actions';
 import { combineReducers } from 'redux';
 import {
-	getCrediLimitListInfo_success,
+	getCreditQueryOptions_success,
 } from '../actions';
+import creditLimitListInfo from '../actions/creditTabListAction';
 
-const creditLimitListInfo = handleActions({
-	[getCrediLimitListInfo_success]: (state, action) => {
+const creditQueryOptions = handleActions({
+	[getCreditQueryOptions_success]: (_, action) => {
 		return { ...action.payload.data }
 	}
 }, {})
 
 export default combineReducers({
-    creditLimitListInfo, 
+	creditLimitListInfo, 
+	creditQueryOptions
 })

@@ -21,16 +21,17 @@ class CreditLimitQuery extends React.Component {
 		})
 	}
 	getFormItem = item => {
-		const { compType, optionKey, actionKey, dataIndex, keyWord, idKey, labelKey, showSearch } = item;
+		const { compType, optionKey, actionKey, dataIndex, keyWord, idKey, labelKey, showSearch, mode, placeholder } = item;
 		const { actionKeyMap = {}, className } = this.props;
 		switch(compType) {
 			case 'input':
-				return <Input placeholder="请输入" className='common_search_width' />;
+				return <Input placeholder={placeholder || "请输入"} className='common_input_width' />;
 			case 'searchSelect':
 				return <SearchSelect
+							mode={mode}
 							action={actionKeyMap[actionKey]} 
 							style={{ width: 170 }}
-							placeholder='请选择'
+							placeholder={placeholder || '请选择'}
 							getPopupContainer={() => document.querySelector(`.${className}`)}
 							keyWord={keyWord}
 							dataToList={res => { return res.data }}
@@ -40,7 +41,7 @@ class CreditLimitQuery extends React.Component {
 				return <Select 
 						showSearch={showSearch}
 						allowClear
-						placeholder="请选择" 
+						placeholder={placeholder || '请选择'}
 						className='common_search_width'
 						filterOption={(input, option) => (
 							option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -51,7 +52,7 @@ class CreditLimitQuery extends React.Component {
 			case 'date':
 				return <RangePicker />;
 			default:
-				return <Input placeholder="请输入" className='common_search_width' />;
+				return <Input placeholder="请输入" className='common_input_width' />;
 		}
 	}
 	getFormItemComp = queryItems => {
@@ -59,54 +60,13 @@ class CreditLimitQuery extends React.Component {
 		const { getFieldDecorator } = form;
 
 		return queryItems.map(item => {
-			const {label, compType, key, rangeKey = [], idKey, labelKey} = item;
+			const {label, compType, key} = item;
 			if(compType === 'operate') {
 				return (
 					<FormItem key={key} className='operate-wrapper'>
 						<Button type='primary' onClick={() => {this.handleSearch('search')}}>查询</Button>
 						<Button type='ghost' onClick={() => {this.handleSearch('reset')}}>重置</Button>
-						{ showExport ? <Button type='primary' onClick={() => {this.handleSearch('export')}}>导出</Button> : null }
-					</FormItem>
-				)
-			}else if(compType === 'order_id_type') {
-				return (
-					<span key={key} className='order-id-type-wrapper'>
-						<FormItem className='order-id-type-item' >
-							{getFieldDecorator('product_line')(
-								<Select 
-									allowClear
-									placeholder="订单类型" 
-									className='range-value'
-									filterOption={(input, option) => (
-										option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-									)}
-								>
-									{ this.getSelectOption('product_line', idKey, labelKey) }
-								</Select>
-							)}
-						</FormItem>
-						<span className='range-value-sign'>{'>'}</span>
-						<FormItem className='order-id-type-item' >
-							{getFieldDecorator('order_id')(
-								<Input className='range-value' placeholder='订单/活动ID'/>
-							)}
-						</FormItem>
-					</span>
-				)
-			}else if(compType === 'number_range') {
-				return (
-					<FormItem key={key} label={label} className='number_range_wrapper'>
-						<FormItem className='number_range_item' >
-							{getFieldDecorator(rangeKey[0])(
-								<InputNumber className='range-value' min={0}/>
-							)}
-						</FormItem>
-						<span className='range-value-sign'>{'~'}</span>
-						<FormItem className='number_range_item' >
-							{getFieldDecorator(rangeKey[1])(
-								<InputNumber className='range-value' min={0}/>
-							)}
-						</FormItem>
+						{ showExport ? <Button type='ghost' onClick={() => {this.handleSearch('export')}}>导出</Button> : null }
 					</FormItem>
 				)
 			}
@@ -125,7 +85,7 @@ class CreditLimitQuery extends React.Component {
 		const dealItems = queryItems.filter(item => item.compType === 'date' || item.compType === 'searchSelect');
 
 		dealItems.forEach(item => {
-			const { key, submitKey = [] } = item;
+			const { key, mode, submitKey = [] } = item;
 			if(item.compType === 'date') {
 				if(values[key] && values[key].length) {
 					submitKey.forEach((submitItem, index) => {
@@ -135,36 +95,31 @@ class CreditLimitQuery extends React.Component {
 				}
 			}else if(item.compType === 'searchSelect') {
 				if(values[key]) {
-					values[key] = values[key]['key']
+					values[key] = mode === 'multiple' ? 
+						values[key].length ? values[key].map(selectItem => selectItem['key']).toString() : undefined :
+						values[key]['key'];
 				}
 			}
 		})
 		return values;
-	}
-	getMultipleIds = (idString) => {
-		const trimIdsStr = idString.trim();
-		return trimIdsStr.replace(/\s+/g,",");
 	}
 	handleSearch = type => {
 		const { form, handleSearch, handleExport } = this.props;
 
 		if(type === 'reset') {
 			form.resetFields();
-			handleSearch({page: 1, page_size: 20});
-		}else if(type === 'search') {
+			// handleSearch({page: 1, page_size: 20});
+		}else if(type === 'search' || type === 'export') {
 			form.validateFields((errors, values) => {
 				if(errors)
 					return null;
 				const dealValues = this.dealValuesDate(values);
-				if(dealValues.order_ids)
-					dealValues.order_ids = this.getMultipleIds(dealValues.order_ids);
-				if(dealValues.id)
-					dealValues.id = this.getMultipleIds(dealValues.id);
-				Object.assign(dealValues, {page: 1, page_size: 20});
-				handleSearch(dealValues);
+				const operateAction = type === 'search' ? handleSearch : type === 'export' ? handleExport : null;
+				if(type === 'search') {
+					Object.assign(dealValues, {page: 1, page_size: 20});
+				}
+				operateAction(dealValues);
 			})
-		}else if(type === 'export') {
-			handleExport()
 		}
 	}
 
@@ -175,7 +130,7 @@ class CreditLimitQuery extends React.Component {
 
 	render() {
 		return (
-			<Form className='rece-query rece-add-query'>
+			<Form className='credit_query_search'>
 				{this.getFormRowComp()}
 			</Form>
 		)

@@ -37,7 +37,7 @@ class AssociateInvoice extends Component {
 		if (selected.length <= 0) {
 			this.warning('请选择发票后再提交!')
 		} else if (parseFloat(total) < parseFloat(can_invoice)) {
-			this.warning('已选择发票的可关联金额的总和必须大于等于发票申请单金额!')
+			this.warning('已选择发票的可关联金额的总和必须大于等于可开票金额!')
 		} else if (!isType) {
 			this.warning('请保证选择的发票类型都是' + type + '，然后再提交!')
 		} else {

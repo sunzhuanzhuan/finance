@@ -4,6 +4,7 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import './invoiceQuery.less';
 import * as action from '../actions/invoiceQuery'
+import { getGoldenCompanyId } from '@/companyDetail/actions/goldenApply';
 import QueryComp from '../components/invoiceQuery/queryComp';
 import QueryStatistics from '../components/invoiceQuery/queryStatistics';
 import { getInvoiceQueryOptions, getInvoiceQueryCol } from '../constants/invoiceQuery';
@@ -150,7 +151,7 @@ export class InvoiceQuery extends Component {
 					handleSearch={this.handleSearch}
 					handleExport={this.handleExport}
 					actionKeyMap={{
-						company: this.props.actions.getInvoiceQueryCompanyId,
+						company: this.props.actions.getGoldenCompanyId,
 						invoiceTitle: this.props.actions.getInvoiceQueryInvoiceTitle,
 					}}
 				/>
@@ -187,7 +188,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-	actions: bindActionCreators({ ...action }, dispatch)
+	actions: bindActionCreators({ ...action, getGoldenCompanyId }, dispatch)
 });
 
 export default connect(

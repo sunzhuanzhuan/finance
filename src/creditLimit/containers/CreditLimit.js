@@ -4,7 +4,9 @@ import { bindActionCreators } from "redux";
 import './creditLimit.less';
 import { Table, Tabs, Alert } from "antd";
 import * as creditLimitActions from "../actions";
-import { getCrediLimitListInfo } from '../actions/creditTabListAction'
+import { getGoldenCompanyId } from '@/companyDetail/actions/goldenApply';
+import { getProjectData, getBrandData, getRequirementWithoutId } from '@/receivablesOff/actions/receivableOff';
+import { getCrediLimitListInfo } from '../actions/creditTabListAction';
 import { getTotalWidth, events } from '@/util';
 import { Scolltable } from '@/components';
 import { getTabOptions, getCreditQueryItems, getCreditCol } from '../constants';
@@ -29,6 +31,7 @@ class CreditLimit extends React.Component {
 
 	componentDidMount() {
 		const { activeKey: product_line } = this.state;
+		this.props.getCreditQuerySalerData();
 		this.getCreditListData({page: 1, page_size: 20, product_line, company_id: 123});
 		const leftSlide = document.getElementsByClassName('ant-layout-sider-trigger')[0];
 		const leftWidth = leftSlide && leftSlide.clientWidth;
@@ -61,7 +64,7 @@ class CreditLimit extends React.Component {
 	}
 
 	getTabPaneContent = () => {
-		const { creditLimitListInfo = {}, creditQueryOptions = {} } = this.props;
+		const { creditLimitListInfo = {}, creditQueryOptions = {}, creditSalerData = [] } = this.props;
 		const { leftWidth, loading, activeKey } = this.state;
 		const tabListInfo = creditLimitListInfo[`creditTab-${activeKey}`] || {};
 		const { total, page, page_size, list = [] } = tabListInfo;
@@ -98,13 +101,16 @@ class CreditLimit extends React.Component {
 				key='search'
 				showExport={true}
 				className={'credit_limit_wrapper'}
-				queryOptions={creditQueryOptions}
+				queryOptions={{...creditQueryOptions, salerData: creditSalerData}}
 				queryItems={getCreditQueryItems()}
 				handleSearch={this.handleSearch}
 				handleExport={this.handleExport}
 				actionKeyMap={{
-					company: this.props.getInvoiceQueryCompanyId,
-					invoiceTitle: this.props.getInvoiceQueryInvoiceTitle,
+					sale: this.props.getCreditQuerySalerData,
+					company: this.props.getGoldenCompanyId,
+					requirement: this.props.getRequirementWithoutId,
+					project: this.props.getProjectData,
+					brand: this.props.getBrandData
 				}}
 			/>,
 			<Alert key='total' className='credit_total_info' message={getTotalInfo} type="info" showIcon />,
@@ -151,13 +157,19 @@ class CreditLimit extends React.Component {
 
 const mapStateToProps = (state) => {
 	const { creditLimitReducer = {} } = state;
-	const { creditLimitListInfo = {}, creditQueryOptions = {} } = creditLimitReducer;
+	const { creditLimitListInfo = {}, creditQueryOptions = {}, creditSalerData = [] } = creditLimitReducer;
 	return {
 		creditLimitListInfo,
-		creditQueryOptions
+		creditQueryOptions,
+		creditSalerData
 	}
 }
 const mapDispatchToProps = dispatch => (
-		bindActionCreators({...creditLimitActions, getCrediLimitListInfo}, dispatch)
+		bindActionCreators({
+			...creditLimitActions, 
+			getCrediLimitListInfo, 
+			getGoldenCompanyId,
+			getProjectData, getBrandData, getRequirementWithoutId
+		}, dispatch)
 	);
 export default connect(mapStateToProps, mapDispatchToProps)(CreditLimit)

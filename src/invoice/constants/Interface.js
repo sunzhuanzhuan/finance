@@ -31,7 +31,6 @@ export default {
 
 	//发票查询
 	getInvoiceQueryMetaData: '/finance/invoice/invoice/metadata',//发票查询条件options
-	getInvoiceQueryCompanyId: '/finance/commonApi/getCompanyIndistinct',//发票查询条件公司简称
 	getInvoiceQueryInvoiceTitle: '/finance/invoice/application/invoiceTitleList',//发票查询条件发票抬头
 	getInvoiceQueryStatistics: '/finance/invoice/invoice/listStat',//发票查询列表统计数据
 	getInvoiceQueryList: '/finance/invoice/invoice/list',//发票查询列表

@@ -3,13 +3,13 @@ import { Tag } from 'antd';
 export const getCreditQueryItems = () => {
     const allQuery =  [
         {label: '订单ID/活动ID', key: 'verification_code', compType: 'input'},
-        {label: '销售', key: 'sale_id', compType: 'searchSelect', actionKey: 'company', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},
+        {label: '销售', key: 'sale_id', compType: 'select', optionKey: 'salerData', idKey: 'user_id', labelKey: 'real_name', showSearch: true},
         {label: '公司简称', key: 'company_id', compType: 'searchSelect', actionKey: 'company', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},
         {label: '公司全称', key: 'company_all_id', compType: 'searchSelect', actionKey: 'company', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},
-        {label: '需求名称', key: 'required_id', compType: 'searchSelect', actionKey: 'company', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},
-        {label: '项目名称', key: 'project_id', compType: 'searchSelect', actionKey: 'company', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},
+        {label: '需求名称', key: 'requirement_id', compType: 'searchSelect', actionKey: 'requirement', dataIndex: ['id', 'name'], keyWord: 'requirement_name'},
+        {label: '项目名称', key: 'project_id', compType: 'searchSelect', actionKey: 'project', dataIndex: ['id', 'name'], keyWord: 'name'},
         {label: 'PO', key: 'PO_id', compType: 'searchSelect', actionKey: 'company', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},
-        {label: '品牌', key: 'brand_id', compType: 'searchSelect', actionKey: 'company', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},
+        {label: '品牌', key: 'brand_id', compType: 'searchSelect', actionKey: 'brand', dataIndex: ['id', 'view_name'], keyWord: 'view_name'},
         {label: '开票时间', key: 'kaipiao_time', compType: 'date', submitKey:['time_start', 'time_end']},
         {label: '应还款时间', key: 'huankuan_time', compType: 'date', submitKey:['time_start', 'time_end']},
         {compType: 'operate', key: 'operate'}

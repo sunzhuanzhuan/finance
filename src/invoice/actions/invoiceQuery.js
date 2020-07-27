@@ -10,14 +10,6 @@ export const {
 	method: 'get'
 });
 
-//发票查询条件公司简称
-export const {
-	getInvoiceQueryCompanyId,
-	getInvoiceQueryCompanyId_success
-} = createHttpAction('getInvoiceQueryCompanyId', Interface.getInvoiceQueryCompanyId, {
-	method: 'get'
-});
-
 //发票查询条件发票抬头
 export const {
 	getInvoiceQueryInvoiceTitle,

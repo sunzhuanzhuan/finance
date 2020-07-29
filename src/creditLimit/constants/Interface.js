@@ -1,6 +1,6 @@
 export default {
 	getCrediLimitListInfo: '/finance/creditapply/useDetailList',
-	getCreditQueryOptions: '/finance/receivables/order/orderListForVerification',
+	getCreditExportInfo: '/finance/creditapply/useDetailExport',
 	getCreditQuerySalerData: '/finance/invoice/application/saleList',
 	getCompanyFullNameSelectData: '/finance/creditapply/companyFullNameSelect',
 	getPoListSelectData: '/finance/creditapply/poListSelect',

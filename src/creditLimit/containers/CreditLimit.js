@@ -2,13 +2,16 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import './creditLimit.less';
-import { Table, Tabs, Alert } from "antd";
+import { Table, Tabs, Alert, Modal } from "antd";
+import qs from 'qs';
+import moment from 'moment';
 import * as creditLimitActions from "../actions";
 import { getGoldenCompanyId } from '@/companyDetail/actions/goldenApply';
 import { getProjectData, getBrandData, getRequirementWithoutId } from '@/receivablesOff/actions/receivableOff';
 import { getCrediLimitListInfo } from '../actions/creditTabListAction';
 import { getTotalWidth, events } from '@/util';
 import { Scolltable } from '@/components';
+import apiDownload from '@/api/apiDownload';
 import { getTabOptions, getCreditQueryItems, getCreditCol } from '../constants';
 import CreditLimitQuery from './CreditLimitQuery';
 
@@ -59,8 +62,26 @@ class CreditLimit extends React.Component {
 		this.getCreditListData({...searchQuery, productLine: activeKey});
 	}
 
+	handleInfo = title => {
+		Modal.info({
+			title: <div dangerouslySetInnerHTML={{ __html: title }}></div>,
+		});
+	}
+	
 	handleExport = (searchQuery) => {
-		console.log('CreditLimit handleExport searchQuery = ', searchQuery);
+		this.props.getCreditExportInfo({...searchQuery, flag: 1}).then(() => {
+			const timeStamp = moment().format('YYYYMMDDHHmmss');
+			apiDownload({
+				url: '/finance/creditapply/useDetailExport?' + qs.stringify(searchQuery),
+				method: 'GET',
+			}, `信用额度使用明细_${timeStamp}.xls`)
+		}).catch(result => {
+			if(result.code === 997) {
+				this.handleInfo(result.errorMsg);
+			}else {
+				message.error(result.errorMsg)
+			}
+		})
 	}
 
 	getTabPaneContent = () => {

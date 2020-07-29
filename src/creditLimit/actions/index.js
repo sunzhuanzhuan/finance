@@ -1,6 +1,14 @@
 import Interface from '../constants/Interface'
 import { createHttpAction } from 'redux-action-extend'
 
+//导出查询接口
+export const {
+	getCreditExportInfo,
+} = createHttpAction('getCreditExportInfo', Interface.getCreditExportInfo, {
+	method: 'get',
+	ignoreToast: true
+});
+
 //销售选择接口
 export const {
 	getCreditQuerySalerData,
@@ -11,8 +19,7 @@ export const {
 
 //公司全称查询接口
 export const {
-	getCompanyFullNameSelectData,
-	getCompanyFullNameSelectData_success
+	getCompanyFullNameSelectData
 } = createHttpAction('getCompanyFullNameSelectData', Interface.getCompanyFullNameSelectData, {
 	method: 'get'
 });
@@ -20,7 +27,6 @@ export const {
 //PO查询接口
 export const {
 	getPoListSelectData,
-	getPoListSelectData_success
 } = createHttpAction('getPoListSelectData', Interface.getPoListSelectData, {
 	method: 'get'
 });

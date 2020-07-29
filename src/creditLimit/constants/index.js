@@ -2,16 +2,17 @@ import React from "react";
 import { Tag } from 'antd';
 export const getCreditQueryItems = () => {
     const allQuery =  [
-        {label: '订单ID/活动ID', key: 'verification_code', compType: 'input'},
-        {label: '销售', key: 'sale_id', compType: 'select', optionKey: 'salerData', idKey: 'user_id', labelKey: 'real_name', showSearch: true},
-        {label: '公司简称', key: 'company_id', compType: 'searchSelect', actionKey: 'company', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},
-        {label: '公司全称', key: 'company_all_id', compType: 'searchSelect', actionKey: 'company', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},
-        {label: '需求名称', key: 'requirement_id', compType: 'searchSelect', actionKey: 'requirement', dataIndex: ['id', 'name'], keyWord: 'requirement_name'},
-        {label: '项目名称', key: 'project_id', compType: 'searchSelect', actionKey: 'project', dataIndex: ['id', 'name'], keyWord: 'name'},
-        {label: 'PO', key: 'PO_id', compType: 'searchSelect', actionKey: 'company', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},
-        {label: '品牌', key: 'brand_id', compType: 'searchSelect', actionKey: 'brand', dataIndex: ['id', 'view_name'], keyWord: 'view_name'},
-        {label: '开票时间', key: 'kaipiao_time', compType: 'date', submitKey:['time_start', 'time_end']},
-        {label: '应还款时间', key: 'huankuan_time', compType: 'date', submitKey:['time_start', 'time_end']},
+        {label: '订单ID/活动ID', key: 'orderId', compType: 'input'},
+        {label: '销售', key: 'saleId', compType: 'select', optionKey: 'salerData', idKey: 'user_id', labelKey: 'real_name', showSearch: true},
+        {label: '区域', key: 'reginTeamId', compType: 'select', optionKey: 'regionList', idKey: 'region_team_id', labelKey: 'region_team_name'},
+        {label: '公司简称', key: 'companyId', compType: 'searchSelect', actionKey: 'company', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},
+        {label: '公司全称', key: 'companyIdFull', compType: 'searchSelect', actionKey: 'companyFull', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},
+        {label: '需求名称', key: 'requirementId', compType: 'searchSelect', actionKey: 'requirement', dataIndex: ['id', 'name'], keyWord: 'requirement_name'},
+        {label: '项目名称', key: 'projectId', compType: 'searchSelect', actionKey: 'project', dataIndex: ['id', 'name'], keyWord: 'name'},
+        {label: 'PO', key: 'po', compType: 'searchSelect', actionKey: 'poList', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},
+        {label: '品牌', key: 'brandId', compType: 'searchSelect', actionKey: 'brand', dataIndex: ['id', 'view_name'], keyWord: 'view_name'},
+        {label: '开票时间', key: 'kaipiao_time', compType: 'date', submitKey:['invoiceOpenTimeStart', 'invoiceOpenTimeEnd']},
+        {label: '应还款时间', key: 'huankuan_time', compType: 'date', submitKey:['paybackTimeStart', 'paybackTimeEnd']},
         {compType: 'operate', key: 'operate'}
     ];
     return allQuery;
@@ -40,37 +41,37 @@ export const getTabOptions = [
 
 const tdSubList = (key, activeKey) => {
     const subOption = {
-        '客户简称/全称': [
-            {title: '公司简称', key: '公司简称'},
-            {title: '公司全称', key: '公司全称'},
+        'companyName': [
+            {title: '公司简称', key: 'companyName'},
+            {title: '公司全称', key: 'companyFullName'},
         ],
-        '销售/区域': [
-            {title: '销售', key: '销售'},
-            {title: '区域', key: '区域'},
+        'saleInfo': [
+            {title: '销售', key: 'saleName'},
+            {title: '区域', key: 'saleRegion'},
         ],
-        '所属项目/品牌/PO': [
-            {title: '项目', key: '项目'},
-            {title: '品牌', key: '品牌'},
-            {title: 'PO', key: 'PO'},
+        'orderInfo': [
+            {title: '项目', key: 'projectName'},
+            {title: '品牌', key: 'brandName'},
+            {title: 'PO', key: 'poCode'},
         ],
-        '需求ID/需求名称/活动名称': activeKey === '3' ? [
-            {title: '需求ID', key: '需求ID'},
-            {title: '需求名称', key: '需求名称'},
+        'orderDetail': activeKey === '3' ? [
+            {title: '需求ID', key: 'requirementId'},
+            {title: '需求名称', key: 'requirementName'},
         ] : [
-            {title: '活动名称', key: '活动名称'},
+            {title: '活动名称', key: 'campaignName'},
         ],
-        '执行完成/结算时间': [
-            activeKey === '3' ? {title: '执行完成时间', key: '执行完成时间'} : null,
-            {title: '结算时间', key: '结算时间'},
+        'orderTime': [
+            activeKey === '3' ? {title: '执行完成时间', key: 'orderExecutedFinishTime'} : null,
+            {title: '结算时间', key: 'orderSettleTime'},
         ],
-        '结案/开票时间': [
-            {title: '结案时间', key: '结案时间'},
-            {title: '开票时间', key: '开票时间', extra: {title: '申请单id', key: '申请单id'}},
-            {title: '回款条件', key: '回款条件'},
+        'invoiceTime': [
+            {title: '结案时间', key: 'orderFinishTime'},
+            {title: '开票时间', key: 'invoiceOpenTime', extra: {title: '申请单id', key: 'invoiceApplyId'}},
+            {title: '回款条件', key: 'paybackCondition'},
         ],
-        '审核通过/应还款时间': [
-            {title: '审核通过时间', key: '审核通过时间'},
-            {title: '应还款时间', key: '应还款时间'},
+        'applyTime': [
+            {title: '审核通过时间', key: 'invoiceApplyOpenTime'},
+            {title: '应还款时间', key: 'orderPaybckTime'},
         ],
     }
     return subOption[key]
@@ -84,80 +85,80 @@ export const getCreditCol = (activeKey) => {
     return [
         {
             title: '订单/活动ID',
-            dataIndex: '订单/活动ID',
-            key: '订单/活动ID',
+            dataIndex: 'orderId',
+            key: 'orderId',
             width: 100,
             render
         },
         {
             title: '客户简称/全称',
-            dataIndex: '客户简称/全称',
-            key: '客户简称/全称',
+            dataIndex: 'companyName',
+            key: 'companyName',
             width: 100,
-            render: (_, record) => tdRender(tdSubList('客户简称/全称'), record)
+            render: (_, record) => tdRender(tdSubList('companyName'), record)
         },
         {
             title: '销售/区域',
-            dataIndex: '销售/区域',
-            key: '销售/区域',
+            dataIndex: 'saleInfo',
+            key: 'saleInfo',
             width: 100,
-            render: (_, record) => tdRender(tdSubList('销售/区域'), record)
+            render: (_, record) => tdRender(tdSubList('saleInfo'), record)
         },
         {
             title: '所属项目/品牌/PO',
-            dataIndex: '所属项目/品牌/PO',
-            key: '所属项目/品牌/PO',
+            dataIndex: 'orderInfo',
+            key: 'orderInfo',
             width: 150,
-            render: (_, record) => tdRender(tdSubList('所属项目/品牌/PO'), record)
+            render: (_, record) => tdRender(tdSubList('orderInfo'), record)
         },
         {
             title: '需求ID/需求名称/活动名称',
-            dataIndex: '需求ID/需求名称/活动名称',
-            key: '需求ID/需求名称/活动名称',
+            dataIndex: 'orderDetail',
+            key: 'orderDetail',
             width: 170,
-            render: (_, record) => tdRender(tdSubList('需求ID/需求名称/活动名称', activeKey), record)
+            render: (_, record) => tdRender(tdSubList('orderDetail', activeKey), record)
         },
         {
             title: '使用信用金额',
-            dataIndex: '使用信用金额',
-            key: '使用信用金额',
+            dataIndex: 'creditAmountUsed',
+            key: 'creditAmountUsed',
             width: 100,
             render
         },
         {
             title: '回款金额',
-            dataIndex: '回款金额',
-            key: '回款金额',
+            dataIndex: 'paybackAmount',
+            key: 'paybackAmount',
             width: 100,
             render
         },
         {
             title: '回款状态',
-            dataIndex: '回款状态',
-            key: '回款状态',
+            dataIndex: 'paybackStatusText',
+            key: 'paybackStatusText',
             width: 100,
             render
         },
         {
             title: '执行完成/结算时间',
-            dataIndex: '执行完成/结算时间',
-            key: '执行完成/结算时间',
+            dataIndex: 'orderTime',
+            key: 'orderTime',
             width: 150,
-            render: (_, record) => tdRender(tdSubList('执行完成/结算时间', activeKey), record)
+            render: (_, record) => tdRender(tdSubList('orderTime', activeKey), record)
         },
         {
             title: '结案/开票时间',
-            dataIndex: '结案/开票时间',
-            key: '结案/开票时间',
+            dataIndex: 'invoiceTime',
+            key: 'invoiceTime',
             width: 200,
-            render: (_, record) => tdRender(tdSubList('结案/开票时间'), record)
+            render: (_, record) => tdRender(tdSubList('invoiceTime'), record)
         },
         {
             title: '审核通过/应还款时间',
-            dataIndex: '审核通过/应还款时间',
-            key: '审核通过/应还款时间',
+            dataIndex: 'applyTime',
+            key: 'applyTime',
             width: 150,
-            render: (_, record) => tdRender(tdSubList('审核通过/应还款时间'), record)
+            render: (_, record) => tdRender(tdSubList('applyTime'), record)
         },
     ];
 }

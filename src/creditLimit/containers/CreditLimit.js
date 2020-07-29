@@ -30,9 +30,9 @@ class CreditLimit extends React.Component {
 	}
 
 	componentDidMount() {
-		const { activeKey: product_line } = this.state;
+		const { activeKey: productLine } = this.state;
 		this.props.getCreditQuerySalerData();
-		this.getCreditListData({page: 1, page_size: 20, product_line, company_id: 123});
+		this.getCreditListData({page: 1, pageSize: 20, productLine});
 		const leftSlide = document.getElementsByClassName('ant-layout-sider-trigger')[0];
 		const leftWidth = leftSlide && leftSlide.clientWidth;
 		this.setState({leftWidth});
@@ -48,7 +48,7 @@ class CreditLimit extends React.Component {
 	handleChangeTab = activeKey => {
 		const { creditLimitListInfo = {} } = this.props;
 		if(!creditLimitListInfo[`creditTab-${activeKey}`]) {
-			this.getCreditListData({page: 1, page_size: 20, product_line: activeKey, company_id: 123});
+			this.getCreditListData({page: 1, page_size: 20, productLine: activeKey});
 		}
 		this.setState({ activeKey });
 	}
@@ -56,7 +56,7 @@ class CreditLimit extends React.Component {
 	handleSearch = (searchQuery) => {
 		const { activeKey } = this.state;
 		this.setState({ [`searchQuery-${activeKey}`]: searchQuery });
-		this.getCreditListData({...searchQuery, product_line: activeKey, company_id: 123});
+		this.getCreditListData({...searchQuery, productLine: activeKey});
 	}
 
 	handleExport = (searchQuery) => {
@@ -64,10 +64,12 @@ class CreditLimit extends React.Component {
 	}
 
 	getTabPaneContent = () => {
-		const { creditLimitListInfo = {}, creditQueryOptions = {}, creditSalerData = [] } = this.props;
+		const { creditLimitListInfo = {}, creditSalerData = [], creditRegionData = [] } = this.props;
 		const { leftWidth, loading, activeKey } = this.state;
 		const tabListInfo = creditLimitListInfo[`creditTab-${activeKey}`] || {};
-		const { total, page, page_size, list = [] } = tabListInfo;
+		const { list = [], pagenation = {}, statistics = {} } = tabListInfo;
+		const { total, page, page_size } = pagenation;
+		const { orderTotal, creditAmountUsed } = statistics;
 		const totalWidth = getTotalWidth(getCreditCol());
 		const searchQuery = this.state[`searchQuery-${activeKey}`];
 		const showTotal = (total) => {
@@ -78,8 +80,8 @@ class CreditLimit extends React.Component {
 				Object.assign(searchQuery, {page});
 				this.handleSearch(searchQuery);
 			},
-			onShowSizeChange: (_, page_size) => {
-				Object.assign(searchQuery, {page_size, page: 1});
+			onShowSizeChange: (_, pageSize) => {
+				Object.assign(searchQuery, {pageSize, page: 1});
 				this.handleSearch(searchQuery);
 			},
 			total: parseInt(total),
@@ -92,8 +94,8 @@ class CreditLimit extends React.Component {
 		};
 		const getTotalInfo = (
 			<div>
-				<span className='credit_info_item'>{`订单/活动：${100}`}</span>
-				<span className='credit_info_item'>{`信用额度使用总计：${100}`}</span>
+				<span className='credit_info_item'>{`订单/活动：${orderTotal || '-'}`}</span>
+				<span className='credit_info_item'>{`信用额度使用总计：${creditAmountUsed || '-'}`}</span>
 			</div>
 		);
 		return [
@@ -101,13 +103,18 @@ class CreditLimit extends React.Component {
 				key='search'
 				showExport={true}
 				className={'credit_limit_wrapper'}
-				queryOptions={{...creditQueryOptions, salerData: creditSalerData}}
+				queryOptions={{
+					salerData: creditSalerData, 
+					regionList: creditRegionData,
+				}}
 				queryItems={getCreditQueryItems()}
 				handleSearch={this.handleSearch}
 				handleExport={this.handleExport}
 				actionKeyMap={{
 					sale: this.props.getCreditQuerySalerData,
 					company: this.props.getGoldenCompanyId,
+					companyFull: this.props.getCompanyFullNameSelectData,
+					poList: this.props.getPoListSelectData,
 					requirement: this.props.getRequirementWithoutId,
 					project: this.props.getProjectData,
 					brand: this.props.getBrandData
@@ -157,11 +164,11 @@ class CreditLimit extends React.Component {
 
 const mapStateToProps = (state) => {
 	const { creditLimitReducer = {} } = state;
-	const { creditLimitListInfo = {}, creditQueryOptions = {}, creditSalerData = [] } = creditLimitReducer;
+	const { creditLimitListInfo = {}, creditSalerData = [], creditRegionData = [] } = creditLimitReducer;
 	return {
 		creditLimitListInfo,
-		creditQueryOptions,
-		creditSalerData
+		creditSalerData, 
+		creditRegionData
 	}
 }
 const mapDispatchToProps = dispatch => (

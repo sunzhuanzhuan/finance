@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import './creditLimit.less';
-import { Table, Tabs, Alert, Modal } from "antd";
+import { Table, Tabs, Alert, Modal, message } from "antd";
 import qs from 'qs';
 import moment from 'moment';
 import * as creditLimitActions from "../actions";

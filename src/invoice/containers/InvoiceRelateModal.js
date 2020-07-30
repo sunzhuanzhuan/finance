@@ -133,7 +133,12 @@ class InvoiceRelateModal extends Component {
 							{
 								(this.state.totalInvoicedAmount > this.state.totalSpendAmount) || (this.state.totalInvoicedAmount > this.state.totalRechargeAmount) ? <p style={{ fontSize: '12px' }}><span style={{ color: 'red' }}>预警提示：</span>该公司发票已开超，请谨慎操作</p> : null
 							}
-							<p style={{ fontSize: '12px' }}>该公司总消费：{this.state.totalSpendAmount}元，总充值：{this.state.totalRechargeAmount}元，已开票金额（含合同、邮件审批）：{this.state.totalInvoicedAmount}元，总作废金额：{this.state.totalInvoiceVoidAmount}</p>
+							<p style={{ fontSize: '12px' }} className='invoice_company_detail_info'>
+								<span>该公司总消费：{this.state.totalSpendAmount}元，</span>
+								<span>总充值：{this.state.totalRechargeAmount}元，</span>
+								<span>已开票金额（含合同、邮件审批）：{this.state.totalInvoicedAmount}元，</span>
+								<span>总作废金额：{this.state.totalInvoiceVoidAmount}</span>
+							</p>
 							<p>请确认该发票申请单之前没有开过发票，以免开重，然后再进行下一步操作</p>
 							<Row type="flex" justify="center" gutter={16}>
 								{this.state.isAssociateBtnVisible == '消费' || this.state.isAssociateBtnVisible == '充值' ? <Col><Button><Link to={"/finance/invoice/associateInvoice?id=" + this.state.invoiceApplyId + "&role=" + role}>已开票，关联现有发票</Link></Button></Col> : ''}

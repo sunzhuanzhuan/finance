@@ -201,15 +201,15 @@ class InvoiceApplyDetail extends React.Component {
 			};
 			const getOperateBtn = () => {
 				const invoiceOperateArr = [
-					{ key: 'void', title: '当月作废', className: 'left-gap' },
-					{ key: 'red', title: '红字发票', className: 'left-gap-10' },
+					{ key: 'void', title: '当月作废' },
+					{ key: 'red', title: '红字发票' },
 				];
 				const otherBinding = Array.isArray(other_application_id) && other_application_id.length;
 				const operateFunc = otherBinding ? this.showConfirm : this.handleInvoiceOperate;
 				return invoiceOperateArr.map(item => {
 					const { className, key, title } = item;
 					return (
-						<a key={key} className={className} onClick={() => operateFunc(key, invoiceBaseInfo, other_application_id)}>{title}</a>
+						<a key={key} className='left-gap-10' onClick={() => operateFunc(key, invoiceBaseInfo, other_application_id)}>{title}</a>
 					)
 				})
 			}

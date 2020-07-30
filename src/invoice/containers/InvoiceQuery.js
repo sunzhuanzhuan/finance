@@ -88,6 +88,7 @@ export class InvoiceQuery extends Component {
 		const query = { opt_type: 'offline', invoice_id };
 		return this.props.actions.getInvoiceQueryOperate(query).then(() => {
 			const { searchQuery } = this.state;
+			this.setState({ selectedRowKeys: [] });
 			this.handleSearch(searchQuery)
 		})
 	}

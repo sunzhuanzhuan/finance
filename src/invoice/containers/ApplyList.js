@@ -490,6 +490,7 @@ class ApplyList extends Component {
 				title: '状态',
 				dataIndex: 'status_display',
 				key: 'status_display',
+				width: '70px',
 				render: (text, record) => {
 					if (record.status === 6 || record.status === 7) {
 						return (

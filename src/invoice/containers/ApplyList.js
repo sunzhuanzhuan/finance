@@ -872,7 +872,7 @@ class ApplyList extends Component {
 								>
 									{getFieldDecorator('type', { placeholder: '请选择' })(
 										<Select
-											style={{ width: 100 }} placeholder='全部'
+											style={{ width: 125 }} placeholder='全部'
 										>
 											<Option value={''}>全部</Option>
 											{applicationType ?

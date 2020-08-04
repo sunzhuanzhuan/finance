@@ -575,9 +575,9 @@ class InvoiceApplyDetail extends React.Component {
 				align: 'center',
 				render: (_, record) => {
 					const getRelateBtn = () => {
-						const { type_display, id, company_id, amount, real_amount, can_invoice, type, receivables_payback_amount } = detailInfo;
+						const { type_display, id, company_id, amount, real_amount, can_invoice, type, receivables_payback_amount, status_display } = detailInfo;
 						return (
-							role === 'cashier' && can_invoice > 0 ? <a key='relateInvoice' onClick={() => {this.isShowRelateModal(type_display, id, company_id, amount, can_invoice, type, receivables_payback_amount, real_amount)}}>重新关联发票</a> : null
+							role === 'cashier' && can_invoice > 0 && status_display !== status_display_map['YIZUOFEI'] ? <a key='relateInvoice' onClick={() => {this.isShowRelateModal(type_display, id, company_id, amount, can_invoice, type, receivables_payback_amount, real_amount)}}>重新关联发票</a> : null
 						)
 					}
 					const getInvoiceNumItems = () => {

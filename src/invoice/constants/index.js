@@ -23,7 +23,8 @@ export const beneficiary_company = {
 }
 export const status_display_map = {
 	'YIKAI': '已开',
-	'YIJI': '已寄'
+	'YIJI': '已寄',
+	'YIZUOFEI': '已作废'
 }
 export const orderColumnsFunc = (flag, handlePass, handleRefuse) => {
 	return [

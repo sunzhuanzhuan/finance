@@ -6,7 +6,6 @@ import { Row, Col, Button, Modal, Form, message, Skeleton } from 'antd';
 import * as applyListAction from '../actions/index'
 import './ApplyList.less';
 import AddInvoiceInfo from '../containers/AddInvoiceInfo'
-import { calcSum } from "../../util";
 import { shallowEqual } from '@/util';
 
 class InvoiceRelateModal extends Component {

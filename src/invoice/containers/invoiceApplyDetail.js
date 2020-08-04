@@ -582,7 +582,7 @@ class InvoiceApplyDetail extends React.Component {
 					}
 					const getInvoiceNumItems = () => {
 						const { status_display, express_company_display, waybill_number } = record;
-						if(status_display === status_display_map['YIKAI'] || status_display === status_display_map['YIJI']) {
+						if(status_display === status_display_map['YIKAI'] || status_display === status_display_map['YIJI'] || status_display === status_display_map['YIZUOFEI']) {
 							return (
 								<div className='status-display'>
 									<p>

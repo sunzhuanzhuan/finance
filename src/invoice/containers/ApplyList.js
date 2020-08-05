@@ -14,6 +14,7 @@ import { calcSum } from "../../util";
 import { columnsList } from '../util'
 import InvoiceRelateModal from './InvoiceRelateModal'
 import apiDownload from '@/api/apiDownload'
+import { status_display_map } from '../constants'
 
 const { RangePicker } = DatePicker
 const FormItem = Form.Item
@@ -453,6 +454,11 @@ class ApplyList extends Component {
 					let partMoney = (<div> <Table loading={this.state.returnLoading} bordered size="small"
 						rowKey='id' columns={columnsPartMoney}
 						dataSource={partMoneyData} pagination={false}></Table></div >)
+					if(record.status_display === status_display_map['YIZUOFEI']) {
+						return <div>
+							<a target='_blank' href={`/finance/invoice/applyDetail?id=${record.id}`} >{text}</a>
+						</div>
+					}
 					if (record.payback_status == 0) {
 						return (
 							<div>
@@ -529,7 +535,7 @@ class ApplyList extends Component {
 					let arrWaitMoney = [record.receivables_payback_amount, -record.payback_amount]
 					return <p className='moneyAmountWrapper'>
 						<p>申请单金额:{record.amount}</p>
-						<p>已开票金额:{record.real_amount}</p>
+						<div>已开票金额:{record.real_amount}</div>
 						{
 							record.type == 1 || record.type == 5 ? 
 							<p>

@@ -447,14 +447,28 @@ class InvoiceApplyDetail extends React.Component {
 				dataIndex: 'id',
 				key: 'id',
 				align: 'center',
-				render: (text, { id }) => {
-					return payback_status === payback_status_map['WAIT_FOR_PAY'] ?
-						<div>{id}<b className="highLight" >待回款</b></div> :
-						payback_status === payback_status_map['ALREADY_FOR_PAY'] ?
-							<div>{id}<b className="highLight" >已回款</b></div> :
-							payback_status === payback_status_map['ALREADY_PART_PAY'] ?
-								<div>{id}<b className="highLight" >部分回款</b></div> :
-								<div>{id}</div>
+				render: (text, { id, status_display }) => {
+					if(status_display === status_display_map['YIZUOFEI']) {
+						return <div>{id}</div>
+					}
+					let paybackText = '';
+					switch(payback_status) {
+						case payback_status_map['WAIT_FOR_PAY']: 
+							paybackText = '待回款';
+							break;
+						case payback_status_map['ALREADY_FOR_PAY']: 
+							paybackText = '已回款';
+							break;
+						case payback_status_map['ALREADY_PART_PAY']: 
+							paybackText = '部分回款';
+							break;
+						default:
+							paybackText = '';
+							break;
+					}
+					return paybackText ?
+						<div>{id}<b className="highLight" >{paybackText}</b></div> :
+						<div>{id}</div>
 				}
 			}, {
 				title: '创建时间/创建人：',

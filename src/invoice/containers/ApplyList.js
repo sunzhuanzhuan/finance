@@ -535,7 +535,7 @@ class ApplyList extends Component {
 					let arrWaitMoney = [record.receivables_payback_amount, -record.payback_amount]
 					return <p className='moneyAmountWrapper'>
 						<p>申请单金额:{record.amount}</p>
-						<div>已开票金额:{record.real_amount}</div>
+						<p>已开票金额:{record.real_amount}</p>
 						{
 							record.type == 1 || record.type == 5 ? 
 							<p>

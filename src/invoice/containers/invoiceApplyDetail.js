@@ -270,7 +270,7 @@ class InvoiceApplyDetail extends React.Component {
 							}
 						]
 					})(
-						<TextArea placeholder='必输' autosize={{ minRows: 4, maxRows: 6 }} />
+						<TextArea placeholder='请填写当月作废的原因，必填' autosize={{ minRows: 4, maxRows: 6 }} />
 					)}
 				</FormItem>
 			)
@@ -332,7 +332,7 @@ class InvoiceApplyDetail extends React.Component {
 							}
 						]
 					})(
-						<TextArea placeholder='必输' autosize={{ minRows: 3, maxRows: 6 }} />
+						<TextArea placeholder='请填写红字发票的原因，必填' autosize={{ minRows: 3, maxRows: 6 }} />
 					)}
 				</FormItem>
 			]

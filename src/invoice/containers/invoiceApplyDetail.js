@@ -322,17 +322,17 @@ class InvoiceApplyDetail extends React.Component {
 						<DatePicker className='select_commont_width' format={dataFormat} />
 					)}
 				</FormItem>,
-				<FormItem label='请填写红字发票原因' key='invalid_reason'>
+				<FormItem label='红冲原因' key='invalid_reason'>
 					{getFieldDecorator('invalid_reason', {
 						rules: [
 							{ 
 								required: true, 
 								max: 100,
-								message: '请输入红字发票原因，最多不超过100个字符' 
+								message: '请输入发票红冲原因，最多不超过100个字符' 
 							}
 						]
 					})(
-						<TextArea placeholder='请填写红字发票的原因，必填' autosize={{ minRows: 3, maxRows: 6 }} />
+						<TextArea placeholder='请填写发票红冲的原因，必填' autosize={{ minRows: 3, maxRows: 6 }} />
 					)}
 				</FormItem>
 			]
@@ -357,8 +357,8 @@ class InvoiceApplyDetail extends React.Component {
 		let typeTable = type ? type === 2 ? handleTypeMap('2') : handleTypeMap('1') : [];
 		const modalCls = invoiceModalType === 'red' ? 'invoice_operate_form clear-fix' : '';
 		const titleOption = {
-			'void': '请填写当月作废原因',
-			'red': '请填写新的发票号',
+			'void': '发票当月作废',
+			'red': '发票红冲',
 			'detail': '操作详情'
 		}
 		const companyColumns = [

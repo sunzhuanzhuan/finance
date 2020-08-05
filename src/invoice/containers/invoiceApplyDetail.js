@@ -604,7 +604,7 @@ class InvoiceApplyDetail extends React.Component {
 											{ label: '操作人：', key: 'operation_user' },
 											{ label: '操作时间：', key: 'operation_time' },
 										]
-										return <p key={index} className='invoice_operate_wrapper'>
+										return <div key={index} className='invoice_operate_wrapper'>
 											<div className='invoice_item'>
 												{
 													status === '5' ? 
@@ -622,7 +622,7 @@ class InvoiceApplyDetail extends React.Component {
 											{
 												this.getInvoiceOperateComp(item, status, role)
 											}
-										</p>
+										</div>
 									}) : null}
 									{
 										getRelateBtn()

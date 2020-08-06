@@ -69,14 +69,14 @@ class CreditLimit extends React.Component {
 	}
 	
 	handleExport = (searchQuery) => {
-		this.props.getCreditExportInfo({...searchQuery, flag: 1}).then(() => {
+		this.props.getCreditExportInfo({...searchQuery, checkExport: 1}).then(() => {
 			const timeStamp = moment().format('YYYYMMDDHHmmss');
 			apiDownload({
 				url: '/finance/creditapply/useDetailExport?' + qs.stringify(searchQuery),
 				method: 'GET',
 			}, `信用额度使用明细_${timeStamp}.xls`)
 		}).catch(result => {
-			if(result.code === 997) {
+			if(result.code === 996) {
 				this.handleInfo(result.errorMsg);
 			}else {
 				message.error(result.errorMsg)

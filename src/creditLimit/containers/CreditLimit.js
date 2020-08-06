@@ -89,8 +89,8 @@ class CreditLimit extends React.Component {
 		const { leftWidth, loading, activeKey } = this.state;
 		const tabListInfo = creditLimitListInfo[`creditTab-${activeKey}`] || {};
 		const { list = [], pagenation = {}, statistics = {} } = tabListInfo;
-		const { total, page, page_size } = pagenation;
-		const { orderTotal, creditAmountUsed } = statistics;
+		const { total, page, pageSize } = pagenation;
+		const { orderTotal = '-', creditAmountUsed = '-' } = statistics;
 		const totalWidth = getTotalWidth(getCreditCol());
 		const searchQuery = this.state[`searchQuery-${activeKey}`];
 		const showTotal = (total) => {
@@ -108,15 +108,15 @@ class CreditLimit extends React.Component {
 			total: parseInt(total),
 			showTotal,
 			current: parseInt(page),
-			pageSize: parseInt(page_size),
+			pageSize: parseInt(pageSize),
 			showQuickJumper: true,
 			showSizeChanger: true,
 			pageSizeOptions: ['20', '50', '100', '200']
 		};
 		const getTotalInfo = (
 			<div>
-				<span className='credit_info_item'>{`订单/活动：${orderTotal || '-'}`}</span>
-				<span className='credit_info_item'>{`信用额度使用总计：${creditAmountUsed || '-'}`}</span>
+				<span className='credit_info_item'>{`订单/活动：${orderTotal}`}</span>
+				<span className='credit_info_item'>{`信用额度使用总计：${creditAmountUsed}`}</span>
 			</div>
 		);
 		return [

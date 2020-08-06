@@ -4,7 +4,7 @@ import qs from 'qs';
 const GET_CREDIT_LIST = 'GET_CREDIT_LIST';
 // 获取核销单详情各方列表
 export function getCrediLimitListInfo(params = {}) {
-	const { product_line } = params;
+	const { productLine } = params;
 
 	return dispatch => {
 		return api.get(`${Interface.getCrediLimitListInfo}?${qs.stringify(params)}`)
@@ -12,14 +12,14 @@ export function getCrediLimitListInfo(params = {}) {
 			dispatch({
 				type: GET_CREDIT_LIST,
 				listData: result.data,
-				key: product_line
+				key: productLine
 			})
 		})
 		.catch( () => {
 			dispatch({
 				type: GET_CREDIT_LIST,
 				listData: {},
-				key: product_line
+				key: productLine
 			})
 		});
 	}

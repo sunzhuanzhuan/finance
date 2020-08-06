@@ -27,7 +27,7 @@ const tdRender = (arr, record = {}) => {
         return (
             <div key={key}>
                 {`${title}：${record[key] || '-'}`}
-                { extra ? <Tag color="#108ee9" className='credit_td_extra_tag'>{`${extra.title}：${record[extra.key]}`}</Tag> : null }
+                { extra ? <Tag color="#108ee9" className='credit_td_extra_tag'>{`${extra.title}：${record[extra.key] || '-'}`}</Tag> : null }
             </div>
         )
     });
@@ -94,14 +94,14 @@ export const getCreditCol = (activeKey) => {
             title: '客户简称/全称',
             dataIndex: 'companyName',
             key: 'companyName',
-            width: 100,
+            width: 150,
             render: (_, record) => tdRender(tdSubList('companyName'), record)
         },
         {
             title: '销售/区域',
             dataIndex: 'saleInfo',
             key: 'saleInfo',
-            width: 100,
+            width: 150,
             render: (_, record) => tdRender(tdSubList('saleInfo'), record)
         },
         {
@@ -143,7 +143,7 @@ export const getCreditCol = (activeKey) => {
             title: '执行完成/结算时间',
             dataIndex: 'orderTime',
             key: 'orderTime',
-            width: 150,
+            width: 200,
             render: (_, record) => tdRender(tdSubList('orderTime', activeKey), record)
         },
         {
@@ -157,7 +157,7 @@ export const getCreditCol = (activeKey) => {
             title: '审核通过/应还款时间',
             dataIndex: 'applyTime',
             key: 'applyTime',
-            width: 150,
+            width: 200,
             render: (_, record) => tdRender(tdSubList('applyTime'), record)
         },
     ];

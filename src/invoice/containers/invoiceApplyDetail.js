@@ -266,6 +266,7 @@ class InvoiceApplyDetail extends React.Component {
 							{ 
 								required: true, 
 								max: 100,
+								whitespace: true,
 								message: '请输入作废原因，最多不超过100个字符' 
 							}
 						]
@@ -327,6 +328,7 @@ class InvoiceApplyDetail extends React.Component {
 						rules: [
 							{ 
 								required: true, 
+								whitespace: true,
 								max: 100,
 								message: '请输入发票红冲原因，最多不超过100个字符' 
 							}

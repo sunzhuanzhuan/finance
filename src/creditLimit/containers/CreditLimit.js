@@ -141,9 +141,7 @@ class CreditLimit extends React.Component {
 					brand: this.props.getBrandData
 				}}
 			/>,
-			<Skeleton key='total' loading={loading} active rows={1} paragraph={false}>
-				<Alert className='credit_total_info' message={getTotalInfo} type="info" showIcon />
-			</Skeleton>,
+			<Alert key='total' className='credit_total_info' message={getTotalInfo} type="info" showIcon />,
 			<Scolltable key='table' scrollClassName='.ant-table-body' widthScroll={totalWidth + leftWidth}>
 				<Table
 					className='credit_limit_table'

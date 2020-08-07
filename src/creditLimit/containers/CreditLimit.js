@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import './creditLimit.less';
-import { Table, Tabs, Alert, Modal, message } from "antd";
+import { Table, Tabs, Alert, Modal, message, Skeleton } from "antd";
 import qs from 'qs';
 import moment from 'moment';
 import * as creditLimitActions from "../actions";
@@ -51,7 +51,7 @@ class CreditLimit extends React.Component {
 	handleChangeTab = activeKey => {
 		const { creditLimitListInfo = {} } = this.props;
 		if(!creditLimitListInfo[`creditTab-${activeKey}`]) {
-			this.getCreditListData({page: 1, page_size: 20, productLine: activeKey});
+			this.getCreditListData({page: 1, pageSize: 20, productLine: activeKey});
 		}
 		this.setState({ activeKey });
 	}
@@ -88,11 +88,11 @@ class CreditLimit extends React.Component {
 		const { creditLimitListInfo = {}, creditSalerData = [], creditRegionData = [] } = this.props;
 		const { leftWidth, loading, activeKey } = this.state;
 		const tabListInfo = creditLimitListInfo[`creditTab-${activeKey}`] || {};
-		const { list = [], pagenation = {}, statistics = {} } = tabListInfo;
-		const { total, page, pageSize } = pagenation;
+		const { list = [], pagination = {}, statistics = {} } = tabListInfo;
+		const { total, page, pageSize } = pagination;
 		const { orderTotal = '-', creditAmountUsed = '-' } = statistics;
 		const totalWidth = getTotalWidth(getCreditCol());
-		const searchQuery = this.state[`searchQuery-${activeKey}`];
+		const searchQuery = this.state[`searchQuery-${activeKey}`] || { page: 1, pageSize: 20 };
 		const showTotal = (total) => {
 			return `共 ${total} 条数据`;
 		};
@@ -141,11 +141,13 @@ class CreditLimit extends React.Component {
 					brand: this.props.getBrandData
 				}}
 			/>,
-			<Alert key='total' className='credit_total_info' message={getTotalInfo} type="info" showIcon />,
+			<Skeleton key='total' loading={loading} active rows={1} paragraph={false}>
+				<Alert className='credit_total_info' message={getTotalInfo} type="info" showIcon />
+			</Skeleton>,
 			<Scolltable key='table' scrollClassName='.ant-table-body' widthScroll={totalWidth + leftWidth}>
 				<Table
 					className='credit_limit_table'
-					rowKey='id'
+					rowKey='orderId'
 					columns={getCreditCol(activeKey)}
 					dataSource={list}
 					loading={loading}

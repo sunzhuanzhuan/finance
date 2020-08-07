@@ -78,7 +78,7 @@ const tdSubList = (key, activeKey) => {
 }
 
 const render = (data) => {
-    return data || data == 0 ? data : '-';
+    return data || data === 0 ? data : '-';
 }
 
 export const getCreditCol = (activeKey) => {

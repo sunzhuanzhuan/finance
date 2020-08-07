@@ -108,7 +108,7 @@ class CreditLimitQuery extends React.Component {
 
 		if(type === 'reset') {
 			form.resetFields();
-			// handleSearch({page: 1, page_size: 20});
+			// handleSearch({page: 1, pageSize: 20});
 		}else if(type === 'search' || type === 'export') {
 			form.validateFields((errors, values) => {
 				if(errors)
@@ -116,7 +116,7 @@ class CreditLimitQuery extends React.Component {
 				const dealValues = this.dealValuesDate(values);
 				const operateAction = type === 'search' ? handleSearch : type === 'export' ? handleExport : null;
 				if(type === 'search') {
-					Object.assign(dealValues, {page: 1, page_size: 20});
+					Object.assign(dealValues, {page: 1, pageSize: 20});
 				}
 				operateAction(dealValues);
 			})

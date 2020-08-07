@@ -8,7 +8,7 @@ import moment from 'moment';
 import * as creditLimitActions from "../actions";
 import { getGoldenCompanyId } from '@/companyDetail/actions/goldenApply';
 import { getProjectData, getBrandData, getRequirementWithoutId } from '@/receivablesOff/actions/receivableOff';
-import { getCrediLimitListInfo } from '../actions/creditTabListAction';
+import { getCrediLimitListInfo, clearCreditLimitMessage } from '../actions/creditTabListAction';
 import { getTotalWidth, events } from '@/util';
 import { Scolltable } from '@/components';
 import apiDownload from '@/api/apiDownload';
@@ -42,6 +42,25 @@ class CreditLimit extends React.Component {
 		this.setState({leftWidth});
 	}
 
+	static getDerivedStateFromProps(nextProps, prevState) {
+		const {creditLimitListInfo = {}} = nextProps;
+		const { errorMsg } = creditLimitListInfo;
+		if(errorMsg !== prevState.errorMsg) {
+			return {
+				errorMsg
+			}
+		}else {
+			return null;
+		}	
+	}
+
+	componentDidUpdate(_, prevState) {
+		const { errorMsg } = this.state;
+		if(errorMsg && errorMsg !== prevState.errorMsg) {
+			message.error(errorMsg)
+		}
+	}
+
 	getCreditListData = (searchQuery) => {
 		this.setState({ loading: true });
 		this.props.getCrediLimitListInfo(searchQuery).finally(() => {
@@ -51,6 +70,7 @@ class CreditLimit extends React.Component {
 
 	handleChangeTab = activeKey => {
 		const { creditLimitListInfo = {} } = this.props;
+		this.props.clearCreditLimitMessage();
 		if(!creditLimitListInfo[`creditTab-${activeKey}`]) {
 			this.getCreditListData({page: 1, pageSize: 20, productLine: activeKey});
 		}
@@ -198,6 +218,7 @@ const mapDispatchToProps = dispatch => (
 		bindActionCreators({
 			...creditLimitActions, 
 			getCrediLimitListInfo, 
+			clearCreditLimitMessage,
 			getGoldenCompanyId,
 			getProjectData, getBrandData, getRequirementWithoutId
 		}, dispatch)

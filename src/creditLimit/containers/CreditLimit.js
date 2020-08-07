@@ -69,7 +69,8 @@ class CreditLimit extends React.Component {
 	}
 	
 	handleExport = (searchQuery) => {
-		this.props.getCreditExportInfo({...searchQuery, checkExport: 1}).then(() => {
+		const { activeKey: productLine } = this.state;
+		this.props.getCreditExportInfo({...searchQuery, checkExport: 1, productLine}).then(() => {
 			const timeStamp = moment().format('YYYYMMDDHHmmss');
 			apiDownload({
 				url: '/finance/creditapply/useDetailExport?' + qs.stringify(searchQuery),

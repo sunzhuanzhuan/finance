@@ -35,6 +35,7 @@ class CreditLimit extends React.Component {
 	componentDidMount() {
 		const { activeKey: productLine } = this.state;
 		this.props.getCreditQuerySalerData();
+		this.props.getCreditQueryRegionList();
 		this.getCreditListData({page: 1, pageSize: 20, productLine});
 		const leftSlide = document.getElementsByClassName('ant-layout-sider-trigger')[0];
 		const leftWidth = leftSlide && leftSlide.clientWidth;

@@ -96,7 +96,7 @@ class CreditLimit extends React.Component {
 			apiDownload({
 				url: '/finance/creditapply/useDetailExport?' + qs.stringify({...searchQuery, productLine}),
 				method: 'GET',
-			}, `信用额度使用明细_${timeStamp}.xls`)
+			}, `信用额度使用明细_${timeStamp}.csv`);
 		}).catch(result => {
 			if(result.code === 996) {
 				this.handleInfo(result.errorMsg);

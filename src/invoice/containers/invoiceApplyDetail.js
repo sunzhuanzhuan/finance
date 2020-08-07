@@ -207,7 +207,7 @@ class InvoiceApplyDetail extends React.Component {
 				const otherBinding = Array.isArray(other_application_id) && other_application_id.length;
 				const operateFunc = otherBinding ? this.showConfirm : this.handleInvoiceOperate;
 				return invoiceOperateArr.map(item => {
-					const { className, key, title } = item;
+					const { key, title } = item;
 					return (
 						<a key={key} className='left-gap-10' onClick={() => operateFunc(key, invoiceBaseInfo, other_application_id)}>{title}</a>
 					)
@@ -394,7 +394,7 @@ class InvoiceApplyDetail extends React.Component {
 				dataIndex: 'contract_num',
 				key: 'contract_num',
 				align: 'center',
-				render: (text, { contract_num }) => {
+				render: (_, { contract_num }) => {
 					return contract_num ? contract_num : "";
 				}
 			},
@@ -403,7 +403,7 @@ class InvoiceApplyDetail extends React.Component {
 				dataIndex: 'contract_scanning_copy',
 				key: 'contract_scanning_copy',
 				align: 'center',
-				render: (text, { contract_scanning_copy }) => {
+				render: (_, { contract_scanning_copy }) => {
 					return <div>
 						{contract_scanning_copy ? contract_scanning_copy.map((item, index) => {
 							return <span className='file-link' key={index} onClick={() => {
@@ -420,7 +420,7 @@ class InvoiceApplyDetail extends React.Component {
 				dataIndex: 'email_approval_screenshots',
 				key: 'email_approval_screenshots',
 				align: 'center',
-				render: (text, { email_approval_screenshots }) => {
+				render: (_, { email_approval_screenshots }) => {
 					return <div>
 						{email_approval_screenshots ? email_approval_screenshots.map((item, index) => {
 							return <div className='thum-img-box' onClick={() => {
@@ -447,7 +447,7 @@ class InvoiceApplyDetail extends React.Component {
 				dataIndex: 'id',
 				key: 'id',
 				align: 'center',
-				render: (text, { id, status_display }) => {
+				render: (_, { id, status_display }) => {
 					if(status_display === status_display_map['YIZUOFEI']) {
 						return <div>{id}</div>
 					}
@@ -475,7 +475,7 @@ class InvoiceApplyDetail extends React.Component {
 				dataIndex: 'created_at',
 				key: 'created_at',
 				align: 'center',
-				render: (text, { created_at, creator_name }) => {
+				render: (_, { created_at, creator_name }) => {
 					return created_at + ' ' + creator_name
 				}
 			}, {
@@ -510,7 +510,7 @@ class InvoiceApplyDetail extends React.Component {
 				dataIndex: 'amount',
 				key: 'amount',
 				align: 'center',
-				render: (text, { amount, real_amount, payback_amount, receivables_payback_amount, invoice_void_amount }) => {
+				render: (_, { amount, real_amount, payback_amount, receivables_payback_amount, invoice_void_amount }) => {
 					return <ul>
 						<li>已开票金额:{real_amount}</li>
 						<li>申请单金额:{amount}</li>
@@ -557,7 +557,7 @@ class InvoiceApplyDetail extends React.Component {
 				dataIndex: 'tax_num',
 				key: 'tax_num',
 				align: 'center',
-				render: (text, { tax_num, invoice_title_address, bank_agency, bank_account_number, phone, invoice_comment }) => {
+				render: (_, { tax_num, invoice_title_address, bank_agency, bank_account_number, phone, invoice_comment }) => {
 					return <ul>
 						<li><span className='invoice-message'>纳税人识别号：</span>{tax_num}</li>
 						<li><span className='invoice-message'>开票地址:</span>{invoice_title_address}</li>
@@ -573,7 +573,7 @@ class InvoiceApplyDetail extends React.Component {
 				dataIndex: 'company_owner_admin_name',
 				key: 'company_owner_admin_name',
 				align: 'center',
-				render: (text, { addressee, addressee_address, addressee_phone, postcode }) => {
+				render: (_, { addressee, addressee_address, addressee_phone, postcode }) => {
 					return <ul>
 						<li><span className='invoice-message'>收件人姓名：</span>{addressee}</li>
 						<li><span className='invoice-message'>收件人地址：</span>{addressee_address}</li>

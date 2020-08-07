@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Input, InputNumber, Button, Select, DatePicker } from "antd";
+import { Form, Input, Button, Select, DatePicker } from "antd";
 import SearchSelect from '@/components/SearchSelect';
 
 const { Option } = Select;
@@ -9,8 +9,7 @@ const { RangePicker } = DatePicker;
 class CreditLimitQuery extends React.Component {
 	constructor() {
 		super();
-		this.state = {
-		};
+		this.state = {};
 	}
 	getSelectOption = (key, idKey, labelKey) => {
 		const { queryOptions = {} } = this.props;

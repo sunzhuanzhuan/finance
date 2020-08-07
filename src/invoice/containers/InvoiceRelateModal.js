@@ -118,6 +118,10 @@ class InvoiceRelateModal extends Component {
 			availableInvoiceList = [],
 			isShowRelateModal
 		} = this.props;
+		const getJudgeSign = () => {
+			const { totalInvoicedAmount, totalSpendAmount, totalRechargeAmount } = this.state;
+			return parseInt(totalInvoicedAmount) > parseInt(totalSpendAmount) || parseInt(totalInvoicedAmount) > parseInt(totalRechargeAmount);
+		}
 		return (
 			<div>
 				<Modal
@@ -130,7 +134,7 @@ class InvoiceRelateModal extends Component {
 					<Skeleton loading={this.state.companyInfoLoading}>
 						<div>
 							{
-								(this.state.totalInvoicedAmount > this.state.totalSpendAmount) || (this.state.totalInvoicedAmount > this.state.totalRechargeAmount) ? <p style={{ fontSize: '12px' }}><span style={{ color: 'red' }}>预警提示：</span>该公司发票已开超，请谨慎操作</p> : null
+								getJudgeSign() ? <p style={{ fontSize: '12px' }}><span style={{ color: 'red' }}>预警提示：</span>该公司发票已开超，请谨慎操作</p> : null
 							}
 							<p style={{ fontSize: '12px' }} className='invoice_company_detail_info'>
 								<span>该公司总消费：{this.state.totalSpendAmount}元，</span>

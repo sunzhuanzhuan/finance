@@ -9,7 +9,7 @@ export const getCreditQueryItems = () => {
         {label: '公司全称', key: 'companyIdFull', compType: 'searchSelect', actionKey: 'companyFull', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},
         {label: '需求名称', key: 'requirementId', compType: 'searchSelect', actionKey: 'requirement', dataIndex: ['id', 'name'], keyWord: 'requirement_name'},
         {label: '项目名称', key: 'projectId', compType: 'searchSelect', actionKey: 'project', dataIndex: ['id', 'name'], keyWord: 'name'},
-        {label: 'PO', key: 'po', compType: 'searchSelect', actionKey: 'poList', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},
+        {label: 'PO', key: 'poCode', compType: 'searchSelect', actionKey: 'poList', dataIndex: ['company_id', 'execution_evidence_code'], keyWord: 'poCode'},
         {label: '品牌', key: 'brandId', compType: 'searchSelect', actionKey: 'brand', dataIndex: ['id', 'view_name'], keyWord: 'view_name'},
         {label: '开票时间', key: 'kaipiao_time', compType: 'date', submitKey:['invoiceOpenTimeStart', 'invoiceOpenTimeEnd']},
         {label: '应还款时间', key: 'huankuan_time', compType: 'date', submitKey:['paybackTimeStart', 'paybackTimeEnd']},

@@ -1013,16 +1013,30 @@ export const adjustApplyDetailFunc = (rel_order_status = [], quote_type = [], re
 				}
 			},
 			'account_id_name': {
-				title: '账号信息',
+				title: '账号信息/运营标签',
 				dataIndex: 'account_id',
 				key: 'account_id',
 				width: 180,
-				render: (data = '-', { weibo_name = '-', platform_id, warningClass }) => {
+				render: (data = '-', { weibo_name = '-', platform_id, warningClass, account_snapshot_tag_name = '' }) => {
 					const platformInfo = platformIcon.find(item => item.id == platform_id) || {};
+					const getTagComp = tags => {
+						if(tags.length > 5) {
+							return (
+								<Tooltip placement='top' title={tags}>
+									<div className='account_tag_comp'>{`${tags.substr(0, 5)}...`}</div>
+								</Tooltip>
+							)
+						}else {
+							return <div>{tags}</div>
+						}
+					}
 					return <div className={`left_content_td platform_wrapper ${warningClass}`}>
 						{platformInfo.platformIcon ? <img className='platform-icon-img' src={platformInfo.platformIcon} /> : null}
 						<div>账号名称：{weibo_name}</div>
-						<div>ID：{data}</div>
+						<div style={{marginBottom: 0}}>ID：{data}</div>
+						{
+							account_snapshot_tag_name && account_snapshot_tag_name.length ? getTagComp(account_snapshot_tag_name) : null
+						}
 					</div>
 				}
 			},

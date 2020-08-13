@@ -106,7 +106,7 @@ class CreditLimit extends React.Component {
 		})
 	}
 
-	getTabPaneContent = () => {
+	getTabPaneContent = (key) => {
 		const { creditLimitListInfo = {}, creditSalerData = [], creditRegionData = [] } = this.props;
 		const { leftWidth, loading, activeKey } = this.state;
 		const tabListInfo = creditLimitListInfo[`creditTab-${activeKey}`] || {};
@@ -141,7 +141,8 @@ class CreditLimit extends React.Component {
 				<span className='credit_info_item'>{`信用额度使用总计：${creditAmountUsed}`}</span>
 			</div>
 		);
-		return [
+		const wrapperClass = `moreThanOneTable${key}`;
+		return <div className={wrapperClass}>
 			<CreditLimitQuery
 				key='search'
 				showExport={true}
@@ -162,9 +163,14 @@ class CreditLimit extends React.Component {
 					project: this.props.getProjectData,
 					brand: this.props.getBrandData
 				}}
-			/>,
-			<Alert key='total' className='credit_total_info' message={getTotalInfo} type="info" showIcon />,
-			<Scolltable key='table' scrollClassName='.ant-table-body' widthScroll={totalWidth + leftWidth}>
+			/>
+			<Alert key='total' className='credit_total_info' message={getTotalInfo} type="info" showIcon />
+			<Scolltable 
+				isMoreThanOne key='table' 
+				wrapperClass={wrapperClass}
+				scrollClassName={`.${wrapperClass} .ant-table-body`}
+				widthScroll={totalWidth + leftWidth}
+			>
 				<Table
 					className='credit_limit_table'
 					rowKey='number'
@@ -176,7 +182,7 @@ class CreditLimit extends React.Component {
 					scroll={{ x: totalWidth }}
 				/>
 			</Scolltable>
-		]
+		</div>
 	}
 
 	getTabPaneComp = () => {
@@ -185,7 +191,7 @@ class CreditLimit extends React.Component {
 			return (
 				<TabPane tab={tab} key={key}>
 					{
-						this.getTabPaneContent()
+						this.getTabPaneContent(key)
 					}
 				</TabPane>
 			)

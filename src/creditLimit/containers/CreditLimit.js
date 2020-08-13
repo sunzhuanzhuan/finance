@@ -167,7 +167,7 @@ class CreditLimit extends React.Component {
 			<Scolltable key='table' scrollClassName='.ant-table-body' widthScroll={totalWidth + leftWidth}>
 				<Table
 					className='credit_limit_table'
-					rowKey='orderId'
+					rowKey='number'
 					columns={getCreditCol(activeKey)}
 					dataSource={list}
 					loading={loading}

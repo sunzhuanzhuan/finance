@@ -13,6 +13,7 @@ export const getCreditQueryItems = () => {
         {label: '品牌', key: 'brandId', compType: 'searchSelect', actionKey: 'brand', dataIndex: ['id', 'view_name'], keyWord: 'view_name'},
         {label: '开票时间', key: 'kaipiao_time', compType: 'date', submitKey:['invoiceOpenTimeStart', 'invoiceOpenTimeEnd']},
         {label: '应还款时间', key: 'huankuan_time', compType: 'date', submitKey:['paybackTimeStart', 'paybackTimeEnd']},
+        {label: '发票申请单审核通过时间', key: 'shenhe_time', compType: 'date', submitKey:['invoiceApplyOpenTimeStart', 'invoiceApplyOpenTimeEnd']},
         {compType: 'operate', key: 'operate'}
     ];
     return allQuery;

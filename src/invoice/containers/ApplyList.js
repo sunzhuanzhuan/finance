@@ -110,10 +110,12 @@ class ApplyList extends Component {
 				createdAtStart = values['range-picker'][0].format('YYYY-MM-DD')
 				createdAtEnd = values['range-picker'][1].format('YYYY-MM-DD');
 			}
-			values.page = 1;
-			values.page_size = 20
+			const { current } = this.state;
+			const page = e === 'refresh' ? current : 1;
+			const pageInfo = {page, page_size: 20};
 			let formatValues = {
 				...values,
+				...pageInfo,
 				'created_at_start': createdAtStart,
 				'created_at_end': createdAtEnd,
 			}
@@ -148,7 +150,7 @@ class ApplyList extends Component {
 				}
 				return;
 			}
-			this.setState({ formData: formatValues, loading: true, current: 1 })
+			this.setState({ formData: formatValues, loading: true, current: page })
 			this.props.actions.getApplyList(formatValues).then(() => {
 				this.props.actions.getApplyListStat(formatValues).catch(({ errorMsg }) => {
 					message.warning(errorMsg || '请求出错', 1)
@@ -956,7 +958,7 @@ class ApplyList extends Component {
 					relateModalVisible={this.state.relateModalVisible}
 					relateBaseInfo={this.state.relateBaseInfo}
 					isShowRelateModal={this.isShowRelateModal}
-					refreshData={this.handleSelsetSubmit}
+					refreshData={this.handleSelsetSubmit.bind(this, 'refresh')}
 				/>
 			</div>
 		)

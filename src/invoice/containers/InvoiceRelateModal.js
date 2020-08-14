@@ -127,6 +127,7 @@ class InvoiceRelateModal extends Component {
 				<Modal
 					title="是否已开发票"
 					visible={this.state.isAssociateVisible}
+					maskClosable={false}
 					onCancel={isShowRelateModal}
 					footer={null}
 					width='580px'
@@ -154,6 +155,7 @@ class InvoiceRelateModal extends Component {
 				<Modal
 					title='填写发票信息'
 					visible={this.state.creatNewInvoiceVisible}
+					maskClosable={false}
 					onCancel={this.handleCreatNewInvoiceOk.bind(this)}
 					onOk={this.handleCreatNewInvoiceOk.bind(this)}
 					okText="提交"

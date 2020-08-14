@@ -777,6 +777,7 @@ class InvoiceApplyDetail extends React.Component {
 						width={640}
 						title={titleOption[invoiceModalType]}
 						visible={Boolean(invoiceModalType)} 
+						maskClosable={false}
 						confirmLoading={confirmLoading}
 						onCancel={() => this.handleInvoiceOperate()}
 						onOk={this.handleOk}

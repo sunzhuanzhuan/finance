@@ -18,14 +18,14 @@ export const getInvoiceQueryOptions = () => {
 
 export const getInvoiceQueryStatisticsOptions = () => {
 	return [
-		{ title: '总记个数', key: 'invoice_count', tips: '查询结果的发票总数（当发票状态按“请选择”筛选时，查询结果不包括状态为”待开“的发票）' },
+		{ title: '总记个数', key: 'invoice_count', tips: '发票总个数 （注：当发票状态按“请选择”筛选时，查询结果不包括状态为”待开“的发票）' },
 		{ title: '总计金额', key: 'invoice_amount', tips: '总已开票金额+总作废金额+总红字金额' },
-		{ title: '线上已开个数', key: 'invoice_used_count', tips: '非线下使用的已开状态的发票总个数' },
-		{ title: '线上已开票金额', key: 'invoice_used_amount', tips: '总线上已开个数发票的金额之和' },
-		{ title: '作废个数', key: 'invoice_voided_count', tips: '作废状态下的发票总个数' },
-		{ title: '作废金额', key: 'invoice_voided_amount', tips: '总作废发票的金额之和' },
-		{ title: '红字个数', key: 'invoice_red_count', tips: '红字状态下的发票总个数' },
-		{ title: '红字金额', key: 'invoice_red_amount', tips: '总红字状态下的正金额之和' },
+		{ title: '线上已开个数', key: 'invoice_used_count', tips: '线上已开状态的发票总个数' },
+		{ title: '线上已开票金额', key: 'invoice_used_amount', tips: '所有线上已开状态的发票总金额' },
+		{ title: '作废个数', key: 'invoice_voided_count', tips: '作废状态的发票总个数' },
+		{ title: '作废金额', key: 'invoice_voided_amount', tips: '所有作废状态的发票总金额' },
+		{ title: '红字个数', key: 'invoice_red_count', tips: '红字状态的发票总个数' },
+		{ title: '红字金额', key: 'invoice_red_amount', tips: '所有红字状态的发票总金额' },
 	]
 }
 

@@ -92,7 +92,7 @@ const render = (data) => {
 export const getCreditCol = (activeKey) => {
     return [
         {
-            title: '订单/活动ID',
+            title: activeKey === '3' ? '订单ID' : '活动ID',
             dataIndex: 'orderId',
             key: 'orderId',
             width: 100,
@@ -120,7 +120,7 @@ export const getCreditCol = (activeKey) => {
             render: (_, record) => tdRender(tdSubList('orderInfo'), record)
         },
         {
-            title: '需求ID/需求名称/活动名称',
+            title: activeKey === '3' ? '需求ID/需求名称' : '需求ID/需求名称/活动名称',
             dataIndex: 'orderDetail',
             key: 'orderDetail',
             width: 170,
@@ -148,14 +148,14 @@ export const getCreditCol = (activeKey) => {
             render
         },
         {
-            title: '执行完成/结算时间',
+            title: activeKey === '3' ? '执行完成/结算时间' : '结算时间',
             dataIndex: 'orderTime',
             key: 'orderTime',
             width: 200,
             render: (_, record) => tdRender(tdSubList('orderTime', activeKey), record)
         },
         {
-            title: '结案/审核/开票时间',
+            title: activeKey === '3' ? '结案/审核/开票时间' : '审核/开票时间',
             dataIndex: 'invoiceTime',
             key: 'invoiceTime',
             width: 200,

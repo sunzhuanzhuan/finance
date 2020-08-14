@@ -59,13 +59,33 @@ class CreditLimitQuery extends React.Component {
 		const { getFieldDecorator } = form;
 
 		return queryItems.map(item => {
-			const {label, compType, key} = item;
+			const {label, compType, key, submitKey, startInitial, endInitial} = item;
 			if(compType === 'operate') {
 				return (
 					<FormItem key={key} className='operate-wrapper'>
 						<Button type='primary' onClick={() => {this.handleSearch('search')}}>查询</Button>
 						<Button type='ghost' onClick={() => {this.handleSearch('reset')}}>重置</Button>
 						{ showExport ? <Button type='ghost' onClick={() => {this.handleSearch('export')}}>导出</Button> : null }
+					</FormItem>
+				)
+			}else if(compType === 'singleDate') {
+				return (
+					<FormItem key={key} label={label}>
+						<FormItem>
+							{getFieldDecorator(submitKey[0], {
+								initialValue: startInitial
+							})(
+								<DatePicker placeholder='开始时间' />
+							)}
+						</FormItem>
+						<span className='range-value-sign'>~</span>
+						<FormItem>
+							{getFieldDecorator(submitKey[1], {
+								initialValue: endInitial
+							})(
+								<DatePicker placeholder='结束时间' />
+							)}
+						</FormItem>
 					</FormItem>
 				)
 			}
@@ -81,7 +101,7 @@ class CreditLimitQuery extends React.Component {
 	}
 	dealValuesDate = values => {
 		const { queryItems = [] } = this.props;
-		const dealItems = queryItems.filter(item => item.compType === 'date' || item.compType === 'searchSelect');
+		const dealItems = queryItems.filter(item => item.compType === 'date' || item.compType === 'singleDate' || item.compType === 'searchSelect');
 
 		dealItems.forEach(item => {
 			const { key, mode, submitKey = [] } = item;
@@ -92,6 +112,10 @@ class CreditLimitQuery extends React.Component {
 					})
 					delete values[key];
 				}
+			}else if(item.compType === 'singleDate') {
+				submitKey.forEach((submitItem) => {
+					values[submitItem] = values[submitItem] && values[submitItem].format('YYYY-MM-DD')
+				})
 			}else if(item.compType === 'searchSelect') {
 				if(values[key]) {
 					values[key] = mode === 'multiple' ? 

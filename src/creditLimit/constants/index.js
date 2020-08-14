@@ -1,5 +1,6 @@
 import React from "react";
 import { Tag } from 'antd';
+import moment from 'moment';
 export const getCreditQueryItems = () => {
     const allQuery =  [
         {label: '订单ID/活动ID', key: 'orderId', compType: 'input'},
@@ -11,9 +12,10 @@ export const getCreditQueryItems = () => {
         {label: '项目名称', key: 'projectId', compType: 'searchSelect', actionKey: 'project', dataIndex: ['id', 'name'], keyWord: 'name'},
         {label: 'PO', key: 'poCode', compType: 'searchSelect', actionKey: 'poList', dataIndex: ['execution_evidence_code', 'execution_evidence_code'], keyWord: 'poCode'},
         {label: '品牌', key: 'brandId', compType: 'searchSelect', actionKey: 'brand', dataIndex: ['id', 'view_name'], keyWord: 'view_name'},
-        {label: '开票时间', key: 'kaipiao_time', compType: 'date', submitKey:['invoiceOpenTimeStart', 'invoiceOpenTimeEnd']},
-        {label: '应还款时间', key: 'huankuan_time', compType: 'date', submitKey:['paybackTimeStart', 'paybackTimeEnd']},
-        {label: '发票申请单审核通过时间', key: 'shenhe_time', compType: 'date', submitKey:['invoiceApplyOpenTimeStart', 'invoiceApplyOpenTimeEnd']},
+        {label: '开票时间', key: 'kaipiao_time', compType: 'singleDate', submitKey:['invoiceOpenTimeStart', 'invoiceOpenTimeEnd']},
+        {label: '应还款时间', key: 'huankuan_time', compType: 'singleDate', submitKey:['paybackTimeStart', 'paybackTimeEnd']},
+        {label: '发票申请单审核通过时间', key: 'shenhe_time', compType: 'singleDate', submitKey:['invoiceApplyOpenTimeStart', 'invoiceApplyOpenTimeEnd']},
+        {label: '结算时间', key: 'jiesuan_time', compType: 'singleDate', submitKey:['orderSettleTimeStart', 'orderSettleTimeEnd'], startInitial: moment('2020-08-24')},
         {compType: 'operate', key: 'operate'}
     ];
     return allQuery;

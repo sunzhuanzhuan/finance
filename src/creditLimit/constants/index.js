@@ -57,18 +57,17 @@ const tdSubList = (key, activeKey) => {
             {title: '品牌', key: 'brandName'},
             {title: 'PO', key: 'poCode'},
         ],
-        'orderDetail': activeKey === '3' ? [
+        'orderDetail': [
             {title: '需求ID', key: 'requirementId'},
             {title: '需求名称', key: 'requirementName'},
-        ] : [
-            {title: '活动名称', key: 'campaignName'},
+            activeKey !== '3' ? {title: '活动名称', key: 'campaignName'} : null
         ],
         'orderTime': [
             activeKey === '3' ? {title: '执行完成时间', key: 'orderExecutedFinishTime'} : null,
             {title: '结算时间', key: 'orderSettleTime'},
         ],
         'invoiceTime': [
-            {title: '结案时间', key: 'orderFinishTime'},
+            activeKey === '3' ? {title: '结案时间', key: 'orderFinishTime'} : null,
             {title: '发票申请单审核通过时间', key: 'invoiceApplyOpenTime', extra: {title: '申请单id', key: 'invoiceApplyId'}},
             {title: '开票时间', key: 'invoiceOpenTime'},
         ],
@@ -150,14 +149,14 @@ export const getCreditCol = (activeKey) => {
             render: (_, record) => tdRender(tdSubList('orderTime', activeKey), record)
         },
         {
-            title: '结案/开票时间',
+            title: '结案/审核/开票时间',
             dataIndex: 'invoiceTime',
             key: 'invoiceTime',
             width: 200,
-            render: (_, record) => tdRender(tdSubList('invoiceTime'), record)
+            render: (_, record) => tdRender(tdSubList('invoiceTime', activeKey), record)
         },
         {
-            title: '审核通过/应还款时间',
+            title: '应还款时间',
             dataIndex: 'applyTime',
             key: 'applyTime',
             width: 200,

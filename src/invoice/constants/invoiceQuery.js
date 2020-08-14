@@ -18,7 +18,7 @@ export const getInvoiceQueryOptions = () => {
 
 export const getInvoiceQueryStatisticsOptions = () => {
 	return [
-		{ title: '总记个数', key: 'invoice_count', tips: '发票总数（发票状态“请选择”选项下的查询结果不包括未使用的发票）' },
+		{ title: '总记个数', key: 'invoice_count', tips: '查询结果的发票总数（当发票状态按“请选择”筛选时，查询结果不包括状态为”待开“的发票）' },
 		{ title: '总计金额', key: 'invoice_amount', tips: '总已开票金额+总作废金额+总红字金额' },
 		{ title: '线上已开个数', key: 'invoice_used_count', tips: '非线下使用的已开状态的发票总个数' },
 		{ title: '线上已开票金额', key: 'invoice_used_amount', tips: '总线上已开个数发票的金额之和' },

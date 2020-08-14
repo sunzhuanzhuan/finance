@@ -27,9 +27,15 @@ const tdRender = (arr, record = {}) => {
             return null;
         }
         const { title, key, extra } = item;
+        let itemVal = '';
+        if(key==='paybackCondition') {
+            itemVal = record[key] || record[key] === 0 ? '审核通过后' + record[key] + '天' : '-';
+        }else {
+            itemVal = record[key] || '-';
+        }
         return (
             <div key={key}>
-                {`${title}：${record[key] || '-'}`}
+                {`${title}：${itemVal}`}
                 { extra ? <Tag color="#108ee9" className='credit_td_extra_tag'>{`${extra.title}：${record[extra.key] || '-'}`}</Tag> : null }
             </div>
         )

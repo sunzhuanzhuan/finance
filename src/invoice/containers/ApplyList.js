@@ -299,7 +299,7 @@ class ApplyList extends Component {
 						})
 					} else if (!that.state.isNeedUploadProof && !that.state.isOrderIncomplete) {
 						that.props.actions.postChangeState(id, input_action, that.state.expressCompany, that.state.waybillNumber, that.state.rejectReason).then(() => {
-							message.success('操作成功', 3, that.handleSelsetSubmit());
+							message.success('操作成功', 3, that.handleSelsetSubmit('refresh'));
 							that.setState({ passDisable: false })
 						}).catch(({ errorMsg }) => {
 							message.warning(errorMsg || '操作失败，请重试', 1);
@@ -309,7 +309,7 @@ class ApplyList extends Component {
 				} else if (input_action === 'accountant-reject') {
 					return new Promise((resolve, reject) => {
 						that.props.actions.postChangeState(id, input_action, that.state.expressCompany, that.state.waybillNumber, that.state.rejectReason).then((response) => {
-							message.success('操作成功', 3, that.handleSelsetSubmit())
+							message.success('操作成功', 3, that.handleSelsetSubmit('refresh'))
 							that.setState({ rejectReason: '' });
 							resolve();
 							that.setState({ passDisable: false })
@@ -322,7 +322,7 @@ class ApplyList extends Component {
 				} else if (input_action != 'sale-commit' && input_action != 'accountant-reject') {
 
 					that.props.actions.postChangeState(id, input_action, that.state.expressCompany, that.state.waybillNumber, that.state.rejectReason).then((response) => {
-						message.success('操作成功', 3, that.handleSelsetSubmit())
+						message.success('操作成功', 3, that.handleSelsetSubmit('refresh'))
 						that.setState({ passDisable: false })
 					}).catch(({ errorMsg }) => {
 						message.warning(errorMsg || '操作失败，请重试', 1);

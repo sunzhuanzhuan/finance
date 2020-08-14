@@ -69,11 +69,11 @@ const tdSubList = (key, activeKey) => {
         ],
         'invoiceTime': [
             {title: '结案时间', key: 'orderFinishTime'},
-            {title: '开票时间', key: 'invoiceOpenTime', extra: {title: '申请单id', key: 'invoiceApplyId'}},
-            {title: '回款条件', key: 'paybackCondition'},
+            {title: '发票申请单审核通过时间', key: 'invoiceApplyOpenTime', extra: {title: '申请单id', key: 'invoiceApplyId'}},
+            {title: '开票时间', key: 'invoiceOpenTime'},
         ],
         'applyTime': [
-            {title: '审核通过时间', key: 'invoiceApplyOpenTime'},
+            {title: '回款条件', key: 'paybackCondition'},
             {title: '应还款时间', key: 'orderPaybckTime'},
         ],
     }

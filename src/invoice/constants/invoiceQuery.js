@@ -18,15 +18,14 @@ export const getInvoiceQueryOptions = () => {
 
 export const getInvoiceQueryStatisticsOptions = () => {
 	return [
-		{ title: '发票总数', key: 'invoice_total_count' },
-		{ title: '总记个数', key: 'invoice_count' },
-		{ title: '总计金额', key: 'invoice_amount' },
-		{ title: '已开个数', key: 'invoice_used_count' },
-		{ title: '线上已开票金额', key: 'invoice_used_amount' },
-		{ title: '作废个数', key: 'invoice_voided_count' },
-		{ title: '作废金额', key: 'invoice_voided_amount' },
-		{ title: '红字个数', key: 'invoice_red_count' },
-		{ title: '红字金额', key: 'invoice_red_amount' },
+		{ title: '总记个数', key: 'invoice_count', tips: '' },
+		{ title: '总计金额', key: 'invoice_amount', tips: '' },
+		{ title: '线上已开个数', key: 'invoice_used_count', tips: '' },
+		{ title: '线上已开票金额', key: 'invoice_used_amount', tips: '' },
+		{ title: '作废个数', key: 'invoice_voided_count', tips: '' },
+		{ title: '作废金额', key: 'invoice_voided_amount', tips: '' },
+		{ title: '红字个数', key: 'invoice_red_count', tips: '' },
+		{ title: '红字金额', key: 'invoice_red_amount', tips: '' },
 	]
 }
 

@@ -1,9 +1,9 @@
 import React from "react";
 import { Tag } from 'antd';
 import moment from 'moment';
-export const getCreditQueryItems = () => {
+export const getCreditQueryItems = (activeKey) => {
     const allQuery =  [
-        {label: '订单ID/活动ID', key: 'orderId', compType: 'input'},
+        {label: activeKey === '3' ? '订单ID' : '活动ID', key: 'orderId', compType: 'input'},
         {label: '销售', key: 'saleId', compType: 'select', optionKey: 'salerData', idKey: 'user_id', labelKey: 'real_name', showSearch: true},
         {label: '区域', key: 'reginTeamId', compType: 'select', optionKey: 'regionList', idKey: 'region_team_id', labelKey: 'region_team_name'},
         {label: '公司简称', key: 'companyId', compType: 'searchSelect', actionKey: 'company', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},

@@ -151,7 +151,7 @@ class CreditLimit extends React.Component {
 					salerData: creditSalerData, 
 					regionList: creditRegionData,
 				}}
-				queryItems={getCreditQueryItems()}
+				queryItems={getCreditQueryItems(activeKey)}
 				handleSearch={this.handleSearch}
 				handleExport={this.handleExport}
 				actionKeyMap={{

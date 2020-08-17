@@ -26,7 +26,7 @@ const tdRender = (arr, record = {}) => {
         if(!item) {
             return null;
         }
-        const { title, key, extra } = item;
+        const { title, noTitle, key, extra } = item;
         let itemVal = '';
         if(key==='paybackCondition') {
             itemVal = record[key] || record[key] === 0 ? '审核通过后' + record[key] + '天' : '-';
@@ -35,7 +35,7 @@ const tdRender = (arr, record = {}) => {
         }
         return (
             <div key={key}>
-                {`${title}：${itemVal}`}
+                { noTitle ? itemVal : `${title}：${itemVal}`}
                 { extra ? <Tag color="#108ee9" className='credit_td_extra_tag'>{`${extra.title}：${record[extra.key] || '-'}`}</Tag> : null }
             </div>
         )
@@ -63,18 +63,21 @@ const tdSubList = (key, activeKey) => {
             {title: '品牌', key: 'brandName'},
             {title: 'PO', key: 'poCode'},
         ],
-        'orderDetail': [
+        'orderDetail': activeKey === '3' ? [
             {title: '需求ID', key: 'requirementId'},
-            {title: '需求名称', key: 'requirementName'},
-            activeKey !== '3' ? {title: '活动名称', key: 'campaignName'} : null
+            {title: '需求名称', key: 'requirementName'}
+        ] : [
+            {title: '活动名称', key: 'campaignName'}
         ],
-        'orderTime': [
-            activeKey === '3' ? {title: '执行完成时间', key: 'orderExecutedFinishTime'} : null,
+        'orderTime': activeKey !== '7' ? [
+            {title: '执行完成时间', key: 'orderExecutedFinishTime'},
             {title: '结算时间', key: 'orderSettleTime'},
+        ] : [
+            {noTitle: true, key: 'orderSettleTime'},
         ],
         'invoiceTime': [
             activeKey === '3' ? {title: '结案时间', key: 'orderFinishTime'} : null,
-            {title: '发票申请单审核通过时间', key: 'invoiceApplyOpenTime', extra: {title: '申请单id', key: 'invoiceApplyId'}},
+            {title: '发票申请单审核时间', key: 'invoiceApplyOpenTime', extra: {title: '申请单id', key: 'invoiceApplyId'}},
             {title: '开票时间', key: 'invoiceOpenTime'},
         ],
         'applyTime': [
@@ -120,7 +123,7 @@ export const getCreditCol = (activeKey) => {
             render: (_, record) => tdRender(tdSubList('orderInfo'), record)
         },
         {
-            title: activeKey === '3' ? '需求ID/需求名称' : '需求ID/需求名称/活动名称',
+            title: activeKey === '3' ? '需求ID/需求名称' : '活动名称',
             dataIndex: 'orderDetail',
             key: 'orderDetail',
             width: 170,
@@ -148,14 +151,14 @@ export const getCreditCol = (activeKey) => {
             render
         },
         {
-            title: activeKey === '3' ? '执行完成/结算时间' : '结算时间',
+            title: activeKey !== '7' ? '执行完成/结算时间' : '审核通过时间',
             dataIndex: 'orderTime',
             key: 'orderTime',
             width: 200,
             render: (_, record) => tdRender(tdSubList('orderTime', activeKey), record)
         },
         {
-            title: activeKey === '3' ? '结案/审核/开票时间' : '审核/开票时间',
+            title: activeKey === '3' ? '结案/申请单审核/开票时间' : '申请单审核/开票时间',
             dataIndex: 'invoiceTime',
             key: 'invoiceTime',
             width: 200,

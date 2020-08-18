@@ -202,7 +202,7 @@ class CreditLimit extends React.Component {
 		const { activeKey } = this.state;
 		
 		return [
-			<h3 key='creditTitle'>信用额度使用明细查询</h3>,
+			<legend key='creditTitle'>信用额度使用明细查询</legend>,
 			<Tabs key='creditContent' className='credit_limit_wrapper' activeKey={activeKey} onChange={this.handleChangeTab}>
 				{
 					this.getTabPaneComp()

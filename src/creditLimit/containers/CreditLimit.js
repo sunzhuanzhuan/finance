@@ -137,8 +137,8 @@ class CreditLimit extends React.Component {
 		};
 		const getTotalInfo = (
 			<div>
-				<span className='credit_info_item'>{`订单/活动：${orderTotal}`}</span>
-				<span className='credit_info_item'>{`信用额度使用总计：${creditAmountUsed}`}</span>
+				<span className='credit_info_item'>{`订单/活动：${orderTotal}个`}</span>
+				<span className='credit_info_item'>{`信用额度使用总计：${creditAmountUsed}元`}</span>
 			</div>
 		);
 		const wrapperClass = `moreThanOneTable${key}`;
@@ -201,13 +201,14 @@ class CreditLimit extends React.Component {
 	render() {
 		const { activeKey } = this.state;
 		
-		return (
-			<Tabs className='credit_limit_wrapper' activeKey={activeKey} onChange={this.handleChangeTab}>
+		return [
+			<h3 key='creditTitle'>信用额度使用明细查询</h3>,
+			<Tabs key='creditContent' className='credit_limit_wrapper' activeKey={activeKey} onChange={this.handleChangeTab}>
 				{
 					this.getTabPaneComp()
 				}
 			</Tabs>
-		)
+		]
 	}
 }
 

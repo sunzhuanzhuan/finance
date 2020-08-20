@@ -47,6 +47,10 @@ export const getInvoicePopContent = (option, values = {}) => {
 	)
 }
 
+const render = (data) => {
+	return !data || data == 0 ? '-' : data; 
+}
+
 export const getInvoiceQueryCol = (handleAction) => {
 	return [
 		{ 
@@ -87,6 +91,7 @@ export const getInvoiceQueryCol = (handleAction) => {
 			key: 'status_name',
 			align: 'center',
 			width: 80,
+			render
 		},
 		{ 
 			title: '发票类型',
@@ -94,6 +99,7 @@ export const getInvoiceQueryCol = (handleAction) => {
 			key: 'invoice_type_name',
 			align: 'center',
 			width: 80,
+			render
 		},
 		{ 
 			title: '开票公司',
@@ -101,6 +107,7 @@ export const getInvoiceQueryCol = (handleAction) => {
 			key: 'beneficiary_company_name',
 			align: 'center',
 			width: 110,
+			render
 		},
 		{ 
 			title: '公司简称',
@@ -108,6 +115,7 @@ export const getInvoiceQueryCol = (handleAction) => {
 			key: 'company_name',
 			align: 'center',
 			width: 110,
+			render
 		},
 		{ 
 			title: '发票抬头',
@@ -115,6 +123,7 @@ export const getInvoiceQueryCol = (handleAction) => {
 			key: 'invoice_title',
 			align: 'center',
 			width: 110,
+			render
 		},
 		{ 
 			title: '发票金额（元）',
@@ -122,6 +131,7 @@ export const getInvoiceQueryCol = (handleAction) => {
 			key: 'amount',
 			align: 'center',
 			width: 120,
+			render
 		},
 		{ 
 			title: '发票内容',
@@ -129,6 +139,7 @@ export const getInvoiceQueryCol = (handleAction) => {
 			key: 'invoice_content',
 			align: 'center',
 			width: 110,
+			render
 		},
 		{ 
 			title: '操作时间',
@@ -166,7 +177,7 @@ export const getInvoiceQueryCol = (handleAction) => {
 						]
 					})
 				}
-				return null
+				return '-'
 			}
 		},
 		{

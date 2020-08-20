@@ -152,13 +152,14 @@ export const getInvoiceQueryCol = (handleAction) => {
 					{ title: '开票时间：', key: 'invoice_time' },
 					{ title: '作废时间：', key: 'void_time' },
 					{ title: '红字时间：', key: 'redmark_time' },
-				]
-				return timeOption.map(item => {
+				];
+				const timeComp = timeOption.map(item => {
 					const { key, title } = item;
 					if(record[key]) {
 						return <div key={title}>{title}{record[key]}</div>
 					}
-				})
+				});
+				return timeComp.filter(item => item).length ? timeComp : '-';
 			}
 		},
 		{ 
@@ -196,7 +197,7 @@ export const getInvoiceQueryCol = (handleAction) => {
 						cancelText="取消"
 					>
 						<a>线下使用</a>
-					</Popconfirm> : null;
+					</Popconfirm> : '-';
 			}
 		}
 	]

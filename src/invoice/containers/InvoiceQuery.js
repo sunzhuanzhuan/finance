@@ -138,7 +138,7 @@ export class InvoiceQuery extends Component {
 				this.setState({ selectedRowKeys })
 			},
 			getCheckboxProps: record => ({
-				disabled: record.is_offline_name || record.status !== '1',
+				disabled: Boolean(record.is_offline_name || record.status !== '1'),
 			}),
 		}
 		const totalWidth = getTotalWidth(getInvoiceQueryCol());

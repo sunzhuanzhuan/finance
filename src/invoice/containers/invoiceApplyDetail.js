@@ -226,20 +226,20 @@ class InvoiceApplyDetail extends React.Component {
 			
 			const getInfoText = () => {
 				const contentArr = [
-					{ key: timeKey[status] },
-					{ key: 'invalid_reason' },
+					{ key: timeKey[status], className: 'left-gap-10 inline_block_item' },
+					{ key: 'invalid_reason', className: 'left-gap-10 inline_block_item invalic_reason_wrapper' },
 				];
 				return contentArr.map(item => {
-					const { key } = item;
+					const { key, className } = item;
 					const itemVal = record[key];
 					const isShowTooltips = key === 'invalid_reason' && itemVal.length > 10;
 					return (
 						isShowTooltips ? <Tooltip placement="top" title={itemVal}>
-							<div key={key} className='left-gap-10 inline_block_item'>
+							<div key={key} className={className}>
 								{`${itemVal.substring(0, 10)}...`}
 							</div>
 						</Tooltip> :
-						<div key={key} className='left-gap-10 inline_block_item'>
+						<div key={key} className={className}>
 							{itemVal}
 						</div>
 					)

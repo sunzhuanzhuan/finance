@@ -47,34 +47,35 @@ export class InvoiceQuery extends Component {
 	}
 
 	handleExport = (searchQuery = {}) => {
-		const { invoice_time_start, invoice_time_end } = searchQuery;
-		const startTime = moment(invoice_time_start);
-		const endTime = moment(invoice_time_end);
-		const overYear = moment.duration(endTime.diff(startTime)).as('y') > 1;
-		const replaceStart = moment(invoice_time_start).subtract(1, 'y').format('YYYY-MM-DD');
-		const replaceEnd = moment().format('YYYY-MM-DD');
-		const startShow = invoice_time_start ? invoice_time_start : replaceStart;
-		const tips = `从${startShow}开始，最多只能导出1年的数据，是否继续导出？`
+		// const { invoice_time_start, invoice_time_end } = searchQuery;
+		// const startTime = moment(invoice_time_start);
+		// const endTime = moment(invoice_time_end);
+		// const overYear = moment.duration(endTime.diff(startTime)).as('y') > 1;
+		// const replaceStart = moment(invoice_time_start).subtract(1, 'y').format('YYYY-MM-DD');
+		// const replaceEnd = moment().format('YYYY-MM-DD');
+		// const startShow = invoice_time_start ? invoice_time_start : replaceStart;
+		// const tips = `从${startShow}开始，最多只能导出1年的数据，是否继续导出？`;
 
-		if(!invoice_time_start || overYear) {
-			Modal.confirm({
-				title: (
-					<div>
-						{tips}
-					</div>
-				),
-				okText: '继续',
-				onOk: () => {
-					if(!invoice_time_start) {
-						searchQuery.invoice_time_start = replaceStart;
-						searchQuery.invoice_time_end = replaceEnd;
-					}
-					this.downloadFunc(searchQuery)
-				},
-			});
-		}else {
-			this.downloadFunc(searchQuery)
-		}
+		this.downloadFunc(searchQuery)
+		// if(!invoice_time_start || overYear) {
+		// 	Modal.confirm({
+		// 		title: (
+		// 			<div>
+		// 				{tips}
+		// 			</div>
+		// 		),
+		// 		okText: '继续',
+		// 		onOk: () => {
+		// 			if(!invoice_time_start) {
+		// 				searchQuery.invoice_time_start = replaceStart;
+		// 				searchQuery.invoice_time_end = replaceEnd;
+		// 			}
+		// 			this.downloadFunc(searchQuery)
+		// 		},
+		// 	});
+		// }else {
+		// 	this.downloadFunc(searchQuery)
+		// }
 	}
 	downloadFunc = (searchQuery) => {
 		const timeStamp = moment().format('YYYYMMDD');

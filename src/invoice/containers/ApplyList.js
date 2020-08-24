@@ -121,33 +121,34 @@ class ApplyList extends Component {
 			}
 			delete formatValues['range-picker'];
 			if(e === 'export') {
-				const startTime = moment(createdAtStart);
-				const endTime = moment(createdAtEnd);
-				const overYear = moment.duration(endTime.diff(startTime)).as('y') > 1;
-				const replaceStart = moment(createdAtStart).subtract(1, 'y').format('YYYY-MM-DD');
-				const replaceEnd = moment().format('YYYY-MM-DD');
-				const startShow = createdAtStart ? createdAtStart : replaceStart;
-				const tips = `从${startShow}开始，最多只能导出1年的数据，是否继续导出？`;
+				// const startTime = moment(createdAtStart);
+				// const endTime = moment(createdAtEnd);
+				// const overYear = moment.duration(endTime.diff(startTime)).as('y') > 1;
+				// const replaceStart = moment(createdAtStart).subtract(1, 'y').format('YYYY-MM-DD');
+				// const replaceEnd = moment().format('YYYY-MM-DD');
+				// const startShow = createdAtStart ? createdAtStart : replaceStart;
+				// const tips = `从${startShow}开始，最多只能导出1年的数据，是否继续导出？`;
 
-				if(!createdAtStart || overYear) {
-					Modal.confirm({
-						title: (
-							<div>
-								{tips}
-							</div>
-						),
-						okText: '继续',
-						onOk: () => {
-							if(!createdAtStart) {
-								formatValues.created_at_start = replaceStart;
-								formatValues.created_at_end = replaceEnd;
-							}
-							this.downloadFunc(formatValues)
-						},
-					});
-				}else {
-					this.downloadFunc(formatValues)
-				}
+				// if(!createdAtStart || overYear) {
+				// 	Modal.confirm({
+				// 		title: (
+				// 			<div>
+				// 				{tips}
+				// 			</div>
+				// 		),
+				// 		okText: '继续',
+				// 		onOk: () => {
+				// 			if(!createdAtStart) {
+				// 				formatValues.created_at_start = replaceStart;
+				// 				formatValues.created_at_end = replaceEnd;
+				// 			}
+				// 			this.downloadFunc(formatValues)
+				// 		},
+				// 	});
+				// }else {
+				// 	this.downloadFunc(formatValues)
+				// }
+				this.downloadFunc(formatValues)
 				return;
 			}
 			this.setState({ formData: formatValues, loading: true, current: page })

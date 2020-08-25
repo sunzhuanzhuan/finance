@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Input, Button, Select, DatePicker } from "antd";
+import { Form, Input, Button, Select, DatePicker, Tooltip } from "antd";
 import SearchSelect from '@/components/SearchSelect';
 
 const { Option } = Select;
@@ -29,7 +29,7 @@ class CreditLimitQuery extends React.Component {
 				return <SearchSelect
 							mode={mode}
 							action={actionKeyMap[actionKey]} 
-							style={{ width: 170 }}
+							style={{ width: 180 }}
 							placeholder={placeholder || '请选择'}
 							getPopupContainer={() => document.querySelector(`.${className}`)}
 							keyWord={keyWord}
@@ -41,7 +41,7 @@ class CreditLimitQuery extends React.Component {
 						showSearch={showSearch}
 						allowClear
 						placeholder={placeholder || '请选择'}
-						className='common_search_width'
+						className='common_input_width'
 						filterOption={(input, option) => (
 							option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
 						)}
@@ -57,6 +57,12 @@ class CreditLimitQuery extends React.Component {
 	getFormItemComp = queryItems => {
 		const { form, showExport } = this.props;
 		const { getFieldDecorator } = form;
+		const getLabel = (label) => {
+			return label.length > 5 ? 
+			<Tooltip title={label}>
+				<span>{`${label.substring(0, 5)}...`}</span>
+			</Tooltip> : label
+		}
 
 		return queryItems.map(item => {
 			const {label, compType, key, submitKey, startInitial, endInitial} = item;
@@ -70,7 +76,7 @@ class CreditLimitQuery extends React.Component {
 				)
 			}else if(compType === 'singleDate') {
 				return (
-					<FormItem key={key} label={label}>
+					<FormItem key={key} label={getLabel(label)} className='credit-form-normal'>
 						<FormItem>
 							{getFieldDecorator(submitKey[0], {
 								initialValue: startInitial
@@ -91,7 +97,7 @@ class CreditLimitQuery extends React.Component {
 			}
 				
 			return (
-				<FormItem key={key} label={label} >
+				<FormItem key={key} label={label} className='credit-form-normal' >
 					{getFieldDecorator(key)(
 						this.getFormItem(item)
 					)}

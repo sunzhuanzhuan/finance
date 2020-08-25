@@ -14,11 +14,11 @@ export const getCreditQueryItems = (activeKey) => {
         {label: '品牌', key: 'brandId', compType: 'searchSelect', actionKey: 'brand', dataIndex: ['id', 'view_name'], keyWord: 'view_name'},
         {label: '开票时间', key: 'kaipiao_time', compType: 'singleDate', submitKey:['invoiceOpenTimeStart', 'invoiceOpenTimeEnd']},
         {label: '应还款时间', key: 'huankuan_time', compType: 'singleDate', submitKey:['paybackTimeStart', 'paybackTimeEnd']},
+        {label: activeKey === '7' ? '审核通过时间' : '结算时间', key: 'jiesuan_time', compType: 'singleDate', submitKey:['orderSettleTimeStart', 'orderSettleTimeEnd'], startInitial: moment('2020-08-24')},
         {label: '发票申请单审核通过时间', key: 'shenhe_time', compType: 'singleDate', submitKey:['invoiceApplyOpenTimeStart', 'invoiceApplyOpenTimeEnd']},
-        {label: '结算时间', key: 'jiesuan_time', compType: 'singleDate', submitKey:['orderSettleTimeStart', 'orderSettleTimeEnd'], startInitial: moment('2020-08-24')},
         {compType: 'operate', key: 'operate'}
     ];
-    return allQuery;
+    return activeKey === '3' ? allQuery : allQuery.filter(item => item.key !== 'requirementId');
 }
 
 const tdRender = (arr, record = {}) => {

@@ -80,11 +80,11 @@ class PreModal extends React.Component {
 	handleTax = () => {
 		if (!this.taxValue) {
 			this.props.form.setFieldsValue({
-				invoice_tax_rate: (0 / this.pureValue * 100).toFixed(2)
+				invoice_tax_rate: (0 / this.pureValue * 100).toFixed()
 			});
 		} else {
 			this.props.form.setFieldsValue({
-				invoice_tax_rate: (this.taxValue / this.pureValue * 100).toFixed(2)
+				invoice_tax_rate: (this.taxValue / this.pureValue * 100).toFixed()
 			});
 		}
 		if (this.voiceType > 0) {
@@ -109,11 +109,11 @@ class PreModal extends React.Component {
 		}
 		if (!this.taxValue) {
 			this.props.form.setFieldsValue({
-				invoice_tax_rate: (0 / this.pureValue * 100).toFixed(2)
+				invoice_tax_rate: (0 / this.pureValue * 100).toFixed()
 			});
 		} else {
 			this.props.form.setFieldsValue({
-				invoice_tax_rate: (this.taxValue / this.pureValue * 100).toFixed(2)
+				invoice_tax_rate: (this.taxValue / this.pureValue * 100).toFixed()
 			});
 		}
 

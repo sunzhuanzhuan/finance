@@ -13,6 +13,7 @@ import { reparationInfo, orderSaleList, status } from './orderCompensate';
 import relatedInvoice from './relatedInvoice'
 import trinityInvoice from './trinityInvoice'
 import usageQuery from './usageQuery'
+import invoiceQuery from './invoiceQuery'
 export default combineReducers({
 	applyList,
 	saleList,
@@ -48,6 +49,7 @@ export default combineReducers({
 	...relatedInvoice,
 	...trinityInvoice,
 	...usageQuery,
+	...invoiceQuery,
 })
 
 

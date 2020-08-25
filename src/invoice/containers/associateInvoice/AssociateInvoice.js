@@ -15,8 +15,7 @@ class AssociateInvoice extends Component {
 	state = {
 		tabsShow: false,
 		stepA: false,
-		dialogShow: false,
-		receivableCount: 0
+		dialogShow: false
 	}
 	async componentWillMount() {
 		//let { setInvoiceListSelected, getAssociateInvoiceDetail, location: { query: { id } } } = this.props;
@@ -26,19 +25,19 @@ class AssociateInvoice extends Component {
 		await getAssociateInvoiceDetail(search.id).catch(({ errorMsg }) => {
 			message.warning(errorMsg, 1);
 		});
-		this.setState({ tabsShow: true, receivableCount: search.receivable })
+		this.setState({ tabsShow: true })
 		setInvoiceListSelected([])
 
 	}
 	submitStepValidity = () => {
-		let { detail: { amount }, selected, detail: { invoice_type_display } } = this.props;
+		let { detail: { can_invoice }, selected, detail: { invoice_type_display } } = this.props;
 		let total = this.totalBox.totalValue || 0;
 		let type = invoice_type_display || '';
 		let isType = this.totalBox.typeTally || false
 		if (selected.length <= 0) {
 			this.warning('请选择发票后再提交!')
-		} else if (parseFloat(total) < parseFloat(amount)) {
-			this.warning('已选择发票的可关联金额的总和必须大于等于发票申请单金额!')
+		} else if (parseFloat(total) < parseFloat(can_invoice)) {
+			this.warning('已选择发票的可关联金额的总和不等于本次可开票金额!')
 		} else if (!isType) {
 			this.warning('请保证选择的发票类型都是' + type + '，然后再提交!')
 		} else {
@@ -130,7 +129,9 @@ class AssociateInvoice extends Component {
 			invoice_title,
 			invoice_type_display,
 			amount,
-			comment
+			comment,
+			receivables_payback_amount,
+			can_invoice
 		}, selected } = this.props;
 		//}, selected, location: { query: { role } } } = this.props;
 		//修改了获取值的方式
@@ -142,7 +143,6 @@ class AssociateInvoice extends Component {
 			},
 			type: 3
 		};
-		const { receivableCount = 0 } = this.state;
 		return (
 			<div className='associate-invoice'>
 				<div id="box" style={{ marginBottom: '62px' }} >
@@ -158,7 +158,9 @@ class AssociateInvoice extends Component {
 							<Col><h4>发票申请单金额：</h4></Col>
 							<Col><b className="totalNumL">{amount || 0}</b></Col>
 							<Col><h4>应回款金额：</h4></Col>
-							<Col><b className="totalNumL">{receivableCount}</b></Col>
+							<Col><b className="totalNumL">{receivables_payback_amount}</b></Col>
+							<Col><h4>可开票金额：</h4></Col>
+							<Col><b className="totalNumL">{can_invoice}</b></Col>
 						</Row>
 						<Row type="flex" justify="start" gutter={16} style={{ lineHeight: "32px" }} >
 							<Col><h4>备注信息：{comment || '无'}</h4></Col>

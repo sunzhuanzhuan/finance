@@ -14,7 +14,7 @@ class DeliverContent extends Component {
 		return (
 			<div>
 				<Row style={{ marginTop: '10px' }} type="flex" justify="start" >
-					<Col span={7} style={{ textAlign: 'right' }} > 快递公司：</Col>
+					<Col span={7} style={{ textAlign: 'right', lineHeight: '32px' }} > 快递公司：</Col>
 					<Col span={17}>
 						<Select
 
@@ -29,7 +29,7 @@ class DeliverContent extends Component {
 					</Col>
 				</Row>
 				<Row style={{ marginTop: '10px' }} type="flex" justify="start">
-					<Col span={7} style={{ textAlign: 'right' }}>运单号：</Col>
+					<Col span={7} style={{ textAlign: 'right', lineHeight: '32px' }}>运单号：</Col>
 					<Col span={17}>
 						<Input onBlur={this.props.getWaybillNumber} style={{ width: '200px' }} placeholder="请输入运单号" />
 					</Col>

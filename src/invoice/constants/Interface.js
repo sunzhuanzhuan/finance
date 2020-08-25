@@ -28,4 +28,11 @@ export default {
 	beneficiaryCompanyList: '/finance/invoice/balance/beneficiaryCompanyList',//发票开具方联想搜索
 	userInvoiceSearchAgg: '/finance/invoice/balance/userInvoiceSearchAgg',//主账号发票列表统计数据
 	trinityInvoiceSearchAgg: '/finance/invoice/balance/trinityInvoiceSearchAgg',//三方发票列表统计数据
+
+	//发票查询
+	getInvoiceQueryMetaData: '/finance/invoice/invoice/metadata',//发票查询条件options
+	getInvoiceQueryInvoiceTitle: '/finance/invoice/application/invoiceTitleList',//发票查询条件发票抬头
+	getInvoiceQueryStatistics: '/finance/invoice/invoice/listStat',//发票查询列表统计数据
+	getInvoiceQueryList: '/finance/invoice/invoice/list',//发票查询列表
+	getInvoiceQueryOperate: '/finance/invoice/invoice/operate',//发票查询列表线下使用操作(发票申请单详情红字作废操作接口)
 }

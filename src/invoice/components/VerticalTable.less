@@ -51,14 +51,48 @@
             color: red;
         }
         .status-display{
-            padding: 10px;
+            // padding: 10px;
             p{
                 line-height: 20px;
                 margin: 0;
-                span{
-                    color: red;
+            }
+            .left-gap-10 {
+                margin-left: 10px;
+            }
+        }
+        .invoice_operate_wrapper {
+            display: flex;
+            line-height: 22px;
+            margin: 4px 0;
+            .invoice_item {
+                // width: 50%;
+                a {
+                    text-decoration: underline;
                 }
             }
+            .invoice_detail_status {
+                display: inline-block;
+                font-size: 10px;
+                width: fit-content;
+                background-color: red;
+                color: #fff;
+                padding: 0px 4px;
+            }
+            .inline_block_item {
+                display: inline-block;
+            }
+            .invalic_reason_wrapper {
+                color: red;
+            }
+            .left-gap-10 {
+                margin-left: 10px;
+            }
+        }
+        .invoice_num_cls {
+            cursor: pointer;
+        }
+        .default_color {
+            color: #1f8fcf;
         }
     }
     .thum-img-box{
@@ -89,4 +123,48 @@
     content: '';
     display: block;
     clear: both;
+}
+.color_red {
+    color: red;
+}
+.invoice_operate_form {
+    .ant-form-item {
+        float: left;
+        display: flex;
+        &:nth-child(4) {
+            width: 100%;
+            margin-top: 10px;
+            .ant-form-item-control-wrapper {
+                width: 50%;
+            }
+        }
+    }
+    .select_commont_width {
+        width: 135px;
+    }
+    .invoice_count_item {
+        margin: 0 24px;
+    }
+    .color_red
+}
+.invoice_popover_wrapper {
+    .ant-popover-title {
+        color: red;
+    }
+    .invoice_popover_content .popover_title {
+        display: inline-block;
+        width: 70px;
+        text-align: right;
+    }
+}
+.invoice_popover_wrapper_small .ant-popover-content .invoice_popover_content .popover_title{
+    width: 40px;
+}
+.relate_new_invoice_form {
+    .dynamic-delete-button {
+        margin-left: 15px;
+    }
+    .add_invoice_btn {
+        margin-top: 15px;
+    }
 }

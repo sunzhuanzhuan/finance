@@ -18,7 +18,7 @@ import receivable from '../receivablesInquiries/reducers'
 import receivableOff from '../receivablesOff/reducers'
 import financeParamsReducer from '../financeParamsSetting/reducers';
 import financeRateReducer from '../financeRateSetting/reducers';
-
+import creditLimitReducer from '../creditLimit/reducers'
 export default combineReducers({
 	commonReducers,
 	routing: routerReducer,
@@ -39,4 +39,5 @@ export default combineReducers({
 	receivableOff, //应收款核销
 	financeParamsReducer,
 	financeRateReducer,
+	creditLimitReducer
 });

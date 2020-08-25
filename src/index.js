@@ -27,6 +27,7 @@ import Receivable from './receivablesInquiries'
 import ReceivableOff from './receivablesOff'
 import FinanceParamsSetting from './financeParamsSetting';
 import FinanceRateSetting from './financeRateSetting';
+import CreditLimit from './creditLimit';
 
 numeral.locale('chs')
 moment.locale('zh-cn');
@@ -60,6 +61,7 @@ const routes = () => (
 			<Route path='/finance/receivableoff' component={ReceivableOff} />
 			<Route path='/finance/financeParamsSetting' component={FinanceParamsSetting} />
 			<Route path='/finance/financeRateSetting' component={FinanceRateSetting} />
+			<Route path='/finance/creditLimit' component={CreditLimit} />
 
 			<Redirect to="/error" />
 		</Switch>

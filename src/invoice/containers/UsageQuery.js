@@ -144,7 +144,7 @@ export class UsageQuery extends Component {
 		}
 		return (
 			<Spin spinning={isLoading}>
-				<h2>发票使用明细查询</h2>
+				<h2>供应商发票使用明细</h2>
 				<Tabs defaultActiveKey="1" onChange={this.changeTabs}>
 					<TabPane tab="主账号" key="1">
 						{tabCheckedKey == 1 ? <AccountForm  {...commonSearchProps} onSearchList={this.getUserInvoiceSearchAsync} /> : null}

@@ -9,6 +9,7 @@ export const getInvoiceQueryOptions = () => {
 		{label: '发票抬头', key: 'invoice_title', compType: 'searchSelect', actionKey: 'invoiceTitle', dataIndex: ['invoice_title', 'invoice_title'], keyWord: 'invoice_title'},
         {label: '公司简称', key: 'company_id', compType: 'searchSelect', placeholder: '支持多个选择', mode: 'multiple', actionKey: 'company', dataIndex: ['company_id', 'name'], keyWord: 'company_name'},
         {label: '开票公司', key: 'beneficiary_company', compType: 'select', optionKey: 'beneficiary_company', idKey: 'id', labelKey: 'display', showSearch: true},
+        {label: '发票使用状态', key: 'is_used', compType: 'select', optionKey: 'is_used', idKey: 'id', labelKey: 'display', showSearch: true, unClearable: true},
         {label: '发票状态', key: 'status', compType: 'select', optionKey: 'status', idKey: 'id', labelKey: 'display', showSearch: true},
         {label: '申请单ID', key: 'invoice_application_id', compType: 'input', placeholder: '支持多个输入，以逗号隔开'},
 		{label: '线上/线下发票', key: 'is_offline', compType: 'select', optionKey: 'is_offline', idKey: 'id', labelKey: 'display', showSearch: true},
@@ -24,8 +25,8 @@ export const getInvoiceQueryStatisticsOptions = () => {
 		{ title: '线上已开票金额', key: 'invoice_used_amount', tips: '所有线上已开状态的发票总金额' },
 		{ title: '作废个数', key: 'invoice_voided_count', tips: '作废状态的发票总个数' },
 		{ title: '作废金额', key: 'invoice_voided_amount', tips: '所有作废状态的发票总金额' },
-		{ title: '红字个数', key: 'invoice_red_count', tips: '红字状态的发票总个数' },
-		{ title: '红字金额', key: 'invoice_red_amount', tips: '所有红字状态的发票总金额' },
+		{ title: '红冲个数', key: 'invoice_red_count', tips: '红冲状态的发票总个数' },
+		{ title: '红冲金额', key: 'invoice_red_amount', tips: '所有红冲状态的发票总金额' },
 	]
 }
 

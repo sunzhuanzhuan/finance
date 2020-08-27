@@ -36,7 +36,7 @@ class CreditLimit extends React.Component {
 		const { activeKey: productLine } = this.state;
 		this.props.getCreditQuerySalerData();
 		this.props.getCreditQueryRegionList();
-		this.getCreditListData({page: 1, pageSize: 20, productLine, orderSettleTimeStart: '2020-08-24'});
+		this.getCreditListData({page: 1, pageSize: 20, productLine, orderSettleTimeStart: '2020-08-27'});
 		const leftSlide = document.getElementsByClassName('ant-layout-sider-trigger')[0];
 		const leftWidth = leftSlide && leftSlide.clientWidth;
 		this.setState({leftWidth});
@@ -72,7 +72,7 @@ class CreditLimit extends React.Component {
 		const { creditLimitListInfo = {} } = this.props;
 		this.props.clearCreditLimitMessage();
 		if(!creditLimitListInfo[`creditTab-${activeKey}`]) {
-			this.getCreditListData({page: 1, pageSize: 20, productLine: activeKey, orderSettleTimeStart: '2020-08-24'});
+			this.getCreditListData({page: 1, pageSize: 20, productLine: activeKey, orderSettleTimeStart: '2020-08-27'});
 		}
 		this.setState({ activeKey });
 	}

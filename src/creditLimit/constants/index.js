@@ -102,7 +102,7 @@ export const getCreditCol = (activeKey) => {
             render
         },
         {
-            title: '客户简称/全称',
+            title: '公司简称/全称',
             dataIndex: 'companyName',
             key: 'companyName',
             width: 150,

@@ -29,7 +29,7 @@ const tdRender = (arr, record = {}) => {
         const { title, noTitle, key, extra } = item;
         let itemVal = '';
         if(key==='paybackCondition') {
-            itemVal = record[key] || record[key] === 0 ? '审核通过后' + record[key] + '天' : '-';
+            itemVal = record[key] || record[key] === 0 ? '发票申请单审核通过后' + record[key] + '天' : '-';
         }else {
             itemVal = record[key] || '-';
         }

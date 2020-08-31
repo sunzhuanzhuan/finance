@@ -27,12 +27,7 @@ const tdRender = (arr, record = {}) => {
             return null;
         }
         const { title, noTitle, key, extra } = item;
-        let itemVal = '';
-        if(key==='paybackCondition') {
-            itemVal = record[key] || record[key] === 0 ? '发票申请单审核通过后' + record[key] + '天' : '-';
-        }else {
-            itemVal = record[key] || '-';
-        }
+        const itemVal = record[key] || '-';
         return (
             <div key={key}>
                 { noTitle ? itemVal : `${title}：${itemVal}`}
@@ -81,7 +76,7 @@ const tdSubList = (key, activeKey) => {
             {title: '开票时间', key: 'invoiceOpenTime'},
         ],
         'applyTime': [
-            {title: '回款条件', key: 'paybackCondition'},
+            {title: '回款条件', key: 'paybackConditionText'},
             {title: '应还款时间', key: 'orderPaybckTime'},
         ],
     }

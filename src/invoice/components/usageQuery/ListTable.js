@@ -103,6 +103,7 @@ export default class ListTable extends Component {
 				title: '发票使用金额',
 				dataIndex: 'invoice_use_amount',
 				key: 'invoice_use_amount',
+				width: 150,
 				align: 'center',
 				render: (text, record) => (record.invoice_status == 1 || record.invoice_status == 2) ? text : null
 			},
@@ -136,9 +137,9 @@ export default class ListTable extends Component {
 				title: '扣款/打款金额',
 				dataIndex: 'invoice_deduction_amount',
 				key: 'invoice_deduction_amount',
-				width: 100,
+				width: 120,
 				render: (text, record) => {
-					return <div style={{ minWidth: 100 }}>
+					return <div style={{ minWidth: 110 }}>
 						<div>扣款：{text}</div>
 						<div>打款：{record.payment_amount}</div>
 					</div>

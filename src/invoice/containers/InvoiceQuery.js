@@ -32,7 +32,7 @@ export class InvoiceQuery extends Component {
 
 	componentDidMount() {
 		this.props.actions.getInvoiceQueryMetaData();
-		this.handleSearch({page: 1, page_size: 20});
+		this.handleSearch({page: 1, page_size: 20, is_used: 1});
 		const leftSlide = document.getElementsByClassName('ant-layout-sider-trigger')[0];
 		const leftWidth = leftSlide && leftSlide.clientWidth;
 		this.setState({leftWidth});
@@ -145,6 +145,7 @@ export class InvoiceQuery extends Component {
 		const totalWidth = getTotalWidth(getInvoiceQueryCol());
 		return (
 			<div className='invoice_query_wrapper'>
+				<legend>厂商发票使用明细</legend>
 				<QueryComp 
 					showExport={true}
 					className={'invoice_query_wrapper'}

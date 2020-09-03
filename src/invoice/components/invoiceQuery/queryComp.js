@@ -1,6 +1,7 @@
 import React from 'react'
-import { Form, Input, InputNumber, Button, Select, DatePicker } from "antd";
+import { Form, Input, Button, Select, DatePicker } from "antd";
 import SearchSelect from '@/components/SearchSelect';
+import { shallowEqual } from '@/util';
 
 const { Option } = Select;
 const FormItem = Form.Item;
@@ -12,6 +13,26 @@ class QueryComp extends React.Component {
 		this.state = {
 		};
 	}
+
+	static getDerivedStateFromProps(nextProps, prevState) {
+		const {queryOptions = {}} = nextProps;
+		const { is_used } = queryOptions;
+		if(is_used && !prevState.is_used) {
+			return {
+				is_used
+			}
+		}else {
+			return null;
+		}	
+	}
+
+	componentDidUpdate(_, prevState) {
+		const { is_used } = this.state;
+		if(!shallowEqual(is_used, prevState.is_used)) {
+			this.props.form.setFieldsValue({ is_used: 1 })
+		}
+	}
+
 	getSelectOption = (key, idKey, labelKey) => {
 		const { queryOptions = {} } = this.props;
 
@@ -21,7 +42,7 @@ class QueryComp extends React.Component {
 		})
 	}
 	getFormItem = item => {
-		const { compType, optionKey, actionKey, dataIndex, keyWord, idKey, labelKey, showSearch, mode, placeholder } = item;
+		const { compType, optionKey, actionKey, dataIndex, keyWord, idKey, labelKey, showSearch, mode, placeholder, unClearable } = item;
 		const { actionKeyMap = {}, className } = this.props;
 		switch(compType) {
 			case 'input':
@@ -40,7 +61,7 @@ class QueryComp extends React.Component {
 			case 'select':
 				return <Select 
 						showSearch={showSearch}
-						allowClear
+						allowClear={!unClearable}
 						placeholder={placeholder || '请选择'}
 						className='common_search_width'
 						filterOption={(input, option) => (
@@ -108,6 +129,7 @@ class QueryComp extends React.Component {
 
 		if(type === 'reset') {
 			form.resetFields();
+			form.setFieldsValue({ is_used: 1 })
 			// handleSearch({page: 1, page_size: 20});
 		}else if(type === 'search' || type === 'export') {
 			form.validateFields((errors, values) => {

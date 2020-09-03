@@ -153,8 +153,8 @@ class AddInvoiceInfo extends Component {
 		}
 	}
 	handleJudge = (fn) => {
-		this.setState({ loading: true });
 		const { page, pageSize, invoiceId } = this.state;
+		this.setState({ loading: true });
 		const id = invoiceId ? invoiceId : [];
 		this.props.actions.getAvailableInvoiceList(this.props.id, id, page, pageSize + 50).then(() => {
 			this.setState({ pageSize: pageSize + 50 }, () => {

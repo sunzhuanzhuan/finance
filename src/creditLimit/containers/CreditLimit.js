@@ -114,7 +114,7 @@ class CreditLimit extends React.Component {
 		const { total, page, pageSize } = pagination;
 		const { orderTotal = '-', creditAmountUsed = '-' } = statistics;
 		const totalWidth = getTotalWidth(getCreditCol());
-		const searchQuery = this.state[`searchQuery-${activeKey}`] || { page: 1, pageSize: 20 };
+		const searchQuery = this.state[`searchQuery-${activeKey}`] || { page: 1, pageSize: 20, orderSettleTimeStart: '2020-08-24' };
 		const showTotal = (total) => {
 			return `共 ${total} 条数据`;
 		};

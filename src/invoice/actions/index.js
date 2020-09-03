@@ -95,7 +95,6 @@ export const getAvailableInvoiceList = (invoice_application_id, exclude_invoice_
 				data
 			}
 		})
-		return Promise.resolve(data || [])
 	})
 }
 

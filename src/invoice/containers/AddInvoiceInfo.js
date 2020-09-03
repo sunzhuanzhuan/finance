@@ -145,19 +145,26 @@ class AddInvoiceInfo extends Component {
 	handleScroll = (e) => {
 		const node = e.target;
 		const top = node.scrollTop;
+		const { loadOver } = this.state;
+		if(loadOver) return;
 		if (top && (top > node.scrollHeight - node.clientHeight - 5)) {
 			this.addMore(() => {
 				this.setState({ loading: false });
-				node.scrollTop = top;
+				if(!loadOver) {node.scrollTop = top;}
 			})
 		}
 	}
 	handleJudge = (fn) => {
+		const { page, pageSize, invoiceId, loadOver } = this.state;
+		if(loadOver) return;
 		this.setState({ loading: true });
-		const { page, pageSize, invoiceId } = this.state;
+		const { availableInvoiceList = [] } = this.props;
 		const id = invoiceId ? invoiceId : [];
-		this.props.actions.getAvailableInvoiceList(this.props.id, id, page, pageSize + 50).then(() => {
-			this.setState({ pageSize: pageSize + 50 }, () => {
+		this.props.actions.getAvailableInvoiceList(this.props.id, id, page, pageSize + 50).then((list = []) => {
+			this.setState({ 
+				pageSize: pageSize + 50,
+				loadOver: availableInvoiceList.length === list.length
+			}, () => {
 				this.props.handleLimit(pageSize + 50);
 				setTimeout(fn, 0);
 			});

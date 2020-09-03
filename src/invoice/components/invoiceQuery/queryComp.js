@@ -129,6 +129,7 @@ class QueryComp extends React.Component {
 
 		if(type === 'reset') {
 			form.resetFields();
+			form.setFieldsValue({ is_used: 1 })
 			// handleSearch({page: 1, page_size: 20});
 		}else if(type === 'search' || type === 'export') {
 			form.validateFields((errors, values) => {

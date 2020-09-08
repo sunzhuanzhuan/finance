@@ -156,10 +156,10 @@ class ReceivableOffQuery extends React.Component {
 				if(errors)
 					return null;
 				const dealValues = this.dealValuesDate(values);
-				if(dealValues.order_ids)
-					dealValues.order_ids = this.getMultipleIds(dealValues.order_ids);
-				if(dealValues.id)
-					dealValues.id = this.getMultipleIds(dealValues.id);
+				// if(dealValues.order_ids)
+				// 	dealValues.order_ids = this.getMultipleIds(dealValues.order_ids);
+				// if(dealValues.id)
+				// 	dealValues.id = this.getMultipleIds(dealValues.id);
 				Object.assign(dealValues, {page: 1, page_size: 20});
 				handleSearch(dealValues);
 			})

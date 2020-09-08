@@ -34,11 +34,11 @@ class ReceivableQuery extends React.Component {
 		})
 	}
 	getFormItem = item => {
-		const { compType, optionKey, actionKey, dataIndex, keyWord, idKey, labelKey, showSearch } = item;
+		const { compType, optionKey, actionKey, dataIndex, keyWord, idKey, labelKey, showSearch, placeholder = '请输入' } = item;
 		const { actionKeyMap = {}, className } = this.props;
 		switch(compType) {
 			case 'input':
-				return <Input placeholder="请输入" className='common_search_width' />;
+				return <Input placeholder={placeholder} className='common_search_width' />;
 			case 'searchSelect':
 				return <SearchSelect
 							action={actionKeyMap[actionKey]} 

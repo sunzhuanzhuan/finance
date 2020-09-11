@@ -3,7 +3,6 @@ import { Form, Input, Select, DatePicker, Row, Col, Button, } from 'antd'
 import SearchSelect from '@/base/SearchSelect'
 
 import { defaultUseTime } from '../../containers/UsageQuery'
-console.log("defaultUseTime", defaultUseTime)
 
 const { RangePicker } = DatePicker
 class SearchForm extends Component {
@@ -83,12 +82,12 @@ class SearchForm extends Component {
 				{source_type == 1 ? <Form.Item label={'订单ID'}>
 					{getFieldDecorator('order_id', {
 						rules: [],
-					})(<Input placeholder='请输入' />)}
+					})(<Input style={{ width: '180px' }} placeholder='支持批量查询，以空格隔开' />)}
 				</Form.Item> : null}
 				<Form.Item label='打款单ID'>
 					{getFieldDecorator('payment_id', {
 						rules: [],
-					})(<Input placeholder='请输入' />)}
+					})(<Input style={{ width: '180px' }} placeholder='支持批量查询，以空格隔开' />)}
 				</Form.Item>
 
 				<Form.Item label='打款时间'>

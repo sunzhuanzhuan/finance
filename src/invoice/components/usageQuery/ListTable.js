@@ -88,7 +88,7 @@ export default class ListTable extends Component {
 				}
 			},
 			{
-				title: '发票录入/使用时间',
+				title: '发票开票/录入/使用时间',
 				dataIndex: 'invoice_created_time',
 				key: 'invoice_created_time',
 				width: 200,

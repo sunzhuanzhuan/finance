@@ -82,18 +82,20 @@ export default class ListTable extends Component {
 					return <div>
 						<div>类型：{invoiceTypeMap[record.invoice_type]}</div>
 						<div>税率：{record.invoice_tax_rate}</div>
+						<div>不含税：{record.invoice_pure_amount}</div>
 						<div>总金额：{record.invoice_amount}</div>
 					</div>
 				}
 			},
 			{
-				title: '发票录入/使用时间',
+				title: '发票开票/录入/使用时间',
 				dataIndex: 'invoice_created_time',
 				key: 'invoice_created_time',
 				width: 200,
 				align: 'center',
 				render: (text, record) => {
 					return <div>
+						<div>开票：{record.invoice_make_out_time}</div>
 						<div>录入：{text}</div>
 						{(record.invoice_status == 1 || record.invoice_status == 2) ? <div>使用：{record.invoice_use_time}</div> : null}
 					</div>
